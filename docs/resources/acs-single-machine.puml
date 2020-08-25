@@ -1,0 +1,58 @@
+@startuml
+
+Title: ACS Single Machine Deployment
+
+skinparam componentStyle uml2
+skinparam linetype ortho
+skinparam rectangle {
+    BorderStyle dashed
+}
+
+actor Client
+
+node "localhost" #lightgrey {
+    component "NGINX proxy" as proxy #4d9cea
+    component "Repository" as repo #4d9cea
+    component "Share" as share #4d9cea
+    component "Digital Workspace" as adw #4d9cea
+    component "Search Service" as search #4d9cea
+    component "Transform Components" as transform #4d9cea
+    component "Sync Service" as sync #4d9cea
+    component "Tomcat" as tomcat  #4d9cea
+    component "ActiveMQ" as amq #4d9cea
+    component "Java" as java #4d9cea
+    component "PostgreSQL" as psql #4d9cea
+}
+
+proxy --> repo
+proxy --> share
+proxy --> adw
+
+repo .. tomcat
+share .. tomcat
+adw .. tomcat
+tomcat .. java
+search .. java
+transform .. java
+sync .. java
+amq .. java
+
+Client --> proxy
+
+share --> repo
+adw --> repo
+
+repo --> psql
+repo --> transform
+repo --> amq
+
+search <--> repo
+transform --> amq
+
+sync <--> repo
+sync --> amq
+sync --> psql
+
+center footer Copyright 2020 Alfresco Software Inc
+
+@enduml
