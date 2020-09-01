@@ -1,14 +1,14 @@
 # Documentation
 
-The diagram below shows the roles used by the ACS playbook when they are deployed onto a single machine.
+The diagram below shows how the ACS playbook uses the roles when deploying onto a single machine.
 
-![Single Machine](./resources/acs-single-machine.png)
+![Single Machine Deployment](./resources/acs-single-machine.png)
 
-The diagram below shows the roles used by the ACS playbook when they are deployed across multiple machines.
+The diagram below shows how the ACS playbook uses the roles when the deployment is spread across multiple machines.
 
-![Multi Machine](./resources/acs-multi-machine.png)
+![Multi Machine Deployment](./resources/acs-multi-machine.png)
 
 
-<!-- If you're an operator looking to deploy the playbooks please refer to the [Deployment Guide](/docs/deployment-guide.md).
+The diagram below shows how the high availabilty ACS playbook uses the roles to provide an HA deployment across multiple machines.
 
-If you're a developer looking to maintain or develop new playbook features please refer the the [Developer Guide](/docs/developer-guide.md). -->
+![High Availability Deployment](./resources/acs-ha.png)
