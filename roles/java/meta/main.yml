@@ -1,3 +1,4 @@
+---
 galaxy_info:
   author: Andrei Ciubotaru
   description: OpenJDK Setup
@@ -5,8 +6,8 @@ galaxy_info:
   min_ansible_version: 2.9
   license: Alfresco
   platforms:
-  - name: Centos
-    versions:
-    - 7
+    - name: Centos
+      versions:
+        - 7
   galaxy_tags: []
 dependencies: []
