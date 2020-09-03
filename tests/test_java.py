@@ -1,16 +1,14 @@
 """Java Tests"""
 import pytest
-from hamcrest import contains_string, assert_that, is_, is_not
-
+from hamcrest import contains_string, assert_that
 
 @pytest.fixture()
-def ansible_vars(host):
+def get_ansible_vars(host):
     """Define AnsibleVars"""
     java_role = "file=../../roles/java/vars/main.yml name=java_role"
     ansible_vars = host.ansible("include_vars", java_role)["ansible_facts"]["java_role"]
     ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
     return ansible_vars
-
 
 def test_java_exists(host, ansible_vars):
     "Check that java executable exists"
