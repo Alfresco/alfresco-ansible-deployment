@@ -40,10 +40,10 @@ platforms:
 scenario:
   name: default
 
-# lint: |
-#   ansible-lint -v playbooks/acs.yml
-#   yamllint .
-#   find . -name "*.py" ! -name __init__.py | xargs pylint
+lint: |
+  ansible-lint -v playbooks/acs.yml
+  yamllint .
+  find . -name "*.py" ! -name __init__.py | xargs pylint
 
 provisioner:
   name: ansible

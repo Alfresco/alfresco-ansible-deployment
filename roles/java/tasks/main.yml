@@ -37,6 +37,7 @@
     src: "{{ temp_dir }}/{{ jdk_tar_file }}"
     dest: "{{ temp_dir }}"
     remote_src: true
+    mode: '0755'
   when: not remote_java.stat.exists
 
 - name: Copy Java
@@ -56,8 +57,7 @@
     state: directory
     owner: root
     group: root
-    # mode: '0755'
-    mode: 'u=rwx,go=rx'
+    mode: '0755'
 
 - name: Add setenv bash file
   become: true
@@ -67,13 +67,3 @@
     owner: root
     group: root
     mode: 'u=rwx,go=rx'
-
-- name: Check if JAVA_HOME is set
-  command: "echo $JAVA_HOME"
-  register: result
-  changed_when: "'/opt/openjdk-' not in result.stdout"
-
-- name: Add JAVA_HOME to path
-  become: true
-  shell: "source {{ config_dir }}/setenv.sh"
-  when: "'/opt/openjdk-' not in result.stdout"
