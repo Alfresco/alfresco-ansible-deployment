@@ -33,11 +33,11 @@ jobs:
         - yamllint .
     - stage: Deploy Integration Env
       env:
-        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=$NEXUS_PASSWORD; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/build/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir;cd /opt/build/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
+        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=$NEXUS_PASSWORD; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir;cd /opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
       script:
         - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
-        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/build/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER"
-        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/build/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
+        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER"
+        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
         - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade awscli 'molecule-ec2' ansible molecule ansible-lint PyHamcrest pylint testinfra;"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2"
@@ -48,7 +48,7 @@ jobs:
         fi
     - stage: Test Integration Env
       env:
-        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=$NEXUS_PASSWORD; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/build/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir;cd /opt/build/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
+        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=$NEXUS_PASSWORD; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir;cd /opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
       script: |
         set -e
         ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
