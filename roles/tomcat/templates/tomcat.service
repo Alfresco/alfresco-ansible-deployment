@@ -1,0 +1,14 @@
+[Unit]
+Description=Apache Tomcat - Alfresco instance
+#Requires=postgresql.service activemq.service
+#After=syslog.socket network.target postgresql.service activemq.service
+After=syslog.socket network.target
+
+[Service]
+Type=forking
+User=alfresco
+ExecStart=/opt/alfresco/tomcat.sh start
+ExecStop=/opt/alfresco/tomcat.sh stop
+
+[Install]
+WantedBy=multi-user.target

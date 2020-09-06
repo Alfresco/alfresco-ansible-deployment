@@ -1,6 +1,6 @@
 galaxy_info:
-  author: Andrei Ciubotaru
-  description: OpenJDK Setup
+  author: Lucian Suciu
+  description: Tomcat Setup
   company: Alfresco
   min_ansible_version: 2.9
   license: Alfresco
@@ -9,4 +9,5 @@ galaxy_info:
     versions:
     - 7
   galaxy_tags: []
-dependencies: []
+dependencies:
+- java

@@ -1,0 +1,245 @@
+---
+  # tasks file for base-tomcat
+
+  - name: Check Tomcat version is installed
+    command: "{{ tomcat_instance }}/bin/catalina.sh configtest"
+    register: install_check
+    environment:
+        JAVA_HOME: "{{ java_home }}"
+    failed_when: false
+    changed_when: install_check.rc != 0
+
+  - name: Create Alfresco group {{ GROUPNAME }}
+    group:
+        name: "{{ GROUPNAME }}"
+        gid: "{{ GROUPID }}"
+
+  - name: Create Tomcat user {{ USERNAME }}
+    user:
+      name: "{{ USERNAME }}"
+      comment: Tomcat user
+      uid: "{{ USERID }}"
+      group: "{{ GROUPNAME }}"
+
+  - name: Create tomcat dir {{ tomcat_instance }}
+    file:
+      path: "{{ tomcat_instance }}"
+      state: directory
+      group: "{{ GROUPNAME }}"
+      owner: "{{ USERNAME }}"
+      mode: '0755'
+
+  - name: Create native temp dir "{{ temp_dir }}/native_build_dir/"
+    file:
+      path: "{{ temp_dir }}/native_build_dir/"
+      state: directory
+      mode: '0755'
+    become: true
+    become_user: "{{ USERNAME }}"
+
+  - name: Install RPMs needed to build Tomcat Native Library
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ utils }}"
+
+  - name: Import tomcat keys
+    rpm_key:
+      state: present
+      key: "{{ item }}"
+    register: download
+    until: download is succeeded
+    failed_when: false
+    loop:
+      "{{ tomcat_keys_urls }}"
+
+  - name: Import gpg keys
+    command: "gpg --keyserver hkp://p80.pool.sks-keyservers.net --recv-keys {{ item }}"
+    register: download
+    until: download is succeeded
+    failed_when: false
+    loop:
+      "{{ gpg_keys }}"
+    become: true
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Download Tomcat
+    get_url:
+      url: "{{ item }}"
+      dest: "{{ temp_dir }}/tomcat.tar.gz"
+      checksum: "sha512:{{ tomcat_sha512 }}"
+    register: download
+    until: download is succeeded
+    failed_when: false
+    loop:
+      "{{ tomcat_tgz_urls }}"
+    become: true
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Download Tomcat Asc
+    get_url:
+      url: "{{ item }}"
+      dest: "{{ temp_dir }}/tomcat.tar.gz.asc"
+    register: download
+    until: download is succeeded
+    failed_when: false
+    loop:
+      "{{ tomcat_asc_urls }}"
+    become: true
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Verify downloaded file
+    command: "gpg --batch --verify {{ temp_dir }}/tomcat.tar.gz.asc {{ temp_dir }}/tomcat.tar.gz"
+    become: true
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Unarchive a file with extra options
+    unarchive:
+      src: "{{ temp_dir }}/tomcat.tar.gz"
+      dest: "{{ tomcat_instance }}"
+      group: "{{ GROUPNAME }}"
+      owner: "{{ USERNAME }}"
+      remote_src: yes
+      extra_opts: ['--strip-components=1']
+    become: true
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Unarchive tomcat native
+    unarchive:
+      src: "{{ tomcat_instance }}/bin/tomcat-native.tar.gz"
+      dest: "{{ temp_dir }}/native_build_dir/"
+      remote_src: yes
+      extra_opts: ['--strip-components=1']
+    become: true
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or 'Loaded APR based Apache Tomcat Native library' not in install_check.stderr
+
+  - name: Configure tomcat
+    command: >
+      ./configure
+      --build={{ ansible_architecture }}
+      --libdir={{ tomcat_instance }}/native-jni-lib
+      --prefix={{ tomcat_instance }}
+      --with-apr=/bin/apr-1-config
+      --with-ssl=yes
+      --with-java-home={{ java_home }}
+    args:
+      chdir: "{{ temp_dir }}/native_build_dir/native/"
+    become: yes
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or 'Loaded APR based Apache Tomcat Native library' not in install_check.stderr
+
+  - name: Make tomcat
+    command: make -j "{{ ansible_processor_count }}"
+    args:
+      chdir: "{{ temp_dir }}/native_build_dir/native"
+    become: yes
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or 'Loaded APR based Apache Tomcat Native library' not in install_check.stderr
+
+  - name: Make install tomcat
+    command: make install
+    args:
+      chdir: "{{ temp_dir }}/native_build_dir/native/"
+    become: yes
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or 'Loaded APR based Apache Tomcat Native library' not in install_check.stderr
+
+  - name: Find .sh files
+    find:
+      paths: "{{ tomcat_instance }}/bin"
+      patterns: '*.sh'
+    register: sh_files
+
+  - name: Switch shebangs from sh to bash
+    lineinfile:
+        path: "{{ item.path }}"
+        regexp: '^#!/bin/sh'
+        line: '#!/bin/bash'
+    become: yes
+    become_user: "{{ USERNAME }}"
+    loop: "{{ sh_files.files }}"
+    when: sh_files.matched > 0
+
+  - name: Recursively change ownership of logs "{{ tomcat_instance }}/logs"
+    file:
+      path: "{{ tomcat_instance }}/logs"
+      state: directory
+      recurse: yes
+      group: "{{ GROUPNAME }}"
+      owner: "{{ USERNAME }}"
+      mode: 'o=r,g=rwx'
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Recursively change ownership of "{{ tomcat_instance }}/work"
+    file:
+      path: "{{ tomcat_instance }}/work"
+      state: directory
+      recurse: yes
+      group: "{{ GROUPNAME }}"
+      owner: "{{ USERNAME }}"
+      mode: 'o=r,g=rwx'
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Recursively remove dir "{{ tomcat_instance }}/webapps/"
+    file:
+      path: "{{ tomcat_instance }}/webapps/"
+      state: absent
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Replace default 404,403,500 page
+    blockinfile:
+        path: "{{ tomcat_instance }}/conf/web.xml"
+        insertbefore: '</web-app>'
+        block: |
+          <error-page>
+            <error-code>404</error-code>
+            <location>/error.jsp</location>
+          </error-page>
+          <error-page>
+            <error-code>403</error-code>
+            <location>/error.jsp</location>
+          </error-page>
+          <error-page>
+            <error-code>500</error-code>
+            <location>/error.jsp</location>
+          </error-page>
+    become: yes
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Add "{{ tomcat_instance }}/conf/server.xml"
+    template:
+        src: server.xml
+        dest: "{{ tomcat_instance }}/conf/server.xml"
+        group: "{{ GROUPNAME }}"
+        owner: "{{ USERNAME }}"
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Add "{{ tomcat_instance }}/bin/setenv.sh"
+    template:
+        src: setenv.sh
+        dest: "{{ tomcat_instance }}/bin/setenv.sh"
+        group: "{{ GROUPNAME }}"
+        owner: "{{ USERNAME }}"
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Add tomcat.service
+    template:
+        src: tomcat.service
+        dest: /usr/lib/systemd/system/tomcat_{{ instance_name }}.service
+        owner: root
+        group: root
+    notify: tomcat-restart
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Ensure tomcat service is started and enabled on boot
+    systemd:
+      name: tomcat_{{ instance_name }}.service
+      state: started
+      enabled: true

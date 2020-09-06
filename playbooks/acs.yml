@@ -1,8 +1,9 @@
-- name: Java Role
+- name: Tomcat Role
   hosts: all
   become: yes
   become_method: sudo
   roles:
-    - role: '../roles/java'
+    - role: '../roles/tomcat'
   tags:
-    - java
+    - tomcat
+
