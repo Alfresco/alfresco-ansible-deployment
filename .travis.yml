@@ -48,13 +48,15 @@ jobs:
           ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"
         fi
     - stage: Unit tests
+      services:
+        - docker
       env:
-        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir;cd /opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
+        - MOLECULE_NO_LOG=false
       name: Java Role unit tests
-      script: |
-        set -e
-        ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
-        ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cd roles/java/ && molecule test"
+      before_script:
+        - pip install ansible molecule 'molecule[docker]' ansible-lint PyHamcrest pylint testinfra
+      script:
+        - cd roles/java/ && molecule test"
     - stage: Test Integration Env
       env:
         - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir;cd /opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
