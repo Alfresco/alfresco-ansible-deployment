@@ -52,9 +52,9 @@ jobs:
         - docker
       env:
         - MOLECULE_NO_LOG=false
+      install: 
+        - pip install ansible molecule 'molecule[docker]' ansible-lint PyHamcrest pylint testinfra  
       name: Java Role unit tests
-      before_script:
-        - pip install ansible molecule 'molecule[docker]' ansible-lint PyHamcrest pylint testinfra
       script:
         - cd roles/java/ && molecule test
     - stage: Test Integration Env
