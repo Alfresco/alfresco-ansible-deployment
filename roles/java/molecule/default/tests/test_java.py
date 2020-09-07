@@ -6,16 +6,15 @@ from hamcrest import contains_string, assert_that
 @pytest.fixture()
 def get_ansible_vars(host):
     """Define AnsibleVars"""
-    java_role = "file=../../roles/java/vars/main.yml name=java_role"
+    java_role = "file=../../vars/main.yml name=java_role"
     ansible_vars = host.ansible("include_vars", java_role)["ansible_facts"]["java_role"]
     ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
     return ansible_vars
 
 def test_java_exists(host, get_ansible_vars):
     "Check that java executable exists"
-    cmd = host.run("[ -f /opt/openjdk-{}/bin/java ] && echo \"File exists\" || echo \"File does not exists\"".format(get_ansible_vars["jdk_version"]))
-    assert_that(cmd.stdout, contains_string("File exists"))
-
+    assert_that(host.file("/opt/openjdk-{}/bin/java".format(get_ansible_vars["jdk_version"])).exists, get_ansible_vars["jdk_version"])
+    
 def test_java_version(host, get_ansible_vars):
     "Check that java version is correct"
     cmd = host.run("/opt/openjdk-{}/bin/java -version".format(get_ansible_vars["jdk_version"]))
