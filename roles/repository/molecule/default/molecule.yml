@@ -1,0 +1,36 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: ec2
+
+platforms:
+  - name: "molecule_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}"
+    image: ami-0affd4508a5d2481b
+    instance_type: t2.xlarge
+    region: us-east-1
+    vpc_subnet_id: subnet-06ffe524598660d99
+
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      timeout: 30
+      callback_whitelist: profile_roles,timer
+    ssh_connection:
+      retries: 15
+      pipelining: true
+  # playbooks:
+  #   converge: ../../playbooks/dbp.yml
+
+verifier:
+  name: testinfra
+  directory: ../../tests
+  env:
+    ANSIBLE_TIMEOUT: "30"
+    ANSIBLE_SSH_RETRIES: "15"
+    PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
+  options:
+    v: 1
+    s: true

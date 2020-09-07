@@ -1,0 +1,16 @@
+---
+postgres_client_auth:
+  - type: local
+    database: "alfresco_{{ instance_name }}"
+    user: "alfresco_{{ instance_name }}"
+    address:
+    method: password
+  - type: host
+    database: all
+    user: all
+    address: 127.0.0.1/32
+    method: md5
+postgres_client_config:
+  - database: "alfresco_{{ instance_name }}"
+    user: "alfresco_{{ instance_name }}"
+    passwd: "alfresco_{{ instance_name }}"

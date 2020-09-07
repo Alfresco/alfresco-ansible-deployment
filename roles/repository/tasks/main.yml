@@ -1,0 +1,264 @@
+---
+- name: Include vars for postgres credentials
+  include_vars: "postgres.yml"
+
+- name: ensure a list of packages installed
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ utils }}"
+  async: 7200
+  poll: 0
+  register: package_sleeper
+
+- name: Create Directories
+  become: yes
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ USERNAME }}"
+    group: "{{ GROUPNAME }}"
+    mode: 'u=rwx,go=rx'
+  loop:
+     - "{{ content_folder }}/amps"
+     - "{{ content_folder }}/alf_data"
+     - "{{ content_folder }}/alfresco-mmt"
+     - "{{ content_folder }}/webapps/alfresco"
+     - "{{ content_folder }}/licenses/"
+     - "{{ content_folder }}/web-server/lib"
+     - "{{ settings_folder }}/shared/classes/alfresco/extension/transform/pipelines"
+     - "{{ settings_folder }}/shared/classes/alfresco/extension/transform/renditions"
+     - "{{ settings_folder }}/shared/classes/alfresco/extension/mimetypes"
+     - "{{ settings_folder }}/shared/classes/alfresco/keystore"
+     - "{{ settings_folder }}/conf/Catalina/localhost"
+     - "/etc/opt/alfresco/tomcat/lib"
+     - "{{ log_folder }}/licenses/"
+
+- name: Check if Alfresco version {{ alfresco.version }} is installed
+  stat:
+    path: "{{ content_folder }}/webapps/alfresco/META-INF/MANIFEST.MF"
+  register: alf_install_check
+  changed_when: not alf_install_check.stat.exists
+
+- name: Download DISTRIBUTION and WAR files
+  become: true
+  loop: "{{ query('items', war_downloads) }}"
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+  register: war_download_result
+  async: 7200
+  poll: 0
+  when: not alf_install_check.stat.exists
+
+- debug: var=war_download_result
+
+- name: Download AMPS
+  become: true
+  loop: "{{ query('items', amp_downloads) }}"
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+  register: amp_download_result
+  async: 7200
+  poll: 0
+
+- debug: var=amp_download_result
+
+- name: Download postgresql jar
+  become: true
+  get_url:
+    url: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependency_postgresql.version }}/postgresql-{{ dependency_postgresql.version }}.jar"
+    dest: "/etc/opt/alfresco/tomcat/lib/postgresql.jar"
+    mode: 0644
+  register: postgresql_download
+  when: not alf_install_check.stat.exists
+  async: 7200
+  poll: 0
+
+- debug: var=postgresql_download
+
+# - name: add acs home to setenv.sh
+#   lineinfile:
+#     path: "/etc/opt/alfresco/setenv.sh"
+#     insertafter: EOF
+#     line: "export ACS_HOME=/opt/alfresco/content-services-{{ alfresco.version }}"
+
+# - name: add acs home to tomcat.sh
+#   lineinfile:
+#     path: "/opt/alfresco/tomcat.sh"
+#     insertafter: 'CATALINA_OPTS'
+#     line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}"
+
+# - name: setup common loader
+#   lineinfile:
+#     path: "/etc/opt/alfresco/tomcat/conf/catalina.properties"
+#     regexp: 'common.loader='
+#     line: common.loader="${catalina.base}/lib","${catalina.base}/lib/*.jar","${acs.home}/web-server/lib","${acs.home}/web-server/lib/*.jar","${catalina.home}/lib","${catalina.home}/lib/*.jar",/etc/opt/alfresco/content-services/classpath
+
+# - name: 'Check on postgres download async task'
+#   async_status:
+#     jid: "{{ postgresql_download.ansible_job_id }}"
+#   register: job_result
+#   until: job_result.finished
+#   retries: 300
+
+- name: 'Check on amp download async task'
+  loop: "{{ amp_download_result.results }}"
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: 300
+
+- name: 'Check on war download async task'
+  loop: "{{ war_download_result.results }}"
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: 300
+
+# # - name: check if "{{ content_folder }}/shared/classes/alfresco-global.properties" exists
+# #   stat:
+# #     path: "{{ content_folder }}/shared/classes/alfresco-global.properties"
+# #   register: global_properties
+
+# # - name: Create alfresco-global.properties
+# #   become: yes
+# #   template:
+# #     owner: "{{ USERNAME }}"
+# #     group: "{{ GROUPNAME }}"
+# #     src: alfresco-global.properties
+# #     dest: "{{ content_folder }}/shared/classes/alfresco-global.properties"
+# #     mode: 'u=rwx,g=rwx,o=rx'
+# #   when: not global_properties.stat.exists
+
+- name: check if zip file exists
+  stat:
+    path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
+  register: archive_exists
+
+- name: Extract content-services-{{ alfresco.version }}.zip into {{ content_folder }}
+  become: yes
+  unarchive:
+    src: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
+    dest: "{{ content_folder }}"
+    remote_src: yes
+  failed_when: false
+  when: archive_exists.stat.exists
+
+# - name: Remove Alfresco Content Services {{ alfresco.version }} zip file
+#   file:
+#     path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
+#     state: absent
+#   when: archive_exists.stat.exists
+
+# - name: add licenses
+#   copy:
+#     src: licenses/
+#     dest: "{{ content_folder }}/licenses/"
+
+# - name: shared.loader path in catalina.properties
+#   lineinfile:
+#     path: "{{ content_folder }}/conf/catalina.properties"
+#     regexp: '^shared.loader='
+#     line: shared.loader=${catalina.base}/shared/classes/
+
+# - name: Install amps on alfresco.war
+#   shell: '/usr/java/bin/java -jar {{ content_folder }}/alfresco-mmt/alfresco-mmt.jar install {{ content_folder }}/amps {{ content_folder }}/webapps/alfresco -directory -nobackup -force'
+#   register: mmt_install
+#   changed_when: mmt_install.rc != 0
+
+# - name: Set s_log4j.appender.File.File in log4j.properties
+#   lineinfile:
+#     path: "{{ content_folder }}/webapps/alfresco/WEB-INF/classes/log4j.properties"
+#     regexp: '^log4j.appender.File.File='
+#     line: "log4j.appender.File.File={{ content_folder }}/logs/alfresco.log"
+
+# - name: Grant all security permissions to alfresco webapp
+#   blockinfile:
+#     path: "{{ content_folder }}/conf/catalina.policy"
+#     block: |
+#       grant codeBase "file:${catalina.base}/webapps/alfresco/-" {
+#           permission java.security.AllPermission;
+#       };
+#       grant codeBase "file:${catalina.base}/webapps/ROOT/-" {
+#           permission org.apache.catalina.security.DeployXmlPermission "ROOT";
+#       };
+
+# - name: check if profiler file exists
+#   stat:
+#     path: "/usr/local/YourKit-JavaProfiler-2019.8/bin/attach.sh"
+#   register: profiler_exists
+
+# - name: Download JavaProfiler
+#   get_url:
+#     url: "https://www.yourkit.com/download/{{ java_profiler }}.zip"
+#     dest: "{{ java_profiler_runtime_dir }}/{{ java_profiler }}.zip"
+#     mode: '0440'
+#   when: not profiler_exists.stat.exists
+
+# - name: check if profiler archive file exists
+#   stat:
+#     path: "{{ java_profiler_runtime_dir }}/{{ java_profiler }}.zip"
+#   register: profiler_archive_exists
+
+# - name: Install JavaProfiler
+#   shell: /usr/java/bin/jar xvf "{{ java_profiler_runtime_dir }}/{{ java_profiler }}.zip"
+#   args:
+#     chdir: /usr/local/
+#   when: profiler_archive_exists.stat.exists
+
+# - name: Remove JavaProfiler
+#   file:
+#     path: "{{ java_profiler_runtime_dir }}/{{ java_profiler }}.zip"
+#     state: absent
+#   failed_when: false
+#   when: profiler_archive_exists.stat.exists
+
+# - name: test key doesn not exist
+#   command: '/usr/java/bin/keytool -v -list -keystore  {{ content_folder }}/shared/classes/alfresco/keystore/keystore -storepass {{ keystore_password }} -alias metadata'
+#   register: result
+#   failed_when: false
+#   changed_when: result.rc != 0
+
+# - name: Generate keys
+#   shell: '/usr/java/bin/keytool -genseckey -dname {{ cert_name }} -validity {{ cert_validity }} -alias metadata -keyalg AES -keysize 256 -keystore {{ content_folder }}/shared/classes/alfresco/keystore/keystore -storetype pkcs12 -storepass {{ keystore_password }}'
+#   when: result.rc != 0
+
+# - name: Check Ownership of {{ content_folder }}
+#   command: "find {{ content_folder }} ! -user {{ USERNAME }}"
+#   register: alf_owner
+#   changed_when: not alf_install_check.stat.exists
+
+# - name: Recursively change ownership of "{{ content_folder }}"
+#   file:
+#     path: "{{ content_folder }}"
+#     state: directory
+#     recurse: yes
+#     owner: "{{ USERNAME }}"
+#     group: "{{ GROUPNAME }}"
+#   changed_when: "alf_owner.rc != 0"
+
+- name: 'Check on package async task'
+  async_status:
+    jid: "{{ package_sleeper.results[0].ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: 30
+
+# - name: Change rights of "{{ content_folder }}/temp"
+#   file:
+#     path: "{{ content_folder }}/temp"
+#     state: directory
+#     mode: g+rwx
+
+# - name: Include postgres credentials
+#   include_tasks: "postgres.yml"
