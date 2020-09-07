@@ -1,5 +1,7 @@
 ---
 
+GROUPNAME: Alfresco
+USERNAME: alfresco
 
 alfresco:
   version: 6.2.2
@@ -73,4 +75,46 @@ ajp_port: "8009"
 solr_port: "8983"
 share_port: "8082"
 # share_host: "{{ ipv4_address['content'] }}"
+nginx_domain: alfresco.org
 share_host: "{{ nginx_domain }}"
+
+share:
+  version: 6.2.2
+
+share_folders:
+  - /shared/classes/alfresco/web-extension
+  - /amps_share
+  - /alfresco-mmt
+
+additional_amps:
+  - amp_name: "Google Docs Share Module"
+    amp_url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/3.2.0/alfresco-googledrive-share-3.2.0.amp"
+    amp_version: "3.2.0"
+
+share_templates:
+  - custom-slingshot-application-context.xml
+  - share-config-custom.xml
+  - smartfolders-amp-actions-config.xml
+
+# vars file for repository
+
+instance_name: share
+resource_path: target
+
+# set default user information
+groupname: "Alfresco"
+groupid: "1001"
+user: "alfresco"
+userid: "33000"
+
+repository:
+  protocol: http
+  host: localhost
+  port: 8080
+
+CSRF:
+  enabled: false
+  referer: "{{ repository.protocol }}://{{ repository.host }}/.*"
+  origin: "{{ repository.protocol }}://{{ repository.host }}"
+
+temp_dir: /tmp/ansible_share

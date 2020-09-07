@@ -40,6 +40,7 @@
   when: not remote_java.stat.exists
 
 - name: Copy Java
+  become: true
   copy:
     src: "{{ temp_dir }}/{{ jdk_folder }}/"
     dest: "{{ java_home }}"

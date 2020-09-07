@@ -9,13 +9,13 @@
     backup: true
   with_items: "{{ postgres_client_auth }}"
   notify: Restart postgresql
-- name: Create a new database with name "alfresco_{{ instance_name }}"
+- name: Create a new database with name "alfresco"
   become: true
   become_user: postgres
   postgresql_db:
     name: "{{ item['database'] }}"
   with_items: "{{ postgres_client_config }}"
-- name: Connect to alfresco_{{ instance_name }} database and set user's password with no expire date
+- name: Connect to alfresco  database and set user's password with no expire date
   become: true
   become_user: postgres
   postgresql_user:

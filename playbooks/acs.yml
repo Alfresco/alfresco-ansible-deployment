@@ -6,4 +6,3 @@
     - role: '../roles/tomcat'
   tags:
     - tomcat
-
