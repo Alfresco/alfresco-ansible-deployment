@@ -14,7 +14,7 @@ def get_ansible_vars(host):
 def test_java_exists(host, get_ansible_vars):
     "Check that java executable exists"
     assert_that(host.file("/opt/openjdk-{}/bin/java".format(get_ansible_vars["jdk_version"])).exists, get_ansible_vars["jdk_version"])
-    
+
 def test_java_version(host, get_ansible_vars):
     "Check that java version is correct"
     cmd = host.run("/opt/openjdk-{}/bin/java -version".format(get_ansible_vars["jdk_version"]))
