@@ -1,0 +1,9 @@
+- name: Tomcat Role
+  hosts: all
+  become: yes
+  become_method: sudo
+  roles:
+    - role: '../roles/tomcat'
+  tags:
+    - tomcat
+

@@ -1,0 +1,72 @@
+---
+# tasks file for roles/java
+- name: Check if dns entry is defined in /etc/resolv.conf
+  command:
+    cmd: 'grep -q 8.8.8.8 /etc/resolv.conf'
+  register: google_in_resolv
+  changed_when: false
+  failed_when: false
+
+- when: google_in_resolv.failed
+  name: fix dns issue with google dns
+  become: yes
+  shell: 'echo "nameserver 8.8.8.8" > /etc/resolv.conf'
+
+- name: check for JDK on remote box
+  stat:
+    path: '{{ java_home }}'
+  register: remote_java
+  failed_when: false
+
+- name: Create temp dir
+  file:
+    path: "{{ temp_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Download file with check (md5)
+  get_url:
+    url: "{{ jdk_url }}"
+    dest: "{{ temp_dir }}"
+    checksum: "md5:{{ jdk_md5_checksum }}"
+  register: remote_jdk_tar
+  when: not remote_java.stat.exists
+
+- name: Unarchive jdk tar.gz
+  unarchive:
+    src: "{{ temp_dir }}/{{ jdk_tar_file }}"
+    dest: "{{ temp_dir }}"
+    remote_src: yes
+  when: not remote_java.stat.exists
+
+- name: Copy Java
+  copy:
+    src: "{{ temp_dir }}/{{ jdk_folder }}/"
+    dest: "{{ java_home }}"
+    remote_src:  yes
+    owner: root
+    group: root
+    mode: 'u=rwx,go=rx'
+  when: not remote_java.stat.exists
+
+- name: Create configuration folder
+  become: yes
+  file:
+    path: "{{ config_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Add setenv bash file
+  become: yes
+  template:
+    src: setenv.sh
+    dest: "{{ config_dir }}/setenv.sh"
+    owner: root
+    group: root
+    mode: 'u=rwx,go=rx'
+
+- name: Add JAVA_HOME to path
+  become: yes
+  shell: "sh {{ config_dir }}/setenv.sh"
