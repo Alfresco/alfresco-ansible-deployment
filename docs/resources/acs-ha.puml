@@ -54,32 +54,18 @@ rectangle {
 }
 
 rectangle {
-    node "transformrouter-lb" as transformrouterlbnode #lightgrey {
-        component "NGINX Proxy" as transformrouterlb #4d9cea
+    node "transform-lb" as transformlbnode #lightgrey {
+        component "NGINX Proxy" as transformlb #4d9cea
     }
 
-    node "transform-router1" as transformrouternode1 #lightgrey {
-        component "Transform (Router & SFS)" as transformrouter1 #4d9cea
-        component "Java" as transformrouterjava1 #4d9cea
+    node "transform1" as transformnode1 #lightgrey {
+        component "Transform (Router, SFS & AIO)" as transform1 #4d9cea
+        component "Java" as transformjava1 #4d9cea
     }
 
-    node "transform-router2" as transformrouternode2 #lightgrey {
-        component "Transform (Router & SFS)" as transformrouter2 #4d9cea
-        component "Java" as transformrouterjava2 #4d9cea
-    }
-
-    node "transformengine-lb" as transformenginelbnode #lightgrey {
-        component "NGINX Proxy" as transformenginelb #4d9cea
-    }
-
-    node "transform-engine1" as transformenginenode1 #lightgrey {
-        component "Transform (T-Engine)" as transformengine1 #4d9cea
-        component "Java" as transformenginejava1 #4d9cea
-    }
-
-    node "transform-engine2" as transformenginenode2 #lightgrey {
-        component "Transform (T-Engine)" as transformengine2 #4d9cea
-        component "Java" as transformenginejava2 #4d9cea
+    node "transform2" as transformnode2 #lightgrey {
+        component "Transform (Router, SFS & AIO)" as transform2 #4d9cea
+        component "Java" as transformjava2 #4d9cea
     }
 }
 
@@ -101,6 +87,7 @@ rectangle {
 
 database "ActiveMQ" as amq
 database "PostgreSQL" as psql
+storage "NFS" as nfs
 
 adw .. proxy
 repo1 .. tomcat1
@@ -111,10 +98,8 @@ share2 .. tomcat2
 tomcat2 .. repojava2
 search1 .. searchjava1
 search2 .. searchjava2
-transformrouter1 .. transformrouterjava1
-transformrouter2 .. transformrouterjava2
-transformengine1 .. transformenginejava1
-transformengine2 .. transformenginejava2
+transform1 .. transformjava1
+transform2 .. transformjava2
 sync1 .. syncjava1
 sync2 .. syncjava2
 
@@ -129,12 +114,8 @@ repolb -down-> share1
 repolb -down-> share2
 searchlb -down-> search1
 searchlb -down-> search2
-transformrouterlb -down-> transformrouter1
-transformrouterlb -down-> transformrouter2
-transformrouter1 -down-> transformenginelb
-transformrouter2 -down-> transformenginelb
-transformenginelb -down-> transformengine1
-transformenginelb -down-> transformengine2
+transformlb -down-> transform1
+transformlb -down-> transform2
 synclb -down-> sync1
 synclb -down-> sync2
 
@@ -147,8 +128,8 @@ repo2 --> psql
 repo1 --> amq
 repo2 --> amq
 
-repo1 --> transformrouterlb
-repo2 --> transformrouterlb
+repo1 --> transformlb
+repo2 --> transformlb
 
 repo1 --> searchlb
 repo2 --> searchlb
@@ -160,13 +141,17 @@ repo2 --> synclb
 sync1 --> repolb
 sync2 --> repolb
 
-transformrouter1 --> amq
-transformrouter2 --> amq
+transform1 --> amq
+transform2 --> amq
 
 sync1 --> amq
 sync2 --> amq
 sync1 --> psql
 sync2 --> psql
+repo1 --> nfs
+repo2 --> nfs
+transform1 --> nfs
+transform2 --> nfs
 
 center footer Copyright 2020 Alfresco Software Inc
 
