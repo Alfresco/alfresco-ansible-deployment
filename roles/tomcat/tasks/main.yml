@@ -5,6 +5,18 @@
       path: "/opt/alfresco/tomcat.sh"
     register: wrapper
 
+  - name: Create Alfresco group {{ GROUPNAME }}
+    group:
+        name: "{{ GROUPNAME }}"
+        gid: "{{ GROUPID }}"
+
+  - name: Create Tomcat user {{ USERNAME }}
+    user:
+      name: "{{ USERNAME }}"
+      comment: Tomcat user
+      uid: "{{ USERID }}"
+      group: "{{ GROUPNAME }}"
+
   - name: Create work dir /opt/alfresco
     file:
       path: "/opt/alfresco"
@@ -32,18 +44,6 @@
     failed_when: false
     changed_when: install_check.rc != 0
     when: wrapper.stat.exists or wrapper_created.rc == 0
-
-  - name: Create Alfresco group {{ GROUPNAME }}
-    group:
-        name: "{{ GROUPNAME }}"
-        gid: "{{ GROUPID }}"
-
-  - name: Create Tomcat user {{ USERNAME }}
-    user:
-      name: "{{ USERNAME }}"
-      comment: Tomcat user
-      uid: "{{ USERID }}"
-      group: "{{ GROUPNAME }}"
 
   - name: Create log dir /var/log/alfresco
     file:
