@@ -1,6 +1,6 @@
 ---
   # tasks file for base-tomcat  
-  - name: check if "/opt/alfresco/tomcat.sh" file exists
+  - name: check if "/opt/alfresco/tomcat.sh" file is there
     stat:
       path: "/opt/alfresco/tomcat.sh"
     register: wrapper
