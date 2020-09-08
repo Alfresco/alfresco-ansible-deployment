@@ -89,7 +89,6 @@
     failed_when: false
     loop:
       "{{ tomcat_tgz_urls }}"
-    become: true
     become_user: root
     changed_when: tomcat_dir.rc !=0
 
@@ -98,7 +97,6 @@
       src: "/opt/apache-tomcat-{{ tomcat_version }}.tar.gz"
       dest: "/opt/"
       remote_src: yes
-    become: true
     become_user: root
     failed_when: false
     changed_when: tomcat_dir.rc !=0
