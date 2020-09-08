@@ -45,6 +45,11 @@
     changed_when: install_check.rc != 0
     when: wrapper.stat.exists or wrapper_created
 
+  - name: check if "/var/log/alfresco" dir exists
+    stat:
+      path: "/var/log/alfresco"
+    register: log_alf
+
   - name: Create log dir /var/log/alfresco
     file:
       path: "/var/log/alfresco"
@@ -54,6 +59,12 @@
       recurse: yes
       mode: '0755'
     become_user: root
+    when: log_alf.stat.exists
+
+  - name: check if "/var/log/alfresco" dir exists
+    stat:
+      path: "/var/log/alfresco"
+    register: tom_dir
 
   - name: Create dir {{ tomcat_config }}
     file:
@@ -64,6 +75,7 @@
       mode: '0755'
       recurse: yes
     become_user: root
+    when: tom_dir.stat.exists
 
   - name: Create webaps dir {{ tomcat_working }}/webapps
     file:
