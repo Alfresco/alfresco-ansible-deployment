@@ -43,7 +43,7 @@
         JAVA_HOME: "{{ java_home }}"
     failed_when: false
     changed_when: install_check.rc != 0
-    when: wrapper.stat.exists or wrapper_created.rc == 0
+    when: wrapper.stat.exists or wrapper_created
 
   - name: Create log dir /var/log/alfresco
     file:
