@@ -10,6 +10,7 @@
 - when: google_in_resolv.failed
   name: fix dns issue with google dns
   become: true
+  become_user: root
   shell: 'echo "nameserver 8.8.8.8" > /etc/resolv.conf'
 
 - name: check for JDK on remote box
@@ -20,6 +21,7 @@
 
 - name: Create temp dir
   become: true
+  become_user: root
   file:
     path: "{{ temp_dir }}"
     state: directory
@@ -43,6 +45,7 @@
 
 - name: Copy Java
   become: true
+  become_user: root
   copy:
     src: "{{ temp_dir }}/{{ jdk_folder }}/"
     dest: "{{ java_home }}"
@@ -54,6 +57,7 @@
 
 - name: Create configuration folder
   become: true
+  become_user: root
   file:
     path: "{{ config_dir }}"
     state: directory
@@ -63,6 +67,7 @@
 
 - name: Add setenv bash file
   become: true
+  become_user: root
   template:
     src: setenv.sh
     dest: "{{ config_dir }}/setenv.sh"
