@@ -1,13 +1,18 @@
 ---
   # tasks file for base-tomcat
+  - name: check if "/opt/alfresco/tomcat.sh" file exists
+    stat:
+      path: "/opt/alfresco/tomcat.sh"
+    register: wrapper
 
   - name: Check Tomcat version is installed
-    command: "/opt/apache-tomcat-{{tomcat_version}}/bin/catalina.sh configtest"
+    command: "/opt/alfresco/tomcat.sh configtest"
     register: install_check
     environment:
         JAVA_HOME: "{{ java_home }}"
     failed_when: false
     changed_when: install_check.rc != 0
+    when: wrapper.stat.exists
 
   - name: Create Alfresco group {{ GROUPNAME }}
     group:
@@ -27,7 +32,6 @@
       state: directory
       group: "{{ GROUPNAME }}"
       owner: "{{ USERNAME }}"
-      recurse: yes
       mode: '0755'
 
   - name: Create log dir /var/log/alfresco
@@ -38,8 +42,9 @@
       owner: "{{ USERNAME }}"
       recurse: yes
       mode: '0755'
+    failed_when: false
 
-  - name: Create webapps dir {{ tomcat_config }}
+  - name: Create dir {{ tomcat_config }}
     file:
       path: "{{ tomcat_config }}"
       state: directory
@@ -57,6 +62,12 @@
       recurse: yes
       mode: '0755'
 
+  - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/" dir exists
+    shell: "ls -l {{tomcat_config}}/"
+    failed_when: false
+    changed_when: false
+    register: tomcat_dir
+
   - name: Download Tomcat
     get_url:
       url: "{{ item }}"
@@ -68,7 +79,7 @@
       "{{ tomcat_tgz_urls }}"
     become: true
     become_user: root
-    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+    changed_when: tomcat_dir.rc !=0
 
   - name: Unarchive a file with extra options
     unarchive:
@@ -77,7 +88,8 @@
       remote_src: yes
     become: true
     become_user: root
-    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+    failed_when: false
+    changed_when: tomcat_dir.rc !=0     
 
   - name: Recursively change ownership of "/opt/apache-tomcat-{{ tomcat_version }}/"
     file:
@@ -87,7 +99,7 @@
       group: "{{ GROUPNAME }}"
       owner: "{{ USERNAME }}"
       mode: 'o=r,g=rwx'
-    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+    changed_when: tomcat_dir.rc !=0
 
   - name: check if conf exists
     shell: "ls -l {{tomcat_config}}/conf"
@@ -106,12 +118,12 @@
 
   - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/conf"
     file: path="/opt/apache-tomcat-{{ tomcat_version }}/conf" state=absent
+    changed_when: False
 
-  - name: check if temp exists
-    shell: "ls -l {{ tomcat_working }}/temp"
-    register: temp_state
-    failed_when: false
-    changed_when: false
+  - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/temp" dir exists
+    stat:
+      path: "/opt/apache-tomcat-{{ tomcat_version }}/temp"
+    register: temp_dir_exists
 
   - name: Copy files from "/opt/apache-tomcat-{{ tomcat_version }}/temp to {{ tomcat_working }}"
     copy:
@@ -120,10 +132,7 @@
       dest: "{{ tomcat_working }}"
       group: "{{ GROUPNAME }}"
       owner: "{{ USERNAME }}"
-    when: temp_state.rc !=0
-
-  - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/temp"
-    file: path="/opt/apache-tomcat-{{ tomcat_version }}/temp" state=absent
+    when: temp_dir_exists.stat.exists
 
   - name: check if work exists
     shell: "ls -l {{tomcat_config}}/work"
@@ -138,16 +147,19 @@
       dest: "{{ tomcat_working }}/work"
       group: "{{ GROUPNAME }}"
       owner: "{{ USERNAME }}"
-    when: temp_state.rc !=0
+    when: work_state.rc !=0
 
-  - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/temp"
-    file: path="/opt/apache-tomcat-{{ tomcat_version }}/temp" state=absent
+#  - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/temp"
+#    file: path="/opt/apache-tomcat-{{ tomcat_version }}/temp" state=absent
+#    changed_when: False
 
-  - name: Remove old files "/opt/apache-tomcat-{{tomcat_version}}/logs"
+  - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/logs"
     file: path="/opt/apache-tomcat-{{ tomcat_version }}/logs" state=absent
+    changed_when: False
 
-  - name: Remove old files "/opt/apache-tomcat-{{tomcat_version}}/webapps"
+  - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/webapps"
     file: path="/opt/apache-tomcat-{{ tomcat_version }}/webapps" state=absent
+    changed_when: False
 
   - name: Add "{{ tomcat_config }}/conf/server.xml"
     template:
