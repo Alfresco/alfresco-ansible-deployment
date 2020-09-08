@@ -146,7 +146,7 @@
     when: temp_dir_exists.stat.exists
 
   - name: check if work exists
-    shell: "ls -l {{tomcat_config}}/work"
+    shell: "ls -l {{ tomcat_config }}/work"
     register: work_state
     failed_when: false
     changed_when: false
