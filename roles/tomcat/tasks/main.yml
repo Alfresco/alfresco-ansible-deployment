@@ -1,10 +1,19 @@
 ---
-  # tasks file for base-tomcat
+  # tasks file for base-tomcat  
   - name: check if "/opt/alfresco/tomcat.sh" file exists
     stat:
       path: "/opt/alfresco/tomcat.sh"
     register: wrapper
 
+  - name: Create work dir /opt/alfresco
+    file:
+      path: "/opt/alfresco"
+      state: directory
+      group: "{{ GROUPNAME }}"
+      owner: "{{ USERNAME }}"
+      mode: '0755'
+    when: not wrapper.stat.exists
+    
   - name: Add /opt/alfresco/tomcat.sh
     template:
         src: tomcat.sh
@@ -35,14 +44,6 @@
       comment: Tomcat user
       uid: "{{ USERID }}"
       group: "{{ GROUPNAME }}"
-
-  - name: Create log dir /opt/alfresco
-    file:
-      path: "/opt/alfresco"
-      state: directory
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
-      mode: '0755'
 
   - name: Create log dir /var/log/alfresco
     file:
