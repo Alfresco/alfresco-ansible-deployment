@@ -5,14 +5,24 @@
       path: "/opt/alfresco/tomcat.sh"
     register: wrapper
 
+  - name: Add /opt/alfresco/tomcat.sh
+    template:
+        src: tomcat.sh
+        dest: "/opt/alfresco/tomcat.sh"
+        group: "{{ GROUPNAME }}"
+        owner: "{{ USERNAME }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+    register: wrapper_created
+    when: not wrapper.stat.exists
+
   - name: Check Tomcat version is installed
-    command: "/opt/alfresco/tomcat.sh configtest"
+    command: "su - {{ USERNAME }} -c '/opt/alfresco/tomcat.sh configtest'"
     register: install_check
     environment:
         JAVA_HOME: "{{ java_home }}"
     failed_when: false
     changed_when: install_check.rc != 0
-    when: wrapper.stat.exists
+    when: wrapper.stat.exists or wrapper_created.rc == 0
 
   - name: Create Alfresco group {{ GROUPNAME }}
     group:
@@ -52,7 +62,8 @@
       owner: "{{ USERNAME }}"
       mode: '0755'
       recurse: yes
-
+    failed_when: false
+    
   - name: Create webaps dir {{ tomcat_working }}/webapps
     file:
       path: "{{ tomcat_working }}/webapps"
@@ -116,7 +127,7 @@
       owner: "{{ USERNAME }}"
     when: conf_state.rc !=0
   
-  - name: "Remove old files /opt/apache-tomcat-{{ tomcat_version }}/conf"
+  - name: Remove old files /opt/apache-tomcat-{{ tomcat_version }}/conf
     file: path="/opt/apache-tomcat-{{ tomcat_version }}/conf" state=absent
     changed_when: False
 
@@ -192,15 +203,6 @@
   - name: adding license server
     lineinfile: dest="/etc/opt/alfresco/setenv.sh" line="export TOMCAT_HOME=/opt/apache-tomcat-{{ tomcat_version }}"
     when: test_tomcat_home.stdout != 0
-
-  - name: Add /opt/alfresco/tomcat.sh
-    template:
-        src: tomcat.sh
-        dest: "/opt/alfresco/tomcat.sh"
-        group: "{{ GROUPNAME }}"
-        owner: "{{ USERNAME }}"
-        mode: 'u=rwx,g=rwx,o=rx'
-    when: install_check.rc != 0
 
   - name: Add tomcat.service
     template:
