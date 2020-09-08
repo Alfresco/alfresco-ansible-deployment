@@ -59,7 +59,7 @@
       recurse: yes
       mode: '0755'
     become_user: root
-    when: log_alf.stat.exists
+    when: not log_alf.stat.exists
 
   - name: check if "/var/log/alfresco" dir exists
     stat:
@@ -75,7 +75,7 @@
       mode: '0755'
       recurse: yes
     become_user: root
-    when: tom_dir.stat.exists
+    when: not tom_dir.stat.exists
 
   - name: Create webaps dir {{ tomcat_working }}/webapps
     file:
