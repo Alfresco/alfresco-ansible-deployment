@@ -115,8 +115,8 @@
       group: "{{ GROUPNAME }}"
       owner: "{{ USERNAME }}"
     when: conf_state.rc !=0
-
-  - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/conf"
+  
+  - name: "Remove old files /opt/apache-tomcat-{{ tomcat_version }}/conf"
     file: path="/opt/apache-tomcat-{{ tomcat_version }}/conf" state=absent
     changed_when: False
 
@@ -190,7 +190,7 @@
     changed_when: test_tomcat_home.rc != 0
 
   - name: adding license server
-    lineinfile: dest=/etc/opt/alfresco/setenv.sh line="export TOMCAT_HOME=/opt/apache-tomcat-{{ tomcat_version }}"
+    lineinfile: dest="/etc/opt/alfresco/setenv.sh" line="export TOMCAT_HOME=/opt/apache-tomcat-{{ tomcat_version }}"
     when: test_tomcat_home.stdout != 0
 
   - name: Add /opt/alfresco/tomcat.sh
