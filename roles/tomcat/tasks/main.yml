@@ -13,7 +13,7 @@
       owner: "{{ USERNAME }}"
       mode: '0755'
     when: not wrapper.stat.exists
-    
+
   - name: Add /opt/alfresco/tomcat.sh
     template:
         src: tomcat.sh
