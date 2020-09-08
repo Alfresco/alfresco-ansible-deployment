@@ -63,7 +63,7 @@
       mode: '0755'
       recurse: yes
     failed_when: false
-    
+
   - name: Create webaps dir {{ tomcat_working }}/webapps
     file:
       path: "{{ tomcat_working }}/webapps"
@@ -74,7 +74,7 @@
       mode: '0755'
 
   - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/" dir exists
-    shell: "ls -l {{tomcat_config}}/"
+    shell: "ls -l {{ tomcat_config }}/"
     failed_when: false
     changed_when: false
     register: tomcat_dir
@@ -100,7 +100,7 @@
     become: true
     become_user: root
     failed_when: false
-    changed_when: tomcat_dir.rc !=0     
+    changed_when: tomcat_dir.rc !=0
 
   - name: Recursively change ownership of "/opt/apache-tomcat-{{ tomcat_version }}/"
     file:
@@ -113,20 +113,20 @@
     changed_when: tomcat_dir.rc !=0
 
   - name: check if conf exists
-    shell: "ls -l {{tomcat_config}}/conf"
+    shell: "ls -l {{ tomcat_config }}/conf"
     register: conf_state
     failed_when: false
     changed_when: false
 
-  - name: Copy files from "/opt/apache-tomcat-{{ tomcat_version }}/conf to {{tomcat_config}}"
-    copy: 
-      remote_src: True 
-      src: "/opt/apache-tomcat-{{ tomcat_version }}/conf" 
-      dest: "{{tomcat_config}}"
+  - name: Copy files from "/opt/apache-tomcat-{{ tomcat_version }}/conf to {{ tomcat_config }}"
+    copy:
+      remote_src: True
+      src: "/opt/apache-tomcat-{{ tomcat_version }}/conf"
+      dest: "{{ tomcat_config }}"
       group: "{{ GROUPNAME }}"
       owner: "{{ USERNAME }}"
     when: conf_state.rc !=0
-  
+
   - name: Remove old files /opt/apache-tomcat-{{ tomcat_version }}/conf
     file: path="/opt/apache-tomcat-{{ tomcat_version }}/conf" state=absent
     changed_when: False
