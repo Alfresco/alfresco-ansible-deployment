@@ -1,14 +1,13 @@
 ---
 dependency:
   name: galaxy
-
 driver:
   name: docker
-
 platforms:
   - name: instance
     image: centos/systemd:latest
     privileged: true
+    pre_build_image: true
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
     command: "/usr/sbin/init"
@@ -36,26 +35,16 @@ platforms:
       - 0.0.0.0:8099:8099/tcp
       - 0.0.0.0:8983:8983/tcp
       - 0.0.0.0:9090:9090/tcp
-
-scenario:
-  name: default
-
-lint: |
-  ansible-lint -v playbooks/acs.yml
-  yamllint .
-  find . -name "*.py" ! -name __init__.py | xargs pylint
-
 provisioner:
   name: ansible
   playbooks:
-    converge: ../../playbooks/acs.yml
-
+    converge: converge.yml
 verifier:
   name: testinfra
-  directory: ../../tests
+  directory: tests
   env:
     ANSIBLE_TIMEOUT: "30"
-    ANSIBLE_SSH_RETRIES: "5"
+    ANSIBLE_SSH_RETRIES: "15"
     PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
   options:
     v: 1

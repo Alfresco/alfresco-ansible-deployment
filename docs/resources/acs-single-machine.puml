@@ -11,12 +11,12 @@ skinparam rectangle {
 actor Client
 
 node "localhost" #lightgrey {
-    component "NGINX proxy" as proxy #4d9cea
+    component "NGINX Proxy" as proxy #4d9cea
     component "Repository" as repo #4d9cea
     component "Share" as share #4d9cea
     component "Digital Workspace" as adw #4d9cea
     component "Search Service" as search #4d9cea
-    component "Transform Components" as transform #4d9cea
+    component "Transform (AIO only)" as transform #4d9cea
     component "Sync Service" as sync #4d9cea
     component "Tomcat" as tomcat  #4d9cea
     component "ActiveMQ" as amq #4d9cea
@@ -24,13 +24,9 @@ node "localhost" #lightgrey {
     component "PostgreSQL" as psql #4d9cea
 }
 
-proxy --> repo
-proxy --> share
-proxy --> adw
-
+adw .. proxy
 repo .. tomcat
 share .. tomcat
-adw .. tomcat
 tomcat .. java
 search .. java
 transform .. java
@@ -39,17 +35,21 @@ amq .. java
 
 Client --> proxy
 
+proxy --> repo
+proxy --> share
+proxy --> adw
+
 share --> repo
 adw --> repo
 
 repo --> psql
 repo --> transform
 repo --> amq
+repo <--> search
+repo <--> sync
 
-search <--> repo
 transform --> amq
 
-sync <--> repo
 sync --> amq
 sync --> psql
 

@@ -9,7 +9,7 @@
 
 - when: google_in_resolv.failed
   name: fix dns issue with google dns
-  become: yes
+  become_user: root
   shell: 'echo "nameserver 8.8.8.8" > /etc/resolv.conf'
 
 - name: check for JDK on remote box
@@ -19,6 +19,7 @@
   failed_when: false
 
 - name: Create temp dir
+  become_user: root
   file:
     path: "{{ temp_dir }}"
     state: directory
@@ -36,21 +37,23 @@
   unarchive:
     src: "{{ temp_dir }}/{{ jdk_tar_file }}"
     dest: "{{ temp_dir }}"
-    remote_src: yes
+    remote_src: true
+    mode: '0755'
   when: not remote_java.stat.exists
 
 - name: Copy Java
+  become_user: root
   copy:
     src: "{{ temp_dir }}/{{ jdk_folder }}/"
     dest: "{{ java_home }}"
-    remote_src:  yes
+    remote_src: true
     owner: root
     group: root
     mode: 'u=rwx,go=rx'
   when: not remote_java.stat.exists
 
 - name: Create configuration folder
-  become: yes
+  become_user: root
   file:
     path: "{{ config_dir }}"
     state: directory
@@ -64,7 +67,7 @@
   register: setenv_exists
 
 - name: Add setenv bash file
-  become: yes
+  become_user: root
   template:
     src: setenv.sh
     dest: "{{ config_dir }}/setenv.sh"
@@ -73,10 +76,3 @@
     mode: 'u=rwx,go=rx'
   register: setenv_create
   when: not setenv_exists.stat.exists
-
-- name: Add JAVA_HOME to path
-  become: yes
-  shell: "sh {{ config_dir }}/setenv.sh"
-  register: java_to_path
-  changed_when: java_to_path.rc != 0
-
