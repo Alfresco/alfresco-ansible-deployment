@@ -2,10 +2,6 @@
 - name: Converge
   hosts: all
   tasks:
-    # - name: Include vars
-    #   include_vars:
-    #     file: ../../java/vars/main.yml
-    #     name: "java vars"
     - name: "Include java"
       include_role:
         name: "java"

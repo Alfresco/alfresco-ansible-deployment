@@ -19,7 +19,7 @@
   failed_when: false
 
 - name: Create temp dir
-  # become: true
+  become: true
   file:
     path: "{{ temp_dir }}"
     state: directory
@@ -42,7 +42,7 @@
   when: not remote_java.stat.exists
 
 - name: Copy Java
-  # become: true
+  become: true
   copy:
     src: "{{ temp_dir }}/{{ jdk_folder }}/"
     dest: "{{ java_home }}"
@@ -53,7 +53,7 @@
   when: not remote_java.stat.exists
 
 - name: Create configuration folder
-  # become: true
+  become: true
   file:
     path: "{{ config_dir }}"
     state: directory
@@ -62,7 +62,7 @@
     mode: '0755'
 
 - name: Add setenv bash file
-  # become: true
+  become: true
   template:
     src: setenv.sh
     dest: "{{ config_dir }}/setenv.sh"
