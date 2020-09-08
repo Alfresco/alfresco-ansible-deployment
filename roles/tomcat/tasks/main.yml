@@ -113,11 +113,10 @@
       mode: 'o=r,g=rwx'
     changed_when: tomcat_dir.rc !=0
 
-  - name: check if conf exists
-    shell: "ls -l {{ tomcat_config }}/conf"
-    register: conf_state
-    failed_when: false
-    changed_when: false
+  - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/conf" dir exists
+    stat:
+      path: "/opt/apache-tomcat-{{ tomcat_version }}/conf"
+    register: conf_dir_exists
 
   - name: Copy files from "/opt/apache-tomcat-{{ tomcat_version }}/conf to {{ tomcat_config }}"
     copy:
@@ -126,7 +125,7 @@
       dest: "{{ tomcat_config }}"
       group: "{{ GROUPNAME }}"
       owner: "{{ USERNAME }}"
-    when: conf_state.rc !=0
+    when: conf_dir_exists.stat.exists
 
   - name: Remove old files /opt/apache-tomcat-{{ tomcat_version }}/conf
     file: path="/opt/apache-tomcat-{{ tomcat_version }}/conf" state=absent
