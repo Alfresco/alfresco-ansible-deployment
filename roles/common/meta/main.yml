@@ -1,0 +1,14 @@
+galaxy_info:
+  author: Andrei Ciubotaru
+  description: Alfresco Main Vars
+  company: Alfresco
+  license: Alfresco
+  platforms:
+  - name: Centos
+    versions:
+    - 7
+  min_ansible_version: 2.9
+  galaxy_tags: []
+
+allow_duplicates: yes
+dependencies:

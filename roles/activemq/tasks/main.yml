@@ -1,0 +1,6 @@
+---
+# tasks file for roles/activemq
+
+- name: Include vars for nexus credentials
+  include_vars: "nexus.yml"
+  failed_when: false

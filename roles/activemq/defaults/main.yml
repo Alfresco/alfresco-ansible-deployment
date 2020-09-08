@@ -1,0 +1,9 @@
+---
+# defaults file for roles/activemq
+ACTIVEMQ_VERSION: "5.15.8"
+DOWNLOAD_URL: "https://artifacts.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/apache/apache-activemq/5.15.8/apache-activemq-5.15.8-bin.tar.gz"
+ACTIVEMQ_ADMIN_LOGIN: alfresco
+ACTIVEMQ_ADMIN_PASSWORD: alfresco
+ACTIVEMQ_CONFIG_MINMEMORY: 512
+ACTIVEMQ_CONFIG_MAXMEMORY: 2048
+ACTIVEMQ_BROKER_NAME: localhost

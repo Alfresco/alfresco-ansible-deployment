@@ -1,0 +1,5 @@
+---
+- name: activemq-restart
+  systemd:
+    name: activemq
+    state: restarted
