@@ -44,4 +44,4 @@ jobs:
         - MOLECULE_NO_LOG=false
       install: pip install 'molecule[docker]'
       script:
-        - cd roles/tomcat/ && molecule test        
+        - cd roles/tomcat/ && molecule --debug test        
