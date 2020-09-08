@@ -6,8 +6,8 @@ from hamcrest import contains_string, assert_that
 @pytest.fixture()
 def get_ansible_vars(host):
     """Define AnsibleVars"""
-    java_role = "file=../../../../java/vars/main.yml name=java_role"
-    tomcat_role = "file=../../../vars/main.yml name=tomcat_role"
+    java_role = "file=../../../java/vars/main.yml name=java_role"
+    tomcat_role = "file=../../vars/main.yml name=tomcat_role"
     ansible_vars = host.ansible("include_vars", java_role)["ansible_facts"]["java_role"]
     ansible_vars.update(host.ansible("include_vars", tomcat_role)["ansible_facts"]["tomcat_role"])
     return ansible_vars
