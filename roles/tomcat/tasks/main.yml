@@ -136,6 +136,7 @@
       group: "{{ GROUPNAME }}"
       owner: "{{ USERNAME }}"
     when: conf_dir_exists.stat.exists
+    changed_when: False
 
   - name: Remove old files /opt/apache-tomcat-{{ tomcat_version }}/conf
     file: path="/opt/apache-tomcat-{{ tomcat_version }}/conf" state=absent
