@@ -53,6 +53,7 @@
       owner: "{{ USERNAME }}"
       recurse: yes
       mode: '0755'
+    become_user: root
 
   - name: Create dir {{ tomcat_config }}
     file:
@@ -62,6 +63,7 @@
       owner: "{{ USERNAME }}"
       mode: '0755'
       recurse: yes
+    become_user: root
 
   - name: Create webaps dir {{ tomcat_working }}/webapps
     file:
