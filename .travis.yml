@@ -1,0 +1,40 @@
+---
+os: linux
+dist: xenial
+language: python
+python:
+  - "3.8.2"
+cache: pip
+
+services:
+  - docker
+
+before_install:
+  - pip install ansible molecule ansible-lint PyHamcrest pylint testinfra
+
+stages:
+  - name: Linters
+  - name: Unit tests
+
+jobs:
+  include:
+    - stage: Linters
+      name: "ansible-lint"
+      install: pip install --upgrade ansible-lint
+      script:
+        - ansible-lint -v playbooks/acs.yml
+    - name: "pylint"
+      install: pip install --upgrade pylint
+      script:
+        - find . -name "*.py" ! -name __init__.py | xargs pylint
+    - name: "yamllint"
+      install: pip install --upgrade yamllint
+      script:
+        - yamllint .
+    - stage: Unit tests
+      name: Java Role unit tests
+      env:
+        - MOLECULE_NO_LOG=false
+      install: pip install 'molecule[docker]'
+      script:
+        - cd roles/java/ && molecule test

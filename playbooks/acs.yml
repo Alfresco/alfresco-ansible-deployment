@@ -1,0 +1,9 @@
+---
+- name: Java Role
+  hosts: all
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/java'
+  tags:
+    - java
