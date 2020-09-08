@@ -149,10 +149,6 @@
       owner: "{{ USERNAME }}"
     when: work_state.rc !=0
 
-#  - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/temp"
-#    file: path="/opt/apache-tomcat-{{ tomcat_version }}/temp" state=absent
-#    changed_when: False
-
   - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/logs"
     file: path="/opt/apache-tomcat-{{ tomcat_version }}/logs" state=absent
     changed_when: False
@@ -220,4 +216,3 @@
       name: tomcat.service
       state: started
       enabled: true
-
