@@ -11,101 +11,67 @@ skinparam rectangle {
 actor Client
 
 node "ingress" as ingressnode #lightgrey {
-    component "NGINX proxy" as proxy #4d9cea
+    component "NGINX Proxy" as proxy #4d9cea
     component "Digital Workspace" as adw #4d9cea
 }
 
-rectangle {
-    node "repository-lb" as repolbnode #lightgrey {
-        component "Load Balancer" as repolb #4d9cea
-    }
-
-    node "repository" as reponode #lightgrey {
-        component "Repository" as repo #4d9cea
-        component "Tomcat" as repotomcat  #4d9cea
-        component "Java" as repojava #4d9cea
-    }
+node "repository" as reponode #lightgrey {
+    component "Repository" as repo #4d9cea
+    component "Share" as share #4d9cea
+    component "Tomcat" as tomcat  #4d9cea
+    component "Java" as repojava #4d9cea
 }
 
-repo .. repotomcat
-repotomcat .. repojava
-
-rectangle {
-    node "share-lb" as sharelbnode #lightgrey {
-        component "Load Balancer" as sharelb #4d9cea
-    }
-
-    node "share" as sharenode #lightgrey {
-        component "Share" as share #4d9cea
-        component "Tomcat" as sharetomcat #4d9cea
-        component "Java" as sharejava #4d9cea
-    }
+node "search" as searchnode #lightgrey {
+    component "Search Service" as search #4d9cea
+    component "Java" as searchjava #4d9cea
 }
-
-share .. sharetomcat
-sharetomcat .. sharejava
-
-rectangle {
-    node "search-lb" as searchlbnode #lightgrey {
-        component "Load Balancer" as searchlb #4d9cea
-    }
-
-    node "search" as searchnode #lightgrey {
-        component "Search Service" as search #4d9cea
-        component "Java" as searchjava #4d9cea
-    }
-}
-
-search .. searchjava
 
 node "transform" as transformnode #lightgrey {
-    component "Transform Components" as transform #4d9cea
+    component "Transform (Router, SFS & AIO)" as transform #4d9cea
     component "Java" as transformjava #4d9cea
 }
-
-transform .. transformjava
 
 node "sync" as syncnode #lightgrey {
     component "Sync Service" as sync #4d9cea
     component "Java" as syncjava #4d9cea
 }
 
-sync .. syncjava
-
 node "activemq" as amqnode #lightgrey {
     component "ActiveMQ" as amq #4d9cea
     component "Java" as amqjava #4d9cea
 }
 
-amq .. amqjava
-
 node "database" as dbnode #lightgrey {
     component "PostgreSQL" as psql #4d9cea
 }
 
+adw .. proxy
+repo .. tomcat
+share .. tomcat
+tomcat .. repojava
+search .. searchjava
+transform .. transformjava
+sync .. syncjava
+amq .. amqjava
+
 Client --> proxy
 
-proxy --> repolb
-proxy --> sharelb
+proxy --> repo
+proxy --> share
 proxy --> adw
 
-sharelb -down-> share
-repolb -down-> repo
-searchlb -down-> search
+share -right-> repo
+adw --> repo
 
-share --> repolb
-adw --> repolb
-
-repo --> searchlb
 repo --> psql
 repo --> transform
-repo --> sync
 repo --> amq
+repo <--> search
+repo <--> sync
 
-search --> repolb
 transform --> amq
 
-sync --> repolb
 sync --> amq
 sync --> psql
 
