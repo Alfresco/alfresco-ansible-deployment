@@ -2,7 +2,7 @@
   # tasks file for base-tomcat
 
   - name: Check Tomcat version is installed
-    command: "/opt/apache-tomcat-{{ tomcat_version }}/bin/catalina.sh configtest"
+    command: "{{ tomcat_instance }}/bin/catalina.sh configtest"
     register: install_check
     environment:
         JAVA_HOME: "{{ java_home }}"
@@ -10,226 +10,236 @@
     changed_when: install_check.rc != 0
 
   - name: Create Alfresco group {{ GROUPNAME }}
-    become: true
     group:
         name: "{{ GROUPNAME }}"
         gid: "{{ GROUPID }}"
 
   - name: Create Tomcat user {{ USERNAME }}
-    become: true
     user:
       name: "{{ USERNAME }}"
       comment: Tomcat user
       uid: "{{ USERID }}"
       group: "{{ GROUPNAME }}"
 
-  - name: Create dir /opt/alfresco
-    become: true
+  - name: Create tomcat dir {{ tomcat_instance }}
     file:
-      path: "/opt/alfresco"
+      path: "{{ tomcat_instance }}"
       state: directory
       group: "{{ GROUPNAME }}"
       owner: "{{ USERNAME }}"
-      recurse: yes
       mode: '0755'
 
-  - name: Create log dir /var/log/alfresco
-    become: true
+  - name: Create native temp dir "{{ temp_dir }}/native_build_dir/"
     file:
-      path: "/var/log/alfresco"
+      path: "{{ temp_dir }}/native_build_dir/"
       state: directory
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
-      recurse: yes
       mode: '0755'
+    become: true
+    become_user: "{{ USERNAME }}"
 
-  - name: Create config dir {{ tomcat_config }}
-    become: true
-    file:
-      path: "{{ tomcat_config }}"
-      state: directory
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
-      mode: '0755'
-      recurse: yes
+  - name: Install RPMs needed to build Tomcat Native Library
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ utils }}"
 
-  - name: Create webapps dir {{ tomcat_working }}/webapps
+  - name: Import tomcat keys
+    rpm_key:
+      state: present
+      key: "{{ item }}"
+    register: download
+    until: download is succeeded
+    failed_when: false
+    loop:
+      "{{ tomcat_keys_urls }}"
+
+  - name: Import gpg keys
+    command: "gpg --keyserver hkp://p80.pool.sks-keyservers.net --recv-keys {{ item }}"
+    register: download
+    until: download is succeeded
+    failed_when: false
+    loop:
+      "{{ gpg_keys }}"
     become: true
-    file:
-      path: "{{ tomcat_working }}/webapps"
-      state: directory
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
-      recurse: yes
-      mode: '0755'
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
 
   - name: Download Tomcat
     get_url:
       url: "{{ item }}"
-      dest: "/opt/apache-tomcat-{{ tomcat_version }}.tar.gz"
+      dest: "{{ temp_dir }}/tomcat.tar.gz"
+      checksum: "sha512:{{ tomcat_sha512 }}"
     register: download
     until: download is succeeded
     failed_when: false
     loop:
       "{{ tomcat_tgz_urls }}"
     become: true
-    become_user: root
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Download Tomcat Asc
+    get_url:
+      url: "{{ item }}"
+      dest: "{{ temp_dir }}/tomcat.tar.gz.asc"
+    register: download
+    until: download is succeeded
+    failed_when: false
+    loop:
+      "{{ tomcat_asc_urls }}"
+    become: true
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Verify downloaded file
+    command: "gpg --batch --verify {{ temp_dir }}/tomcat.tar.gz.asc {{ temp_dir }}/tomcat.tar.gz"
+    become: true
+    become_user: "{{ USERNAME }}"
     when: install_check.rc != 0 or tomcat_version not in install_check.stderr
 
   - name: Unarchive a file with extra options
     unarchive:
-      src: "/opt/apache-tomcat-{{ tomcat_version }}.tar.gz"
-      dest: "/opt/"
+      src: "{{ temp_dir }}/tomcat.tar.gz"
+      dest: "{{ tomcat_instance }}"
+      group: "{{ GROUPNAME }}"
+      owner: "{{ USERNAME }}"
       remote_src: yes
+      extra_opts: ['--strip-components=1']
+    become: true
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+
+  - name: Unarchive tomcat native
+    unarchive:
+      src: "{{ tomcat_instance }}/bin/tomcat-native.tar.gz"
+      dest: "{{ temp_dir }}/native_build_dir/"
+      remote_src: yes
+      extra_opts: ['--strip-components=1']
+    become: true
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or 'Loaded APR based Apache Tomcat Native library' not in install_check.stderr
+
+  - name: Configure tomcat
+    command: >
+      ./configure
+      --build={{ ansible_architecture }}
+      --libdir={{ tomcat_instance }}/native-jni-lib
+      --prefix={{ tomcat_instance }}
+      --with-apr=/bin/apr-1-config
+      --with-ssl=yes
+      --with-java-home={{ java_home }}
+    args:
+      chdir: "{{ temp_dir }}/native_build_dir/native/"
+    become: yes
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or 'Loaded APR based Apache Tomcat Native library' not in install_check.stderr
+
+  - name: Make tomcat
+    command: make -j "{{ ansible_processor_count }}"
+    args:
+      chdir: "{{ temp_dir }}/native_build_dir/native"
+    become: yes
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or 'Loaded APR based Apache Tomcat Native library' not in install_check.stderr
+
+  - name: Make install tomcat
+    command: make install
+    args:
+      chdir: "{{ temp_dir }}/native_build_dir/native/"
+    become: yes
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or 'Loaded APR based Apache Tomcat Native library' not in install_check.stderr
+
+  - name: Find .sh files
+    find:
+      paths: "{{ tomcat_instance }}/bin"
+      patterns: '*.sh'
+    register: sh_files
+
+  - name: Switch shebangs from sh to bash
+    lineinfile:
+        path: "{{ item.path }}"
+        regexp: '^#!/bin/sh'
+        line: '#!/bin/bash'
+    become: yes
+    become_user: "{{ USERNAME }}"
+    loop: "{{ sh_files.files }}"
+    when: sh_files.matched > 0
+
+  - name: Recursively change ownership of logs "{{ tomcat_instance }}/logs"
+    file:
+      path: "{{ tomcat_instance }}/logs"
+      state: directory
+      recurse: yes
       group: "{{ GROUPNAME }}"
       owner: "{{ USERNAME }}"
       mode: 'o=r,g=rwx'
-    become: true
-    become_user: root
     when: install_check.rc != 0 or tomcat_version not in install_check.stderr
 
-  # - name: Recursively change ownership of "/opt/apache-tomcat-{{ tomcat_version }}/"
-  #   become: true
-  #   file:
-  #     path: "/opt/apache-tomcat-{{ tomcat_version }}/"
-  #     state: directory
-  #     recurse: yes
-  #     group: "{{ GROUPNAME }}"
-  #     owner: "{{ USERNAME }}"
-  #     mode: 'o=r,g=rwx'
-  #   when: install_check.rc != 0 or tomcat_version not in install_check.stderr
-
-  - name: check if conf exists
-    shell: "ls -l {{ tomcat_config }}/conf"
-    register: conf_state
-    failed_when: false
-    changed_when: false
-
-  - name: Copy files from "/opt/apache-tomcat-{{ tomcat_version }}/conf to {{ tomcat_config }}"
-    become: true
-    copy:
-      remote_src: True
-      src: "/opt/apache-tomcat-{{ tomcat_version }}/conf"
-      dest: "{{ tomcat_config }}"
+  - name: Recursively change ownership of "{{ tomcat_instance }}/work"
+    file:
+      path: "{{ tomcat_instance }}/work"
+      state: directory
+      recurse: yes
       group: "{{ GROUPNAME }}"
       owner: "{{ USERNAME }}"
-    when: conf_state.rc !=0
+      mode: 'o=r,g=rwx'
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
 
-  - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/conf"
-    become: true
-    file: path="/opt/apache-tomcat-{{ tomcat_version }}/conf" state=absent
+  - name: Recursively remove dir "{{ tomcat_instance }}/webapps/"
+    file:
+      path: "{{ tomcat_instance }}/webapps/"
+      state: absent
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
 
-  - name: check if temp exists
-    shell: "ls -l {{ tomcat_working }}/temp"
-    register: temp_state
-    failed_when: false
-    changed_when: false
+  - name: Replace default 404,403,500 page
+    blockinfile:
+        path: "{{ tomcat_instance }}/conf/web.xml"
+        insertbefore: '</web-app>'
+        block: |
+          <error-page>
+            <error-code>404</error-code>
+            <location>/error.jsp</location>
+          </error-page>
+          <error-page>
+            <error-code>403</error-code>
+            <location>/error.jsp</location>
+          </error-page>
+          <error-page>
+            <error-code>500</error-code>
+            <location>/error.jsp</location>
+          </error-page>
+    become: yes
+    become_user: "{{ USERNAME }}"
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
 
-  - name: Copy files from "/opt/apache-tomcat-{{ tomcat_version }}/temp to {{ tomcat_working }}"
-    become: true
-    copy:
-      remote_src: True
-      src: "/opt/apache-tomcat-{{ tomcat_version }}/temp"
-      dest: "{{ tomcat_working }}"
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
-    when: temp_state.rc !=0
-
-  - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/temp"
-    become: true
-    file: path="/opt/apache-tomcat-{{ tomcat_version }}/temp" state=absent
-
-  - name: check if work exists
-    shell: "ls -l {{ tomcat_config }}/work"
-    register: work_state
-    failed_when: false
-    changed_when: false
-
-  - name: Copy files from "/opt/apache-tomcat-{{ tomcat_version }}/work to {{ tomcat_working }}"
-    become: true
-    copy:
-      remote_src: True
-      src: "/opt/apache-tomcat-{{ tomcat_version }}/work"
-      dest: "{{ tomcat_working }}/work"
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
-    when: temp_state.rc !=0
-
-  - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/temp"
-    become: true
-    file: path="/opt/apache-tomcat-{{ tomcat_version }}/temp" state=absent
-
-  - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/logs"
-    become: true
-    file: path="/opt/apache-tomcat-{{ tomcat_version }}/logs" state=absent
-
-  - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/webapps"
-    become: true
-    file: path="/opt/apache-tomcat-{{ tomcat_version }}/webapps" state=absent
-
-  - name: Add "{{ tomcat_config }}/conf/server.xml"
-    become: true
+  - name: Add "{{ tomcat_instance }}/conf/server.xml"
     template:
         src: server.xml
-        dest: "{{ tomcat_config }}/conf/server.xml"
+        dest: "{{ tomcat_instance }}/conf/server.xml"
         group: "{{ GROUPNAME }}"
         owner: "{{ USERNAME }}"
     when: install_check.rc != 0 or tomcat_version not in install_check.stderr
 
-  - name: Create a symbolic link /etc/opt/alfresco/tomcat/logs
-    become: true
-    file:
-      src: /var/log/alfresco
-      dest: "{{ tomcat_config }}/logs"
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
-      state: link
-      force: yes
-
-  - name: Create a symbolic link "{{ tomcat_config }}"/work
-    become: true
-    file:
-      src: "{{ tomcat_working }}/work"
-      dest: "{{ tomcat_config }}/work"
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
-      state: link
-      force: yes
-
-  - name: checking for TOMCAT_HOME
-    shell: cat  /etc/opt/alfresco/setenv.sh | grep TOMCAT_HOME
-    register: test_tomcat_home
-    failed_when: false
-    changed_when: test_tomcat_home.rc != 0
-
-  - name: adding license server
-    become: true
-    lineinfile: dest=/etc/opt/alfresco/setenv.sh line="export TOMCAT_HOME=/opt/apache-tomcat-{{ tomcat_version }}"
-    when: test_tomcat_home.stdout != 0
-
-  - name: Add /opt/alfresco/tomcat.sh
-    become: true
+  - name: Add "{{ tomcat_instance }}/bin/setenv.sh"
     template:
-        src: tomcat.sh
-        dest: "/opt/alfresco/tomcat.sh"
+        src: setenv.sh
+        dest: "{{ tomcat_instance }}/bin/setenv.sh"
         group: "{{ GROUPNAME }}"
         owner: "{{ USERNAME }}"
-        mode: 'u=rwx,g=rwx,o=rx'
-    when: install_check.rc != 0
+    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
 
   - name: Add tomcat.service
-    become: true
     template:
         src: tomcat.service
-        dest: /usr/lib/systemd/system/tomcat.service
+        dest: /usr/lib/systemd/system/tomcat_{{ instance_name }}.service
         owner: root
         group: root
     notify: tomcat-restart
     when: install_check.rc != 0 or tomcat_version not in install_check.stderr
 
   - name: Ensure tomcat service is started and enabled on boot
-    become: true
     systemd:
-      name: tomcat.service
+      name: tomcat_{{ instance_name }}.service
       state: started
       enabled: true

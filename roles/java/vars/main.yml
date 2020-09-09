@@ -11,3 +11,4 @@ java_home: "/opt/openjdk-{{ jdk_version }}"
 
 temp_dir: /tmp/ansible_java
 config_dir: /etc/opt/alfresco
+

@@ -40,34 +40,29 @@
   when: not remote_java.stat.exists
 
 - name: Copy Java
-  become: true
   copy:
     src: "{{ temp_dir }}/{{ jdk_folder }}/"
     dest: "{{ java_home }}"
-    remote_src:  yes
+    remote_src:  true
     owner: root
     group: root
     mode: 'u=rwx,go=rx'
   when: not remote_java.stat.exists
 
-- name: Create configuration folder
+- name: make sure /etc/profile.d exists
   become: yes
   file:
-    path: "{{ config_dir }}"
+    path: /etc/profile.d
     state: directory
-    owner: root
-    group: root
-    mode: '0755'
-
-- name: Add setenv bash file
-  become: yes
-  template:
-    src: setenv.sh
-    dest: "{{ config_dir }}/setenv.sh"
     owner: root
     group: root
     mode: 'u=rwx,go=rx'
 
-- name: Add JAVA_HOME to path
+- name: export JAVA_HOME and add to PATH
   become: yes
-  shell: "sh {{ config_dir }}/setenv.sh"
+  template:
+    src: java.sh
+    dest: /etc/profile.d/java.sh
+    owner: root
+    group: root
+    mode: 'u=rw,go=r'
