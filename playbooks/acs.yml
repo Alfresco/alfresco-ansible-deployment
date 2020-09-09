@@ -1,6 +1,5 @@
 ---
 - name: Tomcat Role
-
   hosts: all
   become: true
   become_method: sudo

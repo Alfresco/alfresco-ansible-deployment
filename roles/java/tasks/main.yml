@@ -74,5 +74,6 @@
     owner: root
     group: root
     mode: 'u=rwx,go=rx'
+
   register: setenv_create
   when: not setenv_exists.stat.exists
