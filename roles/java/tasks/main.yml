@@ -61,6 +61,11 @@
     group: root
     mode: '0755'
 
+- name: check if setenv file exists
+  stat:
+    path: "{{ config_dir }}/setenv.sh"
+  register: setenv_exists
+
 - name: Add setenv bash file
   become_user: root
   template:
@@ -69,3 +74,6 @@
     owner: root
     group: root
     mode: 'u=rwx,go=rx'
+
+  register: setenv_create
+  when: not setenv_exists.stat.exists
