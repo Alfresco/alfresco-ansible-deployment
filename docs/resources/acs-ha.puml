@@ -89,6 +89,34 @@ database "ActiveMQ" as amq
 database "PostgreSQL" as psql
 storage "NFS" as nfs
 
+note top of repolb
+This is a single point of failure
+so customers may wish to replace 
+this with Nginx Plus and use its
+HA features.
+end note
+
+note top of searchlb
+This is a single point of failure
+so customers may wish to replace 
+this with Nginx Plus and use its
+HA features.
+end note
+
+note top of transformlb
+This is a single point of failure
+so customers may wish to replace 
+this with Nginx Plus and use its
+HA features.
+end note
+
+note top of synclb
+This is a single point of failure
+so customers may wish to replace 
+this with Nginx Plus and use its
+HA features.
+end note
+
 adw .. proxy
 repo1 .. tomcat1
 share1 .. tomcat1
