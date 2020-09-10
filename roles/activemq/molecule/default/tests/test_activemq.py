@@ -20,4 +20,3 @@ def get_ansible_vars(host):
 def test_activemq_exe_exists(host, get_ansible_vars):
     "Check that ActiveMQ executable exists"
     assert_that(host.file("/opt/apache-activemq-{}/bin/activemq".format(get_ansible_vars["activemq_version"])).exists, get_ansible_vars["activemq_home"])
-
