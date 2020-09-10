@@ -7,7 +7,7 @@
   register: activemq_exe
 
 - name: Download and untar activemq
-  become_user: "{{ username }}"
+  become_user: root
   unarchive:
       src: "{{ download_url }}"
       remote_src: true

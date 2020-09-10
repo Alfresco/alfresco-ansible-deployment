@@ -14,13 +14,6 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", common_role_defaults)["ansible_facts"]["common_role_defaults"])
     return ansible_vars
 
-# @pytest.mark.parametrize("folders", [
-#     get_ansible_vars["binaries_fodlers"],
-#     get_ansible_vars["config_folder"],
-#     get_ansible_vars["data_folder"],
-#     get_ansible_vars["logs_folder"]
-# ])
-
 def test_alfresco_user_exists(host, get_ansible_vars):
     "Check that alfresco user exists"
     assert_that(host.user(get_ansible_vars["username"]).exists)

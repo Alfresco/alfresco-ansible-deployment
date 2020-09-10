@@ -39,13 +39,13 @@ provisioner:
   name: ansible
   playbooks:
     converge: converge.yml
-# verifier:
-#   name: testinfra
-#   directory: tests
-#   env:
-#     ANSIBLE_TIMEOUT: "30"
-#     ANSIBLE_SSH_RETRIES: "15"
-#     PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
-#   options:
-#     v: 1
-#     s: true
+verifier:
+  name: testinfra
+  directory: tests
+  env:
+    ANSIBLE_TIMEOUT: "30"
+    ANSIBLE_SSH_RETRIES: "15"
+    PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
+  options:
+    v: 1
+    s: true
