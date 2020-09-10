@@ -32,6 +32,13 @@ jobs:
       script:
         - yamllint .
     - stage: Unit tests
+      name: Common Role unit tests
+      env:
+        - MOLECULE_NO_LOG=false
+      install: pip install 'molecule[docker]'
+      script:
+        - cd roles/common/ && molecule test
+    - stage: Unit tests
       name: Java Role unit tests
       env:
         - MOLECULE_NO_LOG=false

@@ -10,4 +10,6 @@ galaxy_info:
       versions:
         - 7
   galaxy_tags: []
-dependencies: []
+allow_duplicates: true
+dependencies:
+  - common

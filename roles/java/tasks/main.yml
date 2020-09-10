@@ -52,20 +52,17 @@
     mode: 'u=rwx,go=rx'
   when: not remote_java.stat.exists
 
-- name: Create configuration folder
-  become_user: root
-  file:
-    path: "{{ config_dir }}"
-    state: directory
-    owner: root
-    group: root
-    mode: '0755'
+- name: Check if setenv file exists
+  stat:
+    path: "{{ config_folder }}/setenv.sh"
+  register: setenv_exists
 
 - name: Add setenv bash file
-  become_user: root
+  become_user: "{{ username }}"
   template:
     src: setenv.sh
-    dest: "{{ config_dir }}/setenv.sh"
-    owner: root
-    group: root
+    dest: "{{ config_folder }}/setenv.sh"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
     mode: 'u=rwx,go=rx'
+  when: not setenv_exists.stat.exists

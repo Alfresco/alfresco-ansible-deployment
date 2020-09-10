@@ -2,6 +2,9 @@
 - name: Converge
   hosts: all
   tasks:
+    # - name: "Include roles/common"
+    #   include_role:
+    #     name: "roles/common"
     - name: "Include roles/activemq"
       include_role:
-        name: "roles/activemq"
+        name: "activemq"

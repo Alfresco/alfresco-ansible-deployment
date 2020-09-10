@@ -1,2 +1,6 @@
 ---
 # defaults file for roles/common
+binaries_folder: /opt/alfresco
+config_folder: /etc/opt/alfresco
+data_folder: /var/opt/alfresco
+logs_folder: /var/log/alfresco
