@@ -1,0 +1,5 @@
+postgres_major_version: 11
+postgres_listen_addresses: localhost
+postgres_client_auth: []
+postgres_config: []
+postgres_client_config: []

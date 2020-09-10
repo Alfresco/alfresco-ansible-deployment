@@ -45,3 +45,10 @@ jobs:
       install: pip install 'molecule[docker]'
       script:
         - cd roles/java/ && molecule test
+    - stage: Unit tests
+      name: Tomcat Role unit tests
+      env:
+        - MOLECULE_NO_LOG=false
+      install: pip install 'molecule[docker]'
+      script:
+        - cd roles/tomcat/ && molecule test

@@ -1,4 +1,12 @@
 ---
+- name: Tomcat Role
+  hosts: all
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/tomcat'
+  tags:
+    - tomcat
 - name: ActiveMQ Role
   hosts: all
   become: true

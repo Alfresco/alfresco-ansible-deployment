@@ -1,0 +1,10 @@
+---
+# vars file for tomcat
+tomcat_version: "8.5.56"
+tomcat_major: "8"
+
+tomcat_tgz_urls:
+  - "https://apache.claz.org/tomcat/tomcat-{{ tomcat_major }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
+
+tomcat_working: "{{ data_folder }}/tomcat"
+tomcat_config: "{{ config_folder }}/tomcat"

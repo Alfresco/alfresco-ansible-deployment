@@ -5,7 +5,7 @@
   failed_when: false
 
 - name: "Check existence of {{ group_name }} group"
-  shell: "set -o pipefail cat /etc/group | grep {{ group_name }}"
+  shell: "cat /etc/group | grep {{ group_name }}"
   register: group_presence
   failed_when: false
   changed_when: group_presence.rc != 0
@@ -42,6 +42,7 @@
     state: directory
     owner: "{{ username }}"
     group: "{{ group_name }}"
+    recurse: yes
     mode: '0755'
   when: not binaries_exists.stat.exists
 
@@ -57,6 +58,7 @@
     state: directory
     owner: "{{ username }}"
     group: "{{ group_name }}"
+    recurse: yes
     mode: '0755'
   when: not config_exists.stat.exists
 
@@ -72,6 +74,7 @@
     state: directory
     owner: "{{ username }}"
     group: "{{ group_name }}"
+    recurse: yes
     mode: '0755'
   when: not data_exists.stat.exists
 
@@ -87,5 +90,6 @@
     state: directory
     owner: "{{ username }}"
     group: "{{ group_name }}"
+    recurse: yes
     mode: '0755'
   when: not logs_exists.stat.exists
