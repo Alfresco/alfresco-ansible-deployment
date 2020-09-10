@@ -1,6 +1,6 @@
 galaxy_info:
   author: Lucian Suciu
-  description: Alfresco Repository
+  description: Alfresco Main Vars
   company: Alfresco
   license: Alfresco
   platforms:
@@ -9,8 +9,6 @@ galaxy_info:
     - 7
   min_ansible_version: 2.9
   galaxy_tags: []
-dependencies:
-- central
-- postgres
-- tomcat
 
+allow_duplicates: yes
+dependencies:

@@ -1,0 +1,5 @@
+---
+# tasks file for central
+- name: Include nexus credentials for local testing
+  include_vars: "nexus.yml"
+  failed_when: false
