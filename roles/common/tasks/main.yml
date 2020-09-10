@@ -5,7 +5,7 @@
   failed_when: false
 
 - name: "Check existence of {{ group_name }} group"
-  shell: "cat /etc/group | grep {{ group_name }}"
+  shell: "set -o pipefail cat /etc/group | grep {{ group_name }}"
   register: group_presence
   failed_when: false
   changed_when: group_presence.rc != 0

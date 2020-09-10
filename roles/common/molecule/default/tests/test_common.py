@@ -1,6 +1,6 @@
 """Common role Tests"""
-import pytest, string
-from hamcrest import contains_string, assert_that, equal_to
+import pytest
+from hamcrest import assert_that, equal_to
 
 # pylint: disable=redefined-outer-name
 @pytest.fixture()

@@ -14,6 +14,7 @@
       group: "{{ group_name }}"
       owner: "{{ username }}"
       dest: "/opt/"
+      mode: '0755'
   when: not activemq_exe.stat.exists
 
 - name: Check if configuration folder exists
@@ -64,7 +65,7 @@
 
 - name: Change location of ActiveMQ logs
   become_user: "{{ username }}"
-  replace: 
+  replace:
     path: "{{ activemq_conf }}/log4j.properties"
     regexp: "activemq.data"
     replace: "activemq.log"
@@ -73,7 +74,7 @@
 - name: Add activemq_home and host to setenv script
   become_user: "{{ username }}"
   blockinfile:
-    path: "{{config_folder}}/setenv.sh"
+    path: "{{ config_folder }}/setenv.sh"
     block: |
       export ACTIVEMQ_HOME={{ activemq_home }}
       export ACTIVEMQ_HOST={{ activemq_host }}
@@ -99,6 +100,7 @@
       dest: /etc/systemd/system/activemq.service
       owner: "{{ username }}"
       group: "{{ group_name }}"
+      mode: '0755'
 
 - name: Ensure activemq service is started and enabled on boot
   systemd:

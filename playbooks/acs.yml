@@ -1,9 +1,9 @@
 ---
-- name: Java Role
+- name: ActiveMQ Role
   hosts: all
   become: true
   become_method: sudo
   roles:
-    - role: '../roles/java'
+    - role: '../roles/activemq'
   tags:
-    - java
+    - activemq
