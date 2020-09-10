@@ -102,8 +102,8 @@
     changed_when: False
 
   - name: Remove old files /opt/apache-tomcat-{{ tomcat_version }}/conf
-    file: 
-      path: "/opt/apache-tomcat-{{ tomcat_version }}/conf" 
+    file:
+      path: "/opt/apache-tomcat-{{ tomcat_version }}/conf"
       state: absent
     changed_when: False
 
@@ -136,14 +136,14 @@
     when: work_dir_exists.stat.exists
 
   - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/logs"
-    file: 
-      path: "/opt/apache-tomcat-{{ tomcat_version }}/logs" 
+    file:
+      path: "/opt/apache-tomcat-{{ tomcat_version }}/logs"
       state: absent
     changed_when: False
 
   - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/webapps"
-    file: 
-      path: "/opt/apache-tomcat-{{ tomcat_version }}/webapps" 
+    file:
+      path: "/opt/apache-tomcat-{{ tomcat_version }}/webapps"
       state: absent
     changed_when: False
 
@@ -180,7 +180,7 @@
     changed_when: test_tomcat_home.rc != 0
 
   - name: Add TOMCAT_HOME to setenv script
-    lineinfile: 
+    lineinfile:
       path: "{{ config_folder }}/setenv.sh"
       line: "export TOMCAT_HOME=/opt/apache-tomcat-{{ tomcat_version }}"
     when: test_tomcat_home.stdout != 0

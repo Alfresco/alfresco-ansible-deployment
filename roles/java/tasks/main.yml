@@ -59,7 +59,7 @@
 
 - name: check if setenv file exists
   stat:
-    path: "{{ config_folder}}/setenv.sh"
+    path: "{{ config_folder }}/setenv.sh"
   register: setenv_exists
 
 - name: Add setenv bash file
