@@ -15,5 +15,5 @@ def get_ansible_vars(host):
 
 def test_java_home(host, get_ansible_vars):
     "Check that TOMCAT_HOME is environment variable is set"
-    cmd = host.run("source {}/setenv.sh && echo $TOMCAT_HOME".format(get_ansible_vars["config_dir"]))
+    cmd = host.run("source {}/setenv.sh && echo $TOMCAT_HOME".format(get_ansible_vars["config_folder"]))
     assert_that(cmd.stdout, contains_string("apache-tomcat-{}".format(get_ansible_vars["tomcat_version"])))
