@@ -2,9 +2,6 @@
 - name: Include vars for postgres credentials
   include_vars: "postgres.yml"
 
-- name: Include vars for postgres credentials
-  include_vars: "postgres.yml"
-
 - name: ensure a list of packages installed
   become: true
   package:
@@ -17,14 +14,19 @@
 
 - name: Create Directories
   become: yes
+  become_user: root
   file:
     path: "{{ item }}"
     state: directory
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
     mode: 'u=rwx,go=rx'
+    recurse: yes
   loop:
+     - "{{ base_folder }}modules/acs-platform"
+     - "{{ base_folder }}modules/acs-share"
      - "{{ content_folder }}/amps"
+     - "{{ content_folder }}/amps_share"
      - "{{ content_folder }}/alf_data"
      - "{{ content_folder }}/alfresco-mmt"
      - "{{ content_folder }}/webapps/alfresco"
@@ -181,21 +183,23 @@
 
 - name: check if keystore files exists
   stat:
-    path: "{{ data_folder }}/keystore"
+    path: "{{ data_folder }}/keystore/keystore"
   register: keystore_exists
+
 - name: Copy keystore
   become: true
   become_user: "{{ USERNAME }}"
   copy:
     remote_src: True
-    src: "{{ content_folder }}/alf_data/keystore"
-    dest: "{{ data_folder }}"
+    src: "{{ content_folder }}/alf_data/keystore/"
+    dest: "{{ data_folder }}/keystore/"
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
   when: not keystore_exists.stat.exists
+
 - name: Remove keystore files
   file:
-    path: "{{ data_folder }}/keystore"
+    path: "{{ content_folder }}/alf_data/keystore/"
     state: absent
 
 - name: check if classes files exists
@@ -208,7 +212,7 @@
   copy:
     remote_src: True
     src: "{{ content_folder }}/shared/classes/"
-    dest: "{{ settings_folder }}/classpath"
+    dest: "{{ settings_folder }}/classpath/"
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
   when: not classes_exists.stat.exists
@@ -250,6 +254,37 @@
     regexp: '<Context crossContext="true">'
     line: '<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/share.war">'
 
+- name: Create ROOT.xml
+  become: true
+  template:
+    owner: "{{ USERNAME }}"
+    group: "{{ GROUPNAME }}"
+    src: ROOT.xml
+    dest: "{{ tomcat_config }}/conf/Catalina/localhost/ROOT.xml"
+    mode: 'u=rwx,g=rwx,o=rx'
+  when: not global_properties.stat.exists
+
+- name: Create _vti_bin.xml
+  become: true
+  template:
+    owner: "{{ USERNAME }}"
+    group: "{{ GROUPNAME }}"
+    src: _vti_bin.xml
+    dest: "{{ tomcat_config }}/conf/Catalina/localhost/_vti_bin.xml"
+    mode: 'u=rwx,g=rwx,o=rx'
+  when: not global_properties.stat.exists
+
+- name: recreate "{{ settings_folder }}/classpath/"
+  become: yes
+  become_user: root
+  file:
+    path: "{{ settings_folder }}/classpath/"
+    state: directory
+    owner: "{{ USERNAME }}"
+    group: "{{ GROUPNAME }}"
+    mode: 'u=rwx,go=rx'
+    recurse: yes
+
 - name: Create alfresco-global.properties
   become: true
   template:
@@ -270,13 +305,20 @@
   retries: 300
   loop: "{{ amp_download_result.results }}"
 
-- name: Install amps on alfresco.war
-  shell: '/usr/java/bin/java -jar {{ content_folder }}/alfresco-mmt/alfresco-mmt.jar install {{ content_folder }}/amps {{ content_folder }}/web-server/webapps/alfresco.war -directory -nobackup -force'
+- name: Install amps on alfresco.war acs-platform
+  shell: '/bin/java -jar {{ content_folder }}/bin/alfresco-mmt.jar install {{ base_folder }}/modules/acs-platform {{ content_folder }}/web-server/webapps/alfresco.war -directory -force'
   register: mmt_install
   changed_when: mmt_install.rc != 0
 
+- name: Install amps on alfresco.war amps
+  shell: '/bin/java -jar {{ content_folder }}/bin/alfresco-mmt.jar install {{ content_folder }}/amps {{ content_folder }}/web-server/webapps/alfresco.war -directory -nobackup -force'
+  register: mmt_install
+  changed_when: mmt_install.rc != 0
+
+#sudo ${JAVA_HOME}/bin/java -jar ${ACS_HOME}/bin/alfresco-mmt.jar install {{ base_folder }}/modules/acs-share ${ACS_HOME}/web-server/webapps/share.war -directory $*
+
 - name: Install amps on share.war
-  shell: '/usr/java/bin/java -jar {{ content_folder }}/alfresco-mmt/alfresco-mmt.jar install {{ content_folder }}/amps_share {{ content_folder }}/web-server/webapps/share.war -directory -nobackup -force'
+  shell: '/bin/java -jar {{ content_folder }}/bin/alfresco-mmt.jar install {{ content_folder }}/amps_share {{ content_folder }}/web-server/webapps/share.war -directory -nobackup -force'
   register: mmt_install
   changed_when: mmt_install.rc != 0
 
@@ -312,9 +354,31 @@
 - name: Add tomcat.service
   become: true
   template:
-    src: .service
+    src: alfresco-content.service
     dest: /usr/lib/systemd/system/alfresco-content.service
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
   notify: alfresco-content-restart
-  when: alf_install_check.rc != 0
+
+- name: Include postgres credentials
+  include_tasks: "postgres.yml"
+
+- name: add PostResources to alfresco.xml
+  become: true
+  lineinfile:
+    path: "{{ tomcat_config }}/conf/Catalina/localhost/alfresco.xml"
+    regexp: '<PostResources base='
+    line: '<PostResources base="/opt/alfresco/modules/acs-platform"'
+
+- name: add PostResources to share.xml
+  become: true
+  lineinfile:
+    path: "{{ tomcat_config }}/conf/Catalina/localhost/share.xml"
+    regexp: '<PostResources base='
+    line: '<PostResources base="/opt/alfresco/modules/acs-share"'
+
+- name: Ensure alfresco content service is started and enabled on boot
+  systemd:
+    name: alfresco-content.service
+    state: started
+    enabled: true
