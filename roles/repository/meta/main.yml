@@ -14,4 +14,3 @@ dependencies:
 - postgres
 - activemq
 - tomcat
-
