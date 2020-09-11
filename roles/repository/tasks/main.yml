@@ -116,21 +116,6 @@
   retries: 300
   loop: "{{ war_download_result.results }}"
 
-- name: check if "{{ content_folder }}/shared/classes/alfresco-global.properties" exists
-  stat:
-    path: "{{ settings_folder }}/classpath/alfresco-global.properties"
-  register: global_properties
-
-- name: Create alfresco-global.properties
-  become: true
-  template:
-    owner: "{{ USERNAME }}"
-    group: "{{ GROUPNAME }}"
-    src: alfresco-global.properties
-    dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
-    mode: 'u=rwx,g=rwx,o=rx'
-  when: not global_properties.stat.exists
-
 - name: Render configuration templates
   become: yes
   template:
@@ -253,6 +238,11 @@
     path: "{{ tomcat_config }}/conf/Catalina/localhost/share.xml"
     regexp: '<Context crossContext="true">'
     line: '<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/share.war">'
+
+- name: check if "{{ settings_folder }}/classpath/alfresco-global.properties" exists
+  stat:
+    path: "{{ settings_folder }}/classpath/alfresco-global.properties"
+  register: global_properties
 
 - name: Create ROOT.xml
   become: true
