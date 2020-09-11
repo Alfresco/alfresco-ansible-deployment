@@ -6,10 +6,5 @@ tomcat_major: "8"
 tomcat_tgz_urls:
   - "https://apache.claz.org/tomcat/tomcat-{{ tomcat_major }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
 
-GROUPNAME: Alfresco
-GROUPID: 1001
-USERNAME: alfresco
-USERID: 33000
-
-tomcat_working: /var/opt/alfresco/tomcat
-tomcat_config: /etc/opt/alfresco/tomcat
+tomcat_working: "{{ data_folder }}/tomcat"
+tomcat_config: "{{ config_folder }}/tomcat"

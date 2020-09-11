@@ -1,14 +1,15 @@
 galaxy_info:
-  author: Lucian Suciu
-  description: Tomcat Setup
+  author: Andrei Ciubotaru
+  description: ActiveMQ
   company: Alfresco
-  min_ansible_version: 2.9
   license: Alfresco
   platforms:
   - name: Centos
     versions:
     - 7
+  min_ansible_version: 2.9
   galaxy_tags: []
+allow_duplicates: true
 dependencies:
 - common
 - java
