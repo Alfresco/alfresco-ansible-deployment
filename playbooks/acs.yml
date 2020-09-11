@@ -1,17 +1,9 @@
 ---
-- name: Tomcat Role
+- name: Repository Role
   hosts: all
   become: true
   become_method: sudo
   roles:
-    - role: '../roles/tomcat'
+    - role: '../roles/repository'
   tags:
-    - tomcat
-- name: ActiveMQ Role
-  hosts: all
-  become: true
-  become_method: sudo
-  roles:
-    - role: '../roles/activemq'
-  tags:
-    - activemq
+    - repository

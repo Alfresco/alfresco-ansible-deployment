@@ -1,0 +1,10 @@
+[Unit]
+Description=Alfresco Content Services
+
+[Service]
+Type=oneshot
+ExecStart=/bin/true
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
