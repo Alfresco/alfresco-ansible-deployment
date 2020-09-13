@@ -54,6 +54,7 @@ log_folder: "/var/log/alfresco"
 
 # set default user information
 utils:
+  - sudo
   - unzip
   - fontconfig-2.13.0-4.3.el7
   - dejavu-fonts-common-2.33-6.el7
