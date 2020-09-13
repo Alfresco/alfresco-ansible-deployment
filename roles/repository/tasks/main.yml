@@ -151,7 +151,6 @@
     path: "{{ settings_folder }}/licenses"
   register: licenses_exists
 - name: Copy licenses
-  become: true
   become_user: "{{ USERNAME }}"
   copy:
     remote_src: True
