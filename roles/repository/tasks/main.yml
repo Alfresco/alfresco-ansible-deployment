@@ -22,8 +22,8 @@
     mode: 'u=rwx,go=rx'
     recurse: yes
   loop:
-     - "{{ base_folder }}modules/acs-platform"
-     - "{{ base_folder }}modules/acs-share"
+     - "{{ base_folder }}/modules/acs-platform"
+     - "{{ base_folder }}/modules/acs-share"
      - "{{ content_folder }}/amps"
      - "{{ content_folder }}/amps_share"
      - "{{ content_folder }}/alf_data"
@@ -284,19 +284,19 @@
   loop: "{{ amp_download_result.results }}"
 
 - name: Install amps on alfresco.war acs-platform
-  shell: '/bin/java -jar {{ content_folder }}/bin/alfresco-mmt.jar install {{ base_folder }}/modules/acs-platform {{ content_folder }}/web-server/webapps/alfresco.war -directory -force'
+  shell: '{{ java_home }}/bin/java -jar {{ content_folder }}/bin/alfresco-mmt.jar install {{ base_folder }}/modules/acs-platform {{ content_folder }}/web-server/webapps/alfresco.war -directory -force'
   register: mmt_install
   changed_when: mmt_install.rc != 0
 
 - name: Install amps on alfresco.war amps
-  shell: '/bin/java -jar {{ content_folder }}/bin/alfresco-mmt.jar install {{ content_folder }}/amps {{ content_folder }}/web-server/webapps/alfresco.war -directory -nobackup -force'
+  shell: '{{ java_home }}/bin/java -jar {{ content_folder }}/bin/alfresco-mmt.jar install {{ content_folder }}/amps {{ content_folder }}/web-server/webapps/alfresco.war -directory -nobackup -force'
   register: mmt_install
   changed_when: mmt_install.rc != 0
 
 #sudo ${JAVA_HOME}/bin/java -jar ${ACS_HOME}/bin/alfresco-mmt.jar install {{ base_folder }}/modules/acs-share ${ACS_HOME}/web-server/webapps/share.war -directory $*
 
 - name: Install amps on share.war
-  shell: '/bin/java -jar {{ content_folder }}/bin/alfresco-mmt.jar install {{ content_folder }}/amps_share {{ content_folder }}/web-server/webapps/share.war -directory -nobackup -force'
+  shell: '{{ java_home }}/bin/java -jar {{ content_folder }}/bin/alfresco-mmt.jar install {{ content_folder }}/amps_share {{ content_folder }}/web-server/webapps/share.war -directory -nobackup -force'
   register: mmt_install
   changed_when: mmt_install.rc != 0
 
