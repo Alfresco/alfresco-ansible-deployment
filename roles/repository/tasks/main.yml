@@ -3,7 +3,7 @@
   include_vars: "postgres.yml"
 
 - name: ensure a list of packages installed
-  become: true
+  become_user: root
   package:
     name: "{{ item }}"
     state: present
@@ -13,7 +13,6 @@
   loop: "{{ utils }}"
 
 - name: Create Directories
-  become: yes
   become_user: root
   file:
     path: "{{ item }}"
@@ -48,7 +47,7 @@
   changed_when: not alf_install_check.stat.exists
 
 - name: Download DISTRIBUTION and WAR files
-  become: true
+  become_user: root
   loop: "{{ query('items', war_downloads) }}"
   get_url:
     url: "{{ item.url }}"
@@ -62,7 +61,7 @@
   when: not alf_install_check.stat.exists
 
 - name: Download AMPS
-  become: true
+  become_user: root
   loop: "{{ query('items', amp_downloads) }}"
   get_url:
     url: "{{ item.url }}"
@@ -75,7 +74,7 @@
   poll: 0
 
 - name: Download postgresql jar
-  become: true
+  become_user: root
   get_url:
     url: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependency_postgresql.version }}/postgresql-{{ dependency_postgresql.version }}.jar"
     dest: "{{ tomcat_config }}/lib/postgresql.jar"
@@ -86,28 +85,28 @@
   poll: 0
 
 - name: add acs home to setenv.sh
-  become: true
+  become_user: root
   lineinfile:
     path: "/etc/opt/alfresco/setenv.sh"
     insertafter: EOF
     line: "export ACS_HOME=/opt/alfresco/content-services-{{ alfresco.version }}"
 
 - name: add acs home to tomcat.sh
-  become: true
+  become_user: root
   lineinfile:
     path: "/opt/alfresco/tomcat.sh"
     insertafter: 'CATALINA_OPTS'
     line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}"
 
 - name: setup common loader
-  become: true
+  become_user: root
   lineinfile:
     path: "{{ tomcat_config }}/conf/catalina.properties"
     regexp: 'common.loader='
     line: common.loader="${catalina.base}/lib","${catalina.base}/lib/*.jar","{{ content_folder }}/web-server/lib","{{ content_folder }}/web-server/lib/*.jar","${catalina.home}/lib","${catalina.home}/lib/*.jar",/etc/opt/alfresco/content-services/classpath
 
 - name: 'Check on war download async task'
-  become: true
+  become_user: root
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: job_result
@@ -117,7 +116,7 @@
   loop: "{{ war_download_result.results }}"
 
 - name: Render configuration templates
-  become: yes
+  become_user: root
   template:
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
@@ -132,7 +131,7 @@
   register: archive_exists
 
 - name: Extract content-services-{{ alfresco.version }}.zip into {{ content_folder }}
-  become: yes
+  become_user: root
   unarchive:
     src: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
     dest: "{{ content_folder }}"
@@ -172,7 +171,6 @@
   register: keystore_exists
 
 - name: Copy keystore
-  become: true
   become_user: "{{ USERNAME }}"
   copy:
     remote_src: True
@@ -192,7 +190,6 @@
     path: "{{ settings_folder }}/classpath"
   register: classes_exists
 - name: Copy classes
-  become: true
   become_user: "{{ USERNAME }}"
   copy:
     remote_src: True
@@ -211,7 +208,6 @@
     path: "{{ tomcat_config }}/conf/Catalina/localhost/alfresco.xml"
   register: conf_exists
 - name: Copy conf
-  become: true
   become_user: "{{ USERNAME }}"
   copy:
     remote_src: True
@@ -226,14 +222,12 @@
     state: absent
 
 - name: add context home to alfresco.xml
-  become: true
   lineinfile:
     path: "{{ tomcat_config }}/conf/Catalina/localhost/alfresco.xml"
     regexp: '<Context crossContext="true">'
     line: '<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/alfresco.war">'
 
 - name: add context home to share.xml
-  become: true
   lineinfile:
     path: "{{ tomcat_config }}/conf/Catalina/localhost/share.xml"
     regexp: '<Context crossContext="true">'
@@ -245,7 +239,6 @@
   register: global_properties
 
 - name: Create ROOT.xml
-  become: true
   template:
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
@@ -255,7 +248,6 @@
   when: not global_properties.stat.exists
 
 - name: Create _vti_bin.xml
-  become: true
   template:
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
@@ -265,7 +257,6 @@
   when: not global_properties.stat.exists
 
 - name: recreate "{{ settings_folder }}/classpath/"
-  become: yes
   become_user: root
   file:
     path: "{{ settings_folder }}/classpath/"
@@ -276,7 +267,6 @@
     recurse: yes
 
 - name: Create alfresco-global.properties
-  become: true
   template:
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
@@ -286,7 +276,6 @@
   when: not global_properties.stat.exists
 
 - name: 'Check on amp download async task'
-  become: true
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: job_result
@@ -323,7 +312,7 @@
 #   when: result.rc != 0
 
 - name: 'Check on package async task'
-  become: true
+  become_user: root
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: job_result
@@ -333,7 +322,7 @@
   loop: "{{ package_sleeper.results }}"
 
 - name: 'Check on postgres download async task'
-  become: true
+  become_user: root
   async_status:
     jid: "{{ postgresql_download.ansible_job_id }}"
   register: job_result
@@ -342,7 +331,7 @@
   retries: 300
 
 - name: Add tomcat.service
-  become: true
+  become_user: root
   template:
     src: alfresco-content.service
     dest: /usr/lib/systemd/system/alfresco-content.service
@@ -354,14 +343,14 @@
   include_tasks: "postgres.yml"
 
 - name: add PostResources to alfresco.xml
-  become: true
+  become_user: root
   lineinfile:
     path: "{{ tomcat_config }}/conf/Catalina/localhost/alfresco.xml"
     regexp: '<PostResources base='
     line: '<PostResources base="/opt/alfresco/modules/acs-platform"'
 
 - name: add PostResources to share.xml
-  become: true
+  become_user: root
   lineinfile:
     path: "{{ tomcat_config }}/conf/Catalina/localhost/share.xml"
     regexp: '<PostResources base='
