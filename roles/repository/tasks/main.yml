@@ -26,6 +26,8 @@
   loop:
      - "{{ base_folder }}/modules/acs-platform"
      - "{{ base_folder }}/modules/acs-share"
+     - "{{ content_folder }}/modules/acs-platform"
+     - "{{ content_folder }}/modules/acs-share"
      - "{{ content_folder }}/amps"
      - "{{ content_folder }}/amps_share"
      - "{{ content_folder }}/alf_data"
@@ -299,20 +301,17 @@
   retries: 300
   loop: "{{ amp_download_result.results }}"
 
-- name: Install amps on alfresco.war acs-platform
-  shell: '{{ java_home }}/bin/java -jar {{ content_folder }}/bin/alfresco-mmt.jar install {{ base_folder }}/modules/acs-platform {{ content_folder }}/web-server/webapps/alfresco.war -directory -force'
-  register: mmt_install
-  changed_when: mmt_install.rc != 0
+- name: Create apply_amps.sh
+  template:
+    owner: "{{ USERNAME }}"
+    group: "{{ GROUPNAME }}"
+    src: apply_amps.sh
+    dest: "{{ content_folder }}/apply_amps.sh"
+    mode: 'u=rwx,g=rwx,o=rx'
+  when: not global_properties.stat.exists
 
-- name: Install amps on alfresco.war amps
-  shell: '{{ java_home }}/bin/java -jar {{ content_folder }}/bin/alfresco-mmt.jar install {{ content_folder }}/amps {{ content_folder }}/web-server/webapps/alfresco.war -directory -nobackup -force'
-  register: mmt_install
-  changed_when: mmt_install.rc != 0
-
-#sudo ${JAVA_HOME}/bin/java -jar ${ACS_HOME}/bin/alfresco-mmt.jar install {{ base_folder }}/modules/acs-share ${ACS_HOME}/web-server/webapps/share.war -directory $*
-
-- name: Install amps on share.war
-  shell: '{{ java_home }}/bin/java -jar {{ content_folder }}/bin/alfresco-mmt.jar install {{ content_folder }}/amps_share {{ content_folder }}/web-server/webapps/share.war -directory -nobackup -force'
+- name: Install amps on alfresco and share war files
+  shell: '{{ content_folder }}/apply_amps.sh -nobackup -force'
   register: mmt_install
   changed_when: mmt_install.rc != 0
 
