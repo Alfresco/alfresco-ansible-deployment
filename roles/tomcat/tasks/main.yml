@@ -43,9 +43,9 @@
 
   - name: Check if "{{ tomcat_config }}/webapps" dir exists
     stat:
-      path: "{{ tomcat_config }}/webapps"
+      path: "{{ tomcat_working }}/webapps"
     register: webapps_dir
-    
+
   - name: Create webaps dir {{ tomcat_working }}/webapps
     file:
       path: "{{ tomcat_working }}/webapps"

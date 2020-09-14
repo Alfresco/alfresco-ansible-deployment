@@ -1,0 +1,177 @@
+---
+# tasks file for search-services
+- name: Check Solr version is installed
+  command: "{{ dist_dir }}/solr/bin/solr version"
+  register: solr_install_check
+  environment:
+      JAVA_HOME: "{{ java_home }}"
+  failed_when: false
+  changed_when: solr_install_check.rc != 0
+
+- name: ensure a list of packages installed
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ utils }}"
+
+- name: Create Solr user {{ USERNAME }}
+  user:
+    name: "{{ USERNAME }}"
+    comment: Solr user
+    uid: "{{ USERID }}"
+
+- name: create "{{ dist_dir }}/data/" dirs
+  become: yes
+  file:
+    path: "{{ dist_dir }}/data/"
+    state: directory
+    owner: "{{ USERNAME }}"
+    mode: 'u=rwx,go=rx'
+  changed_when: false
+
+- name: create "{{ dist_dir }}/keystores"
+  become: yes
+  file:
+    path: "{{ dist_dir }}/keystores"
+    state: directory
+    owner: "{{ USERNAME }}"
+    mode: 'u=rwx,go=rx'
+  changed_when: false
+
+- name: create "/licenses/" dirs
+  become: yes
+  file:
+    path: "/licenses/"
+    state: directory
+    owner: "{{ USERNAME }}"
+    mode: 'u=rwx,go=rx'
+  changed_when: false
+
+- name: check if zip file exists
+  stat:
+    path: "/opt/alfresco-search-services-{{ solr.version }}.zip"
+  register: solr_archive
+
+- name: Download Solr zip {{ solr.version }}
+  get_url:
+    url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-search-services/{{ solr.version }}/alfresco-search-services-{{ solr.version }}.zip"
+    dest: "/opt/alfresco-search-services-{{ solr.version }}.zip"
+    mode: 0444
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+    timeout: 600
+  register: download_result
+  until: download_result is succeeded
+  when: not solr_archive.stat.exists and solr_install_check.rc != 0
+
+- name: Extract alfresco-search-services-{{ solr.version }}.zip into {{ dist_dir }}
+  become: yes
+  unarchive:
+    src: "/opt/alfresco-search-services-{{ solr.version }}.zip"
+    dest: "/opt/"
+    remote_src: yes
+  failed_when: false
+  when: download_result is succeeded
+  changed_when: false
+
+- name: check if dir {{ dist_dir }}/solrhome/alfrescoModels exists
+  stat:
+    path: "{{ dist_dir }}/solrhome/alfrescoModels"
+  register: alfresco_models
+
+- name: Copy files from "{{ dist_dir }}/solrhome/alfrescoModels to {{ dist_dir }}/data/"
+  copy: remote_src=True src="{{ dist_dir }}/solrhome/alfrescoModels/" dest="{{ dist_dir }}/data/"
+  when: alfresco_models.stat.exists
+  changed_when: false
+
+- name: Remove "{{ dist_dir }}/solrhome/alfrescoModels"
+  file: path="{{ dist_dir }}/solrhome/alfrescoModels" state=absent
+  when: alfresco_models.stat.exists
+  changed_when: false
+
+- name: Recursively change ownership of "{{ dist_dir }}"
+  file:
+    path: "{{ dist_dir }}"
+    state: directory
+    recurse: yes
+    owner: "{{ USERNAME }}"
+    mode: 'o=r,g=rwx'
+  changed_when: false
+
+- name: check if licenses exists
+  shell: "ls -l /licenses/"
+  register: licenses_state
+  failed_when: false
+  changed_when: false
+
+- name: Copy files from "{{ dist_dir }}/licenses/" to "/licenses/"
+  copy: remote_src=True src="{{ dist_dir }}/licenses/" dest="/licenses/"
+  when: licenses_state.rc !=0
+
+- name: Remove old files "{{ dist_dir }}/licenses/"
+  file: path="{{ dist_dir }}/licenses/" state=absent
+  when: licenses_state.rc !=0
+
+- name: check if profiler file exists
+  stat:
+    path: "/usr/local/YourKit-JavaProfiler-2019.8/bin/attach.sh"
+  register: profiler_exists
+
+- name: create "{{ java_profiler_runtime_dir }}" dirs
+  become: yes
+  file:
+    path: "{{ java_profiler_runtime_dir }}"
+    state: directory
+    owner: "{{ USERNAME }}"
+    mode: 'u=rwx,go=rx'
+  changed_when: false
+
+- name: Download JavaProfiler
+  get_url:
+    url: "https://www.yourkit.com/download/{{ java_profiler }}.zip"
+    dest: "{{ java_profiler_runtime_dir }}/{{ java_profiler }}.zip"
+    mode: '0440'
+  when: not profiler_exists.stat.exists
+
+- name: check if profiler archive file exists
+  stat:
+    path: "{{ java_profiler_runtime_dir }}/{{ java_profiler }}.zip"
+  register: profiler_archive_exists
+
+- name: Install JavaProfiler
+  shell: /usr/java/bin/jar xvf "{{ java_profiler_runtime_dir }}/{{ java_profiler }}.zip"
+  args:
+    chdir: /usr/local/
+  when: profiler_archive_exists.stat.exists
+
+- name: Add "{{ dist_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
+  become: yes
+  template:
+    src: solrcore.properties
+    dest: "{{ dist_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
+    owner: "{{ USERNAME }}"
+    mode: 'ugo=rwx'
+  changed_when: false
+
+- name: Check Solr running
+  shell: "{{ dist_dir }}/solr/bin/solr status"
+  register: solr_started
+  environment:
+      JAVA_HOME: "{{ java_home }}"
+  failed_when: false
+  changed_when: solr_started.rc != 0
+
+- name: Add solr.service
+  template:
+      src: solr.service
+      dest: /usr/lib/systemd/system/solr.service
+      owner: root
+      group: root
+  notify: restart-solr
+  when: solr_started.failed or '"No Solr nodes are running." in solr_started.stdout'
+
+- name: Ensure solr service is started and enabled on boot
+  systemd:
+    name: solr.service
+    state: started
+    enabled: true

@@ -1,4 +1,4 @@
-"""ActiveMQ Tests"""
+"""Java Tests"""
 import pytest
 from hamcrest import assert_that
 

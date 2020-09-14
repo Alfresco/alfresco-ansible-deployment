@@ -1,0 +1,18 @@
+[Unit]
+Description=Apache SOLR
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+User={{ USERNAME }}
+Environment=SOLR_INCLUDE={{ dist_dir }}/solr.in.sh
+WorkingDirectory={{ dist_dir }}/solr
+Environment=JAVA_HOME=/usr/java
+ExecStart={{ dist_dir }}/solr/bin/solr start -a "-Dcreate.alfresco.defaults=alfresco,archive"
+ExecReload={{ dist_dir }}/solr/bin/solr restart
+ExecStop={{ dist_dir }}/solr/bin/solr stop
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+

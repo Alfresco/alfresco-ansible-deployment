@@ -1,0 +1,21 @@
+---
+# vars file for search-services
+solr:
+  version: 1.4.2
+
+utils:
+  - unzip
+  - lsof 
+  - ca-certificates
+  - wget
+  - openssl
+  - openssl-devel
+
+dist_dir: /opt/alfresco-search-services
+
+USERNAME: solr
+USERID: 33007
+
+nexus_repository:
+  releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
+  enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"

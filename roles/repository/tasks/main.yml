@@ -4,14 +4,13 @@
 
 - name: ensure a list of packages installed
   become: true
-  become_user: root
   package:
-    name: "{{ item }}"
+    name: "{{ utils }}"
     state: present
   register: package_sleeper
   async: 900
   poll: 0
-  loop: "{{ utils }}"
+  changed_when: false  # For Molecule idempotence check
 
 - name: Create Directories
   become: true
@@ -43,6 +42,7 @@
      - "{{ tomcat_config }}/lib"
      - "{{ tomcat_config }}/conf/Catalina/localhost"
      - "{{ log_folder }}/licenses/"
+  changed_when: false  # For Molecule idempotence check
 
 - name: Check if Alfresco version {{ alfresco.version }} is installed
   stat:
@@ -64,6 +64,7 @@
   async: 900
   poll: 0
   when: not alf_install_check.stat.exists
+  changed_when: false  # For Molecule idempotence check
 
 - name: Download AMPS
   become: true
@@ -78,6 +79,7 @@
   register: amp_download_result
   async: 900
   poll: 0
+  changed_when: false  # For Molecule idempotence check
 
 - name: Download postgresql jar
   become: true
@@ -136,6 +138,7 @@
     dest: "{{ settings_folder }}/classpath/alfresco/web-extension/{{ item }}"
     mode: 'u=rwx,g=rwx,o=rx'
   loop: "{{ share_templates }}"
+  changed_when: false  # For Molecule idempotence check
 
 - name: check if zip file exists
   stat:
@@ -261,7 +264,6 @@
     src: ROOT.xml
     dest: "{{ tomcat_config }}/conf/Catalina/localhost/ROOT.xml"
     mode: 'u=rwx,g=rwx,o=rx'
-  when: not global_properties.stat.exists
 
 - name: Create _vti_bin.xml
   template:
@@ -270,7 +272,6 @@
     src: _vti_bin.xml
     dest: "{{ tomcat_config }}/conf/Catalina/localhost/_vti_bin.xml"
     mode: 'u=rwx,g=rwx,o=rx'
-  when: not global_properties.stat.exists
 
 - name: recreate "{{ settings_folder }}/classpath/"
   become: true
@@ -290,7 +291,6 @@
     src: alfresco-global.properties
     dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
     mode: 'u=rwx,g=rwx,o=rx'
-  when: not global_properties.stat.exists
 
 - name: 'Check on amp download async task'
   async_status:
@@ -329,12 +329,11 @@
   become: true
   become_user: root
   async_status:
-    jid: "{{ item.ansible_job_id }}"
+    jid: "{{ package_sleeper.ansible_job_id }}"
   register: job_result
   until: job_result.finished
   delay: 1
   retries: 300
-  loop: "{{ package_sleeper.results }}"
 
 - name: 'Check on postgres download async task'
   become: true

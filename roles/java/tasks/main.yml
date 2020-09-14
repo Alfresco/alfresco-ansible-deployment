@@ -21,7 +21,6 @@
 
 - name: Create temp dir
   become: true
-  become_user: root
   file:
     path: "{{ temp_dir }}"
     state: directory

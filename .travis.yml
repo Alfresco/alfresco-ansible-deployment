@@ -10,7 +10,7 @@ services:
   - docker
 
 before_install:
-  - pip install ansible molecule ansible-lint PyHamcrest pylint testinfra
+  - pip install ansible molecule ansible-lint PyHamcrest pylint testinfra 
 
 stages:
   - name: Linters
