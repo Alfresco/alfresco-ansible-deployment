@@ -7,6 +7,7 @@
   register: activemq_exe
 
 - name: Download and untar activemq
+  become: true
   become_user: root
   unarchive:
       src: "{{ download_url }}"
@@ -64,6 +65,7 @@
   when: not data_existence.stat.exists
 
 - name: Change location of ActiveMQ logs
+  become: true
   become_user: "{{ username }}"
   replace:
     path: "{{ activemq_conf }}/log4j.properties"
@@ -72,6 +74,7 @@
   when: conf_existence.stat.exists
 
 - name: Add activemq_home and host to setenv script
+  become: true
   become_user: "{{ username }}"
   blockinfile:
     path: "{{ config_folder }}/setenv.sh"
@@ -85,6 +88,7 @@
   register: activemq_wrapper_exists
 
 - name: Add activemq wrapper script
+  become: true
   become_user: "{{ username }}"
   template:
       src: "activemq.sh"

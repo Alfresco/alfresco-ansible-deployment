@@ -19,6 +19,8 @@ alfresco:
     version: 3.3.2
   googledrive_repo:
     version: 3.2.0
+  googledrive_share:
+    version: 3.2.0
   share_services:
     version: 6.2.2
 dependency_postgresql:
@@ -40,6 +42,9 @@ amp_downloads:
     dest: "{{ content_folder }}/amps/alfresco-device-sync-repo.amp"
   - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ alfresco.aos_module.version }}/alfresco-aos-module-{{ alfresco.aos_module.version }}.amp"
     dest: "{{ content_folder }}/amps/alfresco-aos-module.amp"
+  - url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/{{ alfresco.googledrive_share.version }}/alfresco-googledrive-share-{{ alfresco.googledrive_share.version }}.amp"
+    dest: "{{ content_folder }}/amps/alfresco-googledrive-share.amp"
+
 
 maven_repository:
    org: "https://repo.maven.apache.org/maven2/org"

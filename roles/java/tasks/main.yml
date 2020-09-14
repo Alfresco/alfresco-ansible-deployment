@@ -9,6 +9,7 @@
 
 - when: google_in_resolv.failed
   name: fix dns issue with google dns
+  become: true
   become_user: root
   shell: 'echo "nameserver 8.8.8.8" > /etc/resolv.conf'
 
@@ -19,6 +20,7 @@
   failed_when: false
 
 - name: Create temp dir
+  become: true
   become_user: root
   file:
     path: "{{ temp_dir }}"
@@ -42,6 +44,7 @@
   when: not remote_java.stat.exists
 
 - name: Copy Java
+  become: true
   become_user: root
   copy:
     src: "{{ temp_dir }}/{{ jdk_folder }}/"
@@ -63,6 +66,7 @@
   register: setenv_exists
 
 - name: Add setenv bash file
+  become: true
   become_user: "{{ username }}"
   template:
     src: setenv.sh
