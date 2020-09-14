@@ -5,11 +5,12 @@
 - name: ensure a list of packages installed
   become: true
   package:
-    name: "{{ utils }}"
+    name: "{{ item }}"
     state: present
   register: package_sleeper
   async: 900
   poll: 0
+  loop: "{{ utils }}"
   changed_when: false  # For Molecule idempotence check
 
 - name: Create Directories
@@ -264,6 +265,7 @@
     src: ROOT.xml
     dest: "{{ tomcat_config }}/conf/Catalina/localhost/ROOT.xml"
     mode: 'u=rwx,g=rwx,o=rx'
+  when: not global_properties.stat.exists
 
 - name: Create _vti_bin.xml
   template:
@@ -272,6 +274,7 @@
     src: _vti_bin.xml
     dest: "{{ tomcat_config }}/conf/Catalina/localhost/_vti_bin.xml"
     mode: 'u=rwx,g=rwx,o=rx'
+  when: not global_properties.stat.exists
 
 - name: recreate "{{ settings_folder }}/classpath/"
   become: true
@@ -291,6 +294,7 @@
     src: alfresco-global.properties
     dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
     mode: 'u=rwx,g=rwx,o=rx'
+  when: not global_properties.stat.exists
 
 - name: 'Check on amp download async task'
   async_status:
@@ -329,11 +333,12 @@
   become: true
   become_user: root
   async_status:
-    jid: "{{ package_sleeper.ansible_job_id }}"
+    jid: "{{ item.ansible_job_id }}"
   register: job_result
   until: job_result.finished
   delay: 1
   retries: 300
+  loop: "{{ package_sleeper.results }}"
 
 - name: 'Check on postgres download async task'
   become: true
