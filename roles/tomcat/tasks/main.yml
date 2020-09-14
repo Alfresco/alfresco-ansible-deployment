@@ -41,6 +41,11 @@
     become_user: root
     when: not tom_dir.stat.exists
 
+  - name: Check if "{{ tomcat_config }}/webapps" dir exists
+    stat:
+      path: "{{ tomcat_config }}/webapps"
+    register: webapps_dir
+    
   - name: Create webaps dir {{ tomcat_working }}/webapps
     file:
       path: "{{ tomcat_working }}/webapps"
@@ -49,6 +54,7 @@
       owner: "{{ username }}"
       recurse: yes
       mode: '0755'
+    when: not webapps_dir.stat.exists
 
   - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/" dir exists
     shell: "ls -l {{ tomcat_config }}/"
