@@ -132,10 +132,11 @@
 - name: setup common loader
   become: true
   become_user: root
+  failed_when: false
   lineinfile:
     path: "{{ tomcat_config }}/conf/catalina.properties"
     regexp: '^common.loader='
-    line: common.loader="${catalina.base}/lib","${catalina.base}/lib/*.jar","{{ content_folder }}/web-server/lib","{{ content_folder }}/web-server/lib/*.jar","${catalina.home}/lib","${catalina.home}/lib/*.jar",/etc/opt/alfresco/content-services/classpath
+    line: "common.loader=\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\",/etc/opt/alfresco/content-services/classpath"
   when: catalina_prop.stat.exists
 
 #  when: common_loader.rc == 0
