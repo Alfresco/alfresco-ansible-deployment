@@ -66,4 +66,4 @@ jobs:
       install: pip install 'molecule[docker]'
       script:
         - cd roles/repository/ && molecule test        
-        - cd roles/activemq/ && molecule test
+
