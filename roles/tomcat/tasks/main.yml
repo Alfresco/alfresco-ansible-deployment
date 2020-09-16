@@ -24,14 +24,14 @@
     changed_when: install_check.rc != 0
     when: wrapper.stat.exists or wrapper_created
 
-  - name: Check if "{{ tomcat_config }}" dir exists
+  - name: Check if "{{ tomcat_config }}/conf" dir exists
     stat:
-      path: "{{ tomcat_config }}"
+      path: "{{ tomcat_config }}/conf"
     register: tom_dir
 
-  - name: Create dir {{ tomcat_config }}
+  - name: Create dir {{ tomcat_config }}/conf
     file:
-      path: "{{ tomcat_config }}"
+      path: "{{ tomcat_config }}/conf"
       state: directory
       group: "{{ group_name }}"
       owner: "{{ username }}"
@@ -41,9 +41,9 @@
     become_user: root
     when: not tom_dir.stat.exists
 
-  - name: Check if "{{ tomcat_config }}/webapps" dir exists
+  - name: Check if "{{ tomcat_working }}/webapps" dir exists
     stat:
-      path: "{{ tomcat_config }}/webapps"
+      path: "{{ tomcat_working }}/webapps"
     register: webapps_dir
     
   - name: Create webaps dir {{ tomcat_working }}/webapps

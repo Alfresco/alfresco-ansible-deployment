@@ -8,14 +8,23 @@
   package:
     name: "{{ item }}"
     state: present
-  register: package_sleeper
-  async: 900
+#  register: package_sleeper
+#  async: 900
   poll: 0
   loop: "{{ utils }}"
 
+#- name: Create directories
+#  become: true
+#  changed_when: false
+#  become_user: root
+#  command: mkdir -p "{{ item }}" && chmod 755 "{{ item }}" && chown "{{ USERNAME }}"."{{ GROUPNAME }}" "{{ item }}"
+#  args:
+#    creates: "{{ item }}"
+#  loop: "{{ dirs }}"
 - name: Create Directories
   become: true
   become_user: root
+  changed_when: false
   file:
     path: "{{ item }}"
     state: directory
@@ -44,22 +53,23 @@
 
 - name: Check if Alfresco version {{ alfresco.version }} is installed
   stat:
-    path: "{{ content_folder }}/webapps/alfresco/META-INF/MANIFEST.MF"
+    path: "{{ data_folder }}/webapps/alfresco/META-INF/MANIFEST.MF"
   register: alf_install_check
-  changed_when: not alf_install_check.stat.exists
+#  changed_when: not alf_install_check.stat.exists
 
 - name: Download DISTRIBUTION and WAR files
   become: true
   become_user: root
   loop: "{{ query('items', war_downloads) }}"
+  changed_when: false
   get_url:
     url: "{{ item.url }}"
     dest: "{{ item.dest }}"
     mode: 0644
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
-  register: war_download_result
-  async: 900
+#  register: war_download_result
+#  async: 900
   poll: 0
   when: not alf_install_check.stat.exists
 
@@ -73,8 +83,8 @@
     mode: 0644
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
-  register: amp_download_result
-  async: 900
+#  register: amp_download_result
+#  async: 900
   poll: 0
 
 - name: Download postgresql jar
@@ -84,9 +94,9 @@
     url: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependency_postgresql.version }}/postgresql-{{ dependency_postgresql.version }}.jar"
     dest: "{{ tomcat_config }}/lib/postgresql.jar"
     mode: 0644
-  register: postgresql_download
+ # register: postgresql_download
   when: not alf_install_check.stat.exists
-  async: 900
+ # async: 900
   poll: 0
 
 - name: add acs home to setenv.sh
@@ -105,28 +115,44 @@
     insertafter: 'CATALINA_OPTS'
     line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}"
 
+- name: check if catalina properties file exists
+  stat:
+    path: "{{ tomcat_config }}/conf/catalina.properties"
+  register: catalina_prop
+
+#- name: checking for common.loader
+#  command: "cat {{ tomcat_config }}/conf/catalina.properties | grep classpath"
+#  register: common_loader
+#  failed_when: false
+#  when: catalina_exists.stat.exists
+#  changed_when: common_loader.rc != 0
+
 - name: setup common loader
   become: true
   become_user: root
   lineinfile:
     path: "{{ tomcat_config }}/conf/catalina.properties"
-    regexp: 'common.loader='
+    regexp: '^common.loader='
     line: common.loader="${catalina.base}/lib","${catalina.base}/lib/*.jar","{{ content_folder }}/web-server/lib","{{ content_folder }}/web-server/lib/*.jar","${catalina.home}/lib","${catalina.home}/lib/*.jar",/etc/opt/alfresco/content-services/classpath
+  when: catalina_prop.stat.exists
 
-- name: 'Check on war download async task'
-  become: true
-  become_user: root
-  async_status:
-    jid: "{{ item.ansible_job_id }}"
-  register: job_result
-  until: job_result.finished
-  delay: 1
-  retries: 300
-  loop: "{{ war_download_result.results }}"
+#  when: common_loader.rc == 0
+
+#- name: 'Check on war download async task'
+#  become: true
+#  become_user: root
+#  async_status:
+#    jid: "{{ item.ansible_job_id }}"
+#  register: job_result
+#  until: job_result.finished
+#  delay: 1
+#  retries: 300
+#  loop: "{{ war_download_result.results }}"
 
 - name: Render configuration templates
   become: true
   become_user: root
+  changed_when: false
   template:
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
@@ -142,20 +168,22 @@
 
 - name: Extract content-services-{{ alfresco.version }}.zip into {{ content_folder }}
   become: true
-  become_user: root
+  become_user: "{{ USERNAME }}"
   unarchive:
     src: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
     dest: "{{ content_folder }}"
     remote_src: yes
-  failed_when: false
-  when: archive_exists.stat.exists
+    creates: "{{ content_folder }}/bin"
+#  failed_when: false
+#  when: archive_exists.stat.exists and not alf_install_check.stat.exists
 
-# - name: Remove Alfresco Content Services {{ alfresco.version }} zip file
-#   become: true
-#   file:
-#     path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
-#     state: absent
-#   when: archive_exists.stat.exists
+- name: Remove Alfresco Content Services {{ alfresco.version }} zip file
+  changed_when: false
+  become: true
+  file:
+    path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
+    state: absent
+  when: archive_exists.stat.exists
 
 - name: check if licenses files exists
   stat:
@@ -171,7 +199,9 @@
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
   when: not licenses_exists.stat.exists
+
 - name: Remove old files
+  changed_when: false
   file:
     path: "{{ content_folder }}/licenses"
     state: absent
@@ -193,6 +223,7 @@
   when: not keystore_exists.stat.exists
 
 - name: Remove keystore files
+  changed_when: false
   file:
     path: "{{ content_folder }}/alf_data/keystore/"
     state: absent
@@ -201,6 +232,7 @@
   stat:
     path: "{{ settings_folder }}/classpath"
   register: classes_exists
+
 - name: Copy classes
   become: true
   become_user: "{{ USERNAME }}"
@@ -211,15 +243,18 @@
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
   when: not classes_exists.stat.exists
-- name: Remove classes files
-  file:
-    path: "{{ settings_folder }}/classpath"
-    state: absent
+
+#- name: Remove classes files
+#  changed_when: false
+#  file:
+#    path: "{{ settings_folder }}/classpath"
+#    state: absent
 
 - name: check if conf files exist
   stat:
     path: "{{ tomcat_config }}/conf/Catalina/localhost/alfresco.xml"
   register: conf_exists
+
 - name: Copy conf
   become: true
   become_user: "{{ USERNAME }}"
@@ -230,7 +265,9 @@
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
   when: not conf_exists.stat.exists
+
 - name: Remove classes files
+  changed_when: false
   file:
     path: "{{ content_folder }}/web-server/conf"
     state: absent
@@ -247,10 +284,10 @@
     regexp: '<Context crossContext="true">'
     line: '<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/share.war">'
 
-- name: check if "{{ settings_folder }}/classpath/alfresco-global.properties" exists
+- name: check if "{{ tomcat_config }}/conf/Catalina/localhost/ROOT.xml" exists
   stat:
-    path: "{{ settings_folder }}/classpath/alfresco-global.properties"
-  register: global_properties
+    path: "{{ tomcat_config }}/conf/Catalina/localhost/ROOT.xml"
+  register: root_xml
 
 - name: Create ROOT.xml
   template:
@@ -259,7 +296,12 @@
     src: ROOT.xml
     dest: "{{ tomcat_config }}/conf/Catalina/localhost/ROOT.xml"
     mode: 'u=rwx,g=rwx,o=rx'
-  when: not global_properties.stat.exists
+  when: not root_xml.stat.exists
+
+- name: check if "{{ tomcat_config }}/conf/Catalina/localhost/_vti_bin.xml" exists
+  stat:
+    path: "{{ tomcat_config }}/conf/Catalina/localhost/_vti_bin.xml"
+  register: vti_xml
 
 - name: Create _vti_bin.xml
   template:
@@ -268,18 +310,29 @@
     src: _vti_bin.xml
     dest: "{{ tomcat_config }}/conf/Catalina/localhost/_vti_bin.xml"
     mode: 'u=rwx,g=rwx,o=rx'
-  when: not global_properties.stat.exists
+  when: not vti_xml.stat.exists
 
-- name: recreate "{{ settings_folder }}/classpath/"
-  become: true
-  become_user: root
-  file:
-    path: "{{ settings_folder }}/classpath/"
-    state: directory
-    owner: "{{ USERNAME }}"
-    group: "{{ GROUPNAME }}"
-    mode: 'u=rwx,go=rx'
-    recurse: yes
+#- name: check if "{{ settings_folder }}/classpath/" exists
+#  stat:
+#    path: "{{ settings_folder }}/classpath/"
+#  register: classpath
+
+#- name: recreate "{{ settings_folder }}/classpath/"
+#  become: true
+#  become_user: root
+#  file:
+#    path: "{{ settings_folder }}/classpath/"
+#    state: directory
+#    owner: "{{ USERNAME }}"
+#    group: "{{ GROUPNAME }}"
+#    mode: 'u=rwx,go=rx'
+#    recurse: yes
+#  when: not classpath.stat.exists
+
+- name: check if "{{ settings_folder }}/classpath/alfresco-global.properties" exists
+  stat:
+    path: "{{ settings_folder }}/classpath/alfresco-global.properties"
+  register: global_properties
 
 - name: Create alfresco-global.properties
   template:
@@ -290,14 +343,14 @@
     mode: 'u=rwx,g=rwx,o=rx'
   when: not global_properties.stat.exists
 
-- name: 'Check on amp download async task'
-  async_status:
-    jid: "{{ item.ansible_job_id }}"
-  register: job_result
-  until: job_result.finished
-  delay: 1
-  retries: 300
-  loop: "{{ amp_download_result.results }}"
+#- name: 'Check on amp download async task'
+#  async_status:
+#    jid: "{{ item.ansible_job_id }}"
+#  register: job_result
+#  until: job_result.finished
+#  delay: 1
+#  retries: 300
+#  loop: "{{ amp_download_result.results }}"
 
 - name: Install amps on alfresco.war acs-platform
   shell: '{{ java_home }}/bin/java -jar {{ content_folder }}/bin/alfresco-mmt.jar install {{ base_folder }}/modules/acs-platform {{ content_folder }}/web-server/webapps/alfresco.war -directory -force'
@@ -326,26 +379,26 @@
 #   shell: '/usr/java/bin/keytool -genseckey -dname {{ cert_name }} -validity {{ cert_validity }} -alias metadata -keyalg AES -keysize 256 -keystore {{ content_folder }}/shared/classes/alfresco/keystore/keystore -storetype pkcs12 -storepass {{ keystore_password }}'
 #   when: result.rc != 0
 
-- name: 'Check on package async task'
-  become: true
-  become_user: root
-  async_status:
-    jid: "{{ item.ansible_job_id }}"
-  register: job_result
-  until: job_result.finished
-  delay: 1
-  retries: 300
-  loop: "{{ package_sleeper.results }}"
+#- name: 'Check on package async task'
+#  become: true
+#  become_user: root
+#  async_status:
+#    jid: "{{ item.ansible_job_id }}"
+#  register: job_result
+#  until: job_result.finished
+#  delay: 1
+#  retries: 300
+#  loop: "{{ package_sleeper.results }}"
 
-- name: 'Check on postgres download async task'
-  become: true
-  become_user: root
-  async_status:
-    jid: "{{ postgresql_download.ansible_job_id }}"
-  register: job_result
-  until: job_result.finished
-  delay: 1
-  retries: 300
+#- name: 'Check on postgres download async task'
+#  become: true
+#  become_user: root
+#  async_status:
+#    jid: "{{ postgresql_download.ansible_job_id }}"
+#  register: job_result
+#  until: job_result.finished
+#  delay: 1
+#  retries: 300
 
 - name: Add tomcat.service
   become: true
