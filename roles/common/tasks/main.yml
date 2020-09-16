@@ -16,7 +16,7 @@
     name: "{{ item }}"
     state: present
   poll: 0
-  loop: "{{ utils }}"  
+  loop: "{{ utils }}"
 
 - name: "Create {{ group_name }} group"
   group:
