@@ -69,7 +69,6 @@
     path: "{{ activemq_conf }}/log4j.properties"
     regexp: "activemq.data"
     replace: "activemq.log"
-  when: conf_existence.stat.exists
 
 - name: Add activemq_home and host to setenv script
   become_user: "{{ username }}"
