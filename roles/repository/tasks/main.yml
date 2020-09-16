@@ -233,7 +233,7 @@
 - name: Remove classes files
   changed_when: false
   file:
-    path: "{{ settings_folder }}/classpath"
+    path: "{{ content_folder }}/shared/classes"
     state: absent
 
 - name: check if conf files exist
