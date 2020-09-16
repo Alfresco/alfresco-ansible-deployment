@@ -65,5 +65,4 @@ jobs:
         - MOLECULE_NO_LOG=false
       install: pip install 'molecule[docker]'
       script:
-        - cd roles/repository/ && molecule test        
-
+        - cd roles/repository/ && molecule test
