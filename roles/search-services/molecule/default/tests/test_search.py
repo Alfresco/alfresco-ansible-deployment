@@ -31,7 +31,7 @@ def test_solr_service_running_and_enabled(host, svc):
 
 def test_solr_stats_is_accesible(host, get_ansible_vars):
     """Check solrstats service"""
-    timeout = time.time() + 10
+    timeout = time.time() + 360
     output = None
     command = False
     while not command or time.time() < timeout:
