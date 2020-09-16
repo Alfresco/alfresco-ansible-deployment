@@ -24,14 +24,14 @@
     changed_when: install_check.rc != 0
     when: wrapper.stat.exists or wrapper_created
 
-  - name: Check if "{{ tomcat_config }}" dir exists
+  - name: Check if "{{ tomcat_config }}/conf" dir exists
     stat:
-      path: "{{ tomcat_config }}"
+      path: "{{ tomcat_config }}/conf"
     register: tom_dir
 
-  - name: Create dir {{ tomcat_config }}
+  - name: Create dir {{ tomcat_config }}/conf
     file:
-      path: "{{ tomcat_config }}"
+      path: "{{ tomcat_config }}/conf"
       state: directory
       group: "{{ group_name }}"
       owner: "{{ username }}"
@@ -130,9 +130,9 @@
       owner: "{{ username }}"
     when: temp_dir_exists.stat.exists
 
-  - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/temp" dir exists
+  - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/work" dir exists
     stat:
-      path: "/opt/apache-tomcat-{{ tomcat_version }}/temp"
+      path: "/opt/apache-tomcat-{{ tomcat_version }}/work"
     register: work_dir_exists
 
   - name: Copy files from "/opt/apache-tomcat-{{ tomcat_version }}/work to {{ tomcat_working }}"
@@ -173,7 +173,7 @@
       state: link
       force: yes
 
-  - name: Create a symbolic link "{{ tomcat_config }}"/work
+  - name: Create a symbolic link "{{ tomcat_config }}/work"
     file:
       src: "{{ tomcat_working }}/work"
       dest: "{{ tomcat_config }}/work"

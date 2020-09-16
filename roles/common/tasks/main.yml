@@ -43,7 +43,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     recurse: yes
-    mode: '0755'
+    mode: 'u=rwx,g=rwx,o=rx'
   when: not binaries_exists.stat.exists
 
 - name: "Check for configuration folder"
@@ -59,7 +59,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     recurse: yes
-    mode: '0755'
+    mode: 'u=rwx,g=rwx,o=rx'
   when: not config_exists.stat.exists
 
 - name: "Check for data folder"
@@ -75,7 +75,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     recurse: yes
-    mode: '0755'
+    mode: 'u=rwx,g=rwx,o=rx'
   when: not data_exists.stat.exists
 
 - name: "Check for logs folder"
@@ -91,5 +91,5 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     recurse: yes
-    mode: '0755'
+    mode: 'u=rwx,g=rwx,o=rx'
   when: not logs_exists.stat.exists

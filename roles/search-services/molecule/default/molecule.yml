@@ -7,7 +7,6 @@ platforms:
   - name: instance
     image: centos/systemd:latest
     privileged: true
-    pre_build_image: true
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
     command: "/usr/sbin/init"
@@ -35,6 +34,19 @@ platforms:
       - 0.0.0.0:8099:8099/tcp
       - 0.0.0.0:8983:8983/tcp
       - 0.0.0.0:9090:9090/tcp
+
+scenario:
+  test_sequence:
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - side_effect
+    - verify
+
 provisioner:
   name: ansible
   playbooks:

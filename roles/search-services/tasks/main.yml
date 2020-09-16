@@ -19,29 +19,30 @@
     name: "{{ USERNAME }}"
     comment: Solr user
     uid: "{{ USERID }}"
+    group: "{{ group_name }}"
 
-- name: create "{{ dist_dir }}/data/" dirs
+- name: create "{{ dist_dir }}" dir
   become: yes
   file:
-    path: "{{ dist_dir }}/data/"
+    path: "{{ dist_dir }}"
     state: directory
     owner: "{{ USERNAME }}"
     mode: 'u=rwx,go=rx'
   changed_when: false
 
-- name: create "{{ dist_dir }}/keystores"
+- name: create "{{ config_dir }}" dir
   become: yes
   file:
-    path: "{{ dist_dir }}/keystores"
+    path: "{{ config_dir }}"
     state: directory
     owner: "{{ USERNAME }}"
     mode: 'u=rwx,go=rx'
   changed_when: false
 
-- name: create "/licenses/" dirs
+- name: create "{{ data_dir }}" dir
   become: yes
   file:
-    path: "/licenses/"
+    path: "{{ data_dir }}"
     state: directory
     owner: "{{ USERNAME }}"
     mode: 'u=rwx,go=rx'
@@ -68,81 +69,33 @@
   become: yes
   unarchive:
     src: "/opt/alfresco-search-services-{{ solr.version }}.zip"
-    dest: "/opt/"
+    dest: "{{ dist_dir }}"
     remote_src: yes
+    creates: "{{ dist_dir }}/README.MD"
   failed_when: false
   when: download_result is succeeded
   changed_when: false
 
-- name: check if dir {{ dist_dir }}/solrhome/alfrescoModels exists
-  stat:
-    path: "{{ dist_dir }}/solrhome/alfrescoModels"
-  register: alfresco_models
-
-- name: Copy files from "{{ dist_dir }}/solrhome/alfrescoModels to {{ dist_dir }}/data/"
-  copy: remote_src=True src="{{ dist_dir }}/solrhome/alfrescoModels/" dest="{{ dist_dir }}/data/"
-  when: alfresco_models.stat.exists
+- name: Copy files from "{{ dist_dir }}/alfresco-search-services to {{ dist_dir }}/"
+  copy: remote_src=True src="{{ dist_dir }}/alfresco-search-services/" dest="{{ dist_dir }}/"
   changed_when: false
-
-- name: Remove "{{ dist_dir }}/solrhome/alfrescoModels"
-  file: path="{{ dist_dir }}/solrhome/alfrescoModels" state=absent
-  when: alfresco_models.stat.exists
-  changed_when: false
-
-- name: Recursively change ownership of "{{ dist_dir }}"
-  file:
-    path: "{{ dist_dir }}"
-    state: directory
-    recurse: yes
-    owner: "{{ USERNAME }}"
-    mode: 'o=r,g=rwx'
-  changed_when: false
-
-- name: check if licenses exists
-  shell: "ls -l /licenses/"
-  register: licenses_state
   failed_when: false
+
+- name: Remove old files {{ dist_dir }}/alfresco-search-services
+  file: path="{{ dist_dir }}/alfresco-search-services" state=absent
   changed_when: false
 
-- name: Copy files from "{{ dist_dir }}/licenses/" to "/licenses/"
-  copy: remote_src=True src="{{ dist_dir }}/licenses/" dest="/licenses/"
-  when: licenses_state.rc !=0
-
-- name: Remove old files "{{ dist_dir }}/licenses/"
-  file: path="{{ dist_dir }}/licenses/" state=absent
-  when: licenses_state.rc !=0
-
-- name: check if profiler file exists
-  stat:
-    path: "/usr/local/YourKit-JavaProfiler-2019.8/bin/attach.sh"
-  register: profiler_exists
-
-- name: create "{{ java_profiler_runtime_dir }}" dirs
-  become: yes
-  file:
-    path: "{{ java_profiler_runtime_dir }}"
-    state: directory
-    owner: "{{ USERNAME }}"
-    mode: 'u=rwx,go=rx'
+- name: Copy files from "{{ dist_dir }}/solrhome to {{ config_dir }}/"
+  copy: remote_src=True src="{{ dist_dir }}/solrhome" dest="{{ config_dir }}/"
   changed_when: false
 
-- name: Download JavaProfiler
-  get_url:
-    url: "https://www.yourkit.com/download/{{ java_profiler }}.zip"
-    dest: "{{ java_profiler_runtime_dir }}/{{ java_profiler }}.zip"
-    mode: '0440'
-  when: not profiler_exists.stat.exists
-
-- name: check if profiler archive file exists
-  stat:
-    path: "{{ java_profiler_runtime_dir }}/{{ java_profiler }}.zip"
-  register: profiler_archive_exists
-
-- name: Install JavaProfiler
-  shell: /usr/java/bin/jar xvf "{{ java_profiler_runtime_dir }}/{{ java_profiler }}.zip"
-  args:
-    chdir: /usr/local/
-  when: profiler_archive_exists.stat.exists
+- name: add acs home to setenv.sh
+  become: true
+  become_user: root
+  lineinfile:
+    path: "/etc/opt/alfresco/setenv.sh"
+    insertafter: EOF
+    line: "export SOLR_HOME={{ dist_dir }}"
 
 - name: Add "{{ dist_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
   become: yes
@@ -151,6 +104,34 @@
     dest: "{{ dist_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
     owner: "{{ USERNAME }}"
     mode: 'ugo=rwx'
+  changed_when: false
+
+- name: Add "{{ dist_dir }}/solr.sh"
+  become: yes
+  template:
+    src: solr.sh
+    dest: "{{ dist_dir }}/solr.sh"
+    owner: "{{ USERNAME }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+  changed_when: false
+
+- name: Add "{{ config_dir }}/solr.in.sh"
+  become: yes
+  template:
+    src: solr.in.sh
+    dest: "{{ config_dir }}/solr.in.sh"
+    owner: "{{ USERNAME }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+  changed_when: false
+
+- name: Recursively change ownership of "{{ dist_dir }}"
+  file:
+    path: "{{ dist_dir }}"
+    state: directory
+    recurse: yes
+    owner: "{{ USERNAME }}"
+    group: "{{ group_name }}"
+    mode: 'o=r,g=rwx'
   changed_when: false
 
 - name: Check Solr running

@@ -11,7 +11,9 @@ utils:
   - openssl
   - openssl-devel
 
-dist_dir: /opt/alfresco-search-services
+dist_dir: /opt/alfresco/search-services-{{ solr.version }}
+config_dir: /etc/opt/alfresco/search-services
+data_dir: /var/opt/alfresco/search-services
 
 USERNAME: solr
 USERID: 33007

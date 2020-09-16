@@ -153,6 +153,7 @@
     src: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
     dest: "{{ content_folder }}"
     remote_src: yes
+    creates: "{{ content_folder }}/README.txt"
   failed_when: false
   when: archive_exists.stat.exists
 
