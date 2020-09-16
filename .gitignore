@@ -131,3 +131,4 @@ dmypy.json
 .vscode/
 
 roles/common/vars/nexus.yml
+roles/central/vars/nexus.yml
