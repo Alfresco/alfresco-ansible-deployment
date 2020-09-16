@@ -1,9 +1,9 @@
 ---
-- name: Tomcat Role
-  hosts: all
+- name: Repository Role
+  hosts: localhost
   become: true
   become_method: sudo
   roles:
-    - role: '../roles/tomcat'
+    - role: '../roles/repository'
   tags:
-    - tomcat
+    - repository

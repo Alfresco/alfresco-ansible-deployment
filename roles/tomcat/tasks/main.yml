@@ -1,43 +1,22 @@
 ---
   # tasks file for base-tomcat  
-  - name: check if "/opt/alfresco/tomcat.sh" file is there
+  - name: "Check if \"{{ binaries_folder }}/tomcat.sh\" file is there"
     stat:
-      path: "/opt/alfresco/tomcat.sh"
+      path: "{{ binaries_folder }}/tomcat.sh"
     register: wrapper
 
-  - name: Create Alfresco group {{ GROUPNAME }}
-    group:
-        name: "{{ GROUPNAME }}"
-        gid: "{{ GROUPID }}"
-
-  - name: Create Tomcat user {{ USERNAME }}
-    user:
-      name: "{{ USERNAME }}"
-      comment: Tomcat user
-      uid: "{{ USERID }}"
-      group: "{{ GROUPNAME }}"
-
-  - name: Create work dir /opt/alfresco
-    file:
-      path: "/opt/alfresco"
-      state: directory
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
-      mode: '0755'
-    when: not wrapper.stat.exists
-
-  - name: Add /opt/alfresco/tomcat.sh
+  - name: "Add {{ binaries_folder }}/tomcat.sh"
     template:
         src: tomcat.sh
-        dest: "/opt/alfresco/tomcat.sh"
-        group: "{{ GROUPNAME }}"
-        owner: "{{ USERNAME }}"
+        dest: "{{ binaries_folder }}/tomcat.sh"
+        group: "{{ group_name }}"
+        owner: "{{ username }}"
         mode: 'u=rwx,g=rwx,o=rx'
     register: wrapper_created
     when: not wrapper.stat.exists
 
   - name: Check Tomcat version is installed
-    command: "su - {{ USERNAME }} -c '/opt/alfresco/tomcat.sh configtest'"
+    command: "su - {{ username }} -c '{{ binaries_folder }}/tomcat.sh configtest'"
     register: install_check
     environment:
         JAVA_HOME: "{{ java_home }}"
@@ -45,46 +24,37 @@
     changed_when: install_check.rc != 0
     when: wrapper.stat.exists or wrapper_created
 
-  - name: check if "/var/log/alfresco" dir exists
+  - name: Check if "{{ tomcat_config }}/conf" dir exists
     stat:
-      path: "/var/log/alfresco"
-    register: log_alf
-
-  - name: Create log dir /var/log/alfresco
-    file:
-      path: "/var/log/alfresco"
-      state: directory
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
-      recurse: yes
-      mode: '0755'
-    become_user: root
-    when: not log_alf.stat.exists
-
-  - name: check if "/var/log/alfresco" dir exists
-    stat:
-      path: "/var/log/alfresco"
+      path: "{{ tomcat_config }}/conf"
     register: tom_dir
 
-  - name: Create dir {{ tomcat_config }}
+  - name: Create dir {{ tomcat_config }}/conf
     file:
-      path: "{{ tomcat_config }}"
+      path: "{{ tomcat_config }}/conf"
       state: directory
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
+      group: "{{ group_name }}"
+      owner: "{{ username }}"
       mode: '0755'
       recurse: yes
+    become: true
     become_user: root
     when: not tom_dir.stat.exists
+
+  - name: Check if "{{ tomcat_working }}/webapps" dir exists
+    stat:
+      path: "{{ tomcat_working }}/webapps"
+    register: webapps_dir
 
   - name: Create webaps dir {{ tomcat_working }}/webapps
     file:
       path: "{{ tomcat_working }}/webapps"
       state: directory
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
+      group: "{{ group_name }}"
+      owner: "{{ username }}"
       recurse: yes
       mode: '0755'
+    when: not webapps_dir.stat.exists
 
   - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/" dir exists
     shell: "ls -l {{ tomcat_config }}/"
@@ -101,6 +71,7 @@
     failed_when: false
     loop:
       "{{ tomcat_tgz_urls }}"
+    become: true
     become_user: root
     changed_when: tomcat_dir.rc !=0
 
@@ -109,19 +80,20 @@
       src: "/opt/apache-tomcat-{{ tomcat_version }}.tar.gz"
       dest: "/opt/"
       remote_src: yes
+    become: true
     become_user: root
     failed_when: false
-    changed_when: tomcat_dir.rc !=0
+    changed_when: tomcat_dir.rc != 0
 
   - name: Recursively change ownership of "/opt/apache-tomcat-{{ tomcat_version }}/"
     file:
       path: "/opt/apache-tomcat-{{ tomcat_version }}/"
       state: directory
       recurse: yes
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
+      group: "{{ group_name }}"
+      owner: "{{ username }}"
       mode: 'o=r,g=rwx'
-    changed_when: tomcat_dir.rc !=0
+    changed_when: tomcat_dir.rc != 0
 
   - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/conf" dir exists
     stat:
@@ -133,13 +105,15 @@
       remote_src: True
       src: "/opt/apache-tomcat-{{ tomcat_version }}/conf"
       dest: "{{ tomcat_config }}"
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
+      group: "{{ group_name }}"
+      owner: "{{ username }}"
     when: conf_dir_exists.stat.exists
     changed_when: False
 
   - name: Remove old files /opt/apache-tomcat-{{ tomcat_version }}/conf
-    file: path="/opt/apache-tomcat-{{ tomcat_version }}/conf" state=absent
+    file:
+      path: "/opt/apache-tomcat-{{ tomcat_version }}/conf"
+      state: absent
     changed_when: False
 
   - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/temp" dir exists
@@ -152,8 +126,8 @@
       remote_src: True
       src: "/opt/apache-tomcat-{{ tomcat_version }}/temp"
       dest: "{{ tomcat_working }}"
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
+      group: "{{ group_name }}"
+      owner: "{{ username }}"
     when: temp_dir_exists.stat.exists
 
   - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/temp" dir exists
@@ -166,32 +140,36 @@
       remote_src: True
       src: "/opt/apache-tomcat-{{ tomcat_version }}/work"
       dest: "{{ tomcat_working }}/work"
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
+      group: "{{ group_name }}"
+      owner: "{{ username }}"
     when: work_dir_exists.stat.exists
 
   - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/logs"
-    file: path="/opt/apache-tomcat-{{ tomcat_version }}/logs" state=absent
+    file:
+      path: "/opt/apache-tomcat-{{ tomcat_version }}/logs"
+      state: absent
     changed_when: False
 
   - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/webapps"
-    file: path="/opt/apache-tomcat-{{ tomcat_version }}/webapps" state=absent
+    file:
+      path: "/opt/apache-tomcat-{{ tomcat_version }}/webapps"
+      state: absent
     changed_when: False
 
   - name: Add "{{ tomcat_config }}/conf/server.xml"
     template:
         src: server.xml
         dest: "{{ tomcat_config }}/conf/server.xml"
-        group: "{{ GROUPNAME }}"
-        owner: "{{ USERNAME }}"
+        group: "{{ group_name }}"
+        owner: "{{ username }}"
     when: install_check.rc != 0 or tomcat_version not in install_check.stderr
 
-  - name: Create a symbolic link /etc/opt/alfresco/tomcat/logs
+  - name: Create a symbolic link {{ tomcat_config }}/logs
     file:
-      src: /var/log/alfresco
+      src: "{{ logs_folder }}"
       dest: "{{ tomcat_config }}/logs"
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
+      group: "{{ group_name }}"
+      owner: "{{ username }}"
       state: link
       force: yes
 
@@ -199,19 +177,21 @@
     file:
       src: "{{ tomcat_working }}/work"
       dest: "{{ tomcat_config }}/work"
-      group: "{{ GROUPNAME }}"
-      owner: "{{ USERNAME }}"
+      group: "{{ group_name }}"
+      owner: "{{ username }}"
       state: link
       force: yes
 
   - name: checking for TOMCAT_HOME
-    shell: cat  /etc/opt/alfresco/setenv.sh | grep TOMCAT_HOME
+    shell: cat /etc/opt/alfresco/setenv.sh | grep TOMCAT_HOME
     register: test_tomcat_home
     failed_when: false
     changed_when: test_tomcat_home.rc != 0
 
-  - name: adding license server
-    lineinfile: dest="/etc/opt/alfresco/setenv.sh" line="export TOMCAT_HOME=/opt/apache-tomcat-{{ tomcat_version }}"
+  - name: Add TOMCAT_HOME to setenv script
+    lineinfile:
+      path: "{{ config_folder }}/setenv.sh"
+      line: "export TOMCAT_HOME=/opt/apache-tomcat-{{ tomcat_version }}"
     when: test_tomcat_home.stdout != 0
 
   - name: Add tomcat.service

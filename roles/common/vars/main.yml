@@ -1,0 +1,18 @@
+---
+# vars file for central
+# nginx_domain: "alfresco.org"
+
+# java_profiler: YourKit-JavaProfiler-2019.8-b142
+# java_profiler_runtime_dir: "/tmp/Alfresco/yourkit"
+
+nexus_user: "{{ lookup('env', 'NEXUS_USERNAME') }}"
+nexus_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
+
+group_name: Alfresco
+group_id: 1001
+username: alfresco
+user_id: 33031
+
+utils:
+  - sudo
+  - unzip

@@ -8,6 +8,5 @@ jdk_md5_checksum: "ac1bb98fe70314a67f6eb7a87e960d44"
 jdk_tar_file: "OpenJDK11U-jdk_x64_linux_{{ jdk_version }}_{{ jdk_arch }}.tar.gz"
 jdk_folder: "openjdk-{{ jdk_version }}+{{ jdk_arch }}"
 java_home: "/opt/openjdk-{{ jdk_version }}"
-
 temp_dir: /tmp/ansible_java
 config_dir: /etc/opt/alfresco

@@ -10,4 +10,5 @@ galaxy_info:
     - 7
   galaxy_tags: []
 dependencies:
+- common
 - java

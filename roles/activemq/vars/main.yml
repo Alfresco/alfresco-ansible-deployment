@@ -1,0 +1,6 @@
+---
+# vars file for roles/activemq
+activemq_version: "5.15.13"
+download_url: "http://archive.apache.org/dist/activemq/{{ activemq_version }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
+activemq_home: "/opt/apache-activemq-{{ activemq_version }}"
+activemq_host: localhost
