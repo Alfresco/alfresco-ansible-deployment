@@ -19,17 +19,17 @@ def get_ansible_vars(host):
     return ansible_vars
 
 def test_solr_log_exists(host, get_ansible_vars):
-    "Check that java executable exists"
-    assert_that(host.file("{}/solr.log".format(get_ansible_vars["log_dir"])).exists, get_ansible_vars["log_dir"])
+    "Check that solr log"
+    assert_that(host.file("{}/solr.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
 
 @pytest.mark.parametrize("svc", ["solr"])
-def test_activemq_running_and_enabled(host, svc):
-    """Check activemq service"""
+def test_solr_service_running_and_enabled(host, svc):
+    """Check solr service"""
     solr = host.service(svc)
     assert_that(solr.is_running)
     assert_that(solr.is_enabled)
 
-def test_solr_stats_is_accesible(host, AnsibleVars):
+def test_solr_stats_is_accesible(host, get_ansible_vars):
     """Check solrstats service"""
     timeout = time.time() + 10
     output = None
