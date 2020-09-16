@@ -1,6 +1,6 @@
 ---
 - name: Repository Role
-  hosts: all
+  hosts: localhost
   become: true
   become_method: sudo
   roles:

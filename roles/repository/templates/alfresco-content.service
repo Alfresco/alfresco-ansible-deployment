@@ -1,0 +1,11 @@
+[Unit]
+Description=Alfresco Content Services
+Requires={{ postgresql_service[postgres_major_version] }}.service activemq.service tomcat.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/true
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
