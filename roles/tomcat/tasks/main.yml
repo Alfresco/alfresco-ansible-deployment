@@ -41,7 +41,7 @@
     become_user: root
     when: not tom_dir.stat.exists
 
-  - name: Check if "{{ tomcat_config }}/webapps" dir exists
+  - name: Check if "{{ tomcat_working }}/webapps" dir exists
     stat:
       path: "{{ tomcat_working }}/webapps"
     register: webapps_dir

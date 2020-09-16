@@ -10,6 +10,15 @@
   failed_when: false
   changed_when: group_presence.rc != 0
 
+- name: ensure a list of packages installed
+  become: true
+  become_user: root
+  package:
+    name: "{{ item }}"
+    state: present
+  poll: 0
+  loop: "{{ utils }}"
+
 - name: "Create {{ group_name }} group"
   group:
       name: "{{ group_name }}"

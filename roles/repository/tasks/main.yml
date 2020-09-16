@@ -47,9 +47,9 @@
 
 - name: Check if Alfresco version {{ alfresco.version }} is installed
   stat:
-    path: "{{ content_folder }}/webapps/alfresco/META-INF/MANIFEST.MF"
+    path: "{{ data_folder }}/webapps/alfresco/META-INF/MANIFEST.MF"
   register: alf_install_check
-  changed_when: not alf_install_check.stat.exists
+#  changed_when: not alf_install_check.stat.exists
 
 - name: Download DISTRIBUTION and WAR files
   become: true
@@ -110,13 +110,19 @@
     insertafter: 'CATALINA_OPTS'
     line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}"
 
+- name: check if catalina properties file exists
+  stat:
+    path: "{{ tomcat_config }}/conf/catalina.properties"
+  register: catalina_prop
+
 - name: setup common loader
   become: true
   become_user: root
   lineinfile:
     path: "{{ tomcat_config }}/conf/catalina.properties"
-    regexp: 'common.loader='
+    regexp: '^common.loader='
     line: common.loader="${catalina.base}/lib","${catalina.base}/lib/*.jar","{{ content_folder }}/web-server/lib","{{ content_folder }}/web-server/lib/*.jar","${catalina.home}/lib","${catalina.home}/lib/*.jar",/etc/opt/alfresco/content-services/classpath
+  when: catalina_prop.stat.exists
 
 - name: 'Check on war download async task'
   become: true
@@ -148,21 +154,22 @@
 
 - name: Extract content-services-{{ alfresco.version }}.zip into {{ content_folder }}
   become: true
-  become_user: root
+  become_user: "{{ USERNAME }}"
   unarchive:
     src: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
     dest: "{{ content_folder }}"
     remote_src: yes
-    creates: "{{ content_folder }}/README.txt"
+    creates: "{{ content_folder }}/bin"
   failed_when: false
-  when: archive_exists.stat.exists
+  when: archive_exists.stat.exists and not alf_install_check.stat.exists
 
-# - name: Remove Alfresco Content Services {{ alfresco.version }} zip file
-#   become: true
-#   file:
-#     path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
-#     state: absent
-#   when: archive_exists.stat.exists
+- name: Remove Alfresco Content Services {{ alfresco.version }} zip file
+  changed_when: false
+  become: true
+  file:
+    path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
+    state: absent
+  when: archive_exists.stat.exists
 
 - name: check if licenses files exists
   stat:
@@ -178,7 +185,9 @@
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
   when: not licenses_exists.stat.exists
+
 - name: Remove old files
+  changed_when: false
   file:
     path: "{{ content_folder }}/licenses"
     state: absent
@@ -200,6 +209,7 @@
   when: not keystore_exists.stat.exists
 
 - name: Remove keystore files
+  changed_when: false
   file:
     path: "{{ content_folder }}/alf_data/keystore/"
     state: absent
@@ -208,6 +218,7 @@
   stat:
     path: "{{ settings_folder }}/classpath"
   register: classes_exists
+
 - name: Copy classes
   become: true
   become_user: "{{ USERNAME }}"
@@ -218,7 +229,9 @@
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
   when: not classes_exists.stat.exists
+
 - name: Remove classes files
+  changed_when: false
   file:
     path: "{{ settings_folder }}/classpath"
     state: absent
@@ -227,6 +240,7 @@
   stat:
     path: "{{ tomcat_config }}/conf/Catalina/localhost/alfresco.xml"
   register: conf_exists
+
 - name: Copy conf
   become: true
   become_user: "{{ USERNAME }}"
@@ -237,7 +251,9 @@
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
   when: not conf_exists.stat.exists
+
 - name: Remove classes files
+  changed_when: false
   file:
     path: "{{ content_folder }}/web-server/conf"
     state: absent
@@ -254,10 +270,10 @@
     regexp: '<Context crossContext="true">'
     line: '<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/share.war">'
 
-- name: check if "{{ settings_folder }}/classpath/alfresco-global.properties" exists
+- name: check if "{{ tomcat_config }}/conf/Catalina/localhost/ROOT.xml" exists
   stat:
-    path: "{{ settings_folder }}/classpath/alfresco-global.properties"
-  register: global_properties
+    path: "{{ tomcat_config }}/conf/Catalina/localhost/ROOT.xml"
+  register: root_xml
 
 - name: Create ROOT.xml
   template:
@@ -266,7 +282,12 @@
     src: ROOT.xml
     dest: "{{ tomcat_config }}/conf/Catalina/localhost/ROOT.xml"
     mode: 'u=rwx,g=rwx,o=rx'
-  when: not global_properties.stat.exists
+  when: not root_xml.stat.exists
+
+- name: check if "{{ tomcat_config }}/conf/Catalina/localhost/_vti_bin.xml" exists
+  stat:
+    path: "{{ tomcat_config }}/conf/Catalina/localhost/_vti_bin.xml"
+  register: vti_xml
 
 - name: Create _vti_bin.xml
   template:
@@ -275,18 +296,29 @@
     src: _vti_bin.xml
     dest: "{{ tomcat_config }}/conf/Catalina/localhost/_vti_bin.xml"
     mode: 'u=rwx,g=rwx,o=rx'
-  when: not global_properties.stat.exists
+  when: not vti_xml.stat.exists
 
-- name: recreate "{{ settings_folder }}/classpath/"
-  become: true
-  become_user: root
-  file:
-    path: "{{ settings_folder }}/classpath/"
-    state: directory
-    owner: "{{ USERNAME }}"
-    group: "{{ GROUPNAME }}"
-    mode: 'u=rwx,go=rx'
-    recurse: yes
+#- name: check if "{{ settings_folder }}/classpath/" exists
+#  stat:
+#    path: "{{ settings_folder }}/classpath/"
+#  register: classpath
+
+#- name: recreate "{{ settings_folder }}/classpath/"
+#  become: true
+#  become_user: root
+#  file:
+#    path: "{{ settings_folder }}/classpath/"
+#    state: directory
+#    owner: "{{ USERNAME }}"
+#    group: "{{ GROUPNAME }}"
+#    mode: 'u=rwx,go=rx'
+#    recurse: yes
+#  when: not classpath.stat.exists
+
+- name: check if "{{ settings_folder }}/classpath/alfresco-global.properties" exists
+  stat:
+    path: "{{ settings_folder }}/classpath/alfresco-global.properties"
+  register: global_properties
 
 - name: Create alfresco-global.properties
   template:

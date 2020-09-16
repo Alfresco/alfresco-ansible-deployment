@@ -32,6 +32,13 @@ jobs:
       script:
         - yamllint .
     - stage: Unit tests
+      name: Search Role unit tests
+      env:
+        - MOLECULE_NO_LOG=false
+      install: pip install 'molecule[docker]'
+      script:
+        - cd roles/search-services/ && molecule test     
+    - stage: Unit tests
       name: Common Role unit tests
       env:
         - MOLECULE_NO_LOG=false
