@@ -49,8 +49,8 @@
      - "{{ settings_folder }}/classpath/alfresco/extension/mimetypes"
      - "{{ settings_folder }}/classpath/alfresco/web-extension"
      - "{{ data_folder }}/keystore"
-     - "{{ tomcat_config }}/lib"
-     - "{{ tomcat_config }}/conf/Catalina/localhost"
+     - "{{ tomcat_config_dir }}/lib"
+     - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
      - "{{ log_folder }}/licenses/"
 
 - name: Check if Alfresco version {{ alfresco.version }} is installed
@@ -94,7 +94,7 @@
   become_user: root
   get_url:
     url: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependency_postgresql.version }}/postgresql-{{ dependency_postgresql.version }}.jar"
-    dest: "{{ tomcat_config }}/lib/postgresql.jar"
+    dest: "{{ tomcat_config_dir }}/lib/postgresql.jar"
     mode: 0644
  # register: postgresql_download
   when: not alf_install_check.stat.exists
@@ -119,11 +119,11 @@
 
 - name: check if catalina properties file exists
   stat:
-    path: "{{ tomcat_config }}/conf/catalina.properties"
+    path: "{{ tomcat_config_dir }}/conf/catalina.properties"
   register: catalina_prop
 
 #- name: checking for common.loader
-#  command: "cat {{ tomcat_config }}/conf/catalina.properties | grep classpath"
+#  command: "cat {{ tomcat_config_dir }}/conf/catalina.properties | grep classpath"
 #  register: common_loader
 #  failed_when: false
 #  when: catalina_exists.stat.exists
@@ -134,7 +134,7 @@
   become_user: root
   failed_when: false
   lineinfile:
-    path: "{{ tomcat_config }}/conf/catalina.properties"
+    path: "{{ tomcat_config_dir }}/conf/catalina.properties"
     regexp: '^common.loader='
     line: "common.loader=\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\",/etc/opt/alfresco/content-services/classpath"
   when: catalina_prop.stat.exists
@@ -255,7 +255,7 @@
 
 - name: check if conf files exist
   stat:
-    path: "{{ tomcat_config }}/conf/Catalina/localhost/alfresco.xml"
+    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/alfresco.xml"
   register: conf_exists
 
 - name: Copy conf
@@ -264,7 +264,7 @@
   copy:
     remote_src: True
     src: "{{ content_folder }}/web-server/conf/Catalina/localhost/"
-    dest: "{{ tomcat_config }}/conf/Catalina/localhost/"
+    dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/"
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
   when: not conf_exists.stat.exists
@@ -277,19 +277,19 @@
 
 - name: add context home to alfresco.xml
   lineinfile:
-    path: "{{ tomcat_config }}/conf/Catalina/localhost/alfresco.xml"
+    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/alfresco.xml"
     regexp: '<Context crossContext="true">'
     line: '<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/alfresco.war">'
 
 - name: add context home to share.xml
   lineinfile:
-    path: "{{ tomcat_config }}/conf/Catalina/localhost/share.xml"
+    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/share.xml"
     regexp: '<Context crossContext="true">'
     line: '<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/share.war">'
 
-- name: check if "{{ tomcat_config }}/conf/Catalina/localhost/ROOT.xml" exists
+- name: check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml" exists
   stat:
-    path: "{{ tomcat_config }}/conf/Catalina/localhost/ROOT.xml"
+    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml"
   register: root_xml
 
 - name: Create ROOT.xml
@@ -297,13 +297,13 @@
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
     src: ROOT.xml
-    dest: "{{ tomcat_config }}/conf/Catalina/localhost/ROOT.xml"
+    dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml"
     mode: 'u=rwx,g=rwx,o=rx'
   when: not root_xml.stat.exists
 
-- name: check if "{{ tomcat_config }}/conf/Catalina/localhost/_vti_bin.xml" exists
+- name: check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml" exists
   stat:
-    path: "{{ tomcat_config }}/conf/Catalina/localhost/_vti_bin.xml"
+    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml"
   register: vti_xml
 
 - name: Create _vti_bin.xml
@@ -311,7 +311,7 @@
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
     src: _vti_bin.xml
-    dest: "{{ tomcat_config }}/conf/Catalina/localhost/_vti_bin.xml"
+    dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml"
     mode: 'u=rwx,g=rwx,o=rx'
   when: not vti_xml.stat.exists
 
@@ -417,7 +417,7 @@
   become: true
   become_user: root
   lineinfile:
-    path: "{{ tomcat_config }}/conf/Catalina/localhost/alfresco.xml"
+    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/alfresco.xml"
     regexp: '<PostResources base='
     line: '<PostResources base="/opt/alfresco/modules/acs-platform"'
 
@@ -425,7 +425,7 @@
   become: true
   become_user: root
   lineinfile:
-    path: "{{ tomcat_config }}/conf/Catalina/localhost/share.xml"
+    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/share.xml"
     regexp: '<PostResources base='
     line: '<PostResources base="/opt/alfresco/modules/acs-share"'
 
