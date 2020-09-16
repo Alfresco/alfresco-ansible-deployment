@@ -1,7 +1,0 @@
----
-# handlers file for repository
-- name: alfresco-content-restart
-  systemd:
-    name: "alfresco-content"
-    state: restarted
-    daemon_reload: yes

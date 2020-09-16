@@ -40,7 +40,7 @@
     become_user: root
     when: not tom_dir.stat.exists
 
-  - name: Create webaps dir {{ tomcat_working }}/webapps
+  - name: Create webapps dir {{ tomcat_working }}/webapps
     file:
       path: "{{ tomcat_working }}/webapps"
       state: directory
@@ -188,7 +188,7 @@
   - name: Add tomcat.service
     template:
         src: tomcat.service
-        dest: /usr/lib/systemd/system/tomcat.service
+        dest: /etc/systemd/system/tomcat.service
         owner: root
         group: root
     notify: tomcat-restart
