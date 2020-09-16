@@ -24,14 +24,14 @@
     changed_when: install_check.rc != 0
     when: wrapper.stat.exists or wrapper_created
 
-  - name: Check if "{{ tomcat_config }}" dir exists
+  - name: Check if "{{ tomcat_config_dir }}" dir exists
     stat:
-      path: "{{ tomcat_config }}"
+      path: "{{ tomcat_config_dir }}"
     register: tom_dir
 
-  - name: Create dir {{ tomcat_config }}/conf
+  - name: Create dir {{ tomcat_config_dir }}/conf
     file:
-      path: "{{ tomcat_config }}/conf"
+      path: "{{ tomcat_config_dir }}/conf"
       state: directory
       group: "{{ group_name }}"
       owner: "{{ username }}"
@@ -57,7 +57,7 @@
     when: not webapps_dir.stat.exists
 
   - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/" dir exists
-    shell: "ls -l {{ tomcat_config }}/"
+    shell: "ls -l {{ tomcat_config_dir }}/"
     failed_when: false
     changed_when: false
     register: tomcat_dir
@@ -100,11 +100,11 @@
       path: "/opt/apache-tomcat-{{ tomcat_version }}/conf"
     register: conf_dir_exists
 
-  - name: Copy files from "/opt/apache-tomcat-{{ tomcat_version }}/conf to {{ tomcat_config }}"
+  - name: Copy files from "/opt/apache-tomcat-{{ tomcat_version }}/conf to {{ tomcat_config_dir }}"
     copy:
       remote_src: True
       src: "/opt/apache-tomcat-{{ tomcat_version }}/conf"
-      dest: "{{ tomcat_config }}"
+      dest: "{{ tomcat_config_dir }}"
       group: "{{ group_name }}"
       owner: "{{ username }}"
     when: conf_dir_exists.stat.exists
@@ -156,27 +156,27 @@
       state: absent
     changed_when: False
 
-  - name: Add "{{ tomcat_config }}/conf/server.xml"
+  - name: Add "{{ tomcat_config_dir }}/conf/server.xml"
     template:
         src: server.xml
-        dest: "{{ tomcat_config }}/conf/server.xml"
+        dest: "{{ tomcat_config_dir }}/conf/server.xml"
         group: "{{ group_name }}"
         owner: "{{ username }}"
     when: install_check.rc != 0 or tomcat_version not in install_check.stderr
 
-  - name: Create a symbolic link {{ tomcat_config }}/logs
+  - name: Create a symbolic link {{ tomcat_config_dir }}/logs
     file:
       src: "{{ logs_folder }}"
-      dest: "{{ tomcat_config }}/logs"
+      dest: "{{ tomcat_config_dir }}/logs"
       group: "{{ group_name }}"
       owner: "{{ username }}"
       state: link
       force: yes
 
-  - name: Create a symbolic link "{{ tomcat_config }}"/work
+  - name: Create a symbolic link "{{ tomcat_config_dir }}"/work
     file:
       src: "{{ tomcat_working }}/work"
-      dest: "{{ tomcat_config }}/work"
+      dest: "{{ tomcat_config_dir }}/work"
       group: "{{ group_name }}"
       owner: "{{ username }}"
       state: link
