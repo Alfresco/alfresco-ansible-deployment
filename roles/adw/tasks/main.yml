@@ -13,14 +13,14 @@
   loop:
      - "{{ download_location }}"
 
-  - name: Download ADW
-    get_url:
-      url: "{{ adw_tgz_url }}"
-      dest: "{{ binaries_folder }}/digital-workspace-{{ adwVersion }}.war"
-    register: download
-    until: download is succeeded
-    become: true
-    become_user: root
+- name: Download ADW
+  get_url:
+    url: "{{ adw_tgz_url }}"
+    dest: "{{ binaries_folder }}/digital-workspace-{{ adwVersion }}.war"
+  register: download
+  until: download is succeeded
+  become: true
+  become_user: root
 
 - name: Create digital-workspace.xml
   template:
