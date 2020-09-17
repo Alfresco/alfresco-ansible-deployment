@@ -16,9 +16,9 @@
 
 - name: Create Solr user {{ USERNAME }}
   user:
-    name: "{{ USERNAME }}"
     comment: Solr user
     uid: "{{ USERID }}"
+    name: "{{ USERNAME }}"
     group: "{{ group_name }}"
 
 - name: create "{{ dist_dir }}" dir
@@ -27,8 +27,8 @@
     path: "{{ dist_dir }}"
     state: directory
     owner: "{{ USERNAME }}"
+    group: "{{ group_name }}"
     mode: 'u=rwx,go=rx'
-  changed_when: false
 
 - name: create "{{ config_dir }}" dir
   become: yes
@@ -36,8 +36,8 @@
     path: "{{ config_dir }}"
     state: directory
     owner: "{{ USERNAME }}"
+    group: "{{ group_name }}"
     mode: 'u=rwx,go=rx'
-  changed_when: false
 
 - name: create "{{ data_dir }}" dir
   become: yes
@@ -45,8 +45,8 @@
     path: "{{ data_dir }}"
     state: directory
     owner: "{{ USERNAME }}"
+    group: "{{ group_name }}"
     mode: 'u=rwx,go=rx'
-  changed_when: false
 
 - name: check if zip file exists
   stat:
@@ -72,12 +72,19 @@
     dest: "{{ dist_dir }}"
     remote_src: yes
     creates: "{{ dist_dir }}/README.MD"
+    owner: "{{ USERNAME }}"
+    group: "{{ group_name }}"
   failed_when: false
   when: download_result is succeeded
   changed_when: false
 
 - name: Copy files from "{{ dist_dir }}/alfresco-search-services to {{ dist_dir }}/"
-  copy: remote_src=True src="{{ dist_dir }}/alfresco-search-services/" dest="{{ dist_dir }}/"
+  copy:
+    remote_src: True
+    src: "{{ dist_dir }}/alfresco-search-services/"
+    dest: "{{ dist_dir }}/"
+    owner: "{{ USERNAME }}"
+    group: "{{ group_name }}"
   changed_when: false
   failed_when: false
 
@@ -86,7 +93,12 @@
   changed_when: false
 
 - name: Copy files from "{{ dist_dir }}/solrhome to {{ config_dir }}/"
-  copy: remote_src=True src="{{ dist_dir }}/solrhome" dest="{{ config_dir }}/"
+  copy:
+    remote_src: True
+    src: "{{ dist_dir }}/solrhome"
+    dest: "{{ config_dir }}/"
+    owner: "{{ USERNAME }}"
+    group: "{{ group_name }}"
   changed_when: false
 
 - name: add acs home to setenv.sh
@@ -103,6 +115,7 @@
     src: solrcore.properties
     dest: "{{ dist_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
     owner: "{{ USERNAME }}"
+    group: "{{ group_name }}"
     mode: 'ugo=rwx'
   changed_when: false
 
@@ -112,8 +125,8 @@
     src: solr.sh
     dest: "{{ dist_dir }}/solr.sh"
     owner: "{{ USERNAME }}"
+    group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-  changed_when: false
 
 - name: Add "{{ config_dir }}/solr.in.sh"
   become: yes
@@ -121,18 +134,8 @@
     src: solr.in.sh
     dest: "{{ config_dir }}/solr.in.sh"
     owner: "{{ USERNAME }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-  changed_when: false
-
-- name: Recursively change ownership of "{{ dist_dir }}"
-  file:
-    path: "{{ dist_dir }}"
-    state: directory
-    recurse: yes
-    owner: "{{ USERNAME }}"
     group: "{{ group_name }}"
-    mode: 'o=r,g=rwx'
-  changed_when: false
+    mode: 'u=rwx,g=rwx,o=rx'
 
 - name: Check Solr running
   shell: "{{ dist_dir }}/solr/bin/solr status"
@@ -143,11 +146,10 @@
   changed_when: solr_started.rc != 0
 
 - name: Add solr.service
+  become: true
   template:
       src: solr.service
       dest: /usr/lib/systemd/system/solr.service
-      owner: root
-      group: root
   notify: restart-solr
   when: solr_started.failed or '"No Solr nodes are running." in solr_started.stdout'
 
