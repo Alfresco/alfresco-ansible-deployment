@@ -4,20 +4,19 @@
   include_vars: "nexus.yml"
   failed_when: false
 
-- name: "Check existence of {{ group_name }} group"
-  shell: "cat /etc/group | grep {{ group_name }}"
-  register: group_presence
-  failed_when: false
-  changed_when: group_presence.rc != 0
-
 - name: ensure a list of packages installed
   become: true
-  become_user: root
   package:
     name: "{{ item }}"
     state: present
   poll: 0
   loop: "{{ utils }}"
+
+- name: "Check existence of {{ group_name }} group"
+  shell: "cat /etc/group | grep {{ group_name }}"
+  register: group_presence
+  failed_when: false
+  changed_when: group_presence.rc != 0
 
 - name: "Create {{ group_name }} group"
   group:

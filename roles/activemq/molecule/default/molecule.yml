@@ -20,6 +20,7 @@ platforms:
   - name: instance
     image: centos/systemd:latest
     privileged: true
+    pre_build_image: true
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
     command: "/usr/sbin/init"

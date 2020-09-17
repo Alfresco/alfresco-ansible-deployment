@@ -1,9 +1,5 @@
 ---
 # vars file for central
-nginx_domain: "alfresco.org"
-
-java_profiler: YourKit-JavaProfiler-2019.8-b142
-java_profiler_runtime_dir: "/tmp/Alfresco/yourkit"
 
 nexus_user: "{{ lookup('env', 'NEXUS_USERNAME') }}"
 nexus_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
