@@ -1,0 +1,48 @@
+---
+- name: Create Directories
+  become: true
+  become_user: root
+  changed_when: false
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,go=rx'
+    recurse: yes
+  loop:
+     - "{{ download_location }}"
+
+  - name: Download ADW
+    get_url:
+      url: "{{ adw_tgz_url }}"
+      dest: "{{ binaries_folder }}/digital-workspace-{{ adwVersion }}.war"
+    register: download
+    until: download is succeeded
+    become: true
+    become_user: root
+
+- name: Create digital-workspace.xml
+  template:
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    src: digital-workspace.xml
+    dest: "{{ config_folder }}/tomcat/conf/Catalina/localhost/digital-workspace.xml"
+    mode: 'u=rwx,g=rwx,o=rx'
+
+- name: add acs CATALINA_OPTS to tomcat.sh
+  become: true
+  become_user: root
+  lineinfile:
+    path: "{{ binaries_folder }}/tomcat.sh"
+    insertafter: 'CATALINA_OPTS'
+    line: export CATALINA_OPTS="${CATALINA_OPTS} -Dadw.version={{ adwVersion }}"
+
+- name: add ADW_VERSION to setenv.sh
+  become: true
+  become_user: root
+  lineinfile:
+    path: "{{ config_folder }}/setenv.sh"
+    insertafter: EOF
+    line: "export ADW_VERSION={{ adwVersion }}"
+  notify: alfresco-content-restart
