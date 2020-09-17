@@ -1,18 +1,4 @@
 ---
-- name: Create Directories
-  become: true
-  become_user: root
-  changed_when: false
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,go=rx'
-    recurse: yes
-  loop:
-     - "{{ download_location }}"
-
 - name: Download ADW
   get_url:
     url: "{{ adw_tgz_url }}"
