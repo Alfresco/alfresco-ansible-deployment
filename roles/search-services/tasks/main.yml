@@ -92,6 +92,26 @@
   file: path="{{ dist_dir }}/alfresco-search-services" state=absent
   changed_when: false
 
+- name: Add "{{ dist_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
+  become: yes
+  template:
+    src: solrcore.properties
+    dest: "{{ dist_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
+    owner: "{{ USERNAME }}"
+    group: "{{ group_name }}"
+    mode: 'ugo=rwx'
+  changed_when: false
+
+- name: Add "{{ dist_dir }}/solrhome/templates/noRerank/conf/solrcore.properties"
+  become: yes
+  template:
+    src: solrcore.properties
+    dest: "{{ dist_dir }}/solrhome/templates/noRerank/conf/solrcore.properties"
+    owner: "{{ USERNAME }}"
+    group: "{{ group_name }}"
+    mode: 'ugo=rwx'
+  changed_when: false
+
 - name: Copy files from "{{ dist_dir }}/solrhome to {{ config_dir }}/"
   copy:
     remote_src: True
@@ -108,16 +128,6 @@
     path: "/etc/opt/alfresco/setenv.sh"
     insertafter: EOF
     line: "export SOLR_HOME={{ dist_dir }}"
-
-- name: Add "{{ dist_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
-  become: yes
-  template:
-    src: solrcore.properties
-    dest: "{{ dist_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
-    owner: "{{ USERNAME }}"
-    group: "{{ group_name }}"
-    mode: 'ugo=rwx'
-  changed_when: false
 
 - name: Add "{{ dist_dir }}/solr.sh"
   become: yes
