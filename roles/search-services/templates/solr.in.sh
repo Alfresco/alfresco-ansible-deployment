@@ -100,7 +100,7 @@ SOLR_HOME="{{ config_dir }}/solrhome"
 #SOLR_LOG_LEVEL=INFO
 
 # Location where Solr should write logs to. Absolute or relative to solr start dir
-SOLR_LOGS_DIR="/var/log/alfresco"
+SOLR_LOGS_DIR="{{ logs_folder }}"
 LOG4J_PROPS="${SOLR_TIP}/../logs/log4j.properties"
 
 # Enables log rotation, cleanup, and archiving during start. Setting SOLR_LOG_PRESTART_ROTATION=false will skip start

@@ -14,7 +14,7 @@
       group: "{{ group_name }}"
       owner: "{{ username }}"
       dest: "/opt/"
-      mode: '0755'
+      mode: 'u=rwx,g=rwx,o=rx'
   when: not activemq_exe.stat.exists
 
 - name: Check if configuration folder exists
@@ -28,7 +28,7 @@
     state: directory
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: '0755'
+    mode: 'u=rwx,g=rwx,o=rx'
   when: not activemq_configs.stat.exists
 
 - name: Check for conf folder
@@ -51,7 +51,7 @@
     state: directory
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: '0755'
+    mode: 'u=rwx,g=rwx,o=rx'
   when: not activemq_data_folder.stat.exists
 
 - name: Check for data
@@ -102,7 +102,7 @@
       dest: /etc/systemd/system/activemq.service
       owner: "{{ username }}"
       group: "{{ group_name }}"
-      mode: '0755'
+      mode: 'u=rwx,g=rwx,o=rx'
 
 - name: Ensure activemq service is started and enabled on boot
   systemd:

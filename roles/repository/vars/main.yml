@@ -1,7 +1,5 @@
 ---
-
-GROUPNAME: Alfresco
-USERNAME: alfresco
+# var file for repository role
 
 nexus_repository:
   releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
@@ -18,20 +16,10 @@ maven_repository:
 licenses: 3.1.0
 # vars file for repository
 
-base_folder: "/opt/alfresco"
-content_folder: "/opt/alfresco/content-services-{{ alfresco.version }}"
-settings_folder: "/etc/opt/alfresco/content-services"
-data_folder: "/var/opt/alfresco/content-services"
-log_folder: "/var/log/alfresco"
-
-# set default user information
-utils:
-  - fontconfig-2.13.0-4.3.el7
-  - dejavu-fonts-common-2.33-6.el7
-  - fontpackages-filesystem-1.44-8.el7
-  - freetype-2.8-14.el7
-  - libpng
-  - dejavu-sans-fonts-2.33-6.el7
+base_folder: "{{ binaries_folder }}"
+content_folder: "{{ base_folder }}/content-services-{{ alfresco.version }}"
+settings_folder: "{{ config_folder }}/content-services"
+content_data_folder: "{{ data_folder }}/content-services"
 
 cert_name: "\"CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB\""
 cert_validity: 36525
@@ -47,8 +35,7 @@ ajp_port: "8009"
 solr_port: "8983"
 share_port: "8082"
 # share_host: "{{ ipv4_address['content'] }}"
-nginx_domain: alfresco.org
-share_host: "{{ nginx_domain }}"
+
 
 share_folders:
   - /shared/classes/alfresco/web-extension
@@ -65,15 +52,9 @@ share_templates:
 instance_name: share
 resource_path: target
 
-# set default user information
-groupname: "Alfresco"
-groupid: "1001"
-user: "alfresco"
-userid: "33000"
-
 repository:
   protocol: http
-  host: localhost
+  host: "{{ repo_host }}"
   port: 8080
 
 CSRF:
