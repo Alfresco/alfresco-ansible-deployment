@@ -1,7 +1,4 @@
 ---
-# vars file for search-services
-solr:
-  version: 1.4.2
 
 utils:
   - unzip
@@ -11,13 +8,8 @@ utils:
   - openssl
   - openssl-devel
 
-dist_dir: /opt/alfresco/search-services-{{ solr.version }}
-config_dir: /etc/opt/alfresco/search-services
-data_dir: /var/opt/alfresco/search-services
+dist_dir: "{{ binaries_folder }}/search-services-{{ solr.version }}"
 
-USERNAME: solr
-USERID: 33007
+config_dir: "{{ config_folder }}/search-services"
 
-nexus_repository:
-  releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
-  enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
+data_dir: "{{ data_folder }}/search-services"

@@ -14,19 +14,12 @@
     state: present
   with_items: "{{ utils }}"
 
-- name: Create Solr user {{ USERNAME }}
-  user:
-    comment: Solr user
-    uid: "{{ USERID }}"
-    name: "{{ USERNAME }}"
-    group: "{{ group_name }}"
-
 - name: create "{{ dist_dir }}" dir
   become: yes
   file:
     path: "{{ dist_dir }}"
     state: directory
-    owner: "{{ USERNAME }}"
+    owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,go=rx'
 
@@ -35,7 +28,7 @@
   file:
     path: "{{ config_dir }}"
     state: directory
-    owner: "{{ USERNAME }}"
+    owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,go=rx'
 
@@ -44,19 +37,19 @@
   file:
     path: "{{ data_dir }}"
     state: directory
-    owner: "{{ USERNAME }}"
+    owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,go=rx'
 
 - name: check if zip file exists
   stat:
-    path: "/opt/alfresco-search-services-{{ solr.version }}.zip"
+    path: "{{ binaries_folder }}/alfresco-search-services-{{ solr.version }}.zip"
   register: solr_archive
 
 - name: Download Solr zip {{ solr.version }}
   get_url:
     url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-search-services/{{ solr.version }}/alfresco-search-services-{{ solr.version }}.zip"
-    dest: "/opt/alfresco-search-services-{{ solr.version }}.zip"
+    dest: "{{ binaries_folder }}/alfresco-search-services-{{ solr.version }}.zip"
     mode: 0444
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
@@ -68,11 +61,11 @@
 - name: Extract alfresco-search-services-{{ solr.version }}.zip into {{ dist_dir }}
   become: yes
   unarchive:
-    src: "/opt/alfresco-search-services-{{ solr.version }}.zip"
+    src: "{{ binaries_folder }}/alfresco-search-services-{{ solr.version }}.zip"
     dest: "{{ dist_dir }}"
     remote_src: yes
     creates: "{{ dist_dir }}/README.MD"
-    owner: "{{ USERNAME }}"
+    owner: "{{ username }}"
     group: "{{ group_name }}"
   failed_when: false
   when: download_result is succeeded
@@ -83,7 +76,7 @@
     remote_src: True
     src: "{{ dist_dir }}/alfresco-search-services/"
     dest: "{{ dist_dir }}/"
-    owner: "{{ USERNAME }}"
+    owner: "{{ username }}"
     group: "{{ group_name }}"
   changed_when: false
   failed_when: false
@@ -97,7 +90,7 @@
   template:
     src: solrcore.properties
     dest: "{{ dist_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
-    owner: "{{ USERNAME }}"
+    owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'ugo=rwx'
   changed_when: false
@@ -107,7 +100,7 @@
   template:
     src: solrcore.properties
     dest: "{{ dist_dir }}/solrhome/templates/noRerank/conf/solrcore.properties"
-    owner: "{{ USERNAME }}"
+    owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'ugo=rwx'
   changed_when: false
@@ -117,7 +110,7 @@
     remote_src: True
     src: "{{ dist_dir }}/solrhome"
     dest: "{{ config_dir }}/"
-    owner: "{{ USERNAME }}"
+    owner: "{{ username }}"
     group: "{{ group_name }}"
   changed_when: false
 
@@ -125,7 +118,7 @@
   become: true
   become_user: root
   lineinfile:
-    path: "/etc/opt/alfresco/setenv.sh"
+    path: "{{ config_folder }}/setenv.sh"
     insertafter: EOF
     line: "export SOLR_HOME={{ dist_dir }}"
 
@@ -134,7 +127,7 @@
   template:
     src: solr.sh
     dest: "{{ dist_dir }}/solr.sh"
-    owner: "{{ USERNAME }}"
+    owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
 
@@ -143,7 +136,7 @@
   template:
     src: solr.in.sh
     dest: "{{ config_dir }}/solr.in.sh"
-    owner: "{{ USERNAME }}"
+    owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
 
@@ -159,7 +152,7 @@
   become: true
   template:
       src: solr.service
-      dest: /usr/lib/systemd/system/solr.service
+      dest:  /etc/systemd/system/solr.service
   notify: restart-solr
   when: solr_started.failed or '"No Solr nodes are running." in solr_started.stdout'
 
