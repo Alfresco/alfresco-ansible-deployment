@@ -192,6 +192,7 @@
   stat:
     path: "{{ settings_folder }}/licenses"
   register: licenses_exists
+
 - name: Copy licenses
   become: true
   become_user: "{{ USERNAME }}"
@@ -405,7 +406,7 @@
   become_user: root
   template:
     src: alfresco-content.service
-    dest: /usr/lib/systemd/system/alfresco-content.service
+    dest: /etc/systemd/system/alfresco-content.service
     owner: "{{ USERNAME }}"
     group: "{{ GROUPNAME }}"
   notify: alfresco-content-restart
