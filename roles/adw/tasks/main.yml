@@ -3,6 +3,8 @@
   get_url:
     url: "{{ adw_tgz_url }}"
     dest: "{{ binaries_folder }}/digital-workspace-{{ adwVersion }}.war"
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
   register: download
   until: download is succeeded
   become: true
