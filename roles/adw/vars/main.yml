@@ -1,3 +1,4 @@
 ---
 adwVersion: 1.6.0
 adw_tgz_url: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/alfresco-digital-workspace/{{ adwVersion }}/alfresco-digital-workspace-{{ adwVersion }}.war"
+adw_host: localhost
