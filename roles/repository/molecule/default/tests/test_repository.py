@@ -47,6 +47,6 @@ def test_share_log_exists(host, AnsibleVars):
 
 def test_share_context_200(host, AnsibleVars):
     "Check that /share context is available and returns a HTTP 200 status code"
-    cmd = host.run("curl -iL --user admin:admin http://{}:8080/share".format(AnsibleVars["repository"]["host"]))
+    cmd = host.run("curl -iL --user admin:admin http://{}:8080/share".format(AnsibleVars["repo_host"]))
     assert_that(cmd.stdout, contains_string("Alfresco Share"))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
