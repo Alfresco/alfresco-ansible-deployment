@@ -130,9 +130,9 @@
       owner: "{{ username }}"
     when: temp_dir_exists.stat.exists
 
-  - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/temp" dir exists
+  - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/work" dir exists
     stat:
-      path: "/opt/apache-tomcat-{{ tomcat_version }}/temp"
+      path: "/opt/apache-tomcat-{{ tomcat_version }}/work"
     register: work_dir_exists
 
   - name: Copy files from "/opt/apache-tomcat-{{ tomcat_version }}/work to {{ tomcat_working }}"

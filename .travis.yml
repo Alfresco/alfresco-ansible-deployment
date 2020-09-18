@@ -10,7 +10,7 @@ services:
   - docker
 
 before_install:
-  - pip install ansible molecule ansible-lint PyHamcrest pylint testinfra
+  - pip install ansible molecule ansible-lint PyHamcrest pylint testinfra 
 
 stages:
   - name: Linters
@@ -31,6 +31,13 @@ jobs:
       install: pip install --upgrade yamllint
       script:
         - yamllint .
+    - stage: Unit tests
+      name: Search Role unit tests
+      env:
+        - MOLECULE_NO_LOG=false
+      install: pip install 'molecule[docker]'
+      script:
+        - cd roles/search-services/ && molecule test     
     - stage: Unit tests
       name: Common Role unit tests
       env:
