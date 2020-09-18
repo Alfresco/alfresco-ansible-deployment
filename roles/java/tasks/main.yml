@@ -66,7 +66,6 @@
   register: setenv_exists
 
 - name: Add setenv bash file
-  become: true
   become_user: "{{ username }}"
   template:
     src: setenv.sh
