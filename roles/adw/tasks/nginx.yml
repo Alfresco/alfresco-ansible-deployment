@@ -1,4 +1,4 @@
-
+---
 - name: Enable nginx repo.
   template:
     src: nginx.repo
