@@ -4,4 +4,4 @@
   systemd:
     name: "alfresco-content"
     state: restarted
-    daemon_reload: yes
+    daemon_reload: true
