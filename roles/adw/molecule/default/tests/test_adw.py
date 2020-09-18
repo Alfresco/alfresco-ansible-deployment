@@ -6,8 +6,8 @@ from hamcrest import assert_that, contains_string
 @pytest.fixture()
 def AnsibleVars(host):
     """Define AnsibleVars"""
-    adw_role = "file=../../vars/main.yml name=adw_role"
-    ansible_vars = host.ansible("include_vars", adw_role)["ansible_facts"]["adw_role"]
+    common_vars = "../../../common/vars/main.yml name=common_vars"
+    ansible_vars = host.ansible("include_vars", adw_role)["ansible_facts"]["common_vars"]
     return ansible_vars
 
 def test_digital_workspace_200(host, AnsibleVars):
