@@ -6,9 +6,9 @@ After=syslog.socket network.target
 
 [Service]
 Type=forking
-User=alfresco
-ExecStart=/opt/alfresco/tomcat.sh start
-ExecStop=/opt/alfresco/tomcat.sh stop
+User={{ username }}
+ExecStart={{ binaries_folder }}/tomcat.sh start
+ExecStop={{ binaries_folder }}/tomcat.sh stop
 
 [Install]
 WantedBy=multi-user.target

@@ -6,7 +6,7 @@ fi
 
 . {{ config_folder }}/setenv.sh
 export CATALINA_HOME=${TOMCAT_HOME}
-export CATALINA_BASE=/etc/opt/alfresco/tomcat
+export CATALINA_BASE={{ config_folder }}/tomcat
 export CATALINA_OPTS="-Xms2g -Xmx2g -Djava.net.preferIPv4Stack=true"
 export CATALINA_TMPDIR={{ data_folder }}/tomcat/temp
 export CATALINA_PID={{ data_folder }}/tomcat.pid
