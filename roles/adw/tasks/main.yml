@@ -1,4 +1,6 @@
 ---
+- import_tasks: nginx.yml
+
 - name: Download ADW
   get_url:
     url: "{{ adw_tgz_url }}"
