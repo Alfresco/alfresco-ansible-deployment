@@ -1,17 +1,4 @@
 ---
-scenario:
-  test_sequence:
-    - lint
-    - cleanup
-    - destroy
-    - syntax
-    - create
-    - prepare
-    - converge
-    - side_effect
-    - verify
-    - cleanup
-    - destroy
 dependency:
   name: galaxy
 driver:
@@ -47,6 +34,19 @@ platforms:
       - 0.0.0.0:8099:8099/tcp
       - 0.0.0.0:8983:8983/tcp
       - 0.0.0.0:9090:9090/tcp
+
+scenario:
+  test_sequence:
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - side_effect
+    - verify
+
 provisioner:
   name: ansible
   playbooks:

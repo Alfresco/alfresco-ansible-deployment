@@ -1,0 +1,163 @@
+---
+# tasks file for search-services
+- name: Check Solr version is installed
+  command: "{{ dist_dir }}/solr/bin/solr version"
+  register: solr_install_check
+  environment:
+      JAVA_HOME: "{{ java_home }}"
+  failed_when: false
+  changed_when: solr_install_check.rc != 0
+
+- name: ensure a list of packages installed
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ utils }}"
+
+- name: create "{{ dist_dir }}" dir
+  become: yes
+  file:
+    path: "{{ dist_dir }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,go=rx'
+
+- name: create "{{ config_dir }}" dir
+  become: yes
+  file:
+    path: "{{ config_dir }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,go=rx'
+
+- name: create "{{ data_dir }}" dir
+  become: yes
+  file:
+    path: "{{ data_dir }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,go=rx'
+
+- name: check if zip file exists
+  stat:
+    path: "{{ binaries_folder }}/alfresco-search-services-{{ solr.version }}.zip"
+  register: solr_archive
+
+- name: Download Solr zip {{ solr.version }}
+  get_url:
+    url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-search-services/{{ solr.version }}/alfresco-search-services-{{ solr.version }}.zip"
+    dest: "{{ binaries_folder }}/alfresco-search-services-{{ solr.version }}.zip"
+    mode: 0444
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+    timeout: 600
+  register: download_result
+  until: download_result is succeeded
+  when: not solr_archive.stat.exists and solr_install_check.rc != 0
+
+- name: Extract alfresco-search-services-{{ solr.version }}.zip into {{ dist_dir }}
+  become: yes
+  unarchive:
+    src: "{{ binaries_folder }}/alfresco-search-services-{{ solr.version }}.zip"
+    dest: "{{ dist_dir }}"
+    remote_src: yes
+    creates: "{{ dist_dir }}/README.MD"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+  failed_when: false
+  when: download_result is succeeded
+  changed_when: false
+
+- name: Copy files from "{{ dist_dir }}/alfresco-search-services to {{ dist_dir }}/"
+  copy:
+    remote_src: True
+    src: "{{ dist_dir }}/alfresco-search-services/"
+    dest: "{{ dist_dir }}/"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+  changed_when: false
+  failed_when: false
+
+- name: Remove old files {{ dist_dir }}/alfresco-search-services
+  file: path="{{ dist_dir }}/alfresco-search-services" state=absent
+  changed_when: false
+
+- name: Add "{{ dist_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
+  become: yes
+  template:
+    src: solrcore.properties
+    dest: "{{ dist_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'ugo=rwx'
+  changed_when: false
+
+- name: Add "{{ dist_dir }}/solrhome/templates/noRerank/conf/solrcore.properties"
+  become: yes
+  template:
+    src: solrcore.properties
+    dest: "{{ dist_dir }}/solrhome/templates/noRerank/conf/solrcore.properties"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'ugo=rwx'
+  changed_when: false
+
+- name: Copy files from "{{ dist_dir }}/solrhome to {{ config_dir }}/"
+  copy:
+    remote_src: True
+    src: "{{ dist_dir }}/solrhome"
+    dest: "{{ config_dir }}/"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+  changed_when: false
+
+- name: add acs home to setenv.sh
+  become: true
+  become_user: root
+  lineinfile:
+    path: "{{ config_folder }}/setenv.sh"
+    insertafter: EOF
+    line: "export SOLR_HOME={{ dist_dir }}"
+
+- name: Add "{{ dist_dir }}/solr.sh"
+  become: yes
+  template:
+    src: solr.sh
+    dest: "{{ dist_dir }}/solr.sh"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+
+- name: Add "{{ config_dir }}/solr.in.sh"
+  become: yes
+  template:
+    src: solr.in.sh
+    dest: "{{ config_dir }}/solr.in.sh"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+
+- name: Check Solr running
+  shell: "{{ dist_dir }}/solr/bin/solr status"
+  register: solr_started
+  environment:
+      JAVA_HOME: "{{ java_home }}"
+  failed_when: false
+  changed_when: solr_started.rc != 0
+
+- name: Add solr.service
+  become: true
+  template:
+      src: solr.service
+      dest:  /etc/systemd/system/solr.service
+  notify: restart-solr
+  when: solr_started.failed or '"No Solr nodes are running." in solr_started.stdout'
+
+- name: Ensure solr service is started and enabled on boot
+  systemd:
+    name: solr.service
+    state: started
+    enabled: true

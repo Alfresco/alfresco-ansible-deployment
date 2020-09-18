@@ -7,14 +7,14 @@
   register: activemq_exe
 
 - name: Download and untar activemq
-  become_user: root
+  become: true
   unarchive:
       src: "{{ download_url }}"
       remote_src: true
       group: "{{ group_name }}"
       owner: "{{ username }}"
       dest: "/opt/"
-      mode: '0755'
+      mode: 'u=rwx,g=rwx,o=rx'
   when: not activemq_exe.stat.exists
 
 - name: Check if configuration folder exists
@@ -28,7 +28,7 @@
     state: directory
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: '0755'
+    mode: 'u=rwx,g=rwx,o=rx'
   when: not activemq_configs.stat.exists
 
 - name: Check for conf folder
@@ -51,7 +51,7 @@
     state: directory
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: '0755'
+    mode: 'u=rwx,g=rwx,o=rx'
   when: not activemq_data_folder.stat.exists
 
 - name: Check for data
@@ -64,6 +64,7 @@
   when: not data_existence.stat.exists
 
 - name: Change location of ActiveMQ logs
+  become: true
   become_user: "{{ username }}"
   replace:
     path: "{{ activemq_conf }}/log4j.properties"
@@ -71,6 +72,7 @@
     replace: "activemq.log"
 
 - name: Add activemq_home and host to setenv script
+  become: true
   become_user: "{{ username }}"
   blockinfile:
     path: "{{ config_folder }}/setenv.sh"
@@ -84,6 +86,7 @@
   register: activemq_wrapper_exists
 
 - name: Add activemq wrapper script
+  become: true
   become_user: "{{ username }}"
   template:
       src: "activemq.sh"
@@ -99,7 +102,7 @@
       dest: /etc/systemd/system/activemq.service
       owner: "{{ username }}"
       group: "{{ group_name }}"
-      mode: '0755'
+      mode: 'u=rwx,g=rwx,o=rx'
 
 - name: Ensure activemq service is started and enabled on boot
   systemd:

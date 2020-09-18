@@ -1,6 +1,6 @@
 ---
 # vars file for tomcat
-tomcat_version: "8.5.57"
+tomcat_version: "8.5.56"
 tomcat_major: "8"
 
 tomcat_tgz_urls:
