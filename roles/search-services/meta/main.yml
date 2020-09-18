@@ -1,7 +1,6 @@
----
 galaxy_info:
-  author: Lucian Suciu
-  description: Alfresco Repository
+  author: Sergiu Vidrascu
+  description: Deploys Solr Alfresco
   company: Alfresco
   license: Alfresco
   platforms:
@@ -10,8 +9,7 @@ galaxy_info:
     - 7
   min_ansible_version: 2.9
   galaxy_tags: []
+
+allow_duplicates: yes
 dependencies:
-- common
-- postgres
-- activemq
-- tomcat
+- repository

@@ -17,7 +17,7 @@
 #  become: true
 #  changed_when: false
 #  become_user: root
-#  command: mkdir -p "{{ item }}" && chmod 755 "{{ item }}" && chown "{{ USERNAME }}"."{{ GROUPNAME }}" "{{ item }}"
+#  command: mkdir -p "{{ item }}" && chmod 755 "{{ item }}" && chown "{{ username }}"."{{ group_name }}" "{{ item }}"
 #  args:
 #    creates: "{{ item }}"
 #  loop: "{{ dirs }}"
@@ -28,8 +28,8 @@
   file:
     path: "{{ item }}"
     state: directory
-    owner: "{{ USERNAME }}"
-    group: "{{ GROUPNAME }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
     mode: 'u=rwx,go=rx'
     recurse: yes
   loop:
@@ -48,14 +48,14 @@
      - "{{ settings_folder }}/classpath/alfresco/extension/transform/renditions"
      - "{{ settings_folder }}/classpath/alfresco/extension/mimetypes"
      - "{{ settings_folder }}/classpath/alfresco/web-extension"
-     - "{{ data_folder }}/keystore"
+     - "{{ content_data_folder }}/keystore"
      - "{{ tomcat_config_dir }}/lib"
      - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
-     - "{{ log_folder }}/licenses/"
+     - "{{ logs_folder }}/licenses/"
 
 - name: Check if Alfresco version {{ alfresco.version }} is installed
   stat:
-    path: "{{ data_folder }}/webapps/alfresco/META-INF/MANIFEST.MF"
+    path: "{{ content_data_folder }}/webapps/alfresco/META-INF/MANIFEST.MF"
   register: alf_install_check
 #  changed_when: not alf_install_check.stat.exists
 
@@ -157,8 +157,8 @@
   become_user: root
   changed_when: false
   template:
-    owner: "{{ USERNAME }}"
-    group: "{{ GROUPNAME }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
     src: "{{ item }}"
     dest: "{{ settings_folder }}/classpath/alfresco/web-extension/{{ item }}"
     mode: 'u=rwx,g=rwx,o=rx'
@@ -171,7 +171,7 @@
 
 - name: Extract content-services-{{ alfresco.version }}.zip into {{ content_folder }}
   become: true
-  become_user: "{{ USERNAME }}"
+  become_user: "{{ username }}"
   unarchive:
     src: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
     dest: "{{ content_folder }}"
@@ -195,13 +195,13 @@
 
 - name: Copy licenses
   become: true
-  become_user: "{{ USERNAME }}"
+  become_user: "{{ username }}"
   copy:
     remote_src: True
     src: "{{ content_folder }}/licenses"
     dest: "{{ settings_folder }}/"
-    owner: "{{ USERNAME }}"
-    group: "{{ GROUPNAME }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
   when: not licenses_exists.stat.exists
 
 - name: Remove old files
@@ -212,18 +212,18 @@
 
 - name: check if keystore files exists
   stat:
-    path: "{{ data_folder }}/keystore/keystore"
+    path: "{{ content_data_folder }}/keystore/keystore"
   register: keystore_exists
 
 - name: Copy keystore
   become: true
-  become_user: "{{ USERNAME }}"
+  become_user: "{{ username }}"
   copy:
     remote_src: True
     src: "{{ content_folder }}/alf_data/keystore/"
-    dest: "{{ data_folder }}/keystore/"
-    owner: "{{ USERNAME }}"
-    group: "{{ GROUPNAME }}"
+    dest: "{{ content_data_folder }}/keystore/"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
   when: not keystore_exists.stat.exists
 
 - name: Remove keystore files
@@ -239,13 +239,13 @@
 
 - name: Copy classes
   become: true
-  become_user: "{{ USERNAME }}"
+  become_user: "{{ username }}"
   copy:
     remote_src: True
     src: "{{ content_folder }}/shared/classes/"
     dest: "{{ settings_folder }}/classpath/"
-    owner: "{{ USERNAME }}"
-    group: "{{ GROUPNAME }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
   when: not classes_exists.stat.exists
 
 #- name: Remove classes files
@@ -261,13 +261,13 @@
 
 - name: Copy conf
   become: true
-  become_user: "{{ USERNAME }}"
+  become_user: "{{ username }}"
   copy:
     remote_src: True
     src: "{{ content_folder }}/web-server/conf/Catalina/localhost/"
     dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/"
-    owner: "{{ USERNAME }}"
-    group: "{{ GROUPNAME }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
   when: not conf_exists.stat.exists
 
 - name: Remove classes files
@@ -295,8 +295,8 @@
 
 - name: Create ROOT.xml
   template:
-    owner: "{{ USERNAME }}"
-    group: "{{ GROUPNAME }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
     src: ROOT.xml
     dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml"
     mode: 'u=rwx,g=rwx,o=rx'
@@ -309,8 +309,8 @@
 
 - name: Create _vti_bin.xml
   template:
-    owner: "{{ USERNAME }}"
-    group: "{{ GROUPNAME }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
     src: _vti_bin.xml
     dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml"
     mode: 'u=rwx,g=rwx,o=rx'
@@ -327,8 +327,8 @@
 #  file:
 #    path: "{{ settings_folder }}/classpath/"
 #    state: directory
-#    owner: "{{ USERNAME }}"
-#    group: "{{ GROUPNAME }}"
+#    owner: "{{ username }}"
+#    group: "{{ group_name }}"
 #    mode: 'u=rwx,go=rx'
 #    recurse: yes
 #  when: not classpath.stat.exists
@@ -340,8 +340,8 @@
 
 - name: Create alfresco-global.properties
   template:
-    owner: "{{ USERNAME }}"
-    group: "{{ GROUPNAME }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
     src: alfresco-global.properties
     dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
     mode: 'u=rwx,g=rwx,o=rx'
@@ -358,8 +358,8 @@
 
 - name: Create apply_amps.sh
   template:
-    owner: "{{ USERNAME }}"
-    group: "{{ GROUPNAME }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
     src: apply_amps.sh
     dest: "{{ content_folder }}/apply_amps.sh"
     mode: 'u=rwx,g=rwx,o=rx'
@@ -407,8 +407,8 @@
   template:
     src: alfresco-content.service
     dest: /etc/systemd/system/alfresco-content.service
-    owner: "{{ USERNAME }}"
-    group: "{{ GROUPNAME }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
   notify: alfresco-content-restart
 
 - name: Include postgres credentials
