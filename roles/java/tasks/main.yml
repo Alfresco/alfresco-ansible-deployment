@@ -65,10 +65,7 @@
   register: setenv_exists
 
 - name: Add setenv bash file
-<<<<<<< HEAD
-=======
   become: true
->>>>>>> OPSEXP-455-solr
   become_user: "{{ username }}"
   template:
     src: setenv.sh
