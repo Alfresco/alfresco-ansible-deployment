@@ -6,7 +6,6 @@
     owner: root
     group: root
     mode: 0644
-  when: nginx_yum_repo_enabled | bool
 
 - name: Ensure nginx is installed.
   package:
