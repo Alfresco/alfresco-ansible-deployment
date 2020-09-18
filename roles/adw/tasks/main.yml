@@ -1,38 +1,35 @@
 ---
+# tasks file for adw
 - import_tasks: nginx.yml
 
-- name: Download ADW
+- name: check if "{{ nginx_folder }}/alfresco-digital-workspace-{{ adwVersion }}.zip" file exists
+  stat:
+    path:  "{{ temp_dir }}/alfresco-digital-workspace-{{ adwVersion }}.zip"
+  register: adw_zip
+
+- name: Create temp dir
+  file:
+    path: "{{ temp_dir }}"
+    state: directory
+    mode: '0755'
+  when: not adw_zip.stat.exists
+
+- name: Download alfresco-digital-workspace-{{ adwVersion }}.zip
   get_url:
     url: "{{ adw_tgz_url }}"
-    dest: "{{ binaries_folder }}/digital-workspace-{{ adwVersion }}.war"
+    dest: "{{ temp_dir }}/alfresco-digital-workspace-{{ adwVersion }}.zip"
+    mode: 0444
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
-  register: download
-  until: download is succeeded
-  become: true
-  become_user: root
+    timeout: 600
+  register: download_result
+  until: download_result is succeeded
+  when: not adw_zip.stat.exists
 
-- name: Create digital-workspace.xml
-  template:
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    src: digital-workspace.xml
-    dest: "{{ config_folder }}/tomcat/conf/Catalina/localhost/digital-workspace.xml"
-    mode: 'u=rwx,g=rwx,o=rx'
-
-- name: add acs CATALINA_OPTS to tomcat.sh
-  become: true
-  become_user: root
-  lineinfile:
-    path: "{{ binaries_folder }}/tomcat.sh"
-    insertafter: 'CATALINA_OPTS'
-    line: export CATALINA_OPTS="${CATALINA_OPTS} -Dadw.version={{ adwVersion }}"
-
-- name: add ADW_VERSION to setenv.sh
-  become: true
-  become_user: root
-  lineinfile:
-    path: "{{ config_folder }}/setenv.sh"
-    insertafter: EOF
-    line: "export ADW_VERSION={{ adwVersion }}"
-  notify: alfresco-content-restart
+- name: Extract alfresco-digital-workspace-{{ adwVersion }}.zip
+  become: yes
+  unarchive:
+    src: "{{ temp_dir }}/alfresco-digital-workspace-{{ adwVersion }}.zip"
+    dest: "{{ nginx_folder }}/"
+    remote_src: yes
+    creates: "{{ nginx_folder }}/app.config.json"
