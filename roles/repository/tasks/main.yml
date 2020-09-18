@@ -78,7 +78,7 @@
 - name: Download AMPS
   become: true
   become_user: root
-  loop: "{{ query('items', amp_downloads) }}"
+  loop: "{{ query('items', repo_amp_downloads) }}"
   get_url:
     url: "{{ item.url }}"
     dest: "{{ item.dest }}"
