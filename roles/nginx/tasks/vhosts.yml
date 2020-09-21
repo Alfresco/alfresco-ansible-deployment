@@ -1,0 +1,49 @@
+---
+- name: Remove default nginx vhost config file (if configured).
+  file:
+    path: "{{ nginx_default_vhost_path }}"
+    state: absent
+  when: nginx_remove_default_vhost | bool
+  notify: restart nginx
+
+- name: Ensure nginx_vhost_path exists.
+  file:
+    path: "{{ nginx_vhost_path }}"
+    state: directory
+  notify: reload nginx
+
+- name: Add ssl key
+  template:
+    src: "{{ item.cert_key }}"
+    dest: "/etc/nginx/{{ item.cert_key }}"
+    force: true
+    owner: root
+  when: item.listen == '443'
+  with_items: "{{ nginx_vhosts }}"
+
+- name: Add ssl cert
+  template:
+    src: "{{ item.cert_crt }}"
+    dest: "/etc/nginx/{{ item.cert_crt }}"
+    force: true
+    owner: root
+  when: item.listen == '443'
+  with_items: "{{ nginx_vhosts }}"
+
+- name: Add managed vhost config files.
+  template:
+    src: "{{ item.template|default(nginx_vhost_template) }}"
+    dest: "{{ nginx_vhost_path }}/{{ item.filename }}"
+    force: true
+    owner: root
+    group: "{{ root_group }}"
+    mode: 0644
+  when: item.state|default('present') != 'absent'
+  with_items: "{{ nginx_vhosts }}"
+  notify: reload nginx
+
+- name: Remove legacy vhosts.conf file.
+  file:
+    path: "{{ nginx_vhost_path }}/vhosts.conf"
+    state: absent
+  notify: reload nginx

@@ -20,7 +20,7 @@
 
 - name: Add managed vhost config files.
   template:
-    src: alfresco_adw.conf 
+    src: alfresco_adw.conf
     dest: "{{ nginx_vhost_path }}/alfresco_adw.conf"
     force: true
     owner: root

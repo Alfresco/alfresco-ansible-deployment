@@ -9,7 +9,7 @@
   failed_when: false
 
 - name: ensure a list of packages installed
-  become_user: root
+  become: true
   package:
     name: "{{ item }}"
     state: present
