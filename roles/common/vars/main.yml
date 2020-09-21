@@ -55,3 +55,7 @@ share_amp_downloads:
 
 solr:
   version: 1.4.2
+
+adwVersion: 1.6.0
+adw_tgz_url: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-digital-workspace/{{ adwVersion }}/alfresco-digital-workspace-{{ adwVersion }}.zip"
+adw_host: localhost

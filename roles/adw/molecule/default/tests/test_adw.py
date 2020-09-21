@@ -6,7 +6,7 @@ from hamcrest import assert_that, contains_string
 @pytest.fixture()
 def AnsibleVars(host):
     """Define AnsibleVars"""
-    common_vars = "../../../common/vars/hosts.yml name=common_vars"
+    common_vars = "../../../common/vars/main.yml name=common_vars"
     ansible_vars = host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"]
     return ansible_vars
 
