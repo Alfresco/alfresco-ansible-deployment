@@ -12,6 +12,11 @@ services:
 before_install:
   - pip install ansible molecule ansible-lint PyHamcrest pylint testinfra 
 
+env:
+  - MOLECULE_NO_LOG=false
+
+install: pip install 'molecule[docker]'
+
 stages:
   - name: Linters
   - name: Unit tests
@@ -33,50 +38,33 @@ jobs:
         - yamllint .
     - stage: Unit tests
       name: Search Role unit tests
-      env:
-        - MOLECULE_NO_LOG=false
-      install: pip install 'molecule[docker]'
       script:
         - cd roles/search-services/ && molecule test     
     - stage: Unit tests
       name: Common Role unit tests
-      env:
-        - MOLECULE_NO_LOG=false
-      install: pip install 'molecule[docker]'
       script:
         - cd roles/common/ && molecule test
     - stage: Unit tests
       name: Java Role unit tests
-      env:
-        - MOLECULE_NO_LOG=false
-      install: pip install 'molecule[docker]'
       script:
         - cd roles/java/ && molecule test
     - stage: Unit tests
       name: Tomcat Role unit tests
-      env:
-        - MOLECULE_NO_LOG=false
-      install: pip install 'molecule[docker]'
       script:
         - cd roles/tomcat/ && molecule test
     - stage: Unit tests
       name: ActiveMQ Role unit tests
-      env:
-        - MOLECULE_NO_LOG=false
-      install: pip install 'molecule[docker]'
       script:
         - cd roles/activemq/ && molecule test
     - stage: Unit tests
       name: Repository Role unit tests
-      env:
-        - MOLECULE_NO_LOG=false
-      install: pip install 'molecule[docker]'
       script:
         - cd roles/repository/ && molecule test
     - stage: Unit tests
       name: ADW Role unit tests
-      env:
-        - MOLECULE_NO_LOG=false
-      install: pip install 'molecule[docker]'
       script:
         - cd roles/adw/ && molecule test
+    - stage: Unit tests
+      name: Nginx Role unit tests
+      script:
+        - cd roles/nginx/ && molecule test

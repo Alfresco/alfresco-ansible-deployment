@@ -8,3 +8,5 @@ logs_folder: /var/log/alfresco
 utils:
   - sudo
   - unzip
+  - libselinux-python
+  - libsemanage-python
