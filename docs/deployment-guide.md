@@ -74,5 +74,3 @@ The best place to start if something is not working are the log files, these can
     * `/var/log/alfresco/catalina.out`
 * Share 
     * `/var/log/alfresco/share.log`
-
-If you want to access the system from outside the playbook machine you will need to make sure you add an entry in /etc/hosts with "machineIp alfresco.org" on the pc you open the browser on.
