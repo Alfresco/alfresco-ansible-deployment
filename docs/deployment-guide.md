@@ -47,7 +47,7 @@ TODO
     ```
 8. Execute the playbook using the following command:
     ```bash
-    ansible-playbook -i inventory playbooks/dbp.yml
+    ansible-playbook -i inventory playbooks/acs.yml
     ```
 9. Access the system using the following URLs using a browser on the same machine:
     * Digital Workspace: ```http://alfresco.org/```
