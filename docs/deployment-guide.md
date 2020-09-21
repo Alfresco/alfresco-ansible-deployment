@@ -50,13 +50,10 @@ TODO
     ansible-playbook -i inventory playbooks/acs.yml
     ```
 9. Access the system using the following URLs using a browser on the same machine:
-    * Digital Workspace: ```http://alfresco.org/```
+    * Digital Workspace: ```http://alfresco.org/workspace```
     * Share: ```http://alfresco.org/share```
     * Repository: ```http://alfresco.org/alfresco```
-    * Activiti: ```http://alfresco.org/activiti-app```
     * Api-Explorer: ```http://alfresco.org/api-explorer```
-    * Identity Service: ```http://alfresco.org/auth```
-    * Governance Services Api-Explorer: ```http://alfresco.org:8080/gs-api-explorer```
 
 ## Configure
 
