@@ -71,7 +71,7 @@ TODO
 The best place to start if something is not working are the log files, these can be found in the following locations:
 
 * Nginx 
-    * `/var/logs/nginx/error.log`(???)
+    * `/var/log/nginx/error.log`
 * Repository 
     * `/var/log/alfresco/alfresco.log`
     * `/var/log/alfresco/catalina.out`
