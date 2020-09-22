@@ -72,6 +72,7 @@
     replace: "activemq.log"
 
 - name: Add activemq_home and host to setenv script
+  become: true
   become_user: "{{ username }}"
   blockinfile:
     path: "{{ config_folder }}/setenv.sh"

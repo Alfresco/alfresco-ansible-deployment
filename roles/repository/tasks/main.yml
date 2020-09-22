@@ -78,7 +78,7 @@
 - name: Download AMPS
   become: true
   become_user: root
-  loop: "{{ query('items', amp_downloads) }}"
+  loop: "{{ query('items', repo_amp_downloads) }}"
   get_url:
     url: "{{ item.url }}"
     dest: "{{ item.dest }}"
@@ -192,7 +192,6 @@
   stat:
     path: "{{ settings_folder }}/licenses"
   register: licenses_exists
-
 - name: Copy licenses
   become: true
   become_user: "{{ username }}"
@@ -411,7 +410,7 @@
     group: "{{ group_name }}"
   notify: alfresco-content-restart
 
-- name: Include postgres credentials
+- name: Include postgres task
   include_tasks: "postgres.yml"
 
 - name: add PostResources to alfresco.xml

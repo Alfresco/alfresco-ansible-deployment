@@ -1,0 +1,30 @@
+---
+# vars file for nginx
+nginx_version: 1.18.0
+root_group: root
+nginx_conf_path: /etc/nginx/conf.d
+nginx_conf_file_path: /etc/nginx/nginx.conf
+nginx_mime_file_path: /etc/nginx/mime.types
+nginx_pidfile: /run/nginx.pid
+nginx_default_vhost_path: /etc/nginx/conf.d/default.conf
+nginx_user: "nginx"
+nginx_remove_default_vhost: true
+nginx_package_name: "nginx"
+nginx_conf_template: "nginx.conf"
+nginx_yum_repo_enabled: true
+nginx_service_state: started
+nginx_service_enabled: true
+nginx_vhost_template: "{{ nginx_domain }}.conf"
+nginx_vhosts:
+  - listen: "80"
+    server_name: "{{ nginx_domain }}" # this should be an input from the client
+    root: "/usr/share/nginx/html"
+    index: "index.html index.htm"
+    filename: "{{ nginx_domain }}.conf"
+  - listen: "443"
+    server_name: "{{ nginx_domain }}" # this should be an input from the client
+    root: "/usr/share/nginx/html"
+    index: "index.html index.htm"
+    filename: "ssl.{{ nginx_domain }}.conf"
+    cert_crt: "{{ nginx_domain }}.crt"
+    cert_key: "{{ nginx_domain }}.key"
