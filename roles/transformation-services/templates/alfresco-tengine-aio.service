@@ -5,7 +5,7 @@ PartOf=alfresco-transform.service
 
 [Service]
 Type=simple
-User=alfresco
+User={{ username }}
 ExecStart={{ binaries_folder }}/ats-ate-aio.sh
 
 [Install]

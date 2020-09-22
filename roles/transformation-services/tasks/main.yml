@@ -161,15 +161,23 @@
     state: absent
 
 - name: Download alfresco-transform-core-aio-boot-{{ transformation.version }}.jar
-  get_url:
-    url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transformation.version }}/alfresco-transform-core-aio-boot-{{ transformation.version }}.jar"
-    dest: "{{ binaries_folder }}/transform-service-{{ transformation.version }}/alfresco-transform-core-aio-boot-{{ transformation.version }}.jar"
-    mode: 'u=rwx,g=rwx,o=rx'
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    timeout: 600
-  register: download_result
-  until: download_result is succeeded
+  block:
+    - name: Create transformation services folder
+      file:
+        path: "{{ binaries_folder }}/transform-service-{{ transformation.version }}"
+        state: directory
+    - name: Download artefact
+      get_url:
+        url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transformation.version }}/alfresco-transform-core-aio-boot-{{ transformation.version }}.jar"
+        dest: "{{ binaries_folder }}/transform-service-{{ transformation.version }}/alfresco-transform-core-aio-boot-{{ transformation.version }}.jar"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+        url_username: "{{ nexus_user }}"
+        url_password: "{{ nexus_password }}"
+        timeout: 600
+      register: download_result
+      until: download_result is succeeded
 
 - name: Add paths to setenv file
   become_user: "{{ username }}"
@@ -177,7 +185,7 @@
     path: "{{ config_folder }}/setenv.sh"
     block: |
       export LIBREOFFICE_HOME={{ libreoffice_home }}
-      export IMAGEMAGICK_HOME=/usr/lib64/ImageMagick-{{ imagemagick_version_major }}
+      export IMAGEMAGICK_HOME={{ imagemagick_home }}
       export IMAGEMAGICK_DYN=/usr/lib64
       export IMAGEMAGICK_CONFIG=${IMAGEMAGICK_HOME}/config-Q16HDRI
       export IMAGEMAGICK_CODERS=${IMAGEMAGICK_HOME}/modules-Q16HDRI/coders
@@ -208,7 +216,7 @@
       tika.url=${localTransform.core-aio.url}
       transform.misc.url=${localTransform.core-aio.url}
 
-- name: Check if AIO config exists
+- name: Check if AIO script exists
   stat:
     path: "{{ binaries_folder }}/ats-ate-aio.sh"
   register: aio_script
@@ -218,12 +226,11 @@
   become_user: "{{ username }}"
   template:
     src: ats-ate-aio.sh
-    dest: "{{ config_folder }}/ats-ate-aio.sh"
+    dest: "{{ binaries_folder }}/ats-ate-aio.sh"
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: no
-    check_mode: true
   when: not aio_script.stat.exists
 
 - name: Check existence of transform services
@@ -246,7 +253,7 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: no
-    check_mode: true
+  notify: restart-aio
   when: not alfresco_tengine_aio_service.stat.exists
 
 - name: Add alfresco-transform service
@@ -258,7 +265,7 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: no
-    check_mode: true
+  notify: restart-transform
   when: not alfresco_transform_service.stat.exists
 
 - name: clean all
@@ -266,6 +273,11 @@
   args:
     warn: false
   changed_when: false
+
+- name: Enable AIO service
+  systemd:
+    name: alfresco-tengine-aio.service
+    enabled: true
 
 - name: Ensure transform service is started and enabled on boot
   systemd:
