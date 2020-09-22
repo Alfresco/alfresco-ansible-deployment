@@ -4,6 +4,6 @@
   become: true
   become_method: sudo
   roles:
-    - role: '../roles/repository'
+    - role: '../roles/search-services'
   tags:
-    - repository
+    - search

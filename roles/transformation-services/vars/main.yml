@@ -1,8 +1,9 @@
 ---
 # vars file for transformation-services
-IMAGEMAGICK_VERSION: 7.0.10-11
-IMAGEMAGICK_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ IMAGEMAGICK_VERSION }}/imagemagick-distribution-{{ IMAGEMAGICK_VERSION }}-linux.rpm"
-IMAGEMAGICK_LIB_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ IMAGEMAGICK_VERSION }}/imagemagick-distribution-{{ IMAGEMAGICK_VERSION }}-libs-linux.rpm"
+imagemagick_version_major: 7.0.10
+imagemagick_version_minor: 11
+IMAGEMAGICK_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}/imagemagick-distribution-{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}-linux.rpm"
+IMAGEMAGICK_LIB_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}/imagemagick-distribution-{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}-libs-linux.rpm"
 IMAGEMAGICK_DEP_RPM_URL: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
 IMAGEMAGICK_LICENSE_FILE: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/ImageMagick-license.txt"
 
@@ -14,21 +15,7 @@ PDF_RENDERER_VERSION: 1.1
 ALFRESCO_PDF_RENDERER_LIB_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-pdf-renderer/{{ PDF_RENDERER_VERSION }}/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
 PDFIUM_LICENSE_FILE: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/pdfium.txt"
 
-user: alfresco
-groupname: Alfresco
-groupid: 1001
-aiousername: transform-all-in-one
-userid: 33017
-
-transformation:
-  version: 2.3.2
-nexus_repository:
-  releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
-  enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
-
 temp_dir: /tmp/ansible_transformation
 
-utils:
-  - cairo
-  - cups-libs
-  - libSM
+libreoffice_home: "/opt/libreoffice6.3/program"
+imagemagick_home: "/usr/lib64/ImageMagick-{{ imagemagick_version_major }}"

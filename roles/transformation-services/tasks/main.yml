@@ -6,56 +6,20 @@
     state: present
   with_items: "{{ utils }}"
 
-- name: Create Alfresco group {{ groupname }}
-  group:
-    name: "{{ groupname }}"
-    gid: "{{ groupid }}"
-
-- name: Create user {{ aiousername }}
-  user:
-    name: "{{ aiousername }}"
-    comment: AIO username
-    uid: "{{ userid }}"
-    group: "{{ groupname }}"
-
-- name: check if "/usr/bin/alfresco-transform-core-aio-boot-{{ transformation.version }}.jar" file exists
-  stat:
-    path: "/usr/bin/alfresco-transform-core-aio-boot-{{ transformation.version }}.jar"
-  register: core_aio_boot_jar
-
-- name: Download alfresco-transform-core-aio-boot-{{ transformation.version }}.jar
-  get_url:
-    url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transformation.version }}/alfresco-transform-core-aio-boot-{{ transformation.version }}.jar"
-    dest: "/usr/bin/alfresco-transform-core-aio-boot-{{ transformation.version }}.jar"
-    mode: 0444
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    timeout: 600
-  register: download_result
-  until: download_result is succeeded
-  when: not core_aio_boot_jar.stat.exists
-
-- name: Create symbolic link to alfresco-transform-core-aio-boot.jar
-  file:
-    src: "/usr/bin/alfresco-transform-core-aio-boot-{{ transformation.version }}.jar"
-    dest: /usr/bin/alfresco-transform-core-aio-boot.jar
-    owner: "{{ aiousername }}"
-    group: "{{ groupname }}"
-    state: link
-  when: download_result is succeeded or core_aio_boot_jar.stat.exists
-
 - name: Create temp dir
   file:
     path: "{{ temp_dir }}"
     state: directory
-    mode: '0755'
+    mode: 'u=rwx,g=rwx,o=rx'
   become: true
-  become_user: "{{ aiousername }}"
+  become_user: "{{ username }}"
 
-- name: check if "{{ temp_dir }}/imagemagick-distribution-linux.rpm" file exists
-  stat:
-    path: "{{ temp_dir }}/imagemagick-distribution-linux.rpm"
-  register: img_dist_rpm
+- name: Check if ImageMagick is installed
+  command: 
+    cmd: "convert --version"
+  register: magick_exists
+  failed_when: false
+  changed_when: magick_exists.rc != 0
 
 - name: Download imagemagick-distribution-linux.rpm
   get_url:
@@ -67,12 +31,7 @@
     timeout: 600
   register: download_img_dist
   until: download_img_dist is succeeded
-  when: not img_dist_rpm.stat.exists
-
-- name: check if "{{ temp_dir }}/imagemagick-distribution-libs-linux.rpm" file exists
-  stat:
-    path: "{{ temp_dir }}/imagemagick-distribution-libs-linux.rpm"
-  register: img_dist_libs_rpm
+  when: magick_exists.rc != 0
 
 - name: Download imagemagick-distribution-libs-linux.rpm
   get_url:
@@ -84,12 +43,7 @@
     timeout: 600
   register: download_img_libs_dist
   until: download_img_libs_dist is succeeded
-  when: not img_dist_libs_rpm.stat.exists
-
-- name: check if "{{ temp_dir }}/ImageMagick-license.txt" file exists
-  stat:
-    path: "{{ temp_dir }}/ImageMagick-license.txt"
-  register: img_license
+  when: magick_exists.rc != 0
 
 - name: Download ImageMagick-license.txt
   get_url:
@@ -97,12 +51,7 @@
     dest: "{{ temp_dir }}/ImageMagick-license.txt"
     mode: 0444
     timeout: 600
-  when: not img_license.stat.exists
-
-- name: check if "{{ temp_dir }}/imagemagick-epel-dep.rpm" file exists
-  stat:
-    path: "{{ temp_dir }}/imagemagick-epel-dep.rpm"
-  register: img_epel_dep
+  when: magick_exists.rc != 0
 
 - name: Download imagemagick-epel-dep.rpm
   get_url:
@@ -112,36 +61,32 @@
     timeout: 600
   register: download_img_epel_dep
   until: download_img_epel_dep is succeeded
-  when: not img_epel_dep.stat.exists
+  when: magick_exists.rc != 0
 
 - name: install imagemagick-epel-dep
   yum:
     name: "{{ temp_dir }}/imagemagick-epel-dep.rpm"
     state: present
-  when: download_img_epel_dep is succeeded or img_epel_dep.stat.exists
+  when: download_img_epel_dep is succeeded
 
 - name: install imagemagick-distribution-libs
   yum:
     name: "{{ temp_dir }}/imagemagick-distribution-libs-linux.rpm"
     state: present
-  when: download_img_libs_dist is succeeded or img_dist_libs_rpm.stat.exists
+  when: download_img_libs_dist is succeeded
 
 - name: install imagemagick-distribution
   yum:
     name: "{{ temp_dir }}/imagemagick-distribution-linux.rpm"
     state: present
-  when: download_img_dist is succeeded or img_dist_rpm.stat.exists
+  when: download_img_dist is succeeded
 
-- name: clean all
-  command: yum clean all
-  args:
-    warn: false
-  changed_when: false
-
-- name: test libreoffice-dist-{{ LIBREOFFICE_VERSION }}-linux.gz exists
-  stat:
-    path: "{{ temp_dir }}/libreoffice-dist-linux.gz"
-  register: libreoffice
+- name: Check if LibreOffice exists
+  command:
+    cmd: "/opt/libreoffice6.3/program/soffice --version"
+  register: loffice_exists
+  failed_when: false
+  changed_when: loffice_exists.rc != 0
 
 - name: Download libreoffice-dist-{{ LIBREOFFICE_VERSION }}-linux.gz
   get_url:
@@ -153,12 +98,7 @@
     timeout: 600
   register: libreoffice_download
   until: libreoffice_download is succeeded
-  when: not libreoffice.stat.exists
-
-- name: test "{{ temp_dir }}/libreoffice.txt" exists
-  stat:
-    path: "{{ temp_dir }}/libreoffice.txt"
-  register: libreoffice_txt
+  when: loffice_exists.rc != 0
 
 - name: Download libreoffice.txt
   get_url:
@@ -166,7 +106,7 @@
     dest: "{{ temp_dir }}/libreoffice.txt"
     mode: 0444
     timeout: 600
-  when: not libreoffice_txt.stat.exists
+  when: loffice_exists.rc != 0
 
 - name: Extract libreoffice-dist-linux.gz
   become: yes
@@ -174,99 +114,161 @@
     src: "{{ temp_dir }}/libreoffice-dist-linux.gz"
     dest: "{{ temp_dir }}/"
     remote_src: yes
-  when: libreoffice_download is succeeded or libreoffice.stat.exists
-
-- name: check LibreOffice rpms
-  shell: "ls -l {{ temp_dir }}/LibreOffice*/RPMS/*.rpm"
-  args:
-    warn: false
-  register: libre_rpm
-  changed_when: false
+  when: loffice_exists.rc != 0
 
 - name: install LibreOffice
   shell: "yum localinstall -y {{ temp_dir }}/LibreOffice*/RPMS/*.rpm"
   args:
     warn: false
-  when: libre_rpm.rc == 0
+  when: loffice_exists.rc != 0
   changed_when: false
 
-- name: clean all
-  command: yum clean all
-  args:
-    warn: false
-  changed_when: false
-
-- name: test "{{ temp_dir }}/alfresco-pdf-renderer-linux.tgz" exists
-  stat:
-    path: "{{ temp_dir }}/alfresco-pdf-renderer-linux.tgz"
-  register: pdf_rendered
+- name: Check if alfresco-pdf-rendere exe or archive exists
+  block:
+    - name: Check if alfresco-pdf-renderer exists
+      stat:
+        path: "{{ content_folder }}/alfresco-pdf-renderer/alfresco-pdf-renderer"
+      register: alfresco_pdf_renderer_exists
+    - name: Check if alfresco-pdf-renderer archive exists
+      stat:
+        path: "{{ content_folder }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+      register: alfresco_pdf_renderer_tgz_exists
 
 - name: Download alfresco-pdf-renderer-linux.tgz
+  become_user: "{{ username }}"
   get_url:
     url: "{{ ALFRESCO_PDF_RENDERER_LIB_RPM_URL }}"
-    dest: "{{ temp_dir }}/alfresco-pdf-renderer-linux.tgz"
+    dest: "{{ content_folder }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
-    mode: 0444
+    mode: 'u=rwx,g=rwx,o=rx'
     timeout: 600
-  register: download_pdf_rendered
-  until: download_pdf_rendered is succeeded
-  when: not pdf_rendered.stat.exists
-
-- name: test "{{ temp_dir }}/pdfium.txt" exists
-  stat:
-    path: "{{ temp_dir }}/pdfium.txt"
-  register: pdfium
-
-- name: Download pdfium.txt
-  get_url:
-    url: "{{ PDFIUM_LICENSE_FILE }}"
-    dest: "{{ temp_dir }}/pdfium.txt"
-    mode: 0444
-    timeout: 600
-  when: not pdfium.stat.exists
+  register: download_pdf_renderer
+  until: download_pdf_renderer is succeeded
+  when: not alfresco_pdf_renderer_tgz_exists.stat.exists and not alfresco_pdf_renderer_exists.stat.exists
 
 - name: Extract alfresco-pdf-renderer-linux.tgz
-  become: yes
+  become_user: "{{ username }}"
   unarchive:
-    src: "{{ temp_dir }}/alfresco-pdf-renderer-linux.tgz"
-    dest: "/usr/bin/"
+    src: "{{ content_folder }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+    dest: "{{ content_folder }}/alfresco-pdf-renderer/"
     remote_src: yes
-  when: download_pdf_rendered is succeeded or pdf_rendered.stat.exists
+  when: not alfresco_pdf_renderer_exists.stat.exists
+
+- name: Remove alfresco-pdf-renderer-linux.tgz
+  file:
+    path: "{{ content_folder }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+    state: absent
+
+- name: Download alfresco-transform-core-aio-boot-{{ transformation.version }}.jar
+  get_url:
+    url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transformation.version }}/alfresco-transform-core-aio-boot-{{ transformation.version }}.jar"
+    dest: "{{ binaries_folder }}/transform-service-{{ transformation.version }}/alfresco-transform-core-aio-boot-{{ transformation.version }}.jar"
+    mode: 'u=rwx,g=rwx,o=rx'
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+    timeout: 600
+  register: download_result
+  until: download_result is succeeded
+
+- name: Add paths to setenv file
+  become_user: "{{ username }}"
+  blockinfile:
+    path: "{{ config_folder }}/setenv.sh"
+    block: |
+      export LIBREOFFICE_HOME={{ libreoffice_home }}
+      export IMAGEMAGICK_HOME=/usr/lib64/ImageMagick-{{ imagemagick_version_major }}
+      export IMAGEMAGICK_DYN=/usr/lib64
+      export IMAGEMAGICK_CONFIG=${IMAGEMAGICK_HOME}/config-Q16HDRI
+      export IMAGEMAGICK_CODERS=${IMAGEMAGICK_HOME}/modules-Q16HDRI/coders
+      export IMAGEMAGICK_EXE=/usr/bin/magick
+      export IMAGEMAGICK_EXE=/usr/bin/convert
+      export ATS_VERSION={{ transformation.version }}
+      export ATS_HOME={{ binaries_folder }}/transform-service-${ATS_VERSION}
+      export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
+
+- name: Map env variables to Java and Tomcat
+  become_user: "{{ username }}"
+  lineinfile:
+    path: "{{ binaries_folder }}/tomcat.sh"
+    insertafter: EOF
+    line: "export CATALINA_OPTS=\"${CATALINA_OPTS} -Dats-tengine-aio.host=${ATS_TENGINE_AIO_HOST}\""
+
+- name: Add properties to alfresco-global
+  become_user: "{{ username }}"
+  blockinfile:
+    path: "{{ settings_folder }}/classpath/alfresco-global.properties"
+    block: |
+      local.transform.service.enabled=true
+      localTransform.core-aio.url=http://{{ ats_tengine_aio_host }}:8090
+      legacy.transform.service.enabled=true
+      alfresco-pdf-renderer.url=${localTransform.core-aio.url}
+      jodconverter.url=${localTransform.core-aio.url}
+      img.url=${localTransform.core-aio.url}
+      tika.url=${localTransform.core-aio.url}
+      transform.misc.url=${localTransform.core-aio.url}
+
+- name: Check if AIO config exists
+  stat:
+    path: "{{ binaries_folder }}/ats-ate-aio.sh"
+  register: aio_script
+  failed_when: false
+
+- name: Add AIO startup script
+  become_user: "{{ username }}"
+  template:
+    src: ats-ate-aio.sh
+    dest: "{{ config_folder }}/ats-ate-aio.sh"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    force: no
+    check_mode: true
+  when: not aio_script.stat.exists
+
+- name: Check existence of transform services
+  block:
+  - name: Check if alfresco-tengine-aio.service exists
+    stat:
+      path: "/etc/systemd/system/alfresco-tengine-aio.service"
+    register: alfresco_tengine_aio_service
+  - name: Check if alfresco-transform.service exists
+    stat:
+      path: "/etc/systemd/system/alfresco-transform.service"
+    register: alfresco_transform_service
+
+- name: Add alfresco-tengine-aio service
+  become_user: "{{ username }}"
+  template:
+    src: alfresco-tengine-aio.service
+    dest: "/etc/systemd/system/alfresco-tengine-aio.service"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    force: no
+    check_mode: true
+  when: not alfresco_tengine_aio_service.stat.exists
+
+- name: Add alfresco-transform service
+  become_user: "{{ username }}"
+  template:
+    src: alfresco-transform.service
+    dest: "/etc/systemd/system/alfresco-transform.service"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    force: no
+    check_mode: true
+  when: not alfresco_transform_service.stat.exists
 
 - name: clean all
   command: yum clean all
   args:
     warn: false
   changed_when: false
-
-- name: Set group ownership of /usr/bin/alfresco-transform-core-aio-boot.jar
-  file:
-    path: "/usr/bin/alfresco-transform-core-aio-boot.jar"
-    group: "{{ groupname }}"
-
-- name: check aio.service exists
-  stat:
-    path: /usr/lib/systemd/system/aio.service
-  register: aio_service
-
-- name: Add aio.service
-  template:
-    src: aio.service
-    dest: /usr/lib/systemd/system/aio.service
-    owner: root
-    group: root
-  notify: restart-aio
-  when: not aio_service.stat.exists
-
-- name: Create temp dir
-  file:
-    path: "/tmp/Alfresco/"
-    state: directory
-    mode: '0777'
 
 - name: Ensure transform service is started and enabled on boot
   systemd:
-    name: aio.service
+    name: alfresco-transform.service
     state: started
     enabled: true

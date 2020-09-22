@@ -1,2 +1,8 @@
 ---
 # defaults file for roles/transformation-services
+utils:
+  - cairo
+  - cups-libs
+  - libSM
+  - unzip
+  - which

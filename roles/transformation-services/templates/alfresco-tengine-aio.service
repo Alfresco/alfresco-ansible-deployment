@@ -1,0 +1,12 @@
+[Unit]
+Description=Alfresco Transform Service - AIO Transform Engine
+After=syslog.socket network.target activemq.service
+PartOf=alfresco-transform.service
+
+[Service]
+Type=simple
+User=alfresco
+ExecStart={{ binaries_folder }}/ats-ate-aio.sh
+
+[Install]
+WantedBy=multi-user.target
