@@ -39,7 +39,7 @@ jobs:
     - stage: Unit tests
       name: Search Role unit tests
       script:
-        - cd roles/search-services/ && molecule test     
+        - cd roles/search/ && molecule test     
     - stage: Unit tests
       name: Common Role unit tests
       script:
