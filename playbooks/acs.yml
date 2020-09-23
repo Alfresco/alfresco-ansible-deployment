@@ -5,7 +5,7 @@
   become_method: sudo
   roles:
     - role: '../roles/adw'
-    - role: '../roles/search-services'
+    - role: '../roles/search'
     - role: '../roles/nginx'
   tags:
     - repository
