@@ -429,6 +429,12 @@
     regexp: '<PostResources base='
     line: '<PostResources base="/opt/alfresco/modules/acs-share"'
 
+- name: Ensure tomcat restartd
+  systemd:
+    name: tomcat.service
+    state: restarted
+    enabled: true
+
 - name: Ensure alfresco content service is started and enabled on boot
   systemd:
     name: alfresco-content.service

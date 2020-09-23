@@ -4,4 +4,4 @@
   tasks:
     - name: "Include search"
       include_role:
-        name: "search-services"
+        name: "search"
