@@ -1,11 +1,11 @@
-*******
-Docker driver installation guide
-*******
+*********************************************
+Amazon Web Services driver installation guide
+*********************************************
 
 Requirements
 ============
 
-* Docker Engine
+* An AWS credentials rc file
 
 Install
 =======
@@ -19,4 +19,4 @@ widely recommended `'--user' flag`_ when invoking ``pip``.
 
 .. code-block:: bash
 
-    $ python3 -m pip install 'molecule[docker]'
+    $ pip install 'molecule-ec2'
