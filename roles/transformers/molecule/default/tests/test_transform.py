@@ -48,4 +48,3 @@ def test_aio_config_api(host, get_ansible_vars):
     assert_that(cmd.stdout, contains_string("pdfboxOptions"))
     assert_that(cmd.stdout, contains_string("textToPdfOptions"))
     assert_that(cmd.stdout, contains_string("stringOptions"))
-
