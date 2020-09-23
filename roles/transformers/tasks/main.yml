@@ -1,5 +1,5 @@
 ---
-# tasks file for transform-services
+# tasks file for transformers
 - name: ensure a list of packages installed
   package:
     name: "{{ item }}"

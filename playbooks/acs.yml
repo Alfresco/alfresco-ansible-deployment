@@ -4,12 +4,8 @@
   become: true
   become_method: sudo
   roles:
-<<<<<<< HEAD
-    - role: '../roles/search-services'
-=======
     - role: '../roles/adw'
     - role: '../roles/search'
     - role: '../roles/nginx'
->>>>>>> master
   tags:
     - search

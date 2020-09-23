@@ -68,3 +68,7 @@ jobs:
       name: Nginx Role unit tests
       script:
         - cd roles/nginx/ && molecule test
+    - stage: Unit tests
+      name: Transform AIO unit tests
+      script:
+        - cd roles/transformers/ && molecule test

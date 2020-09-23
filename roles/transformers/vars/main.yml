@@ -1,5 +1,5 @@
 ---
-# vars file for transform-services
+# vars file for transformers
 imagemagick_version_major: 7.0.10
 imagemagick_version_minor: 11
 IMAGEMAGICK_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}/imagemagick-distribution-{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}-linux.rpm"
