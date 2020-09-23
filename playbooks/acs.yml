@@ -9,3 +9,5 @@
     - role: '../roles/search'
   tags:
     - repository
+  vars:
+    ansible_python_interpreter: /usr/bin/python2.7
