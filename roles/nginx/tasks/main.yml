@@ -33,10 +33,9 @@
   become: true
   seboolean:
     name: httpd_can_network_connect
-    ignore_selinux_state: true
     state: yes
     persistent: yes
-  when: ansible_facts.virtualization_type != 'docker'
+  when: ansible_selinux.status == "enabled"
 
 - name: Ensure nginx service is running as configured.
   service:
