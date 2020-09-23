@@ -79,6 +79,7 @@
     block: |
       export ACTIVEMQ_HOME={{ activemq_home }}
       export ACTIVEMQ_HOST={{ activemq_host }}
+  changed_when: false
 
 - name: Check if activemq wrapper exists
   stat:

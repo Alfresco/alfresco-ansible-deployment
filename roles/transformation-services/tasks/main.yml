@@ -194,6 +194,7 @@
       export ATS_VERSION={{ transformation.version }}
       export ATS_HOME={{ binaries_folder }}/transform-service-${ATS_VERSION}
       export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
+  changed_when: false
 
 - name: Map env variables to Java and Tomcat
   become_user: "{{ username }}"
