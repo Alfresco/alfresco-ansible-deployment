@@ -73,7 +73,7 @@ jobs:
       env:
         - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=$NEXUS_PASSWORD; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/build/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/dbp-ansible/molecule_temp_dir;cd /opt/build/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/dbp-ansible"
       before_install:
-        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in dbp-ansible.enc -out /tmp/dbp-ansible -d
+        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in dbp-ansible.pem.enc -out /tmp/dbp-ansible -d
         - eval "$(ssh-agent -s)"
         - chmod 600 /tmp/dbp-ansible
         - ssh-add /tmp/dbp-ansible
@@ -82,15 +82,8 @@ jobs:
         - ssh ec2-user@$control_machine_ip "mkdir -p /opt/build/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER"
         - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/build/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
         - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade awscli 'molecule-ec2' ansible molecule ansible-lint PyHamcrest pylint testinfra;"
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2"
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule converge -s ec2"
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule verify -s ec2"
-      after_failure: |
-        if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then
-          ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"
-        fi
-      after_success: |
-        if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then
-          ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"
-        fi 
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule converge"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule verify"
+        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy"; fi
