@@ -4,8 +4,8 @@
   become: true
   become_method: sudo
   roles:
+    - role: '../roles/nginx'
     - role: '../roles/adw'
     - role: '../roles/search'
-    - role: '../roles/nginx'
   tags:
     - repository

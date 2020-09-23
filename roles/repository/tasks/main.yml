@@ -103,7 +103,7 @@
 
 - name: add acs home to setenv.sh
   become: true
-  become_user: root
+  become_user: "{{ username }}"
   lineinfile:
     path: "/etc/opt/alfresco/setenv.sh"
     insertafter: EOF
