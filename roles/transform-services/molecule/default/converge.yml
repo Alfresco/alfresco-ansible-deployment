@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include transform-services"
+      include_role:
+        name: "transform-services"

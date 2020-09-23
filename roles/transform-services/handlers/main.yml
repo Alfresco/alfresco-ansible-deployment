@@ -1,5 +1,5 @@
 ---
-# handlers file for roles/transformation-services
+# handlers file for roles/transform-services
 - name: restart-transform
   service:
     name: alfresco-transform

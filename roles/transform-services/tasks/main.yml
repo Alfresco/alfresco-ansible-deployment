@@ -1,5 +1,5 @@
 ---
-# tasks file for transformation-services
+# tasks file for transform-services
 - name: ensure a list of packages installed
   package:
     name: "{{ item }}"
@@ -160,16 +160,16 @@
     path: "{{ content_folder }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
     state: absent
 
-- name: Download alfresco-transform-core-aio-boot-{{ transformation.version }}.jar
+- name: Download alfresco-transform-core-aio-boot-{{ transform.version }}.jar
   block:
-    - name: Create transformation services folder
+    - name: Create transform services folder
       file:
-        path: "{{ binaries_folder }}/transform-service-{{ transformation.version }}"
+        path: "{{ binaries_folder }}/transform-service-{{ transform.version }}"
         state: directory
     - name: Download artefact
       get_url:
-        url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transformation.version }}/alfresco-transform-core-aio-boot-{{ transformation.version }}.jar"
-        dest: "{{ binaries_folder }}/transform-service-{{ transformation.version }}/alfresco-transform-core-aio-boot-{{ transformation.version }}.jar"
+        url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
+        dest: "{{ binaries_folder }}/transform-service-{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
@@ -191,7 +191,7 @@
       export IMAGEMAGICK_CODERS=${IMAGEMAGICK_HOME}/modules-Q16HDRI/coders
       export IMAGEMAGICK_EXE=/usr/bin/magick
       export IMAGEMAGICK_EXE=/usr/bin/convert
-      export ATS_VERSION={{ transformation.version }}
+      export ATS_VERSION={{ transform.version }}
       export ATS_HOME={{ binaries_folder }}/transform-service-${ATS_VERSION}
       export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
   changed_when: false

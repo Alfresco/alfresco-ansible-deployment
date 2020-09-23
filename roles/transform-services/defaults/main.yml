@@ -1,5 +1,5 @@
 ---
-# defaults file for roles/transformation-services
+# defaults file for roles/transform-services
 utils:
   - cairo
   - cups-libs

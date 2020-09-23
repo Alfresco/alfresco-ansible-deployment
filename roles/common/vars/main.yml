@@ -38,7 +38,7 @@ alfresco:
     version: 6.2.2
 solr:
   version: 1.4.2
-transformation:
+transform:
   version: 2.3.2  
 
 repo_downloads:
