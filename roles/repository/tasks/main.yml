@@ -5,7 +5,7 @@
 - name: ensure a list of packages installed
   become: true
   become_user: root
-  package:
+  dnf:
     name: "{{ item }}"
     state: present
 #  register: package_sleeper

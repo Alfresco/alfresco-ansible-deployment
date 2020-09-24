@@ -9,7 +9,7 @@
   changed_when: solr_install_check.rc != 0
 
 - name: ensure a list of packages installed
-  package:
+  dnf:
     name: "{{ item }}"
     state: present
   with_items: "{{ utils }}"
