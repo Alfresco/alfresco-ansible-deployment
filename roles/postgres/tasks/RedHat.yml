@@ -5,7 +5,7 @@
     state: present
 
 - name: Install packages required for CentOS 8
-  dnf:
+  package:
     name: "{{ item }}"
     state: present
   with_items:

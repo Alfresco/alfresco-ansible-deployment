@@ -10,7 +10,7 @@
 
 - name: ensure a list of packages installed
   become: true
-  dnf:
+  package:
     name: "{{ item }}"
     state: present
   poll: 0
