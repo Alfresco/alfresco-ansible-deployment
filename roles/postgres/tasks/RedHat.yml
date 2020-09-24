@@ -4,7 +4,7 @@
   yum_repository:
     name: postgres
     description: postgres repo
-    baseurl: https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    baseurl: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
 
 - name: Install packages required for CentOS 8
   package:
@@ -15,7 +15,7 @@
   when: ansible_distribution_major_version == "8"
 
 - name: Disable the built-in PostgreSQL module
-  command: dnf -y module disable postgresql
+  command: dnf -qy module disable postgresql
   args:
     warn: false  # set warn=false to prevent warning
   register: disable_dnf_module
