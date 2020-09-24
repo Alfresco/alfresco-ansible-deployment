@@ -2,7 +2,7 @@
 
 - name: Install rpm repo
   yum:
-    name: "{{ postgresq_rpm_repo }}"
+    name: "{{ postgresql_rpm_repo }}"
     state: present
 
 - name: Install packages required for CentOS 8
