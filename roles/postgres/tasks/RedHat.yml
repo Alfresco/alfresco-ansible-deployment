@@ -1,10 +1,9 @@
 ---
 
-- name: Add repository
-  yum_repository:
-    name: postgres
-    description: postgres repo
-    baseurl: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+- name: Install rpm repo
+  yum:
+    name: "{{ postgresq_rpm_repo }}"
+    state: present
 
 - name: Install packages required for CentOS 8
   package:
