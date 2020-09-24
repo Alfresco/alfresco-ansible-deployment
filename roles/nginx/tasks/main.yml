@@ -12,8 +12,10 @@
   shell: 'echo "127.0.0.1 {{ nginx_domain }}" > /etc/hosts'
   when: domain_in_hosts.rc != 0
 
-- include_tasks: RedHat.yml
-  when: ansible_os_family == 'RedHat'
+- name: Ensure nginx is installed.
+  yum:
+    name: "{{ nginx_rpm_url }}"
+    state: present
 
 # Vhost configuration.
 - import_tasks: vhosts.yml
