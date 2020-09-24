@@ -81,7 +81,6 @@ jobs:
         - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
         - ssh ec2-user@$control_machine_ip "mkdir -p /opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER"
         - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
-        - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade awscli 'molecule-ec2' molecule ansible-lint PyHamcrest pylint testinfra;"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -v -e \"ansible_python_interpreter=/usr/bin/python2.7\" -i molecule_temp_dir/inventory/ansible_inventory.yml"
