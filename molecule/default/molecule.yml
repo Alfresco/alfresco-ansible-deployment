@@ -16,7 +16,7 @@ provisioner:
   name: ansible
   config_options:
     defaults:
-      ansible_python_interpreter: /usr/bin/python2.7
+      interpreter_python: /usr/bin/python2.7
       timeout: 30
     ssh_connection:
       retries: 15
