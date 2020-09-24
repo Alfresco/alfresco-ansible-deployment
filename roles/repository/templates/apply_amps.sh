@@ -1,5 +1,5 @@
 #!/bin/sh
-. /etc/opt/alfresco/setenv.sh
+. {{ config_folder }}/setenv.sh
 
 echo "Installing Content Services Platform AMPs ..."
 sudo ${JAVA_HOME}/bin/java -jar ${ACS_HOME}/bin/alfresco-mmt.jar install {{ binaries_folder }}/modules/acs-platform ${ACS_HOME}/web-server/webapps/alfresco.war -directory $*

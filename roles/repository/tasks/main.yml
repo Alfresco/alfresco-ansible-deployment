@@ -103,11 +103,11 @@
 
 - name: add acs home to setenv.sh
   become: true
-  become_user: root
+  become_user: "{{ username }}"
   lineinfile:
-    path: "/etc/opt/alfresco/setenv.sh"
+    path: "{{ config_folder }}/setenv.sh"
     insertafter: EOF
-    line: "export ACS_HOME=/opt/alfresco/content-services-{{ alfresco.version }}"
+    line: "export ACS_HOME={{ binaries_folder }}/content-services-{{ alfresco.version }}"
 
 - name: add acs home to tomcat.sh
   become: true

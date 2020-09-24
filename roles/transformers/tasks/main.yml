@@ -179,10 +179,17 @@
       register: download_result
       until: download_result is succeeded
 
+- name: Check for ATS_HOME in "{{ config_folder }}/setenv.sh"
+  shell: cat {{ config_folder }}/setenv.sh | grep ATS_HOME
+  register: test_ats_home
+  failed_when: false
+  changed_when: test_ats_home.rc != 0
+
 - name: Add paths to setenv file
   become_user: "{{ username }}"
   blockinfile:
     path: "{{ config_folder }}/setenv.sh"
+    marker: "# {mark} ATS ENV VARS"
     block: |
       export LIBREOFFICE_HOME={{ libreoffice_home }}
       export IMAGEMAGICK_HOME={{ imagemagick_home }}
@@ -194,7 +201,8 @@
       export ATS_VERSION={{ transform.version }}
       export ATS_HOME={{ binaries_folder }}/transform-service-${ATS_VERSION}
       export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
-  changed_when: false
+    insertafter: EOF
+  when: test_ats_home.rc != 0
 
 - name: Map env variables to Java and Tomcat
   become_user: "{{ username }}"
@@ -207,6 +215,7 @@
   become_user: "{{ username }}"
   blockinfile:
     path: "{{ settings_folder }}/classpath/alfresco-global.properties"
+    marker: "# {mark} ATS global properties"
     block: |
       local.transform.service.enabled=true
       localTransform.core-aio.url=http://{{ ats_tengine_aio_host }}:8090
