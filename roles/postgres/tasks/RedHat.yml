@@ -1,7 +1,7 @@
 ---
 - name: Install postgresql yum repository
   yum:
-    name: https://download.postgresql.org/pub/repos/yum/{{ postgres_major_version }}/redhat/rhel-7.9-x86_64/pgdg-redhat-repo-latest.noarch.rpm # noqa 204
+    name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
     state: present
 
 - name: Install packages required for CentOS 8
