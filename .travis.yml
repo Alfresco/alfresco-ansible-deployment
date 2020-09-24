@@ -84,6 +84,6 @@ jobs:
         - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade awscli 'molecule-ec2' molecule ansible-lint PyHamcrest pylint testinfra;"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create"
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -v -e 'ansible_python_interpreter=/usr/bin/python2.7' -i molecule_temp_dir/inventory/ansible_inventory.yml"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -v -e \"ansible_python_interpreter=/usr/bin/python2.7\" -i molecule_temp_dir/inventory/ansible_inventory.yml"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule verify"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy"; fi
