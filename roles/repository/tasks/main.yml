@@ -70,8 +70,8 @@
     mode: 0644
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
-#  register: war_download_result
-#  async: 900
+  register: war_download_result
+  async: 900
   poll: 0
   when: not alf_install_check.stat.exists
 
@@ -85,8 +85,8 @@
     mode: 0644
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
-#  register: amp_download_result
-#  async: 900
+  register: amp_download_result
+  async: 900
   poll: 0
 
 - name: Download postgresql jar
@@ -96,9 +96,9 @@
     url: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependency_postgresql.version }}/postgresql-{{ dependency_postgresql.version }}.jar"
     dest: "{{ tomcat_config_dir }}/lib/postgresql.jar"
     mode: 0644
- # register: postgresql_download
+  register: postgresql_download
   when: not alf_install_check.stat.exists
- # async: 900
+  async: 900
   poll: 0
 
 - name: add acs home to setenv.sh
@@ -141,16 +141,16 @@
 
 #  when: common_loader.rc == 0
 
-#- name: 'Check on war download async task'
-#  become: true
-#  become_user: root
-#  async_status:
-#    jid: "{{ item.ansible_job_id }}"
-#  register: job_result
-#  until: job_result.finished
-#  delay: 1
-#  retries: 300
-#  loop: "{{ war_download_result.results }}"
+- name: 'Check on war download async task'
+  become: true
+  become_user: root
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 1
+  retries: 300
+  loop: "{{ war_download_result.results }}"
 
 - name: Render configuration templates
   become: true
@@ -346,14 +346,14 @@
     mode: 'u=rwx,g=rwx,o=rx'
   when: not global_properties.stat.exists
 
-#- name: 'Check on amp download async task'
-#  async_status:
-#    jid: "{{ item.ansible_job_id }}"
-#  register: job_result
-#  until: job_result.finished
-#  delay: 1
-#  retries: 300
-#  loop: "{{ amp_download_result.results }}"
+- name: 'Check on amp download async task'
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 1
+  retries: 300
+  loop: "{{ amp_download_result.results }}"
 
 - name: Create apply_amps.sh
   template:
@@ -379,26 +379,26 @@
 #   shell: '/usr/java/bin/keytool -genseckey -dname {{ cert_name }} -validity {{ cert_validity }} -alias metadata -keyalg AES -keysize 256 -keystore {{ content_folder }}/shared/classes/alfresco/keystore/keystore -storetype pkcs12 -storepass {{ keystore_password }}'
 #   when: result.rc != 0
 
-#- name: 'Check on package async task'
-#  become: true
-#  become_user: root
-#  async_status:
-#    jid: "{{ item.ansible_job_id }}"
-#  register: job_result
-#  until: job_result.finished
-#  delay: 1
-#  retries: 300
-#  loop: "{{ package_sleeper.results }}"
+- name: 'Check on package async task'
+  become: true
+  become_user: root
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 1
+  retries: 300
+  loop: "{{ package_sleeper.results }}"
 
-#- name: 'Check on postgres download async task'
-#  become: true
-#  become_user: root
-#  async_status:
-#    jid: "{{ postgresql_download.ansible_job_id }}"
-#  register: job_result
-#  until: job_result.finished
-#  delay: 1
-#  retries: 300
+- name: 'Check on postgres download async task'
+  become: true
+  become_user: root
+  async_status:
+    jid: "{{ postgresql_download.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 1
+  retries: 300
 
 - name: Add tomcat.service
   become: true
