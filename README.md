@@ -8,9 +8,8 @@ This project provides a set of Ansible playbooks capable of deploying Alfresco p
 
 ## Documentation
 
-Please refer to the [Documentation](./docs/README.md) for more information on deploying and developing.
+Please refer to the [Documentation](./docs/README.md) for more information on [deploying](./docs/deployment-guide.md) and developing.
 
-For the deployment guide please refer to the [Deployment Guide](./docs/deployment-guide.md).
 
 ## License
 
