@@ -1,19 +1,15 @@
 # Deployment Guide
 
-This page describes how to deploy the Alfresco Digital Business Platform (DBP) using Ansible.
+This page describes how to deploy the Alfresco Content Services (ACS) using Ansible.
 
 The system deployed is shown in the diagram below.
 
-TODO: Add diagram
+![Single Machine Deployment](./resources/acs-single-machine.png)
 
-## Components
-
-TODO
 
 ## Prerequisites
 
 * A CentOS machine (bare-metal or EC2 (ami-0affd4508a5d2481b)) to deploy to
-* The machine needs to be able to access itself also trough its public location 
 * SELinux httpd_can_network_connect should be set to 1 (allow)
 
 ## Deploy
@@ -33,7 +29,7 @@ TODO
     # If you are using ssh
     # git clone git@github.com:Alfresco/alfresco-ansible-deployment.git
     ```
-4. Navigate into the `acs-ansible-deployment` folder
+4. Navigate into the `alfresco-ansible-deployment` folder
 5. Create a file called `inventory` with the following contents:
     ```
     [local]
@@ -50,18 +46,21 @@ TODO
     ansible-playbook -i inventory playbooks/acs.yml
     ```
 9. Access the system using the following URLs using a browser on the same machine:
-    * Digital Workspace: ```http://alfresco.org/digital-workspace```
-    * Share: ```http://alfresco.org/share```
-    * Repository: ```http://alfresco.org/alfresco```
-    * Api-Explorer: ```http://alfresco.org/api-explorer```
+    * Digital Workspace: ```/digital-workspace```
+    * Share: ```/share```
+    * Repository: ```/alfresco```
+    * Api-Explorer: ```/api-explorer```
 
-## Configure
+## Folder structure
 
-TODO
+You will find the Alfresco specific files in the following locations:
+| Path   | Purpose   |
+| ------ | --------- |
+| ```/opt/alfrescp```     | Binaries - Alfresco Services and Dependencies |
+| ```/etc/opt/alfresco``` | Configuration - Alfresco Services and Dependencies |
+| ```/var/opt/alfresco``` | Data - Alfresco Services and Dependencies |
+| ```/var/log/alfresco``` | Logs - Alfresco Services and Dependencies |
 
-## Cleanup
-
-TODO
 
 ## Troubleshooting
 
