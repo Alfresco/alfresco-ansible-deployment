@@ -71,5 +71,4 @@ jobs:
     - stage: Unit tests
       name: Transform AIO unit tests
       script:
-        - "travis_wait 30 sleep 1800 &"
-        - cd roles/transformers/ && molecule test
+        - travis_wait 30 cd roles/transformers/ && molecule test
