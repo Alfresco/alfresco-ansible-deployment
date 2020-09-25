@@ -67,7 +67,7 @@ You will find the Alfresco specific files in the following locations:
 The best place to start if something is not working are the log files, these can be found in the following locations:
 
 * Nginx 
-    * `/var/log/nginx/error.log`
+    * `/var/log/alfresco/nginx.alfresco.error.log`
 * Repository 
     * `/var/log/alfresco/alfresco.log`
     * `/var/log/alfresco/catalina.out`
