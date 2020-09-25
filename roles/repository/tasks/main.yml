@@ -6,12 +6,8 @@
   become: true
   become_user: root
   package:
-    name: "{{ item }}"
+    name: "{{ utils }}"
     state: present
-#  register: package_sleeper
-#  async: 900
-  poll: 0
-  loop: "{{ utils }}"
 
 #- name: Create directories
 #  become: true
@@ -378,17 +374,6 @@
 # - name: Generate keys
 #   shell: '/usr/java/bin/keytool -genseckey -dname {{ cert_name }} -validity {{ cert_validity }} -alias metadata -keyalg AES -keysize 256 -keystore {{ content_folder }}/shared/classes/alfresco/keystore/keystore -storetype pkcs12 -storepass {{ keystore_password }}'
 #   when: result.rc != 0
-
-- name: 'Check on package async task'
-  become: true
-  become_user: root
-  async_status:
-    jid: "{{ item.ansible_job_id }}"
-  register: job_result
-  until: job_result.finished
-  delay: 1
-  retries: 300
-  loop: "{{ package_sleeper.results }}"
 
 - name: 'Check on postgres download async task'
   become: true
