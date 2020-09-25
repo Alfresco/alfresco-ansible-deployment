@@ -2,25 +2,34 @@
 - name: Include vars for postgres credentials
   include_vars: "postgres.yml"
 
+- name: Check if Alfresco version {{ alfresco.version }} is installed
+  stat:
+    path: "{{ content_data_folder }}/webapps/alfresco/META-INF/MANIFEST.MF"
+  register: alf_install_check
+ changed_when: not alf_install_check.stat.exists
+
 - name: ensure a list of packages installed
   become: true
   become_user: root
   package:
     name: "{{ item }}"
     state: present
-#  register: package_sleeper
-#  async: 900
   poll: 0
   loop: "{{ utils }}"
 
-#- name: Create directories
-#  become: true
-#  changed_when: false
-#  become_user: root
-#  command: mkdir -p "{{ item }}" && chmod 755 "{{ item }}" && chown "{{ username }}"."{{ group_name }}" "{{ item }}"
-#  args:
-#    creates: "{{ item }}"
-#  loop: "{{ dirs }}"
+- name: Download DISTRIBUTION and WAR files
+  become: true
+  become_user: root
+  loop: "{{ query('items', war_downloads) }}"
+  changed_when: false
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+  when: not alf_install_check.stat.exists
+
 - name: Create Directories
   become: true
   become_user: root
@@ -53,27 +62,6 @@
      - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
      - "{{ logs_folder }}/licenses/"
 
-- name: Check if Alfresco version {{ alfresco.version }} is installed
-  stat:
-    path: "{{ content_data_folder }}/webapps/alfresco/META-INF/MANIFEST.MF"
-  register: alf_install_check
-#  changed_when: not alf_install_check.stat.exists
-
-- name: Download DISTRIBUTION and WAR files
-  become: true
-  become_user: root
-  loop: "{{ query('items', war_downloads) }}"
-  changed_when: false
-  get_url:
-    url: "{{ item.url }}"
-    dest: "{{ item.dest }}"
-    mode: 0644
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-#  register: war_download_result
-#  async: 900
-  poll: 0
-  when: not alf_install_check.stat.exists
 
 - name: Download AMPS
   become: true

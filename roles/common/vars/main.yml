@@ -48,14 +48,14 @@ repo_downloads:
     dest: "{{ content_folder }}/amps/alfresco-device-sync-repo.amp"
   - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ alfresco.aos_module.version }}/alfresco-aos-module-{{ alfresco.aos_module.version }}.amp"
     dest: "{{ content_folder }}/amps/alfresco-aos-module.amp"
-  - url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/{{ alfresco.googledrive_share.version }}/alfresco-googledrive-share-{{ alfresco.googledrive_share.version }}.amp"
-    dest: "{{ content_folder }}/amps/alfresco-googledrive-share.amp"
+  # - url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/{{ alfresco.googledrive_share.version }}/alfresco-googledrive-share-{{ alfresco.googledrive_share.version }}.amp"
+  #   dest: "{{ content_folder }}/amps/alfresco-googledrive-share.amp"
 
 share:
   version: 6.2.2
 share_downloads:
   - amp_name: "Google Docs Share Module"
-    amp_url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/3.2.0/alfresco-googledrive-share-3.2.0.amp"
+    amp_url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/{{ alfresco.googledrive_share.version }}/alfresco-googledrive-share-{{ alfresco.googledrive_share.version }}.amp"
     amp_version: "3.2.0"
 
 nexus_repository:
