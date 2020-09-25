@@ -71,7 +71,7 @@ jobs:
     - stage: Verification
       name: Integration checks
       env:
-        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir;cd /opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
+        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER; MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir; export ANSIBLE_CONFIG=$MOLECULE_EPHEMERAL_DIRECTORY/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
       before_install:
         - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in dbp-ansible.pem.enc -out /tmp/dbp-ansible -d
         - eval "$(ssh-agent -s)"
@@ -79,10 +79,11 @@ jobs:
         - ssh-add /tmp/dbp-ansible
       script:
         - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
-        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER"
-        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/build-alfresco-ansible-deployment/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy"
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create"
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -v -e \"ansible_python_interpreter=/usr/bin/python2.7\" -i molecule_temp_dir/inventory/ansible_inventory.yml"
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule verify"
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy"; fi
+        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER"
+        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
+        - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade awscli 'molecule-ec2';"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -v -i $MOLECULE_EPHEMERAL_DIRECTORY/inventory/ansible_inventory.yml"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule verify -s ec2"
+        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi
