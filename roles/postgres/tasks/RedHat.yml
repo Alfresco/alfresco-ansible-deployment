@@ -1,6 +1,7 @@
 ---
 
 - name: Install rpm repo
+  become: true
   yum:
     name: "{{ postgresql_rpm_repo }}"
     state: present
