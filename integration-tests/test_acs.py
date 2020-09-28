@@ -14,6 +14,7 @@ def AnsibleVars(host):
     tomcat_role = "file=../../roles/tomcat/vars/main.yml name=tomcat_role"
     repository_role = "file=../../roles/repository/vars/main.yml name=repository_role"
     solr_role = "file=../../roles/solr/vars/main.yml name=solr_role"
+    common_role = "file=../../roles/common/vars/main.yml name=common_role"
     ansible_vars = host.ansible("include_vars", adw_role)["ansible_facts"]["adw_role"]
     ansible_vars.update(host.ansible("include_vars", transformation_role)["ansible_facts"]["transformation_role"])
     ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
@@ -21,6 +22,7 @@ def AnsibleVars(host):
     ansible_vars.update(host.ansible("include_vars", tomcat_role)["ansible_facts"]["tomcat_role"])
     ansible_vars.update(host.ansible("include_vars", repository_role)["ansible_facts"]["repository_role"])
     ansible_vars.update(host.ansible("include_vars", solr_role)["ansible_facts"]["solr_role"])
+    ansible_vars.update(host.ansible("include_vars", common_role)["ansible_facts"]["common_role"])
     return ansible_vars
 
 def test_solr_service_is_running_and_enabled(host, AnsibleVars):
@@ -52,7 +54,7 @@ def test_activemq_running_and_enabled(host, AnsibleVars):
     assert_that(activemq.is_running)
     assert_that(activemq.is_enabled)
 
-def test_aio_service(host, get_ansible_vars):
+def test_aio_service(host, AnsibleVars):
     "Check that Transform AIO is enabled and running"
     assert_that(host.service("alfresco-tengine-aio").is_running)
     assert_that(host.service("alfresco-tengine-aio").is_enabled)
