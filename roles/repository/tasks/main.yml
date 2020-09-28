@@ -74,7 +74,7 @@
 - name: Download AMPS
   become: true
   become_user: root
-  loop: "{{ query('items', repo_amp_downloads) }}"
+  loop: "{{ query('items', repo_downloads) }}"
   get_url:
     url: "{{ item.url }}"
     dest: "{{ item.dest }}"
@@ -101,9 +101,9 @@
   become: true
   become_user: "{{ username }}"
   lineinfile:
-    path: "/etc/opt/alfresco/setenv.sh"
+    path: "{{ config_folder }}/setenv.sh"
     insertafter: EOF
-    line: "export ACS_HOME=/opt/alfresco/content-services-{{ alfresco.version }}"
+    line: "export ACS_HOME={{ binaries_folder }}/content-services-{{ alfresco.version }}"
 
 - name: add acs home to tomcat.sh
   become: true
@@ -413,6 +413,12 @@
     path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/share.xml"
     regexp: '<PostResources base='
     line: '<PostResources base="/opt/alfresco/modules/acs-share"'
+
+- name: Ensure tomcat restartd
+  systemd:
+    name: tomcat.service
+    state: restarted
+    enabled: true
 
 - name: Ensure alfresco content service is started and enabled on boot
   systemd:

@@ -69,6 +69,10 @@ jobs:
       script:
         - cd roles/nginx/ && molecule test
     - stage: Verification
+      name: Transform AIO unit tests
+      script:
+        - travis_wait 30 cd roles/transformers/ && molecule test
+    - stage: Verification
       name: Integration checks
       env:
         - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"

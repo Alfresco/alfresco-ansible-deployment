@@ -9,6 +9,6 @@ galaxy_info:
     versions:
     - 7
   galaxy_tags: []
+allow_duplicates: false
 dependencies:
-- common
 - java

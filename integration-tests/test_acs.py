@@ -31,16 +31,16 @@ def test_solr_service_is_running_and_enabled(host, AnsibleVars):
 
 def test_repo_service_is_running_and_enabled(host, AnsibleVars):
     """Check repository service"""
-    repository = host.service("tomcat_{}.service".format(AnsibleVars["instance_name"]))
+    repository = host.service("alfresco-content.service")
     assert_that(repository.is_running)
     assert_that(repository.is_enabled)
 
-def test_postgres_is_installed(host, pkg):
+def test_postgres_is_installed(host, AnsibleVars):
     """Check postgres package"""
     postgres = host.package("postgresql11")
     assert_that(postgres.is_installed)
 
-def test_postgres_running_and_enabled(host, svc):
+def test_postgres_running_and_enabled(host, AnsibleVars):
     """Check postgres service"""
     postgres = host.service("postgresql-11")
     assert_that(postgres.is_running)
@@ -52,11 +52,12 @@ def test_activemq_running_and_enabled(host, AnsibleVars):
     assert_that(activemq.is_running)
     assert_that(activemq.is_enabled)
 
-def test_transformation_service_is_running_and_enabled(host, AnsibleVars):
-    """Check aio service"""
-    aio = host.service("aio.service")
-    assert_that(aio.is_running)
-    assert_that(aio.is_enabled)
+def test_aio_service(host, get_ansible_vars):
+    "Check that Transform AIO is enabled and running"
+    assert_that(host.service("alfresco-tengine-aio").is_running)
+    assert_that(host.service("alfresco-tengine-aio").is_enabled)
+    assert_that(host.service("alfresco-transform").is_running)
+    assert_that(host.service("alfresco-transform").is_enabled)
 
 def test_share_is_accesible(host, AnsibleVars):
     """Check share service"""
@@ -67,7 +68,7 @@ def test_share_is_accesible(host, AnsibleVars):
         run_command = host.run("curl -v -k --connect-timeout 5 --location --request GET 'https://{}/share/page/'".format(AnsibleVars['nginx_domain']))
         command = run_command.succeeded
         output = run_command.stdout
-    assert_that(output,contains_string("Alfresco Identity Service"))
+    assert_that(output,contains_string("2005-2020 Alfresco Software"))
 
 def test_transformation_stats_is_accesible(host, AnsibleVars):
     """Check aio console """

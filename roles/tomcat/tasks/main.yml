@@ -183,7 +183,7 @@
       force: yes
 
   - name: checking for TOMCAT_HOME
-    shell: cat /etc/opt/alfresco/setenv.sh | grep TOMCAT_HOME
+    shell: cat {{ config_folder }}/setenv.sh | grep TOMCAT_HOME
     register: test_tomcat_home
     failed_when: false
     changed_when: test_tomcat_home.rc != 0

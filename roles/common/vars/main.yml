@@ -1,6 +1,7 @@
 ---
 # vars file for common
 nginx_domain: "alfresco.org"
+
 nginx_vhost_path: /etc/nginx/conf.d
 nexus_user: "{{ lookup('env', 'NEXUS_USERNAME') }}"
 nexus_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
@@ -35,8 +36,12 @@ alfresco:
     version: 3.2.0
   share_services:
     version: 6.2.2
+solr:
+  version: 1.4.2
+transform:
+  version: 2.3.2  
 
-repo_amp_downloads:
+repo_downloads:
   - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/integrations/alfresco-googledrive-repo-enterprise/{{ alfresco.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ alfresco.googledrive_repo.version }}.amp"
     dest: "{{ content_folder }}/amps/alfresco-googledrive-repo-enterprise.amp"
   - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/services/sync/alfresco-device-sync-repo/{{ alfresco.device_sync.version }}/alfresco-device-sync-repo-{{ alfresco.device_sync.version }}.amp"
@@ -48,14 +53,14 @@ repo_amp_downloads:
 
 share:
   version: 6.2.2
-share_amp_downloads:
+share_downloads:
   - amp_name: "Google Docs Share Module"
     amp_url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/3.2.0/alfresco-googledrive-share-3.2.0.amp"
     amp_version: "3.2.0"
 
-solr:
-  version: 1.4.2
+nexus_repository:
+  releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
+  enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
 
 adwVersion: 1.6.0
 adw_tgz_url: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-digital-workspace/{{ adwVersion }}/alfresco-digital-workspace-{{ adwVersion }}.zip"
-adw_host: localhost
