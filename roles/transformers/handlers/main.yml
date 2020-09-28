@@ -1,0 +1,11 @@
+---
+# handlers file for roles/transformers
+- name: restart-transform
+  service:
+    name: alfresco-transform
+    state: restarted
+
+- name: restart-aio
+  service:
+    name: alfresco-transform
+    state: restarted

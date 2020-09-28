@@ -1,10 +1,21 @@
 ---
+scenario:
+  test_sequence:
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
 dependency:
   name: galaxy
-
 driver:
   name: docker
-
 platforms:
   - name: instance
     image: centos/systemd:latest
@@ -36,27 +47,17 @@ platforms:
       - 0.0.0.0:8099:8099/tcp
       - 0.0.0.0:8983:8983/tcp
       - 0.0.0.0:9090:9090/tcp
-
-scenario:
-  name: default
-
-lint: |
-  ansible-lint -v playbooks/acs.yml
-  yamllint .
-  find . -name "*.py" ! -name __init__.py | xargs pylint
-
 provisioner:
   name: ansible
   playbooks:
-    converge: ../../playbooks/acs.yml
-
-# verifier:
-#   name: testinfra
-#   directory: ../../tests
-#   env:
-#     ANSIBLE_TIMEOUT: "30"
-#     ANSIBLE_SSH_RETRIES: "5"
-#     PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
-#   options:
-#     v: 1
-#     s: true
+    converge: converge.yml
+verifier:
+  name: testinfra
+  directory: tests
+  env:
+    ANSIBLE_TIMEOUT: "30"
+    ANSIBLE_SSH_RETRIES: "15"
+    PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
+  options:
+    v: 1
+    s: true

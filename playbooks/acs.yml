@@ -8,4 +8,4 @@
     - role: '../roles/search'
     - role: '../roles/nginx'
   tags:
-    - repository
+    - search

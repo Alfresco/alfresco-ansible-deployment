@@ -9,7 +9,6 @@ galaxy_info:
     - 7
   min_ansible_version: 2.9
   galaxy_tags: []
-allow_duplicates: true
+allow_duplicates: false
 dependencies:
-- common
 - java

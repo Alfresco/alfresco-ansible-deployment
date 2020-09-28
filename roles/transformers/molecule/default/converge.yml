@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include transformers"
+      include_role:
+        name: "transformers"

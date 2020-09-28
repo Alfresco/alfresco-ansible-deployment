@@ -4,6 +4,6 @@ if [ $(id -u) -eq 0 ]; then
     exit
 fi
 
-. /etc/opt/alfresco/setenv.sh
+. {{ config_folder }}/setenv.sh
 export SOLR_INCLUDE={{ config_dir }}/solr.in.sh
 {{ dist_dir }}/solr/bin/solr $*
