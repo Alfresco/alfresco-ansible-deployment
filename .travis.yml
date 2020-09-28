@@ -71,7 +71,8 @@ jobs:
     - stage: Verification
       name: Transform AIO unit tests
       script:
-        - travis_wait 30 cd roles/transformers/ && molecule test
+        - cd roles/transformers
+        - travis_wait 30 molecule test
     - stage: Verification
       name: Integration checks
       env:
