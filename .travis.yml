@@ -81,8 +81,7 @@ jobs:
         - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in dbp-ansible.pem.enc -out /tmp/dbp-ansible -d
         - eval "$(ssh-agent -s)"
         - chmod 600 /tmp/dbp-ansible
-        - ssh-add /tmp/dbp-ansible        
-        - git clone --depth 1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
+        - ssh-add /tmp/dbp-ansible
       script:
         - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
         - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER"
@@ -93,5 +92,8 @@ jobs:
         # - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir/inventory/ansible_inventory.yml"
         # - echo "wait for repo to be up" && sleep 5m
         # - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule verify -s ec2"
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;export HOST=$(cat molecule_temp_dir/instance_config.yml | grep address | sed "s/- address\: //g");cd dtas/tests; pytest"
+        - export HOST=\$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat molecule_temp_dir/instance_config.yml | grep address | sed 's/- address: //g'")
+        - git clone --depth 1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
+        - cd dtas/tests
+        - pytest
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi
