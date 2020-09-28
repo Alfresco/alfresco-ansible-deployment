@@ -262,7 +262,6 @@
 
 - name: Add alfresco-tengine-aio service
   become: true
-  become_user: "{{ username }}"
   template:
     src: alfresco-tengine-aio.service
     dest: "/etc/systemd/system/alfresco-tengine-aio.service"
@@ -275,7 +274,6 @@
 
 - name: Add alfresco-transform service
   become: true
-  become_user: "{{ username }}"
   template:
     src: alfresco-transform.service
     dest: "/etc/systemd/system/alfresco-transform.service"
