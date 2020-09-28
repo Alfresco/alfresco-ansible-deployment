@@ -144,7 +144,7 @@
     jid: "{{ item.ansible_job_id }}"
   register: job_result
   until: job_result.finished
-  delay: 1
+  delay: 2
   retries: 300
   loop: "{{ war_download_result.results }}"
 
