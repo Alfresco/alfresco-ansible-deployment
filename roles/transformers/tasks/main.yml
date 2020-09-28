@@ -15,7 +15,7 @@
   become_user: "{{ username }}"
 
 - name: Check if ImageMagick is installed
-  command: 
+  command:
     cmd: "convert --version"
   register: magick_exists
   failed_when: false
@@ -135,6 +135,7 @@
       register: alfresco_pdf_renderer_tgz_exists
 
 - name: Download alfresco-pdf-renderer-linux.tgz
+  become: true
   become_user: "{{ username }}"
   get_url:
     url: "{{ ALFRESCO_PDF_RENDERER_LIB_RPM_URL }}"
@@ -148,6 +149,7 @@
   when: not alfresco_pdf_renderer_tgz_exists.stat.exists and not alfresco_pdf_renderer_exists.stat.exists
 
 - name: Extract alfresco-pdf-renderer-linux.tgz
+  become: true
   become_user: "{{ username }}"
   unarchive:
     src: "{{ content_folder }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
@@ -186,6 +188,7 @@
   changed_when: test_ats_home.rc != 0
 
 - name: Add paths to setenv file
+  become: true
   become_user: "{{ username }}"
   blockinfile:
     path: "{{ config_folder }}/setenv.sh"
@@ -205,6 +208,7 @@
   when: test_ats_home.rc != 0
 
 - name: Map env variables to Java and Tomcat
+  become: true
   become_user: "{{ username }}"
   lineinfile:
     path: "{{ binaries_folder }}/tomcat.sh"
@@ -212,6 +216,7 @@
     line: "export CATALINA_OPTS=\"${CATALINA_OPTS} -Dats-tengine-aio.host=${ATS_TENGINE_AIO_HOST}\""
 
 - name: Add properties to alfresco-global
+  become: true
   become_user: "{{ username }}"
   blockinfile:
     path: "{{ settings_folder }}/classpath/alfresco-global.properties"
@@ -233,6 +238,7 @@
   failed_when: false
 
 - name: Add AIO startup script
+  become: true
   become_user: "{{ username }}"
   template:
     src: ats-ate-aio.sh
@@ -255,7 +261,7 @@
     register: alfresco_transform_service
 
 - name: Add alfresco-tengine-aio service
-  become_user: "{{ username }}"
+  become: true
   template:
     src: alfresco-tengine-aio.service
     dest: "/etc/systemd/system/alfresco-tengine-aio.service"
@@ -267,7 +273,7 @@
   when: not alfresco_tengine_aio_service.stat.exists
 
 - name: Add alfresco-transform service
-  become_user: "{{ username }}"
+  become: true
   template:
     src: alfresco-transform.service
     dest: "/etc/systemd/system/alfresco-transform.service"

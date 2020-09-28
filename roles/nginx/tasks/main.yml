@@ -12,8 +12,10 @@
   shell: 'echo "127.0.0.1 {{ nginx_domain }}" > /etc/hosts'
   when: domain_in_hosts.rc != 0
 
-- include_tasks: RedHat.yml
-  when: ansible_os_family == 'RedHat'
+- name: Ensure nginx is installed.
+  yum:
+    name: "{{ nginx_rpm_url }}"
+    state: present
 
 # Vhost configuration.
 - import_tasks: vhosts.yml
@@ -30,14 +32,16 @@
     - reload nginx
 
 - name: Set httpd_can_network_connect flag on and keep it persistent across reboots
+  become: true
   seboolean:
     name: httpd_can_network_connect
     state: yes
     persistent: yes
-  when: ansible_facts.virtualization_type != 'docker'
+  when: ansible_selinux.status == "enabled"
 
 - name: Ensure nginx service is running as configured.
   service:
     name: nginx
     state: "{{ nginx_service_state }}"
     enabled: "{{ nginx_service_enabled }}"
+  notify: reload nginx

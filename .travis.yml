@@ -10,7 +10,7 @@ services:
   - docker
 
 before_install:
-  - pip install ansible molecule ansible-lint PyHamcrest pylint testinfra 
+  - pip install ansible==2.9.13 molecule ansible-lint PyHamcrest pylint testinfra 
 
 env:
   - MOLECULE_NO_LOG=false
@@ -19,7 +19,7 @@ install: pip install 'molecule[docker]'
 
 stages:
   - name: Linters
-  - name: Unit tests
+  - name: Verification
 
 jobs:
   include:
@@ -36,39 +36,60 @@ jobs:
       install: pip install --upgrade yamllint
       script:
         - yamllint .
-    - stage: Unit tests
-      name: Search Role unit tests
+    - stage: Verification
+      name: Search Role Verification
       script:
         - cd roles/search/ && molecule test     
-    - stage: Unit tests
-      name: Common Role unit tests
+    - stage: Verification
+      name: Common Role Verification
       script:
         - cd roles/common/ && molecule test
-    - stage: Unit tests
-      name: Java Role unit tests
+    - stage: Verification
+      name: Java Role Verification
       script:
         - cd roles/java/ && molecule test
-    - stage: Unit tests
-      name: Tomcat Role unit tests
+    - stage: Verification
+      name: Tomcat Role Verification
       script:
         - cd roles/tomcat/ && molecule test
-    - stage: Unit tests
-      name: ActiveMQ Role unit tests
+    - stage: Verification
+      name: ActiveMQ Role Verification
       script:
         - cd roles/activemq/ && molecule test
-    - stage: Unit tests
-      name: Repository Role unit tests
+    - stage: Verification
+      name: Repository Role Verification
       script:
         - cd roles/repository/ && molecule test
-    - stage: Unit tests
-      name: ADW Role unit tests
+    - stage: Verification
+      name: ADW Role Verification
       script:
         - cd roles/adw/ && molecule test
-    - stage: Unit tests
-      name: Nginx Role unit tests
+    - stage: Verification
+      name: Nginx Role Verification
       script:
         - cd roles/nginx/ && molecule test
-    - stage: Unit tests
+    - stage: Verification
       name: Transform AIO unit tests
       script:
-        - travis_wait 30 cd roles/transformers/ && molecule test
+        - cd roles/transformers
+        - travis_wait 30 molecule test
+    - stage: Verification
+      name: Integration checks
+      env:
+        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
+      before_install:
+        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in dbp-ansible.pem.enc -out /tmp/dbp-ansible -d
+        - eval "$(ssh-agent -s)"
+        - chmod 600 /tmp/dbp-ansible
+        - ssh-add /tmp/dbp-ansible
+      script:
+        - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
+        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER"
+        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
+        - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade awscli 'molecule-ec2';"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir/inventory/ansible_inventory.yml"
+        - echo "wait for repo to be up" && sleep 5m
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule verify -s ec2"
+        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi
