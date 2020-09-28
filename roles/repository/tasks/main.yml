@@ -10,7 +10,7 @@
 
 - name: ensure a list of packages installed
   become: true
-  become_user: root
+  become_user: "{{ username }}"
   package:
     name: "{{ item }}"
     state: present
@@ -19,7 +19,7 @@
 
 - name: Download DISTRIBUTION and WAR files
   become: true
-  become_user: root
+  become_user: "{{ username }}"
   loop: "{{ query('items', war_downloads) }}"
   changed_when: false
   get_url:
