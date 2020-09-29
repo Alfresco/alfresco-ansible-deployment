@@ -300,3 +300,4 @@
     name: alfresco-transform.service
     state: started
     enabled: true
+  notify: alfresco-content-restart
