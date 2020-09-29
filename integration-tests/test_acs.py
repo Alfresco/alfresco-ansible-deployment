@@ -9,14 +9,14 @@ def AnsibleVars(host):
     """Define AnsibleVars"""
     nginx_role = "file=../../roles/nginx/vars/main.yml name=nginx_role"
     adw_role = "file=../../roles/adw/vars/main.yml name=adw_role"
-    transformation_role = "file=../../roles/transformation-services/vars/main.yml name=transformation_role"
+    transformers = "file=../../roles/transformers/vars/main.yml name=transformers"
     java_role = "file=../../roles/java/vars/main.yml name=java_role"
     tomcat_role = "file=../../roles/tomcat/vars/main.yml name=tomcat_role"
     repository_role = "file=../../roles/repository/vars/main.yml name=repository_role"
     solr_role = "file=../../roles/solr/vars/main.yml name=solr_role"
     common_role = "file=../../roles/common/vars/main.yml name=common_role"
     ansible_vars = host.ansible("include_vars", adw_role)["ansible_facts"]["adw_role"]
-    ansible_vars.update(host.ansible("include_vars", transformation_role)["ansible_facts"]["transformation_role"])
+    ansible_vars.update(host.ansible("include_vars", transformers)["ansible_facts"]["transformers"])
     ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
     ansible_vars.update(host.ansible("include_vars", nginx_role)["ansible_facts"]["nginx_role"])
     ansible_vars.update(host.ansible("include_vars", tomcat_role)["ansible_facts"]["tomcat_role"])
