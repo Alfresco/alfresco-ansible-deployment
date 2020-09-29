@@ -1,7 +1,9 @@
 ---
-- name: Install postgresql yum repository
+
+- name: Install rpm repo
+  become: true
   yum:
-    name: https://download.postgresql.org/pub/repos/yum/{{ postgres_major_version }}/redhat/rhel-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm # noqa 204
+    name: "{{ postgresql_rpm_repo }}"
     state: present
 
 - name: Install packages required for CentOS 8
@@ -13,7 +15,7 @@
   when: ansible_distribution_major_version == "8"
 
 - name: Disable the built-in PostgreSQL module
-  command: dnf -y module disable postgresql
+  command: dnf -qy module disable postgresql
   args:
     warn: false  # set warn=false to prevent warning
   register: disable_dnf_module

@@ -1,4 +1,5 @@
 ---
+postgresql_rpm_repo: https://download.postgresql.org/pub/repos/yum/{{ postgres_major_version }}/redhat/rhel-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm # noqa 204
 postgresql_packages:
   11:
     - postgresql11-server

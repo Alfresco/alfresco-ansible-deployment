@@ -1,11 +1,12 @@
 ---
 - name: Repository Role
-  hosts: localhost
+  hosts: all
   become: true
   become_method: sudo
   roles:
+    - role: '../roles/nginx'
     - role: '../roles/adw'
     - role: '../roles/search'
-    - role: '../roles/nginx'
+    - role: '../roles/transformers'
   tags:
     - search

@@ -189,6 +189,8 @@
     changed_when: test_tomcat_home.rc != 0
 
   - name: Add TOMCAT_HOME to setenv script
+    become: true
+    become_user: "{{ username }}"
     lineinfile:
       path: "{{ config_folder }}/setenv.sh"
       line: "export TOMCAT_HOME=/opt/apache-tomcat-{{ tomcat_version }}"

@@ -5,7 +5,7 @@
 - name: ensure a list of packages installed
   become: true
   package:
-    name: "{{ item }}"
+    name: "{{ utils }}"
     state: present
   poll: 0
   loop: "{{ utils }}"
@@ -82,10 +82,11 @@
   loop:
     - "{{ settings_folder }}"
     - "{{ content_data_folder }}/content"
+    - "{{ settings_folder }}/classpath"
 
 - name: Move licenses and keystore folders
   block:
-    - name: Copy licenses folder
+    - name: Copy licenses folder to {{ settings_folder }}
       copy:
         remote_src: true
         src: "{{ content_folder }}/licenses"
@@ -93,7 +94,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
-    - name: Copy keystore folder
+    - name: Copy keystore folder {{ content_data_folder }}
       copy:
         remote_src: true
         src: "{{ content_folder }}/alf_data/keystore"
@@ -108,4 +109,19 @@
     - name: Remove keystore folder
       file:
         path: "{{ content_folder }}/alf_data/keystore"
+        state: absent
+
+- name: Move shared/classes to the {{ settings_folder }}/classpath
+  block:
+    - name: Copy shared/classes to the {{ settings_folder }}/classpath
+      copy:
+          remote_src: true
+          src: "{{ content_folder }}/web-server/shared/classes/"
+          dest: "{{ settings_folder }}/classpath/"
+          owner: "{{ username }}"
+          group: "{{ group_name }}"
+          mode: 'u=rwx,g=rwx,o=rx'
+    - name: Remove licenses folder
+      file:
+        path: "{{ content_folder }}/web-server/shared/classes/"
         state: absent
