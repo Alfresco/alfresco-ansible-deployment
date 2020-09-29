@@ -5,19 +5,22 @@ nexus_repository:
   releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
   enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
 
-war_downloads:
-  - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ alfresco.version }}/alfresco-content-services-distribution-{{ alfresco.version }}.zip"
-    dest: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
-  - url: "{{ nexus_repository.releases }}org/alfresco/api-explorer/{{ alfresco.api_explorer.version }}/api-explorer-{{ alfresco.api_explorer.version }}.war"
-    dest: "{{ content_folder }}/webapps/api-explorer.war"
+# war_downloads:
+#   - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ alfresco.version }}/alfresco-content-services-distribution-{{ alfresco.version }}.zip"
+#     dest: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
+#   - url: "{{ nexus_repository.releases }}org/alfresco/api-explorer/{{ alfresco.api_explorer.version }}/api-explorer-{{ alfresco.api_explorer.version }}.war"
+#     dest: "{{ content_folder }}/webapps/api-explorer.war"
+
+distribution_zip:
+  url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ alfresco.version }}/alfresco-content-services-distribution-{{ alfresco.version }}.zip"
+  dest: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
 
 maven_repository:
    org: "https://repo.maven.apache.org/maven2/org"
 licenses: 3.1.0
 # vars file for repository
 
-base_folder: "{{ binaries_folder }}"
-content_folder: "{{ base_folder }}/content-services-{{ alfresco.version }}"
+content_folder: "{{ binaries_folder }}/content-services-{{ alfresco.version }}"
 settings_folder: "{{ config_folder }}/content-services"
 content_data_folder: "{{ data_folder }}/content-services"
 

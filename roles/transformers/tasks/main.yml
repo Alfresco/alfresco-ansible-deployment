@@ -123,7 +123,7 @@
   when: loffice_exists.rc != 0
   changed_when: false
 
-- name: Check if alfresco-pdf-rendere exe or archive exists
+- name: Check if alfresco-pdf-renderer exe or archive exists
   block:
     - name: Check if alfresco-pdf-renderer exists
       stat:

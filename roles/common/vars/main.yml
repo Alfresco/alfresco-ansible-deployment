@@ -56,6 +56,7 @@ share:
 share_downloads:
   - amp_name: "Google Docs Share Module"
     amp_url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/{{ alfresco.googledrive_share.version }}/alfresco-googledrive-share-{{ alfresco.googledrive_share.version }}.amp"
+    dest: "{{ content_folder }}/amps/alfresco-googledrive-repo-enterprise.amp"
     amp_version: "3.2.0"
 
 nexus_repository:
