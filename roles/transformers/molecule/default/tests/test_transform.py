@@ -47,3 +47,4 @@ def test_aio_root_api(host, get_ansible_vars):
     cmd = host.run("curl -iL http://{}:8090".format(get_ansible_vars["ats_tengine_aio_host"]))
     assert_that(cmd.stdout, contains_string("All in One Transformer Test Transformation"), cmd.stdout)
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
+    
