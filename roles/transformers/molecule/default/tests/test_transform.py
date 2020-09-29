@@ -30,12 +30,6 @@ def test_aio_service(host, get_ansible_vars):
     assert_that(host.service("alfresco-transform").is_running)
     assert_that(host.service("alfresco-transform").is_enabled)
 
-def test_aio_root_api(host, get_ansible_vars):
-    """Check that Transform AIO root api works"""
-    cmd = host.run("curl -iL http://{}:8090".format(get_ansible_vars["ats_tengine_aio_host"]))
-    assert_that(cmd.stdout, contains_string("All in One Transformer Test Transformation"), cmd.stdout)
-    assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
-
 def test_aio_config_api(host, get_ansible_vars):
     """Check that Transform AIO transform/config api works"""
     cmd = host.run("curl -iL http://{}:8090/transform/config".format(get_ansible_vars["ats_tengine_aio_host"]))
@@ -47,3 +41,10 @@ def test_aio_config_api(host, get_ansible_vars):
     assert_that(cmd.stdout, contains_string("pdfboxOptions"))
     assert_that(cmd.stdout, contains_string("textToPdfOptions"))
     assert_that(cmd.stdout, contains_string("stringOptions"))
+
+def test_aio_root_api(host, get_ansible_vars):
+    """Check that Transform AIO root api works"""
+    cmd = host.run("curl -iL http://{}:8090".format(get_ansible_vars["ats_tengine_aio_host"]))
+    assert_that(cmd.stdout, contains_string("All in One Transformer Test Transformation"), cmd.stdout)
+    assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
+
