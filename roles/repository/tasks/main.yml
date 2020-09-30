@@ -22,52 +22,14 @@
       stat:
         path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
       register: archive_exists
+      changed_when: not archive_exists.stat.exists
       failed_when: false
     - name: Check if VERSIONS.md file exists
       stat:
         path: "{{ content_folder }}/VERSIONS.md"
       register: versions_exists
+      changed_when: not versions_exists.stat.exists
       failed_when: false
-
-- name: Download DISTRIBUTION zip
-  block:
-    - name: Create {{ content_folder }} folder
-      file:
-        path: "{{ content_folder }}"
-        state: directory
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 'u=rwx,go=rx'
-    - name: Download 
-      become: true
-      become_user: "{{ username }}"
-      get_url:
-        url: "{{ distribution_zip.url }}"
-        dest: "{{ distribution_zip.dest }}"
-        mode: 0444
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        url_username: "{{ nexus_user }}"
-        url_password: "{{ nexus_password }}"
-      register: download_dist
-      until: download_dist is succeeded
-      when: not archive_exists.stat.exists and not versions_exists.stat.exists
-
-- name: Extract content-services-{{ alfresco.version }}.zip into {{ content_folder }}
-  become: true
-  become_user: "{{ username }}"
-  unarchive:
-    src: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
-    dest: "{{ content_folder }}"
-    remote_src: yes
-  when: download_dist is succeeded
-
-- name: Remove Alfresco Content Services {{ alfresco.version }} zip file
-  become: true
-  file:
-    path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
-    state: absent
-  when: download_dist is succeeded
 
 - name: Create configuration and data directories
   become: true
@@ -80,12 +42,50 @@
     mode: 'u=rwx,go=rx'
     recurse: yes
   loop:
+    - "{{ content_folder }}"
     - "{{ settings_folder }}"
     - "{{ content_data_folder }}/content"
     - "{{ settings_folder }}/classpath"
 
+- name: Download DISTRIBUTION zip
+  become: true
+  become_user: "{{ username }}"
+  get_url:
+    url: "{{ distribution_zip.url }}"
+    dest: "{{ distribution_zip.dest }}"
+    mode: 0444
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+  register: download_dist
+  until: download_dist is succeeded
+  when: not archive_exists.stat.exists and not versions_exists.stat.exists
+
+- name: Extract content-services-{{ alfresco.version }}.zip into {{ content_folder }}
+  become: true
+  become_user: "{{ username }}"
+  unarchive:
+    src: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
+    dest: "{{ content_folder }}"
+    remote_src: yes
+  when: not download_dist.skipped
+
+- name: Remove Alfresco Content Services {{ alfresco.version }} zip file
+  become: true
+  file:
+    path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
+    state: absent
+  when: download_dist is succeeded
+
 - name: Move licenses and keystore folders
   block:
+    - name: Check if source license folder exists
+      stat:
+        path: "{{ content_folder }}/licenses"
+      register: licences_exist
+      failed_when: false
+      changed_when: not licences_exist.stat.exists
     - name: Copy licenses folder to {{ settings_folder }}
       copy:
         remote_src: true
@@ -94,6 +94,13 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
+      when: licences_exist.stat.exists
+    - name: Check if source keystore folder exists
+      stat: 
+        path: "{{ content_folder }}/alf_data/keystore"
+      register: keystore_exists
+      failed_when: false
+      changed_when: not keystore_exists.stat.exists
     - name: Copy keystore folder {{ content_data_folder }}
       copy:
         remote_src: true
@@ -102,6 +109,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
+      when: keystore_exists.stat.exists
     - name: Remove licenses folder
       file:
         path: "{{ content_folder }}/licenses"
@@ -113,15 +121,22 @@
 
 - name: Move shared/classes to the {{ settings_folder }}/classpath
   block:
+    - name: Check if source shared/classes exists
+      stat:
+        path: "{{ content_folder }}/web-server/shared/classes/"
+      register: classes_exists
+      failed_when: false
+      changed_when: not classes_exists.stat.exists
     - name: Copy shared/classes to the {{ settings_folder }}/classpath
       copy:
-          remote_src: true
-          src: "{{ content_folder }}/web-server/shared/classes/"
-          dest: "{{ settings_folder }}/classpath/"
-          owner: "{{ username }}"
-          group: "{{ group_name }}"
-          mode: 'u=rwx,g=rwx,o=rx'
-    - name: Remove licenses folder
+        remote_src: true
+        src: "{{ content_folder }}/web-server/shared/classes/"
+        dest: "{{ settings_folder }}/classpath/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+      when: classes_exists.stat.exists
+    - name: Remove shared/classes/ folder
       file:
         path: "{{ content_folder }}/web-server/shared/classes/"
         state: absent
