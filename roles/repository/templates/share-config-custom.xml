@@ -59,7 +59,7 @@
          </action>
       </rule>
    -->
-   <config evaluator="string-compare" condition="CSRFPolicy" replace={{ CSRF.enabled }}>
+   <config evaluator="string-compare" condition="CSRFPolicy" replace="{{ CSRF.enabled }}">
 
       <!--
          Properties that may be used inside the rest of the CSRFPolicy config to avoid repetition but

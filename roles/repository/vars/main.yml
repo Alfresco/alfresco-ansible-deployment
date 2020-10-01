@@ -33,7 +33,7 @@ shutdown_port: "8005"
 redirect_port: "8443"
 ajp_port: "8009"
 solr_port: "8983"
-share_port: "8082"
+share_port: "8080"
 # share_host: "{{ ipv4_address['content'] }}"
 
 
@@ -58,7 +58,7 @@ repository:
   port: 8080
 
 CSRF:
-  enabled: false
+  enabled: "false"
   referer: "{{ repository.protocol }}://{{ repository.host }}/.*"
   origin: "{{ repository.protocol }}://{{ repository.host }}"
 
