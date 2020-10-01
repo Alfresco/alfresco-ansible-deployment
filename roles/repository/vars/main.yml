@@ -5,15 +5,12 @@ nexus_repository:
   releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
   enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
 
-# war_downloads:
-#   - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ alfresco.version }}/alfresco-content-services-distribution-{{ alfresco.version }}.zip"
-#     dest: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
-#   - url: "{{ nexus_repository.releases }}org/alfresco/api-explorer/{{ alfresco.api_explorer.version }}/api-explorer-{{ alfresco.api_explorer.version }}.war"
-#     dest: "{{ content_folder }}/webapps/api-explorer.war"
+war_downloads:
+  - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ alfresco.version }}/alfresco-content-services-distribution-{{ alfresco.version }}.zip"
+    dest: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
+  - url: "{{ nexus_repository.releases }}org/alfresco/api-explorer/{{ alfresco.api_explorer.version }}/api-explorer-{{ alfresco.api_explorer.version }}.war"
+    dest: "{{ content_folder }}/webapps/api-explorer.war"
 
-distribution_zip:
-  url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ alfresco.version }}/alfresco-content-services-distribution-{{ alfresco.version }}.zip"
-  dest: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
 
 maven_repository:
    org: "https://repo.maven.apache.org/maven2/org"
@@ -36,7 +33,7 @@ shutdown_port: "8005"
 redirect_port: "8443"
 ajp_port: "8009"
 solr_port: "8983"
-share_port: "8082"
+share_port: "8080"
 # share_host: "{{ ipv4_address['content'] }}"
 
 
@@ -61,7 +58,7 @@ repository:
   port: 8080
 
 CSRF:
-  enabled: false
+  enabled: "false"
   referer: "{{ repository.protocol }}://{{ repository.host }}/.*"
   origin: "{{ repository.protocol }}://{{ repository.host }}"
 

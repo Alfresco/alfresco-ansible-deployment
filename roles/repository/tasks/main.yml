@@ -4,36 +4,15 @@
 
 - name: ensure a list of packages installed
   become: true
+  become_user: root
   package:
     name: "{{ utils }}"
     state: present
-  poll: 0
-  loop: "{{ utils }}"
 
-- name: Check if Alfresco version {{ alfresco.version }} is installed
-  stat:
-    path: "{{ content_data_folder }}/webapps/alfresco/META-INF/MANIFEST.MF"
-  register: alf_install_check
-  changed_when: not alf_install_check.stat.exists
-
-- name: Check if zip file exists or content folder exists
-  block:
-    - name: Check if zip file exists
-      stat:
-        path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
-      register: archive_exists
-      changed_when: not archive_exists.stat.exists
-      failed_when: false
-    - name: Check if VERSIONS.md file exists
-      stat:
-        path: "{{ content_folder }}/VERSIONS.md"
-      register: versions_exists
-      changed_when: not versions_exists.stat.exists
-      failed_when: false
-
-- name: Create configuration and data directories
+- name: Create Directories
   become: true
-  become_user: "{{ username }}"
+  become_user: root
+  changed_when: false
   file:
     path: "{{ item }}"
     state: directory
@@ -42,25 +21,128 @@
     mode: 'u=rwx,go=rx'
     recurse: yes
   loop:
-    - "{{ content_folder }}"
-    - "{{ settings_folder }}"
-    - "{{ content_data_folder }}/content"
-    - "{{ settings_folder }}/classpath"
+     - "{{ binaries_folder }}/modules/acs-platform"
+     - "{{ binaries_folder }}/modules/acs-share"
+     - "{{ content_folder }}/modules/acs-platform"
+     - "{{ content_folder }}/modules/acs-share"
+     - "{{ content_folder }}/amps"
+     - "{{ content_folder }}/amps_share"
+     - "{{ content_folder }}/alf_data"
+     - "{{ content_folder }}/alfresco-mmt"
+     - "{{ content_folder }}/webapps/alfresco"
+     - "{{ content_folder }}/licenses/"
+     - "{{ content_folder }}/web-server/lib"
+     - "{{ settings_folder }}/classpath/alfresco/extension/transform/pipelines"
+     - "{{ settings_folder }}/classpath/alfresco/extension/transform/renditions"
+     - "{{ settings_folder }}/classpath/alfresco/extension/mimetypes"
+     - "{{ settings_folder }}/classpath/alfresco/web-extension"
+     - "{{ content_data_folder }}/keystore"
+     - "{{ tomcat_config_dir }}/lib"
+     - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
+     - "{{ logs_folder }}/licenses/"
 
-- name: Download DISTRIBUTION zip
+- name: Check if Alfresco version {{ alfresco.version }} is installed
+  stat:
+    path: "{{ content_data_folder }}/webapps/alfresco/META-INF/MANIFEST.MF"
+  register: alf_install_check
+
+- name: Download DISTRIBUTION and WAR files
   become: true
-  become_user: "{{ username }}"
+  become_user: root
+  loop: "{{ query('items', war_downloads) }}"
+  changed_when: false
   get_url:
-    url: "{{ distribution_zip.url }}"
-    dest: "{{ distribution_zip.dest }}"
-    mode: 0444
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
-  register: download_dist
-  until: download_dist is succeeded
-  when: not archive_exists.stat.exists and not versions_exists.stat.exists
+  register: war_download_result
+  async: 900
+  poll: 0
+  when: not alf_install_check.stat.exists
+
+- name: Download AMPS
+  become: true
+  become_user: root
+  loop: "{{ query('items', repo_downloads) }}"
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+  register: amp_download_result
+  when: not alf_install_check.stat.exists
+  async: 900
+  poll: 0
+  
+- name: Download postgresql jar
+  become: true
+  become_user: root
+  get_url:
+    url: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependency_postgresql.version }}/postgresql-{{ dependency_postgresql.version }}.jar"
+    dest: "{{ tomcat_config_dir }}/lib/postgresql.jar"
+    mode: 0644
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+  register: postgresql_download
+  when: not alf_install_check.stat.exists
+  async: 900
+  poll: 0
+
+- name: add acs home to setenv.sh
+  become: true
+  become_user: "{{ username }}"
+  lineinfile:
+    path: "{{ config_folder }}/setenv.sh"
+    insertafter: EOF
+    line: "export ACS_HOME={{ binaries_folder }}/content-services-{{ alfresco.version }}"
+
+- name: add acs home to tomcat.sh
+  become: true
+  become_user: "{{ username }}"
+  lineinfile:
+    path: "/opt/alfresco/tomcat.sh"
+    insertafter: 'CATALINA_OPTS'
+    line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}"
+
+- name: setup common loader
+  become: true
+  become_user: "{{ username }}"
+  failed_when: false
+  lineinfile:
+    path: "{{ tomcat_config_dir }}/conf/catalina.properties"
+    regexp: '^common.loader='
+    line: "common.loader=\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\",/etc/opt/alfresco/content-services/classpath"
+
+- name: 'Check on war download async task'
+  become: true
+  become_user: root
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 2
+  retries: 300
+  loop: "{{ war_download_result.results }}"
+
+- name: Add the configuration templates
+  become: true
+  become_user: "{{ username }}"
+  template:
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    src: "{{ item }}"
+    dest: "{{ settings_folder }}/classpath/alfresco/web-extension/{{ item }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+  loop: "{{ share_templates }}"
+  changed_when: false
+
+- name: check if zip file exists
+  stat:
+    path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
+  register: archive_exists
 
 - name: Extract content-services-{{ alfresco.version }}.zip into {{ content_folder }}
   become: true
@@ -69,23 +151,22 @@
     src: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
     dest: "{{ content_folder }}"
     remote_src: yes
-  when: not download_dist.skipped
+    creates: "{{ content_folder }}/bin"
 
 - name: Remove Alfresco Content Services {{ alfresco.version }} zip file
+  changed_when: false
   become: true
   file:
     path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
     state: absent
-  when: download_dist is succeeded
+  when: archive_exists.stat.exists
 
-- name: Move licenses and keystore folders
+- name: Move licenses folders
   block:
     - name: Check if source license folder exists
       stat:
         path: "{{ content_folder }}/licenses"
-      register: licences_exist
-      failed_when: false
-      changed_when: not licences_exist.stat.exists
+      register: licences
     - name: Copy licenses folder to {{ settings_folder }}
       copy:
         remote_src: true
@@ -94,13 +175,18 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
-      when: licences_exist.stat.exists
+      when: licences.stat.exists
+    - name: Remove licenses folder
+      file:
+        path: "{{ content_folder }}/licenses"
+        state: absent
+
+- name: Move keystore folders
+  block:
     - name: Check if source keystore folder exists
       stat: 
         path: "{{ content_folder }}/alf_data/keystore"
-      register: keystore_exists
-      failed_when: false
-      changed_when: not keystore_exists.stat.exists
+      register: keystore
     - name: Copy keystore folder {{ content_data_folder }}
       copy:
         remote_src: true
@@ -109,34 +195,178 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
-      when: keystore_exists.stat.exists
-    - name: Remove licenses folder
-      file:
-        path: "{{ content_folder }}/licenses"
-        state: absent
+      when: keystore.stat.exists
     - name: Remove keystore folder
       file:
         path: "{{ content_folder }}/alf_data/keystore"
         state: absent
 
-- name: Move shared/classes to the {{ settings_folder }}/classpath
+- name: Move classes folder
   block:
-    - name: Check if source shared/classes exists
+    - name: Check if classes files exists
       stat:
-        path: "{{ content_folder }}/web-server/shared/classes/"
-      register: classes_exists
-      failed_when: false
-      changed_when: not classes_exists.stat.exists
-    - name: Copy shared/classes to the {{ settings_folder }}/classpath
+        path: "{{ settings_folder }}/classpath"
+      register: classes
+    - name: Copy classes
+      become: true
+      become_user: "{{ username }}"
       copy:
-        remote_src: true
-        src: "{{ content_folder }}/web-server/shared/classes/"
+        remote_src: True
+        src: "{{ content_folder }}/shared/classes/"
         dest: "{{ settings_folder }}/classpath/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
-      when: classes_exists.stat.exists
-    - name: Remove shared/classes/ folder
+      when: not classes.stat.exists
+    - name: Remove classes files
       file:
-        path: "{{ content_folder }}/web-server/shared/classes/"
+        path: "{{ content_folder }}/shared/classes/"
         state: absent
+
+- name: Move conf folder
+  block:
+    - name: Check if conf files exist
+      stat:
+        path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/alfresco.xml"
+      register: conf_exists
+    - name: Copy conf
+      become: true
+      become_user: "{{ username }}"
+      copy:
+        remote_src: True
+        src: "{{ content_folder }}/web-server/conf/Catalina/localhost/"
+        dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+      when: not conf_exists.stat.exists
+    - name: Remove conf files
+      file:
+        path: "{{ content_folder }}/web-server/conf"
+        state: absent
+
+- name: Add context home to alfresco.xml
+  lineinfile:
+    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/alfresco.xml"
+    regexp: '<Context crossContext="true">'
+    line: '<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/alfresco.war">'
+
+- name: Add context home to share.xml
+  lineinfile:
+    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/share.xml"
+    regexp: '<Context crossContext="true">'
+    line: '<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/share.war">'
+
+- name: Check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml" exists
+  stat:
+    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml"
+  register: root_xml
+
+- name: Create ROOT.xml
+  template:
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    src: ROOT.xml
+    dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml"
+    mode: 'u=rwx,g=rwx,o=rx'
+  when: not root_xml.stat.exists
+
+- name: check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml" exists
+  stat:
+    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml"
+  register: vti_xml
+
+- name: Create _vti_bin.xml
+  template:
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    src: _vti_bin.xml
+    dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml"
+    mode: 'u=rwx,g=rwx,o=rx'
+  when: not vti_xml.stat.exists
+
+- name: Check if "{{ settings_folder }}/classpath/alfresco-global.properties" exists
+  stat:
+    path: "{{ settings_folder }}/classpath/alfresco-global.properties"
+  register: global_properties
+
+- name: Create alfresco-global.properties
+  template:
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    src: alfresco-global.properties
+    dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
+    mode: 'u=rwx,g=rwx,o=rx'
+  when: not global_properties.stat.exists
+
+- name: Check on amp download async task
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 1
+  retries: 300
+  loop: "{{ amp_download_result.results }}"
+
+- name: Create apply_amps.sh
+  template:
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    src: apply_amps.sh
+    dest: "{{ content_folder }}/apply_amps.sh"
+    mode: 'u=rwx,g=rwx,o=rx'
+  when: not global_properties.stat.exists
+
+- name: Install amps on alfresco and share war files
+  shell: '{{ content_folder }}/apply_amps.sh -nobackup -force'
+  register: mmt_install
+  changed_when: mmt_install.rc != 0
+
+- name: Check on postgres download async task
+  become: true
+  become_user: root
+  async_status:
+    jid: "{{ postgresql_download.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 1
+  retries: 300
+
+- name: Add tomcat.service
+  become: true
+  become_user: root
+  template:
+    src: alfresco-content.service
+    dest: /etc/systemd/system/alfresco-content.service
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+  notify: alfresco-content-restart
+
+- name: Include postgres task
+  include_tasks: "postgres.yml"
+
+- name: Add PostResources to alfresco.xml
+  become: true
+  become_user: root
+  lineinfile:
+    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/alfresco.xml"
+    regexp: '<PostResources base='
+    line: '<PostResources base="/opt/alfresco/modules/acs-platform"'
+
+- name: Add PostResources to share.xml
+  become: true
+  become_user: root
+  lineinfile:
+    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/share.xml"
+    regexp: '<PostResources base='
+    line: '<PostResources base="/opt/alfresco/modules/acs-share"'
+
+- name: Ensure tomcat restarted
+  systemd:
+    name: tomcat.service
+    state: restarted
+    enabled: true
+
+- name: Ensure alfresco content service is started and enabled on boot
+  systemd:
+    name: alfresco-content.service
+    state: started
+    enabled: true

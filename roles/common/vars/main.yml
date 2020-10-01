@@ -36,10 +36,17 @@ alfresco:
     version: 3.2.0
   share_services:
     version: 6.2.2
+
+share:
+  version: 6.2.2
+
 solr:
   version: 1.4.2
+  
 transform:
-  version: 2.3.2  
+  version: 2.3.2
+
+adwVersion: 1.6.0
 
 repo_downloads:
   - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/integrations/alfresco-googledrive-repo-enterprise/{{ alfresco.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ alfresco.googledrive_repo.version }}.amp"
@@ -48,20 +55,11 @@ repo_downloads:
     dest: "{{ content_folder }}/amps/alfresco-device-sync-repo.amp"
   - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ alfresco.aos_module.version }}/alfresco-aos-module-{{ alfresco.aos_module.version }}.amp"
     dest: "{{ content_folder }}/amps/alfresco-aos-module.amp"
-  # - url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/{{ alfresco.googledrive_share.version }}/alfresco-googledrive-share-{{ alfresco.googledrive_share.version }}.amp"
-  #   dest: "{{ content_folder }}/amps/alfresco-googledrive-share.amp"
-
-share:
-  version: 6.2.2
-share_downloads:
-  - amp_name: "Google Docs Share Module"
-    amp_url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/{{ alfresco.googledrive_share.version }}/alfresco-googledrive-share-{{ alfresco.googledrive_share.version }}.amp"
-    dest: "{{ content_folder }}/amps/alfresco-googledrive-repo-enterprise.amp"
-    amp_version: "3.2.0"
+  - url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/{{ alfresco.googledrive_share.version }}/alfresco-googledrive-share-{{ alfresco.googledrive_share.version }}.amp"
+    dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
 
 nexus_repository:
   releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
   enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
 
-adwVersion: 1.6.0
 adw_tgz_url: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-digital-workspace/{{ adwVersion }}/alfresco-digital-workspace-{{ adwVersion }}.zip"
