@@ -76,7 +76,7 @@
   when: not alf_install_check.stat.exists
   async: 900
   poll: 0
-  
+
 - name: Download postgresql jar
   become: true
   become_user: root
@@ -184,7 +184,7 @@
 - name: Move keystore folders
   block:
     - name: Check if source keystore folder exists
-      stat: 
+      stat:
         path: "{{ content_folder }}/alf_data/keystore"
       register: keystore
     - name: Copy keystore folder {{ content_data_folder }}
