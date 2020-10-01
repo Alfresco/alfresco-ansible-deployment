@@ -44,7 +44,9 @@ solr:
   version: 1.4.2
   
 transform:
-  version: 2.3.2  
+  version: 2.3.2
+
+adwVersion: 1.6.0
 
 repo_downloads:
   - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/integrations/alfresco-googledrive-repo-enterprise/{{ alfresco.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ alfresco.googledrive_repo.version }}.amp"
@@ -60,5 +62,4 @@ nexus_repository:
   releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
   enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
 
-adwVersion: 1.6.0
 adw_tgz_url: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-digital-workspace/{{ adwVersion }}/alfresco-digital-workspace-{{ adwVersion }}.zip"

@@ -9,4 +9,4 @@
     - role: '../roles/search'
     - role: '../roles/transformers'
   tags:
-    - repository
+    - search
