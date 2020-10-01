@@ -2,14 +2,14 @@
 - name: Include vars for postgres credentials
   include_vars: "postgres.yml"
 
-- name: ensure a list of packages installed
+- name: Ensure a list of packages installed
   become: true
   become_user: root
   package:
     name: "{{ utils }}"
     state: present
 
-- name: Create Directories
+- name: Create folders
   become: true
   become_user: root
   changed_when: false
@@ -91,7 +91,7 @@
   async: 900
   poll: 0
 
-- name: add acs home to setenv.sh
+- name: Add ACS home to setenv.sh
   become: true
   become_user: "{{ username }}"
   lineinfile:
@@ -99,7 +99,7 @@
     insertafter: EOF
     line: "export ACS_HOME={{ binaries_folder }}/content-services-{{ alfresco.version }}"
 
-- name: add acs home to tomcat.sh
+- name: Add ACS home to tomcat.sh
   become: true
   become_user: "{{ username }}"
   lineinfile:
@@ -107,7 +107,7 @@
     insertafter: 'CATALINA_OPTS'
     line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}"
 
-- name: setup common loader
+- name: Setup common loader
   become: true
   become_user: "{{ username }}"
   failed_when: false
@@ -116,7 +116,7 @@
     regexp: '^common.loader='
     line: "common.loader=\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\",/etc/opt/alfresco/content-services/classpath"
 
-- name: 'Check on war download async task'
+- name: Check on war download async task
   become: true
   become_user: root
   async_status:
@@ -139,7 +139,7 @@
   loop: "{{ share_templates }}"
   changed_when: false
 
-- name: check if zip file exists
+- name: Check if zip file exists
   stat:
     path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
   register: archive_exists
@@ -269,7 +269,7 @@
     mode: 'u=rwx,g=rwx,o=rx'
   when: not root_xml.stat.exists
 
-- name: check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml" exists
+- name: Check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml" exists
   stat:
     path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml"
   register: vti_xml
