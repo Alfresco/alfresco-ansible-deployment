@@ -67,7 +67,7 @@ def test_share_is_accesible(host, AnsibleVars):
     output = None
     command = False
     while not command or time.time() < timeout:
-        run_command = host.run("curl -v -k --connect-timeout 5 --location --request GET 'https://{}/share/page/'".format(AnsibleVars['nginx_domain']))
+        run_command = host.run("curl -v -k --connect-timeout 5 --location --request GET 'https://localhost/share/page/'")
         command = run_command.succeeded
         output = run_command.stdout
     assert_that(output,contains_string("2005-2020 Alfresco Software"))
@@ -78,7 +78,7 @@ def test_transformation_stats_is_accesible(host, AnsibleVars):
     output = None
     command = False
     while not command or time.time() < timeout:
-        run_command = host.run("curl -v -k --connect-timeout 5 https://{}/aio/".format(AnsibleVars['nginx_domain']))
+        run_command = host.run("curl -v -k --connect-timeout 5 https://localhost/aio/")
         command = run_command.succeeded
         output = run_command.stdout
     assert_that(output,contains_string("All in One"))
@@ -89,7 +89,7 @@ def test_adw_is_accesible(host, AnsibleVars):
     output = None
     command = False
     while not command or time.time() < timeout:
-        run_command = host.run("curl -v -k --connect-timeout 5 https://{}/".format(AnsibleVars['nginx_domain']))
+        run_command = host.run("curl -v -k --connect-timeout 5 https://localhost/")
         command = run_command.succeeded
         output = run_command.stdout
     assert_that(output,contains_string("Alfresco Digital Workspace"))
@@ -100,7 +100,7 @@ def test_solr_stats_is_accesible(host, AnsibleVars):
     output = None
     command = False
     while not command or time.time() < timeout:
-        run_command = host.run("curl -v -k --connect-timeout 5 --user admin:admin https://{}/alfresco/s/api/solrstats".format(AnsibleVars['nginx_domain']))
+        run_command = host.run("curl -v -k --connect-timeout 5 --user admin:admin https://localhost/alfresco/s/api/solrstats")
         command = run_command.succeeded
         output = run_command.stdout
     assert_that(output,contains_string("queryInfo"))
