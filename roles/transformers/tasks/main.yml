@@ -92,14 +92,6 @@
   until: libreoffice_download is succeeded
   when: loffice_exists.rc != 0
 
-- name: Download libreoffice.txt
-  get_url:
-    url: "{{ LIBREOFFICE_LICENSE_FILE }}"
-    dest: "{{ temp_dir }}/libreoffice.txt"
-    mode: 0444
-    timeout: 600
-  when: loffice_exists.rc != 0
-
 - name: Extract libreoffice-dist-linux.gz
   become: yes
   unarchive:
