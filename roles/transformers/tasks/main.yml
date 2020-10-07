@@ -45,13 +45,13 @@
   until: download_img_libs_dist is succeeded
   when: magick_exists.rc != 0
 
-- name: Download ImageMagick-license.txt
-  get_url:
-    url: "{{ IMAGEMAGICK_LICENSE_FILE }}"
-    dest: "{{ temp_dir }}/ImageMagick-license.txt"
-    mode: 0444
-    timeout: 600
-  when: magick_exists.rc != 0
+# - name: Download ImageMagick-license.txt
+#   get_url:
+#     url: "{{ IMAGEMAGICK_LICENSE_FILE }}"
+#     dest: "{{ temp_dir }}/ImageMagick-license.txt"
+#     mode: 0444
+#     timeout: 600
+#   when: magick_exists.rc != 0
 
 - name: Download imagemagick-epel-dep.rpm
   get_url:
@@ -100,13 +100,13 @@
   until: libreoffice_download is succeeded
   when: loffice_exists.rc != 0
 
-- name: Download libreoffice.txt
-  get_url:
-    url: "{{ LIBREOFFICE_LICENSE_FILE }}"
-    dest: "{{ temp_dir }}/libreoffice.txt"
-    mode: 0444
-    timeout: 600
-  when: loffice_exists.rc != 0
+# - name: Download libreoffice.txt
+#   get_url:
+#     url: "{{ LIBREOFFICE_LICENSE_FILE }}"
+#     dest: "{{ temp_dir }}/libreoffice.txt"
+#     mode: 0444
+#     timeout: 600
+#   when: loffice_exists.rc != 0
 
 - name: Extract libreoffice-dist-linux.gz
   become: yes
@@ -135,18 +135,32 @@
       register: alfresco_pdf_renderer_tgz_exists
 
 - name: Download alfresco-pdf-renderer-linux.tgz
-  become: true
-  become_user: "{{ username }}"
-  get_url:
-    url: "{{ ALFRESCO_PDF_RENDERER_LIB_RPM_URL }}"
-    dest: "{{ content_folder }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-    timeout: 600
-  register: download_pdf_renderer
-  until: download_pdf_renderer is succeeded
-  when: not alfresco_pdf_renderer_tgz_exists.stat.exists and not alfresco_pdf_renderer_exists.stat.exists
+  block:
+    - name: Check if alfresco-pdf-renderer folder exists
+      stat:
+        path: "{{ content_folder }}/alfresco-pdf-renderer/"
+      register: pdf_renderer_folder
+    - name: Create alfresco-pdf-renderer folder
+      file:
+        path: "{{ content_folder }}/alfresco-pdf-renderer/"
+        state: directory
+        mode: 'u=rwx,g=rwx,o=rx'
+      become: true
+      become_user: "{{ username }}"
+      when: not pdf_renderer_folder.stat.exists
+    - name: Download alfresco-pdf-renderer-linux.tgz
+      become: true
+      become_user: "{{ username }}"
+      get_url:
+        url: "{{ ALFRESCO_PDF_RENDERER_LIB_RPM_URL }}"
+        dest: "{{ content_folder }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+        url_username: "{{ nexus_user }}"
+        url_password: "{{ nexus_password }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+        timeout: 600
+      register: download_pdf_renderer
+      until: download_pdf_renderer is succeeded
+      when: not alfresco_pdf_renderer_tgz_exists.stat.exists and not alfresco_pdf_renderer_exists.stat.exists
 
 - name: Extract alfresco-pdf-renderer-linux.tgz
   become: true
@@ -215,21 +229,28 @@
     insertafter: EOF
     line: "export CATALINA_OPTS=\"${CATALINA_OPTS} -Dats-tengine-aio.host=${ATS_TENGINE_AIO_HOST}\""
 
-- name: Add properties to alfresco-global
-  become: true
-  become_user: "{{ username }}"
-  blockinfile:
-    path: "{{ settings_folder }}/classpath/alfresco-global.properties"
-    marker: "# {mark} ATS global properties"
-    block: |
-      local.transform.service.enabled=true
-      localTransform.core-aio.url=http://{{ ats_tengine_aio_host }}:8090
-      legacy.transform.service.enabled=true
-      alfresco-pdf-renderer.url=${localTransform.core-aio.url}
-      jodconverter.url=${localTransform.core-aio.url}
-      img.url=${localTransform.core-aio.url}
-      tika.url=${localTransform.core-aio.url}
-      transform.misc.url=${localTransform.core-aio.url}
+# - name: Add properties to alfresco-global
+#   block:
+#     - name: Check if alfresco-global.properties exists
+#       stat: 
+#         path: "{{ settings_folder }}/classpath/alfresco-global.properties"
+#       register: alfresco_global
+#     - name: Add properties
+#       become: true
+#       become_user: "{{ username }}"
+#       blockinfile:
+#         path: "{{ settings_folder }}/classpath/alfresco-global.properties"
+#         marker: "# {mark} ATS global properties"
+#         block: |
+#           local.transform.service.enabled=true
+#           localTransform.core-aio.url=http://{{ ats_tengine_aio_host }}:8090
+#           legacy.transform.service.enabled=true
+#           alfresco-pdf-renderer.url=${localTransform.core-aio.url}
+#           jodconverter.url=${localTransform.core-aio.url}
+#           img.url=${localTransform.core-aio.url}
+#           tika.url=${localTransform.core-aio.url}
+#           transform.misc.url=${localTransform.core-aio.url}
+#       when: not alfresco_global.stat.exists
 
 - name: Check if AIO script exists
   stat:
