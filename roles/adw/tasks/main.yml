@@ -2,7 +2,7 @@
 # tasks file for adw
 - import_tasks: nginx.yml
 
-- name: check if "{{ nginx_folder }}/alfresco-digital-workspace-{{ adwVersion }}.zip" file exists
+- name: check if "{{ temp_dir }}/alfresco-digital-workspace-{{ adwVersion }}.zip" file exists
   stat:
     path:  "{{ temp_dir }}/alfresco-digital-workspace-{{ adwVersion }}.zip"
   register: adw_zip
@@ -39,4 +39,4 @@
     src: "{{ temp_dir }}/alfresco-digital-workspace-{{ adwVersion }}.zip"
     dest: "{{ nginx_folder }}/digital-workspace/"
     remote_src: yes
-    creates: "{{ nginx_folder }}/app.config.json"
+    creates: "{{ nginx_folder }}/digital-workspace/app.config.json"
