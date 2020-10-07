@@ -14,7 +14,7 @@
     mode: '0755'
   when: not adw_zip.stat.exists
 
-  - name: Create "{{ nginx_folder }}/digital-workspace/" dir
+- name: Create "{{ nginx_folder }}/digital-workspace/" dir
   file:
     path: "{{ nginx_folder }}/digital-workspace/"
     state: directory
