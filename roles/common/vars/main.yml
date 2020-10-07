@@ -1,6 +1,6 @@
 ---
 # vars file for common
-nginx_domain: "alfresco.org"
+#nginx_domain: ""
 
 nginx_vhost_path: /etc/nginx/conf.d
 nexus_user: "{{ lookup('env', 'NEXUS_USERNAME') }}"
