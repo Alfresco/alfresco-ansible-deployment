@@ -26,7 +26,7 @@
     owner: root
     group: root
     mode: 0644
-  notify: reload nginx
+  notify: restart nginx
 
 - name: Remove legacy vhosts.conf file.
   file:
