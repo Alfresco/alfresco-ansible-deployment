@@ -39,7 +39,7 @@
     remote_src: yes
     creates: "{{ nginx_folder }}/digital-workspace/app.config.json"
 
-- include_task: nginx.yml
+- include_tasks: nginx.yml
 
 - name: Add managed vhost config files.
   template:
