@@ -1,15 +1,4 @@
 ---
-postgres_client_auth:
-  - type: local
-    database: "alfresco"
-    user: "alfresco"
-    address:
-    method: trust
-  - type: host
-    database: all
-    user: all
-    address: 127.0.0.1/32
-    method: trust
 postgres_client_config:
   - database: "alfresco"
     user: "alfresco"

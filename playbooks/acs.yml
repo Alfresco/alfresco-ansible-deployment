@@ -8,7 +8,7 @@
   #   - role: '../roles/adw'
   #   - role: '../roles/search'
   #   - role: '../roles/transformers'
-  roles: 
+  roles:
     - role: '../roles/repository'
     - role: '../roles/nginx'
     - role: '../roles/adw'

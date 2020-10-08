@@ -38,6 +38,16 @@
   with_items: "{{ postgres_config }}"
   notify: Restart postgresql
 
+- name: Configure postgresql client auth
+  lineinfile:
+    path: "{{ postgresql_conf_path[postgres_major_version] }}/pg_hba.conf"
+    insertbefore: BOF
+#    regexp: ^{{ item['type'] }}\s+{{ item['database'] }}\s+{{ item['user'] }}\s+{{ item['address'] }}\s+{{ item['method'] }}
+    line: "{{ item['type'] }}\t{{ item['database'] }}\t{{ item['user'] }}\t{{ item['address'] }}\t{{ item['method'] }}"
+    state: "{{ item['state'] | default(omit) }}"
+    backup: true
+  with_items: "{{ postgres_client_auth }}"
+
 - name: Ensure postgresql service is started and enabled on boot
   systemd:
     name: "{{ postgresql_service[postgres_major_version] }}"
