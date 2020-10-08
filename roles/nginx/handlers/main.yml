@@ -4,7 +4,7 @@
   service: name=nginx state=restarted
   become: true
   become_user: root
-  
+
 - name: validate nginx configuration
   command: nginx -t -c /etc/nginx/nginx.conf
   changed_when: false
