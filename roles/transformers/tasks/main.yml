@@ -45,7 +45,6 @@
   until: download_img_libs_dist is succeeded
   when: magick_exists.rc != 0
 
-<<<<<<< HEAD
 # - name: Download ImageMagick-license.txt
 #   get_url:
 #     url: "{{ IMAGEMAGICK_LICENSE_FILE }}"
@@ -54,8 +53,6 @@
 #     timeout: 600
 #   when: magick_exists.rc != 0
 
-=======
->>>>>>> master
 - name: Download imagemagick-epel-dep.rpm
   get_url:
     url: "{{ IMAGEMAGICK_DEP_RPM_URL }}"
@@ -103,7 +100,6 @@
   until: libreoffice_download is succeeded
   when: loffice_exists.rc != 0
 
-<<<<<<< HEAD
 # - name: Download libreoffice.txt
 #   get_url:
 #     url: "{{ LIBREOFFICE_LICENSE_FILE }}"
@@ -112,8 +108,6 @@
 #     timeout: 600
 #   when: loffice_exists.rc != 0
 
-=======
->>>>>>> master
 - name: Extract libreoffice-dist-linux.gz
   become: yes
   unarchive:
