@@ -27,7 +27,7 @@
     name: nginx
     state: started
     enabled: true
-  notify: reload nginx
+  notify: restart nginx
 
 - name: Add managed vhost config files.
   template:
