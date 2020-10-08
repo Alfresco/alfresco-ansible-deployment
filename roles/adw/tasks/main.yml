@@ -40,20 +40,3 @@
     creates: "{{ nginx_folder }}/digital-workspace/app.config.json"
 
 - include_tasks: nginx.yml
-
-- name: Flush handlers
-  meta: flush_handlers
-
-- name: Flush handlers2
-  shell: systemctl status nginx.service
-  register: shell_result
-
-- debug:
-    var: shell_result.stdout_lines
-
-- name: Flush handlers3
-  shell: journalctl -xe
-  register: shell2_result
-
-- debug:
-    var: shell2_result.stdout_lines
