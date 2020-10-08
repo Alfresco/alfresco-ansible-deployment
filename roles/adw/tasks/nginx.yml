@@ -28,3 +28,13 @@
     state: started
     enabled: true
   notify: reload nginx
+
+- name: Add managed vhost config files.
+  template:
+    src: alfresco_adw.conf
+    dest: "{{ nginx_vhost_path }}/alfresco_adw.conf"
+    force: true
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
