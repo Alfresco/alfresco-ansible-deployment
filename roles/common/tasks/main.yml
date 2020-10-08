@@ -105,12 +105,3 @@
     recurse: yes
     mode: 'u=rwx,g=rwx,o=rx'
   when: not logs_exists.stat.exists
-
-- name: Disable SELinux at next reboot
-  selinux:
-    state: disabled
-
-- name: Set SELinux in permissive mode until the machine is rebooted
-  command: setenforce 0
-  ignore_errors: true
-  changed_when: false
