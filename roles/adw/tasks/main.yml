@@ -49,7 +49,7 @@
     owner: root
     group: root
     mode: 0644
-#  notify: reload nginx
+  notify: reload nginx
 
 - name: Flush handlers
   meta: flush_handlers
