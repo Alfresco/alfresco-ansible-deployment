@@ -127,22 +127,22 @@
   block:
     - name: Check if alfresco-pdf-renderer exists
       stat:
-        path: "{{ content_folder }}/alfresco-pdf-renderer/alfresco-pdf-renderer"
+        path: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer"
       register: alfresco_pdf_renderer_exists
     - name: Check if alfresco-pdf-renderer archive exists
       stat:
-        path: "{{ content_folder }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+        path: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
       register: alfresco_pdf_renderer_tgz_exists
 
 - name: Download alfresco-pdf-renderer-linux.tgz
   block:
     - name: Check if alfresco-pdf-renderer folder exists
       stat:
-        path: "{{ content_folder }}/alfresco-pdf-renderer/"
+        path: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/"
       register: pdf_renderer_folder
     - name: Create alfresco-pdf-renderer folder
       file:
-        path: "{{ content_folder }}/alfresco-pdf-renderer/"
+        path: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/"
         state: directory
         mode: 'u=rwx,g=rwx,o=rx'
       become: true
@@ -153,7 +153,7 @@
       become_user: "{{ username }}"
       get_url:
         url: "{{ ALFRESCO_PDF_RENDERER_LIB_RPM_URL }}"
-        dest: "{{ content_folder }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+        dest: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
         mode: 'u=rwx,g=rwx,o=rx'
@@ -166,14 +166,14 @@
   become: true
   become_user: "{{ username }}"
   unarchive:
-    src: "{{ content_folder }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
-    dest: "{{ content_folder }}/alfresco-pdf-renderer/"
+    src: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+    dest: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/"
     remote_src: yes
   when: not alfresco_pdf_renderer_exists.stat.exists
 
 - name: Remove alfresco-pdf-renderer-linux.tgz
   file:
-    path: "{{ content_folder }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+    path: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
     state: absent
 
 - name: Download alfresco-transform-core-aio-boot-{{ transform.version }}.jar
@@ -321,4 +321,4 @@
     name: alfresco-transform.service
     state: started
     enabled: true
-  notify: alfresco-content-restart
+  # notify: alfresco-content-restart
