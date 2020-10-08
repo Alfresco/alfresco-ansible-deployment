@@ -54,13 +54,15 @@
 - name: Flush handlers
   meta: flush_handlers
 
-- shell: systemctl status nginx.service
+- name: Flush handlers2
+  shell: systemctl status nginx.service
   register: shell_result
 
 - debug:
     var: shell_result.stdout_lines
 
-- shell: journalctl -xe
+- name: Flush handlers3
+  shell: journalctl -xe
   register: shell2_result
 
 - debug:

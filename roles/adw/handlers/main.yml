@@ -6,4 +6,5 @@
 
 - name: restart nginx
   service: name=nginx state=restarted
-  sudo: yes
+  become: true
+  become_user: root
