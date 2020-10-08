@@ -21,3 +21,10 @@
   file:
     path: "{{ nginx_vhost_path }}/vhosts.conf"
     state: absent
+
+- name: Ensure nginx service is running as configured.
+  service:
+    name: nginx
+    state: started
+    enabled: true
+  notify: reload nginx    
