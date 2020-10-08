@@ -8,4 +8,4 @@
   changed_when: false
 
 - name: reload nginx
-  service: name=nginx state=reloaded
+  service: name=nginx state=restarted
