@@ -58,10 +58,10 @@
   register: shell_result
 
 - debug:
-    var: shell_result.stdout_lines  
+    var: shell_result.stdout_lines
 
 - shell: journalctl -xe
   register: shell2_result
 
 - debug:
-    var: shell2_result.stdout_lines  
+    var: shell2_result.stdout_lines
