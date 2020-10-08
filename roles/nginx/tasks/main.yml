@@ -1,16 +1,5 @@
 ---
-# Setup/install tasks.
-- name: Check if dns entry is defined in /etc/hosts for testing
-  command:
-    cmd: "grep -q {{ nginx_domain }} /etc/hosts"
-  register: domain_in_hosts
-  changed_when: domain_in_hosts.rc != 0
-  failed_when: false
-
-- name: add dns for domain {{ nginx_domain }} point to localhost
-  become: yes
-  shell: 'echo "127.0.0.1 {{ nginx_domain }}" > /etc/hosts'
-  when: domain_in_hosts.rc != 0
+# Setup/install tasks .
 
 - name: Ensure nginx is installed.
   yum:
