@@ -1,7 +1,5 @@
 ---
 # tasks file for adw
-- import_tasks: nginx.yml
-
 - name: check if "{{ temp_dir }}/alfresco-digital-workspace-{{ adwVersion }}.zip" file exists
   stat:
     path:  "{{ temp_dir }}/alfresco-digital-workspace-{{ adwVersion }}.zip"
@@ -40,3 +38,15 @@
     dest: "{{ nginx_folder }}/digital-workspace/"
     remote_src: yes
     creates: "{{ nginx_folder }}/digital-workspace/app.config.json"
+
+- include_task: nginx.yml
+
+- name: Add managed vhost config files.
+  template:
+    src: alfresco_adw.conf
+    dest: "{{ nginx_vhost_path }}/alfresco_adw.conf"
+    force: true
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
