@@ -14,5 +14,5 @@ def AnsibleVars(host):
 
 def test_digital_workspace_200(host, AnsibleVars):
     "Check that /digital-workspace context is available and returns a HTTP 200 status code"
-    cmd = host.run("curl -iL --user admin:admin http://{}:8880/digital-workspace/".format(AnsibleVars["adw_host"]))
+    cmd = host.run("curl -iL --user admin:admin http://{}:8880/".format(AnsibleVars["adw_host"]))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
