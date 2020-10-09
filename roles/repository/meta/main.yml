@@ -12,6 +12,8 @@ galaxy_info:
   galaxy_tags: []
 allow_duplicates: false
 dependencies:
+- postgres
 - activemq
 - tomcat
-- postgres
+- transformers
+- search

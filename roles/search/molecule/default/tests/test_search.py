@@ -1,5 +1,4 @@
 """Solr Tests"""
-import time
 import pytest
 from hamcrest import contains_string, assert_that
 
@@ -32,12 +31,8 @@ def test_solr_service_running_and_enabled(host, svc):
     assert_that(solr.is_enabled)
 
 def test_solr_stats_is_accesible(host, get_ansible_vars):
-    """Check solrstats service"""
-    timeout = time.time() + 360
-    output = None
-    command = False
-    while not command or time.time() < timeout:
-        run_command = host.run("curl -v -k --connect-timeout 5 --user admin:admin http://{}:8080/alfresco/s/api/solrstats".format(get_ansible_vars["repo_host"]))
-        command = run_command.succeeded
-        output = run_command.stdout
-    assert_that(output,contains_string("queryInfo"))
+    """Check that SOLR creates the alfresco and archive cores"""
+    alfresco_core_command = host.run("curl -iL http://{}:8983/solr/#/~cores/alfresco".format(get_ansible_vars["solr_host"]))
+    archive_core_command = host.run("curl -iL http://{}:8983/solr/#/~cores/archive".format(get_ansible_vars["solr_host"]))
+    assert_that(alfresco_core_command.stdout, contains_string("HTTP/1.1 200"))
+    assert_that(archive_core_command.stdout, contains_string("HTTP/1.1 200"))

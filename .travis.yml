@@ -39,7 +39,11 @@ jobs:
     - stage: Verification
       name: Search Role Verification
       script:
-        - cd roles/search/ && molecule test     
+        - cd roles/search/
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy   
     - stage: Verification
       name: Common Role Verification
       script:

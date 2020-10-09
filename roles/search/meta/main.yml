@@ -12,4 +12,5 @@ galaxy_info:
 
 allow_duplicates: false
 dependencies:
-- repository
+- common
+- java
