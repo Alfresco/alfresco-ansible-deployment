@@ -2,3 +2,4 @@
 nginx_package_name: "nginx"
 nginx_folder: "/usr/share/nginx/html"
 temp_dir: "/tmp/digital_workspace"
+request_uri: "digital-workspace"
