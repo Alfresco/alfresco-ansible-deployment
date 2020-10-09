@@ -1,5 +1,4 @@
 """Solr Tests"""
-import time
 import pytest
 from hamcrest import contains_string, assert_that
 
