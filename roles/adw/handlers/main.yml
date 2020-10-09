@@ -1,11 +1,13 @@
 ---
 # handlers file for adw
-- name: restart nginx
-  service: name=nginx state=restarted
-
 - name: validate nginx configuration
   command: nginx -t -c /etc/nginx/nginx.conf
   changed_when: false
-
 - name: reload nginx
   service: name=nginx state=reloaded
+  become: true
+  become_user: root
+- name: restart nginx
+  service: name=nginx state=restarted
+  become: true
+  become_user: root
