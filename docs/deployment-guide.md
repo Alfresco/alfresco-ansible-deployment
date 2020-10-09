@@ -1,6 +1,6 @@
 # Deployment Guide
 
-This page describes how to deploy the Alfresco Content Services (ACS) using Ansible.
+This page describes how to deploy Alfresco Content Services (ACS) 6.2.x using Ansible.
 
 The system deployed is shown in the diagram below.
 
@@ -11,7 +11,7 @@ The system deployed is shown in the diagram below.
 * A CentOS machine to deploy to, can be:
   * Bare Metal
   * Virtual Machine
-  * EC2 instance (ami-0affd4508a5d2481b in us-east-1)
+  * EC2 instance (t3.large using ami-0affd4508a5d2481b in us-east-1)
 * SELinux is disabled
 
   This can be achieved by running the following command:
@@ -35,12 +35,10 @@ The system deployed is shown in the diagram below.
     sudo yum install -y ansible
     ```
 
-3. Clone the repository to the machine you wish to deploy to
+3. Clone the repository to the machine you wish to deploy to (using the latest stable tag):
 
     ```bash
-    git clone https://github.com/Alfresco/alfresco-ansible-deployment.git
-    # If you are using ssh
-    # git clone git@github.com:Alfresco/alfresco-ansible-deployment.git
+    git clone --branch v1.0-A1 https://github.com/Alfresco/alfresco-ansible-deployment.git
     ```
 
 4. Navigate into the `alfresco-ansible-deployment` folder
@@ -84,7 +82,8 @@ You will find the Alfresco specific files in the following locations:
 
 ## Known Issues
 
-* The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Check on war download async task (283 retries left)." appearing many times as the WAR file downloads.
+* The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Check on war download async task (nnn retries left)." appearing many times as the WAR file downloads
+* The Tomcat access log is enabled by default and will grow in size quite quickly
 
 ## Troubleshooting
 
