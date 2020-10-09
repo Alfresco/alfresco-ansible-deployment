@@ -91,7 +91,7 @@ def test_adw_is_accesible(host, AnsibleVars):
     output = None
     command = False
     while not command or time.time() < timeout:
-        run_command = host.run("curl -v -k --connect-timeout 5 http://{}/".format(AnsibleVars['repo_host']))
+        run_command = host.run("curl -v -k --connect-timeout 5 http://{}/digital-workspace/".format(AnsibleVars['repo_host']))
         command = run_command.succeeded
         output = run_command.stdout
     assert_that(output,contains_string("Alfresco Digital Workspace"))

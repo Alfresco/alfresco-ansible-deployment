@@ -7,7 +7,8 @@ driver:
 
 platforms:
   - name: "molecule_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}"
-    image: ami-0affd4508a5d2481b
+#    image: ami-0affd4508a5d2481b
+    image: ami-0667c462e50c0e905
     instance_type: t2.xlarge
     region: us-east-1
     vpc_subnet_id: subnet-06ffe524598660d99
