@@ -12,6 +12,13 @@ The system deployed is shown in the diagram below.
   * Bare Metal
   * Virtual Machine
   * EC2 instance (ami-0affd4508a5d2481b in us-east-1)
+* SELinux is disabled
+
+  This can be achieved by running the following command:
+
+  ```bash
+  sudo setenforce 0;
+  ```
 
 ## Deploy
 
@@ -28,7 +35,7 @@ The system deployed is shown in the diagram below.
     sudo yum install -y ansible
     ```
 
-3. Clone the repository to the machine you wish to deploy to (How will we distribute the playbooks?)
+3. Clone the repository to the machine you wish to deploy to
 
     ```bash
     git clone https://github.com/Alfresco/alfresco-ansible-deployment.git
@@ -57,8 +64,11 @@ The system deployed is shown in the diagram below.
     ansible-playbook -i inventory playbooks/acs.yml
     ```
 
+    > NOTE: The playbook takes around 30 minutes to complete.
+
 8. Access the system using the following URLs using a browser on the same machine:
-    * Digital Workspace: ```/```
+
+    * Digital Workspace: ```/digital-workspace```
     * Share: ```/share```
     * Repository: ```/alfresco```
 
@@ -71,6 +81,10 @@ You will find the Alfresco specific files in the following locations:
 | ```/etc/opt/alfresco``` | Configuration |
 | ```/var/opt/alfresco``` | Data |
 | ```/var/log/alfresco``` | Logs |
+
+## Known Issues
+
+* The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Check on war download async task (283 retries left)." appearing many times as the WAR file downloads.
 
 ## Troubleshooting
 
