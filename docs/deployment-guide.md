@@ -38,7 +38,7 @@ The system deployed is shown in the diagram below.
 3. Clone the repository to the machine you wish to deploy to (using the latest stable tag):
 
     ```bash
-    git clone --branch v1.0-A1 https://github.com/Alfresco/alfresco-ansible-deployment.git
+    git clone --branch v1.0-A2 https://github.com/Alfresco/alfresco-ansible-deployment.git
     ```
 
 4. Navigate into the `alfresco-ansible-deployment` folder
@@ -66,7 +66,7 @@ The system deployed is shown in the diagram below.
 
 8. Access the system using the following URLs using a browser on the same machine:
 
-    * Digital Workspace: ```/digital-workspace```
+    * Digital Workspace: ```/workspace```
     * Share: ```/share```
     * Repository: ```/alfresco```
 
