@@ -1,16 +1,63 @@
 ---
-- name: Repository Role
-  hosts: all
+- name: Database Role
+  hosts: database
   become: true
   become_method: sudo
-  # roles:
-  #   - role: '../roles/nginx'
-  #   - role: '../roles/adw'
-  #   - role: '../roles/search'
-  #   - role: '../roles/transformers'
   roles:
-    - role: '../roles/repository'
-    - role: '../roles/nginx'
-    - role: '../roles/adw'
+    - role: '../roles/postgres'
+  tags:
+    - database
+
+- name: MQTT Role
+  hosts: mqtt
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/activemq'
+  tags:
+    - mqtt
+
+- name: Transformers Role
+  hosts: transformers
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/transformers'
+  tags:
+    - transformers
+
+- name: Alfresco Search Role
+  hosts: search
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/search'
   tags:
     - search
+
+- name: Alfresco Repository Role
+  hosts: repository
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/repository'
+  tags:
+    - repository
+
+- name: Nginx Role
+  hosts: nginx
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/nginx'
+  tags:
+    - nginx
+
+- name: Alfresco Digital Workspace Role
+  hosts: adw
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/adw'
+  tags:
+    - adw
