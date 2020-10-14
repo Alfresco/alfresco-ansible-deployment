@@ -202,10 +202,9 @@
         dest: /etc/systemd/system/tomcat.service
         owner: root
         group: root
-    # notify: tomcat-restart
     when: install_check.rc != 0 or tomcat_version not in install_check.stderr
 
-  - name: Ensure tomcat service is started and enabled on boot
-    systemd:
-      name: tomcat.service
-      enabled: true
+  # - name: Ensure tomcat service is enabled on boot
+  #   systemd:
+  #     name: tomcat.service
+  #     enabled: true
