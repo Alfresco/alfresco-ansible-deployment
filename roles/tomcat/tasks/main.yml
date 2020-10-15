@@ -204,7 +204,8 @@
         group: root
     when: install_check.rc != 0 or tomcat_version not in install_check.stderr
 
-  # - name: Ensure tomcat service is enabled on boot
-  #   systemd:
-  #     name: tomcat.service
-  #     enabled: true
+  - name: Ensure tomcat service is enabled on boot
+    systemd:
+      name: tomcat.service
+      state: stopped
+      enabled: true

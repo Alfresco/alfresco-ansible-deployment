@@ -330,7 +330,7 @@
   delay: 1
   retries: 300
 
-- name: Add tomcat.service
+- name: Add alfresco-content.service
   become: true
   become_user: root
   template:
@@ -359,11 +359,10 @@
     regexp: '<PostResources base='
     line: '<PostResources base="/opt/alfresco/modules/acs-share"'
 
-# - name: Ensure tomcat restarted
-#   systemd:
-#     name: tomcat.service
-#     state: started
-#     enabled: true
+- name: Ensure tomcat restarted
+  systemd:
+    name: tomcat.service
+    state: started
 
 - name: Ensure alfresco content service enabled on boot
   systemd:
