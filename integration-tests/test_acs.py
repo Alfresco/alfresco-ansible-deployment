@@ -74,6 +74,17 @@ def test_share_is_accesible(host, AnsibleVars):
         output = run_command.stdout
     assert_that(output,contains_string("2005-2020 Alfresco Software"))
 
+def test_repository_root_is_accesible(host, AnsibleVars):
+    """Check repository root service"""
+    timeout = time.time() + 10
+    output = None
+    command = False
+    while not command or time.time() < timeout:
+        run_command = host.run("curl -v -k --connect-timeout 5 --location --request GET 'http://{}/'".format(AnsibleVars['repo_host']))
+        command = run_command.succeeded
+        output = run_command.stdout
+    assert_that(output,contains_string("Alfresco Repository"))
+
 def test_transformation_stats_is_accesible(host, AnsibleVars):
     """Check aio console """
     timeout = time.time() + 10
