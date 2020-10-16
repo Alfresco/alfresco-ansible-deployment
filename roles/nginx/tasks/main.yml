@@ -20,13 +20,30 @@
   notify:
     - reload nginx
 
-- name: Set httpd_can_network_connect flag on and keep it persistent across reboots
+- name: Check firewalld is installed
+  systemd:
+    name: firewalld
+  register: firewalld_svc
+
+- name: Allow required network flows
+  firewalld:
+    port: "{{ item.listen | default('80') }}/tcp"
+    permanent: yes
+    state: enabled
+    immediate: yes
+  with_items: "{{ nginx_vhosts }}"
+  when: firewalld_svc.status.UnitFileState is defined
+
+- name: Allow Nginx to run in SELinux context
   become: true
   seboolean:
-    name: httpd_can_network_connect
+    name: "{{ item }}"
     state: yes
     persistent: yes
   when: ansible_selinux.status == "enabled"
+  with_items:
+    - httpd_can_network_connect
+    - nis_enabled
 
 - name: Ensure nginx service is running as configured.
   service:
