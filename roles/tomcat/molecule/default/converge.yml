@@ -6,13 +6,8 @@
       include_role:
         name: "tomcat"
 
-    # - name: Check if tomcat is started
-    #   service_facts:
-    #   register: services_state
-
     - name: Ensure tomcat service is started and enabled on boot
       systemd:
         name: tomcat.service
         state: started
       changed_when: false
-      # when: services_state.ansible_facts.services.tomcat.service.state == "stopped"
