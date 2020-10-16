@@ -8,10 +8,11 @@ The system deployed is shown in the diagram below.
 
 ## Prerequisites
 
-* A CentOS machine to deploy to, can be:
+* A CentOS 7 machine to deploy to, can be:
   * Bare Metal
   * Virtual Machine
   * EC2 instance (t3.large using ami-0affd4508a5d2481b in us-east-1)
+* User running the playbook must have the ability to `sudo`
 * SELinux is disabled
 
   This can be achieved by running the following command:
@@ -35,28 +36,33 @@ The system deployed is shown in the diagram below.
     sudo yum install -y ansible
     ```
 
-3. Clone the repository to the machine you wish to deploy to (using the latest stable tag):
+3. Clone the repository to the machine you wish to deploy to and switch to the stable tag:
 
     ```bash
-    git clone --branch v1.0-A2 https://github.com/Alfresco/alfresco-ansible-deployment.git
+    git clone https://github.com/Alfresco/alfresco-ansible-deployment.git
+    cd alfresco-ansible-deployment
+    git checkout tags/v1.0-A2
     ```
 
-4. Navigate into the `alfresco-ansible-deployment` folder
-5. Create a file called `inventory` with the following contents:
+    > NOTE: As we protect the `Alfresco` organization with SAML SSO you will first have to authorize your SSH key or personal access token via [GitHub](https://github.com).
+
+4. Create a file called `inventory` with the following contents in the `alfresco-ansible-deployment` folder:
 
     ```text
     [local]
     control ansible_connection=local
     ```
 
-6. Create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
+    > NOTE: This step won't be necessary in the future.
+
+5. Create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
 
     ```bash
-    export NEXUS_USERNAME=<your-username>
-    export NEXUS_PASSWORD=<your-password>
+    export NEXUS_USERNAME="<your-username>"
+    export NEXUS_PASSWORD="<your-password>"
     ```
 
-7. Execute the playbook using the following command:
+6. Execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
 
     ```bash
     ansible-playbook -i inventory playbooks/acs.yml
@@ -64,7 +70,7 @@ The system deployed is shown in the diagram below.
 
     > NOTE: The playbook takes around 30 minutes to complete.
 
-8. Access the system using the following URLs using a browser on the same machine:
+7. Access the system using the following URLs using a browser on the same machine:
 
     * Digital Workspace: ```/workspace```
     * Share: ```/share```
@@ -82,8 +88,10 @@ You will find the Alfresco specific files in the following locations:
 
 ## Known Issues
 
+* The playbook is failing on CentOS 8
 * The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Check on war download async task (nnn retries left)." appearing many times as the WAR file downloads
 * The Tomcat access log is enabled by default and will grow in size quite quickly
+* The playbook is not fully idempotent so may cause issues if you make changes and run many times
 
 ## Troubleshooting
 
