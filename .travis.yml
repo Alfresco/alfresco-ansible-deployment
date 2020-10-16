@@ -10,12 +10,12 @@ services:
   - docker
 
 before_install:
-  - pip install ansible==2.9.13 molecule ansible-lint PyHamcrest pylint testinfra 
+  - pip install ansible==2.9.13 molecule ansible-lint PyHamcrest pylint testinfra 'molecule[docker]'
 
 env:
   - MOLECULE_NO_LOG=false
 
-install: pip install 'molecule[docker]'
+# install: pip install 'molecule[docker]'
 
 stages:
   - name: Linters
