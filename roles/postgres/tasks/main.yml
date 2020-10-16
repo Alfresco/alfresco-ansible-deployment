@@ -26,7 +26,6 @@
     regexp: "^listen_addresses = '{{ postgres_listen_addresses }}'"
     insertafter: "^#listen_addresses = 'localhost'"
     line: "listen_addresses = '{{ postgres_listen_addresses }}'"
-  # notify: Restart postgresql
 
 - name: Custom postgresql Configuration
   lineinfile:
@@ -36,7 +35,6 @@
     state: "{{ item['state'] | default(omit) }}"
     backup: true
   with_items: "{{ postgres_config }}"
-  # notify: Restart postgresql
 
 - name: Configure postgresql client auth
   lineinfile:
