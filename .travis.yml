@@ -10,7 +10,7 @@ services:
   - docker
 
 before_install:
-  - pip install ansible==2.9.13 molecule ansible-lint PyHamcrest pylint testinfra 
+  - pip install ansible==2.9.13 molecule==3.0.8 ansible-lint PyHamcrest pylint testinfra
 
 env:
   - MOLECULE_NO_LOG=false
@@ -39,6 +39,7 @@ jobs:
     - stage: Verification
       name: Search Role Verification
       script:
+        - molecule --version
         - cd roles/search/
         - molecule converge
         - sleep 1m
@@ -77,7 +78,7 @@ jobs:
       script:
         - cd roles/transformers
         - molecule converge
-        - sleep 5m
+        - sleep 1m
         - molecule verify
         - molecule destroy
     - stage: Verification
