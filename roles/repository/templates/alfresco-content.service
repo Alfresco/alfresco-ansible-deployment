@@ -1,6 +1,6 @@
 [Unit]
 Description=Alfresco Content Services
-Requires=activemq.service tomcat.service
+Requires=tomcat.service
 
 [Service]
 Type=oneshot

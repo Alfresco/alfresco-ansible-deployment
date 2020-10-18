@@ -4,12 +4,12 @@ all:
     postgres:
       hosts:
        postgres1:
-          ansible_host: x.x.x.x
+          ansible_host: 3.236.28.0
           ansible_user: centos
     repository:
       hosts:
         repository1:
-          ansible_host: y.y.y.y
+          ansible_host: 18.207.252.102
           ansible_user: centos
     connect_database:
       children:

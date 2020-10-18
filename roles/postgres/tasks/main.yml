@@ -48,15 +48,15 @@
     backup: true
   with_items: "{{ postgres_client_auth }}"
 
-- name: Change "postgres" pass
-  become: true
-  become_user: postgres
-  postgresql_user:
-    name: "postgres"
-    password: "{{ postgres_pass }}"
-
 - name: Ensure postgresql service is started and enabled on boot
   systemd:
     name: "{{ postgresql_service[postgres_major_version] }}"
     state: started
     enabled: true
+    
+- name: Change "postgres" pass
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: "postgres"
+    password: "{{ postgres_pass }}"    
