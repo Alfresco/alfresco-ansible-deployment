@@ -1,0 +1,17 @@
+---
+all:
+  children:
+    postgres:
+      hosts:
+       postgres1:
+          ansible_host: x.x.x.x
+          ansible_user: centos
+    repository:
+      hosts:
+        repository1:
+          ansible_host: y.y.y.y
+          ansible_user: centos
+    connect_database:
+      children:
+        repository:
+        postgres:

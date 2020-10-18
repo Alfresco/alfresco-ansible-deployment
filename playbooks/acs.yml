@@ -1,16 +1,63 @@
 ---
-- name: Repository Role
-  hosts: all
+- name: PostgreSQL Role
+  hosts: postgres
   become: true
   become_method: sudo
-  # roles:
-  #   - role: '../roles/nginx'
-  #   - role: '../roles/adw'
-  #   - role: '../roles/search'
-  #   - role: '../roles/transformers'
   roles:
-    - role: '../roles/repository'
-    - role: '../roles/nginx'
-    - role: '../roles/adw'
+    - role: '../roles/postgres'
+  tags:
+    - postgres
+
+- name: ActiveMQ Role
+  hosts: activemq
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/activemq'
+  tags:
+    - activemq
+
+- name: Search Role
+  hosts: search
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/search'
   tags:
     - search
+
+- name: Repository Role
+  hosts: repository
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/repository'
+  tags:
+    - repository
+
+- name: Transformers Role
+  hosts: localhost
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/transformers'
+  tags:
+    - transformers
+
+- name: Nginx Role
+  hosts: localhost
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/nginx'
+  tags:
+    - nginx
+
+- name: ADW Role
+  hosts: localhost
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/adw'
+  tags:
+    - adw
