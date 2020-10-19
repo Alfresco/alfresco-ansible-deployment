@@ -4,13 +4,38 @@ all:
     postgres:
       hosts:
        postgres1:
-          ansible_host: 3.236.28.0
+          ansible_host: 3.236.143.174
           ansible_user: centos
     repository:
       hosts:
         repository1:
-          ansible_host: 18.207.252.102
+          ansible_host: 34.204.190.82
           ansible_user: centos
+    activemq:
+      hosts:
+        activemq1:
+          ansible_host: 3.237.16.4
+          ansible_user: centos
+    search:
+      hosts:
+        search1:
+          ansible_host: 3.209.82.14
+          ansible_user: centos
+    webservers:
+      hosts:
+        nginx1:
+          ansible_host: 3.238.110.152
+          ansible_user: centos
+    adw:
+      hosts:
+        adw1:
+          ansible_host: 3.238.110.152
+          ansible_user: centos
+    transformers:
+      hosts:
+        transformer1:
+          ansible_host: 34.231.147.54
+          ansible_user: centos                    
     connect_database:
       children:
         repository:

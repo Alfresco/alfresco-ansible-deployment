@@ -1,3 +1,2 @@
 ---
 postgres_pass: MyPass1
-db_host: "{{ hostvars['postgres1']['ansible_host'] }}"

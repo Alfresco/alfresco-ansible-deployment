@@ -36,7 +36,7 @@
     - repository
 
 - name: Transformers Role
-  hosts: localhost
+  hosts: transformers
   become: true
   become_method: sudo
   roles:
@@ -45,7 +45,7 @@
     - transformers
 
 - name: Nginx Role
-  hosts: localhost
+  hosts: webservers
   become: true
   become_method: sudo
   roles:
@@ -54,7 +54,7 @@
     - nginx
 
 - name: ADW Role
-  hosts: localhost
+  hosts: webservers
   become: true
   become_method: sudo
   roles:
