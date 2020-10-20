@@ -1,0 +1,6 @@
+---
+alfresco:
+  version: 6.2.2
+
+share:
+  version: 6.2.2
