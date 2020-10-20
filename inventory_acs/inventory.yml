@@ -35,13 +35,4 @@ all:
       hosts:
         transformer1:
           ansible_host: 34.239.176.1
-          ansible_user: centos                    
-    connect_database:
-      children:
-        repository:
-        postgres:
-    alfresco:
-      children:
-        repository:
-        transformers:
-
+          ansible_user: centos
