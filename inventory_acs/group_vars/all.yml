@@ -45,4 +45,17 @@ alfresco:
     version: 6.2.2
 
 share:
-  version: 6.2.2  
+  version: 6.2.2
+
+dependency_postgresql:
+  version: 42.2.13
+
+solr:
+  version: 1.4.2
+  
+transform:
+  version: 2.3.2
+
+adwVersion: 1.6.0
+
+adw_tgz_url: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-digital-workspace/{{ adwVersion }}/alfresco-digital-workspace-{{ adwVersion }}.zip"
