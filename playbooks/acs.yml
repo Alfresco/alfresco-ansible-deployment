@@ -44,8 +44,17 @@
   tags:
     - repository
 
+- name: Transformers Role
+  hosts: transformers
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/transformers'
+  tags:
+    - transformers
+
 - name: Nginx Role
-  hosts: nginx
+  hosts: webservers
   become: true
   become_method: sudo
   roles:
@@ -54,7 +63,7 @@
     - nginx
 
 - name: Alfresco Digital Workspace Role
-  hosts: adw
+  hosts: webservers
   become: true
   become_method: sudo
   roles:

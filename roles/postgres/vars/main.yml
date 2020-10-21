@@ -10,3 +10,8 @@ postgres_client_auth:
     user: all
     address: 127.0.0.1/32
     method: md5
+  - type: host
+    database: all
+    user: all
+    address: "{{ hostvars['repository1']['ansible_host'] }}/32"
+    method: md5
