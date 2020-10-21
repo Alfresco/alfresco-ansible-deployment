@@ -103,3 +103,29 @@ jobs:
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule verify -s ec2"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; sed -i 's/alfresco.org/$TESTHOST/g' tests/conftest.py; pytest"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi
+    - stage: Verification
+      name: Multi Machine converge
+      env:
+        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
+      before_install:
+        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in dbp-ansible.pem.enc -out /tmp/dbp-ansible -d
+        - eval "$(ssh-agent -s)"
+        - chmod 600 /tmp/dbp-ansible
+        - ssh-add /tmp/dbp-ansible
+        - git clone --depth 1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
+      script:
+        - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
+        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER"
+        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
+        - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade awscli 'molecule-ec2';"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2-multi"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2-multi"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2-multi/dynamic_inventory.py"
+        - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat $MOLECULE_EPHEMERAL_DIRECTORY/new_inventory.yml | yq .all.children.webservers.hosts.webservers_1.ansible_host -r")
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i $MOLECULE_EPHEMERAL_DIRECTORY/new_inventory.yml"
+        - echo "wait for repo to be up" && sleep 5m
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule verify -s ec2-multi"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; sed -i 's/alfresco.org/$TESTHOST/g' tests/conftest.py; pytest"
+        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi
+
+
