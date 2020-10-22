@@ -1,6 +1,6 @@
 import os
-import yaml
 import re
+import yaml
 
 yamlfile= open(os.environ['MOLECULE_EPHEMERAL_DIRECTORY'] + "/instance_config.yml")
 parsed_yaml_file = yaml.load(yamlfile, Loader=yaml.FullLoader)

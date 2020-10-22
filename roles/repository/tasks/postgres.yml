@@ -15,5 +15,4 @@
     priv: "ALL"
     expires: infinity
     role_attr_flags: SUPERUSER
-    login_host: "{{ hostvars['postgres1']['ansible_host'] }}"
   with_items: "{{ postgres_client_config }}"

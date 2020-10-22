@@ -126,6 +126,4 @@ jobs:
         - echo "wait for repo to be up" && sleep 5m
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule verify -s ec2-multi"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; sed -i 's/alfresco.org/$TESTHOST/g' tests/conftest.py; pytest"
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi
-
-
+        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2-multi"; fi
