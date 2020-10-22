@@ -56,6 +56,7 @@
         platforms_fact: "{{ platforms_fact|default([]) +
                   [{'name': item.name,
                     'count': range(1, item.count + 1)|list,
+                    'spot_price': item.spot_price
                     'image': item.image,
                     'instance_type': item.instance_type,
                     'region': item.region,
