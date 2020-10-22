@@ -3,36 +3,34 @@ all:
   children:
     postgres:
       hosts:
-       postgres1:         
+       postgres_1:         
           ansible_host: 35.175.180.166
           ansible_user: centos
     repository:
       hosts:
-        repository1:
+        repository_1:
           ansible_host: 35.175.180.166
           ansible_user: centos
     activemq:
       hosts:
-        activemq1:
+        activemq_1:
           ansible_host: 35.175.180.166
           ansible_user: centos
     search:
       hosts:
-        search1:
+        search_1:
           ansible_host: 35.175.180.166
           ansible_user: centos
     webservers:
       hosts:
-        nginx1:
+        nginx_1:
           ansible_host: 35.175.180.166
           ansible_user: centos
-    adw:
-      hosts:
-        adw1:
+        adw_1:
           ansible_host: 35.175.180.166
           ansible_user: centos
     transformers:
       hosts:
-        transformer1:
+        transformer_1:
           ansible_host: 35.175.180.166
           ansible_user: centos
