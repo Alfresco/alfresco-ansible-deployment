@@ -231,15 +231,15 @@
 - name: Getting go_signal tengine-aio service to start
   block:
   - name: Check for activemq
-    wait_for: 
+    wait_for:
       host: "{{ activemq_host }}"
       port: 8161
     register: activemq_go
   - name: Check for sfs
-    wait_for: 
+    wait_for:
       host: "{{ sfs_host }}"
       port: 8099
-    register: sfs_go  
+    register: sfs_go
 
 - name: Enable and start AIO service
   systemd:

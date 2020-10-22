@@ -80,7 +80,7 @@
   changed_when: false
 
 - name: Getting go_signal for t-router to start
-  wait_for: 
+  wait_for:
     host: "{{ ats_tengine_aio_host }}"
     port: 8090
   register: go_signal
