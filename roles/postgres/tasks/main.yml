@@ -53,10 +53,3 @@
     name: "{{ postgresql_service[postgres_major_version] }}"
     state: started
     enabled: true
-
-- name: Change "postgres" pass
-  become: true
-  become_user: postgres
-  postgresql_user:
-    name: "postgres"
-    password: "{{ postgres_pass }}"

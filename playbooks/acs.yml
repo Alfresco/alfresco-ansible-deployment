@@ -8,14 +8,14 @@
   tags:
     - database
 
-- name: MQTT Role
-  hosts: mqtt
+- name: Activemq Role
+  hosts: activemq
   become: true
   become_method: sudo
   roles:
     - role: '../roles/activemq'
   tags:
-    - mqtt
+    - activemq
 
 - name: Transformers Role
   hosts: transformers
