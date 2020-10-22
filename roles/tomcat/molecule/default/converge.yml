@@ -5,7 +5,9 @@
     - name: "Include tomcat"
       include_role:
         name: "tomcat"
+
     - name: Ensure tomcat service is started and enabled on boot
       systemd:
         name: tomcat.service
         state: started
+      changed_when: false
