@@ -71,7 +71,7 @@
           #!/bin/bash
           sudo setsebool -P httpd_can_network_connect 1
           sudo getsebool httpd_can_network_connect
-        spot_price: "{{ item.spot_price }}"
+        spot_price: "{{ item.0.spot_price }}"
         image: "{{ item.0.image }}"
         instance_type: "{{ item.0.instance_type }}"
         instance_initiated_shutdown_behavior: terminate
