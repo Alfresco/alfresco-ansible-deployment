@@ -17,4 +17,3 @@
     expires: infinity
     role_attr_flags: SUPERUSER
   with_items: "{{ postgres_client_config }}"
-  notify: Restart postgresql

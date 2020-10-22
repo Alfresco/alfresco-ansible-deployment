@@ -48,8 +48,6 @@ repo --> amq
 repo <--> search
 repo <--> sync
 
-transform --> amq
-
 sync --> amq
 sync --> psql
 

@@ -5,3 +5,21 @@
     name: "alfresco-content"
     state: restarted
     daemon_reload: true
+
+- name: alfresco-content-reload
+  systemd:
+    name: "alfresco-content"
+    state: reloaded
+    daemon_reload: true
+
+- name: alfresco-content-stop
+  systemd:
+    name: "alfresco-content"
+    state: stopped
+    daemon_reload: true
+
+- name: alfresco-content-start
+  systemd:
+    name: "alfresco-content"
+    state: started
+    daemon_reload: true
