@@ -15,5 +15,7 @@ dependencies:
 - postgres
 - activemq
 - tomcat
+- sfs
 - transformers
+- trouter
 - search

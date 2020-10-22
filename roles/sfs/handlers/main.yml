@@ -1,0 +1,19 @@
+---
+# handlers file for sfs
+- name: restart-sfs
+  service:
+    name: alfresco-shared-fs
+    state: restarted
+    daemon_reload: true
+
+- name: start-sfs
+  service:
+    name: alfresco-shared-fs
+    state: started
+    daemon_reload: true
+
+- name: stop-sfs
+  service:
+    name: alfresco-shared-fs
+    state: stopped
+    daemon_reload: true

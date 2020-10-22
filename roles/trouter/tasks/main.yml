@@ -1,0 +1,93 @@
+---
+# tasks file for Transformation Router
+- name: ensure a list of packages installed
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ utils }}"
+
+- name: Download alfresco-transform-router-{{ trouter.version }}.jar
+  block:
+    - name: Create transform services folder
+      file:
+        path: "{{ ats_home }}"
+        state: directory
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+    - name: Download alfresco-transform-router.jar
+      get_url:
+        url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-transform-router/{{ trouter.version }}/alfresco-transform-router-{{ trouter.version }}.jar"
+        dest: "{{ ats_home }}/alfresco-transform-router-{{ trouter.version }}.jar"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+        url_username: "{{ nexus_user }}"
+        url_password: "{{ nexus_password }}"
+        timeout: 600
+      register: download_result
+      until: download_result is succeeded
+
+- name: Add t-router startup script
+  become: true
+  become_user: "{{ username }}"
+  template:
+    src: ats-atr.sh
+    dest: "{{ binaries_folder }}/ats-atr.sh"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    force: yes
+
+- name: Add paths to setenv file
+  block:
+    - name: Check for ATS_HOME in "{{ config_folder }}/setenv.sh"
+      shell: cat {{ config_folder }}/setenv.sh | grep ATS_HOME
+      register: test_ats_home
+      failed_when: false
+      changed_when: test_ats_home.rc != 0
+    - name: Check for ACTIVEMQ_HOST in "{{ config_folder }}/setenv.sh"
+      shell: cat {{ config_folder }}/setenv.sh | grep ACTIVEMQ_HOST
+      register: test_activemq_home
+      failed_when: false
+      changed_when: test_activemq_home.rc != 0
+    - name: Add paths to setenv file
+      become: true
+      become_user: "{{ username }}"
+      blockinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        marker: "# {mark} ROUTER ENV VARS"
+        block: |
+          export ATS_HOME={{ binaries_folder }}/transform-service
+          export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
+          export ATS_SHARED_FS_HOST={{ sfs_host }}
+        insertafter: EOF
+      when: test_ats_home.rc != 0 and test_activemq_home.rc != 0
+
+- name: Add alfresco-transform-router service
+  become: true
+  template:
+    src: alfresco-transform-router.service
+    dest: "/etc/systemd/system/alfresco-transform-router.service"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    force: yes
+
+- name: clean all
+  command: yum clean all
+  args:
+    warn: false
+  changed_when: false
+
+- name: Getting go_signal for t-router to start
+  wait_for: 
+    host: "{{ ats_tengine_aio_host }}"
+    port: 8090
+  register: go_signal
+
+- name: Enable and start t-router service
+  systemd:
+    name: alfresco-transform-router.service
+    state: started
+    enabled: true
+  when: not go_signal.failed

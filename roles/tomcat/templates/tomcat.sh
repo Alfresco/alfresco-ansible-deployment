@@ -12,3 +12,16 @@ export CATALINA_TMPDIR={{ data_folder }}/tomcat/temp
 export CATALINA_PID={{ data_folder }}/tomcat.pid
 export LOG_BASE={{ logs_folder }}
 /bin/bash -c "cd ${LOG_BASE}; ${CATALINA_HOME}/bin/catalina.sh $*"
+if [ ! -z "$ATS_SHARED_FS_HOST" ]
+then
+    export CATALINA_OPTS="${CATALINA_OPTS} -Dats-shared-fs.host=${ATS_SHARED_FS_HOST}"
+else
+    export CATALINA_OPTS="${CATALINA_OPTS} -Dats-shared-fs.host={{ sfs_host }}"
+fi
+
+if [ ! -z "$ATS_TENGINE_AIO_HOST" ]
+then
+    export CATALINA_OPTS="${CATALINA_OPTS} -Dats-tengine-aio.host=${ATS_TENGINE_AIO_HOST}"
+else
+    export CATALINA_OPTS="${CATALINA_OPTS} -Dats-tengine-aio.host={{ ats_tengine_aio_host }}"
+fi
