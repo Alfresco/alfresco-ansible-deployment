@@ -98,13 +98,13 @@ jobs:
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2"
         - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat molecule_temp_dir/instance_config.yml | yq .[].address -r")
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory1.ini"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir/inventory/ansible_inventory.yml"
         - echo "wait for repo to be up" && sleep 5m
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule verify -s ec2"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; sed -i 's/alfresco.org/$TESTHOST/g' tests/conftest.py; pytest"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi
     - stage: Verification
-      name: Multi Machine converge
+      name: Multi Machine Integration checks
       env:
         - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
       before_install:
@@ -121,8 +121,8 @@ jobs:
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2multi"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2multi"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2multi/dynamic_inventory.py"
-        - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat $MOLECULE_EPHEMERAL_DIRECTORY/new_inventory.yml | yq .all.children.webservers.hosts.webservers_1.ansible_host -r")
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i $MOLECULE_EPHEMERAL_DIRECTORY/new_inventory.yml"
+        - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat molecule_temp_dir/new_inventory.yml | yq .all.children.webservers.hosts.webservers_1.ansible_host -r")
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir/new_inventory.yml"
         - echo "wait for repo to be up" && sleep 5m
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule verify -s ec2multi"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; sed -i 's/alfresco.org/$TESTHOST/g' tests/conftest.py; pytest"
