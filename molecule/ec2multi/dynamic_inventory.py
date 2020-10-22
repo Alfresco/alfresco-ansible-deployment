@@ -20,12 +20,12 @@ for item in parsed_yaml_file:
     add_if_key_not_exist(inventoryfile['all']['children'], groupname, {})
     add_if_key_not_exist(inventoryfile['all']['children'][groupname], 'hosts', {})
     add_if_key_not_exist(inventoryfile['all']['children'][groupname]['hosts'], item['instance'], {
-            'ansible_host': item['address'],
-            'ansible_private_key_file': item['identity_file'],
-            'ansible_ssh_common_args': "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no",
-            'ansible_user': 'centos',
-            'connection': 'ssh'
-        })
+        'ansible_host': item['address'],
+        'ansible_private_key_file': item['identity_file'],
+        'ansible_ssh_common_args': "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no",
+        'ansible_user': 'centos',
+        'connection': 'ssh'
+    })
 
 yaml.dump(inventoryfile, new_inventory)
 new_inventory.close()
