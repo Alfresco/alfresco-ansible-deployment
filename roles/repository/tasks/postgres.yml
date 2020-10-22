@@ -6,7 +6,6 @@
     name: "{{ item['database'] }}"
   with_items: "{{ postgres_client_config }}"
 
-
 - name: Connect to alfresco  database and set user's password with no expire date
   become: true
   become_user: postgres
