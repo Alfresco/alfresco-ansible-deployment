@@ -1,0 +1,11 @@
+---
+- name: Alfresco Content Services
+  hosts: all
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/repository'
+    - role: '../roles/nginx'
+    - role: '../roles/adw'
+  tags:
+    - acs
