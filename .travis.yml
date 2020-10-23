@@ -91,9 +91,9 @@ jobs:
         - chmod 600 /tmp/dbp-ansible
         - ssh-add /tmp/dbp-ansible
         - git clone --depth 1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
-        - sed -i 's/localhost/localhost\n          ansible_ssh_common_args\\\: -o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no/g' inventory/inventory.yml
-        - sed -i 's/localhost/localhost\n          ansible_private_key_file\\\: centos/g' inventory/inventory.yml
-        - sed -i 's/localhost/localhost\n          ansible_user\\\: \/opt\/buildacs\/$TRAVIS_BRANCH\/$TRAVIS_BUILD_NUMBER\/alfresco-ansible-deployment\/molecule_temp_dir\/ssh_key/g' inventory/inventory.yml
+        - sed -i 's/localhost/localhost\n          ansible_ssh_common_args:: -o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no/g' inventory/inventory.yml
+        - sed -i 's/localhost/localhost\n          ansible_private_key_file:: centos/g' inventory/inventory.yml
+        - sed -i 's/localhost/localhost\n          ansible_user:: \/opt\/buildacs\/$TRAVIS_BRANCH\/$TRAVIS_BUILD_NUMBER\/alfresco-ansible-deployment\/molecule_temp_dir\/ssh_key/g' inventory/inventory.yml
       script:
         - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
         - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER"
