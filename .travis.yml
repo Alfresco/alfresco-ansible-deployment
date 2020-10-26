@@ -27,7 +27,7 @@ jobs:
       name: "ansible-lint"
       install: pip install --upgrade ansible-lint
       script:
-        - ansible-lint ANSIBLE_DUPLICATE_YAML_DICT_KEY=ignore -v playbooks/acs.yml
+        - ansible-lint -v playbooks/acs.yml
     - name: "pylint"
       install: pip install --upgrade pylint
       script:
