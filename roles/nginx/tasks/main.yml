@@ -23,10 +23,13 @@
 - name: Set httpd_can_network_connect flag on and keep it persistent across reboots
   become: true
   seboolean:
-    name: httpd_can_network_connect
+    name: "{{ item }}"
     state: yes
     persistent: yes
   when: ansible_selinux.status == "enabled"
+  with_items:
+    - httpd_can_network_connect
+    - nis_enabled
 
 - name: Ensure nginx service is running as configured.
   service:
