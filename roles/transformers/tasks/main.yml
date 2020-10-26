@@ -235,15 +235,10 @@
       host: "{{ activemq_host }}"
       port: 8161
     register: activemq_go
-  - name: Check for sfs
-    wait_for:
-      host: "{{ sfs_host }}"
-      port: 8099
-    register: sfs_go
 
 - name: Enable and start AIO service
   systemd:
     name: alfresco-tengine-aio.service
     state: started
     enabled: true
-  when: not activemq_go.failed and not sfs_go.failed
+  when: not activemq_go.failed

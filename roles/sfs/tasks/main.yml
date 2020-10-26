@@ -85,5 +85,5 @@
 - name: Enable and start sfs service
   systemd:
     name: alfresco-shared-fs.service
-    state: started
     enabled: true
+  notify: start-sfs
