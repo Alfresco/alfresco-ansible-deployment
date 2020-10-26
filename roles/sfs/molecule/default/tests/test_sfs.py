@@ -31,3 +31,4 @@ def test_sfs_response(host, AnsibleVars):
     cmd = host.run("curl -iL http://{}:8099".format(AnsibleVars["sfs_host"]))
     assert_that(cmd.stdout, contains_string("Content-Type: application/json"))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 404"))
+    
