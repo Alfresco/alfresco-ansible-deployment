@@ -4,7 +4,7 @@
     name: "{{ item['database'] }}"
     login_host: "{{ hostvars['postgres1']['ansible_host'] }}"
     login_password: "{{ postgres_pass }}"
-  with_items: "{{ postgres_client_config }}"
+    with_items: "{{ postgres_client_config }}"
 
 - name: Connect to alfresco  database and set user's password with no expire date
   postgresql_user:
@@ -17,4 +17,4 @@
     expires: infinity
     role_attr_flags: SUPERUSER
     login_host: "{{ hostvars['postgres1']['ansible_host'] }}"
-  with_items: "{{ postgres_client_config }}"
+    with_items: "{{ postgres_client_config }}"
