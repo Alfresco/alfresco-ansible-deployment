@@ -2,14 +2,14 @@
 - name: Create a new database with name "alfresco"
   postgresql_db:
     name: "{{ item['database'] }}"
-    login_host: "{{ hostvars['postgres1']['ansible_host'] }}"
-    login_password: "{{ postgres_pass }}"
-    with_items: "{{ postgres_client_config }}"
+    login_host: "{{ item['loginhost'] }}"
+    login_password: "{{ item['loginpassword'] }}"
+  with_items: "{{ postgres_client_config }}"
 
 - name: Connect to alfresco  database and set user's password with no expire date
   postgresql_user:
-    login_host: "{{ hostvars['postgres1']['ansible_host'] }}"
-    login_password: "{{ postgres_pass }}"
+    login_host: "{{ item['loginhost'] }}"
+    login_password: "{{ tem['loginpassword'] }}"
     db: "{{ item['database'] }}"
     name: "{{ item['user'] }}"
     password: "{{ item['passwd'] }}"
@@ -17,4 +17,4 @@
     expires: infinity
     role_attr_flags: SUPERUSER
     login_host: "{{ hostvars['postgres1']['ansible_host'] }}"
-    with_items: "{{ postgres_client_config }}"
+  with_items: "{{ postgres_client_config }}"
