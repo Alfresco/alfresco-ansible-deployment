@@ -1,5 +1,5 @@
 ---
-external_ip: "{{ hostvars['repository1']['ansible_host'] | default('127.0.0.1') }}"
+external_ip: "{{ hostvars['repository1']['ansible_host'] }}"
 postgres_client_auth:
   - type: local
     database: "alfresco"

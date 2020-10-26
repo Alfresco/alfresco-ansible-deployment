@@ -36,10 +36,9 @@
     backup: true
   with_items: "{{ postgres_config }}"
 
-external_ip: "{{ hostvars['repository1']['ansible_host'] }}"
 - set_fact: external_ip="127.0.0.1"
   when: external_ip is undefined
-
+  
 - name: Configure postgresql client auth
   lineinfile:
     path: "{{ postgresql_conf_path[postgres_major_version] }}/pg_hba.conf"
