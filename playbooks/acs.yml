@@ -1,11 +1,72 @@
 ---
-- name: Alfresco Content Services
-  hosts: all
+- name: Database Role
+  hosts: database
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/postgres'
+  tags:
+    - database
+
+- name: Activemq Role
+  hosts: activemq
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/activemq'
+  tags:
+    - activemq
+
+- name: Transformers Role
+  hosts: transformers
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/transformers'
+  tags:
+    - transformers
+
+- name: Alfresco Search Role
+  hosts: search
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/search'
+  tags:
+    - search
+
+- name: Alfresco Repository Role
+  hosts: repository
   become: true
   become_method: sudo
   roles:
     - role: '../roles/repository'
+  tags:
+    - repository
+
+- name: Transformers Role
+  hosts: transformers
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/transformers'
+  tags:
+    - transformers
+
+- name: Nginx Role
+  hosts: webservers
+  become: true
+  become_method: sudo
+  roles:
     - role: '../roles/nginx'
+  tags:
+    - nginx
+
+- name: Alfresco Digital Workspace Role
+  hosts: webservers
+  become: true
+  become_method: sudo
+  roles:
     - role: '../roles/adw'
   tags:
-    - acs
+    - adw

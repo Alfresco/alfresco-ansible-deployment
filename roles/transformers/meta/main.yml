@@ -13,4 +13,4 @@ galaxy_info:
 
 allow_duplicates: false
 dependencies:
-  - java
+  - tomcat
