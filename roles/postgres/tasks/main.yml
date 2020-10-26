@@ -37,8 +37,8 @@
   with_items: "{{ postgres_config }}"
 
 - set_fact: external_ip="127.0.0.1"
-  when: external_ip is undefined
-  
+  when: hostvars['repository1'] is undefined
+
 - name: Configure postgresql client auth
   lineinfile:
     path: "{{ postgresql_conf_path[postgres_major_version] }}/pg_hba.conf"
