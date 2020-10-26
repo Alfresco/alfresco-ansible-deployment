@@ -1,7 +1,6 @@
 [Unit]
 Description=Alfresco Transform Service
 Requires=alfresco-tengine-aio.service
-# PartOf=alfresco-content.service
 
 [Service]
 Type=oneshot

@@ -1,0 +1,29 @@
+---
+all:
+  children:
+    postgres:
+      hosts:
+       postgres_1:         
+          ansible_host: localhost
+    repository:
+      hosts:
+        repository_1:
+          ansible_host: localhost
+    activemq:
+      hosts:
+        activemq_1:
+          ansible_host: localhost
+    search:
+      hosts:
+        search_1:
+          ansible_host: localhost
+    webservers:
+      hosts:
+        nginx_1:
+          ansible_host: localhost
+        adw_1:
+          ansible_host: localhost
+    transformers:
+      hosts:
+        transformer_1:
+          ansible_host: localhost

@@ -20,9 +20,9 @@ def AnsibleVars(host):
     ansible_vars.update(host.ansible("include_vars", common_defaults)["ansible_facts"]["common_defaults"])
     return ansible_vars
 
-def test_tomcat_service_is_running_and_enabled(host, AnsibleVars):
+def test_repo_service_is_running_and_enabled(host, AnsibleVars):
     """Check repository service"""
-    repository = host.service("tomcat.service")
+    repository = host.service("alfresco-content.service")
     assert_that(repository.is_running)
     assert_that(repository.is_enabled)
 
