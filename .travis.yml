@@ -23,7 +23,7 @@ stages:
 
 jobs:
   include:
-#    - stage: Linters
+    - stage: Linters
 #      name: "ansible-lint"
 #      install: pip install --upgrade ansible-lint
 #     script:
