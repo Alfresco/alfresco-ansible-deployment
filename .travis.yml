@@ -26,8 +26,8 @@ jobs:
     - stage: Linters
       name: "ansible-lint"
       install: pip install --upgrade ansible-lint
-      script:
-        - ansible-lint -v playbooks/acs.yml
+#     script:
+#        - ansible-lint -v playbooks/acs.yml
     - name: "pylint"
       install: pip install --upgrade pylint
       script:
