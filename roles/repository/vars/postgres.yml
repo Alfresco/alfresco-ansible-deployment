@@ -4,3 +4,4 @@ postgres_client_config:
     user: "alfresco"
     passwd: "alfresco"
     port: "5432"
+postgres_pass: MyPass1

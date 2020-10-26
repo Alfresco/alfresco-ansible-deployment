@@ -1,4 +1,5 @@
 ---
+postgres_pass: MyPass1
 external_ip: "{{ hostvars['repository1']['ansible_host'] }}"
 postgres_client_auth:
   - type: local
