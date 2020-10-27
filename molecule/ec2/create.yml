@@ -110,14 +110,8 @@
     - name: Populate instance config dict # noqa 503
       set_fact:
         instance_conf_dict: {
-          'instance-pg': "{{ item.instances[0].tags.instance }}",
-          'address-pg': "{{ item.instances[0].public_ip }}",
-          'instance-activemq': "{{ item.instances[1].tags.instance }}",
-          'address-activemq': "{{ item.instances[1].public_ip }}",
-          'instance-search': "{{ item.instances[2].tags.instance }}",
-          'address-search': "{{ item.instances[2].public_ip }}",
-          'instance-repo': "{{ item.instances[3].tags.instance }}",
-          'address-repo': "{{ item.instances[3].public_ip }}",
+          'instance': "{{ item.instances[0].tags.instance }}",
+          'address': "{{ item.instances[0].public_ip }}",
           'user': "{{ ssh_user }}",
           'port': "{{ ssh_port }}",
           'identity_file': "{{ keypair_path }}",
