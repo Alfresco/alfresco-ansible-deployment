@@ -7,9 +7,9 @@
   vars:
     ssh_user: centos
     ssh_port: 22
-    security_group_name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}"
-    security_group_description: Security group for testing Molecule
-    keypair_name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}"
+    security_group_name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_single"
+    security_group_description: Security group for testing Molecule Single
+    keypair_name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_single"
     keypair_path: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/ssh_key"
 
   tasks:
