@@ -1,7 +1,7 @@
 ---
 all:
   children:
-    postgres:
+    database:
       hosts:
        postgres1:         
           ansible_host: 35.175.180.166
