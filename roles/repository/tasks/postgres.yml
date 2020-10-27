@@ -1,5 +1,5 @@
 ---
-- set_fact: external_ip="{{ db_host }}"
+- set_fact: external_ip="localhost"
   when: hostvars['repository_1'] is undefined
 
 - name: Create a new database with name "alfresco"
