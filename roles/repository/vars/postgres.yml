@@ -5,4 +5,3 @@ postgres_client_config:
     passwd: "alfresco"
     port: "5432"
 postgres_pass: MyPass1
-external_ip: "{{ hostvars['repository_1']['ansible_host'] }}"

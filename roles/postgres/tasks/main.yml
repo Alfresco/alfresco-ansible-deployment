@@ -36,8 +36,8 @@
     backup: true
   with_items: "{{ postgres_config }}"
 
-- set_fact: external_ip="127.0.0.1"
-  when: hostvars['repository_1'] is undefined
+- set_fact: repo_host="127.0.0.1"
+  when: repo_host is undefined
 
 - name: Configure postgresql client auth
   lineinfile:
