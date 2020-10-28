@@ -1,17 +1,17 @@
 ---
-- set_fact: db_host="127.0.0.1"
-  when: db_host is undefined
+- set_fact: db_host_connect="{{ db_host }}"
+  when: hostvars['database_1'] is undefined
 
 - name: Create a new database with name "alfresco"
   postgresql_db:
     name: "{{ item['database'] }}"
-    login_host: "{{ db_host }}"
+    login_host: "{{ db_host_connect }}"
     login_password: "{{ postgres_pass }}"
   with_items: "{{ postgres_client_config }}"
 
 - name: Connect to alfresco  database and set user's password with no expire date
   postgresql_user:
-    login_host: "{{ db_host }}"
+    login_host: "{{ db_host_connect }}"
     login_password: "{{ postgres_pass }}"
     db: "{{ item['database'] }}"
     name: "{{ item['user'] }}"
