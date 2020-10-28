@@ -1,5 +1,6 @@
 ---
 postgres_pass: MyPass1
+repo_host_connect: "{{ hostvars['repository_1']['ansible_host'] }}"
 postgres_client_auth:
   - type: local
     database: "alfresco"
