@@ -20,9 +20,9 @@
         return_content: yes
       register: ipv4_address
 
-    - name: Get local ip
-      command: "hostname -I | awk '{print $1}'"
-      register: ipv4_local
+#    - name: Get local ip
+#      shell: "hostname -I | awk '{print $1}'"
+#      register: ipv4_local
 
     - name: Create security group
       ec2_group:
@@ -116,7 +116,7 @@
         - proto: all
           cidr_ip: "{{ ipv4_address['content'] }}/32"
         - proto: all
-          cidr_ip: "{{ ipv4_local['content'] }}/32"          
+          cidr_ip: "{{ ansible_eth0.ipv4.address }}/32"          
         - proto: all
           group_name: "{{ security_group_name }}"
       with_items: "{{ ec2_jobs.results }}"
