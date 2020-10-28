@@ -20,8 +20,8 @@
         return_content: yes
       register: ipv4_address
 
-    - name: Use uri to ipify to get local ip
-      command: hostname -I | awk '{print $1}'
+    - name: Get local ip
+      command: "hostname -I | awk '{print $1}'"
       register: ipv4_local
 
     - name: Create security group
