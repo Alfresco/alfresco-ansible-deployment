@@ -42,7 +42,7 @@ share:
 
 solr:
   version: 1.4.2
-  
+
 transform:
   version: 2.3.4
 

@@ -2,6 +2,9 @@
 - name: Converge
   hosts: all
   tasks:
+    - name: "Include postgres"
+      include_role:
+        name: "postgres"
     - name: "Include repository"
       include_role:
         name: "repository"
