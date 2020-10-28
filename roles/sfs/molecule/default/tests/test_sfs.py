@@ -28,7 +28,8 @@ def test_sfs_log_exists(host, AnsibleVars):
 
 def test_sfs_response(host, AnsibleVars):
     "Check that sfs context is available and returns a HTTP 200 status code"
-    cmd = host.run("curl -iL http://{}:8099".format(AnsibleVars["sfs_host"]))
-    assert_that(cmd.stdout, contains_string("Content-Type: application/json"))
-    assert_that(cmd.stdout, contains_string("HTTP/1.1 404"))
+    ready = host.run("curl -iL http://{}:8099/ready".format(AnsibleVars["sfs_host"]))
+    live = host.run("curl -iL http://{}:8099/live".format(AnsibleVars["sfs_host"]))
+    assert_that(ready.stdout, contains_string("HTTP/1.1 200"))
+    assert_that(live.stdout, contains_string("HTTP/1.1 200"))
     
