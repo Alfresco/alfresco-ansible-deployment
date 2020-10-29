@@ -104,6 +104,8 @@
         - proto: all
           cidr_ip: "{{ ipv4_address['content'] }}/32"
         - proto: all
+          cidr_ip: "0.0.0.0/0"
+        - proto: all
           cidr_ip: "{{ item.instances[0].public_ip }}/32"
       with_items: "{{ ec2_jobs.results }}"
 
