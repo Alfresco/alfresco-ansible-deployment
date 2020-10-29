@@ -1,0 +1,11 @@
+[Unit]
+Description=Alfresco Transform Router
+After=syslog.socket network.target 
+
+[Service]
+Type=simple
+User=alfresco
+ExecStart=/opt/alfresco/ats-atr.sh
+
+[Install]
+WantedBy=multi-user.target

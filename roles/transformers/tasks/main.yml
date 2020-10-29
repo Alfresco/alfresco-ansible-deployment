@@ -45,14 +45,6 @@
   until: download_img_libs_dist is succeeded
   when: magick_exists.rc != 0
 
-# - name: Download ImageMagick-license.txt
-#   get_url:
-#     url: "{{ IMAGEMAGICK_LICENSE_FILE }}"
-#     dest: "{{ temp_dir }}/ImageMagick-license.txt"
-#     mode: 0444
-#     timeout: 600
-#   when: magick_exists.rc != 0
-
 - name: Download imagemagick-epel-dep.rpm
   get_url:
     url: "{{ IMAGEMAGICK_DEP_RPM_URL }}"
@@ -100,14 +92,6 @@
   until: libreoffice_download is succeeded
   when: loffice_exists.rc != 0
 
-# - name: Download libreoffice.txt
-#   get_url:
-#     url: "{{ LIBREOFFICE_LICENSE_FILE }}"
-#     dest: "{{ temp_dir }}/libreoffice.txt"
-#     mode: 0444
-#     timeout: 600
-#   when: loffice_exists.rc != 0
-
 - name: Extract libreoffice-dist-linux.gz
   become: yes
   unarchive:
@@ -123,37 +107,33 @@
   when: loffice_exists.rc != 0
   changed_when: false
 
-- name: Check if alfresco-pdf-rendere exe or archive exists
+- name: Create transform-services folder
+  file:
+    path: "{{ ats_home }}"
+    state: directory
+    mode: 'u=rwx,g=rwx,o=rx'
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+
+- name: Check if alfresco-pdf-renderer exe or archive exists
   block:
     - name: Check if alfresco-pdf-renderer exists
       stat:
-        path: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer"
+        path: "{{ ats_home }}/alfresco-pdf-renderer"
       register: alfresco_pdf_renderer_exists
     - name: Check if alfresco-pdf-renderer archive exists
       stat:
-        path: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+        path: "{{ ats_home }}/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
       register: alfresco_pdf_renderer_tgz_exists
 
 - name: Download alfresco-pdf-renderer-linux.tgz
   block:
-    - name: Check if alfresco-pdf-renderer folder exists
-      stat:
-        path: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/"
-      register: pdf_renderer_folder
-    - name: Create alfresco-pdf-renderer folder
-      file:
-        path: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/"
-        state: directory
-        mode: 'u=rwx,g=rwx,o=rx'
-      become: true
-      become_user: "{{ username }}"
-      when: not pdf_renderer_folder.stat.exists
     - name: Download alfresco-pdf-renderer-linux.tgz
       become: true
       become_user: "{{ username }}"
       get_url:
         url: "{{ ALFRESCO_PDF_RENDERER_LIB_RPM_URL }}"
-        dest: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+        dest: "{{ ats_home }}/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
         mode: 'u=rwx,g=rwx,o=rx'
@@ -166,34 +146,34 @@
   become: true
   become_user: "{{ username }}"
   unarchive:
-    src: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
-    dest: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/"
+    src: "{{ ats_home }}/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+    dest: "{{ ats_home }}"
     remote_src: yes
   when: not alfresco_pdf_renderer_exists.stat.exists
 
 - name: Remove alfresco-pdf-renderer-linux.tgz
-  file:
-    path: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
-    state: absent
+  block:
+  - name: Remove from content services
+    file:
+      path: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+      state: absent
+  - name: Remove from transform services
+    file:
+      path: "{{ ats_home }}/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+      state: absent
 
 - name: Download alfresco-transform-core-aio-boot-{{ transform.version }}.jar
-  block:
-    - name: Create transform services folder
-      file:
-        path: "{{ binaries_folder }}/transform-service-{{ transform.version }}"
-        state: directory
-    - name: Download artefact
-      get_url:
-        url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
-        dest: "{{ binaries_folder }}/transform-service-{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
-        url_username: "{{ nexus_user }}"
-        url_password: "{{ nexus_password }}"
-        timeout: 600
-      register: download_result
-      until: download_result is succeeded
+  get_url:
+    url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
+    dest: "{{ binaries_folder }}/transform-service/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+    timeout: 600
+  register: download_result
+  until: download_result is succeeded
 
 - name: Check for ATS_HOME in "{{ config_folder }}/setenv.sh"
   shell: cat {{ config_folder }}/setenv.sh | grep ATS_HOME
@@ -215,48 +195,11 @@
       export IMAGEMAGICK_CODERS=${IMAGEMAGICK_HOME}/modules-Q16HDRI/coders
       export IMAGEMAGICK_EXE=/usr/bin/magick
       export IMAGEMAGICK_EXE=/usr/bin/convert
-      export ATS_VERSION={{ transform.version }}
-      export ATS_HOME={{ binaries_folder }}/transform-service-${ATS_VERSION}
+      export ATS_HOME={{ binaries_folder }}/transform-service
       export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
+      export ATS_SHARED_FS_HOST={{ sfs_host }}
     insertafter: EOF
   when: test_ats_home.rc != 0
-
-- name: Map env variables to Java and Tomcat
-  become: true
-  become_user: "{{ username }}"
-  lineinfile:
-    path: "{{ binaries_folder }}/tomcat.sh"
-    insertafter: EOF
-    line: "export CATALINA_OPTS=\"${CATALINA_OPTS} -Dats-tengine-aio.host=${ATS_TENGINE_AIO_HOST}\""
-
-# - name: Add properties to alfresco-global
-#   block:
-#     - name: Check if alfresco-global.properties exists
-#       stat: 
-#         path: "{{ settings_folder }}/classpath/alfresco-global.properties"
-#       register: alfresco_global
-#     - name: Add properties
-#       become: true
-#       become_user: "{{ username }}"
-#       blockinfile:
-#         path: "{{ settings_folder }}/classpath/alfresco-global.properties"
-#         marker: "# {mark} ATS global properties"
-#         block: |
-#           local.transform.service.enabled=true
-#           localTransform.core-aio.url=http://{{ ats_tengine_aio_host }}:8090
-#           legacy.transform.service.enabled=true
-#           alfresco-pdf-renderer.url=${localTransform.core-aio.url}
-#           jodconverter.url=${localTransform.core-aio.url}
-#           img.url=${localTransform.core-aio.url}
-#           tika.url=${localTransform.core-aio.url}
-#           transform.misc.url=${localTransform.core-aio.url}
-#       when: not alfresco_global.stat.exists
-
-- name: Check if AIO script exists
-  stat:
-    path: "{{ binaries_folder }}/ats-ate-aio.sh"
-  register: aio_script
-  failed_when: false
 
 - name: Add AIO startup script
   become: true
@@ -267,19 +210,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-    force: no
-  when: not aio_script.stat.exists
-
-- name: Check existence of transform services
-  block:
-  - name: Check if alfresco-tengine-aio.service exists
-    stat:
-      path: "/etc/systemd/system/alfresco-tengine-aio.service"
-    register: alfresco_tengine_aio_service
-  - name: Check if alfresco-transform.service exists
-    stat:
-      path: "/etc/systemd/system/alfresco-transform.service"
-    register: alfresco_transform_service
+    force: yes
 
 - name: Add alfresco-tengine-aio service
   become: true
@@ -289,21 +220,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-    force: no
-  notify: restart-aio
-  when: not alfresco_tengine_aio_service.stat.exists
-
-- name: Add alfresco-transform service
-  become: true
-  template:
-    src: alfresco-transform.service
-    dest: "/etc/systemd/system/alfresco-transform.service"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-    force: no
-  notify: restart-transform
-  when: not alfresco_transform_service.stat.exists
+    force: yes
 
 - name: clean all
   command: yum clean all
@@ -311,14 +228,17 @@
     warn: false
   changed_when: false
 
-- name: Enable AIO service
+- name: Getting go_signal tengine-aio service to start
+  block:
+  - name: Check for activemq
+    wait_for:
+      host: "{{ activemq_host }}"
+      port: 8161
+    register: activemq_go
+
+- name: Enable and start AIO service
   systemd:
     name: alfresco-tengine-aio.service
-    enabled: true
-
-- name: Ensure transform service is started and enabled on boot
-  systemd:
-    name: alfresco-transform.service
     state: started
     enabled: true
-  # notify: alfresco-content-restart
+  when: not activemq_go.failed

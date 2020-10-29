@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Andrei Ciubotaru
-  description: Deploys Transform Services
+  description: Deploys Transformation Router
   company: Alfresco
   license: Alfresco
   platforms:

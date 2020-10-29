@@ -53,6 +53,24 @@
   tags:
     - transformers
 
+- name: T-Router Role
+  hosts: transformers
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/trouter'
+  tags:
+    - trouter
+
+- name: Shared File Store Role
+  hosts: transformers
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/sfs'
+  tags:
+    - sfs
+
 - name: Nginx Role
   hosts: webservers
   become: true

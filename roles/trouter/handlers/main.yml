@@ -1,0 +1,19 @@
+---
+# handlers file for trouter
+- name: restart-trouter
+  service:
+    name: alfresco-transform-router
+    state: restarted
+    daemon_reload: true
+
+- name: start-trouter
+  service:
+    name: alfresco-transform-router
+    state: started
+    daemon_reload: true
+
+- name: stop-trouter
+  service:
+    name: alfresco-transform-router
+    state: stopped
+    daemon_reload: true
