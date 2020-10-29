@@ -36,7 +36,7 @@
     backup: true
   with_items: "{{ postgres_config }}"
 
-- set_fact: repo_host_connect="127.0.0.1"
+- set_fact: repo_host_connect="127.0.0.1/32"
   when: hostvars['repository_1'] is undefined
 
 - name: Configure postgresql client auth

@@ -16,5 +16,5 @@ postgres_client_auth:
   - type: host
     database: all
     user: all
-    address: "{{ repo_host_connect }}/32"
+    address: "{{ repo_host_connect }}"
     method: md5
