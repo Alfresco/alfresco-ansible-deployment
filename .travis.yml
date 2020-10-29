@@ -129,8 +129,7 @@ jobs:
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2multi"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2multi"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2multi/dynamic_inventory.py"
-        - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat molecule_temp_dir_m/new_inventory.yml | yq .all.children.webservers.hosts.webservers_1.ansible_host -r")
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cp -r /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory_acs/group_vars /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cp -r /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory_acs/group_vars /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m/
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m/new_inventory.yml"
         - echo "wait for repo to be up" && sleep 5m
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule verify -s ec2multi"
