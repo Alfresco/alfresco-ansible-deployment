@@ -11,6 +11,10 @@ group_id: 1001
 username: alfresco
 user_id: 33031
 
+maven_repository:
+   org: "https://repo.maven.apache.org/maven2/org"
+licenses: 3.1.0
+
 # component version
 
 dependency_postgresql:
@@ -36,6 +40,11 @@ alfresco:
     version: 3.2.0
   share_services:
     version: 6.2.2
+  sync_service:
+    version: 3.3.3
+
+
+    # mai sus trebe pus ampul de sync service cu versiunea lui
 
 share:
   version: 6.2.2
@@ -46,7 +55,11 @@ solr:
 transform:
   version: 2.3.2
 
-adwVersion: 1.6.0
+adw:
+  version: 1.6.0
+
+sync:
+  version: 3.3.3
 
 repo_downloads:
   - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/integrations/alfresco-googledrive-repo-enterprise/{{ alfresco.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ alfresco.googledrive_repo.version }}.amp"
@@ -62,4 +75,7 @@ nexus_repository:
   releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
   enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
 
-adw_tgz_url: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-digital-workspace/{{ adwVersion }}/alfresco-digital-workspace-{{ adwVersion }}.zip"
+adw_tgz_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
+sync_zip_url: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"
+
+sync_home: "{{ binaries_folder }}/sync-service"

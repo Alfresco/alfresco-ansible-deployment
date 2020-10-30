@@ -1,0 +1,140 @@
+---
+# tasks file for sync
+# - name: Include vars for postgres credentials
+#   include_vars: "postgres.yml"
+
+- name: Populate service facts
+  service_facts:
+
+- name: Download sync servies {{ sync.version }}
+  block:
+    - name: Create sync services folder
+      file:
+        path: "{{ sync_home }}"
+        state: directory
+    - name: Download artefact
+      get_url:
+        url: "{{ sync_zip_url }}"
+        dest: "{{ sync_home }}/sync-dist--6.x-{{ sync.version }}.zip"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+        url_username: "{{ nexus_user }}"
+        url_password: "{{ nexus_password }}"
+      register: sync_download_result
+      async: 900
+      poll: 0
+  when: not ansible_facts.services['alfresco-sync.service'] is defined
+
+- name: Download postgresql jar
+  block:
+    - name: Create connectors folder
+      file:
+        path: "{{ sync_home }}/service_sync/connectors"
+        state: directory
+    - name: Download artefact
+      become: true
+      become_user: root
+      get_url:
+        url: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependency_postgresql.version }}/postgresql-{{ dependency_postgresql.version }}.jar"
+        dest: "{{ sync_home }}/service_sync/connectors/postgresql.jar"
+        mode: 0644
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+      register: postgresql_download
+      async: 900
+      poll: 0
+  # when: not ansible_facts.services['alfresco-sync.service'] is defined
+
+
+
+- name: Check on sync service download async task
+  become: true
+  become_user: root
+  async_status:
+    jid: "{{ sync_download_result.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 1
+  retries: 300
+  when: sync_download_result.started == 1
+
+- name: sync_download_result result after polling
+  debug:
+    var: sync_download_result
+
+- name: postgresql_download result
+  debug:
+    var: postgresql_download
+
+- name: Check on postgres download async task
+  become: true
+  become_user: root
+  async_status:
+    jid: "{{ postgresql_download.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 1
+  retries: 300
+  when: postgresql_download.started == 1
+
+
+
+- name: Remove sync service archive
+  file:
+    path: "{{ binaries_folder }}/sync-service/sync-dist--6.x-{{ sync.version }}.zip"
+    state: absent
+
+
+- name: Check if syncservice script exists
+  stat:
+    path: "{{ binaries_folder }}/syncservice.sh"
+  register: syncservice_script
+  failed_when: false
+
+- name: Add sync service startup script
+  become: true
+  become_user: "{{ username }}"
+  template:
+    src: syncservice.sh
+    dest: "{{ binaries_folder }}/syncservice.sh"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    force: no
+  when: not syncservice_script.stat.exists
+
+- name: Add alfresco-sync.service service
+  become: true
+  template:
+    src: alfresco-sync.service
+    dest: "/etc/systemd/system/alfresco-sync.service"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    force: yes
+  notify: stop-sync
+  when: not ansible_facts.services['alfresco-sync.service'] is defined
+
+# - name: clean all
+#   command: yum clean all
+#   args:
+#     warn: false
+#   changed_when: false
+
+- name: Enable Sync service
+  systemd:
+    name: alfresco-sync.service
+    enabled: true
+
+
+# - name: test if sync is enabled
+#   debug:
+#     var: ansible_facts.services['alfresco-sync.service']
+#   when: ansible_facts.services['alfresco-sync.service']['status'] == "enabled"
+
+# - name: Notify alfresco content service to start
+#   wait_for:
+#     host: "{{ repo_host }}"
+#     port: 8080
+#   notify: start-sync

@@ -12,11 +12,6 @@ war_downloads:
     dest: "{{ content_folder }}/webapps/api-explorer.war"
 
 
-maven_repository:
-   org: "https://repo.maven.apache.org/maven2/org"
-licenses: 3.1.0
-# vars file for repository
-
 content_folder: "{{ binaries_folder }}/content-services-{{ alfresco.version }}"
 settings_folder: "{{ config_folder }}/content-services"
 content_data_folder: "{{ data_folder }}/content-services"
