@@ -102,6 +102,7 @@ jobs:
         - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir/"
         - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
         - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade --use-feature=2020-resolver awscli 'molecule-ec2';"
+        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir/"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2"
         - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat molecule_temp_dir/instance_config.yml | yq .[].address -r")
@@ -126,6 +127,7 @@ jobs:
         - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m/"
         - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
         - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade --use-feature=2020-resolver awscli 'molecule-ec2';"
+        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m/"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2multi"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2multi"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2multi/dynamic_inventory.py"
