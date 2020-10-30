@@ -2,6 +2,9 @@
 - name: Include vars for postgres credentials
   include_vars: "postgres.yml"
 
+- name: Include postgres task
+  include_tasks: "postgres.yml"
+
 - name: Ensure a list of packages installed
   become: true
   become_user: root
@@ -339,9 +342,6 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
   notify: alfresco-content-restart
-
-- name: Include postgres task
-  include_tasks: "postgres.yml"
 
 - name: Add PostResources to alfresco.xml
   become: true
