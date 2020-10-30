@@ -39,6 +39,9 @@
 - set_fact: repo_host_connect="127.0.0.1"
   when: hostvars['repository_1'] is undefined
 
+- set_fact: db_host_connect_test="127.0.0.1"
+  when: TESTHOST is undefined
+
 - name: Configure postgresql client auth
   lineinfile:
     path: "{{ postgresql_conf_path[postgres_major_version] }}/pg_hba.conf"
