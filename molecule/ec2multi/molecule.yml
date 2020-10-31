@@ -61,7 +61,7 @@ provisioner:
 
 verifier:
   name: testinfra
-  directory: ../../integration-tests
+  directory: ../../integration-tests-multi
   env:
     ANSIBLE_TIMEOUT: "30"
     ANSIBLE_SSH_RETRIES: "15"
