@@ -1,7 +1,7 @@
 ---
 
 - set_fact: db_host_connect="{{ db_host }}"
-  when: hostvars['database_1'] is undefined or hostvars['database_1']=="localhost"
+  when: hostvars['database_1'] is undefined
 
 - name: Create a new database with name "alfresco"
   postgresql_db:
