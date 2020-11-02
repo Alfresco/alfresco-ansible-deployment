@@ -2,9 +2,10 @@
 # Setup/install tasks .
 
 - name: Ensure nginx is installed.
-  yum:
+  package:
     name: "{{ nginx_rpm_url }}"
     state: present
+
 
 # Vhost configuration.
 - import_tasks: vhosts.yml
