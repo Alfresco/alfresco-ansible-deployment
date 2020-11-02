@@ -7,10 +7,10 @@
     group: root
     mode: 0644
 
-- name: Ensure nginx is installed.
-  package:
-    name: "{{ nginx_package_name }}"
-    state: present
+#- name: Ensure nginx is installed.
+#  package:
+#    name: "{{ nginx_package_name }}"
+#   state: present
 
 - name: Ensure nginx_vhost_path exists.
   file:

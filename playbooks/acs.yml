@@ -63,7 +63,7 @@
     - nginx
 
 - name: Alfresco Digital Workspace Role
-  hosts: adw
+  hosts: webservers
   become: true
   become_method: sudo
   roles:

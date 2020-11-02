@@ -26,13 +26,11 @@ all:
         nginx1:
           ansible_host: 35.175.180.166
           ansible_user: centos
-    adw:
-      hosts:
         adw1:
           ansible_host: 35.175.180.166
           ansible_user: centos
     transformers:
       hosts:
-        transformer1:
+        transformers_1:
           ansible_host: 35.175.180.166
           ansible_user: centos

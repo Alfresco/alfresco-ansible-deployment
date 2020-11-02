@@ -6,7 +6,6 @@
     name: "{{ nginx_rpm_url }}"
     state: present
 
-
 # Vhost configuration.
 - import_tasks: vhosts.yml
 
