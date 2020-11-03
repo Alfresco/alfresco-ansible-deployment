@@ -69,7 +69,7 @@ def test_share_is_accesible(host, AnsibleVars):
     output = None
     command = False
     while not command or time.time() < timeout:
-        run_command = host.run("curl -v -k --connect-timeout 5 --location --request GET 'http://{}/share/page/'".format(AnsibleVars['repo_host']))
+        run_command = host.run("curl -v -k --connect-timeout 5 --location --request GET 'http://{}/share/page/'".format(AnsibleVars['adw_host']))
         command = run_command.succeeded
         output = run_command.stdout
     assert_that(output,contains_string("2005-2020 Alfresco Software"))
@@ -80,7 +80,7 @@ def test_repository_root_is_accesible(host, AnsibleVars):
     output = None
     command = False
     while not command or time.time() < timeout:
-        run_command = host.run("curl -v -k --connect-timeout 5 --location --request GET 'http://{}/'".format(AnsibleVars['repo_host']))
+        run_command = host.run("curl -v -k --connect-timeout 5 --location --request GET 'http://{}/'".format(AnsibleVars['adw_host']))
         command = run_command.succeeded
         output = run_command.stdout
     assert_that(output,contains_string("Alfresco Repository"))
@@ -91,7 +91,7 @@ def test_transformation_stats_is_accesible(host, AnsibleVars):
     output = None
     command = False
     while not command or time.time() < timeout:
-        run_command = host.run("curl -v -k --connect-timeout 5 http://{}/aio/".format(AnsibleVars['repo_host']))
+        run_command = host.run("curl -v -k --connect-timeout 5 http://{}/aio/".format(AnsibleVars['adw_host']))
         command = run_command.succeeded
         output = run_command.stdout
     assert_that(output,contains_string("All in One"))
@@ -102,7 +102,7 @@ def test_adw_is_accesible(host, AnsibleVars):
     output = None
     command = False
     while not command or time.time() < timeout:
-        run_command = host.run("curl -v -k --connect-timeout 5 http://{}/workspace/".format(AnsibleVars['repo_host']))
+        run_command = host.run("curl -v -k --connect-timeout 5 http://{}/workspace/".format(AnsibleVars['adw_host']))
         command = run_command.succeeded
         output = run_command.stdout
     assert_that(output,contains_string("Alfresco Digital Workspace"))
@@ -113,7 +113,7 @@ def test_solr_stats_is_accesible(host, AnsibleVars):
     output = None
     command = False
     while not command or time.time() < timeout:
-        run_command = host.run("curl -v -k --connect-timeout 5 --user admin:admin http://{}/alfresco/s/api/solrstats".format(AnsibleVars['repo_host']))
+        run_command = host.run("curl -v -k --connect-timeout 5 --user admin:admin http://{}/alfresco/s/api/solrstats".format(AnsibleVars['adw_host']))
         command = run_command.succeeded
         output = run_command.stdout
     assert_that(output,contains_string("queryInfo"))
