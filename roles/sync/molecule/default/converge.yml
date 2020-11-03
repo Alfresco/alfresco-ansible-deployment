@@ -2,6 +2,12 @@
 - name: Converge
   hosts: all
   tasks:
+    - name: "Include postgres"
+      include_role:
+        name: "postgres"
+    - name: "Include activemq"
+      include_role:
+        name: "activemq"
     - name: "Include sync"
       include_role:
         name: "sync"

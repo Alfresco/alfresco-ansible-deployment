@@ -1,15 +1,12 @@
 [Unit]
 Description=Alfresco Sync Service
-Requires=postgresql.service activemq.service
-# $$$$$$$Fix this bit
-After=syslog.socket network.target postgresql.service activemq.service tomcat.service
-PartOf=alfresco-content.service
+After=syslog.socket network.target
 
 [Service]
 Type=forking
-User=alfresco
-ExecStart=/opt/alfresco/syncservice.sh start
-ExecStop=/opt/alfresco/syncservice.sh stop
+User={{ username }}
+ExecStart={{ binaries_folder }}/syncservice.sh start
+ExecStop={{ binaries_folder }}/syncservice.sh stop
 
 [Install]
 WantedBy=multi-user.target
