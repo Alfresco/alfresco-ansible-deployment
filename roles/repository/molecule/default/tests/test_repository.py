@@ -6,16 +6,19 @@ from hamcrest import assert_that, contains_string
 @pytest.fixture()
 def AnsibleVars(host):
     """Define AnsibleVars"""
-    repository_role = "file=../../vars/main.yml name=repository_role"
+    java_role = "file=../../../java/vars/main.yml name=java_role"
+    common_vars = "file=../../../common/vars/main.yml name=common_vars"
+    common_defaults = "file=../../../common/defaults/main.yml name=common_defaults"
+    common_hosts = "file=../../../common/vars/hosts.yml name=common_hosts"
     tomcat_role = "file=../../../roles/tomcat/vars/main.yml name=tomcat_role"
-    java_role = "file=../../../roles/java/vars/main.yml name=java_role"
-    common_vars = "../../../common/vars/main.yml name=common_vars"
-    common_hosts = "../../../common/defaults/main.yml name=common_hosts"
-    ansible_vars = host.ansible("include_vars", tomcat_role)["ansible_facts"]["tomcat_role"]
-    ansible_vars.update(host.ansible("include_vars", repository_role)["ansible_facts"]["repository_role"])
+    repository_role = "file=../../vars/main.yml name=repository_role"
+    ansible_vars = host.ansible("include_vars", java_role)["ansible_facts"]["java_role"]
     ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
     ansible_vars.update(host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"])
     ansible_vars.update(host.ansible("include_vars", common_hosts)["ansible_facts"]["common_hosts"])
+    ansible_vars.update(host.ansible("include_vars", common_defaults)["ansible_facts"]["common_defaults"])
+    ansible_vars.update(host.ansible("include_vars", tomcat_role)["ansible_facts"]["tomcat_role"])
+    ansible_vars.update(host.ansible("include_vars", repository_role)["ansible_facts"]["repository_role"])
     return ansible_vars
 
 def test_repo_service_is_running_and_enabled(host, AnsibleVars):
