@@ -7,6 +7,10 @@
     group: root
     mode: 0644
 
+- name: Delay nginx pack install
+  pause:
+    minutes: 2
+
 - name: Ensure nginx in adw.
   package:
     name: "{{ nginx_package_name }}"
