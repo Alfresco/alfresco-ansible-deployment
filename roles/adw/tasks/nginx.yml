@@ -11,8 +11,7 @@
   package:
     name: "{{ nginx_package_name }}"
     state: present
-  retries: 5
-  delay: 3
+  lock_timeout: 180
 
 - name: Ensure nginx_vhost_path exists.
   file:

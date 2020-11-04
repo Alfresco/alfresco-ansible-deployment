@@ -5,6 +5,7 @@
   package:
     name: "{{ nginx_rpm_url }}"
     state: present
+  lock_timeout: 180
 
 # Vhost configuration.
 - import_tasks: vhosts.yml
