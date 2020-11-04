@@ -12,4 +12,5 @@ galaxy_info:
   galaxy_tags: []
 allow_duplicates: false
 dependencies:
+- common
 - tomcat
