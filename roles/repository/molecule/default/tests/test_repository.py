@@ -50,3 +50,9 @@ def test_share_context_200(host, AnsibleVars):
     cmd = host.run("curl -iL --user admin:admin http://{}:8080/share".format(AnsibleVars["repo_host"]))
     assert_that(cmd.stdout, contains_string("Alfresco Share"))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
+
+def test_api_explorer_context_200(host, AnsibleVars):
+    "Check that /api-explorer context is available and returns a HTTP 200 status code"
+    cmd = host.run("curl -iL --user admin:admin http://{}:8080/api-explorer".format(AnsibleVars["repo_host"]))
+    assert_that(cmd.stdout, contains_string("Alfresco Content Services REST API Explorer"))
+    assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
