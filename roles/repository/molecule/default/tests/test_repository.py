@@ -6,7 +6,7 @@ from hamcrest import assert_that, contains_string
 @pytest.fixture()
 def get_ansible_vars(host):
     """Define get_ansible_vars"""
-   repository_role = "file=../../vars/main.yml name=repository_role"
+    repository_role = "file=../../vars/main.yml name=repository_role"
     tomcat_role = "file=../../../roles/tomcat/vars/main.yml name=tomcat_role"
     java_role = "file=../../../roles/java/vars/main.yml name=java_role"
     common_vars = "../../../common/vars/main.yml name=common_vars"
