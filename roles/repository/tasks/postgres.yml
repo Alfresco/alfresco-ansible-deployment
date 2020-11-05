@@ -1,5 +1,4 @@
 ---
-
 - set_fact: db_host_connect="{{ db_host }}"
   when: hostvars['database_1'] is undefined
 
