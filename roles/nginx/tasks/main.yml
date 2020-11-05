@@ -1,5 +1,5 @@
 ---
-# Setup/install tasks .
+# Setup/install tasks
 - name: Enable nginx repo.
   template:
     src: nginx.repo
