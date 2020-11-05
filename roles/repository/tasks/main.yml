@@ -364,7 +364,7 @@
     enabled: true
 
 - name: Notify alfresco content service
-  wait_for: 
+  wait_for:
     host: "{{ db_host_connect }}"
     port: 5432
   notify: alfresco-content-start

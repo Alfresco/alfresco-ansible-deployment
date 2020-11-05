@@ -7,7 +7,7 @@
     owner: root
     group: root
     mode: 0644
-    
+
 - name: Wait for yum lock release (Ansible 2.8.0 workaround)
   shell: ps -aux | grep yum
   register: yum_lock
