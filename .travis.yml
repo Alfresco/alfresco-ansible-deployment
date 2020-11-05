@@ -64,7 +64,11 @@ jobs:
     - stage: Verification
       name: Repository Role Verification
       script:
-        - cd roles/repository/ && molecule test
+        - cd roles/repository/ 
+        - molecule converge
+        - sleep 5m
+        - travis_wait 30 molecule verify
+        - molecule destroy
     - stage: Verification
       name: ADW Role Verification
       script:
