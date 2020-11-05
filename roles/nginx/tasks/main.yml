@@ -1,6 +1,13 @@
 ---
 # Setup/install tasks .
-
+- name: Enable nginx repo.
+  template:
+    src: nginx.repo
+    dest: /etc/yum.repos.d/nginx.repo
+    owner: root
+    group: root
+    mode: 0644
+    
 - name: Wait for yum lock release (Ansible 2.8.0 workaround)
   shell: ps -aux | grep yum
   register: yum_lock
