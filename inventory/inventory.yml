@@ -3,7 +3,7 @@ all:
   children:
     database:
       hosts:
-       database_1:         
+        database_1:         
           ansible_host: localhost
     repository:
       hosts:
