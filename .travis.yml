@@ -18,17 +18,17 @@ install: pip install 'molecule[docker]'
 
 stages:
   - name: Linters
-  - name: Verification
+  - name: Unit
   - name: Integration
 
 jobs:
   include:
     - stage: Linters
- #     name: "ansible-lint"
- #     install: pip install --upgrade ansible-lint
- #     script:
- #       - ansible-lint -v playbooks/acs.yml
-      name: "pylint"
+      name: "ansible-lint"
+      install: pip install --upgrade ansible-lint
+      script:
+        - ansible-lint -v playbooks/acs.yml
+    - name: "pylint"
       install: pip install --upgrade pylint
       script:
         - find . -name "*.py" ! -name __init__.py | xargs pylint
@@ -36,7 +36,7 @@ jobs:
       install: pip install --upgrade yamllint
       script:
         - yamllint .
-    - stage: Verification
+    - stage: Unit
       name: Search Role Verification
       script:
         - molecule --version
@@ -45,23 +45,23 @@ jobs:
         - sleep 1m
         - molecule verify
         - molecule destroy   
-    - stage: Verification
+    - stage: Unit
       name: Common Role Verification
       script:
         - cd roles/common/ && molecule test
-    - stage: Verification
+    - stage: Unit
       name: Java Role Verification
       script:
         - cd roles/java/ && molecule test
-    - stage: Verification
+    - stage: Unit
       name: Tomcat Role Verification
       script:
         - cd roles/tomcat/ && molecule test
-    - stage: Verification
+    - stage: Unit
       name: ActiveMQ Role Verification
       script:
         - cd roles/activemq/ && molecule test
-    - stage: Verification
+    - stage: Unit
       name: Repository Role Verification
       script:
         - cd roles/repository/ 
@@ -69,15 +69,15 @@ jobs:
         - sleep 5m
         - travis_wait 30 molecule verify
         - molecule destroy
-    - stage: Verification
+    - stage: Unit
       name: ADW Role Verification
       script:
         - cd roles/adw/ && molecule test
-    - stage: Verification
+    - stage: Unit
       name: Nginx Role Verification
       script:
         - cd roles/nginx/ && molecule test
-    - stage: Verification
+    - stage: Unit
       name: Transform AIO unit tests
       script:
         - cd roles/transformers
