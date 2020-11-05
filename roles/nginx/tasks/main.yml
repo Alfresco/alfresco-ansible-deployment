@@ -7,21 +7,12 @@
     owner: root
     group: root
     mode: 0644
-    
-- name: Wait for yum lock release (Ansible 2.8.0 workaround)
-  shell: ps -aux | grep yum
-  register: yum_lock
-  retries: 20
-  delay: 6
-  until: yum_lock.stdout_lines|length <= 2
-  changed_when: false
 
 - name: Ensure nginx is installed.
   package:
     name: "{{ nginx_pack }}"
     state: present
     lock_timeout: 180
-  when: yum_lock.stdout_lines|length <= 2
 
 # Vhost configuration.
 - import_tasks: vhosts.yml
