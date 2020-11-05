@@ -67,7 +67,7 @@ jobs:
         - cd roles/repository/ 
         - molecule converge
         - sleep 5m
-        - molecule verify
+        - travis_wait 30 molecule verify
         - molecule destroy
     - stage: Verification
       name: ADW Role Verification
