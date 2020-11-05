@@ -8,12 +8,13 @@
   delay: 6
   until: yum_lock.stdout_lines|length <= 2
   changed_when: false
-  
+
 - name: Ensure nginx is installed.
-  yum:
-    name: "{{ nginx_rpm_url }}"
+  package:
+    name: "{{ nginx_pack }}"
     state: present
     lock_timeout: 180
+  when: yum_lock.stdout_lines|length <= 2
 
 # Vhost configuration.
 - import_tasks: vhosts.yml
