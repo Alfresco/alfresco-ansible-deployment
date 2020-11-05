@@ -286,11 +286,6 @@
 - name: Include postgres task
   include_tasks: "postgres.yml"
 
-- name: Check if "{{ settings_folder }}/classpath/alfresco-global.properties" exists
-  stat:
-    path: "{{ settings_folder }}/classpath/alfresco-global.properties"
-  register: global_properties
-
 - name: Create alfresco-global.properties
   template:
     owner: "{{ username }}"
@@ -298,7 +293,6 @@
     src: alfresco-global.properties
     dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
     mode: 'u=rwx,g=rwx,o=rx'
-  when: not global_properties.stat.exists
 
 - name: Check on amp download async task
   async_status:
@@ -316,7 +310,6 @@
     src: apply_amps.sh
     dest: "{{ content_folder }}/apply_amps.sh"
     mode: 'u=rwx,g=rwx,o=rx'
-  when: not global_properties.stat.exists
 
 - name: Install amps on alfresco and share war files
   shell: '{{ content_folder }}/apply_amps.sh -nobackup -force'
