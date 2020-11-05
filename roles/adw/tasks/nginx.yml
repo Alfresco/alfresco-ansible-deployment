@@ -14,9 +14,12 @@
   delay: 6
   until: yum_lock.stdout_lines|length <= 2
   changed_when: false
+- name: Delay nginx yum install
+  pause:
+    minutes: 2
 
 - name: Ensure nginx in adw.
-  package:
+  yum:
     name: "{{ nginx_package_name }}"
     state: present
     lock_timeout: 180

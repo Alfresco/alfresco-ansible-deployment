@@ -10,7 +10,7 @@
   changed_when: false
   
 - name: Ensure nginx is installed.
-  package:
+  yum:
     name: "{{ nginx_rpm_url }}"
     state: present
     lock_timeout: 180
