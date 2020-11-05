@@ -27,3 +27,7 @@ all:
       hosts:
         transformer_1:
           ansible_host: localhost
+    syncservice:
+      hosts:
+        syncservice_1:
+          ansible_host: localhost

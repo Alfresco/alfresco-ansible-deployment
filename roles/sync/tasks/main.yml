@@ -85,7 +85,7 @@
         state: directory
     - name: Add config.yml template
       template:
-        src: "config.yml"
+        src: "config.yml.j2"
         dest: "{{ config_folder }}/sync-service/config.yml"
         owner: "{{ username }}"
         group: "{{ group_name }}"
