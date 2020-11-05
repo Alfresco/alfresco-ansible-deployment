@@ -114,7 +114,7 @@
     group: "{{ group_name }}"
   changed_when: false
 
-- name: add acs home to setenv.sh
+- name: add solr home to setenv.sh
   become: true
   become_user: "{{ username }}"
   lineinfile:

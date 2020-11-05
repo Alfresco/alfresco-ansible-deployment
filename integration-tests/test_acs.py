@@ -60,8 +60,6 @@ def test_aio_service(host, AnsibleVars):
     "Check that Transform AIO is enabled and running"
     assert_that(host.service("alfresco-tengine-aio").is_running)
     assert_that(host.service("alfresco-tengine-aio").is_enabled)
-    assert_that(host.service("alfresco-transform").is_running)
-    assert_that(host.service("alfresco-transform").is_enabled)
 
 def test_share_is_accesible(host, AnsibleVars):
     """Check share service"""
