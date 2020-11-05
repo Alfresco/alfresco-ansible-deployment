@@ -130,7 +130,7 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: yes
-  notify: stop-sync
+  notify: restart-sync
   when: not ansible_facts.services['alfresco-sync.service'] is defined
 
 - name: clean all
@@ -144,13 +144,17 @@
     path: "{{ binaries_folder }}/sync-dist-6.x-{{ sync.version }}.zip"
     state: absent
 
+- name: Include postgres task
+  include_tasks: "postgres.yml"
+
 - name: Enable Sync service
   systemd:
     name: alfresco-sync.service
+    state: stopped
     enabled: true
 
 - name: Notify sync service service to start
   wait_for:
-    host: "{{ db_host }}"
-    port: 5432
+    host: "{{ repo_host }}"
+    port: 8080
   notify: start-sync

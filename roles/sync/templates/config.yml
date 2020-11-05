@@ -1,10 +1,10 @@
 springContextFileLocation: sync-spring.xml
-version: 3.3.3 (201)
+version: {{ sync.version }}
 
 # ActiveMQ config
 messaging:
-    username: {{ ACTIVEMQ_ADMIN_LOGIN }}
-    password: {{ ACTIVEMQ_ADMIN_PASSWORD }}
+    username: admin
+    password: admin
     dataFormat: defaultDataFormatDef
     txnManager: syncRequiredTxn
     nodeEvents:
@@ -112,7 +112,7 @@ server:
     applicationConnectors:
         - type: http
           port: 9090
-          type: https
+          type: http
           keyStorePath: ./sync.p12
           keyStorePassword: N9SnIgrcAx7zWr
           keyStoreType: PKCS12
