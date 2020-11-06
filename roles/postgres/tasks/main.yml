@@ -48,7 +48,6 @@
   lineinfile:
     path: "{{ postgresql_conf_path[postgres_major_version] }}/pg_hba.conf"
     insertbefore: BOF
-#    regexp: ^{{ item['type'] }}\s+{{ item['database'] }}\s+{{ item['user'] }}\s+{{ item['address'] }}\s+{{ item['method'] }}
     line: "{{ item['type'] }}\t{{ item['database'] }}\t{{ item['user'] }}\t{{ item['address'] }}\t{{ item['method'] }}"
     state: "{{ item['state'] | default(omit) }}"
     backup: true
