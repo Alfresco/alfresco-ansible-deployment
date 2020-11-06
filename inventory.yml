@@ -21,7 +21,9 @@ all:
       hosts:
         nginx_1:
           ansible_host: localhost
-        webservers_1:
+    adw:
+      hosts:
+        adw_1:
           ansible_host: localhost
     transformers:
       hosts:
