@@ -18,4 +18,6 @@ solr_host: localhost
 share_host: localhost
 repo_host: localhost
 ats_tengine_aio_host: localhost
+sfs_host: localhost
+trouter_host: localhost
 adw_host: localhost 

@@ -5,7 +5,10 @@ db_host: "{{ hostvars['database_1']['ansible_host'] }}"
 solr_host: "{{ hostvars['search_1']['ansible_host'] }}"
 share_host: "{{ repo_host }}"
 ats_tengine_aio_host: "{{ hostvars['transformers_1']['ansible_host'] }}"
+sfs_host: "{{ hostvars['transformers_1']['ansible_host'] }}"
+trouter_host: "{{ hostvars['transformers_1']['ansible_host'] }}"
 adw_host: "{{ hostvars['adw_1']['ansible_host'] }}"
+
 postgres_pass: MyPass1
 nexus_repository:
   releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"

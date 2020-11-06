@@ -42,13 +42,12 @@
 
 - name: setting db host connect
   set_fact: db_host_connect_test="127.0.0.1"
-  when: TESTHOST is undefined
+  when: hostvars['database_1'] is undefined
 
 - name: Configure postgresql client auth
   lineinfile:
     path: "{{ postgresql_conf_path[postgres_major_version] }}/pg_hba.conf"
     insertbefore: BOF
-#    regexp: ^{{ item['type'] }}\s+{{ item['database'] }}\s+{{ item['user'] }}\s+{{ item['address'] }}\s+{{ item['method'] }}
     line: "{{ item['type'] }}\t{{ item['database'] }}\t{{ item['user'] }}\t{{ item['address'] }}\t{{ item['method'] }}"
     state: "{{ item['state'] | default(omit) }}"
     backup: true

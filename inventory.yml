@@ -4,28 +4,28 @@ all:
     database:
       hosts:
         database_1:         
-          ansible_host: localhost
+          ansible_connection: local
     repository:
       hosts:
         repository_1:
-          ansible_host: localhost
+          ansible_connection: local
     activemq:
       hosts:
         activemq_1:
-          ansible_host: localhost
+          ansible_connection: local
     search:
       hosts:
         search_1:
-          ansible_host: localhost
+          ansible_connection: local
     webservers:
       hosts:
         nginx_1:
-          ansible_host: localhost
+          ansible_connection: local
     adw:
       hosts:
         adw_1:
-          ansible_host: localhost
+          ansible_connection: local
     transformers:
       hosts:
         transformers_1:
-          ansible_host: localhost
+          ansible_connection: local
