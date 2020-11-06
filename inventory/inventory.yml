@@ -23,7 +23,7 @@ all:
           ansible_host: localhost
     adw:
       hosts:
-        adw1_1:
+        adw_1:
           ansible_host: localhost
     transformers:
       hosts:
