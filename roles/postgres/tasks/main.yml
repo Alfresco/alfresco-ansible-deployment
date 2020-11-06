@@ -40,9 +40,9 @@
   set_fact: repo_host_connect="127.0.0.1"
   when: hostvars['repository_1'] is undefined or hostvars['repository_1'] == "localhost"
 
-- name: setting db host connect
-  set_fact: db_host_connect_test="127.0.0.1"
-  when: TESTHOST is undefined
+#- name: setting db host connect
+#  set_fact: db_host_connect_test="127.0.0.1"
+#  when: TESTHOST is undefined
 
 - name: Configure postgresql client auth
   lineinfile:
