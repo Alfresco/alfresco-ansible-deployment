@@ -5,6 +5,9 @@
     - name: "Include postgres"
       include_role:
         name: "postgres"
+    - name: "Include activemq"
+      include_role:
+        name: "activemq"
     - name: "Include repository"
       include_role:
         name: "repository"

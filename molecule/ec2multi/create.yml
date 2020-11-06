@@ -7,18 +7,22 @@
   vars:
     ssh_user: centos
     ssh_port: 22
-    security_group_name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}"
-    security_group_description: Security group for testing Molecule
-    keypair_name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}"
+    security_group_name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_multi"
+    security_group_description: Security group for testing Molecule Multi
+    keypair_name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_multi"
     keypair_path: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/ssh_key"
 
   tasks:
-    - name: Use uri to ipify to get local ip
+    - name: Use uri to ipify to get external ip
       uri:
         url: https://api.ipify.org
         method: GET
         return_content: yes
       register: ipv4_address
+
+    - name: Get local ip
+      shell: "hostname -I | awk '{print $1}'"
+      register: ipv4_local
 
     - name: Create security group
       ec2_group:
@@ -28,6 +32,20 @@
         - proto: all
           cidr_ip: "{{ ipv4_address['content'] }}/32"
       register: sec_group
+
+    - name: Update security group
+      ec2_group:
+        name: "{{ security_group_name }}"
+        description: "{{ security_group_name }}"
+        rules:
+        - proto: all
+          cidr_ip: "0.0.0.0/0"
+        - proto: all
+          cidr_ip: "{{ ipv4_address['content'] }}/32"
+        - proto: all
+          cidr_ip: "{{ ipv4_local.stdout }}/32"          
+        - proto: all
+          group_name: "{{ security_group_name }}"
 
     - name: Test for presence of local keypair
       stat:
@@ -71,7 +89,6 @@
           #!/bin/bash
           sudo setsebool -P httpd_can_network_connect 1
           sudo getsebool httpd_can_network_connect
-        spot_price: "{{ item.0.spot_price }}"
         image: "{{ item.0.image }}"
         instance_type: "{{ item.0.instance_type }}"
         instance_initiated_shutdown_behavior: terminate
@@ -104,17 +121,6 @@
       until: ec2_jobs.finished
       retries: 300
       with_items: "{{ server.results }}"
-
-    - name: Update security group
-      ec2_group:
-        name: "{{ security_group_name }}"
-        description: "{{ security_group_name }}"
-        rules:
-        - proto: all
-          cidr_ip: "{{ ipv4_address['content'] }}/32"
-        - proto: all
-          cidr_ip: "{{ item.instances[0].public_ip }}/32"
-      with_items: "{{ ec2_jobs.results }}"
 
     - name: Populate instance config dict # noqa 503
       set_fact:

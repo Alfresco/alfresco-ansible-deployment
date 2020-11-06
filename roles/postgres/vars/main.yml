@@ -1,4 +1,7 @@
 ---
+postgres_pass: MyPass1
+repo_host_connect: "{{ hostvars['repository_1']['ansible_host'] }}"
+db_host_connect_test: "{{ TESTHOST }}"
 postgres_client_auth:
   - type: local
     database: "alfresco"
@@ -9,4 +12,14 @@ postgres_client_auth:
     database: all
     user: all
     address: 127.0.0.1/32
+    method: md5
+  - type: host
+    database: all
+    user: all
+    address: "{{ repo_host_connect }}/32"
+    method: md5
+  - type: host
+    database: all
+    user: all
+    address: "{{ db_host_connect_test }}/32"
     method: md5
