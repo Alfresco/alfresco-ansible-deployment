@@ -107,15 +107,6 @@
     insertafter: 'CATALINA_OPTS'
     line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}"
 
-- name: Setup common loader
-  become: true
-  become_user: "{{ username }}"
-  failed_when: false
-  lineinfile:
-    path: "{{ tomcat_config_dir }}/conf/catalina.properties"
-    regexp: '^common.loader='
-    line: "common.loader=\"/etc/opt/alfresco/content-services/classpath\",\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\""
-
 - name: Check on war download async task
   become: true
   become_user: root
@@ -325,6 +316,15 @@
   until: job_result.finished
   delay: 1
   retries: 300
+
+- name: Setup common loader
+  become: true
+  become_user: "{{ username }}"
+  failed_when: false
+  lineinfile:
+    path: "{{ tomcat_config_dir }}/conf/catalina.properties"
+    regexp: '^common.loader='
+    line: "common.loader=\"/etc/opt/alfresco/content-services/classpath\",\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\""
 
 - name: Add alfresco-content.service
   become: true
