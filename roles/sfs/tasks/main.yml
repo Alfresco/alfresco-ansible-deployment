@@ -1,0 +1,89 @@
+---
+# tasks file for sfs
+- name: ensure a list of packages installed
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ utils }}"
+
+- name: Download alfresco-shared-file-store-controller-{{ sfs.version }}.jar
+  block:
+    - name: Create transform services folder
+      become: true
+      become_user: "{{ username }}"
+      file:
+        path: "{{ ats_home }}"
+        state: directory
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+    - name: Download alfresco-shared-file-store-controller.jar
+      get_url:
+        url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-shared-file-store-controller/{{ sfs.version }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar"
+        dest: "{{ ats_home }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+        url_username: "{{ nexus_user }}"
+        url_password: "{{ nexus_password }}"
+        timeout: 600
+      register: download_result
+      until: download_result is succeeded
+
+- name: Add sfs startup script
+  become: true
+  become_user: "{{ username }}"
+  template:
+    src: ats-shared-fs.sh
+    dest: "{{ binaries_folder }}/ats-shared-fs.sh"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    force: yes
+
+- name: Add paths to setenv file
+  block:
+    - name: Check for ATS_HOME in "{{ config_folder }}/setenv.sh"
+      shell: cat {{ config_folder }}/setenv.sh | grep ATS_HOME
+      register: test_ats_home
+      failed_when: false
+      changed_when: test_ats_home.rc != 0
+    - name: Check for ACTIVEMQ_HOST in "{{ config_folder }}/setenv.sh"
+      shell: cat {{ config_folder }}/setenv.sh | grep ACTIVEMQ_HOST
+      register: test_activemq_home
+      failed_when: false
+      changed_when: test_activemq_home.rc != 0
+    - name: Add paths to setenv file
+      become: true
+      become_user: "{{ username }}"
+      blockinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        marker: "# {mark} SFS ENV VARS"
+        block: |
+          export ATS_HOME={{ binaries_folder }}/transform-service
+          export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
+          export ATS_SHARED_FS_HOST={{ sfs_host }}
+        insertafter: EOF
+      when: test_ats_home.rc != 0 and test_activemq_home.rc != 0
+
+- name: Add alfresco-shared-fs service
+  become: true
+  template:
+    src: alfresco-shared-fs.service
+    dest: "/etc/systemd/system/alfresco-shared-fs.service"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    force: yes
+  notify: start-sfs
+
+- name: clean all
+  command: yum clean all
+  args:
+    warn: false
+  changed_when: false
+
+- name: Enable and start sfs service
+  systemd:
+    name: alfresco-shared-fs.service
+    enabled: true
+  notify: start-sfs

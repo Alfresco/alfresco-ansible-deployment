@@ -27,8 +27,6 @@ def test_aio_service(host, get_ansible_vars):
     "Check that Transform AIO is enabled and running"
     assert_that(host.service("alfresco-tengine-aio").is_running)
     assert_that(host.service("alfresco-tengine-aio").is_enabled)
-    assert_that(host.service("alfresco-transform").is_running)
-    assert_that(host.service("alfresco-transform").is_enabled)
 
 def test_aio_config_api(host, get_ansible_vars):
     """Check that Transform AIO transform/config api works"""

@@ -54,6 +54,7 @@ solr:
 transform:
   version: 2.3.2
 
-adwVersion: 1.6.0
+adw:
+  version: 1.6.0
 
-adw_tgz_url: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-digital-workspace/{{ adwVersion }}/alfresco-digital-workspace-{{ adwVersion }}.zip"
+adw_tgz_url: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
