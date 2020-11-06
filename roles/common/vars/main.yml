@@ -52,7 +52,8 @@ trouter:
 sfs:
   version: 0.10.0
 
-adwVersion: 1.6.0
+adw:
+  version: 1.6.0
 
 repo_downloads:
   - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/integrations/alfresco-googledrive-repo-enterprise/{{ alfresco.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ alfresco.googledrive_repo.version }}.amp"
@@ -68,6 +69,6 @@ nexus_repository:
   releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
   enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
 
-adw_tgz_url: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-digital-workspace/{{ adwVersion }}/alfresco-digital-workspace-{{ adwVersion }}.zip"
+adw_tgz_url: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
 
 ats_home: "{{ binaries_folder }}/transform-service"

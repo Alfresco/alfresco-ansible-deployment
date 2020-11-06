@@ -24,7 +24,7 @@ rules:
   hyphens:
     level: error
   indentation: disable
-  key-duplicates: enable
+  key-duplicates: disable
   line-length: disable
   new-line-at-end-of-file: disable
   new-lines:

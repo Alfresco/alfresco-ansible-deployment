@@ -36,6 +36,14 @@
     backup: true
   with_items: "{{ postgres_config }}"
 
+- name: set repo_host_connect
+  set_fact: repo_host_connect="127.0.0.1"
+  when: hostvars['repository_1'] is undefined or hostvars['repository_1'] == "localhost"
+
+- name: set db_host_connect_test
+  set_fact: db_host_connect_test="127.0.0.1"
+  when: TESTHOST is undefined
+
 - name: Configure postgresql client auth
   lineinfile:
     path: "{{ postgresql_conf_path[postgres_major_version] }}/pg_hba.conf"
@@ -51,3 +59,10 @@
     name: "{{ postgresql_service[postgres_major_version] }}"
     state: started
     enabled: true
+
+- name: Change "postgres" pass
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: "postgres"
+    password: "{{ postgres_pass }}"
