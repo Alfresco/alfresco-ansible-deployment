@@ -18,7 +18,7 @@ install: pip install 'molecule[docker]'
 
 stages:
   - name: Linters
-  - name: Unit
+  - name: Verification
 
 jobs:
   include:
@@ -35,7 +35,7 @@ jobs:
       install: pip install --upgrade yamllint
       script:
         - yamllint .
-    - stage: Unit
+    - stage: Verification
       name: Search Role Verification
       script:
         - molecule --version
@@ -44,23 +44,23 @@ jobs:
         - sleep 1m
         - molecule verify
         - molecule destroy   
-    - stage: Unit
+    - stage: Verification
       name: Common Role Verification
       script:
         - cd roles/common/ && molecule test
-    - stage: Unit
+    - stage: Verification
       name: Java Role Verification
       script:
         - cd roles/java/ && molecule test
-    - stage: Unit
+    - stage: Verification
       name: Tomcat Role Verification
       script:
         - cd roles/tomcat/ && molecule test
-    - stage: Unit
+    - stage: Verification
       name: ActiveMQ Role Verification
       script:
         - cd roles/activemq/ && molecule test
-    - stage: Unit
+    - stage: Verification
       name: Repository Role Verification
       script:
         - cd roles/repository/ 
@@ -68,7 +68,7 @@ jobs:
         - sleep 5m
         - travis_wait 30 molecule verify
         - molecule destroy
-    - stage: Unit
+    - stage: Verification
       name: ADW Role Verification
       script:
         - cd roles/adw/ && molecule test
@@ -92,7 +92,7 @@ jobs:
         - sleep 1m
         - molecule verify
         - molecule destroy
-    - stage: Unit
+    - stage: Verification
       name: Integration checks
       env:
         - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
@@ -122,7 +122,7 @@ jobs:
         - echo "wait for repo to be up" && sleep 5m
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; pytest --verbose --host http://$TESTHOST --user admin --password admin"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi
-    - stage: Unit
+    - stage: Verification
       name: Multi Machine Integration checks
       env:
         - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
