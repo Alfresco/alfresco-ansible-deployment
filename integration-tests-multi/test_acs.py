@@ -15,7 +15,7 @@ def AnsibleVars(host):
     repository_role = "file=../../roles/repository/vars/main.yml name=repository_role"
     solr_role = "file=../../roles/solr/vars/main.yml name=solr_role"
     common_role = "file=../../roles/common/vars/main.yml name=common_role"
-    common_host_role = "file=../../inventory_acs/group_vars/all.yml name=common_host_role"
+    common_host_role = "file=../../inventory/group_vars/all.yml name=common_host_role"
     ansible_vars = host.ansible("include_vars", adw_role)["ansible_facts"]["adw_role"]
     ansible_vars.update(host.ansible("include_vars", transformers)["ansible_facts"]["transformers"])
     ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
