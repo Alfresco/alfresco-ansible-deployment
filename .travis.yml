@@ -72,7 +72,7 @@ jobs:
       name: ADW Role Verification
       script:
         - cd roles/adw/ && molecule test
-    - stage: Unit
+    - stage: Verification
       name: Nginx Role Verification
       script:
         - cd roles/nginx/ && molecule test
