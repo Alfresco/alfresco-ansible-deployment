@@ -102,12 +102,12 @@ jobs:
         - chmod 600 /tmp/dbp-ansible
         - ssh-add /tmp/dbp-ansible
         - git clone --depth 1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
-        - sed -i 's/localhost/localhost\n          ansible_ssh_common_args:-o UserKnownHostsFile=\/dev\/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no/g' inventory/inventory.yml
-        - sed -i 's/-o UserKnownHostsFile/ -o UserKnownHostsFile/g' inventory/inventory.yml
-        - sed -i "s/localhost/localhost\n          ansible_private_key_file:\/opt\/buildacs\/$TRAVIS_BRANCH\/$TRAVIS_BUILD_NUMBER\/alfresco-ansible-deployment\/molecule_temp_dir\/ssh_key/g" inventory/inventory.yml
-        - sed -i 's/\/opt\/buildacs/ \/opt\/buildacs/g' inventory/inventory.yml
-        - sed -i 's/localhost/localhost\n          ansible_user:centos/g' inventory/inventory.yml
-        - sed -i 's/centos/ centos/g' inventory/inventory.yml
+        - sed -i 's/localhost/localhost\n          ansible_ssh_common_args:-o UserKnownHostsFile=\/dev\/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no/g' inventory.yml
+        - sed -i 's/-o UserKnownHostsFile/ -o UserKnownHostsFile/g' inventory.yml
+        - sed -i "s/localhost/localhost\n          ansible_private_key_file:\/opt\/buildacs\/$TRAVIS_BRANCH\/$TRAVIS_BUILD_NUMBER\/alfresco-ansible-deployment\/molecule_temp_dir\/ssh_key/g" inventory.yml
+        - sed -i 's/\/opt\/buildacs/ \/opt\/buildacs/g' inventory.yml
+        - sed -i 's/localhost/localhost\n          ansible_user:centos/g' inventory.yml
+        - sed -i 's/centos/ centos/g' inventory.yml
       script:
         - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
         - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir/"
@@ -117,8 +117,8 @@ jobs:
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2"
         - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat molecule_temp_dir/instance_config.yml | yq .[].address -r")
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; sed -i 's/localhost/$TESTHOST/g' /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory/inventory.yml"
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory/inventory.yml"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; sed -i 's/localhost/$TESTHOST/g' /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory.yml"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory.yml"
         - echo "wait for repo to be up" && sleep 5m
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; pytest --verbose --host http://$TESTHOST --user admin --password admin"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi

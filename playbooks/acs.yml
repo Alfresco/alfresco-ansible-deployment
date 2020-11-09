@@ -44,15 +44,6 @@
   tags:
     - repository
 
-#- name: Transformers Role
-#  hosts: transformers
-#  become: true
-#  become_method: sudo
-#  roles:
-#    - role: '../roles/transformers'
-#  tags:
-#    - transformers
-
 - name: T-Router Role
   hosts: transformers
   become: true
