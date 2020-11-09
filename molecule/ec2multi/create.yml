@@ -95,7 +95,7 @@
         vpc_subnet_id: "{{ item.0.vpc_subnet_id }}"
         group: "{{ security_group_name }}"
         instance_tags:
-          Name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}"
+          Name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_multi"
           instance: "{{ item.0.name }}_{{ item.1 }}"
         volumes:
           - device_name: /dev/sda1
