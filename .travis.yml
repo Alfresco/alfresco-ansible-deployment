@@ -109,6 +109,7 @@ jobs:
         - sed -i 's/\/opt\/buildacs/ \/opt\/buildacs/g' inventory.yml
         - sed -i 's/localhost/localhost\n          ansible_user:centos/g' inventory.yml
         - sed -i 's/centos/ centos/g' inventory.yml
+        - cat inventory.yml
       script:
         - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
         - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir/"
@@ -119,6 +120,7 @@ jobs:
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2"
         - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat molecule_temp_dir/instance_config.yml | yq .[].address -r")
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; sed -i 's/local/$TESTHOST/g' /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory.yml"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cat /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory.yml"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory.yml"
         - echo "wait for repo to be up" && sleep 5m
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; pytest --verbose --host http://$TESTHOST --user admin --password admin"
