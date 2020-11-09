@@ -283,10 +283,8 @@
     mode: 'u=rwx,g=rwx,o=rx'
   when: not vti_xml.stat.exists
 
-- name: Check if "{{ settings_folder }}/classpath/alfresco-global.properties" exists
-  stat:
-    path: "{{ settings_folder }}/classpath/alfresco-global.properties"
-  register: global_properties
+- name: Include postgres task
+  include_tasks: "postgres.yml"
 
 - name: Create alfresco-global.properties
   template:
@@ -295,7 +293,6 @@
     src: alfresco-global.properties
     dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
     mode: 'u=rwx,g=rwx,o=rx'
-  when: not global_properties.stat.exists
 
 - name: Check on amp download async task
   async_status:
@@ -313,7 +310,6 @@
     src: apply_amps.sh
     dest: "{{ content_folder }}/apply_amps.sh"
     mode: 'u=rwx,g=rwx,o=rx'
-  when: not global_properties.stat.exists
 
 - name: Install amps on alfresco and share war files
   shell: '{{ content_folder }}/apply_amps.sh -nobackup -force'
@@ -339,9 +335,6 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
   notify: alfresco-content-restart
-
-- name: Include postgres task
-  include_tasks: "postgres.yml"
 
 - name: Add PostResources to alfresco.xml
   become: true
@@ -370,8 +363,8 @@
     state: stopped
     enabled: true
 
-- name: Notify alfresco content service to start
+- name: Notify alfresco content service
   wait_for:
-    host: "{{ db_host }}"
+    host: "{{ db_host_connect }}"
     port: 5432
   notify: alfresco-content-start
