@@ -13,6 +13,7 @@ before_install:
 
 env:
   - MOLECULE_NO_LOG=false
+  - ANSIBLE_FORCE_COLOR=true
 
 install: pip install 'molecule[docker]'
 
@@ -112,15 +113,12 @@ jobs:
         - sed -i 's/local/local\n          ansible_user:centos/g' inventory.yml
         - sed -i 's/centos/ centos/g' inventory.yml
         - sed -i 's/ansible_connection/ansible_host/g' inventory.yml
-        - cat inventory.yml
         - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
         - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade --use-feature=2020-resolver awscli 'molecule-ec2==0.2';"
         - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir/"
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2"
         - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat molecule_temp_dir/instance_config.yml | yq .[].address -r")
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; sed -i 's/local/$TESTHOST/g' /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory.yml"
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cat /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory.yml"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory.yml"
         - echo "wait for repo to be up" && sleep 5m
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; pytest --verbose --host http://$TESTHOST --user admin --password admin"
@@ -140,7 +138,6 @@ jobs:
         - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/"
         - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
         - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade --use-feature=2020-resolver awscli 'molecule-ec2==0.2';"
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2multi"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2multi"
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2multi/dynamic_inventory.py"
         - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat inventory.yml | yq .all.children.webservers.hosts.webservers_1.ansible_host -r")
