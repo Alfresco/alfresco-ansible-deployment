@@ -65,13 +65,13 @@
         path: "{{ sync_home }}/sync"
       register: sync_folder
     - name: Copy files from sync to to {{ sync_home }}
-      copy: 
+      copy:
         src: "{{ sync_home }}/sync/"
         dest: "{{ sync_home }}"
         remote_src: yes
       when: sync_folder.stat.exists
     - name: Remove old sync folder
-      file: 
+      file:
         path: "{{ sync_home }}/sync"
         state: absent
 
