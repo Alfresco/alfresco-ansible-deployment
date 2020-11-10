@@ -36,19 +36,14 @@
     backup: true
   with_items: "{{ postgres_config }}"
 
-- name: set repo_host_connect
+- name: setting repo host connect
   set_fact: repo_host_connect="127.0.0.1"
-  when: hostvars['repository_1'] is undefined or hostvars['repository_1'] == "localhost"
-
-- name: set db_host_connect_test
-  set_fact: db_host_connect_test="127.0.0.1"
-  when: TESTHOST is undefined
+  when: hostvars['repository_1'] is not defined or hostvars['repository_1'] == "localhost"
 
 - name: Configure postgresql client auth
   lineinfile:
     path: "{{ postgresql_conf_path[postgres_major_version] }}/pg_hba.conf"
     insertbefore: BOF
-#    regexp: ^{{ item['type'] }}\s+{{ item['database'] }}\s+{{ item['user'] }}\s+{{ item['address'] }}\s+{{ item['method'] }}
     line: "{{ item['type'] }}\t{{ item['database'] }}\t{{ item['user'] }}\t{{ item['address'] }}\t{{ item['method'] }}"
     state: "{{ item['state'] | default(omit) }}"
     backup: true
