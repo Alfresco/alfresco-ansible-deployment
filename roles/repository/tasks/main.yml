@@ -46,18 +46,20 @@
     path: "{{ content_data_folder }}/webapps/alfresco/META-INF/MANIFEST.MF"
   register: alf_install_check
 
-- name: Download DISTRIBUTION and WAR files
+- name: Download DISTRIBUTION files
   become: true
   become_user: root
-  loop: "{{ query('items', war_downloads) }}"
+  loop: "{{ query('items', distribution_download) }}"
   changed_when: false
   get_url:
     url: "{{ item.url }}"
     dest: "{{ item.dest }}"
-    mode: 0644
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
-  register: war_download_result
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+  register: distribution_download_result
   async: 900
   poll: 0
   when: not alf_install_check.stat.exists
@@ -107,7 +109,7 @@
     insertafter: 'CATALINA_OPTS'
     line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}"
 
-- name: Check on war download async task
+- name: Check on distribution download async task
   become: true
   become_user: root
   async_status:
@@ -116,7 +118,7 @@
   until: job_result.finished
   delay: 2
   retries: 300
-  loop: "{{ war_download_result.results }}"
+  loop: "{{ distribution_download_result.results }}"
 
 - name: Add the configuration templates
   become: true
@@ -143,6 +145,24 @@
     dest: "{{ content_folder }}"
     remote_src: yes
     creates: "{{ content_folder }}/bin"
+
+- name: Download war files
+  become: true
+  become_user: root
+  loop: "{{ query('items', repo_war_downloads) }}"
+  changed_when: false
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+  register: war_download_result
+  async: 900
+  poll: 0
+  when: not alf_install_check.stat.exists
 
 - name: Remove Alfresco Content Services {{ alfresco.version }} zip file
   changed_when: false
@@ -274,6 +294,20 @@
     mode: 'u=rwx,g=rwx,o=rx'
   when: not vti_xml.stat.exists
 
+- name: Check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml" exists
+  stat:
+    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml"
+  register: api_explorer
+
+- name: Create api-explorer.xml
+  template:
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    src: api-explorer.xml
+    dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml"
+    mode: 'u=rwx,g=rwx,o=rx'
+  when: not api_explorer.stat.exists
+
 - name: Include postgres task
   include_tasks: "postgres.yml"
 
@@ -316,6 +350,17 @@
   until: job_result.finished
   delay: 1
   retries: 300
+
+- name: Check on war download async task
+  become: true
+  become_user: root
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 2
+  retries: 300
+  loop: "{{ war_download_result.results }}"
 
 - name: Setup common loader
   become: true
