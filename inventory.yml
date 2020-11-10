@@ -29,3 +29,7 @@ all:
       hosts:
         transformers_1:
           ansible_connection: local
+    syncservice:
+      hosts:
+        syncservice_1:
+          ansible_connection: local
