@@ -1,6 +1,4 @@
 ---
-# var file for repository role
-
 nexus_repository:
   releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
   enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
@@ -15,7 +13,6 @@ war_downloads:
 maven_repository:
    org: "https://repo.maven.apache.org/maven2/org"
 licenses: 3.1.0
-# vars file for repository
 
 content_folder: "{{ binaries_folder }}/content-services-{{ alfresco.version }}"
 settings_folder: "{{ config_folder }}/content-services"
@@ -34,8 +31,6 @@ redirect_port: "8443"
 ajp_port: "8009"
 solr_port: "8983"
 share_port: "8080"
-# share_host: "{{ ipv4_address['content'] }}"
-
 
 share_folders:
   - /shared/classes/alfresco/web-extension
@@ -46,8 +41,6 @@ share_templates:
   - custom-slingshot-application-context.xml
   - share-config-custom.xml
   - smartfolders-amp-actions-config.xml
-
-# vars file for repository
 
 instance_name: share
 resource_path: target

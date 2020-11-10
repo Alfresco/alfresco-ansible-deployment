@@ -6,7 +6,7 @@ driver:
   name: ec2
 
 platforms:
-  - name: "molecule_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}"
+  - name: "molecule_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_single"
 #    image: ami-0affd4508a5d2481b
     image: ami-0667c462e50c0e905
     instance_type: t3.xlarge
