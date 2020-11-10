@@ -11,7 +11,7 @@ def get_ansible_vars(host):
     java_role = "file=../../../roles/java/vars/main.yml name=java_role"
     common_vars = "../../../common/vars/main.yml name=common_vars"
     common_defaults = "../../../common/defaults/main.yml name=common_defaults"
-    common_hosts = "../../inventory_acs/group_vars/all.yml name=common_hosts"
+    common_hosts = "../../group_vars/all.yml name=common_hosts"
     ansible_vars = host.ansible("include_vars", tomcat_role)["ansible_facts"]["tomcat_role"]
     ansible_vars.update(host.ansible("include_vars", repository_role)["ansible_facts"]["repository_role"])
     ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
@@ -39,6 +39,20 @@ def test_share_context_200(host, get_ansible_vars):
     "Check that /share context is available and returns a HTTP 200 status code"
     cmd = host.run("curl -iL --user admin:admin --connect-timeout 5 http://{}:8080/share".format(get_ansible_vars["repo_host"]))
     assert_that(cmd.stdout, contains_string("Alfresco Share"))
+    assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
+
+def test_vti_bin_context_200(host, get_ansible_vars):
+    "Check that /share context is available and returns a HTTP 200 status code"
+    cmd = host.run("curl -iL --user admin:admin --connect-timeout 5 http://{}:8080/_vti_bin/".format(get_ansible_vars["repo_host"]))
+    assert_that(cmd.stdout, contains_string("Welcome to Alfresco!"))
+    assert_that(cmd.stdout, contains_string("This application does not provide a web interface in the browser."))
+    assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
+
+def test_vti_inf_context_200(host, get_ansible_vars):
+    "Check that /share context is available and returns a HTTP 200 status code"
+    cmd = host.run("curl -iL --user admin:admin --connect-timeout 5 http://{}:8080/_vti_inf.html".format(get_ansible_vars["repo_host"]))
+    assert_that(cmd.stdout, contains_string("_vti_bin"))
+    assert_that(cmd.stdout, contains_string("FrontPage Configuration Information"))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
 
 def test_repo_service_is_running_and_enabled(host, get_ansible_vars):
