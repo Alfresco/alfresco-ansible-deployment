@@ -82,6 +82,9 @@
         path: "{{ sync_home }}/sync"
         state: absent
 
+- name: Include postgres task
+  include_tasks: "postgres.yml"
+
 - name: Add config.yml file to {{ config_folder }}
   block:
     - name: Create sync-service in {{ config_folder }}
@@ -138,7 +141,7 @@
     mode: 'u=rwx,g=rwx,o=rx'
     force: yes
   notify: restart-sync
-  # when: not ansible_facts.services['alfresco-sync.service'] is defined
+  when: not ansible_facts.services['alfresco-sync.service'] is defined
 
 - name: clean all
   command: yum clean all
@@ -150,9 +153,6 @@
   file:
     path: "{{ binaries_folder }}/sync-dist-6.x-{{ sync.version }}.zip"
     state: absent
-
-- name: Include postgres task
-  include_tasks: "postgres.yml"
 
 - name: Enable Sync service
   systemd:
