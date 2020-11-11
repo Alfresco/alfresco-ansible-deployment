@@ -3,3 +3,4 @@
 utils:
   - unzip
   - which
+  - python-psycopg2
