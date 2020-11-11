@@ -138,7 +138,7 @@
     mode: 'u=rwx,g=rwx,o=rx'
     force: yes
   notify: restart-sync
-  when: not ansible_facts.services['alfresco-sync.service'] is defined
+  # when: not ansible_facts.services['alfresco-sync.service'] is defined
 
 - name: clean all
   command: yum clean all
