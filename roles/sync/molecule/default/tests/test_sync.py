@@ -9,7 +9,7 @@ def get_ansible_vars(host):
     java_role = "file=../../../java/vars/main.yml name=java_role"
     common_vars = "file=../../../common/vars/main.yml name=common_vars"
     common_defaults = "file=../../../common/defaults/main.yml name=common_defaults"
-    common_hosts = "../../group_vars/all.yml name=common_hosts" 
+    common_hosts = "../../group_vars/all.yml name=common_hosts"
     syncservices = "file=../../vars/main.yml name=syncservices"
     ansible_vars = host.ansible("include_vars", java_role)["ansible_facts"]["java_role"]
     ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
