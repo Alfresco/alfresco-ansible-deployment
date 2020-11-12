@@ -1,9 +1,15 @@
 ---
 postgres_pass: MyPass1
 repo_host_connect: "{{ hostvars['repository_1']['ansible_host'] }}"
+sync_host_connect: "{{ hostvars['syncservice_1']['ansible_host'] }}"
 postgres_client_auth:
   - type: local
     database: "alfresco"
+    user: "alfresco"
+    address:
+    method: password
+  - type: local
+    database: "alfresco_sync"
     user: "alfresco"
     address:
     method: password
@@ -16,4 +22,9 @@ postgres_client_auth:
     database: all
     user: all
     address: "{{ repo_host_connect }}/32"
+    method: md5
+  - type: host
+    database: all
+    user: all
+    address: "{{ sync_host_connect }}/32"
     method: md5

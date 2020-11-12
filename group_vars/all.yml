@@ -8,6 +8,7 @@ ats_tengine_aio_host: "{{ hostvars['transformers_1']['ansible_host'] }}"
 sfs_host: "{{ hostvars['transformers_1']['ansible_host'] }}"
 trouter_host: "{{ hostvars['transformers_1']['ansible_host'] }}"
 adw_host: "{{ hostvars['adw_1']['ansible_host'] }}"
+sync_host: "{{ hostvars['syncservice_1']['ansible_host'] }}"
 
 postgres_pass: MyPass1
 nexus_repository:
@@ -68,4 +69,8 @@ transform:
 adw:
   version: 1.6.0
 
+sync:
+  version: 3.3.3.1
+
 adw_tgz_url: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
+sync_zip_url: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"

@@ -1,0 +1,167 @@
+---
+# tasks file for sync
+- name: Include vars for postgres credentials
+  include_vars: "postgres.yml"
+
+- name: Ensure a list of packages installed
+  become: true
+  become_user: root
+  package:
+    name: "{{ utils }}"
+    state: present
+
+- name: Populate service facts
+  service_facts:
+
+- name: Download sync servies {{ sync.version }}
+  block:
+    - name: Create sync services folder
+      become: true
+      become_user: "{{ username }}"
+      file:
+        path: "{{ sync_home }}"
+        state: directory
+    - name: Download artefact
+      become: true
+      become_user: "{{ username }}"
+      get_url:
+        url: "{{ sync_zip_url }}"
+        dest: "{{ binaries_folder }}/sync-dist-6.x-{{ sync.version }}.zip"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+        url_username: "{{ nexus_user }}"
+        url_password: "{{ nexus_password }}"
+      register: sync_download_result
+      until: sync_download_result is succeeded
+  when: not ansible_facts.services['alfresco-sync.service'] is defined
+
+- name: Download postgresql jar
+  block:
+    - name: Create connectors folder
+      become: true
+      become_user: "{{ username }}"
+      file:
+        path: "{{ sync_home }}/service-sync/connectors"
+        state: directory
+    - name: Download artefact
+      become: true
+      become_user: "{{ username }}"
+      get_url:
+        url: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependency_postgresql.version }}/postgresql-{{ dependency_postgresql.version }}.jar"
+        dest: "{{ sync_home }}/service-sync/connectors/postgresql.jar"
+        mode: 'u=rwx,g=rwx,o=rx'
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+      register: postgresql_download
+      until: postgresql_download is succeeded
+
+- name: Extract sync service to {{ sync_home }}
+  become: true
+  become_user: "{{ username }}"
+  unarchive:
+    src: "{{ binaries_folder }}/sync-dist-6.x-{{ sync.version }}.zip"
+    dest: "{{ sync_home }}"
+    remote_src: yes
+  when: sync_download_result.changed
+
+- name: Move sync service files to {{ sync_home }}
+  block:
+    - name: Check if sync folder exists
+      stat:
+        path: "{{ sync_home }}/sync"
+      register: sync_folder
+    - name: Copy files from sync to to {{ sync_home }}
+      copy:
+        src: "{{ sync_home }}/sync/"
+        dest: "{{ sync_home }}"
+        remote_src: yes
+      when: sync_folder.stat.exists
+    - name: Remove old sync folder
+      file:
+        path: "{{ sync_home }}/sync"
+        state: absent
+
+- name: Include postgres task
+  include_tasks: "postgres.yml"
+
+- name: Add config.yml file to {{ config_folder }}
+  block:
+    - name: Create sync-service in {{ config_folder }}
+      become: true
+      become_user: "{{ username }}"
+      file:
+        path: "{{ config_folder }}/sync-service"
+        state: directory
+    - name: Add config.yml template
+      template:
+        src: "config.yml.j2"
+        dest: "{{ config_folder }}/sync-service/config.yml"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+        force: yes
+
+- name: Check for SYNC_HOME in "{{ config_folder }}/setenv.sh"
+  shell: cat {{ config_folder }}/setenv.sh | grep SYNC_HOME
+  register: test_sync_home
+  failed_when: false
+  changed_when: test_sync_home.rc != 0
+
+- name: Add paths to setenv file
+  become: true
+  become_user: "{{ username }}"
+  blockinfile:
+    path: "{{ config_folder }}/setenv.sh"
+    marker: "# {mark} SYNC ENV VARS"
+    block: |
+      export SYNC_VERSION={{ sync.version }}
+      export SYNC_HOME={{ sync_home }}
+    insertafter: EOF
+  when: test_sync_home.rc != 0
+
+- name: Add sync service startup script
+  become: true
+  become_user: "{{ username }}"
+  template:
+    src: syncservice.sh
+    dest: "{{ binaries_folder }}/syncservice.sh"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    force: no
+
+- name: Add alfresco-sync.service service
+  become: true
+  template:
+    src: alfresco-sync.service
+    dest: "/etc/systemd/system/alfresco-sync.service"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    force: yes
+  notify: restart-sync
+  when: not ansible_facts.services['alfresco-sync.service'] is defined
+
+- name: clean all
+  command: yum clean all
+  args:
+    warn: false
+  changed_when: false
+
+- name: Remove sync service archive
+  file:
+    path: "{{ binaries_folder }}/sync-dist-6.x-{{ sync.version }}.zip"
+    state: absent
+
+- name: Enable Sync service
+  systemd:
+    name: alfresco-sync.service
+    state: stopped
+    enabled: true
+
+- name: Notify sync service service to start
+  wait_for:
+    host: "{{ repo_host }}"
+    port: 8080
+  notify: start-sync
