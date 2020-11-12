@@ -3,10 +3,6 @@
   set_fact: db_host_connect="{{ db_host }}"
   when: hostvars['database_1'] is not defined
 
-- name: debug hostvars
-  debug:
-    var: hostvars
-
 - name: setting sync host connect
   set_fact: sync_connect="{{ sync_host }}"
   when: hostvars['syncservice_1'] is not defined
