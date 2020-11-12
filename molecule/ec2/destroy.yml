@@ -29,6 +29,11 @@
       async: 7200
       poll: 0
 
+    - name: Delete remote keypair
+      ec2_key:
+        name: "{{ keypair_name }}"
+        state: absent
+
     - name: Wait for instance(s) deletion to complete
       async_status:
         jid: "{{ item.ansible_job_id }}"
@@ -46,11 +51,6 @@
       until: not result.failed
       retries: 100
       delay: 3
-
-    - name: Delete remote keypair
-      ec2_key:
-        name: "{{ keypair_name }}"
-        state: absent
 
     # Mandatory configuration for Molecule to function.
 
