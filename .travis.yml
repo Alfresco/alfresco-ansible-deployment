@@ -110,7 +110,7 @@ jobs:
         - eval "$(ssh-agent -s)"
         - chmod 600 /tmp/dbp-ansible
         - ssh-add /tmp/dbp-ansible
-        - git clone --depth 1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
+        - git clone --branch enable-sync-service-tests --depth 1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
       script:
         - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
         - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/"
