@@ -20,6 +20,16 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", common_defaults)["ansible_facts"]["common_defaults"])
     return ansible_vars
 
+def test_repo_service_is_running_and_enabled(host, get_ansible_vars):
+    """Check repository service"""
+    repository = host.service("alfresco-content.service")
+    assert_that(repository.is_running)
+    assert_that(repository.is_enabled)
+
+def test_alfresco_log_exists(host, get_ansible_vars):
+    "Check that alfresco.log exists in /var/log/alfresco"
+    assert_that(host.file("/var/log/alfresco/alfresco.log").exists)
+
 def test_alfresco_context_200(host, get_ansible_vars):
     "Check that /alfresco context is available and returns a HTTP 200 status code"
     cmd = host.run("curl -iL --user admin:admin --connect-timeout 5 http://{}:8080/alfresco".format(get_ansible_vars["repo_host"]))
@@ -55,12 +65,8 @@ def test_vti_inf_context_200(host, get_ansible_vars):
     assert_that(cmd.stdout, contains_string("FrontPage Configuration Information"))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
 
-def test_repo_service_is_running_and_enabled(host, get_ansible_vars):
-    """Check repository service"""
-    repository = host.service("alfresco-content.service")
-    assert_that(repository.is_running)
-    assert_that(repository.is_enabled)
-
-def test_alfresco_log_exists(host, get_ansible_vars):
-    "Check that alfresco.log exists in /var/log/alfresco"
-    assert_that(host.file("/var/log/alfresco/alfresco.log").exists)
+def test_api_explorer_context_200(host, get_ansible_vars):
+    "Check that /api-explorer context is available and returns a HTTP 200 status code"
+    cmd = host.run("curl -iL --user admin:admin http://{}:8080/api-explorer".format(get_ansible_vars["repo_host"]))
+    assert_that(cmd.stdout, contains_string("Alfresco Content Services REST API Explorer"))
+    assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))

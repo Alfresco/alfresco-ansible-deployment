@@ -74,6 +74,14 @@ repo_downloads:
   - url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/{{ alfresco.googledrive_share.version }}/alfresco-googledrive-share-{{ alfresco.googledrive_share.version }}.amp"
     dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
 
+repo_war_downloads:
+  - url: "{{ nexus_repository.releases }}org/alfresco/api-explorer/{{ alfresco.api_explorer.version }}/api-explorer-{{ alfresco.api_explorer.version }}.war"
+    dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
+  - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-vti-bin/{{ alfresco.vti_bin.version }}/alfresco-vti-bin-{{ alfresco.vti_bin.version }}.war"
+    dest: "{{ content_folder }}/web-server/webapps/_vti_bin.war"
+  - url: "{{ nexus_repository.releases }}org/alfresco/alfresco-server-root/{{ alfresco.server_root.version }}/alfresco-server-root-{{ alfresco.server_root.version }}.war"
+    dest: "{{ content_folder }}/web-server/webapps/ROOT.war"
+
 nexus_repository:
   releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
   enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"

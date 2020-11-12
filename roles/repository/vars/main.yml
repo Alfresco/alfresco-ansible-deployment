@@ -3,15 +3,9 @@ nexus_repository:
   releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
   enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
 
-war_downloads:
+distribution_download:
   - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ alfresco.version }}/alfresco-content-services-distribution-{{ alfresco.version }}.zip"
     dest: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
-  - url: "{{ nexus_repository.releases }}org/alfresco/api-explorer/{{ alfresco.api_explorer.version }}/api-explorer-{{ alfresco.api_explorer.version }}.war"
-    dest: "{{ content_folder }}/webapps/api-explorer.war"
-  - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-vti-bin/{{ alfresco.vti_bin.version }}/alfresco-vti-bin-{{ alfresco.vti_bin.version }}.war"
-    dest: "{{ content_folder }}/webapps/_vti_bin.war"
-  - url: "{{ nexus_repository.releases }}org/alfresco/alfresco-server-root/{{ alfresco.server_root.version }}/alfresco-server-root-{{ alfresco.server_root.version }}.war"
-    dest: "{{ content_folder }}/webapps/ROOT.war"
 
 maven_repository:
    org: "https://repo.maven.apache.org/maven2/org"
