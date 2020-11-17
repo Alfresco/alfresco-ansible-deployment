@@ -17,10 +17,11 @@ env:
 install: pip install 'molecule[docker]'
 
 stages:
-  - name: Release Stage
-    if: branch = master OR commit_message = "release"
   - name: Linters
   - name: Verification
+  - name: Release Stage
+    if: branch = master OR commit_message = "release"
+    
 jobs:
   include:
     - stage: Linters
