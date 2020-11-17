@@ -21,7 +21,6 @@ stages:
     if: branch = master OR commit_message = "release"
   - name: Linters
   - name: Verification
-
 jobs:
   include:
     - stage: Linters
