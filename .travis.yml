@@ -168,7 +168,6 @@ jobs:
         - zip -r alfresco-ansible-release-${version}.zip alfresco-ansible-release-${version}
         - echo "copy to nexus"
         - echo "copy to s3 location"        
-        - rm -rf alfresco-ansible-release-${version}*
       before_deploy:
         - git config --local user.name "TravisCI Alfresco"
         - git config --local user.email "opsexperience@alfresco.com"
@@ -178,6 +177,8 @@ jobs:
         provider: releases
         api_key:
           secure: $GITHUB_DEPLOY_KEY        
-        file_glob: true
-        file: /**/*        
+        file: alfresco-ansible-release-${version}        
         skip_cleanup: true    
+        on:
+          tags: true
+          all_branches: true
