@@ -169,6 +169,16 @@ jobs:
         - echo "copy to nexus"
         - echo "copy to s3 location"        
         - rm -rf alfresco-ansible-release-${version}*
+        - git push -q git@github.com:Alfresco/alfresco-ansible-deployment.git --tags
+      before_deploy:
+        - git config --local user.name "TravisCI Alfresco"
+        - git config --local user.email "opsexperience@alfresco.com"
         - export GIT_TAG="v${version}"
         - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
-        - git push -q git@github.com:Alfresco/alfresco-ansible-deployment.git --tags
+      deploy:
+        provider: releases
+        api_key:
+          secure: $GITHUB_DEPLOY_KEY        
+        file_glob: true
+        file: /**/*        
+        skip_cleanup: true    
