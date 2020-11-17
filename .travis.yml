@@ -176,7 +176,8 @@ jobs:
         - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
       deploy:
         provider: releases
-        api_key: $GITHUB_TOKEN      
+        api_key:
+          secure: $GITHUB_DEPLOY_KEY        
         file_glob: true
         file: /**/*        
-        skip_cleanup: true
+        skip_cleanup: true    
