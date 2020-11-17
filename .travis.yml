@@ -154,3 +154,19 @@ jobs:
         - echo "wait for repo to be up" && sleep 5m
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; pytest --verbose --host http://$TESTHOST --user admin --password admin"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2multi"; fi
+    - stage: Release Stage
+      name: Release Stage
+      script:
+        - if [ -f roles/common/defaults/main.yml ]; then version=$(grep -A1 "alfresco:" roles/common/vars/main.yml|grep version |awk '{print $2}');fi
+        - if [ -f group_vars/all.yml ]; then version=$(grep -A1 "alfresco:" group_vars/all.yml|grep version |awk '{print $2}');fi
+        - echo ${version}>version
+        - mkdir alfresco-ansible-release-${version}
+        - rsync -rv --exclude molecule/  * alfresco-ansible-release-${version}
+        - echo "TBD" > alfresco-ansible-release-${version}/README.txt
+        - zip -r alfresco-ansible-release-${version}.zip alfresco-ansible-release-${version}
+        - echo "copy to nexus"
+        - echo "copy to s3 location"        
+        - rm -rf alfresco-ansible-release-${version}*
+        - export GIT_TAG="v${version}"
+        - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
+        - git push -q https://github.com/Alfresco/alfresco-ansible-deployment --tags
