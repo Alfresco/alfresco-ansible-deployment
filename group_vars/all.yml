@@ -64,7 +64,13 @@ solr:
   version: 1.4.2
   
 transform:
-  version: 2.3.2
+  version: 2.3.5
+
+trouter:
+  version: 1.3.1
+
+sfs:
+  version: 0.8.0
 
 adw:
   version: 1.6.0
@@ -74,3 +80,7 @@ sync:
 
 adw_tgz_url: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
 sync_zip_url: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"
+
+
+sync_home: "{{ binaries_folder }}/sync-service"
+ats_home: "{{ binaries_folder }}/transform-service"
