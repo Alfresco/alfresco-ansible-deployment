@@ -174,7 +174,8 @@ jobs:
         - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
       deploy:
         provider: releases
-        github_token: $GITHUB_TOKEN       
+        user: $GITHUB_USERNAME
+        password: $GITHUB_PASSWORD
         file: alfresco-ansible-release-${version}        
         skip_cleanup: true    
         on:
