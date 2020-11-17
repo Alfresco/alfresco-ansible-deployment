@@ -171,4 +171,4 @@ jobs:
         - rm -rf alfresco-ansible-release-${version}*
         - export GIT_TAG="v${version}"
         - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
-        - git push -q https://github.com/Alfresco/alfresco-ansible-deployment --tags
+        - git push -q git@github.com:Alfresco/alfresco-ansible-deployment.git --tags
