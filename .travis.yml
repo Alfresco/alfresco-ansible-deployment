@@ -162,7 +162,7 @@ jobs:
         - if [ -f group_vars/all.yml ]; then version=$(grep -A1 "alfresco:" group_vars/all.yml|grep version |awk '{print $2}');fi
         - echo ${version}>version
         - mkdir alfresco-ansible-release-${version}
-        - rsync -rv --exclude molecule/  * alfresco-ansible-release-${version}
+        - rsync -rv --exclude molecule/ * alfresco-ansible-release-${version}
         - echo "https://employeetraining.alfresco.com/acs-deploy-zip/600896" > alfresco-ansible-release-${version}/README.txt
         - zip -r alfresco-ansible-release-${version}.zip alfresco-ansible-release-${version}
         - echo "copy to nexus"
@@ -175,7 +175,7 @@ jobs:
       deploy:
         provider: releases
         api_key: $GITHUB_TOKEN_2
-        file: alfresco-ansible-release-${version}        
+        file: alfresco-ansible-release-${version}.zip        
         skip_cleanup: true    
         on:
           all_branches: true
