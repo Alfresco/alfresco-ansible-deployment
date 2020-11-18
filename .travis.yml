@@ -13,14 +13,16 @@ before_install:
 
 env:
   - MOLECULE_NO_LOG=false
+  - version=1.0-A3.0
 
 install: pip install 'molecule[docker]'
 
 stages:
-  - name: Linters
-  - name: Verification
   - name: Release Stage
     if: branch = master OR commit_message = "[release]"
+  - name: Linters
+  - name: Verification
+
 
 jobs:
   include:
@@ -159,11 +161,11 @@ jobs:
     - stage: Release Stage
       name: Release Stage
       script:
-        - if [ -f roles/common/defaults/main.yml ]; then version=$(grep -A1 "alfresco:" roles/common/vars/main.yml|grep version |awk '{print $2}');fi
-        - if [ -f group_vars/all.yml ]; then version=$(grep -A1 "alfresco:" group_vars/all.yml|grep version |awk '{print $2}');fi
+        - if [ -f roles/common/defaults/main.yml ]; then repo_version=$(grep -A1 "alfresco:" roles/common/vars/main.yml|grep version |awk '{print $2}');fi
+        - if [ -f group_vars/all.yml ]; then repo_version=$(grep -A1 "alfresco:" group_vars/all.yml|grep version |awk '{print $2}');fi
         - rm -rf molecule/
         - mkdir dist
-        - echo "1.0-A3.0">dist/VERSION
+        - echo "v${version}">dist/VERSION
         - echo "For more info visit https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/README.md" > dist/README.txt
       before_deploy:
         - git config --local user.name "TravisCI Alfresco"
@@ -176,3 +178,5 @@ jobs:
         file_glob: true
         file: ~/*
         skip_cleanup: true
+        on:
+          all_branches: true        
