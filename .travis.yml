@@ -184,6 +184,6 @@ jobs:
         skip_cleanup: true
         region: "eu-west-1"
         glob: "*.zip"
-        upload-dir: "enterprise/alfresco-ansible-deployment/"
+        upload-dir: "enterprise/alfresco-ansible-deployment"
         on:
            all_branches: true          
