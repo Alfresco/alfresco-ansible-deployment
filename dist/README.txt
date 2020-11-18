@@ -1,0 +1,1 @@
+For more info on this project goto https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/README.md
