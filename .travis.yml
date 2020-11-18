@@ -13,7 +13,6 @@ before_install:
 
 env:
   - MOLECULE_NO_LOG=false
-  - version=1.0-A3.0
 
 install: pip install 'molecule[docker]'
 
@@ -161,6 +160,7 @@ jobs:
     - stage: Release Stage
       name: Release Stage
       script:
+        - export version="1.0-A3.0"
         - if [ -f roles/common/defaults/main.yml ]; then repo_version=$(grep -A1 "alfresco:" roles/common/vars/main.yml|grep version |awk '{print $2}');fi
         - if [ -f group_vars/all.yml ]; then repo_version=$(grep -A1 "alfresco:" group_vars/all.yml|grep version |awk '{print $2}');fi
         - rm -rf molecule/
@@ -171,6 +171,7 @@ jobs:
         - git config --local user.name "TravisCI Alfresco"
         - git config --local user.email "opsexperience@alfresco.com"
         - export GIT_TAG="v${version}"
+        - git add *
         - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
       deploy:
         provider: releases
