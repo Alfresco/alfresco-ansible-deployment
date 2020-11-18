@@ -20,7 +20,7 @@ stages:
   - name: Linters
   - name: Verification
   - name: Release Stage
-    if: branch = master OR commit_message = "\[release\]"
+    if: branch = master OR commit_message = "[release]"
 
 jobs:
   include:
@@ -174,5 +174,5 @@ jobs:
         provider: releases
         api_key: $GITHUB_TOKEN_2
         file_glob: true
-        file: *        
+        file: ~/*
         skip_cleanup: true
