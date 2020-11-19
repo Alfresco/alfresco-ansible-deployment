@@ -193,5 +193,4 @@ jobs:
         on:
           all_branches: true
       script:
-        - version=`cat dist/VERSION`
         - rm -rf alfresco-ansible-release-${version}              
