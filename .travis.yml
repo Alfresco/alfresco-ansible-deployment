@@ -178,6 +178,7 @@ jobs:
           all_branches: true
     - stage: Release Stage
       name: Release to S3
+      script:
         - version=`cat dist/VERSION`
         - rsync -rv --exclude molecule/ * alfresco-ansible-release-${version}
         - zip -r alfresco-ansible-release-${version}.zip alfresco-ansible-release-${version}
