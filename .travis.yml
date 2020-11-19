@@ -175,8 +175,6 @@ jobs:
         api_key: $GITHUB_TOKEN_2
         file: alfresco-ansible-release-${version}.zip
         skip_cleanup: true
-        on:
-          all_branches: true
       after_deploy:
         - rm -fv alfresco-ansible-release-${version}.zip
     - stage: Release Stage
@@ -198,7 +196,5 @@ jobs:
         region: "eu-west-1"
         local_dir: s3_deploy
         upload-dir: "enterprise/alfresco-ansible-deployment"
-        on:
-          all_branches: true
       after_deploy:
         - rm -fv alfresco-ansible-release-${version}.zip
