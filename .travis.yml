@@ -183,7 +183,7 @@ jobs:
         bucket: "${S3_STAGING_BUCKET}"
         skip_cleanup: true
         region: "eu-west-1"
-        glob: "*.zip"
+        file: alfresco-ansible-release-${version}.zip
         upload-dir: "enterprise/alfresco-ansible-deployment"
         on:
            all_branches: true          
