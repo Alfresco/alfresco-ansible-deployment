@@ -62,6 +62,15 @@
   tags:
     - sfs
 
+- name: Sync Service Role
+  hosts: syncservice
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/sync'
+  tags:
+    - sync
+
 - name: Nginx Role
   hosts: webservers
   become: true

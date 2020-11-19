@@ -1,0 +1,19 @@
+---
+# handlers file for trouter
+- name: restart-sync
+  service:
+    name: alfresco-sync
+    state: restarted
+    daemon_reload: true
+
+- name: start-sync
+  service:
+    name: alfresco-sync
+    state: started
+    daemon_reload: true
+
+- name: stop-sync
+  service:
+    name: alfresco-sync
+    state: stopped
+    daemon_reload: true

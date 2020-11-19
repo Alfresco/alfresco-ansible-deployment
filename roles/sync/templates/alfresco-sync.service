@@ -1,0 +1,12 @@
+[Unit]
+Description=Alfresco Sync Service
+After=syslog.socket network.target
+
+[Service]
+Type=forking
+User={{ username }}
+ExecStart={{ binaries_folder }}/syncservice.sh start
+ExecStop={{ binaries_folder }}/syncservice.sh stop
+
+[Install]
+WantedBy=multi-user.target

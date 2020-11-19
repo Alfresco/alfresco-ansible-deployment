@@ -46,31 +46,43 @@ The system deployed is shown in the diagram below.
 
     > NOTE: As we protect the `Alfresco` organization with SAML SSO you will first have to authorize your SSH key or personal access token via [GitHub](https://github.com).
 
-4. Create a file called `inventory` with the following contents in the `alfresco-ansible-deployment` folder:
-
-    ```text
-    [local]
-    control ansible_connection=local
-    ```
-
-    > NOTE: This step won't be necessary in the future.
-
-5. Create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
+4. Create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
 
     ```bash
     export NEXUS_USERNAME="<your-username>"
     export NEXUS_PASSWORD="<your-password>"
     ```
 
-6. Execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
+5. Execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
+  5.1. To run the playbook on the local machine execute the following command
 
     ```bash
-    ansible-playbook -i inventory playbooks/acs.yml
+    ansible-playbook playbooks/acs.yml -i inventory-local.yml
+    ```
+  5.2. To run the playbook on a remote host the inventory file (inventory-remote.yml) needs to contain the IP of the host and the path to the ssh key used to connect the control machine to the host machine. You can specify one targetIP for all the hosts, to for a single-machine deployment, or different targetIP's for a multi-machine deployment
+      A small example how a host block should look
+      ```bash
+      activemq:
+      hosts:
+        activemq_1:
+          ansible_host: targetIP
+          ansible_private_key_file: "/path/ssh_key.pem"
+          ansible_ssh_common_args: -o UserKnownHostsFile=/dev/null -o ControlMaster=auto
+            -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=no
+          ansible_user: centos
+          connection: ssh
+      ```
+
+      After editing the inventory file execute the following command
+
+    ```bash
+    ansible-playbook playbooks/acs.yml -i inventory-local.yml
     ```
 
     > NOTE: The playbook takes around 30 minutes to complete.
 
-7. Access the system using the following URLs using a browser on the same machine:
+6. Access the system using the following URLs using a browser on the same machine:
 
     * Digital Workspace: ```/workspace```
     * Share: ```/share```
