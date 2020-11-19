@@ -178,9 +178,6 @@ jobs:
           all_branches: true
     - stage: Release Stage 
       name: Release Stage
-      script:
-        - version=`cat dist/VERSION`
-        - rm -rf alfresco-ansible-release-${version}
       deploy:
         provider: s3
         access_key_id: "${STAGING_AWS_ACCESS_KEY}"
@@ -191,4 +188,7 @@ jobs:
         file: alfresco-ansible-release-${version}.zip
         upload-dir: "enterprise/alfresco-ansible-deployment"
         on:
-          all_branches: true          
+          all_branches: true
+      script:
+        - version=`cat dist/VERSION`
+        - rm -rf alfresco-ansible-release-${version}              
