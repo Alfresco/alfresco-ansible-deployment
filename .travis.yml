@@ -171,19 +171,19 @@ jobs:
         - git add *
         - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
       deploy:
-        provider: releases
-        api_key: $GITHUB_TOKEN_2
-        file: alfresco-ansible-release-${version}.zip
-        skip_cleanup: true
-        on:
-          all_branches: true
-        provider: s3
-        access_key_id: "${STAGING_AWS_ACCESS_KEY}"
-        secret_access_key: "${STAGING_AWS_SECRET_KEY}"
-        bucket: "${S3_STAGING_BUCKET}"
-        skip_cleanup: true
-        region: "eu-west-1"
-        file: alfresco-ansible-release-${version}.zip
-        upload-dir: "enterprise/alfresco-ansible-deployment"
-        on:
-           all_branches: true          
+        - provider: releases
+          api_key: $GITHUB_TOKEN_2
+          file: alfresco-ansible-release-${version}.zip
+          skip_cleanup: true
+          on:
+            all_branches: true
+        - provider: s3
+          access_key_id: "${STAGING_AWS_ACCESS_KEY}"
+          secret_access_key: "${STAGING_AWS_SECRET_KEY}"
+          bucket: "${S3_STAGING_BUCKET}"
+          skip_cleanup: true
+          region: "eu-west-1"
+          file: alfresco-ansible-release-${version}.zip
+          upload-dir: "enterprise/alfresco-ansible-deployment"
+          on:
+            all_branches: true          
