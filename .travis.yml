@@ -19,8 +19,6 @@ install: pip install 'molecule[docker]'
 stages:
   - name: Release Stage
     if: branch = master OR commit_message = "[release]"
-  - name: Release Stage S3
-    if: branch = master OR commit_message = "[release]"
   - name: Linters
   - name: Verification
 
@@ -160,7 +158,7 @@ jobs:
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; pytest --verbose --host http://$TESTHOST --user admin --password admin"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2multi"; fi
     - stage: Release Stage 
-      name: Release Stage
+      name: Release tag on GutHub
       script:
         - version=`cat dist/VERSION`
         - rsync -rv --exclude molecule/ * alfresco-ansible-release-${version}
@@ -178,8 +176,11 @@ jobs:
         skip_cleanup: true
         on:
           all_branches: true
-    - stage: Release Stage S3 
-      name: Release Stage S3
+    - stage: Release Stage
+      name: Release to S3
+        - version=`cat dist/VERSION`
+        - rsync -rv --exclude molecule/ * alfresco-ansible-release-${version}
+        - zip -r alfresco-ansible-release-${version}.zip alfresco-ansible-release-${version}
       deploy:
         provider: s3
         access_key_id: "${STAGING_AWS_ACCESS_KEY}"
