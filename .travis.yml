@@ -19,6 +19,8 @@ install: pip install 'molecule[docker]'
 stages:
   - name: Release Stage
     if: branch = master OR commit_message = "[release]"
+  - name: Release Stage S3
+    if: branch = master OR commit_message = "[release]"
   - name: Linters
   - name: Verification
 
@@ -176,8 +178,8 @@ jobs:
         skip_cleanup: true
         on:
           all_branches: true
-    - stage: Release Stage 
-      name: Release Stage
+    - stage: Release Stage S3 
+      name: Release Stage S3
       deploy:
         provider: s3
         access_key_id: "${STAGING_AWS_ACCESS_KEY}"
