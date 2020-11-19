@@ -185,7 +185,9 @@ jobs:
         - version=`cat dist/VERSION`
         - rsync -rv --exclude molecule/ * alfresco-ansible-release-${version}
       before_deploy:
+        - mkdir s3_deploy
         - zip -r alfresco-ansible-release-${version}.zip alfresco-ansible-release-${version}
+        - mv alfresco-ansible-release-${version}.zip s3_deploy/
         - rm -rf alfresco-ansible-release-${version}
       deploy:
         provider: s3
@@ -194,7 +196,7 @@ jobs:
         bucket: "${S3_STAGING_BUCKET}"
         skip_cleanup: true
         region: "eu-west-1"
-        file: alfresco-ansible-release-${version}.zip
+        local_dir: s3_deploy
         upload-dir: "enterprise/alfresco-ansible-deployment"
         on:
           all_branches: true
