@@ -13,13 +13,6 @@ The system deployed is shown in the diagram below.
   * Virtual Machine
   * EC2 instance (t3.large using ami-0affd4508a5d2481b in us-east-1)
 * User running the playbook must have the ability to `sudo`
-* SELinux is disabled
-
-  This can be achieved by running the following command:
-
-  ```bash
-  sudo setenforce 0;
-  ```
 
 ## Deploy
 
