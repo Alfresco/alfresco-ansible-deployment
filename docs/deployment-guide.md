@@ -93,7 +93,7 @@ hosts:
 
 Ansible will display play recap to let you know that everything is done, similar to the [block bellow](#recap)
 
-<a name="recap">
+<a name="recap">  
 ```bash
 PLAY RECAP *****************************************************************************************************************************************************************************************************************************************************************************************************************
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
@@ -106,13 +106,11 @@ syncservice_1              : ok=39   changed=18   unreachable=0    failed=0    s
 transformers_1             : ok=81   changed=10   unreachable=0    failed=0    skipped=44   rescued=0    ignored=0
 ```
 
+Access the system using the following URLs using a browser:
 
-
-To access the system using the following URLs using a browser:
-
-    * Digital Workspace: ```__webserversHost__/workspace```
-    * Share: ```__webserversHost__/share```
-    * Repository: ```__webserversHost__/alfresco```
+    * Digital Workspace: ```webservers_host_ip/workspace```
+    * Share: ```webservers_host_ip/share```
+    * Repository: ```webservers_host_ip/alfresco```
 
 ## Folder structure
 
