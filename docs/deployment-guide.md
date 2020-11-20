@@ -53,15 +53,15 @@ The system deployed is shown in the diagram below.
     export NEXUS_PASSWORD="<your-password>"
     ```
 
-5. Execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
+5. Execute the playbook as the current user using the following command (the playbook will escalate privileges when required):  
 
-  5.1. To run the playbook on the local machine execute the following command
+  5.1. To run the playbook on the local machine execute the following command  
 
     ```bash
     ansible-playbook playbooks/acs.yml -i inventory-local.yml
     ```
 
-  5.2. To run the playbook on a remote host the inventory file (inventory-remote.yml) needs to contain the IP of the host and the path to the ssh key used to connect the control machine to the host machine. You can specify one targetIP for all the hosts, to for a single-machine deployment, or different targetIP's for a multi-machine deployment
+  5.2. To run the playbook on a remote host the inventory file (inventory-remote.yml) needs to contain the IP of the host and the path to the ssh key used to connect the control machine to the host machine. You can specify one targetIP for all the hosts, to obtain a single-machine deployment, or different targetIP's for a multi-machine deployment.
       A small example how a host block should look
 
 
