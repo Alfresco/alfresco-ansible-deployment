@@ -5,11 +5,17 @@ Ansible models your IT infrastructure by describing how all of your systems inte
 It uses no agents and no additional custom security infrastructure, so it's easy to deploy - and most importantly, it uses a very simple language (YAML, in the form of Ansible Playbooks) that allow you to describe your automation jobs in a way that approaches plain English.
 
 
-Source: https://www.ansible.com/overview/how-ansible-works
+>Source: https://www.ansible.com/overview/how-ansible-works
 
-Quick overview of the project structure.
+**Quick overview of the project structure.**
 
-The project amkes use of ansible role structure. Ansible role is an independent component which allows reuse of common configuration steps. Ansible role is a set of tasks to configure a host to serve a certain purpose like configuring a service. Roles are defined using YAML files with a predefined directory structure.
+The project contains a playbook and multiple roles.
+
+An Ansible playbook is a file where users write Ansible code, an organized collection of scripts defining the work of a server configuration. 
+
+ACS playbook can be found in the _playbooks_ directory. Because the project makes use of ansible role structure, the playbook contains only definitions of the roles, and all the logic is perfomed by them, thus making the project both granular and easy to maintain.
+
+Ansible role is an independent component which allows reuse of common configuration steps. Ansible role is a set of tasks to configure a host to serve a certain purpose like configuring a service. Roles are defined using YAML files with a predefined directory structure.
 A role directory structure contains directories: defaults, vars, tasks, files, templates, meta, handlers. 
 
 **defaults**: contains default variables for the role. Variables in default have the lowest priority so they are easy to override.  
@@ -45,8 +51,6 @@ The diagram below shows how the ACS playbook uses the roles when the deployment 
 ![Multi Machine Deployment](./resources/acs-multi-machine.png)
 
 At this point it's unclear whether there will be a playbook to deploy a fully highly available system. The diagram below shows what this might look like if we were to implement this.
-
-![High Availability Deployment](./resources/acs-ha.png)
 
 
 
