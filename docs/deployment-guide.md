@@ -104,9 +104,7 @@ repository_1               : ok=92   changed=43   unreachable=0    failed=0    s
 search_1                   : ok=34   changed=13   unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
 syncservice_1              : ok=39   changed=18   unreachable=0    failed=0    skipped=13   rescued=0    ignored=0
 transformers_1             : ok=81   changed=10   unreachable=0    failed=0    skipped=44   rescued=0    ignored=0
-```
-
-
+```  
 
 To access the system using the following URLs using a browser:
 
