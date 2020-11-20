@@ -91,10 +91,10 @@ hosts:
 
     > NOTE: The playbook takes around 30 minutes to complete.
 
-Ansible will display play recap to let you know that everything is done, similar to the [block bellow](#recap)
+Ansible will display play recap to let you know that everything is done, similar to the [block bellow](#recap)  
 
 <a name="recap">
-```bash
+```bash  
 PLAY RECAP *****************************************************************************************************************************************************************************************************************************************************************************************************************
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
 adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
