@@ -2,14 +2,16 @@
 
 This page describes how to deploy Alfresco Content Services (ACS) 6.2.x using Ansible.
 
-The system deployed is shown in the diagram below.
+This will guide will show you how to deploy ACS on a local or a remote enviroment (single and multi machine deployments).
+Both systems (single and multi machine) deployed are shown in the diagrams below.
 
 ![Single Machine Deployment](./resources/acs-single-machine.png)
+![Multi Machine Deployment](./resources/acs-multi-machine.png)
 
 
 In order to run the ACS playbook you'll need a control machine and one or more hosts. To deploy on local host(control and host machines are one and the same) you'll need a CentOS 7 machine. To deploy on a remote machine, you'll a control machine that can run ansible and one or more CentOS 7 hosts.
 
-## Prerequisites
+### Prerequisites
 
 * A CentOS 7 machine to deploy to, can be:
   * Bare Metal
@@ -23,7 +25,7 @@ In order to run the ACS playbook you'll need a control machine and one or more h
 [Deploy on a remote machine (single or multi machine deployment)](#remote) 
 
 
-**<a name="prepare">Prepare the control machine**
+### <a name="prepare">Prepare the control machine
 
 1. Install Git
 
@@ -55,7 +57,7 @@ In order to run the ACS playbook you'll need a control machine and one or more h
     export NEXUS_PASSWORD="<your-password>"
     ```
 
-**<a name="local">Deploy on the local machine**  
+### <a name="local">Deploy on the local machine
 To deploy everything on the local machine just execute the playbook as the current user using the following command (the playbook will escalate privileges when required):  
 
   ```bash
@@ -66,7 +68,7 @@ To deploy everything on the local machine just execute the playbook as the curre
 Ansible will display play recap to let you know that everything is done, similar to the [block bellow](#recap)
 
 
-**<a name="remote">Deploy on a remote machine (single or multi machine deployment)**  
+### <a name="remote">Deploy on a remote machine (single or multi machine deployment)
 To deploy everything on a remote host, the inventory file (inventory_remote.yml) needs to contain the IP of the host or hosts and the path to the ssh key used to connect the control machine to the host machine. You can specify one _targetIP_ for all the hosts to obtain a single-machine deployment, or different _targetIP_'s for a multi-machine deployment.
 
   A small example of how a host block should look:
@@ -91,10 +93,10 @@ hosts:
 
     > NOTE: The playbook takes around 30 minutes to complete.
 
-Ansible will display play recap to let you know that everything is done, similar to the [block bellow](#recap)
+Ansible will display play recap to let you know that everything is done, similar to the [block bellow](#recap)  
 
-<a name="recap">  
-```bash
+<a name="recap">
+```bash  
 PLAY RECAP *****************************************************************************************************************************************************************************************************************************************************************************************************************
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
 adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
@@ -105,6 +107,8 @@ search_1                   : ok=34   changed=13   unreachable=0    failed=0    s
 syncservice_1              : ok=39   changed=18   unreachable=0    failed=0    skipped=13   rescued=0    ignored=0
 transformers_1             : ok=81   changed=10   unreachable=0    failed=0    skipped=44   rescued=0    ignored=0
 ```
+
+
 
 Access the system using the following URLs using a browser:
 
