@@ -57,13 +57,13 @@ The system deployed is shown in the diagram below.
 
   5.1. To run the playbook on the local machine execute the following command  
 
-    ```bash
-    ansible-playbook playbooks/acs.yml -i inventory-local.yml
-    ```
+  ```bash
+    ansible-playbook playbooks/acs.yml -i inventory_local.yml
+  ```
 
-  5.2. To run the playbook on a remote host the inventory file (inventory-remote.yml) needs to contain the IP of the host and the path to the ssh key used to connect the control machine to the host machine. You can specify one targetIP for all the hosts, to obtain a single-machine deployment, or different targetIP's for a multi-machine deployment.
-      A small example how a host block should look
+  5.2. To run the playbook on a remote host, the inventory file (inventory_remote.yml) needs to contain the IP of the host and the path to the ssh key used to connect the control machine to the host machine. You can specify one targetIP for all the hosts to obtain a single-machine deployment, or different targetIP's for a multi-machine deployment.
 
+  A small example of how a host block should look:
 
 ```
 activemq:
@@ -77,13 +77,27 @@ hosts:
     ansible_user: centos
     connection: ssh
 ```
-      After editing the inventory file execute the following command
+   After editing the inventory file execute the following command
 
 ```bash
-    ansible-playbook playbooks/acs.yml -i inventory-remote.yml
+    ansible-playbook playbooks/acs.yml -i inventory_remote.yml
 ```
 
     > NOTE: The playbook takes around 30 minutes to complete.
+
+Ansible will display play recap to let you know that everything is done, similar to the block bellow
+
+```bash
+PLAY RECAP *****************************************************************************************************************************************************************************************************************************************************************************************************************
+activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
+adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
+database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
+nginx_1                    : ok=21   changed=8    unreachable=0    failed=0    skipped=8    rescued=0    ignored=0
+repository_1               : ok=92   changed=43   unreachable=0    failed=0    skipped=14   rescued=0    ignored=0
+search_1                   : ok=34   changed=13   unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
+syncservice_1              : ok=39   changed=18   unreachable=0    failed=0    skipped=13   rescued=0    ignored=0
+transformers_1             : ok=81   changed=10   unreachable=0    failed=0    skipped=44   rescued=0    ignored=0
+```
 
 6. Access the system using the following URLs using a browser on the same machine:
 
