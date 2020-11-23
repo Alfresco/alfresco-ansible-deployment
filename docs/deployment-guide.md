@@ -65,7 +65,20 @@ To deploy everything on the local machine just execute the playbook as the curre
   ```
 > NOTE: The playbook takes around 30 minutes to complete.
 
-Ansible will display play recap to let you know that everything is done, similar to the [block bellow](#recap)
+Ansible will display play recap to let you know that everything is done, similar to the block below
+
+
+```bash  
+PLAY RECAP *****************************************************************************************************************************************************************
+activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
+adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
+database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
+nginx_1                    : ok=21   changed=8    unreachable=0    failed=0    skipped=8    rescued=0    ignored=0
+repository_1               : ok=92   changed=43   unreachable=0    failed=0    skipped=14   rescued=0    ignored=0
+search_1                   : ok=34   changed=13   unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
+syncservice_1              : ok=39   changed=18   unreachable=0    failed=0    skipped=13   rescued=0    ignored=0
+transformers_1             : ok=81   changed=10   unreachable=0    failed=0    skipped=44   rescued=0    ignored=0
+```
 
 
 ### <a name="remote">Deploy on a remote machine (single or multi machine deployment)
@@ -93,12 +106,11 @@ hosts:
 
     > NOTE: The playbook takes around 30 minutes to complete.
 
-Ansible will display play recap to let you know that everything is done, similar to the [block bellow](#recap)
+Ansible will display play recap to let you know that everything is done, similar to the block below
 
-<a name="recap">
  
 ```bash  
-PLAY RECAP *****************************************************************************************************************************************************************************************************************************************************************************************************************
+PLAY RECAP *****************************************************************************************************************************************************************
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
 adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
 database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
