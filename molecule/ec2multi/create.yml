@@ -144,25 +144,9 @@
           cidr_ip: "{{ ipv4_local.stdout }}/32"          
         - proto: all
           group_name: "{{ security_group_name }}"
-       - proto: all
-          group_name: "{{ item.instances[0].public_ip }}"          
+        - proto: all
+          group_name: "{{ item.instances[0].public_ip }}"
       with_items: "{{ ec2_jobs.results }}"
-
-- name: Create security group
-ec2_group:
-name: "some-name"
-description: "some description"
-vpc_id: "vpc-blahblah"
-region: "eu-north-4"
-rules:
-- proto: tcp
-from_port: 443
-to_port: 443
-cidr_ip: "{{ item }}"
-with_items:
-- addr1/32
-- addr2/32
-- etc/32
 
     - name: Convert instance config dict to a list # noqa 503
       set_fact:
