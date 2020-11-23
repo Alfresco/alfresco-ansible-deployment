@@ -39,8 +39,6 @@
         description: "{{ security_group_name }}"
         rules:
         - proto: all
-          cidr_ip: "0.0.0.0/0"
-        - proto: all
           cidr_ip: "{{ ipv4_address['content'] }}/32"
         - proto: all
           cidr_ip: "{{ ipv4_local.stdout }}/32"          
