@@ -44,7 +44,7 @@ sudo pip3 install ansible==2.9.13 molecule==3.0.8 molecule-ec2==0.2 pyyaml
 To quickly provision a single machine deployment you need to follow these steps.  
 
 ```bash
-export MOLECULE_EPHEMERAL_DIRECTORY=/home/centos/.cache/molecule/alfresco-ansible-deployment/ec2
+export MOLECULE_EPHEMERAL_DIRECTORY=/home/centos/.cache/molecule/alfresco-ansible-deployment/ec2multi
 ```
 > This command will produce one EC2 instance.  
 ```bash
@@ -55,7 +55,7 @@ This command will display something similar in the terminal
 
 ```bash
 TASK [Wait for SSH] ************************************************************
-    ok: [localhost] => (item={'address': 'EC2_IP_ADDRESS', 'identity_file': '/home/centos/.cache/molecule/alfresco-ansible-deployment/ec2/', 'instance': 'EC2_INSTANCE_NAME', 'instance_ids': ['EC2_INSTANCE_ID'], 'port': 22, 'user': 'centos'})
+    ok: [localhost] => (item={'address': 'EC2_IP_ADDRESS', 'identity_file': '/home/centos/.cache/molecule/alfresco-ansible-deployment/ec2/ssh_key', 'instance': 'EC2_INSTANCE_NAME', 'instance_ids': ['EC2_INSTANCE_ID'], 'port': 22, 'user': 'centos'})
 
     TASK [Wait for boot process to finish] *****************************************
     Pausing for 120 seconds
@@ -121,7 +121,7 @@ This command will display something similar in the terminal. Full log not shown 
 
 ```bash
 TASK [Wait for SSH] ************************************************************
-    ok: [localhost] => (item={'address': 'EC2_IP_ADDRESS', 'identity_file': '/home/centos/.cache/molecule/alfresco-ansible-deployment/ec2/', 'instance': 'EC2_INSTANCE_NAME', 'instance_ids': ['EC2_INSTANCE_ID'], 'port': 22, 'user': 'centos'})
+    ok: [localhost] => (item={'address': 'EC2_IP_ADDRESS', 'identity_file': '/home/centos/.cache/molecule/alfresco-ansible-deployment/ec2multi/ssh_key', 'instance': 'EC2_INSTANCE_NAME', 'instance_ids': ['EC2_INSTANCE_ID'], 'port': 22, 'user': 'centos'})
 
     TASK [Wait for boot process to finish] *****************************************
     Pausing for 120 seconds
