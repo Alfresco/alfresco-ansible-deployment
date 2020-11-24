@@ -66,6 +66,7 @@
     get_url:
       url: "{{ item }}"
       dest: "/opt/apache-tomcat-{{ tomcat_version }}.tar.gz"
+      timeout: 570
     register: download
     until: download is succeeded
     failed_when: false
