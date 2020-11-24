@@ -160,8 +160,8 @@
         purge_rules: no
         rules:
           - proto: all
-            group_name: "{{ item.instances[0].public_ip }}/32"
-      with_items: "{{ ec2_jobs.results }}"
+            group_name: "{{ item.address }}/32"
+      with_items: "{{ lookup('file', molecule_instance_config) | molecule_from_yaml }}"
 
     - name: Wait for boot process to finish
       pause:
