@@ -103,7 +103,11 @@ To delete the EC2 instance:
 ```bash
 molecule destroy -s ec2
 ```
-
+  
+  
+##### For more information on this project, please refer to the [Documentation](README.md)
+  
+  
 ## <a name="multi">Multi Machine
 
 To quickly provision a multi machine deployment you need to follow these steps.  
@@ -169,3 +173,6 @@ To delete the EC2 instances:
 ```bash
 molecule destroy -s ec2multi
 ```
+  
+  
+##### For more information on this project, please refer to the [Documentation](README.md)
