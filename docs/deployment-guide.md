@@ -2,7 +2,7 @@
 
 This page describes how to deploy Alfresco Content Services (ACS) 6.2.x using Ansible.
 
-This will guide will show you how to deploy ACS on a local or a remote enviroment (single and multi machine deployments).
+This guide will show you how to deploy ACS on a local or a remote enviroment (single and multi machine deployments).
 Both systems (single and multi machine) deployed are shown in the diagrams below.
 
 ![Single Machine Deployment](./resources/acs-single-machine.png)
