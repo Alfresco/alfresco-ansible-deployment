@@ -160,7 +160,7 @@
         purge_rules: no
         rules:
           - proto: all
-            group_name: "{{ item.address }}/32"
+            cidr_ip: "{{ item.address }}/32"
       with_items: "{{ lookup('file', molecule_instance_config) | molecule_from_yaml }}"
 
     - name: Wait for boot process to finish
