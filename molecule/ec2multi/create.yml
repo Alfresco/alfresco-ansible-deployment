@@ -39,8 +39,6 @@
         description: "{{ security_group_name }}"
         rules:
         - proto: all
-          cidr_ip: "0.0.0.0/0"
-        - proto: all
           cidr_ip: "{{ ipv4_address['content'] }}/32"
         - proto: all
           cidr_ip: "{{ ipv4_local.stdout }}/32"          
@@ -153,6 +151,16 @@
         search_regex: SSH
         delay: 10
         timeout: 320
+      with_items: "{{ lookup('file', molecule_instance_config) | molecule_from_yaml }}"
+
+    - name: Update security group again
+      ec2_group:
+        name: "{{ security_group_name }}"
+        description: "{{ security_group_name }}"
+        purge_rules: no
+        rules:
+          - proto: all
+            cidr_ip: "{{ item.address }}/32"
       with_items: "{{ lookup('file', molecule_instance_config) | molecule_from_yaml }}"
 
     - name: Wait for boot process to finish
