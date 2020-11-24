@@ -50,7 +50,6 @@ The diagram below shows how the ACS playbook uses the roles when the deployment 
 
 ![Multi Machine Deployment](./resources/acs-multi-machine.png)
 
-At this point it's unclear whether there will be a playbook to deploy a fully highly available system. The diagram below shows what this might look like if we were to implement this.
 
 
 
