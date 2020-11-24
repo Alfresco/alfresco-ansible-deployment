@@ -166,7 +166,7 @@
           group_name: "{{ security_group_name }}"
         - proto: all
           group_name: "{{ item.instances[0].public_ip }}"
-      with_items: "{{ ec2_jobs.results }}"
+        with_items: "{{ ec2_jobs.results }}"
 
     - name: Wait for boot process to finish
       pause:
