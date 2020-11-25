@@ -109,15 +109,15 @@
     insertafter: 'CATALINA_OPTS'
     line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}"
 
-- name: Check on distribution download async task
+- name: Verifying if the distribution zip finished downloading
   become: true
   become_user: root
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: job_result
   until: job_result.finished
-  delay: 2
-  retries: 300
+  delay: 30
+  retries: 20
   loop: "{{ distribution_download_result.results }}"
 
 - name: Add the configuration templates

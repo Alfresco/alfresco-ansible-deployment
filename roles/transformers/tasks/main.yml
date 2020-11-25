@@ -89,8 +89,19 @@
     mode: 0444
     timeout: 570
   register: libreoffice_download
-  until: libreoffice_download is succeeded
+  async: 900
+  poll: 0
   when: loffice_exists.rc != 0
+
+- name: Verifying if libreoffice finished downloading
+  become: true
+  become_user: root
+  async_status:
+    jid: "{{ libreoffice_download.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 30
+  retries: 15
 
 - name: Extract libreoffice-dist-linux.gz
   become: yes
