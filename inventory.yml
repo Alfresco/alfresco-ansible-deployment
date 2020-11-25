@@ -5,7 +5,6 @@ all:
       hosts:
         database_1:         
           ansible_connection: local
-          ansible_host: 127.0.0.1
           ### For connecting to external machines you will need to:
           ### - Remove ansible_connection
           ### - Modify ansible_host
@@ -18,34 +17,27 @@ all:
       hosts:
         repository_1:
           ansible_connection: local
-          ansible_host: 127.0.0.1
     activemq:
       hosts:
         activemq_1:
           ansible_connection: local
-          ansible_host: 127.0.0.1
     search:
       hosts:
         search_1:
           ansible_connection: local
-          ansible_host: 127.0.0.1
     webservers:
       hosts:
         nginx_1:
           ansible_connection: local
-          ansible_host: 127.0.0.1
     adw:
       hosts:
         adw_1:
           ansible_connection: local
-          ansible_host: 127.0.0.1
     transformers:
       hosts:
         transformers_1:
           ansible_connection: local
-          ansible_host: 127.0.0.1
     syncservice:
       hosts:
         syncservice_1:
           ansible_connection: local
-          ansible_host: 127.0.0.1
