@@ -38,11 +38,11 @@
 
 - name: setting repo host connect
   set_fact: repo_host_connect="127.0.0.1"
-  when: hostvars['repository_1'] is not defined or hostvars['repository_1'] == "localhost"
+  when: hostvars['repository_1']['ansible_host'] is not defined or hostvars['repository_1'] == "localhost"
 
 - name: setting sync host connect
   set_fact: sync_host_connect="127.0.0.1"
-  when: hostvars['syncservice_1'] is not defined or hostvars['syncservice_1'] == "localhost"
+  when: hostvars['syncservice_1']['ansible_host'] is not defined or hostvars['syncservice_1'] == "localhost"
 
 - name: Configure postgresql client auth
   lineinfile:
