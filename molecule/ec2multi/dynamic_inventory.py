@@ -5,7 +5,7 @@ import yaml
 yamlfile= open(os.environ['MOLECULE_EPHEMERAL_DIRECTORY'] + "/instance_config.yml")
 parsed_yaml_file = yaml.load(yamlfile, Loader=yaml.FullLoader)
 
-new_inventory = open(os.path.dirname(os.path.abspath(__file__)) + "/../../inventory.yml", "w")
+new_inventory = open(os.path.dirname(os.path.abspath(__file__)) + "/../../inventory_ssh.yml", "w")
 inventoryfile = {'all': {'children':{}}}
 
 def add_if_key_not_exist(dict_obj, key, value):

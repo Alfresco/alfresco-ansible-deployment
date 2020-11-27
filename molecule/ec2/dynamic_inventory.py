@@ -29,7 +29,7 @@ for item in parsed_old_inventory['all']['children']:
     add_if_key_not_exist(inventoryfile['all']['children'][item]['hosts'], groupname, {})
     add_if_key_not_exist(inventoryfile['all']['children'][item]['hosts'][groupname], 'ansible_host', address)
     add_if_key_not_exist(inventoryfile['all']['children'][item]['hosts'][groupname], 'ansible_private_key_file', identity_file)
-    add_if_key_not_exist(inventoryfile['all']['children'][item]['hosts'][groupname], 'ansible_ssh_common_args', '"-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"')
+    add_if_key_not_exist(inventoryfile['all']['children'][item]['hosts'][groupname], 'ansible_ssh_common_args', "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no")
     add_if_key_not_exist(inventoryfile['all']['children'][item]['hosts'][groupname], 'ansible_user', 'centos')
     add_if_key_not_exist(inventoryfile['all']['children'][item]['hosts'][groupname], 'connection', 'ssh')
 
