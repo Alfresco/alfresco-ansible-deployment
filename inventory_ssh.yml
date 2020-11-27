@@ -1,0 +1,72 @@
+---
+all:
+  children:
+    database:
+      hosts:
+        database_1:         
+          ## For connecting to external machines you will need to:
+          ## - Remove ansible_connection
+          ## - Modify ansible_host
+          ## - Add private key file and user. 
+          ## - Optional - You can also add ssh common args if needed.
+          connection: ssh
+          ansible_host: targetIP
+          ansible_private_key_file: "/path/ssh_key.pem"
+          ansible_user: centos           
+          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+    repository:
+      hosts:
+        repository_1:
+          connection: shh
+          ansible_host: targetIP
+          ansible_private_key_file: "/path/ssh_key.pem"
+          ansible_user: centos           
+          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+    activemq:
+      hosts:
+        activemq_1:
+          connection: ssh
+          ansible_host: targetIP
+          ansible_private_key_file: "/path/ssh_key.pem"
+          ansible_user: centos           
+          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+    search:
+      hosts:
+        search_1:
+          connection: ssh
+          ansible_host: targetIP
+          ansible_private_key_file: "/path/ssh_key.pem"
+          ansible_user: centos           
+          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+    webservers:
+      hosts:
+        nginx_1:
+          connection: shh
+          ansible_host: targetIP
+          ansible_private_key_file: "/path/ssh_key.pem"
+          ansible_user: centos           
+          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+    adw:
+      hosts:
+        adw_1:
+          connection: ssh
+          ansible_host: targetIP
+          ansible_private_key_file: "/path/ssh_key.pem"
+          ansible_user: centos           
+          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+    transformers:
+      hosts:
+        transformers_1:
+          connection: ssh
+          ansible_host: targetIP
+          ansible_private_key_file: "/path/ssh_key.pem"
+          ansible_user: centos           
+          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+    syncservice:
+      hosts:
+        syncservice_1:
+          connection: ssh
+          ansible_host: targetIP
+          ansible_private_key_file: "/path/ssh_key.pem"
+          ansible_user: centos           
+          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
