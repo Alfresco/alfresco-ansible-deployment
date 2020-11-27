@@ -1,37 +1,49 @@
 # Deployment Guide
 
-This page describes how to deploy Alfresco Content Services (ACS) 6.2.x using Ansible.
+This page describes how to deploy Alfresco Content Services (ACS) 6.2.x using the Ansible playbook found in this project.
 
-This guide will show you how to deploy ACS on a local or a remote enviroment (single and multi machine deployments).
-Both systems (single and multi machine) deployed are shown in the diagrams below.
+Before continuing we need to introduce some more [Ansible concepts](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html); [control node](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html#control-node), [connection type](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#connecting-to-hosts-behavioral-inventory-parameters) and the [inventory file](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#intro-inventory).
 
-![Single Machine Deployment](./resources/acs-single-machine.png)
-![Multi Machine Deployment](./resources/acs-multi-machine.png)
+The machine the playbook is run from is known as the control node. An inventory file is used to describe where the roles within the playbook should deploy to. There are two types of connection, `local` and `ssh`. Local means that everything will be installed on the control node, ssh means that everything will be deployed on one or more `hosts`, these hosts can be bare metal machines, Virtual machines or instances running on a public cloud. This is shown in the diagrams below:
 
+![Local Deployment Type](./resources/deployment-type-local.png) 
 
-In order to run the ACS playbook you'll need a control machine and one or more hosts. To deploy on local host(control and host machines are one and the same) you'll need a CentOS 7 machine. To deploy on a remote machine, you'll a control machine that can run ansible and one or more CentOS 7 hosts.
-
-### Prerequisites
-
-* A CentOS 7 machine to deploy to, can be:
-  * Bare Metal
-  * Virtual Machine
-  * EC2 instance (t3.large using ami-0affd4508a5d2481b in us-east-1)
-* User running the playbook must have the ability to `sudo`
+![SSH Deployment Type](./resources/deployment-type-ssh.png)
 
 
-[Prepare the control machine](#prepare)   
-[Deploy on the local machine](#local)  
-[Deploy on a remote machine (single or multi machine deployment)](#remote) 
+## Getting Started Quickly
 
+The quickest way to get started and experiment with the playbook is by leveraging Vagrant to create a Virtualbox virtual machine to act as the control node **and** the target host.
 
-### <a name="prepare">Prepare the control machine
-
-1. Install Git
-
+1. Ensure your local machine has 10G of memory and 4 CPUs
+2. Clone this repository to your local machine
+3. Install [Vagrant](https://www.vagrantup.com/downloads)
+4. Install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
+5. Open Virtualbox application
+6. In a terminal, navigate to the where you cloned the repository
+7. Run the following command:
+  
     ```bash
-    sudo yum install -y git
+    vagrant up
     ```
+
+    > NOTE: The playbook takes around 30 minutes to complete.
+
+Once ACS has initialized access the system using the following URLs using a browser:
+
+* Digital Workspace: [http://172.100.100.100/workspace](http://172.100.100.100/workspace)
+* Share: [http://172.100.100.100/share](http://172.100.100.100/share)
+* Repository: [http://172.100.100.100/alfresco](http://172.100.100.100/alfresco)
+
+## Setup A Control Node
+
+As mentioned in the introduction a control node is required to run the playbook. You can use any computer that has a Python installation as a control node; laptops, shared desktops, and servers can all run Ansible.
+
+In the interest of keeping this guide simple we will use an AWS EC2 instance as the control node, the steps required are shown below:
+
+1. Launch an EC2 instance using the Centos 7 (x86_64) AMI from the Marketplace (instance size/type does not matter) and SSH into the machine
+
+    ![Centos AMI](./resources/centos-ami.png)
 
 2. Install Ansible
 
@@ -40,75 +52,99 @@ In order to run the ACS playbook you'll need a control machine and one or more h
     sudo yum install -y ansible
     ```
 
-3. Clone the repository to the machine you wish to deploy to and switch to the stable tag:
+3. Install Git
+
+    ```bash
+    sudo yum install -y git
+    ```
+
+4. Clone the repository and switch to the stable tag:
 
     ```bash
     git clone https://github.com/Alfresco/alfresco-ansible-deployment.git
     cd alfresco-ansible-deployment
-    git checkout tags/v1.0-A2
+    git checkout tags/v1.0-A3
     ```
 
     > NOTE: As we protect the `Alfresco` organization with SAML SSO you will first have to authorize your SSH key or personal access token via [GitHub](https://github.com).
 
-4. Create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
+5. Create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
 
     ```bash
     export NEXUS_USERNAME="<your-username>"
     export NEXUS_PASSWORD="<your-password>"
     ```
 
-### <a name="local">Deploy on the local machine
-To deploy everything on the local machine just execute the playbook as the current user using the following command (the playbook will escalate privileges when required):  
+Now you have the control node setup you need to decide what kind of deployment you would like. To deploy everything on the control node follow the steps in the [Locahost Deployment](#localhost-deployment) section or to deploy to one or more other machines follow the steps in the [SSH Deployment](#ssh-deployment) section.
 
-  ```bash
-    ansible-playbook playbooks/acs.yml -i inventory_local.yml
-  ```
-> NOTE: The playbook takes around 30 minutes to complete.
+## Localhost Deployment
 
-Ansible will display play recap to let you know that everything is done, similar to the block below
+The diagram below shows the result of a localhost deployment.
 
+![Localhost Deployment](./resources/acs-localhost.png)
 
-```bash  
-PLAY RECAP *****************************************************************************************************************************************************************
-activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
-adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
-database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
-nginx_1                    : ok=21   changed=8    unreachable=0    failed=0    skipped=8    rescued=0    ignored=0
-repository_1               : ok=92   changed=43   unreachable=0    failed=0    skipped=14   rescued=0    ignored=0
-search_1                   : ok=34   changed=13   unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
-syncservice_1              : ok=39   changed=18   unreachable=0    failed=0    skipped=13   rescued=0    ignored=0
-transformers_1             : ok=81   changed=10   unreachable=0    failed=0    skipped=44   rescued=0    ignored=0
-```
-
-
-### <a name="remote">Deploy on a remote machine (single or multi machine deployment)
-To deploy everything on a remote host, the inventory file (inventory_remote.yml) needs to contain the IP of the host or hosts and the path to the ssh key used to connect the control machine to the host machine. You can specify one _targetIP_ for all the hosts to obtain a single-machine deployment, or different _targetIP_'s for a multi-machine deployment.
-
-  A small example of how a host block should look:
-
-```
-activemq:
-hosts:
-  activemq_1:
-    ansible_host: targetIP
-    ansible_private_key_file: "/path/ssh_key.pem"
-    ansible_ssh_common_args: -o UserKnownHostsFile=/dev/null -o ControlMaster=auto
-      -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes
-      -o StrictHostKeyChecking=no
-    ansible_user: centos
-    connection: ssh
-```
-   After editing the inventory file execute the following command
+To deploy everything on the local machine just execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
 
 ```bash
-    ansible-playbook playbooks/acs.yml -i inventory_remote.yml
+ansible-playbook playbooks/acs.yml -i inventory_local.yml
 ```
 
-    > NOTE: The playbook takes around 30 minutes to complete.
+> NOTE: The playbook takes around 30 minutes to complete.
 
-Ansible will display play recap to let you know that everything is done, similar to the block below
+Once the playbook is complete Ansible will display a play recap to let you know that everything is done, similar to the block below:
 
- 
+```bash
+PLAY RECAP *****************************************************************************************************************************************************************
+activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
+adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
+database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
+nginx_1                    : ok=21   changed=8    unreachable=0    failed=0    skipped=8    rescued=0    ignored=0
+repository_1               : ok=92   changed=43   unreachable=0    failed=0    skipped=14   rescued=0    ignored=0
+search_1                   : ok=34   changed=13   unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
+syncservice_1              : ok=39   changed=18   unreachable=0    failed=0    skipped=13   rescued=0    ignored=0
+transformers_1             : ok=81   changed=10   unreachable=0    failed=0    skipped=44   rescued=0    ignored=0
+```
+
+Once ACS has initialized access the system using the following URLs with a browser:
+
+* Digital Workspace: `http://<machine-ip>/workspace`
+* Share: `http://<machine-ip>/share`
+* Repository: `http://<machine-ip>/alfresco`
+
+## SSH Deployment
+
+To deploy to hosts other than the control node an SSH connection is required. The control node must have network access to all the target hosts and permission to SSH into the machine.
+
+The inventory file (`inventory_ssh.yml`) is used to specify the target IP addresses and the SSH connection details. You can specify one IP address for all the hosts to obtain a single-machine deployment, or different IP addresses for a multi-machine deployment.
+
+If you want to deploy everything to a single machine follow the steps in the [Single Machine Deployment](#single-machine-deployment) section, to deploy everything to separate machines follow the steps in the [Multi Machine Deployment](#multi-machine-deployment) section.
+
+### Single Machine Deployment
+
+The diagram below shows the result of a single machine deployment.
+
+![Single Machine Deployment](./resources/acs-single-machine.png)
+
+Once you have prepared the target host and configured the inventory_ssh.yaml file you are ready to run the playbook.
+
+> **For Internal Use Only**: Use the following [guide](./generate-target-hosts.md#single) to generate a target host and an inventory file for testing purposes.
+
+To check your inventory file is configured correctly and the control node is able to connect to the target host run the following command:
+
+```bash
+ansible all -m ping -i inventory_ssh.yml
+```
+
+To deploy everything on the target host execute the playbook as the current user using the following command:
+
+```bash
+ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
+```
+
+> NOTE: The playbook takes around 30 minutes to complete.
+
+Once the playbook is complete Ansible will display a play recap to let you know that everything is done, similar to the block below:
+
 ```bash  
 PLAY RECAP *****************************************************************************************************************************************************************
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
@@ -120,16 +156,61 @@ search_1                   : ok=34   changed=13   unreachable=0    failed=0    s
 syncservice_1              : ok=39   changed=18   unreachable=0    failed=0    skipped=13   rescued=0    ignored=0
 transformers_1             : ok=81   changed=10   unreachable=0    failed=0    skipped=44   rescued=0    ignored=0
 ```
-  
-Access the system using the following URLs using a browser:
 
-    * Digital Workspace: ```webservers_host_ip/workspace```
-    * Share: ```webservers_host_ip/share```
-    * Repository: ```webservers_host_ip/alfresco```
+Once ACS has initialized access the system using the following URLs with a browser:
+
+* Digital Workspace: `http://<machine-ip>/workspace`
+* Share: `http://<machine-ip>/share`
+* Repository: `http://<machine-ip>/alfresco`
+
+### Multi Machine Deployment
+
+The diagram below shows the result of a multi machine deployment.
+
+![Multi Machine Deployment](./resources/acs-multi-machine.png)
+
+Once you have prepared the target hosts and configured the inventory_ssh.yaml file you are ready to run the playbook.
+
+> **For Internal Use Only**: Use the following [guide](./generate-target-hosts.md#mutli) to generate target hosts and an inventory file for testing purposes.
+
+To check your inventory file is configured correctly and the control node is able to connect to the target hosts run the following command:
+
+```bash
+ansible all -m ping -i inventory_ssh.yml
+```
+
+To deploy everything on the target hosts execute the playbook as the current user using the following command:
+
+```bash
+ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
+```
+
+> NOTE: The playbook takes around 30 minutes to complete.
+
+Once the playbook is complete Ansible will display a play recap to let you know that everything is done, similar to the block below:
+
+```bash  
+PLAY RECAP *****************************************************************************************************************************************************************
+activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
+adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
+database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
+nginx_1                    : ok=21   changed=8    unreachable=0    failed=0    skipped=8    rescued=0    ignored=0
+repository_1               : ok=92   changed=43   unreachable=0    failed=0    skipped=14   rescued=0    ignored=0
+search_1                   : ok=34   changed=13   unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
+syncservice_1              : ok=39   changed=18   unreachable=0    failed=0    skipped=13   rescued=0    ignored=0
+transformers_1             : ok=81   changed=10   unreachable=0    failed=0    skipped=44   rescued=0    ignored=0
+```
+
+Once ACS has initialized access the system using the following URLs with a browser:
+
+* Digital Workspace: `http://<webservers_host_ip>/workspace`
+* Share: `http://<webservers_host_ip>/share`
+* Repository: `http://<webservers_host_ip>/alfresco`
 
 ## Folder structure
 
-You will find the Alfresco specific files in the following locations:
+You will find the Alfresco specific files in the following locations on the target hosts:
+
 | Path   | Purpose   |
 | ------ | --------- |
 | ```/opt/alfresco```     | Binaries |
@@ -139,14 +220,12 @@ You will find the Alfresco specific files in the following locations:
 
 ## Known Issues
 
-* The playbook is failing on CentOS 8
-* The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Check on war download async task (nnn retries left)." appearing many times as the WAR file downloads
-* The Tomcat access log is enabled by default and will grow in size quite quickly
-* The playbook is not fully idempotent so may cause issues if you make changes and run many times
+* The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Verifying if `<file>` finished downloading (nnn retries left)" appearing many times. Despite the wording this is **not** an error.
+* The playbook is not yet fully idempotent so may cause issues if you make changes and run many times
 
 ## Troubleshooting
 
-The best place to start if something is not working are the log files, these can be found in the following locations:
+The best place to start if something is not working are the log files, these can be found in the following locations on the target hosts:
 
 * Nginx
   * `/var/log/alfresco/nginx.alfresco.error.log`

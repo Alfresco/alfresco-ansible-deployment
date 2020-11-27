@@ -1,0 +1,19 @@
+@startuml playbook-overview
+
+skinparam componentStyle uml2
+skinparam linetype ortho
+
+rectangle "Playbook" as playbook #Ivory {
+
+    component role2 #4d9cea {
+        node "task" as role2task1 #Wheat
+        node "task" as role2task2 #Wheat
+    }
+
+    component role1 #4d9cea {
+        node "task" as role1task1 #Wheat
+        node "task" as role1task2 #Wheat
+    }
+}
+
+@enduml

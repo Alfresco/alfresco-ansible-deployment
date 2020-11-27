@@ -1,25 +1,18 @@
-@startuml
-
-Title: ACS Ansible Deployment
+@startuml ansible-overview
 
 skinparam componentStyle uml2
 skinparam linetype ortho
-skinparam rectangle {
-    BorderStyle dashed
-}
 
-actor Client
+actor User
 
-component "Playbook" as playbook #4d9cea
+rectangle "Playbook" as playbook #Ivory
 
-node "host1" #lightgrey
-node "host2" #lightgrey
+node "host1" #LightGrey
+node "hostN" #LightGrey
 
-Client -> playbook
+User -> playbook
 
-playbook -down-> host1
-playbook -down-> host2
-
-center footer Copyright 2020 Alfresco Software Inc
+playbook --> host1
+playbook --> hostN
 
 @enduml
