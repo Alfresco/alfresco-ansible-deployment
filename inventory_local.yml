@@ -5,8 +5,12 @@ all:
       hosts:
         database_1:         
           ansible_connection: local
-          ### For connecting to external machines you will need the host,private key file and user. You can also add ssh common args but are optional.
-          # ansible_host: targetIP
+          ansible_host: "127.0.0.1"
+          ### For connecting to external machines you will need to:
+          ### - Remove ansible_connection
+          ### - Modify ansible_host
+          ### - Add private key file and user. 
+          ### - Optional - You can also add ssh common args if needed.
           # ansible_private_key_file: "/path/ssh_key.pem"
           # ansible_user: centos           
           # #ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
@@ -14,27 +18,34 @@ all:
       hosts:
         repository_1:
           ansible_connection: local
+          ansible_host: "127.0.0.1"
     activemq:
       hosts:
         activemq_1:
           ansible_connection: local
+          ansible_host: "127.0.0.1"
     search:
       hosts:
         search_1:
           ansible_connection: local
+          ansible_host: "127.0.0.1"
     webservers:
       hosts:
         nginx_1:
           ansible_connection: local
+          ansible_host: "127.0.0.1"
     adw:
       hosts:
         adw_1:
           ansible_connection: local
+          ansible_host: "127.0.0.1"
     transformers:
       hosts:
         transformers_1:
           ansible_connection: local
+          ansible_host: "127.0.0.1"
     syncservice:
       hosts:
         syncservice_1:
           ansible_connection: local
+          ansible_host: "127.0.0.1"
