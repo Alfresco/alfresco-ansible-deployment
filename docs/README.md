@@ -50,6 +50,10 @@ The same playbook can be run to deploy the system in several different ways, ple
 
 ## Versioning
 
+The playbooks are currently supported on the following operating systems:
+
+* CentOS 7
+
 The table below shows the version of the components deployed by the playbook.
 
 | Component | Version |

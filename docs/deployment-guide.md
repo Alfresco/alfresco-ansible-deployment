@@ -6,9 +6,20 @@ Before continuing we need to introduce some more [Ansible concepts](https://docs
 
 The machine the playbook is run from is known as the control node. An inventory file is used to describe where the roles within the playbook should deploy to. There are two types of connection, `local` and `ssh`. Local means that everything will be installed on the control node, ssh means that everything will be deployed on one or more `hosts`, these hosts can be bare metal machines, Virtual machines or instances running on a public cloud. This is shown in the diagrams below:
 
-![Local Deployment Type](./resources/deployment-type-local.png) 
+![Local Deployment Type](./resources/deployment-type-local.png)
 
 ![SSH Deployment Type](./resources/deployment-type-ssh.png)
+
+## Folder Structure
+
+Regardless of role and connection type a consistent folder structure is used, you will find the deployed files in the following locations:
+
+| Path   | Purpose   |
+| ------ | --------- |
+| ```/opt/alfresco```     | Binaries |
+| ```/etc/opt/alfresco``` | Configuration |
+| ```/var/opt/alfresco``` | Data |
+| ```/var/log/alfresco``` | Logs |
 
 ## Getting Started Quickly
 
@@ -33,6 +44,7 @@ Once ACS has initialized access the system using the following URLs using a brow
 * Digital Workspace: [http://172.100.100.100/workspace](http://172.100.100.100/workspace)
 * Share: [http://172.100.100.100/share](http://172.100.100.100/share)
 * Repository: [http://172.100.100.100/alfresco](http://172.100.100.100/alfresco)
+* API Explorer: [http://172.100.100.100/api-explorer](http://172.100.100.100/api-explorer)
 
 ## Setup A Control Node
 
@@ -106,9 +118,10 @@ transformers_1             : ok=81   changed=10   unreachable=0    failed=0    s
 
 Once ACS has initialized access the system using the following URLs with a browser:
 
-* Digital Workspace: `http://<machine-ip>/workspace`
-* Share: `http://<machine-ip>/share`
-* Repository: `http://<machine-ip>/alfresco`
+* Digital Workspace: `http://<control-node-ip>/workspace`
+* Share: `http://<control-node-ip>/share`
+* Repository: `http://<control-node-ip>/alfresco`
+* API Explorer: `http://<control-node-ip>/api-explorer`
 
 ## SSH Deployment
 
@@ -158,9 +171,10 @@ transformers_1             : ok=81   changed=10   unreachable=0    failed=0    s
 
 Once ACS has initialized access the system using the following URLs with a browser:
 
-* Digital Workspace: `http://<machine-ip>/workspace`
-* Share: `http://<machine-ip>/share`
-* Repository: `http://<machine-ip>/alfresco`
+* Digital Workspace: `http://<target-host-ip>/workspace`
+* Share: `http://<target-host-ip>/share`
+* Repository: `http://<target-host-ip>/alfresco`
+* API Explorer: `http://<target-host-ip>/api-explorer`
 
 ### Multi Machine Deployment
 
@@ -202,20 +216,10 @@ transformers_1             : ok=81   changed=10   unreachable=0    failed=0    s
 
 Once ACS has initialized access the system using the following URLs with a browser:
 
-* Digital Workspace: `http://<webservers_host_ip>/workspace`
-* Share: `http://<webservers_host_ip>/share`
-* Repository: `http://<webservers_host_ip>/alfresco`
-
-## Folder structure
-
-You will find the Alfresco specific files in the following locations on the target hosts:
-
-| Path   | Purpose   |
-| ------ | --------- |
-| ```/opt/alfresco```     | Binaries |
-| ```/etc/opt/alfresco``` | Configuration |
-| ```/var/opt/alfresco``` | Data |
-| ```/var/log/alfresco``` | Logs |
+* Digital Workspace: `http://<webservers-host-ip>/workspace`
+* Share: `http://<webservers-host-ip>/share`
+* Repository: `http://<webservers-host-ip>/alfresco`
+* API Explorer: `http://<webservers-host-ip>/api-explorer`
 
 ## Known Issues
 
