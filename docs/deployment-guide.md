@@ -10,7 +10,6 @@ The machine the playbook is run from is known as the control node. An inventory 
 
 ![SSH Deployment Type](./resources/deployment-type-ssh.png)
 
-
 ## Getting Started Quickly
 
 The quickest way to get started and experiment with the playbook is by leveraging Vagrant to create a Virtualbox virtual machine to act as the control node **and** the target host.
@@ -125,9 +124,9 @@ The diagram below shows the result of a single machine deployment.
 
 ![Single Machine Deployment](./resources/acs-single-machine.png)
 
-Once you have prepared the target host and configured the inventory_ssh.yaml file you are ready to run the playbook.
+> **NOTE**: You can optionally use the following [guide](./generate-target-hosts.md#generate-single-target-host) to generate a target host and an inventory file for testing purposes.
 
-> **For Internal Use Only**: Use the following [guide](./generate-target-hosts.md#single) to generate a target host and an inventory file for testing purposes.
+Once you have prepared the target host and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
 To check your inventory file is configured correctly and the control node is able to connect to the target host run the following command:
 
@@ -169,9 +168,9 @@ The diagram below shows the result of a multi machine deployment.
 
 ![Multi Machine Deployment](./resources/acs-multi-machine.png)
 
-Once you have prepared the target hosts and configured the inventory_ssh.yaml file you are ready to run the playbook.
+> **NOTE**: You can optionally use the following [guide](./generate-target-hosts.md#generate-single-target-host) to generate target hosts and an inventory file for testing purposes.
 
-> **For Internal Use Only**: Use the following [guide](./generate-target-hosts.md#mutli) to generate target hosts and an inventory file for testing purposes.
+Once you have prepared the target hosts and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
 To check your inventory file is configured correctly and the control node is able to connect to the target hosts run the following command:
 

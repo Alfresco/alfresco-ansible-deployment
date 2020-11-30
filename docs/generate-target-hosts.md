@@ -6,7 +6,7 @@
 
 This page describes how to generate one or more target hosts and an inventory file that can be used to test the ACS playbook.
 
-Until we hve a more convenient mechanism to create test machines i.e. Terraform or CloudFormation we can use `molecule`, a tool designed for testing Ansible playbooks.
+Until we have a more convenient mechanism to create test machines i.e. Terraform or CloudFormation we can use `molecule`, a tool designed for testing Ansible playbooks.
 
 Molecule provides support for testing with multiple instances, operating systems and distributions, virtualization providers, test frameworks and testing scenarios. It also provides a way to create and destroy EC2 instances that can be used as target hosts.
 
@@ -79,7 +79,9 @@ To quickly provision a single target host follow the steps below.
     python3 molecule/ec2/dynamic_inventory.py
     ```
 
-You are now ready to run the playbook, please return to the [deployment guide and follow the steps to deploy](./deployment-guide#single-machine-deployment).
+You are now ready to run the playbook, please return to the [deployment guide and follow the steps to deploy](./deployment-guide.md#single-machine-deployment).
+
+https://github.com/Alfresco/alfresco-ansible-deployment/blob/OPSEXP-463-docs/docs/deployment-guide.md#single-machine-deployment
 
 ## Generate Multiple Target Hosts
 
@@ -120,7 +122,7 @@ To quickly provision multiple target hosts follow the steps below.
     python3 molecule/ec2multi/dynamic_inventory.py
     ```
 
-You are now ready to run the playbook, please return to the [deployment guide and follow the steps to deploy](./deployment-guide#multi-machine-deployment).
+You are now ready to run the playbook, please return to the [deployment guide and follow the steps to deploy](./deployment-guide.md#multi-machine-deployment).
 
 ## Cleanup
 
