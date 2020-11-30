@@ -81,8 +81,6 @@ To quickly provision a single target host follow the steps below.
 
 You are now ready to run the playbook, please return to the [deployment guide and follow the steps to deploy](./deployment-guide.md#single-machine-deployment).
 
-https://github.com/Alfresco/alfresco-ansible-deployment/blob/OPSEXP-463-docs/docs/deployment-guide.md#single-machine-deployment
-
 ## Generate Multiple Target Hosts
 
 To quickly provision multiple target hosts follow the steps below.

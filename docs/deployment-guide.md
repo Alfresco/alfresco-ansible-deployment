@@ -168,7 +168,7 @@ The diagram below shows the result of a multi machine deployment.
 
 ![Multi Machine Deployment](./resources/acs-multi-machine.png)
 
-> **NOTE**: You can optionally use the following [guide](./generate-target-hosts.md#generate-single-target-host) to generate target hosts and an inventory file for testing purposes.
+> **NOTE**: You can optionally use the following [guide](./generate-target-hosts.md#generate-multiple-target-host) to generate target hosts and an inventory file for testing purposes.
 
 Once you have prepared the target hosts and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
@@ -219,7 +219,7 @@ You will find the Alfresco specific files in the following locations on the targ
 
 ## Known Issues
 
-* The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Verifying if `<file>` finished downloading (nnn retries left)" appearing many times. Despite the wording this is **not** an error.
+* The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Verifying if `<file>` finished downloading (nnn retries left)" appearing many times. Despite the wording this is **not** an error so please ignore and be patient!
 * The playbook is not yet fully idempotent so may cause issues if you make changes and run many times
 
 ## Troubleshooting
