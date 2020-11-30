@@ -129,7 +129,23 @@ To deploy to hosts other than the control node an SSH connection is required. Th
 
 The inventory file (`inventory_ssh.yml`) is used to specify the target IP addresses and the SSH connection details. You can specify one IP address for all the hosts to obtain a single-machine deployment, or different IP addresses for a multi-machine deployment.
 
-If you want to deploy everything to a single machine follow the steps in the [Single Machine Deployment](#single-machine-deployment) section, to deploy everything to separate machines follow the steps in the [Multi Machine Deployment](#multi-machine-deployment) section.
+The example snippet below demonstrates how to deploy the repository to a host with an IP address of `50.6.51.7` and SSH key at `/path/to/ssh_key.pem`.
+
+```yaml
+...
+  repository:
+    hosts:
+      repository_1:
+        connection: shh
+        ansible_host: 50.6.51.7
+        ansible_private_key_file: "/path/to/ssh_key.pem"
+        ansible_user: centos
+        ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto
+          -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR
+          -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+```
+
+If you want to deploy everything to a single machine follow the steps in the [Single Machine Deployment](#single-machine-deployment) section, alternatively, to deploy to any number of separate machines follow the steps in the [Multi Machine Deployment](#multi-machine-deployment) section.
 
 ### Single Machine Deployment
 
