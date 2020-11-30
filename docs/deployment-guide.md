@@ -168,7 +168,7 @@ The diagram below shows the result of a multi machine deployment.
 
 ![Multi Machine Deployment](./resources/acs-multi-machine.png)
 
-> **NOTE**: You can optionally use the following [guide](./generate-target-hosts.md#generate-multiple-target-host) to generate target hosts and an inventory file for testing purposes.
+> **NOTE**: You can optionally use the following [guide](./generate-target-hosts.md#generate-multiple-target-hosts) to generate target hosts and an inventory file for testing purposes.
 
 Once you have prepared the target hosts and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
