@@ -1,79 +1,91 @@
-@startuml
-
-Title: ACS Multi Machine Deployment
+@startuml acs-multi-machine
 
 skinparam componentStyle uml2
 skinparam linetype ortho
-skinparam rectangle {
-    BorderStyle dashed
+
+actor User
+
+node "Control Node" as "control" #LightGrey {
+    rectangle "Playbook" as playbook #Ivory
+
+    rectangle "inventory" #White
 }
 
-actor Client
-
-node "ingress" as ingressnode #lightgrey {
+node "webservers" as ingressnode #lightgrey {
     component "NGINX Proxy" as proxy #4d9cea
     component "Digital Workspace" as adw #4d9cea
+    component "Common" as webserverscommon #4d9cea
 }
 
 node "repository" as reponode #lightgrey {
-    component "Repository" as repo #4d9cea
-    component "Share" as share #4d9cea
+    component "Repository & Share" as repo #4d9cea
     component "Tomcat" as tomcat  #4d9cea
     component "Java" as repojava #4d9cea
+    component "Common" as repocommon #4d9cea
 }
 
 node "search" as searchnode #lightgrey {
     component "Search Service" as search #4d9cea
     component "Java" as searchjava #4d9cea
+    component "Common" as searchcommon #4d9cea
 }
 
 node "transform" as transformnode #lightgrey {
-    component "Transform (Router, SFS & AIO)" as transform #4d9cea
+    component "AIO Transform Engine" as tengine #4d9cea
+    component "Transform Router" as trouter #4d9cea
+    component "Shared File Service" as sfs #4d9cea
     component "Java" as transformjava #4d9cea
+    component "Common" as transformcommon #4d9cea
 }
 
 node "sync" as syncnode #lightgrey {
     component "Sync Service" as sync #4d9cea
     component "Java" as syncjava #4d9cea
+    component "Common" as synccommon #4d9cea
 }
 
 node "activemq" as amqnode #lightgrey {
     component "ActiveMQ" as amq #4d9cea
     component "Java" as amqjava #4d9cea
+    component "Common" as amqcommon #4d9cea
 }
 
 node "database" as dbnode #lightgrey {
     component "PostgreSQL" as psql #4d9cea
+    component "Common" as dbcommon #4d9cea
 }
 
-adw .. proxy
-repo .. tomcat
-share .. tomcat
-tomcat .. repojava
-search .. searchjava
-transform .. transformjava
-sync .. syncjava
-amq .. amqjava
+User -> playbook
+playbook <- inventory
 
-Client --> proxy
+playbook -down-> psql
+playbook -down-> amq
+playbook -down-> tengine
+playbook -down-> search
+playbook -down-> repo
+playbook -down-> trouter
+playbook -down-> sfs
+playbook -down-> sync
+playbook -down-> proxy
+playbook -down-> adw
 
-proxy --> repo
-proxy --> share
-proxy --> adw
+amq .down.> amqjava
+adw .down.> webserverscommon
+proxy .down.> webserverscommon
+psql .down.> dbcommon
+repo .down.> tomcat
+search .down.> searchjava
+sfs .down.> transformjava
+sync .down.> syncjava
+tomcat .down.> repojava
+tengine .down.> transformjava
+trouter .down.> transformjava
 
-share -right-> repo
-adw --> repo
-
-repo --> psql
-repo --> transform
-repo --> amq
-repo <--> search
-repo <--> sync
-
-transform --> amq
-
-sync --> amq
-sync --> psql
+amqjava .down.> amqcommon
+searchjava .down.> searchcommon
+transformjava .down.> transformcommon
+syncjava .down.> synccommon
+repojava .down.> repocommon
 
 center footer Copyright 2020 Alfresco Software Inc
 

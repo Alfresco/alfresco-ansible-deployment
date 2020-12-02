@@ -3,12 +3,7 @@ all:
   children:
     database:
       hosts:
-        database_1:         
-          ## For connecting to external machines you will need to:
-          ## - Remove ansible_connection
-          ## - Modify ansible_host
-          ## - Add private key file and user. 
-          ## - Optional - You can also add ssh common args if needed.
+        database_1:
           connection: ssh
           ansible_host: targetIP
           ansible_private_key_file: "/path/ssh_key.pem"

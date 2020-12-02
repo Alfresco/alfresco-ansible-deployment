@@ -1,7 +1,7 @@
-@startuml acs-single-machine
+@startuml acs-localhost
 
 skinparam componentStyle uml2
-skinparam linetype ortho
+' skinparam linetype ortho
 
 actor User
 
@@ -9,9 +9,7 @@ node "Control Node" as "control" #LightGrey {
     rectangle "Playbook" as playbook #Ivory
 
     rectangle "inventory" #White
-}
 
-node "Target Host" as "host" #LightGrey {
     component "Common" as common #4d9cea
     component "NGINX Proxy" as proxy #4d9cea
     component "Repository & Share" as repo #4d9cea
