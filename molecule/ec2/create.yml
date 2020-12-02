@@ -67,6 +67,12 @@
         vpc_subnet_id: "{{ item.vpc_subnet_id }}"
         group: "{{ security_group_name }}"
         instance_tags:
+          Creator: "molecule_{{ lookup('env', 'USER') }} }}"
+          Owner: "Operator Experience Team"
+          Department: "Engineering"
+          Purpose: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_single"
+          NoAutomaticShutdown: "False"
+          Production: "False"
           Name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_single"
           instance: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_single"
         volumes:
