@@ -25,7 +25,7 @@ Regardless of role and connection type a consistent folder structure is used, yo
 
 The quickest way to get started and experiment with the playbook is by leveraging Vagrant to create a Virtualbox virtual machine to act as the control node **and** the target host.
 
-1. Ensure your local machine has 10G of memory and 4 CPUs
+1. Ensure your local machine has a minimum of 10G of memory and 4 CPUs
 2. Clone this repository to your local machine
 3. Install [Vagrant](https://www.vagrantup.com/downloads)
 4. Install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
@@ -118,10 +118,10 @@ transformers_1             : ok=81   changed=10   unreachable=0    failed=0    s
 
 Once ACS has initialized access the system using the following URLs with a browser:
 
-* Digital Workspace: `http://<control-node-ip>/workspace`
-* Share: `http://<control-node-ip>/share`
-* Repository: `http://<control-node-ip>/alfresco`
-* API Explorer: `http://<control-node-ip>/api-explorer`
+* Digital Workspace: `http://<control-node-public-ip>/workspace`
+* Share: `http://<control-node-public-ip>/share`
+* Repository: `http://<control-node-public-ip>/alfresco`
+* API Explorer: `http://<control-node-public-ip>/api-explorer`
 
 ## SSH Deployment
 

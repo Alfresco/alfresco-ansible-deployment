@@ -50,9 +50,10 @@ The same playbook can be run to deploy the system in several different ways, ple
 
 ## Versioning
 
-The playbooks are currently supported on the following operating systems:
+The playbooks are currently tested on target hosts with the following operating systems:
 
 * CentOS 7
+* Red Hat Enterprise Linux 7.6
 
 The table below shows the version of the components deployed by the playbook.
 
