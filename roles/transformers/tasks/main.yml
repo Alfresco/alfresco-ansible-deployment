@@ -187,12 +187,11 @@
   register: download_result
   until: download_result is succeeded
 
-# Remove the "1" from test_ats_home1. It is there just to break the build
 - name: Check for ATS_HOME in "{{ config_folder }}/setenv.sh"
   shell: cat {{ config_folder }}/setenv.sh | grep ATS_HOME
   register: test_ats_home
   failed_when: false
-  changed_when: test_ats_home1.rc != 0
+  changed_when: test_ats_home.rc != 0
 
 - name: Add paths to setenv file
   become: true
