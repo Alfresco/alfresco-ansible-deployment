@@ -24,19 +24,19 @@ stages:
 
 jobs:
   include:
-    - stage: Linters
-      name: "ansible-lint"
-      install: pip install --upgrade ansible-lint
-      script:
-        - ansible-lint -v playbooks/acs.yml
-    - name: "pylint"
-      install: pip install --upgrade pylint
-      script:
-        - find . -name "*.py" ! -name __init__.py | xargs pylint
-    - name: "yamllint"
-      install: pip install --upgrade yamllint
-      script:
-        - yamllint .
+    # - stage: Linters
+    #   name: "ansible-lint"
+    #   install: pip install --upgrade ansible-lint
+    #   script:
+    #     - ansible-lint -v playbooks/acs.yml
+    # - name: "pylint"
+    #   install: pip install --upgrade pylint
+    #   script:
+    #     - find . -name "*.py" ! -name __init__.py | xargs pylint
+    # - name: "yamllint"
+    #   install: pip install --upgrade yamllint
+    #   script:
+    #     - yamllint .
     # - stage: Verification
     #   name: Search Role Verification
     #   script:
@@ -158,7 +158,7 @@ jobs:
         - VERSION=`cat VERSION`
         - echo "Tagging repository with v$VERSION..."
         - export GIT_TAG="v$VERSION"
-        - git add *
+        # - git add *
         - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
       deploy:
         provider: s3
