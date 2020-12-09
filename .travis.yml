@@ -168,7 +168,7 @@ jobs:
         - echo "Tagging repository with v$VERSION..."
         - export GIT_TAG="v$VERSION"
         - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
-        - git push https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-ansible-deployment --tags
+        - git push origin $GIT_TAG
       deploy:
         provider: s3
         access_key_id: "${STAGING_AWS_ACCESS_KEY}"
