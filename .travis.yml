@@ -13,7 +13,7 @@ branches:
     - master
     - /feature.*/
     - /fix.*/
-    - /OPSEXP-.*/q
+    - /OPSEXP-.*/
 
 before_install:
   - pip install ansible==2.9.13 molecule==3.0.8 ansible-lint PyHamcrest pylint testinfra
