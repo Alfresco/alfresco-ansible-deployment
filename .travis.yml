@@ -27,135 +27,135 @@ stages:
   - name: Linters
   - name: Verification
   - name: Release Stage
-    if: (branch = master AND commit_message = "[release]") or branch = OPSEXP-662-release-stage
+    if: branch = master AND commit_message = "[release]"
 
 jobs:
   include:
-    # - stage: Linters
-    #   name: "ansible-lint"
-    #   install: pip install --upgrade ansible-lint
-    #   script:
-    #     - ansible-lint -v playbooks/acs.yml
-    # - name: "pylint"
-    #   install: pip install --upgrade pylint
-    #   script:
-    #     - find . -name "*.py" ! -name __init__.py | xargs pylint
-    # - name: "yamllint"
-    #   install: pip install --upgrade yamllint
-    #   script:
-    #     - yamllint .
-    # - stage: Verification
-    #   name: Search Role Verification
-    #   script:
-    #     - molecule --version
-    #     - cd roles/search/
-    #     - molecule converge
-    #     - sleep 1m
-    #     - molecule verify
-    #     - molecule destroy   
-    # - stage: Verification
-    #   name: Common Role Verification
-    #   script:
-    #     - cd roles/common/ && molecule test
-    # - stage: Verification
-    #   name: Java Role Verification
-    #   script:
-    #     - cd roles/java/ && molecule test
-    # - stage: Verification
-    #   name: Tomcat Role Verification
-    #   script:
-    #     - cd roles/tomcat/ && molecule test
-    # - stage: Verification
-    #   name: ActiveMQ Role Verification
-    #   script:
-    #     - cd roles/activemq/ && molecule test
-    # - stage: Verification
-    #   name: Repository Role Verification
-    #   script:
-    #     - cd roles/repository/ 
-    #     - molecule converge
-    #     - sleep 5m
-    #     - travis_wait 30 molecule verify
-    #     - molecule destroy
-    # - stage: Verification
-    #   name: ADW Role Verification
-    #   script:
-    #     - cd roles/adw/ && molecule test
-    # - stage: Verification
-    #   name: Nginx Role Verification
-    #   script:
-    #     - cd roles/nginx/ && molecule test
-    # - stage: Verification
-    #   name: SFS Role Verification
-    #   script:
-    #     - cd roles/sfs/ && molecule test
-    # - stage: Verification
-    #   name: Trouter Role Verification
-    #   script:
-    #     - cd roles/trouter/ && molecule test
-    # - stage: Verification
-    #   name: Transform AIO Verification tests
-    #   script:
-    #     - cd roles/transformers
-    #     - molecule converge
-    #     - sleep 1m
-    #     - molecule verify
-    #     - molecule destroy
-    # - stage: Verification
-    #   name: Sync Service Verification tests
-    #   script:
-    #     - cd roles/sync
-    #     - molecule converge
-    #     - sleep 1m
-    #     - molecule verify
-    #     - molecule destroy
-    # - stage: Verification
-    #   name: Single Machine Integration checks
-    #   env:
-    #     - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single"
-    #     - ANSIBLE_FORCE_COLOR=true
-    #   before_install:
-    #     - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in dbp-ansible.pem.enc -out /tmp/dbp-ansible -d
-    #     - eval "$(ssh-agent -s)"
-    #     - chmod 600 /tmp/dbp-ansible
-    #     - ssh-add /tmp/dbp-ansible
-    #     - git clone --depth 1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
-    #   script:
-    #     - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
-    #     - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/"
-    #     - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/ ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single
-    #     - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade --use-feature=2020-resolver awscli 'molecule-ec2==0.2';"
-    #     - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/"
-    #     - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2"
-    #     - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2/dynamic_inventory.py"
-    #     - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat molecule_temp_dir/instance_config.yml | yq .[].address -r")
-    #     - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS; ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/inventory_ssh.yml"
-    #     - echo "wait for repo to be up" && sleep 5m
-    #     - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; pytest --verbose --host http://$TESTHOST --user admin --password admin"
-    #     - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi
-    # - stage: Verification
-    #   name: Multi Machine Integration checks
-    #   env:
-    #     - ANSIBLE_FORCE_COLOR=true
-    #     - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
-    #   before_install:
-    #     - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in dbp-ansible.pem.enc -out /tmp/dbp-ansible -d
-    #     - eval "$(ssh-agent -s)"
-    #     - chmod 600 /tmp/dbp-ansible
-    #     - ssh-add /tmp/dbp-ansible
-    #     - git clone --depth 1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
-    #   script:
-    #     - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
-    #     - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/"
-    #     - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
-    #     - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade --use-feature=2020-resolver awscli 'molecule-ec2==0.2';"
-    #     - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2multi"
-    #     - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2multi/dynamic_inventory.py"
-    #     - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat inventory_ssh.yml | yq .all.children.webservers.hosts.webservers_1.ansible_host -r")
-    #     - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory_ssh.yml"
-    #     - echo "wait for repo to be up" && sleep 5m
-    #     - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; pytest --verbose --host http://$TESTHOST --user admin --password admin"
-    #     - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2multi"; fi
+    - stage: Linters
+      name: "ansible-lint"
+      install: pip install --upgrade ansible-lint
+      script:
+        - ansible-lint -v playbooks/acs.yml
+    - name: "pylint"
+      install: pip install --upgrade pylint
+      script:
+        - find . -name "*.py" ! -name __init__.py | xargs pylint
+    - name: "yamllint"
+      install: pip install --upgrade yamllint
+      script:
+        - yamllint .
+    - stage: Verification
+      name: Search Role Verification
+      script:
+        - molecule --version
+        - cd roles/search/
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy   
+    - stage: Verification
+      name: Common Role Verification
+      script:
+        - cd roles/common/ && molecule test
+    - stage: Verification
+      name: Java Role Verification
+      script:
+        - cd roles/java/ && molecule test
+    - stage: Verification
+      name: Tomcat Role Verification
+      script:
+        - cd roles/tomcat/ && molecule test
+    - stage: Verification
+      name: ActiveMQ Role Verification
+      script:
+        - cd roles/activemq/ && molecule test
+    - stage: Verification
+      name: Repository Role Verification
+      script:
+        - cd roles/repository/ 
+        - molecule converge
+        - sleep 5m
+        - travis_wait 30 molecule verify
+        - molecule destroy
+    - stage: Verification
+      name: ADW Role Verification
+      script:
+        - cd roles/adw/ && molecule test
+    - stage: Verification
+      name: Nginx Role Verification
+      script:
+        - cd roles/nginx/ && molecule test
+    - stage: Verification
+      name: SFS Role Verification
+      script:
+        - cd roles/sfs/ && molecule test
+    - stage: Verification
+      name: Trouter Role Verification
+      script:
+        - cd roles/trouter/ && molecule test
+    - stage: Verification
+      name: Transform AIO Verification tests
+      script:
+        - cd roles/transformers
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+    - stage: Verification
+      name: Sync Service Verification tests
+      script:
+        - cd roles/sync
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+    - stage: Verification
+      name: Single Machine Integration checks
+      env:
+        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single"
+        - ANSIBLE_FORCE_COLOR=true
+      before_install:
+        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in dbp-ansible.pem.enc -out /tmp/dbp-ansible -d
+        - eval "$(ssh-agent -s)"
+        - chmod 600 /tmp/dbp-ansible
+        - ssh-add /tmp/dbp-ansible
+        - git clone --depth 1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
+      script:
+        - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
+        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/"
+        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/ ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single
+        - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade --use-feature=2020-resolver awscli 'molecule-ec2==0.2';"
+        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/"
+        - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2/dynamic_inventory.py"
+        - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat molecule_temp_dir/instance_config.yml | yq .[].address -r")
+        - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS; ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/inventory_ssh.yml"
+        - echo "wait for repo to be up" && sleep 5m
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; pytest --verbose --host http://$TESTHOST --user admin --password admin"
+        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi
+    - stage: Verification
+      name: Multi Machine Integration checks
+      env:
+        - ANSIBLE_FORCE_COLOR=true
+        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
+      before_install:
+        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in dbp-ansible.pem.enc -out /tmp/dbp-ansible -d
+        - eval "$(ssh-agent -s)"
+        - chmod 600 /tmp/dbp-ansible
+        - ssh-add /tmp/dbp-ansible
+        - git clone --depth 1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
+      script:
+        - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
+        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/"
+        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
+        - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade --use-feature=2020-resolver awscli 'molecule-ec2==0.2';"
+        - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule create -s ec2multi"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2multi/dynamic_inventory.py"
+        - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat inventory_ssh.yml | yq .all.children.webservers.hosts.webservers_1.ansible_host -r")
+        - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory_ssh.yml"
+        - echo "wait for repo to be up" && sleep 5m
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; pytest --verbose --host http://$TESTHOST --user admin --password admin"
+        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2multi"; fi
     - stage: Release Stage 
       name: Release
       script:
@@ -178,7 +178,5 @@ jobs:
         local_dir: dist
         glob: "*.zip"
         upload-dir: "enterprise/alfresco-ansible-deployment"
-        on:
-          branch: OPSEXP-662-release-stage
       after_deploy:
         - rm -fv dist/alfresco-ansible-release-*.zip
