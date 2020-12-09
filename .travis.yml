@@ -179,5 +179,7 @@ jobs:
         local_dir: dist
         glob: "*.zip"
         upload-dir: "enterprise/alfresco-ansible-deployment"
+        on:
+          branch: OPSEXP-662-release-stage
       after_deploy:
         - rm -fv dist/alfresco-ansible-release-*.zip
