@@ -153,6 +153,8 @@ jobs:
       name: Release
       script:
         - scripts/generate-zip.sh
+        # Travis CI runner work on DETACHED HEAD, so we need to checkout the release branch
+        - git checkout -B "${TRAVIS_BRANCH}"
         - git config --local user.name "TravisCI Alfresco"
         - git config --local user.email "opsexperience@alfresco.com"
         - export VERSION=`cat VERSION`
@@ -168,6 +170,7 @@ jobs:
         skip_cleanup: true
         region: "eu-west-1"
         local_dir: dist
+        glob: "*.zip"
         upload-dir: "enterprise/alfresco-ansible-deployment"
       after_deploy:
         - rm -fv dist/alfresco-ansible-release-*.zip
