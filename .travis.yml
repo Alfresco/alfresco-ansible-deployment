@@ -160,16 +160,14 @@ jobs:
       name: Release
       script:
         - scripts/generate-zip.sh
-        - git config --list
-        # Travis CI runner work on DETACHED HEAD, so we need to checkout the release branch
+        # Travis CI runner work on DETACHED HEAD, so we need to checkout the branch
         - git checkout -B "${TRAVIS_BRANCH}"
-        # - git config --local user.name "TravisCI Alfresco"
-        # - git config --local user.email "opsexperience@alfresco.com"
+        - git config --local user.email "alfresco-build@alfresco.com"
         - export VERSION=`cat VERSION`
         - echo "Tagging repository with v$VERSION..."
         - export GIT_TAG="v$VERSION"
         - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
-        - git push https://$GITHUB_TOKEN_2@github.com/Alfresco/alfresco-ansible-deployment $GIT_TAG
+        - git push https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-ansible-deployment $GIT_TAG
       deploy:
         provider: s3
         access_key_id: "${STAGING_AWS_ACCESS_KEY}"
