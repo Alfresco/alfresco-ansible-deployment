@@ -8,6 +8,13 @@ python:
 services:
   - docker
 
+branches:
+  only:
+    - master
+    - /feature.*/
+    - /fix.*/
+    - /OPSEXP-.*/q
+
 before_install:
   - pip install ansible==2.9.13 molecule==3.0.8 ansible-lint PyHamcrest pylint testinfra
 
@@ -154,14 +161,14 @@ jobs:
       script:
         - scripts/generate-zip.sh
         # Travis CI runner work on DETACHED HEAD, so we need to checkout the release branch
-        - git checkout -B "${TRAVIS_BRANCH}"
+        # - git checkout -B "${TRAVIS_BRANCH}"
         - git config --local user.name "TravisCI Alfresco"
         - git config --local user.email "opsexperience@alfresco.com"
         - export VERSION=`cat VERSION`
         - echo "Tagging repository with v$VERSION..."
         - export GIT_TAG="v$VERSION"
         - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
-        - git push origin $GIT_TAG
+        - git push https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-ansible-deployment --tags
       deploy:
         provider: s3
         access_key_id: "${STAGING_AWS_ACCESS_KEY}"
