@@ -20,7 +20,7 @@ stages:
   - name: Linters
   - name: Verification
   - name: Release Stage
-    if: (branch = master AND commit_message = "[release]") or branch = opsexp-662-release-stage
+    if: (branch = master AND commit_message = "[release]") or branch = OPSEXP-662-release-stage
 
 jobs:
   include:
