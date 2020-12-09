@@ -97,7 +97,7 @@
           Owner: "Operator Experience Team"
           Department: "Engineering"
           Purpose: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_multi"
-          NoAutomaticShutdown: "False"
+          NoAutomaticShutdown: "{{ lookup('env', 'KEEP_ENV') }}"
           Production: "False"
           Name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_multi"
           instance: "{{ item.0.name }}_{{ item.1 }}"
