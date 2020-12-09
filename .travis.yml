@@ -155,11 +155,11 @@ jobs:
         - scripts/generate-zip.sh
         - git config --local user.name "TravisCI Alfresco"
         - git config --local user.email "opsexperience@alfresco.com"
-        - VERSION=`cat VERSION`
+        - export VERSION=`cat VERSION`
         - echo "Tagging repository with v$VERSION..."
         - export GIT_TAG="v$VERSION"
-        # - git add *
         - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
+        - git push origin $GIT_TAG
       deploy:
         provider: s3
         access_key_id: "${STAGING_AWS_ACCESS_KEY}"
