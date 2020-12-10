@@ -108,7 +108,7 @@ jobs:
         - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\";export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single"
         - ANSIBLE_FORCE_COLOR=true
       before_install:
-        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in dbp-ansible.pem.enc -out /tmp/dbp-ansible -d
+        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
         - eval "$(ssh-agent -s)"
         - chmod 600 /tmp/dbp-ansible
         - ssh-add /tmp/dbp-ansible
@@ -132,7 +132,7 @@ jobs:
         - ANSIBLE_FORCE_COLOR=true
         - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME;export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\";export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment"
       before_install:
-        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in dbp-ansible.pem.enc -out /tmp/dbp-ansible -d
+        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
         - eval "$(ssh-agent -s)"
         - chmod 600 /tmp/dbp-ansible
         - ssh-add /tmp/dbp-ansible
