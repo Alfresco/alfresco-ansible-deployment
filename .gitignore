@@ -10,6 +10,7 @@ __pycache__/
 .vagrant
 .Python
 build/
+dist/
 develop-eggs/
 downloads/
 eggs/

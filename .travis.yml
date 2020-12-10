@@ -8,6 +8,13 @@ python:
 services:
   - docker
 
+branches:
+  only:
+    - master
+    - /feature.*/
+    - /fix.*/
+    - /OPSEXP-.*/
+
 before_install:
   - pip install ansible==2.9.13 molecule==3.0.8 ansible-lint PyHamcrest pylint testinfra
 
@@ -150,35 +157,17 @@ jobs:
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; pytest --verbose --host http://$TESTHOST --user admin --password admin"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2multi"; fi
     - stage: Release Stage 
-      name: Release tag on GitHub
+      name: Release
       script:
-        - version=`cat dist/VERSION`
-        - rsync -rv --exclude molecule/ * alfresco-ansible-release-${version}
-        - zip -r alfresco-ansible-release-${version}.zip alfresco-ansible-release-${version}
-        - rm -rf alfresco-ansible-release-${version}
-      before_deploy:
-        - git config --local user.name "TravisCI Alfresco"
-        - git config --local user.email "opsexperience@alfresco.com"
-        - export GIT_TAG="v${version}"
-        - git add *
+        - scripts/generate-zip.sh
+        # Travis CI runner work on DETACHED HEAD, so we need to checkout the branch
+        - git checkout -B "${TRAVIS_BRANCH}"
+        - git config --local user.email "alfresco-build@alfresco.com"
+        - export VERSION=`cat VERSION`
+        - echo "Tagging repository with v$VERSION..."
+        - export GIT_TAG="v$VERSION"
         - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
-      deploy:
-        provider: releases
-        api_key: $GITHUB_TOKEN_2
-        file: alfresco-ansible-release-${version}.zip
-        skip_cleanup: true
-      after_deploy:
-        - rm -fv alfresco-ansible-release-${version}.zip
-    - stage: Release Stage
-      name: Release zip to S3
-      script:
-        - version=`cat dist/VERSION`
-        - rsync -rv --exclude molecule/ * alfresco-ansible-release-${version}
-      before_deploy:
-        - mkdir s3_deploy
-        - zip -r alfresco-ansible-release-${version}.zip alfresco-ansible-release-${version}
-        - mv alfresco-ansible-release-${version}.zip s3_deploy/
-        - rm -rf alfresco-ansible-release-${version}
+        - git push https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-ansible-deployment $GIT_TAG
       deploy:
         provider: s3
         access_key_id: "${STAGING_AWS_ACCESS_KEY}"
@@ -186,7 +175,8 @@ jobs:
         bucket: "${S3_STAGING_BUCKET}"
         skip_cleanup: true
         region: "eu-west-1"
-        local_dir: s3_deploy
+        local_dir: dist
+        glob: "*.zip"
         upload-dir: "enterprise/alfresco-ansible-deployment"
       after_deploy:
-        - rm -fv alfresco-ansible-release-${version}.zip
+        - rm -fv dist/alfresco-ansible-release-*.zip
