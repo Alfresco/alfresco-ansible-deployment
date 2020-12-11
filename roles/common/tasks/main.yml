@@ -16,31 +16,17 @@
   poll: 0
   loop: "{{ utils }}"
 
-- name: "Check existence of {{ group_name }} group"
-  shell: "cat /etc/group | grep {{ group_name }}"
-  register: group_presence
-  failed_when: false
-  changed_when: group_presence.rc != 0
-
 - name: "Create {{ group_name }} group"
   group:
       name: "{{ group_name }}"
-      gid: "{{ group_id }}"
-  when: group_presence.rc != 0
-
-- name: "Check existence of {{ username }} user"
-  command: "id -u {{ username }}"
-  register: user_presence
-  failed_when: false
-  changed_when: user_presence.rc != 0
+      system: yes
 
 - name: "Create {{ username }} user"
   user:
     name: "{{ username }}"
     comment: "{{ username }} user"
-    uid: "{{ user_id }}"
+    system: yes
     group: "{{ group_name }}"
-  when: user_presence.rc != 0
 
 - name: "Check for binaries folder"
   stat:
