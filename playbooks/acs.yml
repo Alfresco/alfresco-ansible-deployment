@@ -5,6 +5,7 @@
   become_method: sudo
   roles:
     - role: '../roles/postgres'
+      when: external_repo_db_host is undefined
   tags:
     - database
 
