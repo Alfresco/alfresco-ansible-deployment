@@ -8,7 +8,7 @@
 
 - name: Create a new database with name "alfresco"
   postgresql_db:
-    name: "{{ dn_name }}"
+    name: "{{ db_name }}"
     login_host: "{{ db_host }}"
     login_password: "{{ postgres_pass }}"
 
