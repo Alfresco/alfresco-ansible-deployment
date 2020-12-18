@@ -31,9 +31,9 @@ Resources:
           Type: Schedule
           Properties:
             Schedule: rate(1 day)
-    Tags:
-      Creator: Ops Experience Team
-      Owner: Ops Experience Team
-      Department: Engineering
-      Product: Online Trial
-      Purpose: Control Plane
+      Tags:
+        Creator: Ops Experience Team
+        Owner: Ops Experience Team
+        Department: Engineering
+        Product: Ansible Deployment
+        Purpose: Building and Testing
