@@ -56,18 +56,12 @@ sql:
                 lockRetryCount: 5
                 lockRetryWaitSeconds: 1
         driver: org.postgresql.Driver
-{% for items in postgres_client_config %}
-        database: {{ items.database }}
-{% if db_host_connect == sync_connect  %}
-        host: localhost
-{% else %}
-        host: {{ db_host_connect }}
-{% endif %}
-        port: {{ items.port }}
+        database: {{ db_name }}
+        host: {{ db_host }}
+        port: {{ db_port }}
         url: jdbc:postgresql://${sql.db.host}:${sql.db.port}/${sql.db.database}
-        username: {{ items.user }}
-        password: {{ items.passwd }}
-{% endfor %}
+        username: {{ db_user }}
+        password: {{ db_passwd }}
         pool:
             initial: 50
             max: 100
