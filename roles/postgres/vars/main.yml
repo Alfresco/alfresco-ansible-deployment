@@ -5,12 +5,12 @@ sync_host_connect: "{{ hostvars['syncservice_1']['ansible_host'] }}"
 postgres_client_auth:
   - type: local
     database: "{{ repo_db_name | default('alfresco') }}"
-    user: "{{ repo_db_user | defautls('alfresco') }}"
+    user: "{{ repo_db_user | default('alfresco') }}"
     address:
     method: password
   - type: local
-    database: "{{ sync_db_name | defaults('alfresco_sync') }}"
-    user: "{{ sync_db_user | defaults('alfresco') }}"
+    database: "{{ sync_db_name | default('alfresco_sync') }}"
+    user: "{{ sync_db_user | default('alfresco') }}"
     address:
     method: password
   - type: host
