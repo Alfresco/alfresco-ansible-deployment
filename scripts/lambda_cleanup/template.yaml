@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Lambda Cleanup for dangling EC2
+
+Resources:
+  CleanUpLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/cleanup.py
+      Handler: cleanup.lambda_handler
+      Runtime: python3.8
+      MemorySize: 256
+      Timeout: 30 
+      Description: Scheduled Lambda removes dangling molecule ec2 images from builds
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Sid: CloudWatchAndEC2AllowFindAndTerminate
+              Effect: Allow
+              Action:
+                - logs:CreateLogStream
+                - logs:CreateLogGroup
+                - logs:PutLogEvents
+                - ec2:DescribeInstances
+                - ec2:DescribeTags
+                - ec2:TerminateInstances
+              Resource: "*"
+      Events:
+        ScheduledEvent:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 day)
+    Tags:
+      Creator: Ops Experience Team
+      Owner: Ops Experience Team
+      Department: Engineering
+      Product: Online Trial
+      Purpose: Control Plane
