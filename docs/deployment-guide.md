@@ -256,6 +256,8 @@ ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e external_repo_db_host
 | `external_sync_db_user` | Username with appropriate rights on the sync-service database (defaults to `external_repo_db_user`) |
 | `external_sync_db_passwd` | Password associated with the sync-service datasbe username (defaults to `external_repo_db_passwd`) | 
 
+> Of course inventory file must first be purge from any member of the database group.
+
 ## Known Issues
 
 * The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Verifying if `<file>` finished downloading (nnn retries left)" appearing many times. Despite the wording this is **not** an error so please ignore and be patient!
