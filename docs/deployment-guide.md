@@ -236,27 +236,34 @@ Once ACS has initialized access the system using the following URLs with a brows
 * Repository: `http://<webservers-host-ip>/alfresco`
 * API Explorer: `http://<webservers-host-ip>/api-explorer`
 
-### Using an external database
+### Custom database settings
 
-It is possible to skip database installation. This is useful if you have an external RDBMS where you can pre-provision the database for both Alfresco repository and sync-service.
-In such scenario you neeed to pass additionnal variables to the playbook as shown bellow:
+When deploying it is possible to set custom variable to set database name, username & password.
+This can be done using variables described bellow:
+
+| Variable | comment |
+| ------ | --------- |
+| `repo_db_name` | Name of the pre-provisionned repository database (defaults to 'alfresco') |
+| `repo_db_user` | Username with appropriate rights on the repository database (defaults to 'alfresco') |
+| `repo_db_passwd` | Password associated with the repository datasbe username (defaults to 'alfresco') |
+| `sync_db_name` | Name of the pre-provisionned repository database (defaults to 'alfresco_sync' |
+| `sync_db_user` | Username with appropriate rights on the sync-service database (defaults to `repo_db_user`) |
+| `sync_db_passwd` | Password associated with the sync-service datasbe username (defaults to `repo_db_passwd`) | 
+
+
+It is also possible to skip database installation. This is useful if you have an external RDBMS where you can pre-provision the database for both Alfresco repository and sync-service.
+In such scenario you need to pass additionnal variables to the playbook as shown bellow:
 
 ```bash
-ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e external_repo_db_host="192.168.0.31" -e external_repo_db_name="alfrepo" -e external_repo_db_user="alfresco" -e external_repo_db_passwd="myreposecret" -e external_sync_db_name="alfsync" -e external_sync_db_user="alfresco" -e external_sync_db_passwd="myreposecret"
+ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e external_repo_db_host="192.168.0.31" -e external_repo_db_port="5432" -e repo_db_name="alfrepo" -e repo_db_user="alfresco" -e repo_db_passwd="myreposecret" -e sync_db_name="alfsync" -e sync_db_user="alfresco" -e sync_db_passwd="myreposecret"
 ```
 
 | Variable | comment |
 | ------ | --------- |
-| `external_repo_db_host` | FQDN/IP of the database service for the repository |
-| `external_repo_db_name` | Name of the pre-provisionned repository database |
-| `external_repo_db_user` | Username with appropriate rights on the repository database |
-| `external_repo_db_passwd` | Password associated with the repository datasbe username | 
+| `external_repo_db_host` | FQDN/IP of the database service for the repository (defaults to the inventory database host) |
+| `external_repo_db_port` | TCP port of the database service for the repository (defaults to 5432) |
 | `external_sync_db_host` | FQDN/IP of the database service for the sync-service (defaults to `external_repo_db_host`) |
-| `external_sync_db_name` | Name of the pre-provisionned repository database (defaults to 'alfresco_sync' |
-| `external_sync_db_user` | Username with appropriate rights on the sync-service database (defaults to `external_repo_db_user`) |
-| `external_sync_db_passwd` | Password associated with the sync-service datasbe username (defaults to `external_repo_db_passwd`) | 
-
-> Of course inventory file must first be purge from any member of the database group.
+| `external_sync_db_port` | TCP port of the database service for the sync-service (defaults to `external_repo_db_port`) |
 
 ## Known Issues
 
