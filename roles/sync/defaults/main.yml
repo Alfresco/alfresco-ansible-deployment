@@ -3,3 +3,9 @@
 utils:
   - unzip
   - python-psycopg2
+
+db_host: "{%if external_sync_db_host is defined or external_repo_db_host is defined %}{{ external_sync_db_host | default(external_repo_db_host) }}{% else %}{{ hostvars[groups['database'][0]]['ansible_host'] }}{% endif %}"
+db_port: "{{ external_sync_db_port | default(external_repo_db_port) | default(5432) }}"
+db_name: "{{ external_sync_db_name | default('alfresco_sync') }}"
+db_user: "{{ external_sync_db_user | default(external_repo_db_user) | default('alfresco') }}"
+db_passwd: "{{ external_sync_db_passwd | default(external_repo_db_passwd) | default('alfresco') }}"
