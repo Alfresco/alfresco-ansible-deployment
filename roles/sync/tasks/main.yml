@@ -1,8 +1,5 @@
 ---
 # tasks file for sync
-- name: Include vars for postgres credentials
-  include_vars: "postgres.yml"
-
 - name: Ensure a list of packages installed
   become: true
   become_user: root
@@ -84,6 +81,7 @@
 
 - name: Include postgres task
   include_tasks: "postgres.yml"
+  when: groups['database'] | length > 0
 
 - name: Add config.yml file to {{ config_folder }}
   block:

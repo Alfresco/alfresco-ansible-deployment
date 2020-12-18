@@ -1,7 +1,6 @@
 ---
-- name: setting db host connect
-  set_fact: db_host_connect="{{ db_host }}"
-  when: hostvars['database_1'] is undefined
+- name: Include vars for postgres credentials
+  include_vars: "postgres.yml"
 
 - name: setting repo host connect
   set_fact: repo_connect="{{ repo_host }}"
@@ -9,19 +8,17 @@
 
 - name: Create a new database with name "alfresco"
   postgresql_db:
-    name: "{{ item['database'] }}"
-    login_host: "{{ db_host_connect }}"
+    name: "{{ dn_name }}"
+    login_host: "{{ db_host }}"
     login_password: "{{ postgres_pass }}"
-  with_items: "{{ postgres_client_config }}"
 
 - name: Connect to alfresco  database and set user's password with no expire date
   postgresql_user:
-    login_host: "{{ db_host_connect }}"
+    login_host: "{{ db_host }}"
     login_password: "{{ postgres_pass }}"
-    db: "{{ item['database'] }}"
-    name: "{{ item['user'] }}"
-    password: "{{ item['passwd'] }}"
+    db: "{{ db_name }}"
+    name: "{{ db_user }}"
+    password: "{{ db_passwd }}"
     priv: "ALL"
     expires: infinity
     role_attr_flags: SUPERUSER
-  with_items: "{{ postgres_client_config }}"
