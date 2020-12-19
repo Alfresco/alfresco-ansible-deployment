@@ -114,7 +114,7 @@
   register: job_result
   until: job_result.finished
   delay: 30
-  retries: 20
+  retries: 30
   loop: "{{ distribution_download_result.results }}"
 
 - name: Add the configuration templates
@@ -307,7 +307,7 @@
 
 - name: Include postgres task
   include_tasks: "postgres.yml"
-  when: groups['database'] | length > 0
+  when: external_repo_db_host is undefined
 
 - name: Create alfresco-global.properties
   template:

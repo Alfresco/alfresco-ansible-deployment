@@ -81,7 +81,7 @@
 
 - name: Include postgres task
   include_tasks: "postgres.yml"
-  when: groups['database'] | length > 0
+  when: external_repo_db_host is undefined
 
 - name: Add config.yml file to {{ config_folder }}
   block:
