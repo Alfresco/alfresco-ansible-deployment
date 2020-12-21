@@ -1,18 +1,19 @@
 ---
 - name: Include vars for postgres credentials
-  include_vars: "postgres.yml"
+  include_vars: postgres.yml
 
 - name: setting repo host connect
-  set_fact: repo_connect="{{ repo_host }}"
+  set_fact:
+    repo_connect: "{{ repo_host }}"
   when: hostvars['repository_1'] is undefined
 
-- name: Create a new database with name "alfresco"
+- name: Create a new database with name {{ db_name }}
   postgresql_db:
     name: "{{ db_name }}"
     login_host: "{{ db_host }}"
     login_password: "{{ postgres_pass }}"
 
-- name: Connect to alfresco  database and set user's password with no expire date
+- name: Connect to {{ db_name }} database and set user's password with no expire date
   postgresql_user:
     login_host: "{{ db_host }}"
     login_password: "{{ postgres_pass }}"

@@ -1,18 +1,19 @@
 ---
 - name: Include vars for postgres credentials
-  include_vars: "postgres.yml"
+  include_vars: postgres.yml
 
 - name: setting sync host connect
-  set_fact: sync_connect="{{ sync_host }}"
+  set_fact:
+    sync_connect: {{ sync_host }}
   when: hostvars['syncservice_1'] is not defined
 
-- name: Create a new database with name "alfresco_sync"
+- name: Create a new database with name {{ db_name }}
   postgresql_db:
     name: "{{ db_name }}"
     login_host: "{{ db_host }}"
     login_password: "{{ postgres_pass }}"
 
-- name: Connect to alfresco_sync  database and set user's password with no expire date
+- name: Connect to {{ db_name }} database and set user's password with no expire date
   postgresql_user:
     login_host: "{{ db_host }}"
     login_password: "{{ postgres_pass }}"
