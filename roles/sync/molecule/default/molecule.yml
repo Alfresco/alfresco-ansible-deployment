@@ -49,7 +49,7 @@ platforms:
       - 0.0.0.0:9090:9090/tcp
 provisioner:
   name: ansible
-    inventory:
+  inventory:
     hosts:
       all:
         children:
