@@ -51,6 +51,14 @@ platforms:
       - 0.0.0.0:9090:9090/tcp
 provisioner:
   name: ansible
+  inventory:
+    hosts:
+      all:
+        children:
+          database:
+            hosts:
+              instance:
+                ansible_host: instance
   playbooks:
     converge: converge.yml
 verifier:
