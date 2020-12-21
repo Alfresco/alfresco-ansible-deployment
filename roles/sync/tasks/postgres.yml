@@ -4,7 +4,7 @@
 
 - name: setting sync host connect
   set_fact:
-    sync_connect: {{ sync_host }}
+    sync_connect: "{{ sync_host }}"
   when: hostvars['syncservice_1'] is not defined
 
 - name: Create a new database with name {{ db_name }}
