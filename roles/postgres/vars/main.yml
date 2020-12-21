@@ -21,6 +21,11 @@ postgres_client_auth:
   - type: host
     database: all
     user: all
+    address: "{{ ansible_default_ipv4.address }}/32"
+    method: md5
+  - type: host
+    database: all
+    user: all
     address: "{{ repo_host_connect }}/32"
     method: md5
   - type: host
