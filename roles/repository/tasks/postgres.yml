@@ -7,13 +7,13 @@
     repo_connect: "{{ repo_host }}"
   when: hostvars['repository_1'] is undefined
 
-- name: Create a new database with name {{ db_name }}
+- name: "Create a new database with name {{ db_name }}"
   postgresql_db:
     name: "{{ db_name }}"
     login_host: "{{ db_host }}"
     login_password: "{{ postgres_pass }}"
 
-- name: Connect to {{ db_name }} database and set user's password with no expire date
+- name: "Connect to {{ db_name }} database and set user's password with no expire date"
   postgresql_user:
     login_host: "{{ db_host }}"
     login_password: "{{ postgres_pass }}"
