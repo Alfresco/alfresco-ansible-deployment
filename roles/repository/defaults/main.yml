@@ -9,7 +9,7 @@ utils:
   - dejavu-sans-fonts-2.33-6.el7
   - python-psycopg2
 
-db_host: "{%if external_repo_db_host is defined %}{{ external_repo_db_host }}{% else %}{{ hostvars[groups['database'][0]]['ansible_host'] }}{% endif %}"
+db_host: "{%if external_repo_db_host is defined %}{{ external_repo_db_host }}{% else %}{{ hostvars['database_1']['ansible_host'] }}{% endif %}"
 db_port: "{{ external_repo_db_port | default(5432) }}"
 db_name: "{{ repo_db_name | default('alfresco') }}"
 db_user: "{{ repo_db_user | default('alfresco') }}"
