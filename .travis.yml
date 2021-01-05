@@ -123,18 +123,22 @@ jobs:
         - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
         - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
         - export AWS_DEFAULT_REGION='us-east-1'
+        - git clone --depth 1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
       script:
         - aws ec2 run-instances --image-id ami-0affd4508a5d2481b --count 1 --instance-type t3.xlarge --key-name dbp-ansible --security-group-ids sg-08a391712fda7092a --subnet-id subnet-06ffe524598660d99 --tag-specifications "ResourceType=instance,Tags=[{Key=local,Value=machine_no_${TRAVIS_BUILD_NUMBER}}]"
         - echo "wait for instance to be up" && sleep 2m
         - export PUBLIC_IP=$(aws ec2 describe-instances --filters Name=tag-key,Values=local Name=tag-value,Values=machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+        - export INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag-key,Values=local Name=tag-value,Values=machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].InstanceId' --output text)
         - ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
         - scripts/generate-zip.sh
-        - export VERSION=$(cat VERSION)     
+        - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
         - ssh centos@${PUBLIC_IP} "sudo yum install -y unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm ansible"
         - ssh centos@${PUBLIC_IP} "sudo yum update -y; sudo yum install -y ansible"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml"
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; pytest --verbose --host http://$PUBLIC_IP --user admin --password admin"
+        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID"; fi
     - stage: Verification
       name: Single Machine Integration checks
       env:
