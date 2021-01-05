@@ -1,16 +1,15 @@
 import logging
-import boto3
 from datetime import datetime, timedelta
 from dateutil import parser
+import boto3
 
 _logger = logging.getLogger()
 _logger.setLevel(logging.INFO)
 _ec2 = boto3.client('ec2')
 _filters = [
     {
-        'Name': 'tag:Name', 
+        'Name': 'tag:Name',
         'Values': ['molecule_OPSEXP-*', 'molecule_master_*']
-        
     },
     {
         'Name':'tag:NoAutomaticShutdown',
@@ -20,19 +19,23 @@ _filters = [
         'Name': 'instance-state-name',
         'Values': ['running','stopped']
     }
-        ]
+]
 
 def lambda_handler(event, context):
+    """Lambda entry point"""
+
     response = _ec2.describe_instances(Filters=_filters)
     instances_to_terminate = _get_instances_to_terminate(response)
-    
+
     if len(instances_to_terminate) > 0:
         _ec2.terminate_instances(InstanceIds=instances_to_terminate)
-        _logger.info('Terminated the following instances: ' + str(instances_to_terminate))
+        _logger.info('Terminated the following instances: %s', str(instances_to_terminate))
     else:
         _logger.info('No instances to terminate')
-    
+
 def _get_instances_to_terminate(response):
+    """Build list of instance IDs to terminate"""
+
     instances_to_terminate = []
     if 'Reservations' in response and len(response['Reservations']) > 0:
         for reservation in response['Reservations']:

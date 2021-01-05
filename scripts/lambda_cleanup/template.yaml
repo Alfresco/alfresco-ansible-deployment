@@ -1,7 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: >
-  Lambda Cleanup for dangling EC2
+Description: Lambda function to cleanup orphaned EC2 instances created by Molecule
 
 Resources:
   CleanUpLambda:
