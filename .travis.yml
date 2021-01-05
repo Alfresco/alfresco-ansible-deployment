@@ -24,8 +24,8 @@ env:
 install: pip install 'molecule[docker]'
 
 stages:
-  - name: Linters
   - name: Verification
+  - name: Linters
   - name: Release Stage
     if: branch = master AND commit_message = "[release]"
 
