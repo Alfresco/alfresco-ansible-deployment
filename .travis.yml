@@ -111,6 +111,14 @@ jobs:
         - molecule destroy
     - stage: Verification
       name: Localhost integration checks
+      before_deploy:
+        - 'curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"'
+        - 'unzip awscli-bundle.zip'
+        - './awscli-bundle/install -b ~/bin/aws'
+        - 'export PATH=~/bin:$PATH'
+        - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+        - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        - export AWS_DEFAULT_REGION='us-east-1'
       script:
         - aws ec2 run-instances --image-id ami-0affd4508a5d2481b --count 1 --instance-type t3.xlarge --key-name dbp-ansible	 --security-group-ids sg-08a391712fda7092a --subnet-id subnet-06ffe524598660d99
     - stage: Verification
