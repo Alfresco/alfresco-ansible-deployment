@@ -125,10 +125,10 @@ jobs:
         - export AWS_DEFAULT_REGION='us-east-1'
         - git clone --depth 1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
       script:
-        - aws ec2 run-instances --image-id ami-0affd4508a5d2481b --count 1 --instance-type t3.xlarge --key-name dbp-ansible --security-group-ids sg-099a05787b0a322c3 --subnet-id subnet-06ffe524598660d99 --tag-specifications "ResourceType=instance,Tags=[{Key=local,Value=machine_no_${TRAVIS_BUILD_NUMBER}}]"
-        - echo "wait for instance to be up" && sleep 4m
+        - aws ec2 run-instances --image-id ami-0affd4508a5d2481b --count 1 --instance-type t3.xlarge --key-name dbp-ansible --security-group-ids sg-099a05787b0a322c3 --subnet-id subnet-06ffe524598660d99 --tag-specifications "ResourceType=instance,Tags=[{Key=local,Value=machine_no_${TRAVIS_BUILD_NUMBER}},{Key=Creator,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}},{Key=Owner,Value="Operator Experience Team"},{Key=Department,Value=Engineering},{Key=Purpose,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}_local},{Key=NoAutomaticShutdown,Value=${KEEP_ENV}},{Key=Production,Value=False},{Key=Name,Value={TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_local},{Key=instance,Value={TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_local}]"
+        - export INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag-key,Values=local Name=tag-value,Values=machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].InstanceId' --output text)
+        - aws ec2 wait instance-running --instance-ids ${INSTANCE_ID}
         - export PUBLIC_IP=$(aws ec2 describe-instances --filters Name=instance-state-name,Values=running Name=tag-key,Values=local Name=tag-value,Values=machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-        - export INSTANCE_ID=$(aws ec2 describe-instances --filters Name=instance-state-name,Values=running Name=tag-key,Values=local Name=tag-value,Values=machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].InstanceId' --output text)
         - ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
         - scripts/generate-zip.sh
         - export VERSION=$(cat VERSION)
