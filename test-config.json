@@ -1,13 +1,13 @@
 {
     "config": {
-      "host": "TESTHOST",
+      "host": "HOST",
       "username": "admin",
       "password": "admin"
     },
     "assertions": {
       "acs": {
         "edition": "Enterprise",
-        "version": "7.0.0",
+        "version": "6.2.2",
         "identity": false,
         "modules": [
           {
