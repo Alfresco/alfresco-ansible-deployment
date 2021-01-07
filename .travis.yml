@@ -137,6 +137,7 @@ jobs:
         - ssh centos@${PUBLIC_IP} "sudo yum update -y; sudo yum install -y ansible"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml"
+        - sed -i "s+TESTHOST+http://$PUBLIC_IP+g" "test-config.json" 
         - cd dtas; pytest --verbose --host http://$PUBLIC_IP --user admin --password admin
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
     - stage: Verification
@@ -161,7 +162,8 @@ jobs:
         - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat molecule_temp_dir/instance_config.yml | yq .[].address -r")
         - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS; ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/inventory_ssh.yml"
         - echo "wait for repo to be up" && sleep 5m
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; pytest --verbose --host http://$TESTHOST --user admin --password admin"
+        - sed -i "s+TESTHOST+http://$TESTHOST+g" "test-config.json" 
+        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; cd dtas; pytest --verbose --configuration test-config.json"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi
     - stage: Verification
       name: Multi Machine Integration checks
