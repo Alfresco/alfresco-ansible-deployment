@@ -1,6 +1,6 @@
 {
     "config": {
-      "host": "HOST",
+      "host": "TEST_URL",
       "username": "admin",
       "password": "admin"
     },
