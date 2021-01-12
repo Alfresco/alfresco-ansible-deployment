@@ -6,7 +6,7 @@ nginx_vhost_path: /etc/nginx/conf.d
 nexus_user: "{{ lookup('env', 'NEXUS_USERNAME') }}"
 nexus_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
 
-group_name: Alfresco
+group_name: alfresco
 username: alfresco
 
 maven_repository:
