@@ -49,6 +49,9 @@ scenario:
 
 provisioner:
   name: ansible
+  inventory:
+    links: 
+      group_vars: ../../../../group_vars
   playbooks:
     converge: converge.yml
 verifier:
