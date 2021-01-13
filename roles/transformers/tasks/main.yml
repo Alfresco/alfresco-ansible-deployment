@@ -80,10 +80,10 @@
   failed_when: false
   changed_when: loffice_exists.rc != 0
 
-- name: Download libreoffice-dist-{{ LIBREOFFICE_VERSION }}-linux.gz
+- name: Download libreoffice {{ LIBREOFFICE_VERSION }} rpm tar.gz
   get_url:
     url: "{{ LIBREOFFICE_RPM_URL }}"
-    dest: "{{ temp_dir }}/libreoffice-dist-linux.gz"
+    dest: "{{ temp_dir }}/libreoffice.tar.gz"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     mode: 0444
@@ -107,7 +107,7 @@
 - name: Extract libreoffice-dist-linux.gz
   become: yes
   unarchive:
-    src: "{{ temp_dir }}/libreoffice-dist-linux.gz"
+    src: "{{ temp_dir }}/libreoffice.tar.gz"
     dest: "{{ temp_dir }}/"
     remote_src: yes
   when: loffice_exists.rc != 0

@@ -7,8 +7,8 @@ IMAGEMAGICK_LIB_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/reposit
 IMAGEMAGICK_DEP_RPM_URL: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
 IMAGEMAGICK_LICENSE_FILE: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/ImageMagick-license.txt"
 
-LIBREOFFICE_VERSION: 6.3.5
-LIBREOFFICE_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/libreoffice/libreoffice-dist/{{ LIBREOFFICE_VERSION }}/libreoffice-dist-{{ LIBREOFFICE_VERSION }}-linux.gz"
+LIBREOFFICE_VERSION: 6.3.5.2
+LIBREOFFICE_RPM_URL: "https://downloadarchive.documentfoundation.org/libreoffice/old/6.3.5.2/rpm/x86_64/LibreOffice_6.3.5.2_Linux_x86-64_rpm.tar.gz"
 LIBREOFFICE_LICENSE_FILE: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/libreoffice.txt"
 
 PDF_RENDERER_VERSION: 1.1
