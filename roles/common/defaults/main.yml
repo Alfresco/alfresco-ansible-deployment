@@ -22,3 +22,7 @@ sfs_host: localhost
 trouter_host: localhost
 adw_host: localhost
 sync_host: localhost
+
+# Default home for components
+sync_home: "{{ binaries_folder }}/sync-service"
+ats_home: "{{ binaries_folder }}/transform-service"

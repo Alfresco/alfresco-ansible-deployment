@@ -9,9 +9,13 @@ nexus_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
 group_name: alfresco
 username: alfresco
 
-# maven_repository:
-#    org: "https://repo.maven.apache.org/maven2/org"
-# licenses: 3.1.0
+maven_repository:
+   org: "https://repo.maven.apache.org/maven2/org"
+licenses: 3.1.0
+
+
+sync_home: "{{ binaries_folder }}/sync-service"
+ats_home: "{{ binaries_folder }}/transform-service"
 
 # # component version
 
@@ -85,5 +89,3 @@ username: alfresco
 # adw_tgz_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
 # sync_zip_url: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"
 
-sync_home: "{{ binaries_folder }}/sync-service"
-ats_home: "{{ binaries_folder }}/transform-service"

@@ -167,7 +167,7 @@
   block:
   - name: Remove from content services
     file:
-      path: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+      path: "{{ binaries_folder }}/content-services-{{ acs.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
       state: absent
   - name: Remove from transform services
     file:

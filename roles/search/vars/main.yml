@@ -1,5 +1,5 @@
 ---
 # vars file for search-services
-dist_dir: "{{ binaries_folder }}/search-services-{{ solr.version }}"
+dist_dir: "{{ binaries_folder }}/search-services-{{ alfresco_search_services.version }}"
 config_dir: "{{ config_folder }}/search-services"
 data_dir: "{{ data_folder }}/search-services"

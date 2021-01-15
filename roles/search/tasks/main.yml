@@ -43,13 +43,13 @@
 
 - name: check if zip file exists
   stat:
-    path: "{{ binaries_folder }}/alfresco-search-services-{{ solr.version }}.zip"
+    path: "{{ binaries_folder }}/alfresco-search-services-{{ alfresco_search_services.version }}.zip"
   register: solr_archive
 
-- name: Download Solr zip {{ solr.version }}
+- name: Download Solr zip {{ alfresco_search_services.version }}
   get_url:
-    url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-search-services/{{ solr.version }}/alfresco-search-services-{{ solr.version }}.zip"
-    dest: "{{ binaries_folder }}/alfresco-search-services-{{ solr.version }}.zip"
+    url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-search-services/{{ alfresco_search_services.version }}/alfresco-search-services-{{ alfresco_search_services.version }}.zip"
+    dest: "{{ binaries_folder }}/alfresco-search-services-{{ alfresco_search_services.version }}.zip"
     mode: 0444
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
@@ -58,10 +58,10 @@
   until: download_result is succeeded
   when: not solr_archive.stat.exists and solr_install_check.rc != 0
 
-- name: Extract alfresco-search-services-{{ solr.version }}.zip into {{ dist_dir }}
+- name: Extract alfresco-search-services-{{ alfresco_search_services.version }}.zip into {{ dist_dir }}
   become: yes
   unarchive:
-    src: "{{ binaries_folder }}/alfresco-search-services-{{ solr.version }}.zip"
+    src: "{{ binaries_folder }}/alfresco-search-services-{{ alfresco_search_services.version }}.zip"
     dest: "{{ dist_dir }}"
     remote_src: yes
     creates: "{{ dist_dir }}/README.MD"

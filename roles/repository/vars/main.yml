@@ -4,14 +4,14 @@ nexus_repository:
   enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
 
 distribution_download:
-  - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ alfresco.version }}/alfresco-content-services-distribution-{{ alfresco.version }}.zip"
-    dest: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
+  - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
+    dest: "{{ content_folder }}/content-services-{{ acs.version }}.zip"
 
 maven_repository:
    org: "https://repo.maven.apache.org/maven2/org"
 licenses: 3.1.0
 
-content_folder: "{{ binaries_folder }}/content-services-{{ alfresco.version }}"
+content_folder: "{{ binaries_folder }}/content-services-{{ acs.version }}"
 settings_folder: "{{ config_folder }}/content-services"
 content_data_folder: "{{ data_folder }}/content-services"
 
