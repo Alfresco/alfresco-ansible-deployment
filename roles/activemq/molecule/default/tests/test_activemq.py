@@ -11,7 +11,7 @@ def get_ansible_vars(host):
     common_vars = "../../../common/vars/main.yml name=common_vars"
     common_defaults = "../../../common/defaults/main.yml name=common_defaults"
     common_hosts = "../../../common/vars/hosts.yml name=common_hosts"
-    group_vars = "../../group_vars/all.yml name=group_vars"
+    group_vars = "../../../../group_vars/all.yml name=group_vars"
     ansible_vars = host.ansible("include_vars", java_role)["ansible_facts"]["java_role"]
     ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
     ansible_vars.update(host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"])
@@ -23,17 +23,17 @@ def get_ansible_vars(host):
 
 def test_activemq_exe_exists(host, get_ansible_vars):
     "Check that ActiveMQ executable exists"
-    assert_that(host.file("/opt/apache-activemq-{}/bin/activemq".format(get_ansible_vars["dependencies_version.activemq"])).exists, get_ansible_vars["activemq_home"])
+    assert_that(host.file("/opt/apache-activemq-{}/bin/activemq".format(get_ansible_vars["dependencies_version"]["activemq"])).exists, get_ansible_vars["activemq_home"])
 
 def test_activemq_version(host, get_ansible_vars):
     "Check that ActiveMQ version is correct"
     cmd = host.run("source {}/setenv.sh && $ACTIVEMQ_HOME/bin/activemq --version".format(get_ansible_vars["config_folder"]))
-    assert_that(cmd.stdout, contains_string("ActiveMQ {}".format(get_ansible_vars["dependencies_version.activemq"])))
+    assert_that(cmd.stdout, contains_string("ActiveMQ {}".format(get_ansible_vars["dependencies_version"]["activemq"])))
 
 def test_activemq_home(host, get_ansible_vars):
     "Check that ActiveMQ home is set correctly"
     cmd = host.run("source {}/setenv.sh && echo $ACTIVEMQ_HOME".format(get_ansible_vars["config_folder"]))
-    assert_that(cmd.stdout, contains_string("/opt/apache-activemq-{}".format(get_ansible_vars["dependencies_version.activemq"])))
+    assert_that(cmd.stdout, contains_string("/opt/apache-activemq-{}".format(get_ansible_vars["dependencies_version"]["activemq"])))
 
 def test_activemq_service(host, get_ansible_vars):
     "Check that ActiveMQ is enabled and running"
