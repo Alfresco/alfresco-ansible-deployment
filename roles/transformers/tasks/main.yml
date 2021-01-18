@@ -101,7 +101,7 @@
   register: job_result
   until: job_result.finished
   delay: 30
-  retries: 15
+  retries: 30
   when: loffice_exists.rc != 0
 
 - name: Extract libreoffice-dist-linux.gz
