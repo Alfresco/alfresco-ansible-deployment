@@ -80,14 +80,12 @@
   failed_when: false
   changed_when: loffice_exists.rc != 0
 
-- name: Download libreoffice-dist-{{ LIBREOFFICE_VERSION }}-linux.gz
+- name: Download libreoffice {{ LIBREOFFICE_VERSION }} rpm tar.gz
   get_url:
     url: "{{ LIBREOFFICE_RPM_URL }}"
-    dest: "{{ temp_dir }}/libreoffice-dist-linux.gz"
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
+    dest: "{{ temp_dir }}/libreoffice.tar.gz"
     mode: 0444
-    timeout: 570
+    timeout: 950
   register: libreoffice_download
   async: 900
   poll: 0
@@ -101,13 +99,13 @@
   register: job_result
   until: job_result.finished
   delay: 30
-  retries: 15
+  retries: 30
   when: loffice_exists.rc != 0
 
 - name: Extract libreoffice-dist-linux.gz
   become: yes
   unarchive:
-    src: "{{ temp_dir }}/libreoffice-dist-linux.gz"
+    src: "{{ temp_dir }}/libreoffice.tar.gz"
     dest: "{{ temp_dir }}/"
     remote_src: yes
   when: loffice_exists.rc != 0
