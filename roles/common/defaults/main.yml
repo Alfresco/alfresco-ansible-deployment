@@ -12,16 +12,16 @@ utils:
   - libsemanage-python
 
 # vars file to keep track of hosts (activemq, repository, share, etc.)
-activemq_host: localhost
-db_host: localhost
-solr_host: localhost
-share_host: localhost
-repo_host: localhost
-ats_tengine_aio_host: localhost
-sfs_host: localhost
-trouter_host: localhost
-adw_host: localhost
-sync_host: localhost
+# activemq_host: localhost
+# db_host: localhost
+# solr_host: localhost
+# share_host: localhost
+# repo_host: localhost
+# ats_tengine_aio_host: localhost
+# sfs_host: localhost
+# trouter_host: localhost
+# adw_host: localhost
+# sync_host: localhost
 
 # Default home for components
 sync_home: "{{ binaries_folder }}/sync-service"

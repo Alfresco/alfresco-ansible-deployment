@@ -242,7 +242,7 @@
 
 - name: Getting go_signal tengine-aio service to start
   block:
-  - name: Check for activemq
+  - name: Check for activemq "{{ activemq_host }}"
     wait_for:
       host: "{{ activemq_host }}"
       port: 8161
