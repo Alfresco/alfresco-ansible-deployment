@@ -3,7 +3,7 @@
 
 echo "Installing Content Services Platform AMPs ..."
 sudo ${JAVA_HOME}/bin/java -jar ${ACS_HOME}/bin/alfresco-mmt.jar install {{ binaries_folder }}/modules/acs-platform ${ACS_HOME}/web-server/webapps/alfresco.war -directory $*
-sudo ${JAVA_HOME}/bin/java -jar ${ACS_HOME}/bin/alfresco-mmt.jar install ${ACS_HOME}/amps ${ACS_HOME}/web-server/webapps/alfresco.war -directory -nobackup $*
+sudo ${JAVA_HOME}/bin/java -jar ${ACS_HOME}/bin/alfresco-mmt.jar install ${ACS_HOME}/amps_repo ${ACS_HOME}/web-server/webapps/alfresco.war -directory -nobackup $*
 sudo ${JAVA_HOME}/bin/java -jar ${ACS_HOME}/bin/alfresco-mmt.jar list ${ACS_HOME}/web-server/webapps/alfresco.war
 
 echo "Installing Content Services Share AMPs ..."

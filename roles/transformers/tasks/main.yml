@@ -23,7 +23,7 @@
 
 - name: Download imagemagick-distribution-linux.rpm
   get_url:
-    url: "{{ IMAGEMAGICK_RPM_URL }}"
+    url: "{{ dependencies_url.imagemagick_rpm }}"
     dest: "{{ temp_dir }}/imagemagick-distribution-linux.rpm"
     mode: 0444
     url_username: "{{ nexus_user }}"
@@ -35,7 +35,7 @@
 
 - name: Download imagemagick-distribution-libs-linux.rpm
   get_url:
-    url: "{{ IMAGEMAGICK_LIB_RPM_URL }}"
+    url: "{{ dependencies_url.imagemagick_lib_rpm }}"
     dest: "{{ temp_dir }}/imagemagick-distribution-libs-linux.rpm"
     mode: 0444
     url_username: "{{ nexus_user }}"
@@ -47,7 +47,7 @@
 
 - name: Download imagemagick-epel-dep.rpm
   get_url:
-    url: "{{ IMAGEMAGICK_DEP_RPM_URL }}"
+    url: "{{ dependencies_url.imagemagick_dep_rpm }}"
     dest: "{{ temp_dir }}/imagemagick-epel-dep.rpm"
     mode: 0444
     timeout: 570
@@ -80,9 +80,9 @@
   failed_when: false
   changed_when: loffice_exists.rc != 0
 
-- name: Download libreoffice-dist-{{ LIBREOFFICE_VERSION }}-linux.gz
+- name: Download libreoffice-dist-{{ dependencies_version.libreoffice }}-linux.gz
   get_url:
-    url: "{{ LIBREOFFICE_RPM_URL }}"
+    url: "{{ dependencies_url.libreoffice_rpm }}"
     dest: "{{ temp_dir }}/libreoffice-dist-linux.gz"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
@@ -135,7 +135,7 @@
       register: alfresco_pdf_renderer_exists
     - name: Check if alfresco-pdf-renderer archive exists
       stat:
-        path: "{{ ats_home }}/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+        path: "{{ ats_home }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
       register: alfresco_pdf_renderer_tgz_exists
 
 - name: Download alfresco-pdf-renderer-linux.tgz
@@ -144,8 +144,8 @@
       become: true
       become_user: "{{ username }}"
       get_url:
-        url: "{{ ALFRESCO_PDF_RENDERER_LIB_RPM_URL }}"
-        dest: "{{ ats_home }}/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+        url: "{{ dependencies_url.alfresco_pdf_renderer_lib_rpm }}"
+        dest: "{{ ats_home }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
         mode: 'u=rwx,g=rwx,o=rx'
@@ -158,7 +158,7 @@
   become: true
   become_user: "{{ username }}"
   unarchive:
-    src: "{{ ats_home }}/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+    src: "{{ ats_home }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
     dest: "{{ ats_home }}"
     remote_src: yes
   when: not alfresco_pdf_renderer_exists.stat.exists
@@ -167,16 +167,16 @@
   block:
   - name: Remove from content services
     file:
-      path: "{{ binaries_folder }}/content-services-{{ acs.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+      path: "{{ binaries_folder }}/content-services-{{ acs.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
       state: absent
   - name: Remove from transform services
     file:
-      path: "{{ ats_home }}/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+      path: "{{ ats_home }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
       state: absent
 
 - name: Download alfresco-transform-core-aio-boot-{{ transform.version }}.jar
   get_url:
-    url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
+    url: "{{ downloads.transform_jar_url }}"
     dest: "{{ binaries_folder }}/transform-service/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
     owner: "{{ username }}"
     group: "{{ group_name }}"

@@ -9,7 +9,7 @@
 - name: Download and untar activemq
   become: true
   unarchive:
-      src: "{{ download_url }}"
+      src: "{{ dependencies_url.activemq }}"
       remote_src: true
       group: "{{ group_name }}"
       owner: "{{ username }}"

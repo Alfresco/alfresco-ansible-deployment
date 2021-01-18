@@ -11,12 +11,12 @@ def get_ansible_vars(host):
     java_role = "file=../../../roles/java/vars/main.yml name=java_role"
     common_vars = "../../../common/vars/main.yml name=common_vars"
     common_defaults = "../../../common/defaults/main.yml name=common_defaults"
-    common_hosts = "../../group_vars/all.yml name=common_hosts"
+    group_vars = "../../group_vars/all.yml name=group_vars"
     ansible_vars = host.ansible("include_vars", tomcat_role)["ansible_facts"]["tomcat_role"]
     ansible_vars.update(host.ansible("include_vars", repository_role)["ansible_facts"]["repository_role"])
     ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
     ansible_vars.update(host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"])
-    ansible_vars.update(host.ansible("include_vars", common_hosts)["ansible_facts"]["common_hosts"])
+    ansible_vars.update(host.ansible("include_vars", group_vars)["ansible_facts"]["group_vars"])
     ansible_vars.update(host.ansible("include_vars", common_defaults)["ansible_facts"]["common_defaults"])
     return ansible_vars
 
@@ -39,7 +39,7 @@ def test_alfresco_context_200(host, get_ansible_vars):
 def test_alfresco_api(host, get_ansible_vars):
     "Check the repository is installed correctly by calling the discovery API (/alfresco/api/discovery)"
     cmd = host.run("curl -iL --user admin:admin --connect-timeout 5 http://{}:8080/alfresco/api/discovery".format(get_ansible_vars["repo_host"]))
-    assert_that(cmd.stdout, contains_string(get_ansible_vars["alfresco"]["version"]))
+    assert_that(cmd.stdout, contains_string(get_ansible_vars["acs"]["version"]))
 
 def test_share_log_exists(host, get_ansible_vars):
     "Check that share.log exists in /var/log/alfresco"
