@@ -16,7 +16,7 @@ branches:
     - /OPSEXP-.*/
 
 before_install:
-  - pip install ansible==2.9.13 molecule==3.0.8 ansible-lint PyHamcrest pylint testinfra
+  - pip install ansible==2.9.13 molecule==3.0.8 ansible-lint PyHamcrest pylint pytest-testinfra
 
 env:
   - MOLECULE_NO_LOG=false
