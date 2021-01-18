@@ -71,6 +71,8 @@
   get_url:
     url: "{{ item.url }}"
     dest: "{{ item.dest }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
     mode: 0644
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
