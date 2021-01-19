@@ -1,6 +1,0 @@
----
-utils:
-  - sudo
-  - unzip
-  - libselinux-python
-  - libsemanage-python

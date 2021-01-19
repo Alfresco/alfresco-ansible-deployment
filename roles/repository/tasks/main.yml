@@ -6,9 +6,11 @@
   become: true
   become_user: root
   package:
-    name: "{{ utils }}"
+    name: "{{ item }}"
     state: present
-
+  poll: 0
+  loop: "{{ utils }}"
+  
 - name: Create folders
   become: true
   become_user: root
