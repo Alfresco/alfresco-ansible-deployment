@@ -9,7 +9,7 @@
     name: "{{ item }}"
     state: present
   poll: 0
-  loop: "{{ utils }}"
+  loop: "{{ utils_repo }}"
 
 - name: Create folders
   become: true
