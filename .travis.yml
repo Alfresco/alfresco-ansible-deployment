@@ -164,7 +164,9 @@ jobs:
         - scripts/generate-zip.sh
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip ec2-user@${PUBLIC_IP}:/home/ec2-user/
-        - ssh ec2-user@${PUBLIC_IP} "sudo yum install cloud-utils-growpart -y ; sudo growpart /dev/nvme0n1 2 ; sudo xfs_growfs -d / "
+        - ssh ec2-user@${PUBLIC_IP} "sudo yum install -y cloud-utils-growpart"
+        - ssh ec2-user@${PUBLIC_IP} "sudo growpart /dev/nvme0n1 2"
+        - ssh ec2-user@${PUBLIC_IP} "sudo xfs_growfs -d /"
         - ssh ec2-user@${PUBLIC_IP} "sudo yum install -y unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm ansible"
         - ssh ec2-user@${PUBLIC_IP} "sudo yum update -y; sudo yum install -y ansible"
         - ssh ec2-user@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
