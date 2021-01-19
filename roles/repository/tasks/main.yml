@@ -10,7 +10,7 @@
     state: present
   poll: 0
   loop: "{{ utils }}"
-  
+
 - name: Create folders
   become: true
   become_user: root
