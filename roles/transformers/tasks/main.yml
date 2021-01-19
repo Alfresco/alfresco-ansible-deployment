@@ -1,10 +1,27 @@
 ---
 # tasks file for transformers
+- name: Include OS specific variables
+  include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+
 - name: ensure a list of packages installed
   package:
     name: "{{ item }}"
     state: present
   with_items: "{{ utils }}"
+
+- name: Install Imagick Libs CentOS8
+  package:
+    name: "{{ IMAGEMAGICK_LIB_RPM_URL }}"
+    state: present
+    disable_gpg_check: True
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '8'
+
+- name: Install Imagick CentOS8
+  package:
+    name: "{{ IMAGEMAGICK_RPM_URL }}"
+    state: present
+    disable_gpg_check: True
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '8'
 
 - name: Create temp dir
   file:

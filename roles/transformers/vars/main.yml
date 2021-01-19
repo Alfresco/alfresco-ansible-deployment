@@ -1,9 +1,6 @@
 ---
 # vars file for transformers
 imagemagick_version_major: 7.0.10
-imagemagick_version_minor: 11
-IMAGEMAGICK_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}/imagemagick-distribution-{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}-linux.rpm"
-IMAGEMAGICK_LIB_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}/imagemagick-distribution-{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}-libs-linux.rpm"
 IMAGEMAGICK_DEP_RPM_URL: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
 IMAGEMAGICK_LICENSE_FILE: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/ImageMagick-license.txt"
 
