@@ -36,3 +36,38 @@ def test_configuration_syntax(host, get_ansible_vars):
     cmd = host.run("nginx -t")
     assert_that(cmd.stderr, contains_string("{} syntax is ok".format(get_ansible_vars["nginx_conf_file_path"])))
     assert_that(cmd.stderr, contains_string("{} test is successful".format(get_ansible_vars["nginx_conf_file_path"])))
+
+def test_nginx_secure_solr_path_1(host, get_ansible_vars):
+    "Check that /.*/service/api/solr/.* is blocked and returns a HTTP 403 status code"
+    cmd = host.run("curl -iL --connect-timeout 5 http://{}/alfresco/service/api/solr/test".format(get_ansible_vars["adw_host"]))
+    assert_that(cmd.stdout, contains_string("HTTP/1.1 403"))
+
+def test_nginx_secure_solr_path_2(host, get_ansible_vars):
+    "Check that /.*/s/api/solr/.* is blocked and returns a HTTP 403 status code"
+    cmd = host.run("curl -iL --connect-timeout 5 http://{}/alfresco/s/api/solr/test".format(get_ansible_vars["adw_host"]))
+    assert_that(cmd.stdout, contains_string("HTTP/1.1 403"))
+
+def test_nginx_secure_solr_path_3(host, get_ansible_vars):
+    "Check that /.*/wcservice/api/solr/.* is blocked and returns a HTTP 403 status code"
+    cmd = host.run("curl -iL --connect-timeout 5 http://{}/alfresco/wcservice/api/solr/test".format(get_ansible_vars["adw_host"]))
+    assert_that(cmd.stdout, contains_string("HTTP/1.1 403"))
+
+def test_nginx_secure_solr_path_4(host, get_ansible_vars):
+    "Check that /.*/wcs/api/solr/.* is blocked and returns a HTTP 403 status code"
+    cmd = host.run("curl -iL --connect-timeout 5 http://{}/alfresco/wcs/api/solr/test".format(get_ansible_vars["adw_host"]))
+    assert_that(cmd.stdout, contains_string("HTTP/1.1 403"))
+
+def test_nginx_secure_solr_path_5(host, get_ansible_vars):
+    "Check that /.*/proxy/alfresco/api/solr/.* is blocked and returns a HTTP 403 status code"
+    cmd = host.run("curl -iL --connect-timeout 5 http://{}/alfresco/proxy/alfresco/api/solr/test".format(get_ansible_vars["adw_host"]))
+    assert_that(cmd.stdout, contains_string("HTTP/1.1 403"))
+
+def test_nginx_secure_solr_path_6(host, get_ansible_vars):
+    "Check that /.*/-default-/proxy/alfresco/api/.* is blocked and returns a HTTP 403 status code"
+    cmd = host.run("curl -iL --connect-timeout 5 http://{}/alfresco/-default-/proxy/alfresco/api/test".format(get_ansible_vars["adw_host"]))
+    assert_that(cmd.stdout, contains_string("HTTP/1.1 403"))
+
+def test_nginx_secure_prometheus_path(host, get_ansible_vars):
+    "Check that /.*/s/prometheus is blocked and returns a HTTP 403 status code"
+    cmd = host.run("curl -iL --connect-timeout 5 http://{}/alfresco/s/prometheus".format(get_ansible_vars["adw_host"]))
+    assert_that(cmd.stdout, contains_string("HTTP/1.1 403"))

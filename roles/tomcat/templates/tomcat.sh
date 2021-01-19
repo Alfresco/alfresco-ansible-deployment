@@ -11,4 +11,6 @@ export CATALINA_OPTS="-Xms2g -Xmx2g -Djava.net.preferIPv4Stack=true"
 export CATALINA_TMPDIR={{ data_folder }}/tomcat/temp
 export CATALINA_PID={{ data_folder }}/tomcat.pid
 export LOG_BASE={{ logs_folder }}
+export CATALINA_OPTS="${CATALINA_OPTS} -Dats-tengine-aio.host={{ ats_tengine_aio_host }}"
+export CATALINA_OPTS="${CATALINA_OPTS} -Dats-shared-fs.host={{ sfs_host }}"
 /bin/bash -c "cd ${LOG_BASE}; ${CATALINA_HOME}/bin/catalina.sh $*"

@@ -7,9 +7,9 @@
   vars:
     ssh_user: centos
     ssh_port: 22
-    security_group_name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}"
-    security_group_description: Security group for testing Molecule
-    keypair_name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}"
+    security_group_name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_single"
+    security_group_description: Security group for testing Molecule Single
+    keypair_name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_single"
     keypair_path: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}/ssh_key"
 
   tasks:
@@ -58,6 +58,7 @@
         user_data: |
           #!/bin/bash
           sudo setsebool -P httpd_can_network_connect 1
+          sudo setsebool -P nis_enabled 1
           sudo getsebool httpd_can_network_connect
         # spot_price: "{{ item.spot_price }}"
         image: "{{ item.image }}"
@@ -66,8 +67,14 @@
         vpc_subnet_id: "{{ item.vpc_subnet_id }}"
         group: "{{ security_group_name }}"
         instance_tags:
-          Name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}"
-          instance: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}"
+          Creator: "{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}"
+          Owner: "Operator Experience Team"
+          Department: "Engineering"
+          Purpose: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_single"
+          NoAutomaticShutdown: "{{ lookup('env', 'KEEP_ENV') }}"
+          Production: "False"
+          Name: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_single"
+          instance: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_single"
         volumes:
           - device_name: /dev/sda1
             volume_type: gp2
@@ -77,7 +84,7 @@
         assign_public_ip: true
         exact_count: 1
         count_tag:
-          instance: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}"
+          instance: "molecule_{{ lookup('env', 'TRAVIS_BRANCH') }}_{{ lookup('env', 'TRAVIS_BUILD_NUMBER') }}_single"
       register: server
       loop: "{{ molecule_yml.platforms }}"
       loop_control:
@@ -94,7 +101,7 @@
       until: ec2_jobs.finished
       retries: 300
       with_items: "{{ server.results }}"
-
+    
     - name: Update security group
       ec2_group:
         name: "{{ security_group_name }}"
@@ -103,14 +110,16 @@
         - proto: all
           cidr_ip: "{{ ipv4_address['content'] }}/32"
         - proto: all
-          cidr_ip: "{{ item.instances[0].public_ip }}/32"
+          cidr_ip: "0.0.0.0/0"
+        - proto: all
+          cidr_ip: "{{ item.tagged_instances[0].public_ip }}/32"
       with_items: "{{ ec2_jobs.results }}"
 
     - name: Populate instance config dict # noqa 503
       set_fact:
         instance_conf_dict: {
-          'instance': "{{ item.instances[0].tags.instance }}",
-          'address': "{{ item.instances[0].public_ip }}",
+          'instance': "{{ item.tagged_instances[0].tags.instance }}",
+          'address': "{{ item.tagged_instances[0].public_ip }}",
           'user': "{{ ssh_user }}",
           'port': "{{ ssh_port }}",
           'identity_file': "{{ keypair_path }}",

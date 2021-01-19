@@ -1,0 +1,57 @@
+@startuml acs-localhost
+
+skinparam componentStyle uml2
+' skinparam linetype ortho
+
+actor User
+
+node "Control Node" as "control" #LightGrey {
+    rectangle "Playbook" as playbook #Ivory
+
+    rectangle "inventory" #White
+
+    component "Common" as common #4d9cea
+    component "NGINX Proxy" as proxy #4d9cea
+    component "Repository & Share" as repo #4d9cea
+    component "Digital Workspace" as adw #4d9cea
+    component "Search Service" as search #4d9cea
+    component "AIO Transform Engine" as tengine #4d9cea
+    component "Transform Router" as trouter #4d9cea
+    component "Shared File Service" as sfs #4d9cea
+    component "Sync Service" as sync #4d9cea
+    component "Tomcat" as tomcat  #4d9cea
+    component "ActiveMQ" as amq #4d9cea
+    component "Java" as java #4d9cea
+    component "PostgreSQL" as psql #4d9cea
+}
+
+User -> playbook
+playbook <- inventory
+
+playbook -down-> psql
+playbook -down-> amq
+playbook -down-> tengine
+playbook -down-> search
+playbook -down-> repo
+playbook -down-> trouter
+playbook -down-> sfs
+playbook -down-> sync
+playbook -down-> proxy
+playbook -down-> adw
+
+amq .down.> java
+adw .down.> common
+java .down.> common
+proxy .down.> common
+psql .down.> common
+repo .down.> tomcat
+search .down.> java
+sfs .down.> java
+sync .down.> java
+tomcat .down.> java
+tengine .down.> java
+trouter .down.> java
+
+center footer Copyright 2020 Alfresco Software Inc
+
+@enduml

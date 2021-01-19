@@ -31,6 +31,7 @@
     url: "{{ jdk_url }}"
     dest: "{{ temp_dir }}"
     checksum: "md5:{{ jdk_md5_checksum }}"
+    timeout: 570
   register: remote_jdk_tar
   when: not remote_java.stat.exists
 
@@ -55,11 +56,6 @@
   when: not remote_java.stat.exists
 
 - name: Check if setenv file exists
-  stat:
-    path: "{{ config_folder }}/setenv.sh"
-  register: setenv_exists
-
-- name: check if setenv file exists
   stat:
     path: "{{ config_folder }}/setenv.sh"
   register: setenv_exists

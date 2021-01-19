@@ -1,0 +1,18 @@
+@startuml ansible-overview
+
+skinparam componentStyle uml2
+skinparam linetype ortho
+
+actor User
+
+rectangle "Playbook" as playbook #Ivory
+
+node "host1" #LightGrey
+node "hostN" #LightGrey
+
+User -> playbook
+
+playbook --> host1
+playbook --> hostN
+
+@enduml

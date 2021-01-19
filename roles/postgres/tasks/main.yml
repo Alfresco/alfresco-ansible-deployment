@@ -5,6 +5,9 @@
 - name: Include OS specific tasks
   include_tasks: "{{ ansible_os_family }}.yml"
 
+- name: Include OS specific variables
+  include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+
 - name: Install packages
   package:
     name: "{{ item }}"
@@ -26,7 +29,6 @@
     regexp: "^listen_addresses = '{{ postgres_listen_addresses }}'"
     insertafter: "^#listen_addresses = 'localhost'"
     line: "listen_addresses = '{{ postgres_listen_addresses }}'"
-  notify: Restart postgresql
 
 - name: Custom postgresql Configuration
   lineinfile:
@@ -36,13 +38,19 @@
     state: "{{ item['state'] | default(omit) }}"
     backup: true
   with_items: "{{ postgres_config }}"
-  notify: Restart postgresql
+
+- name: setting repo host connect
+  set_fact: repo_host_connect="127.0.0.1"
+  when: hostvars['repository_1'] is not defined or hostvars['repository_1'] == "localhost"
+
+- name: setting sync host connect
+  set_fact: sync_host_connect="127.0.0.1"
+  when: hostvars['syncservice_1'] is not defined or hostvars['syncservice_1'] == "localhost"
 
 - name: Configure postgresql client auth
   lineinfile:
     path: "{{ postgresql_conf_path[postgres_major_version] }}/pg_hba.conf"
     insertbefore: BOF
-#    regexp: ^{{ item['type'] }}\s+{{ item['database'] }}\s+{{ item['user'] }}\s+{{ item['address'] }}\s+{{ item['method'] }}
     line: "{{ item['type'] }}\t{{ item['database'] }}\t{{ item['user'] }}\t{{ item['address'] }}\t{{ item['method'] }}"
     state: "{{ item['state'] | default(omit) }}"
     backup: true
@@ -53,3 +61,10 @@
     name: "{{ postgresql_service[postgres_major_version] }}"
     state: started
     enabled: true
+
+- name: Change "postgres" pass
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: "postgres"
+    password: "{{ postgres_pass }}"

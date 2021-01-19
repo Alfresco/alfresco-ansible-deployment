@@ -1,0 +1,13 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include activemq"
+      include_role:
+        name: "activemq"
+    - name: "Include AIO"
+      include_role:
+        name: "transformers"
+    - name: "Include trouter"
+      include_role:
+        name: "trouter"

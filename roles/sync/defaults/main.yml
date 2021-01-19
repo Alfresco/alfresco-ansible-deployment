@@ -1,0 +1,5 @@
+---
+# defaults file for sync
+utils:
+  - unzip
+  - python-psycopg2

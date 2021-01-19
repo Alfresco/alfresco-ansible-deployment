@@ -1,11 +1,21 @@
 ---
 # handlers file for roles/transformers
-- name: restart-transform
-  service:
-    name: alfresco-transform
-    state: restarted
 
 - name: restart-aio
   service:
-    name: alfresco-transform
+    name: alfresco-tengine-aio
     state: restarted
+    daemon_reload: true
+
+
+- name: start-aio
+  service:
+    name: alfresco-tengine-aio
+    state: started
+    daemon_reload: true
+
+- name: stop-aio
+  service:
+    name: alfresco-tengine-aio
+    state: stopped
+    daemon_reload: true

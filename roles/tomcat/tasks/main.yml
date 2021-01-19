@@ -66,6 +66,7 @@
     get_url:
       url: "{{ item }}"
       dest: "/opt/apache-tomcat-{{ tomcat_version }}.tar.gz"
+      timeout: 570
     register: download
     until: download is succeeded
     failed_when: false
@@ -202,10 +203,11 @@
         dest: /etc/systemd/system/tomcat.service
         owner: root
         group: root
-    # notify: tomcat-restart
     when: install_check.rc != 0 or tomcat_version not in install_check.stderr
 
-  - name: Ensure tomcat service is started and enabled on boot
+  - name: Ensure tomcat service is enabled on boot
     systemd:
       name: tomcat.service
+      state: stopped
       enabled: true
+    changed_when: false

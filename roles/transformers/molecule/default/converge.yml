@@ -2,9 +2,9 @@
 - name: Converge
   hosts: all
   tasks:
-    - name: "Include tomcat role"
+    - name: "Include activemq"
       include_role:
-        name: "tomcat"
+        name: "activemq"
     - name: "Include transformers"
       include_role:
         name: "transformers"

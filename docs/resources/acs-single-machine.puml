@@ -1,22 +1,25 @@
-@startuml
-
-Title: ACS Single Machine Deployment
+@startuml acs-single-machine
 
 skinparam componentStyle uml2
 skinparam linetype ortho
-skinparam rectangle {
-    BorderStyle dashed
+
+actor User
+
+node "Control Node" as "control" #LightGrey {
+    rectangle "Playbook" as playbook #Ivory
+
+    rectangle "inventory" #White
 }
 
-actor Client
-
-node "localhost" #lightgrey {
+node "Target Host" as "host" #LightGrey {
+    component "Common" as common #4d9cea
     component "NGINX Proxy" as proxy #4d9cea
-    component "Repository" as repo #4d9cea
-    component "Share" as share #4d9cea
+    component "Repository & Share" as repo #4d9cea
     component "Digital Workspace" as adw #4d9cea
     component "Search Service" as search #4d9cea
-    component "Transform (AIO only)" as transform #4d9cea
+    component "AIO Transform Engine" as tengine #4d9cea
+    component "Transform Router" as trouter #4d9cea
+    component "Shared File Service" as sfs #4d9cea
     component "Sync Service" as sync #4d9cea
     component "Tomcat" as tomcat  #4d9cea
     component "ActiveMQ" as amq #4d9cea
@@ -24,34 +27,32 @@ node "localhost" #lightgrey {
     component "PostgreSQL" as psql #4d9cea
 }
 
-adw .. proxy
-repo .. tomcat
-share .. tomcat
-tomcat .. java
-search .. java
-transform .. java
-sync .. java
-amq .. java
+User -> playbook
+playbook <- inventory
 
-Client --> proxy
+playbook -down-> psql
+playbook -down-> amq
+playbook -down-> tengine
+playbook -down-> search
+playbook -down-> repo
+playbook -down-> trouter
+playbook -down-> sfs
+playbook -down-> sync
+playbook -down-> proxy
+playbook -down-> adw
 
-proxy --> repo
-proxy --> share
-proxy --> adw
-
-share --> repo
-adw --> repo
-
-repo --> psql
-repo --> transform
-repo --> amq
-repo <--> search
-repo <--> sync
-
-transform --> amq
-
-sync --> amq
-sync --> psql
+amq .down.> java
+adw .down.> common
+java .down.> common
+proxy .down.> common
+psql .down.> common
+repo .down.> tomcat
+search .down.> java
+sfs .down.> java
+sync .down.> java
+tomcat .down.> java
+tengine .down.> java
+trouter .down.> java
 
 center footer Copyright 2020 Alfresco Software Inc
 
