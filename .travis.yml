@@ -165,7 +165,7 @@ jobs:
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip ec2-user@${PUBLIC_IP}:/home/ec2-user/
         - ssh ec2-user@${PUBLIC_IP} "sudo yum install cloud-utils-growpart -y ; sudo growpart /dev/nvme0n1 2 ; sudo xfs_growfs -d / "
-        - ssh ec2-user@${PUBLIC_IP} "sudo yum install -y unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm ansible"
+        - ssh ec2-user@${PUBLIC_IP} "sudo yum install -y unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm ansible"
         - ssh ec2-user@${PUBLIC_IP} "sudo yum update -y; sudo yum install -y ansible"
         - ssh ec2-user@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - ssh ec2-user@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml"
