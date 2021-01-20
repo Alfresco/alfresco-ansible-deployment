@@ -3,6 +3,3 @@ nginx_package_name: "nginx"
 nginx_folder: "/usr/share/nginx/html"
 temp_dir: "/tmp/digital_workspace"
 request_uri: "workspace"
-
-
-# adw_tgz_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"

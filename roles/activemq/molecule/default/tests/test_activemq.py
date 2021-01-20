@@ -1,4 +1,5 @@
 """ActiveMQ Tests"""
+import os
 import pytest
 from hamcrest import assert_that, contains_string
 
@@ -21,6 +22,8 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", group_vars)["ansible_facts"]["group_vars"])
     return ansible_vars
 
+test_host = os.environ.get('TEST_HOST')
+
 def test_activemq_exe_exists(host, get_ansible_vars):
     "Check that ActiveMQ executable exists"
     assert_that(host.file("/opt/apache-activemq-{}/bin/activemq".format(get_ansible_vars["dependencies_version"]["activemq"])).exists, get_ansible_vars["activemq_home"])
@@ -42,6 +45,6 @@ def test_activemq_service(host, get_ansible_vars):
 
 def test_activemq_web_console(host, get_ansible_vars):
     "Check that ActiveMQ web console is available and returns a HTTP 200 for the home page"
-    cmd = host.run("curl -iL --user admin:admin http://{}:8161".format(get_ansible_vars["activemq_host"]))
+    cmd = host.run("curl -iL --user admin:admin http://{}:8161".format(test_host))
     assert_that(cmd.stdout, contains_string("Welcome to the Apache ActiveMQ!"))
     assert_that(cmd.stdout, contains_string("200 OK"))

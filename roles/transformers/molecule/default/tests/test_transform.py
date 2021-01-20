@@ -1,4 +1,5 @@
 """Transform Tests"""
+import os
 import pytest
 from hamcrest import contains_string, assert_that
 
@@ -19,6 +20,8 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", transform_services)["ansible_facts"]["transform_services"])
     return ansible_vars
 
+test_host = os.environ.get('TEST_HOST')
+
 def test_aio_log_exists(host, get_ansible_vars):
     """Check that Transform AIO log exists"""
     assert_that(host.file("{}/ats-ate-aio.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
@@ -30,7 +33,7 @@ def test_aio_service(host, get_ansible_vars):
 
 def test_aio_config_api(host, get_ansible_vars):
     """Check that Transform AIO transform/config api works"""
-    cmd = host.run("curl -iL http://{}:8090/transform/config".format(get_ansible_vars["ats_tengine_aio_host"]))
+    cmd = host.run("curl -iL http://{}:8090/transform/config".format(test_host))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
     assert_that(cmd.stdout, contains_string("pdfRendererOptions"))
     assert_that(cmd.stdout, contains_string("archiveOptions"))
@@ -42,6 +45,6 @@ def test_aio_config_api(host, get_ansible_vars):
 
 def test_aio_root_api(host, get_ansible_vars):
     """Check that Transform AIO root api works"""
-    cmd = host.run("curl -iL http://{}:8090".format(get_ansible_vars["ats_tengine_aio_host"]))
+    cmd = host.run("curl -iL http://{}:8090".format(test_host))
     assert_that(cmd.stdout, contains_string("All in One Transformer Test Transformation"), cmd.stdout)
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))

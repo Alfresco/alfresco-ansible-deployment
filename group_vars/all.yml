@@ -90,16 +90,5 @@ dependencies_url:
   tomcat: "http://archive.apache.org/dist/tomcat/tomcat-{{ dependencies_version.tomcat[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
 
 
-# repo_host: "{{ hostvars['repository_1']['ansible_host'] }}"
-# activemq_host: "{{ hostvars['activemq_1']['ansible_host'] }}"
-# db_host: "{{ hostvars['database_1']['ansible_host'] }}"
-# solr_host: "{{ hostvars['search_1']['ansible_host'] }}"
-# share_host: "{{ repo_host }}"
-# ats_tengine_aio_host: "{{ hostvars['transformers_1']['ansible_host'] }}"
-# sfs_host: "{{ hostvars['transformers_1']['ansible_host'] }}"
-# trouter_host: "{{ hostvars['transformers_1']['ansible_host'] }}"
-# adw_host: "{{ hostvars['adw_1']['ansible_host'] }}"
-# sync_host: "{{ hostvars['syncservice_1']['ansible_host'] }}"
-
 postgres_pass: MyPass1
 jdk_md5_checksum: "ac1bb98fe70314a67f6eb7a87e960d44"
