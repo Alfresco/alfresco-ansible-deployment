@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 # find location of the script
