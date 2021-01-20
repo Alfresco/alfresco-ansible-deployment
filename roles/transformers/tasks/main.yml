@@ -75,19 +75,19 @@
 
 - name: Check if LibreOffice exists
   command:
-    cmd: "/opt/libreoffice6.3/program/soffice --version"
+    cmd: "{{ libreoffice_home }}/program/soffice --version"
   register: loffice_exists
   failed_when: false
   changed_when: loffice_exists.rc != 0
 
-- name: Download libreoffice-dist-{{ dependencies_version.libreoffice }}-linux.gz
+- name: "Download libreoffice {{ dependencies_version.libreoffice }} rpm tar.gz"
   get_url:
     url: "{{ dependencies_url.libreoffice_rpm }}"
-    dest: "{{ temp_dir }}/libreoffice-dist-linux.gz"
+    dest: "{{ temp_dir }}/libreoffice.tar.gz"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     mode: 0444
-    timeout: 570
+    timeout: 950
   register: libreoffice_download
   async: 900
   poll: 0
@@ -107,7 +107,7 @@
 - name: Extract libreoffice-dist-linux.gz
   become: yes
   unarchive:
-    src: "{{ temp_dir }}/libreoffice-dist-linux.gz"
+    src: "{{ temp_dir }}/libreoffice.tar.gz"
     dest: "{{ temp_dir }}/"
     remote_src: yes
   when: loffice_exists.rc != 0
