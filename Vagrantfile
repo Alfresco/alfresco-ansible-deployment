@@ -11,6 +11,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :ansible_local do |ansible|
     ansible.playbook = "playbooks/acs.yml"
     ansible.inventory_path = "inventory_local.yml"
+    ansible.install_mode = "pip"
     ansible.version = "2.9.15"
     ansible.limit = "all"
     ansible.become = true
