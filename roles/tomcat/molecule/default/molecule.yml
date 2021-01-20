@@ -1,4 +1,17 @@
 ---
+scenario:
+  test_sequence:
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
 dependency:
   name: galaxy
 driver:

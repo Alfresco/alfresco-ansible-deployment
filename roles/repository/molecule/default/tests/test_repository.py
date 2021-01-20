@@ -12,7 +12,7 @@ def get_ansible_vars(host):
     java_role = "file=../../../roles/java/vars/main.yml name=java_role"
     common_vars = "../../../common/vars/main.yml name=common_vars"
     common_defaults = "../../../common/defaults/main.yml name=common_defaults"
-    group_vars = "../../group_vars/all.yml name=group_vars"
+    group_vars = "../../../../group_vars/all.yml name=group_vars"
     ansible_vars = host.ansible("include_vars", tomcat_role)["ansible_facts"]["tomcat_role"]
     ansible_vars.update(host.ansible("include_vars", repository_role)["ansible_facts"]["repository_role"])
     ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
