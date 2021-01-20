@@ -3,11 +3,14 @@
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
 
-- name: ensure a list of packages installed
+- name: Ensure a list of packages installed
+  become: true
+  become_user: root
   package:
     name: "{{ item }}"
     state: present
-  with_items: "{{ utils }}"
+  poll: 0
+  loop: "{{ utils_transform }}"
 
 - name: Install Imagick Libs CentOS8
   package:

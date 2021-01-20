@@ -1,6 +1,6 @@
 ---
 # defaults file for search-services
-utils:
+utils_search:
   - unzip
   - lsof 
   - ca-certificates
