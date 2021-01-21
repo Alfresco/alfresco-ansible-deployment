@@ -5,12 +5,6 @@ config_folder: /etc/opt/alfresco
 data_folder: /var/opt/alfresco
 logs_folder: /var/log/alfresco
 
-utils:
-  - sudo
-  - unzip
-  - libselinux-python
-  - libsemanage-python
-
 # vars file to keep track of hosts (activemq, repository, share, etc.)
 activemq_host: localhost
 db_host: localhost

@@ -1,10 +1,30 @@
 ---
 # tasks file for transformers
-- name: ensure a list of packages installed
+- name: Include OS specific variables
+  include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+
+- name: Ensure a list of packages installed
+  become: true
+  become_user: root
   package:
     name: "{{ item }}"
     state: present
-  with_items: "{{ utils }}"
+  poll: 0
+  loop: "{{ utils_transform }}"
+
+- name: Install Imagick Libs CentOS8
+  package:
+    name: "{{ IMAGEMAGICK_LIB_RPM_URL }}"
+    state: present
+    disable_gpg_check: True
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '8'
+
+- name: Install Imagick CentOS8
+  package:
+    name: "{{ IMAGEMAGICK_RPM_URL }}"
+    state: present
+    disable_gpg_check: True
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '8'
 
 - name: Create temp dir
   file:
@@ -59,19 +79,19 @@
   yum:
     name: "{{ temp_dir }}/imagemagick-epel-dep.rpm"
     state: present
-  when: download_img_epel_dep is succeeded
+  when: download_img_epel_dep is succeeded and magick_exists.rc != 0
 
 - name: install imagemagick-distribution-libs
   yum:
     name: "{{ temp_dir }}/imagemagick-distribution-libs-linux.rpm"
     state: present
-  when: download_img_libs_dist is succeeded
+  when: download_img_libs_dist is succeeded and magick_exists.rc != 0
 
 - name: install imagemagick-distribution
   yum:
     name: "{{ temp_dir }}/imagemagick-distribution-linux.rpm"
     state: present
-  when: download_img_dist is succeeded
+  when: download_img_dist is succeeded and magick_exists.rc != 0
 
 - name: Check if LibreOffice exists
   command:
