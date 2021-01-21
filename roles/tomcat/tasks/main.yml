@@ -163,7 +163,7 @@
         dest: "{{ tomcat_config_dir }}/conf/server.xml"
         group: "{{ group_name }}"
         owner: "{{ username }}"
-    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+    when: install_check.rc != 0 or dependencies_version.tomcat not in install_check.stderr
 
   - name: Create a symbolic link {{ tomcat_config_dir }}/logs
     file:
@@ -203,7 +203,7 @@
         dest: /etc/systemd/system/tomcat.service
         owner: root
         group: root
-    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+    when: install_check.rc != 0 or dependencies_version.tomcat not in install_check.stderr
 
   - name: Ensure tomcat service is enabled on boot
     systemd:

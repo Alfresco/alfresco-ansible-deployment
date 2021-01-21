@@ -1,10 +1,13 @@
 ---
 # tasks file for Transformation Router
-- name: ensure a list of packages installed
+- name: Ensure a list of packages installed
+  become: true
+  become_user: root
   package:
     name: "{{ item }}"
     state: present
-  with_items: "{{ utils }}"
+  poll: 0
+  loop: "{{ utils_trouter }}"
 
 - name: Download alfresco-transform-router-{{ trouter.version }}.jar
   block:
