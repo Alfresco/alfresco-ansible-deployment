@@ -205,6 +205,10 @@
         path: "{{ content_folder }}/licenses"
         state: absent
 
+- name: Include tasks for acs 7
+  include_tasks: "acs7.yml"
+  when: acs.version is version('7.0.0', 'ge')
+
 - name: Move keystore folders
   block:
     - name: Check if source keystore folder exists
@@ -224,6 +228,7 @@
       file:
         path: "{{ content_folder }}/alf_data/keystore"
         state: absent
+  when: acs.version is version('7.0.0', 'lt')
 
 - name: Move classes folder
   block:

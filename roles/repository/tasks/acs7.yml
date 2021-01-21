@@ -1,0 +1,22 @@
+---
+  # these tasks are subject to change or removal 
+  # https://alfresco.atlassian.net/browse/OPSEXP-690 
+- name: Move keystore folders
+  block:
+    - name: Check if source keystore folder exists
+      stat:
+        path: "{{ content_folder }}/keystore"
+      register: keystore
+    - name: Copy keystore folder {{ content_data_folder }}
+      copy:
+        remote_src: true
+        src: "{{ content_folder }}/keystore/metadata-keystore/"
+        dest: "{{ content_data_folder }}/keystore/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+      when: keystore.stat.exists
+    - name: Remove keystore folder
+      file:
+        path: "{{ content_folder }}/keystore"
+        state: absent
