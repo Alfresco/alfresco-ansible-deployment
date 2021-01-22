@@ -75,6 +75,8 @@
       copy:
         src: "{{ sync_home }}/sync/"
         dest: "{{ sync_home }}"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"        
         remote_src: yes
       when: sync_folder.stat.exists
     - name: Remove old sync folder
