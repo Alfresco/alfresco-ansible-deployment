@@ -1,7 +1,4 @@
 ---
-- name: Include OS specific variables
-  include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
-
 - name: Install Imagick Libs CentOS8
   package:
     name: "{{ imagemagick_lib_rpm_url }}"

@@ -1,7 +1,4 @@
 ---
-# imagemagick_version_minor: 58
-# IMAGEMAGICK_RPM_URL: "https://download.imagemagick.org/ImageMagick/download/linux/CentOS/{{ ansible_architecture }}/ImageMagick-{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}.{{ ansible_architecture }}.rpm"
-# IMAGEMAGICK_LIB_RPM_URL: "https://download.imagemagick.org/ImageMagick/download/linux/CentOS/{{ ansible_architecture }}/ImageMagick-libs-{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}.{{ ansible_architecture }}.rpm"
 imagemagick_version: 7.0.10-58
 
 imagemagick_rpm_url: "https://download.imagemagick.org/ImageMagick/download/linux/CentOS/{{ ansible_architecture }}/ImageMagick-{{ imagemagick_version }}.{{ ansible_architecture }}.rpm"
