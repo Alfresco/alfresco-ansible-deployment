@@ -31,7 +31,14 @@ The quickest way to get started and experiment with the playbook is by leveragin
 4. Install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
 5. Open Virtualbox application
 6. In a terminal, navigate to the where you cloned the repository
-7. Run the following command:
+7. Create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
+
+    ```bash
+    export NEXUS_USERNAME="<your-username>"
+    export NEXUS_PASSWORD="<your-password>"
+    ```
+
+8. Run the following command:
   
     ```bash
     vagrant up

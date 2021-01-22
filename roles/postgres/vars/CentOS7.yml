@@ -1,0 +1,5 @@
+postgresql_packages:
+  11:
+    - postgresql11-server
+    - postgresql11
+    - python-psycopg2

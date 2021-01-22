@@ -1,10 +1,16 @@
 ---
 # tasks file for transformers
-- name: ensure a list of packages installed
+- name: Include OS specific variables
+  include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+
+- name: Ensure a list of packages installed
+  become: true
+  become_user: root
   package:
     name: "{{ item }}"
     state: present
-  with_items: "{{ utils }}"
+  poll: 0
+  loop: "{{ utils_transform }}"
 
 - name: Create temp dir
   file:
@@ -21,30 +27,6 @@
   failed_when: false
   changed_when: magick_exists.rc != 0
 
-- name: Download imagemagick-distribution-linux.rpm
-  get_url:
-    url: "{{ dependencies_url.imagemagick_rpm }}"
-    dest: "{{ temp_dir }}/imagemagick-distribution-linux.rpm"
-    mode: 0444
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    timeout: 570
-  register: download_img_dist
-  until: download_img_dist is succeeded
-  when: magick_exists.rc != 0
-
-- name: Download imagemagick-distribution-libs-linux.rpm
-  get_url:
-    url: "{{ dependencies_url.imagemagick_lib_rpm }}"
-    dest: "{{ temp_dir }}/imagemagick-distribution-libs-linux.rpm"
-    mode: 0444
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    timeout: 570
-  register: download_img_libs_dist
-  until: download_img_libs_dist is succeeded
-  when: magick_exists.rc != 0
-
 - name: Download imagemagick-epel-dep.rpm
   get_url:
     url: "{{ dependencies_url.imagemagick_dep_rpm }}"
@@ -59,19 +41,10 @@
   yum:
     name: "{{ temp_dir }}/imagemagick-epel-dep.rpm"
     state: present
-  when: download_img_epel_dep is succeeded
+  when: download_img_epel_dep is succeeded and magick_exists.rc != 0
 
-- name: install imagemagick-distribution-libs
-  yum:
-    name: "{{ temp_dir }}/imagemagick-distribution-libs-linux.rpm"
-    state: present
-  when: download_img_libs_dist is succeeded
-
-- name: install imagemagick-distribution
-  yum:
-    name: "{{ temp_dir }}/imagemagick-distribution-linux.rpm"
-    state: present
-  when: download_img_dist is succeeded
+- name: Include OS specific tasks
+  include_tasks: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
 
 - name: Check if LibreOffice exists
   command:

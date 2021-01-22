@@ -1,12 +1,6 @@
 ---
 # vars file for roles/java
-
-# jdk_version: "11.0.7"
-# jdk_arch: "10"
-# jdk_url: "https://github.com/AdoptOpenJDK/openjdk11-upstream-binaries/releases/download/jdk-{{ jdk_version }}+{{ jdk_arch }}/OpenJDK11U-jdk_x64_linux_{{ jdk_version }}_{{ jdk_arch }}.tar.gz"
-# jdk_md5_checksum: "ac1bb98fe70314a67f6eb7a87e960d44"
 jdk_tar_file: "OpenJDK11U-jdk_x64_linux_{{ dependencies_version.jdk }}_{{ dependencies_version.jdk_arch }}.tar.gz"
 jdk_folder: "openjdk-{{ dependencies_version.jdk }}+{{ dependencies_version.jdk_arch }}"
 java_home: "/opt/openjdk-{{ dependencies_version.jdk }}"
 temp_dir: /tmp/ansible_java
-# config_dir: /etc/opt/alfresco

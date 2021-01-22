@@ -5,12 +5,6 @@ config_folder: /etc/opt/alfresco
 data_folder: /var/opt/alfresco
 logs_folder: /var/log/alfresco
 
-utils:
-  - sudo
-  - unzip
-  - libselinux-python
-  - libsemanage-python
-
 # Default home for components
 sync_home: "{{ binaries_folder }}/sync-service"
 ats_home: "{{ binaries_folder }}/transform-service"

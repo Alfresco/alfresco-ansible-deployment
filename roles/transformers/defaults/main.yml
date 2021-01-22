@@ -1,6 +1,6 @@
 ---
 # defaults file for roles/transformers
-utils:
+utils_transform:
   - cairo
   - cups-libs
   - libSM
