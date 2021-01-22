@@ -56,7 +56,7 @@
       mode: '0755'
     when: not webapps_dir.stat.exists
 
-  - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/" dir exists
+  - name: check if "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/" dir exists
     shell: "ls -l {{ tomcat_config_dir }}/"
     failed_when: false
     changed_when: false
@@ -64,21 +64,21 @@
 
   - name: Download Tomcat
     get_url:
-      url: "{{ item }}"
-      dest: "/opt/apache-tomcat-{{ tomcat_version }}.tar.gz"
+      url: "{{ dependencies_url.tomcat }}"
+      dest: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
       timeout: 570
     register: download
     until: download is succeeded
     failed_when: false
-    loop:
-      "{{ tomcat_tgz_urls }}"
+    # loop:
+    #   "{{ tomcat_tgz_urls }}"
     become: true
     become_user: root
     changed_when: tomcat_dir.rc !=0
 
   - name: Unarchive a file with extra options
     unarchive:
-      src: "/opt/apache-tomcat-{{ tomcat_version }}.tar.gz"
+      src: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
       dest: "/opt/"
       remote_src: yes
     become: true
@@ -86,9 +86,9 @@
     failed_when: false
     changed_when: tomcat_dir.rc != 0
 
-  - name: Recursively change ownership of "/opt/apache-tomcat-{{ tomcat_version }}/"
+  - name: Recursively change ownership of "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/"
     file:
-      path: "/opt/apache-tomcat-{{ tomcat_version }}/"
+      path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/"
       state: directory
       recurse: yes
       group: "{{ group_name }}"
@@ -96,64 +96,64 @@
       mode: 'o=r,g=rwx'
     changed_when: tomcat_dir.rc != 0
 
-  - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/conf" dir exists
+  - name: check if "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf" dir exists
     stat:
-      path: "/opt/apache-tomcat-{{ tomcat_version }}/conf"
+      path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf"
     register: conf_dir_exists
 
-  - name: Copy files from "/opt/apache-tomcat-{{ tomcat_version }}/conf to {{ tomcat_config_dir }}"
+  - name: Copy files from "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf to {{ tomcat_config_dir }}"
     copy:
       remote_src: True
-      src: "/opt/apache-tomcat-{{ tomcat_version }}/conf"
+      src: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf"
       dest: "{{ tomcat_config_dir }}"
       group: "{{ group_name }}"
       owner: "{{ username }}"
     when: conf_dir_exists.stat.exists
     changed_when: False
 
-  - name: Remove old files /opt/apache-tomcat-{{ tomcat_version }}/conf
+  - name: Remove old files /opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf
     file:
-      path: "/opt/apache-tomcat-{{ tomcat_version }}/conf"
+      path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf"
       state: absent
     changed_when: False
 
-  - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/temp" dir exists
+  - name: check if "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/temp" dir exists
     stat:
-      path: "/opt/apache-tomcat-{{ tomcat_version }}/temp"
+      path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/temp"
     register: temp_dir_exists
 
-  - name: Copy files from "/opt/apache-tomcat-{{ tomcat_version }}/temp to {{ tomcat_working }}"
+  - name: Copy files from "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/temp to {{ tomcat_working }}"
     copy:
       remote_src: True
-      src: "/opt/apache-tomcat-{{ tomcat_version }}/temp"
+      src: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/temp"
       dest: "{{ tomcat_working }}"
       group: "{{ group_name }}"
       owner: "{{ username }}"
     when: temp_dir_exists.stat.exists
 
-  - name: check if "/opt/apache-tomcat-{{ tomcat_version }}/work" dir exists
+  - name: check if "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/work" dir exists
     stat:
-      path: "/opt/apache-tomcat-{{ tomcat_version }}/work"
+      path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/work"
     register: work_dir_exists
 
-  - name: Copy files from "/opt/apache-tomcat-{{ tomcat_version }}/work to {{ tomcat_working }}"
+  - name: Copy files from "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/work to {{ tomcat_working }}"
     copy:
       remote_src: True
-      src: "/opt/apache-tomcat-{{ tomcat_version }}/work"
+      src: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/work"
       dest: "{{ tomcat_working }}/work"
       group: "{{ group_name }}"
       owner: "{{ username }}"
     when: work_dir_exists.stat.exists
 
-  - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/logs"
+  - name: Remove old files "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/logs"
     file:
-      path: "/opt/apache-tomcat-{{ tomcat_version }}/logs"
+      path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/logs"
       state: absent
     changed_when: False
 
-  - name: Remove old files "/opt/apache-tomcat-{{ tomcat_version }}/webapps"
+  - name: Remove old files "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/webapps"
     file:
-      path: "/opt/apache-tomcat-{{ tomcat_version }}/webapps"
+      path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/webapps"
       state: absent
     changed_when: False
 
@@ -163,7 +163,7 @@
         dest: "{{ tomcat_config_dir }}/conf/server.xml"
         group: "{{ group_name }}"
         owner: "{{ username }}"
-    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+    when: install_check.rc != 0 or dependencies_version.tomcat not in install_check.stderr
 
   - name: Create a symbolic link {{ tomcat_config_dir }}/logs
     file:
@@ -194,7 +194,7 @@
     become_user: "{{ username }}"
     lineinfile:
       path: "{{ config_folder }}/setenv.sh"
-      line: "export TOMCAT_HOME=/opt/apache-tomcat-{{ tomcat_version }}"
+      line: "export TOMCAT_HOME=/opt/apache-tomcat-{{ dependencies_version.tomcat }}"
     when: test_tomcat_home.stdout != 0
 
   - name: Add tomcat.service
@@ -203,7 +203,7 @@
         dest: /etc/systemd/system/tomcat.service
         owner: root
         group: root
-    when: install_check.rc != 0 or tomcat_version not in install_check.stderr
+    when: install_check.rc != 0 or dependencies_version.tomcat not in install_check.stderr
 
   - name: Ensure tomcat service is enabled on boot
     systemd:

@@ -1,19 +1,6 @@
 ---
 # vars file for transformers
-imagemagick_version_major: 7.0.10
-IMAGEMAGICK_DEP_RPM_URL: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
-IMAGEMAGICK_LICENSE_FILE: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/ImageMagick-license.txt"
-
-LIBREOFFICE_VERSION_FULL: 6.3.5.2
-LIBREOFFICE_VERSION_MINOR: 6.3
-LIBREOFFICE_RPM_URL: "https://downloadarchive.documentfoundation.org/libreoffice/old/{{ LIBREOFFICE_VERSION_FULL }}/rpm/x86_64/LibreOffice_{{ LIBREOFFICE_VERSION_FULL }}_Linux_x86-64_rpm.tar.gz"
-LIBREOFFICE_LICENSE_FILE: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/libreoffice.txt"
-
-PDF_RENDERER_VERSION: 1.1
-ALFRESCO_PDF_RENDERER_LIB_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-pdf-renderer/{{ PDF_RENDERER_VERSION }}/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
-PDFIUM_LICENSE_FILE: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/pdfium.txt"
-
 temp_dir: /tmp/ansible_transformation
 
-libreoffice_home: "/opt/libreoffice{{ LIBREOFFICE_VERSION_MINOR }}/"
-imagemagick_home: "/usr/lib64/ImageMagick-{{ imagemagick_version_major }}"
+libreoffice_home: "/opt/libreoffice{{ dependencies_version.libreoffice[0:3] }}/"
+imagemagick_home: "/usr/lib64/ImageMagick-{{ dependencies_version.imagemagick[0:6] }}"

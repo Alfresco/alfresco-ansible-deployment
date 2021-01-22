@@ -1,4 +1,5 @@
 """Solr Tests"""
+import os
 import pytest
 from hamcrest import contains_string, assert_that
 
@@ -19,6 +20,8 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", search_services)["ansible_facts"]["search_services"])
     return ansible_vars
 
+test_host = os.environ.get('TEST_HOST')
+
 def test_solr_log_exists(host, get_ansible_vars):
     "Check that solr log"
     assert_that(host.file("{}/solr.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
@@ -32,7 +35,7 @@ def test_solr_service_running_and_enabled(host, svc):
 
 def test_solr_stats_is_accesible(host, get_ansible_vars):
     """Check that SOLR creates the alfresco and archive cores"""
-    alfresco_core_command = host.run("curl -iL http://{}:8983/solr/#/~cores/alfresco".format(get_ansible_vars["solr_host"]))
-    archive_core_command = host.run("curl -iL http://{}:8983/solr/#/~cores/archive".format(get_ansible_vars["solr_host"]))
+    alfresco_core_command = host.run("curl -iL http://{}:8983/solr/#/~cores/alfresco".format(test_host))
+    archive_core_command = host.run("curl -iL http://{}:8983/solr/#/~cores/archive".format(test_host))
     assert_that(alfresco_core_command.stdout, contains_string("HTTP/1.1 200"))
     assert_that(archive_core_command.stdout, contains_string("HTTP/1.1 200"))

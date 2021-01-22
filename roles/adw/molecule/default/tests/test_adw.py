@@ -1,4 +1,5 @@
-"""Repo Tests"""
+"""ADW Tests"""
+import os
 import pytest
 from hamcrest import assert_that, contains_string
 
@@ -12,7 +13,9 @@ def AnsibleVars(host):
     ansible_vars.update(host.ansible("include_vars", common_hosts)["ansible_facts"]["common_hosts"])
     return ansible_vars
 
+test_host = os.environ.get('TEST_HOST')
+
 def test_digital_workspace_200(host, AnsibleVars):
     "Check that ADW is available and returns a HTTP 200 status code"
-    cmd = host.run("curl -iL --user admin:admin http://{}:8880/".format(AnsibleVars["adw_host"]))
+    cmd = host.run("curl -iL --user admin:admin http://{}:8880/".format(test_host))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))

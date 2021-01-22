@@ -19,7 +19,7 @@
         group: "{{ group_name }}"
     - name: Download alfresco-transform-router.jar
       get_url:
-        url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-transform-router/{{ trouter.version }}/alfresco-transform-router-{{ trouter.version }}.jar"
+        url: "{{ downloads.trouter_jar_url }}"
         dest: "{{ ats_home }}/alfresco-transform-router-{{ trouter.version }}.jar"
         owner: "{{ username }}"
         group: "{{ group_name }}"

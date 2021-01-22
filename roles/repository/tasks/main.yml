@@ -30,7 +30,7 @@
      - "{{ binaries_folder }}/modules/acs-share"
      - "{{ content_folder }}/modules/acs-platform"
      - "{{ content_folder }}/modules/acs-share"
-     - "{{ content_folder }}/amps"
+     - "{{ content_folder }}/amps_repo"
      - "{{ content_folder }}/amps_share"
      - "{{ content_folder }}/alf_data"
      - "{{ content_folder }}/alfresco-mmt"
@@ -46,7 +46,7 @@
      - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
      - "{{ logs_folder }}/licenses/"
 
-- name: Check if Alfresco version {{ alfresco.version }} is installed
+- name: Check if Alfresco version {{ acs.version }} is installed
   stat:
     path: "{{ content_data_folder }}/webapps/alfresco/META-INF/MANIFEST.MF"
   register: alf_install_check
@@ -54,11 +54,10 @@
 - name: Download DISTRIBUTION files
   become: true
   become_user: root
-  loop: "{{ query('items', distribution_download) }}"
   changed_when: false
   get_url:
-    url: "{{ item.url }}"
-    dest: "{{ item.dest }}"
+    url: "{{ downloads.acs_zip_url }}"
+    dest: "{{ download_dest }}"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     owner: "{{ username }}"
@@ -72,7 +71,7 @@
 - name: Download AMPS
   become: true
   become_user: root
-  loop: "{{ query('items', repo_downloads) }}"
+  loop: "{{ query('items', amp_downloads) }}"
   get_url:
     url: "{{ item.url }}"
     dest: "{{ item.dest }}"
@@ -90,7 +89,7 @@
   become: true
   become_user: root
   get_url:
-    url: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependency_postgresql.version }}/postgresql-{{ dependency_postgresql.version }}.jar"
+    url: "{{ dependencies_url.postgresql_connector }}"
     dest: "{{ tomcat_config_dir }}/lib/postgresql.jar"
     mode: 0644
     owner: "{{ username }}"
@@ -106,7 +105,7 @@
   lineinfile:
     path: "{{ config_folder }}/setenv.sh"
     insertafter: EOF
-    line: "export ACS_HOME={{ binaries_folder }}/content-services-{{ alfresco.version }}"
+    line: "export ACS_HOME={{ binaries_folder }}/content-services-{{ acs.version }}"
 
 - name: Add ACS home to tomcat.sh
   become: true
@@ -120,12 +119,11 @@
   become: true
   become_user: root
   async_status:
-    jid: "{{ item.ansible_job_id }}"
+    jid: "{{ distribution_download_result.ansible_job_id }}"
   register: job_result
   until: job_result.finished
   delay: 30
   retries: 20
-  loop: "{{ distribution_download_result.results }}"
 
 - name: Add the configuration templates
   become: true
@@ -141,22 +139,37 @@
 
 - name: Check if zip file exists
   stat:
-    path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
+    path: "{{ content_folder }}/content-services-{{ acs.version }}.zip"
   register: archive_exists
 
-- name: Extract content-services-{{ alfresco.version }}.zip into {{ content_folder }}
+- name: Extract content-services-{{ acs.version }}.zip into {{ content_folder }}
   become: true
   become_user: "{{ username }}"
   unarchive:
-    src: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
+    src: "{{ content_folder }}/content-services-{{ acs.version }}.zip"
     dest: "{{ content_folder }}"
     remote_src: yes
     creates: "{{ content_folder }}/bin"
 
+- name: Move alfresco-share-services.amp to {{ content_folder }}/amps_repo folder
+  block:
+    - name: Copy alfresco-share-services.amp
+      copy:
+        remote_src: true
+        src: "{{ content_folder }}/amps/alfresco-share-services.amp"
+        dest: "{{ content_folder }}/amps_repo/alfresco-share-services.amp"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+    - name: Remove amps folder
+      file:
+        path: "{{ content_folder }}/amps"
+        state: absent
+
 - name: Download war files
   become: true
   become_user: root
-  loop: "{{ query('items', repo_war_downloads) }}"
+  loop: "{{ query('items', war_downloads) }}"
   changed_when: false
   get_url:
     url: "{{ item.url }}"
@@ -171,11 +184,11 @@
   poll: 0
   when: not alf_install_check.stat.exists
 
-- name: Remove Alfresco Content Services {{ alfresco.version }} zip file
+- name: Remove Alfresco Content Services {{ acs.version }} zip file
   changed_when: false
   become: true
   file:
-    path: "{{ content_folder }}/content-services-{{ alfresco.version }}.zip"
+    path: "{{ content_folder }}/content-services-{{ acs.version }}.zip"
     state: absent
   when: archive_exists.stat.exists
 

@@ -1,4 +1,5 @@
 """SyncService Tests"""
+import os
 import pytest
 from hamcrest import contains_string, assert_that
 
@@ -19,6 +20,8 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", syncservices)["ansible_facts"]["syncservices"])
     return ansible_vars
 
+test_host = os.environ.get('TEST_HOST')
+
 def test_sync_log_exists(host, get_ansible_vars):
     """Check that Sync Service log exists"""
     assert_that(host.file("{}/sync-service.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
@@ -30,7 +33,7 @@ def test_sync_service(host, get_ansible_vars):
 
 def test_sync_health(host, get_ansible_vars):
     """Check Sync Service health"""
-    cmd = host.run("curl -iL http://{}:9090/alfresco/healthcheck".format(get_ansible_vars["sync_host"]))
+    cmd = host.run("curl -iL http://{}:9090/alfresco/healthcheck".format(test_host))
     assert_that(cmd.stdout, contains_string("ActiveMQ connection Ok"))
     assert_that(cmd.stdout, contains_string("Database connection Ok"))
     assert_that(cmd.stdout, contains_string("Repository connection Ok"))

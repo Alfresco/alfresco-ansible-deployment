@@ -36,12 +36,19 @@ platforms:
       - 0.0.0.0:9090:9090/tcp
 provisioner:
   name: ansible
+  ansible_args:
+    - --inventory=../../../../inventory_local.yml
+    - --limit=instance
+  inventory:
+    links: 
+      group_vars: ../../../../group_vars
   playbooks:
     converge: converge.yml
 verifier:
   name: testinfra
   directory: tests
   env:
+    TEST_HOST: "localhost"
     ANSIBLE_TIMEOUT: "30"
     ANSIBLE_SSH_RETRIES: "15"
     PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"

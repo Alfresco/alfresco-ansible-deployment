@@ -51,7 +51,7 @@
 
 - name: Download Solr zip {{ solr.version }}
   get_url:
-    url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-search-services/{{ solr.version }}/alfresco-search-services-{{ solr.version }}.zip"
+    url: "{{ downloads.solr_zip_url }}"
     dest: "{{ binaries_folder }}/alfresco-search-services-{{ solr.version }}.zip"
     mode: 0444
     url_username: "{{ nexus_user }}"

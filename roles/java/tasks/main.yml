@@ -28,7 +28,7 @@
 
 - name: Download file with check (md5)
   get_url:
-    url: "{{ jdk_url }}"
+    url: "{{ dependencies_url.jdk }}"
     dest: "{{ temp_dir }}"
     checksum: "md5:{{ jdk_md5_checksum }}"
     timeout: 570

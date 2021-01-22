@@ -12,20 +12,6 @@
   poll: 0
   loop: "{{ utils_transform }}"
 
-- name: Install Imagick Libs CentOS8
-  package:
-    name: "{{ IMAGEMAGICK_LIB_RPM_URL }}"
-    state: present
-    disable_gpg_check: True
-  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '8'
-
-- name: Install Imagick CentOS8
-  package:
-    name: "{{ IMAGEMAGICK_RPM_URL }}"
-    state: present
-    disable_gpg_check: True
-  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '8'
-
 - name: Create temp dir
   file:
     path: "{{ temp_dir }}"
@@ -41,33 +27,9 @@
   failed_when: false
   changed_when: magick_exists.rc != 0
 
-- name: Download imagemagick-distribution-linux.rpm
-  get_url:
-    url: "{{ IMAGEMAGICK_RPM_URL }}"
-    dest: "{{ temp_dir }}/imagemagick-distribution-linux.rpm"
-    mode: 0444
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    timeout: 570
-  register: download_img_dist
-  until: download_img_dist is succeeded
-  when: magick_exists.rc != 0
-
-- name: Download imagemagick-distribution-libs-linux.rpm
-  get_url:
-    url: "{{ IMAGEMAGICK_LIB_RPM_URL }}"
-    dest: "{{ temp_dir }}/imagemagick-distribution-libs-linux.rpm"
-    mode: 0444
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    timeout: 570
-  register: download_img_libs_dist
-  until: download_img_libs_dist is succeeded
-  when: magick_exists.rc != 0
-
 - name: Download imagemagick-epel-dep.rpm
   get_url:
-    url: "{{ IMAGEMAGICK_DEP_RPM_URL }}"
+    url: "{{ dependencies_url.imagemagick_dep_rpm }}"
     dest: "{{ temp_dir }}/imagemagick-epel-dep.rpm"
     mode: 0444
     timeout: 570
@@ -81,29 +43,22 @@
     state: present
   when: download_img_epel_dep is succeeded and magick_exists.rc != 0
 
-- name: install imagemagick-distribution-libs
-  yum:
-    name: "{{ temp_dir }}/imagemagick-distribution-libs-linux.rpm"
-    state: present
-  when: download_img_libs_dist is succeeded and magick_exists.rc != 0
-
-- name: install imagemagick-distribution
-  yum:
-    name: "{{ temp_dir }}/imagemagick-distribution-linux.rpm"
-    state: present
-  when: download_img_dist is succeeded and magick_exists.rc != 0
+- name: Include OS specific tasks
+  include_tasks: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
 
 - name: Check if LibreOffice exists
   command:
-    cmd: "/opt/libreoffice6.3/program/soffice --version"
+    cmd: "{{ libreoffice_home }}/program/soffice --version"
   register: loffice_exists
   failed_when: false
   changed_when: loffice_exists.rc != 0
 
-- name: Download libreoffice {{ LIBREOFFICE_VERSION }} rpm tar.gz
+- name: "Download libreoffice {{ dependencies_version.libreoffice }} rpm tar.gz"
   get_url:
-    url: "{{ LIBREOFFICE_RPM_URL }}"
+    url: "{{ dependencies_url.libreoffice_rpm }}"
     dest: "{{ temp_dir }}/libreoffice.tar.gz"
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
     mode: 0444
     timeout: 950
   register: libreoffice_download
@@ -153,7 +108,7 @@
       register: alfresco_pdf_renderer_exists
     - name: Check if alfresco-pdf-renderer archive exists
       stat:
-        path: "{{ ats_home }}/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+        path: "{{ ats_home }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
       register: alfresco_pdf_renderer_tgz_exists
 
 - name: Download alfresco-pdf-renderer-linux.tgz
@@ -162,8 +117,8 @@
       become: true
       become_user: "{{ username }}"
       get_url:
-        url: "{{ ALFRESCO_PDF_RENDERER_LIB_RPM_URL }}"
-        dest: "{{ ats_home }}/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+        url: "{{ dependencies_url.alfresco_pdf_renderer_lib_rpm }}"
+        dest: "{{ ats_home }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
         mode: 'u=rwx,g=rwx,o=rx'
@@ -176,7 +131,7 @@
   become: true
   become_user: "{{ username }}"
   unarchive:
-    src: "{{ ats_home }}/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+    src: "{{ ats_home }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
     dest: "{{ ats_home }}"
     remote_src: yes
   when: not alfresco_pdf_renderer_exists.stat.exists
@@ -185,16 +140,16 @@
   block:
   - name: Remove from content services
     file:
-      path: "{{ binaries_folder }}/content-services-{{ alfresco.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+      path: "{{ binaries_folder }}/content-services-{{ acs.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
       state: absent
   - name: Remove from transform services
     file:
-      path: "{{ ats_home }}/alfresco-pdf-renderer-{{ PDF_RENDERER_VERSION }}-linux.tgz"
+      path: "{{ ats_home }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
       state: absent
 
 - name: Download alfresco-transform-core-aio-boot-{{ transform.version }}.jar
   get_url:
-    url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
+    url: "{{ downloads.transform_jar_url }}"
     dest: "{{ binaries_folder }}/transform-service/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
     owner: "{{ username }}"
     group: "{{ group_name }}"
@@ -260,7 +215,7 @@
 
 - name: Getting go_signal tengine-aio service to start
   block:
-  - name: Check for activemq
+  - name: Check for activemq "{{ activemq_host }}"
     wait_for:
       host: "{{ activemq_host }}"
       port: 8161

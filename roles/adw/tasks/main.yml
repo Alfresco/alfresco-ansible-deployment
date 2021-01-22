@@ -21,7 +21,7 @@
 
 - name: Download alfresco-digital-workspace-{{ adw.version }}.zip
   get_url:
-    url: "{{ adw_tgz_url }}"
+    url: "{{ downloads.adw_zip_url }}"
     dest: "{{ temp_dir }}/alfresco-digital-workspace-{{ adw.version }}.zip"
     mode: 0444
     url_username: "{{ nexus_user }}"

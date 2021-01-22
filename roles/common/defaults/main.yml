@@ -5,14 +5,17 @@ config_folder: /etc/opt/alfresco
 data_folder: /var/opt/alfresco
 logs_folder: /var/log/alfresco
 
-# vars file to keep track of hosts (activemq, repository, share, etc.)
-activemq_host: localhost
-db_host: localhost
-solr_host: localhost
-share_host: localhost
-repo_host: localhost
-ats_tengine_aio_host: localhost
-sfs_host: localhost
-trouter_host: localhost
-adw_host: localhost
-sync_host: localhost
+# Default home for components
+sync_home: "{{ binaries_folder }}/sync-service"
+ats_home: "{{ binaries_folder }}/transform-service"
+
+repo_host: "{{ hostvars['repository_1']['ansible_host'] }}"
+activemq_host: "{{ hostvars['activemq_1']['ansible_host'] }}"
+db_host: "{{ hostvars['database_1']['ansible_host'] }}"
+solr_host: "{{ hostvars['search_1']['ansible_host'] }}"
+share_host: "{{ repo_host }}"
+ats_tengine_aio_host: "{{ hostvars['transformers_1']['ansible_host'] }}"
+sfs_host: "{{ hostvars['transformers_1']['ansible_host'] }}"
+trouter_host: "{{ hostvars['transformers_1']['ansible_host'] }}"
+adw_host: "{{ hostvars['adw_1']['ansible_host'] }}"
+sync_host: "{{ hostvars['syncservice_1']['ansible_host'] }}"
