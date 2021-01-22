@@ -1,8 +1,5 @@
 ---
 # tasks file for transformers
-- name: Include OS specific variables
-  include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
-
 - name: Ensure a list of packages installed
   become: true
   become_user: root
