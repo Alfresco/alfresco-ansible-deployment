@@ -1,4 +1,4 @@
 ---
-imagemagick_version_minor: 11
-IMAGEMAGICK_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}/imagemagick-distribution-{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}-linux.rpm"
-IMAGEMAGICK_LIB_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}/imagemagick-distribution-{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}-libs-linux.rpm"
+# imagemagick_version_minor: 11
+# IMAGEMAGICK_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}/imagemagick-distribution-{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}-linux.rpm"
+# IMAGEMAGICK_LIB_RPM_URL: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}/imagemagick-distribution-{{ imagemagick_version_major }}-{{ imagemagick_version_minor }}-libs-linux.rpm"
