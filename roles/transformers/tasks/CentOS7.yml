@@ -1,7 +1,7 @@
 ---
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
-  
+
 - name: Download imagemagick-distribution-linux.rpm
   get_url:
     url: "{{ dependencies_url.imagemagick_rpm }}"
