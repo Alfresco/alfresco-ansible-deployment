@@ -4,14 +4,14 @@
 
 - name: Install Imagick Libs CentOS8
   package:
-    name: "{{ dependencies_url.imagemagick_lib_rpm }}"
+    name: "{{ imagemagick_lib_rpm_url }}"
     state: present
     disable_gpg_check: True
   when: magick_exists.rc != 0
 
 - name: Install Imagick CentOS8
   package:
-    name: "{{ dependencies_url.imagemagick_rpm }}"
+    name: "{{ imagemagick_rpm_url }}"
     state: present
     disable_gpg_check: True
   when: magick_exists.rc != 0
