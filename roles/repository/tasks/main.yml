@@ -418,7 +418,7 @@
     line: '<PostResources base="/opt/alfresco/modules/acs-share"'
 
 - name: Check whether alfresco-global.properties already appended
-  command: 
+  command:
     cmd: 'grep -q Added_by_ansible {{ settings_folder }}/classpath/alfresco-global.properties'
   check_mode: no
   ignore_errors: yes
