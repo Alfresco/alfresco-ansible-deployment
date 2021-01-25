@@ -3,7 +3,6 @@ nexus_repository:
   releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
   enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
 
-
 acs:
   version: 6.2.2
 
@@ -63,17 +62,7 @@ amp_downloads:
   - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
 
-
-
-dependencies_version:
-  postgresql_connector: 42.2.13
-  activemq: 5.15.13
-  imagemagick: 7.0.10-11
-  libreoffice: 6.3.5.2
-  pdf_renderer: 1.1
-  jdk: 11.0.7
-  jdk_arch: 10
-  tomcat: 8.5.56
+include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
 
 dependencies_url:
   postgresql_connector: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependencies_version.postgresql_connector }}/postgresql-{{ dependencies_version.postgresql_connector }}.jar"
