@@ -1,6 +1,6 @@
 #!/bin/bash
 
-wget -qO /dev/null --user=${NEXUS_USERNAME} --password=${NEXUS_PASSWORD} https://artifacts.alfresco.com/nexus/service/local/repositories/activiti-enterprise-releases/content/com/activiti/activiti-enterprise/1.9.0.6/activiti-enterprise-1.9.0.6.pom
+wget -qO /dev/null --user=${NEXUS_USERNAME} --password=${NEXUS_PASSWORD} https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-content-services-distribution/6.2.2/alfresco-content-services-distribution-6.2.2.pom
 if [ $? -ne 0 ]
     then
       echo "Nexus credentials not working, please set NEXUS_USERNAME and NEXUS_PASSWORD as specified in the deployment guide"
