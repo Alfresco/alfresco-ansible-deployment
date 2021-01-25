@@ -417,12 +417,12 @@
     regexp: '<PostResources base='
     line: '<PostResources base="/opt/alfresco/modules/acs-share"'
 
-- name: Check for ~/configuration_files/alfresco-global.properties
-  local_action: stat path=~/configuration_files/alfresco-global.properties
+- name: Check for "{{ inventory_dir }}/configuration_files/alfresco-global.properties"
+  local_action: stat path="{{ inventory_dir }}/configuration_files/alfresco-global.properties"
   register: stat_alfresco_global_properties
 
-- name: Append local alfresco-global.properties to generated 
-  shell: 'cat ~/configuration_files/alfresco-global.properties >> {{ settings_folder }}/classpath/alfresco-global.properties'
+- name: Append local alfresco-global.properties to generated
+  shell: 'cat {{ inventory_dir }}/configuration_files/alfresco-global.properties >> {{ settings_folder }}/classpath/alfresco-global.properties'
   when: stat_alfresco_global_properties.stat.exists == true
 
 - name: Ensure tomcat restarted
