@@ -52,7 +52,7 @@
 
 - name: Download imagemagick-distribution-linux.rpm
   get_url:
-    url: "{{ dependencies_url.imagemagick_rpm }}"
+    url: "{{ imagemagick_rpm }}"
     dest: "{{ temp_dir }}/imagemagick-distribution-linux.rpm"
     mode: 0444
     url_username: "{{ nexus_user }}"
@@ -64,7 +64,7 @@
 
 - name: Download imagemagick-distribution-libs-linux.rpm
   get_url:
-    url: "{{ dependencies_url.imagemagick_lib_rpm }}"
+    url: "{{ imagemagick_lib_rpm }}"
     dest: "{{ temp_dir }}/imagemagick-distribution-libs-linux.rpm"
     mode: 0444
     url_username: "{{ nexus_user }}"
