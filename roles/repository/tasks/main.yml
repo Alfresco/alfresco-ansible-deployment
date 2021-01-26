@@ -322,7 +322,7 @@
 - name: Check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml" exists
   stat:
     path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml"
-  register: api_explorer
+  register: api_explorer_xml
 
 - name: Create api-explorer.xml
   template:
@@ -331,7 +331,7 @@
     src: api-explorer.xml
     dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml"
     mode: 'u=rwx,g=rwx,o=rx'
-  when: not api_explorer.stat.exists
+  when: not api_explorer_xml.stat.exists
 
 - name: Include postgres task
   include_tasks: "postgres.yml"
