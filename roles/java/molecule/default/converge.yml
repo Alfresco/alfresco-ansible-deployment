@@ -5,8 +5,6 @@
     - name: Classify hosts depending on their OS distribution
       group_by:
         key: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}"
-      failed_when: false
-      changed_when: false
 
 - name: Converge
   hosts: all
