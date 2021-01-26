@@ -1,7 +1,7 @@
 dependencies_version:
   postgresql_connector: 42.2.13
   activemq: 5.15.13
-  imagemagick: 7.0.10-11
+  imagemagick: 7.0.10-59
   libreoffice: 6.3.5.2
   pdf_renderer: 1.1
   jdk: 11.0.7
