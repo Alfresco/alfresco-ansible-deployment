@@ -37,6 +37,15 @@ adw:
 sync:
   version: 3.3.3.1
 
+dependencies_version:
+  postgresql_connector: 42.2.13
+  activemq: 5.15.13
+  imagemagick: 7.0.10-59
+  libreoffice: 6.3.5.2
+  pdf_renderer: 1.1
+  jdk: 11.0.7
+  jdk_arch: 10
+  tomcat: 8.5.56
 
 downloads:
   acs_zip_url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
@@ -46,7 +55,6 @@ downloads:
   trouter_jar_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-transform-router/{{ trouter.version }}/alfresco-transform-router-{{ trouter.version }}.jar"
   transform_jar_url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
   sync_zip_url: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"
-
 
 war_downloads:
   - url: "{{ nexus_repository.releases }}org/alfresco/api-explorer/{{ api_explorer.version }}/api-explorer-{{ api_explorer.version }}.war"
