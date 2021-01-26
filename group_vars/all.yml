@@ -77,7 +77,7 @@ dependencies_url:
   postgresql_connector: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependencies_version.postgresql_connector }}/postgresql-{{ dependencies_version.postgresql_connector }}.jar"
   activemq: "http://archive.apache.org/dist/activemq/{{ dependencies_version.activemq }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
   imagemagick_rpm: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version }}/imagemagick-distribution-{{ imagemagick_version }}-linux.rpm"
-  imagemagick_lib_rpm: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{{ imagemagick_version }}/imagemagick-distribution-{{ imagemagick_version }}-libs-linux.rpm"
+  imagemagick_lib_rpm: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version }}/imagemagick-distribution-{{ imagemagick_version }}-libs-linux.rpm"
   imagemagick_dep_rpm: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
   imagemagick_license: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/ImageMagick-license.txt"
   libreoffice_rpm: "https://downloadarchive.documentfoundation.org/libreoffice/old/{{ dependencies_version.libreoffice }}/rpm/x86_64/LibreOffice_{{ dependencies_version.libreoffice }}_Linux_x86-64_rpm.tar.gz"
