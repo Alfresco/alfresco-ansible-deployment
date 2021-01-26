@@ -24,6 +24,16 @@
   failed_when: false
   changed_when: magick_exists.rc != 0
 
+- name: set imagemagick version for CentOS7
+  set_fact:
+    imagemagick_version: "{{ dependencies_version.imagemagick.CentOS7 }}"
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version < '8'
+
+- name: set imagemagick version for CentOS8
+  set_fact:
+    imagemagick_version: "{{ dependencies_version.imagemagick.CentOS8 }}"
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == '8'
+
 - name: Download imagemagick-epel-dep.rpm
   get_url:
     url: "{{ dependencies_url.imagemagick_dep_rpm }}"
