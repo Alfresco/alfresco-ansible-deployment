@@ -1,4 +1,11 @@
 ---
+- name: talk to all hosts just so we can learn about them
+  hosts: all
+  tasks:
+    - name: Classify hosts depending on their OS distribution
+      group_by:
+        key: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}"
+
 - name: Database Role
   hosts: database
   become: true
