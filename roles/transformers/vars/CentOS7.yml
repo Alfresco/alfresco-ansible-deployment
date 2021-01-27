@@ -1,1 +1,4 @@
 ---
+imagemagick_version: 7.0.10-11
+libreoffice: 6.3.5.2
+pdf_renderer: 1.1
