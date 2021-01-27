@@ -10,7 +10,7 @@ imagemagick_rpm: "https://nexus.alfresco.com/nexus/service/local/repositories/th
 imagemagick_lib_rpm: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version }}/imagemagick-distribution-{{ imagemagick_version }}-libs-linux.rpm"
 imagemagick_dep_rpm: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
 imagemagick_license: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/ImageMagick-license.txt"
-libreoffice_rpm: "https://downloadarchive.documentfoundation.org/libreoffice/old/{{ libreoffice }}/rpm/x86_64/LibreOffice_{{ libreoffice }}_Linux_x86-64_rpm.tar.gz"
+libreoffice_rpm: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/libreoffice/libreoffice-dist/{{ libreoffice }}/libreoffice-dist-{{ libreoffice }}-linux.gz"
 libreoffice_license_file: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/libreoffice.txt"
 alfresco_pdf_renderer_lib_rpm: "https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-pdf-renderer/{{ pdf_renderer }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
 pdfium_license_file: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/pdfium.txt"
