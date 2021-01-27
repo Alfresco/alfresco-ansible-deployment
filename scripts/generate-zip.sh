@@ -22,6 +22,7 @@ rsync -rvq --exclude molecule/ ../roles $BUILD_FOLDER
 cp ../inventory_* $BUILD_FOLDER
 cp ../LICENSE $BUILD_FOLDER
 cp ../VERSION $BUILD_FOLDER
+cp ../6.2.N-extra-vars.yml
 
 # generate ZIP
 echo "Generating ZIP file..."
