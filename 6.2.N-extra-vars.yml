@@ -1,0 +1,38 @@
+---
+acs:
+  version: 6.2.2
+
+amps:  
+  aos_module:
+    version: 1.3.1
+  device_sync:
+    version: 3.3.3.1
+  googledrive_repo:
+    version: 3.2.0
+  googledrive_share:
+    version: 3.2.0
+
+solr:
+  version: 1.4.2
+
+transform:
+  version: 2.3.5
+
+trouter:
+  version: 1.3.1
+
+sfs:
+  version: 0.8.0
+
+sync:
+  version: 3.3.3.1
+
+dependencies_version:
+  postgresql_connector: 42.2.13
+  activemq: 5.15.13
+  imagemagick: 7.0.10-11
+  libreoffice: 6.3.5.2
+  pdf_renderer: 1.1
+  jdk: 11.0.7
+  jdk_arch: 10
+  tomcat: 8.5.56
