@@ -43,7 +43,7 @@ dependencies_version:
   imagemagick:
     CentOS8: 7.0.10-59
     CentOS7: 7.0.10-11
-  libreoffice: 6.3.5.2
+  libreoffice: 6.3.5
   pdf_renderer: 1.1
   jdk: 11.0.7
   jdk_arch: 10
@@ -78,7 +78,7 @@ dependencies_url:
   activemq: "http://archive.apache.org/dist/activemq/{{ dependencies_version.activemq }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
   imagemagick_dep_rpm: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
   imagemagick_license: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/ImageMagick-license.txt"
-  libreoffice_rpm: "https://downloadarchive.documentfoundation.org/libreoffice/old/{{ dependencies_version.libreoffice }}/rpm/x86_64/LibreOffice_{{ dependencies_version.libreoffice }}_Linux_x86-64_rpm.tar.gz"
+  libreoffice_rpm: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/libreoffice/libreoffice-dist/{{ dependencies_version.libreoffice }}/libreoffice-dist-{{ dependencies_version.libreoffice }}-linux.gz"
   libreoffice_license_file: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/libreoffice.txt"
   alfresco_pdf_renderer_lib_rpm: "https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-pdf-renderer/{{ dependencies_version.pdf_renderer }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
   pdfium_license_file: "https://github.com/Alfresco/acs-community-packaging/blob/master/distribution/src/main/resources/licenses/3rd-party/pdfium.txt"
