@@ -192,7 +192,7 @@
     state: absent
   when: archive_exists.stat.exists
 
-- name: Move licenses folders
+- name: Move licenses folder
   block:
     - name: Check if source license folder exists
       stat:
