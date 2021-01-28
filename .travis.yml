@@ -110,7 +110,7 @@ jobs:
         - molecule verify
         - molecule destroy
     - stage: Verification
-      name: Localhost integration checks
+      name: Localhost integration checks (ACS 6.2.2)
       before_install:
         - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
         - eval "$(ssh-agent -s)"
@@ -136,9 +136,9 @@ jobs:
         - ssh centos@${PUBLIC_IP} "sudo yum install -y unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
         - ssh centos@${PUBLIC_IP} "sudo yum update -y; sudo yum install -y ansible"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
-        - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml"
-        - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "test-config.json" 
-        - cd dtas; pytest --verbose  --configuration ../test-config.json tests/ -s
+        - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@6.2.N-extra-vars.yml\""
+        - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "test-config-acs6-stack.json" 
+        - cd dtas; pytest --verbose  --configuration ../test-config-acs6-stack.json tests/ -s
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
     - stage: Verification
       name: CentOS8 integration checks

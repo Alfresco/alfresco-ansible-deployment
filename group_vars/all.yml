@@ -3,13 +3,12 @@ nexus_repository:
   releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
   enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
 
-
 acs:
-  version: 6.2.2
+  version: 7.0.0-M3
 
 amps:  
   aos_module:
-    version: 1.3.1
+    version: 1.4.0-M1
   device_sync:
     version: 3.3.3.1
   googledrive_repo:
@@ -21,19 +20,19 @@ api_explorer:
   version: 6.3.0
 
 solr:
-  version: 1.4.2
+  version: 2.0.0
 
 transform:
-  version: 2.3.5
+  version: 2.3.6
 
 trouter:
   version: 1.3.1
 
 sfs:
-  version: 0.8.0
+  version: 0.10.0
 
 adw:
-  version: 1.6.0
+  version: 2.0.0
 
 sync:
   version: 3.3.3.1
@@ -47,7 +46,6 @@ downloads:
   trouter_jar_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-transform-router/{{ trouter.version }}/alfresco-transform-router-{{ trouter.version }}.jar"
   transform_jar_url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
   sync_zip_url: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"
-
 
 war_downloads:
   - url: "{{ nexus_repository.releases }}org/alfresco/api-explorer/{{ api_explorer.version }}/api-explorer-{{ api_explorer.version }}.war"
@@ -64,7 +62,7 @@ amp_downloads:
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
 
 dependencies_version:
-  postgresql_connector: 42.2.13
+  postgresql_connector: 42.2.16
   activemq: 5.15.13
   jdk: 11.0.7
   jdk_arch: 10

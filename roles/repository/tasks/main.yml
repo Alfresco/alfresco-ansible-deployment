@@ -212,7 +212,28 @@
         path: "{{ content_folder }}/licenses"
         state: absent
 
-- name: Move keystore folders
+- name: Move keystore folders for ACS7
+  block:
+    - name: Check if source keystore folder exists
+      stat:
+        path: "{{ content_folder }}/keystore"
+      register: keystore
+    - name: Copy keystore folder {{ content_data_folder }}
+      copy:
+        remote_src: true
+        src: "{{ content_folder }}/keystore/metadata-keystore/"
+        dest: "{{ content_data_folder }}/keystore/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+      when: keystore.stat.exists
+    - name: Remove keystore folder
+      file:
+        path: "{{ content_folder }}/keystore"
+        state: absent
+  when: acs.version is version('7.0.0', 'ge')
+
+- name: Move keystore folders for ACS6
   block:
     - name: Check if source keystore folder exists
       stat:
@@ -231,6 +252,7 @@
       file:
         path: "{{ content_folder }}/alf_data/keystore"
         state: absent
+  when: acs.version is version('7.0.0', 'lt')
 
 - name: Move classes folder
   block:
@@ -317,7 +339,7 @@
 - name: Check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml" exists
   stat:
     path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml"
-  register: api_explorer
+  register: api_explorer_xml
 
 - name: Create api-explorer.xml
   template:
@@ -326,7 +348,7 @@
     src: api-explorer.xml
     dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml"
     mode: 'u=rwx,g=rwx,o=rx'
-  when: not api_explorer.stat.exists
+  when: not api_explorer_xml.stat.exists
 
 - name: Include postgres task
   include_tasks: "postgres.yml"
