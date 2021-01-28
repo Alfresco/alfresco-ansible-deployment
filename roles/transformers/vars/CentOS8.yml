@@ -1,10 +1,4 @@
 ---
 imagemagick_version: 7.0.10-59
-<<<<<<< HEAD
-
-imagemagick_rpm_url: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version }}/imagemagick-distribution-{{ imagemagick_version }}-linux.rpm"
-imagemagick_lib_rpm_url: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version }}/imagemagick-distribution-{{ imagemagick_version }}-libs-linux.rpm"
-=======
 libreoffice: 6.3.5
 pdf_renderer: 1.1
->>>>>>> master
