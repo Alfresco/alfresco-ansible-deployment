@@ -212,11 +212,28 @@
         path: "{{ content_folder }}/licenses"
         state: absent
 
-- name: Include tasks for acs 7
-  include_tasks: "acs7.yml"
+- name: Move keystore folders for ACS7
+  block:
+    - name: Check if source keystore folder exists
+      stat:
+        path: "{{ content_folder }}/keystore"
+      register: keystore
+    - name: Copy keystore folder {{ content_data_folder }}
+      copy:
+        remote_src: true
+        src: "{{ content_folder }}/keystore/metadata-keystore/"
+        dest: "{{ content_data_folder }}/keystore/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+      when: keystore.stat.exists
+    - name: Remove keystore folder
+      file:
+        path: "{{ content_folder }}/keystore"
+        state: absent
   when: acs.version is version('7.0.0', 'ge')
 
-- name: Move keystore folders
+- name: Move keystore folders for ACS6
   block:
     - name: Check if source keystore folder exists
       stat:
