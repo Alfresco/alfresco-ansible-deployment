@@ -20,7 +20,7 @@ api_explorer:
   version: 6.3.0
 
 solr:
-  version: 2.0.0
+  version: 2.0.1
 
 transform:
   version: 2.3.6
