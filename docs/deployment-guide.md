@@ -243,6 +243,10 @@ Once ACS has initialized access the system using the following URLs with a brows
 * Repository: `http://<webservers-host-ip>/alfresco`
 * API Explorer: `http://<webservers-host-ip>/api-explorer`
 
+## Customizing the deployment
+
+For custom configuration on the deployment please refer to the [Customization Guide](./customization-guide.md).
+
 ## Known Issues
 
 * The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Verifying if `<file>` finished downloading (nnn retries left)" appearing many times. Despite the wording this is **not** an error so please ignore and be patient!
@@ -259,3 +263,4 @@ The best place to start if something is not working are the log files, these can
   * `/var/log/alfresco/catalina.out`
 * Share
   * `/var/log/alfresco/share.log`
+
