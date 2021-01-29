@@ -211,7 +211,7 @@
       file:
         path: "{{ content_folder }}/licenses"
         state: absent
-      
+
 - name: Copy license files if existent in inventory
   block:
     - name: copy local files to remote
