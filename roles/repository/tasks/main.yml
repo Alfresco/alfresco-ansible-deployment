@@ -462,6 +462,21 @@
     regexp: '<PostResources base='
     line: '<PostResources base="/opt/alfresco/modules/acs-share"'
 
+- name: Check whether alfresco-global.properties already appended
+  command:
+    cmd: 'grep -q "#Add your properties here" {{ settings_folder }}/classpath/alfresco-global.properties'
+  check_mode: no
+  ignore_errors: yes
+  register: agp_already_appended
+
+- name: Check for "{{ inventory_dir }}/configuration_files/alfresco-global.properties"
+  stat: path="{{ inventory_dir }}/configuration_files/alfresco-global.properties"
+  register: stat_alfresco_global_properties
+
+- name: Append local alfresco-global.properties to generated
+  shell: 'cat {{ inventory_dir }}/configuration_files/alfresco-global.properties >> {{ settings_folder }}/classpath/alfresco-global.properties'
+  when: stat_alfresco_global_properties.stat.exists and agp_already_appended.rc == 1
+
 - name: Ensure tomcat restarted
   systemd:
     name: tomcat.service
