@@ -7,3 +7,6 @@ utils_search:
   - wget
   - openssl
   - openssl-devel
+search:
+  environment:
+    JVM_OPTS: "-Xms512m -Xmx2g "

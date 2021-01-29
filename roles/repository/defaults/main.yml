@@ -1,0 +1,14 @@
+acs:
+  environment:
+    JVM_OPTS: " -Xms512m -Xmx3g "
+    JAVA_TOOL_OPTIONS: " -Dencryption.keystore.type=JCEKS 
+      -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding 
+      -Dencryption.keyAlgorithm=DESede 
+      -Dencryption.keystore.location=/usr/local/tomcat/shared/classes/alfresco/extension/keystore/keystore 
+      -Dmetadata-keystore.aliases=metadata 
+      -Dmetadata-keystore.metadata.algorithm=DESede"
+    JAVA_OPTS: " -XX:+DisableExplicitGC 
+      -XX:+UseConcMarkSweepGC 
+      -Djava.awt.headless=true 
+      -XX:ReservedCodeCacheSize=128m 
+      $JAVA_OPTS"

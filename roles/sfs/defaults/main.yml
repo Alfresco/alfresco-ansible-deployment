@@ -3,3 +3,7 @@
 utils_sfs:
   - unzip
   - which
+
+sfs:
+  environment:
+    JVM_OPTS: "-Xms128m -Xmx512m "

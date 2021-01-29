@@ -77,7 +77,7 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: yes
-  notify: start-sfs
+  notify: restart-sfs
 
 - name: clean all
   command: yum clean all

@@ -3,6 +3,9 @@ Description=Alfresco Transform Service - AIO Transform Engine
 After=syslog.socket network.target 
 
 [Service]
+{% for key, value in tengine.environment.items() %}
+Environment='{{key}}={{value}}'
+{% endfor %}
 Type=simple
 User={{ username }}
 ExecStart={{ binaries_folder }}/ats-ate-aio.sh
