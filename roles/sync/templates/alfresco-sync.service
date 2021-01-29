@@ -3,6 +3,9 @@ Description=Alfresco Sync Service
 After=syslog.socket network.target
 
 [Service]
+{% for key, value in sync.environment.items() %}
+Environment='{{key}}={{value}}'
+{% endfor %}
 Type=forking
 User={{ username }}
 ExecStart={{ binaries_folder }}/syncservice.sh start

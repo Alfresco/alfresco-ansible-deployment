@@ -3,3 +3,4 @@
   systemd:
     name: activemq
     state: restarted
+    daemon_reload: true

@@ -3,6 +3,9 @@ Description=Alfresco Shared File Store
 After=syslog.socket network.target
 
 [Service]
+{% for key, value in sfs.environment.items() %}
+Environment='{{key}}={{value}}'
+{% endfor %}
 Type=simple
 User=alfresco
 ExecStart=/opt/alfresco/ats-shared-fs.sh

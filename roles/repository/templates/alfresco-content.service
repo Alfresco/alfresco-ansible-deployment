@@ -3,6 +3,10 @@ Description=Alfresco Content Services
 Requires=tomcat.service
 
 [Service]
+{% for key, value in acs.environment.items() %}
+Environment='{{key}}={{value}}'
+{% endfor %}
+Environment='CATALINA_OPTS=${CATALINA_OPTS} -Dats-tengine-aio.host={{ ats_tengine_aio_host }} -Dats-shared-fs.host={{ sfs_host }}'
 Type=oneshot
 ExecStart=/bin/true
 RemainAfterExit=true
