@@ -125,7 +125,7 @@
   loop: "{{ acs_environment | dict2items }}"
 
 - name: Verifying if the distribution zip finished downloading
-  become: trueq
+  become: true
   become_user: root
   async_status:
     jid: "{{ distribution_download_result.ansible_job_id }}"
