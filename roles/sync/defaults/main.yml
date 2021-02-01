@@ -1,3 +1,2 @@
-
 sync_environment:
   JVM_OPTS: "-Xms512m -Xmx2g "

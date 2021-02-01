@@ -121,7 +121,7 @@
   lineinfile:
     path: "/opt/alfresco/tomcat.sh"
     insertafter: 'CATALINA_OPTS'
-    line: export {{item.key}}="{{item.value}}"
+    line: export {{ item.key }}="{{ item.value }}"
   loop: "{{ acs_environment }}"
 
 - name: Verifying if the distribution zip finished downloading
