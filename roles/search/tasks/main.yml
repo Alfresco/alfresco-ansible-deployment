@@ -1,7 +1,7 @@
 ---
 # tasks file for search-services
-- name: Check search.version is installed
-  command: "{{ dist_dir }}/solr/bin/search.version"
+- name: Check search is installed
+  command: "{{ dist_dir }}/solr/bin/solr.version"
   register: solr_install_check
   environment:
       JAVA_HOME: "{{ java_home }}"
