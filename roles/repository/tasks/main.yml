@@ -490,6 +490,6 @@
 
 - name: Notify alfresco content service
   wait_for:
-    host: "{{ db_host_connect }}"
+    host: "{{ hostvars['database_1']['ansible_host'] }}"
     port: 5432
   notify: alfresco-content-start

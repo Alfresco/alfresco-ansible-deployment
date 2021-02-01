@@ -58,11 +58,7 @@ sql:
         driver: org.postgresql.Driver
 {% for items in postgres_client_config %}
         database: {{ items.database }}
-{% if db_host_connect == sync_connect  %}
-        host: localhost
-{% else %}
-        host: {{ db_host_connect }}
-{% endif %}
+        host: {{ hostvars['database_1']['ansible_host'] }}
         port: {{ items.port }}
         url: jdbc:postgresql://${sql.db.host}:${sql.db.port}/${sql.db.database}
         username: {{ items.user }}
