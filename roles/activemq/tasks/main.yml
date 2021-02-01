@@ -40,6 +40,14 @@
   command: "mv {{ activemq_home }}/conf {{ config_folder }}/activemq removes={{ activemq_home }}/conf"
   when: not conf_existence.stat.exists
 
+- name: Allow external connections to webconsole
+  become: true
+  become_user: "{{ username }}"
+  replace:
+    path: "{{ activemq_conf }}/jetty.xml"
+    regexp: "127.0.0.1"
+    replace: "0.0.0.0"
+
 - name: Check if data folder exists
   stat:
     path: "{{ data_folder }}/activemq"
