@@ -212,6 +212,29 @@
         path: "{{ content_folder }}/licenses"
         state: absent
 
+- name: Copy license files if existent in inventory
+  block:
+    - name: copy local files to remote
+      copy:
+        src: "{{ role_path }}/../../configuration_files"
+        dest: "/tmp/configuration_files"
+    - name: find license files
+      find:
+        paths: "/tmp/configuration_files"
+        recurse: yes
+        patterns: "*.lic"
+      register: licenses_to_copy
+    - name: copy license files to alfresco webapps
+      copy:
+        remote_src: true
+        src: "{{ item.path }}"
+        dest: "{{ settings_folder }}/licenses/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+      with_items: "{{ licenses_to_copy.files }}"
+      when: licenses_to_copy is iterable
+
 - name: Move keystore folders for ACS7
   block:
     - name: Check if source keystore folder exists
