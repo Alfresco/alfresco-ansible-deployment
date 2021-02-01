@@ -1,7 +1,7 @@
 ---
 # tasks file for search-services
-- name: Check Solr version is installed
-  command: "{{ dist_dir }}/solr/bin/solr version"
+- name: Check search.version is installed
+  command: "{{ dist_dir }}/solr/bin/search.version"
   register: solr_install_check
   environment:
       JAVA_HOME: "{{ java_home }}"
@@ -46,13 +46,13 @@
 
 - name: check if zip file exists
   stat:
-    path: "{{ binaries_folder }}/alfresco-search-services-{{ solr.version }}.zip"
+    path: "{{ binaries_folder }}/alfresco-search-services-{{ search.version }}.zip"
   register: solr_archive
 
-- name: Download Solr zip {{ solr.version }}
+- name: Download Solr zip {{ search.version }}
   get_url:
     url: "{{ downloads.solr_zip_url }}"
-    dest: "{{ binaries_folder }}/alfresco-search-services-{{ solr.version }}.zip"
+    dest: "{{ binaries_folder }}/alfresco-search-services-{{ search.version }}.zip"
     mode: 0444
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
@@ -61,10 +61,10 @@
   until: download_result is succeeded
   when: not solr_archive.stat.exists and solr_install_check.rc != 0
 
-- name: Extract alfresco-search-services-{{ solr.version }}.zip into {{ dist_dir }}
+- name: Extract alfresco-search-services-{{ search.version }}.zip into {{ dist_dir }}
   become: yes
   unarchive:
-    src: "{{ binaries_folder }}/alfresco-search-services-{{ solr.version }}.zip"
+    src: "{{ binaries_folder }}/alfresco-search-services-{{ search.version }}.zip"
     dest: "{{ dist_dir }}"
     remote_src: yes
     creates: "{{ dist_dir }}/README.MD"
