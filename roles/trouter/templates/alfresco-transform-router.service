@@ -3,9 +3,6 @@ Description=Alfresco Transform Router
 After=syslog.socket network.target 
 
 [Service]
-{% for key, value in tengine.environment.items() %}
-Environment='{{key}}={{value}}'
-{% endfor %}
 Type=simple
 User=alfresco
 ExecStart=/opt/alfresco/ats-atr.sh
