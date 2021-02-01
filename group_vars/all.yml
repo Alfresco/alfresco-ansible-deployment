@@ -19,7 +19,7 @@ amps:
 api_explorer:
   version: 7.0.0-A3
 
-solr:
+search:
   version: 2.0.1
 
 transform:
