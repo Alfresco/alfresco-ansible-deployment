@@ -13,4 +13,7 @@ export ACTIVEMQ_PIDFILE={{ data_folder }}/activemq.pid
 export ACTIVEMQ_OPTS="-Djava.util.logging.config.file=logging.properties -Djava.security.auth.login.config=${ACTIVEMQ_CONF}/login.config"
 export ACTIVEMQ_OPTS="${ACTIVEMQ_OPTS} -Djava.net.preferIPv4Stack=true"
 export ACTIVEMQ_OPTS="${ACTIVEMQ_OPTS} -Dactivemq.log={{ logs_folder }}"
+{% for key, value in activemq_environment.items() %}
+export {{key}}="{{value}}"
+{% endfor %}
 ${ACTIVEMQ_HOME}/bin/activemq $*

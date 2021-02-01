@@ -7,6 +7,5 @@ utils_search:
   - wget
   - openssl
   - openssl-devel
-search:
-  environment:
-    JVM_OPTS: "-Xms512m -Xmx2g "
+search_environment: # This will add extra vars at the end of the solr.in.sh file
+  SOLR_JAVA_MEM: "-Xms1g -Xmx1g"

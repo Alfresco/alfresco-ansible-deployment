@@ -3,6 +3,5 @@
 utils_trouter:
   - unzip
   - which
-trouter:
-  environment:
-    JVM_OPTS: "-Xms128m -Xmx512m "
+trouter_environment:
+  JVM_OPTS: "-Xms128m -Xmx512m "

@@ -6,6 +6,6 @@ utils_transform:
   - libSM
   - unzip
   - which
-tengine:
-  environment:
-    JVM_OPTS: "-Xms512m -Xmx1536m "
+
+tengine_environment:
+  JVM_OPTS: "-Xms512m -Xmx1536m "
