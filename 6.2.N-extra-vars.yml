@@ -12,6 +12,9 @@ amps:
   googledrive_share:
     version: 3.2.0
 
+api_explorer:
+  version: 6.3.0
+
 solr:
   version: 1.4.3
 
