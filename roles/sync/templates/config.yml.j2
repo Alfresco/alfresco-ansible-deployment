@@ -58,7 +58,7 @@ sql:
         driver: org.postgresql.Driver
 {% for items in postgres_client_config %}
         database: {{ items.database }}
-        host: {{ hostvars['database_1']['ansible_host'] }}
+        host: {{ db_host }}
         port: {{ items.port }}
         url: jdbc:postgresql://${sql.db.host}:${sql.db.port}/${sql.db.database}
         username: {{ items.user }}
