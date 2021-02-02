@@ -1,7 +1,6 @@
 acs_environment:
-  JVM_OPTS: " -Xms512m -Xmx3g "
   JAVA_TOOL_OPTIONS: ""
-  JAVA_OPTS: " -XX:+DisableExplicitGC 
+  JAVA_OPTS: " -Xms512m -Xmx3g -XX:+DisableExplicitGC 
     -XX:+UseConcMarkSweepGC 
     -Djava.awt.headless=true 
     -XX:ReservedCodeCacheSize=128m 

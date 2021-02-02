@@ -8,4 +8,4 @@ utils_transform:
   - which
 
 tengine_environment:
-  JVM_OPTS: "-Xms512m -Xmx1536m "
+  JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx1536m "

@@ -5,4 +5,4 @@ utils_sfs:
   - which
 
 sfs_environment:
-  JVM_OPTS: "-Xms128m -Xmx512m "
+  JAVA_OPTS: "$JAVA_OPTS -Xms128m -Xmx512m "

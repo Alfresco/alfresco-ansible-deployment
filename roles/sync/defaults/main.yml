@@ -1,2 +1,2 @@
 sync_environment:
-  JVM_OPTS: "-Xms512m -Xmx2g "
+  JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx2g "
