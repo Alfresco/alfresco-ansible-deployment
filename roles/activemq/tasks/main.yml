@@ -47,7 +47,7 @@
     path: "{{ activemq_conf }}/jetty.xml"
     regexp: "127.0.0.1"
     replace: "0.0.0.0"
-  
+
 - name: Check if data folder exists
   stat:
     path: "{{ data_folder }}/activemq"
