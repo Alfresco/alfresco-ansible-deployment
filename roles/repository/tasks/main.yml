@@ -35,7 +35,6 @@
      - "{{ content_folder }}/alf_data"
      - "{{ content_folder }}/alfresco-mmt"
      - "{{ content_folder }}/webapps/alfresco"
-     - "{{ content_folder }}/licenses/"
      - "{{ content_folder }}/web-server/lib"
      - "{{ settings_folder }}/classpath/alfresco/extension/transform/pipelines"
      - "{{ settings_folder }}/classpath/alfresco/extension/transform/renditions"
@@ -44,7 +43,6 @@
      - "{{ content_data_folder }}/keystore"
      - "{{ tomcat_config_dir }}/lib"
      - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
-     - "{{ logs_folder }}/licenses/"
 
 - name: Check if Alfresco version {{ acs.version }} is installed
   stat:
@@ -192,27 +190,7 @@
     state: absent
   when: archive_exists.stat.exists
 
-- name: Move licenses folder
-  block:
-    - name: Check if source license folder exists
-      stat:
-        path: "{{ content_folder }}/licenses"
-      register: licences
-    - name: Copy licenses folder to {{ settings_folder }}
-      copy:
-        remote_src: true
-        src: "{{ content_folder }}/licenses"
-        dest: "{{ settings_folder }}"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
-      when: licences.stat.exists
-    - name: Remove licenses folder
-      file:
-        path: "{{ content_folder }}/licenses"
-        state: absent
-
-- name: Copy license files if existent in inventory
+- name: Copy user provided license file
   block:
     - name: copy local files to remote
       copy:
