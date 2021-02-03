@@ -53,40 +53,45 @@ Once ACS has initialized access the system using the following URLs using a brow
 * Repository: [http://172.100.100.100/alfresco](http://172.100.100.100/alfresco)
 * API Explorer: [http://172.100.100.100/api-explorer](http://172.100.100.100/api-explorer)
 
+To access the machine vagrant created and ran the playbook on use `vagrant ssh`.
+
 ## Setup A Control Node
 
 As mentioned in the introduction a control node is required to run the playbook. You can use any computer that has a Python installation as a control node; laptops, shared desktops, and servers can all run Ansible.
 
 In the interest of keeping this guide simple we will use an AWS EC2 instance as the control node, the steps required are shown below:
 
-1. Launch an EC2 instance using the Centos 7 (x86_64) AMI from the Marketplace (instance size/type does not matter) and SSH into the machine
+1. Launch an EC2 instance using the Centos 7 or 8 (x86_64) AMI from the Marketplace (instance size/type does not matter)
 
     ![Centos AMI](./resources/centos-ami.png)
 
-2. Install Ansible
+2. Transfer the ZIP file to the control node and SSH into the machine
 
     ```bash
-    sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    scp <local-path>/alfresco-ansible-deployment.zip centos@<control-node-ip>:/home/centos/
+    ssh -i <yourpem-file> centos@<control-node-ip>
+    ```
+
+3. Install the required dependencies for Ansible (replace the 7 with 8 in the URL if you're using CentOS 8)
+
+    ```bash
+    sudo yum install -y unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    ```
+
+4. Install Ansible
+
+    ```bash
     sudo yum install -y ansible
     ```
 
-3. Install Git
+5. Extract the ZIP file
 
     ```bash
-    sudo yum install -y git
-    ```
-
-4. Clone the repository and switch to the stable tag:
-
-    ```bash
-    git clone https://github.com/Alfresco/alfresco-ansible-deployment.git
+    unzip alfresco-ansible-deployment.zip
     cd alfresco-ansible-deployment
-    git checkout tags/v1.0-A3
     ```
 
-    > NOTE: As we protect the `Alfresco` organization with SAML SSO you will first have to authorize your SSH key or personal access token via [GitHub](https://github.com).
-
-5. Create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
+6. Create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
 
     ```bash
     export NEXUS_USERNAME="<your-username>"
