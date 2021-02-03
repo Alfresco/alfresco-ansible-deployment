@@ -4,11 +4,3 @@ acs_environment:
     -Djava.awt.headless=true 
     -XX:ReservedCodeCacheSize=128m 
     $JAVA_OPTS"
-  JAVA_TOOL_OPTIONS: {% if acs.version is version('7.0.0', '=>') %} 
-    "-Dencryption.keystore.location={{ content_data_folder }}/keystore/keystore
-    -Dencryption.keystore.keyMetaData.location={{ content_data_folder }}/keystore/keystore-passwords.properties
-    -Dencryption.keyAlgorithm=DESede
-    -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding
-    -Dencryption.keystore.type=JCEKS
-    -Dencryption.keystore.backup.type=JCEKS"
-    {% endif %}
