@@ -162,6 +162,10 @@
 
 - name: Move alfresco-share-services.amp to {{ content_folder }}/amps_repo folder
   block:
+    - name: Check if zip file exists
+      stat:
+        path: "{{ content_folder }}/amps/alfresco-share-services.amp"
+      register: share_amp_exists
     - name: Copy alfresco-share-services.amp
       copy:
         remote_src: true
@@ -170,6 +174,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
+      when: share_amp_exists.stat.exists
     - name: Remove amps folder
       file:
         path: "{{ content_folder }}/amps"

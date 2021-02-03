@@ -93,11 +93,11 @@
   become: true
   become_user: "{{ username }}"
   template:
-      src: "activemq.sh"
-      dest: "{{ binaries_folder }}"
-      owner: "{{ username }}"
-      group: "{{ group_name }}"
-      mode: 'u=rwx,go=rx'
+    src: "activemq.sh"
+    dest: "{{ binaries_folder }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,go=rx'
   notify: activemq-restart
 
 - name: Add activemq.service

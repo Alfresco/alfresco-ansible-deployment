@@ -6,4 +6,4 @@ activemq_data: "{{ data_folder }}/activemq/data"
 activemq_tmp: "{{ data_folder }}/activemq/tmp"
 
 activemq_environment:
-  JAVA_OPTS: "$JAVA_OPTS -Xms128m -Xmx1g "
+  ACTIVEMQ_OPTS: "$ACTIVEMQ_OPTS -Xms128m -Xmx1g"
