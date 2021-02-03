@@ -89,29 +89,25 @@
       export ACTIVEMQ_HOME={{ activemq_home }}
       export ACTIVEMQ_HOST={{ activemq_host }}
 
-- name: Check if activemq wrapper exists
-  stat:
-    path: "{{ binaries_folder }}/activemq.sh"
-  register: activemq_wrapper_exists
-
 - name: Add activemq wrapper script
   become: true
   become_user: "{{ username }}"
   template:
-      src: "activemq.sh"
-      dest: "{{ binaries_folder }}"
-      owner: "{{ username }}"
-      group: "{{ group_name }}"
-      mode: 'u=rwx,go=rx'
-  when: not activemq_wrapper_exists.stat.exists
+    src: "activemq.sh"
+    dest: "{{ binaries_folder }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,go=rx'
+  notify: activemq-restart
 
 - name: Add activemq.service
   template:
-      src: activemq.service
-      dest: /etc/systemd/system/activemq.service
-      owner: "{{ username }}"
-      group: "{{ group_name }}"
-      mode: 'u=rwx,g=rwx,o=rx'
+    src: activemq.service
+    dest: /etc/systemd/system/activemq.service
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+  notify: activemq-restart
 
 - name: Ensure activemq service is started and enabled on boot
   systemd:
