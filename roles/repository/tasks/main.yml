@@ -445,7 +445,7 @@
     regexp: '<PostResources base='
     line: '<PostResources base="/opt/alfresco/modules/acs-share"'
 
-- name: Insert or Update custom properties added by trough configuration_files/alfresco-global.properties
+- name: Insert or Update custom properties added through configuration_files/alfresco-global.properties
   blockinfile:
     path: "{{ settings_folder }}/classpath/alfresco-global.properties"
     marker: "{mark} - ANSIBLE MANAGED BLOCK"
