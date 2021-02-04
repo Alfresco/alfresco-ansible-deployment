@@ -1,4 +1,8 @@
 ---
+- debug:
+    var: postgresql_rpm_repo
+- debug:
+    var: postgres_major_version
 
 - name: Install rpm repo
   become: true

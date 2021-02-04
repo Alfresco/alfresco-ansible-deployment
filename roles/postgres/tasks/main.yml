@@ -1,7 +1,4 @@
 ---
-- name: Include OS family specific variables
-  include_vars: "{{ ansible_os_family }}.yml"
-
 - name: Include OS specific tasks
   include_tasks: "{{ ansible_os_family }}.yml"
 
@@ -12,27 +9,27 @@
   package:
     name: "{{ item }}"
     state: present
-  with_items: "{{ postgresql_packages[postgres_major_version] }}"
+  with_items: "{{ postgresql_packages }}"
 
 - name: Check if PG_VERSION exists
   stat:
-    path: "{{ postgresql_data_path[postgres_major_version] }}/PG_VERSION"
+    path: "{{ postgresql_data_path }}/PG_VERSION"
   register: pg_version
 
 - name: Initialize the system database
-  command: "{{ postgresql_setup_path[postgres_major_version] }} initdb"
+  command: "{{ postgresql_setup_path }} initdb"
   when: not pg_version.stat.exists
 
 - name: Configure postgresql to listen on all IP interfaces
   lineinfile:
-    path: "{{ postgresql_conf_path[postgres_major_version] }}/postgresql.conf"
+    path: "{{ postgresql_conf_path }}/postgresql.conf"
     regexp: "^listen_addresses = '{{ postgres_listen_addresses }}'"
     insertafter: "^#listen_addresses = 'localhost'"
     line: "listen_addresses = '{{ postgres_listen_addresses }}'"
 
 - name: Custom postgresql Configuration
   lineinfile:
-    path: "{{ postgresql_conf_path[postgres_major_version] }}/postgresql.conf"
+    path: "{{ postgresql_conf_path }}/postgresql.conf"
     regexp: "^{{ item['line'] }}"
     line: "{{ item['line'] }}"
     state: "{{ item['state'] | default(omit) }}"
@@ -41,7 +38,7 @@
 
 - name: Configure postgresql client auth
   lineinfile:
-    path: "{{ postgresql_conf_path[postgres_major_version] }}/pg_hba.conf"
+    path: "{{ postgresql_conf_path }}/pg_hba.conf"
     insertbefore: BOF
     line: "{{ item['type'] }}\t{{ item['database'] }}\t{{ item['user'] }}\t{{ item['address'] }}\t{{ item['method'] }}"
     state: "{{ item['state'] | default(omit) }}"
@@ -50,7 +47,7 @@
 
 - name: Ensure postgresql service is started and enabled on boot
   systemd:
-    name: "{{ postgresql_service[postgres_major_version] }}"
+    name: "{{ postgresql_service }}"
     state: started
     enabled: true
 
