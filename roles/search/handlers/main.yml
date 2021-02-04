@@ -4,3 +4,4 @@
   service:
     name: solr
     state: restarted
+    daemon_reload: true

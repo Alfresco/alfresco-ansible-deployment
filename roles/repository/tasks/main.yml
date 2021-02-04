@@ -111,7 +111,16 @@
   lineinfile:
     path: "/opt/alfresco/tomcat.sh"
     insertafter: 'CATALINA_OPTS'
-    line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}"
+    line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME} -Dats-tengine-aio.host={{ ats_tengine_aio_host }} -Dats-shared-fs.host={{ sfs_host }}"
+
+- name: Add additional env vars to tomcat.sh
+  become: true
+  become_user: "{{ username }}"
+  lineinfile:
+    path: "/opt/alfresco/tomcat.sh"
+    insertafter: 'CATALINA_OPTS'
+    line: export {{ item.key }}="{{ item.value }}"
+  loop: "{{ acs_environment | dict2items }}"
 
 - name: Verifying if the distribution zip finished downloading
   become: true
