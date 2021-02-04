@@ -68,7 +68,7 @@ In the interest of keeping this guide simple we will use an AWS EC2 instance as 
 2. Transfer the ZIP file to the control node and SSH into the machine
 
     ```bash
-    scp <local-path>/alfresco-ansible-deployment.zip centos@<control-node-ip>:/home/centos/
+    scp <local-path>/alfresco-ansible-deployment-<version>.zip centos@<control-node-ip>:/home/centos/
     ssh -i <yourpem-file> centos@<control-node-ip>
     ```
 
@@ -87,8 +87,7 @@ In the interest of keeping this guide simple we will use an AWS EC2 instance as 
 5. Extract the ZIP file
 
     ```bash
-    unzip alfresco-ansible-deployment.zip
-    cd alfresco-ansible-deployment
+    unzip alfresco-ansible-deployment-<version>.zip
     ```
 
 6. Create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
@@ -98,7 +97,52 @@ In the interest of keeping this guide simple we will use an AWS EC2 instance as 
     export NEXUS_PASSWORD="<your-password>"
     ```
 
-Now you have the control node setup you need to decide what kind of deployment you would like. To deploy everything on the control node follow the steps in the [Locahost Deployment](#localhost-deployment) section or to deploy to one or more other machines follow the steps in the [SSH Deployment](#ssh-deployment) section.
+Now you have the control node setup you can [configure](#configure-your-deployment) your deployment and decide what kind of deployment you would like.
+
+To deploy everything on the control node follow the steps in the [Locahost Deployment](#localhost-deployment) section or to deploy to one or more other machines follow the steps in the [SSH Deployment](#ssh-deployment) section.
+
+## Configure Your Deployment
+
+By default, without any configuration applied, the playbook will deploy a limited trial of the Enterprise version of Alfresco Content Services 7.x that goes into read-only mode after 2 days. If you'd like to try Alfresco Content Services for a longer period, request the 30-day [Download Trial](https://www.alfresco.com/platform/content-services-ecm/trial/download).
+
+The sections below describe how you can configure your deployment before running the playbook.
+
+### License
+
+If you have a valid license place your `*.lic` file in the `configuration_files` folder before running the playbook.
+
+>NOTE: You can also [upload a license](https://docs.alfresco.com/6.2/tasks/at-adminconsole-license.html) via the Admin Console once the system is running.
+
+### Alfresco Global Properties
+
+You can provide your [repository configuration](https://github.com/Alfresco/acs-deployment/blob/master/docs/properties-reference.md) by editing the `configuration_files/alfresco-global.properties` file.
+
+The properties defined in this file will be appended to the generated "alfresco-global.properties" located in "/etc/opt/alfresco/content-services/classpath".
+
+### Override Playbook Variables
+
+Ansible provides a mechanism to [override variables](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#defining-variables-at-runtime) provided by the playbook at runtime.
+
+Whilst it's possible to override any variable defined by the playbook we have only tested changing the variables defined in `group_vars/all.yml`.
+
+Variables can be overridden using either the `--extra-vars` or `-e` command line option when running the playbook.
+
+If you have more than one variable to override we recommend using a separate file. The file name must be prefixed with "@", for example:
+
+```bash
+ansible-playbook ... --extra-vars "@my-vars.yml"
+```
+
+### AMPs
+
+Several AMP files are downloaded and applied during playbook execution, these are defined in a variable that can be overridden using the mechanism described in the previous section. Follow the steps below to apply your own AMPs
+
+1. Open `group_vars/all.yml` and copy the whole `amp_downloads` variable definition
+2. Create a new file and paste the `amp_downloads` variable
+3. Add any additional AMPs you want to apply paying close attention to the `dest` property. If it's a repository AMP use the `amps_repo` folder, if it's a Share AMP use the `amps_share` folder
+4. Save the file and reference it via the `--extra-vars` option when running the playbook
+
+>NOTE: This mechanism will be improved in a future release.
 
 ## Localhost Deployment
 
@@ -106,10 +150,16 @@ The diagram below shows the result of a localhost deployment.
 
 ![Localhost Deployment](./resources/acs-localhost.png)
 
-To deploy everything on the local machine just execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
+To deploy everything on the local machine navigate to the folder you extracted the ZIP to and execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
 
 ```bash
 ansible-playbook playbooks/acs.yml -i inventory_local.yml
+```
+
+Alternatively, to deploy an ACS 6.2.N system use the following command:
+
+```bash
+ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@6.2.N-extra-vars.yml"
 ```
 
 > NOTE: The playbook takes around 30 minutes to complete.
@@ -168,7 +218,7 @@ The diagram below shows the result of a single machine deployment.
 
 Once you have prepared the target host and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
-To check your inventory file is configured correctly and the control node is able to connect to the target host run the following command:
+To check your inventory file is configured correctly and the control node is able to connect to the target host navigate to the folder you extracted the ZIP to and run the following command:
 
 ```bash
 ansible all -m ping -i inventory_ssh.yml
@@ -178,6 +228,12 @@ To deploy everything on the target host execute the playbook as the current user
 
 ```bash
 ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
+```
+
+Alternatively, to deploy an ACS 6.2.N system use the following command:
+
+```bash
+ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@6.2.N-extra-vars.yml"
 ```
 
 > NOTE: The playbook takes around 30 minutes to complete.
@@ -225,6 +281,12 @@ To deploy everything on the target hosts execute the playbook as the current use
 ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
 ```
 
+Alternatively, to deploy an ACS 6.2.N system use the following command:
+
+```bash
+ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@6.2.N-extra-vars.yml"
+```
+
 > NOTE: The playbook takes around 30 minutes to complete.
 
 Once the playbook is complete Ansible will display a play recap to let you know that everything is done, similar to the block below:
@@ -248,24 +310,13 @@ Once ACS has initialized access the system using the following URLs with a brows
 * Repository: `http://<webservers-host-ip>/alfresco`
 * API Explorer: `http://<webservers-host-ip>/api-explorer`
 
-## Customizing the deployment
-
-For custom configuration on the deployment please refer to the [Customization Guide](./customization-guide.md).
-
 ## Known Issues
 
 * The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Verifying if `<file>` finished downloading (nnn retries left)" appearing many times. Despite the wording this is **not** an error so please ignore and be patient!
-* The playbook is not yet fully idempotent so may cause issues if you make changes and run many times
+* The playbook is not yet fully idempotent so may cause issues if you make changes and run multiple times
 
 ## Troubleshooting
 
-The best place to start if something is not working are the log files, these can be found in the following locations on the target hosts:
+If the playbook fails for some reason try re-running it with the `-v` option, if that still doesn't provide enough information try re-running with the `-vvv` option.
 
-* Nginx
-  * `/var/log/alfresco/nginx.alfresco.error.log`
-* Repository
-  * `/var/log/alfresco/alfresco.log`
-  * `/var/log/alfresco/catalina.out`
-* Share
-  * `/var/log/alfresco/share.log`
-
+If the playbook completes successfully but the system is not functionaing the best place to start is the log files, these can be found in the `/var/log/alfresco` folder on the target hosts. Please note the nginx log files are owned by root as the nginx process is running as root so it can listen on port 80.
