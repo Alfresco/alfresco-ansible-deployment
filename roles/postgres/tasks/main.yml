@@ -1,9 +1,29 @@
 ---
-- name: Include OS specific tasks
-  include_tasks: "{{ ansible_os_family }}.yml"
-
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+
+- name: Install rpm repo
+  become: true
+  yum:
+    name: "{{ postgresql_rpm_repo }}"
+    state: present
+    disable_gpg_check: True
+
+- name: Install packages required for CentOS 8
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - glibc-langpack-en
+  when: ansible_distribution_major_version == "8"
+
+- name: Disable the built-in PostgreSQL module
+  command: dnf -qy module disable postgresql
+  args:
+    warn: false  # set warn=false to prevent warning
+  register: disable_dnf_module
+  changed_when: "'Nothing to do.' not in disable_dnf_module.stdout"
+  when: ansible_distribution_major_version == "8"
 
 - name: Install packages
   package:
