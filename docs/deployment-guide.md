@@ -119,36 +119,6 @@ You can provide your [repository configuration](https://github.com/Alfresco/acs-
 
 The properties defined in this file will be appended to the generated "alfresco-global.properties" located in "/etc/opt/alfresco/content-services/classpath".
 
-### Custom keystore configuration
-
-You can add your own generated keystore files to acs by adding the file within `configuration_files/keystores`.
-Of course you also need to set the custom_keystore variable to true for the key to be copied.
-Besides that you will also have to add the keystore properties to acs_environment.JAVA_TOOL_OPTIONS variable within the global variabiles file.
-
-Example setup:
-```bash
-#Key Generation
-CERT_DNAME="CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB"
-CERT_VALIDITY=36525
-KEYSTORE_PASSWORD=mp6yc0UD9e
-keytool -genseckey -dname "$CERT_DNAME" -validity ${CERT_VALIDITY} -alias metadata -keyalg AES -keysize 256 -keystore ${TOMCAT_DIR}/shared/classes/alfresco/keystore keystore -storetype pkcs12 -storepass ${KEYSTORE_PASSWORD}
-
-```yaml
-#Options needed in group_vars/all.yaml
-custom_keystore: true
-acs_environment:
-  JAVA_TOOL_OPTIONS: " -Dencryption.keystore.type=pkcs12 
-    -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding 
-    -Dencryption.keyAlgorithm=AES 
-    -Dencryption.keystore.location=/var/opt/alfresco/content-services/keystore/keystore 
-    -Dmetadata-keystore.password=mp6yc0UD9e 
-    -Dmetadata-keystore.aliases=metadata 
-    -Dmetadata-keystore.metadata.password=mp6yc0UD9e 
-    -Dmetadata-keystore.metadata.algorithm=AES "
-```
-
-For more information reffering keystore configuration please consult https://docs.alfresco.com/6.2/concepts/keystore-config.html
-
 ### Override Playbook Variables
 
 Ansible provides a mechanism to [override variables](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#defining-variables-at-runtime) provided by the playbook at runtime.
@@ -173,6 +143,51 @@ Several AMP files are downloaded and applied during playbook execution, these ar
 4. Save the file and reference it via the `--extra-vars` option when running the playbook
 
 >NOTE: This mechanism will be improved in a future release.
+
+### JVM Options
+
+Each Java based service deployed by the playbook is configured with some default settings, including memory settings.
+
+The defaults are defined in group_vars/all.yml so they can be overridden using the mechanism described [above](#override-playbook-variables).
+
+For example, to override the JAVA_OPTS environment variable for the All In One Transformer Engine place the following in your extra vars file:
+
+```yaml
+tengine_environment:
+  JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx1g"
+```
+
+The `*_environment` variable is defined as a dictionary, all keys are added to the relevant components start script thus allowing you to define any number of environment variables.
+
+### Custom Keystore
+
+By default the playbook deploys a default keystore to ease the installation process, however, we recommend you [generate your own keystore](https://docs.alfresco.com/6.2/concepts/keystore-generate.html) following the [instructions here](https://docs.alfresco.com/6.2/concepts/keystore-config.html).
+
+There are three steps required to use a custom keystore:
+
+1. Place your generated keystore file in the `configuration_files/keystores` folder (these get copied to /var/opt/alfresco/content-services/keystore)
+2. Override the `custom_keystore` variable defined in group_vars/all.yml
+3. Override the `acs_environment` variable and define your custom JAVA_TOOL_OPTIONS configuration
+
+An example custom extra-vars file is shown below:
+
+```yaml
+custom_keystore: true
+acs_environment:
+  JAVA_OPTS: " -Xms512m -Xmx3g -XX:+DisableExplicitGC
+    -XX:+UseConcMarkSweepGC
+    -Djava.awt.headless=true
+    -XX:ReservedCodeCacheSize=128m
+    $JAVA_OPTS"
+  JAVA_TOOL_OPTIONS: " -Dencryption.keystore.type=pkcs12
+    -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding
+    -Dencryption.keyAlgorithm=AES
+    -Dencryption.keystore.location=/var/opt/alfresco/content-services/keystore/<your-keystore-file>
+    -Dmetadata-keystore.password=<your-keystore-password>
+    -Dmetadata-keystore.aliases=metadata
+    -Dmetadata-keystore.metadata.password=<your-keystore-password>
+    -Dmetadata-keystore.metadata.algorithm=AES"
+```
 
 ## Localhost Deployment
 
