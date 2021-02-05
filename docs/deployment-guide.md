@@ -119,6 +119,36 @@ You can provide your [repository configuration](https://github.com/Alfresco/acs-
 
 The properties defined in this file will be appended to the generated "alfresco-global.properties" located in "/etc/opt/alfresco/content-services/classpath".
 
+### Custom keystore configuration
+
+You can add your own generated keystore files to acs by adding the file within `configuration_files/keystores`.
+Of course you also need to set the custom_keystore variable to true for the key to be copied.
+Besides that you will also have to add the keystore properties to acs_environment.JAVA_TOOL_OPTIONS variable within the global variabiles file.
+
+Example setup:
+```bash
+#Key Generation
+CERT_DNAME="CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB"
+CERT_VALIDITY=36525
+KEYSTORE_PASSWORD=mp6yc0UD9e
+keytool -genseckey -dname "$CERT_DNAME" -validity ${CERT_VALIDITY} -alias metadata -keyalg AES -keysize 256 -keystore ${TOMCAT_DIR}/shared/classes/alfresco/keystore keystore -storetype pkcs12 -storepass ${KEYSTORE_PASSWORD}
+
+```yaml
+#Options needed in group_vars/all.yaml
+custom_keystore: true
+acs_environment:
+  JAVA_TOOL_OPTIONS: " -Dencryption.keystore.type=pkcs12 
+    -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding 
+    -Dencryption.keyAlgorithm=AES 
+    -Dencryption.keystore.location=/var/opt/alfresco/content-services/keystore/keystore 
+    -Dmetadata-keystore.password=mp6yc0UD9e 
+    -Dmetadata-keystore.aliases=metadata 
+    -Dmetadata-keystore.metadata.password=mp6yc0UD9e 
+    -Dmetadata-keystore.metadata.algorithm=AES "
+```
+
+For more information reffering keystore configuration please consult https://docs.alfresco.com/6.2/concepts/keystore-config.html
+
 ### Override Playbook Variables
 
 Ansible provides a mechanism to [override variables](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#defining-variables-at-runtime) provided by the playbook at runtime.
