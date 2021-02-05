@@ -5,7 +5,3 @@ acs_environment:
     -XX:ReservedCodeCacheSize=128m 
     $JAVA_OPTS"
 
-# The default location where we copy all keystores from "configuration-files/keystores" is /var/opt/alfresco/content-services/keystore/
-# This location is defined by variables as follows: {{ data_folder }}/content-services/keystore or {{ content_data_folder }}/keystore
-# If you change any of those variables the location will change in consequence
-custom_keystores: true
