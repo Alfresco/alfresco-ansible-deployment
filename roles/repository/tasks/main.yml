@@ -242,8 +242,9 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
-      when: keystore.stat.exists
-      when: not custom_keystores
+      when:
+        - keystore.stat.exists
+        - not custom_keystores
     - name: Remove keystore folder
       file:
         path: "{{ content_folder }}/keystore"
@@ -273,8 +274,9 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
-      when: keystore.stat.exists
-      when: not custom_keystores
+      when:
+        - keystore.stat.exists
+        - not custom_keystores
     - name: Remove keystore folder
       file:
         path: "{{ content_folder }}/alf_data/keystore"
