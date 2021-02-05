@@ -28,7 +28,7 @@ The following systemd services are deployed and can be used to stop and start Al
 | Service Name   | Purpose   |
 | ------ | --------- |
 | ```activemq.service``` | ActiveMQ Service |
-| ```postgresql-11.service``` | Postgresql DB Service |
+| ```postgresql-<version>.service``` | Postgresql DB Service (where `<version>` is 11 for ACS 6.2.N and 13 for ACS 7.x) |
 | ```tomcat.service``` | Tomcat Service |
 | ```solr.service``` | Alfresco Search Service |
 | ```alfresco-shared-fs.service``` | Alfresco Shared File Store Controller Service |
