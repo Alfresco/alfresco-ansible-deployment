@@ -219,7 +219,7 @@ jobs:
         - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade --use-feature=2020-resolver awscli 'molecule-ec2==0.2';"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" == *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=true;molecule create -s ec2multi"; else ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=false;molecule create -s ec2multi"; fi
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2multi/dynamic_inventory.py"
-        - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat inventory_ssh.yml | yq .all.children.webservers.hosts.webservers_1.ansible_host -r")
+        - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat inventory_ssh.yml | yq .all.children.nginx.hosts.nginx_1.ansible_host -r")
         - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory_ssh.yml"
         - echo "wait for repo to be up" && sleep 5m
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; sed -i 's+TEST_URL+http://$TESTHOST+g' test-config.json; cd dtas; pytest --tb=line --configuration ../test-config.json tests/ -s"
