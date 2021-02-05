@@ -122,7 +122,7 @@ The properties defined in this file will be appended to the generated "alfresco-
 ### Custom keystore configuration
 
 You can add your own generated keystore files to acs by adding the file within `configuration_files/keystores`.
-Of course you also need to set the custom_keystore variable to true for the key to be copied.
+Of course you also need to set the custom_keystores variable to true for the key to be copied.
 Besides that you will also have to add the keystore properties to acs_environment.JAVA_TOOL_OPTIONS variable within the global variabiles file.
 
 Example setup:
@@ -135,7 +135,7 @@ keytool -genseckey -dname "$CERT_DNAME" -validity ${CERT_VALIDITY} -alias metada
 
 ```yaml
 #Options needed in group_vars/all.yaml
-custom_keystore: true
+custom_keystores: true
 acs_environment:
   JAVA_TOOL_OPTIONS: " -Dencryption.keystore.type=pkcs12 
     -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding 
