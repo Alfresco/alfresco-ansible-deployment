@@ -111,7 +111,16 @@
   lineinfile:
     path: "/opt/alfresco/tomcat.sh"
     insertafter: 'CATALINA_OPTS'
-    line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}"
+    line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME} -Dats-tengine-aio.host={{ ats_tengine_aio_host }} -Dats-shared-fs.host={{ sfs_host }}"
+
+- name: Add additional env vars to tomcat.sh
+  become: true
+  become_user: "{{ username }}"
+  lineinfile:
+    path: "/opt/alfresco/tomcat.sh"
+    insertafter: 'CATALINA_OPTS'
+    line: export {{ item.key }}="{{ item.value }}"
+  loop: "{{ acs_environment | dict2items }}"
 
 - name: Verifying if the distribution zip finished downloading
   become: true
@@ -151,6 +160,10 @@
 
 - name: Move alfresco-share-services.amp to {{ content_folder }}/amps_repo folder
   block:
+    - name: Check if alfresco-share-services.amp file exists
+      stat:
+        path: "{{ content_folder }}/amps/alfresco-share-services.amp"
+      register: share_amp_exists
     - name: Copy alfresco-share-services.amp
       copy:
         remote_src: true
@@ -159,6 +172,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
+      when: share_amp_exists.stat.exists
     - name: Remove amps folder
       file:
         path: "{{ content_folder }}/amps"
@@ -440,20 +454,15 @@
     regexp: '<PostResources base='
     line: '<PostResources base="/opt/alfresco/modules/acs-share"'
 
-- name: Check whether alfresco-global.properties already appended
-  command:
-    cmd: 'grep -q "#Add your properties here" {{ settings_folder }}/classpath/alfresco-global.properties'
-  check_mode: no
-  ignore_errors: yes
-  register: agp_already_appended
-
-- name: Check for "{{ inventory_dir }}/configuration_files/alfresco-global.properties"
-  stat: path="{{ inventory_dir }}/configuration_files/alfresco-global.properties"
-  register: stat_alfresco_global_properties
-
-- name: Append local alfresco-global.properties to generated
-  shell: 'cat {{ inventory_dir }}/configuration_files/alfresco-global.properties >> {{ settings_folder }}/classpath/alfresco-global.properties'
-  when: stat_alfresco_global_properties.stat.exists and agp_already_appended.rc == 1
+- name: Insert or Update custom properties added through configuration_files/alfresco-global.properties
+  blockinfile:
+    path: "{{ settings_folder }}/classpath/alfresco-global.properties"
+    marker: "{mark} - ANSIBLE MANAGED BLOCK"
+    marker_begin: "### Begin - Custom user properties"
+    marker_end: "### End - Custom user properties"
+    insertafter: EOF
+    block: "{{ lookup('file', role_path + '/../../configuration_files/alfresco-global.properties') }}"
+  notify: alfresco-content-restart
 
 - name: Ensure tomcat restarted
   systemd:

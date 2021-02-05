@@ -4,3 +4,6 @@ activemq_base: "{{ config_folder }}/activemq"
 activemq_conf: "{{ config_folder }}/activemq/conf"
 activemq_data: "{{ data_folder }}/activemq/data"
 activemq_tmp: "{{ data_folder }}/activemq/tmp"
+
+activemq_environment:
+  ACTIVEMQ_OPTS: "$ACTIVEMQ_OPTS -Xms128m -Xmx1g"

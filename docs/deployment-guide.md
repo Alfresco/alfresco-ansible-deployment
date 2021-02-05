@@ -21,6 +21,21 @@ Regardless of role and connection type a consistent folder structure is used, yo
 | ```/var/opt/alfresco``` | Data |
 | ```/var/log/alfresco``` | Logs |
 
+## Service Configuration
+
+The following systemd services are deployed and can be used to stop and start Alfresco components:
+
+| Service Name   | Purpose   |
+| ------ | --------- |
+| ```activemq.service``` | ActiveMQ Service |
+| ```postgresql-11.service``` | Postgresql DB Service |
+| ```tomcat.service``` | Tomcat Service |
+| ```solr.service``` | Alfresco Search Service |
+| ```alfresco-shared-fs.service``` | Alfresco Shared File Store Controller Service |
+| ```alfresco-sync.service``` | Alfresco Sync Service |
+| ```alfresco-tengine-aio.service``` | Alfresco AIO Transform Core Engine | 
+| ```alfresco-transform-router.service``` | Alfresco Transformation Router Service |
+
 ## Getting Started Quickly
 
 The quickest way to get started and experiment with the playbook is by leveraging Vagrant to create a Virtualbox virtual machine to act as the control node **and** the target host.
