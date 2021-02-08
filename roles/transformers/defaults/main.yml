@@ -6,6 +6,3 @@ utils_transform:
   - libSM
   - unzip
   - which
-
-tengine_environment:
-  JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx1536m "

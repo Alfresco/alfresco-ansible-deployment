@@ -37,7 +37,6 @@ adw:
 sync:
   version: 3.4.0-M2
 
-
 downloads:
   acs_zip_url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
   adw_zip_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
@@ -60,6 +59,31 @@ amp_downloads:
     dest: "{{ content_folder }}/amps_repo/alfresco-device-sync-repo.amp"
   - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
+
+acs_environment:
+  JAVA_OPTS: " -Xms512m -Xmx3g -XX:+DisableExplicitGC 
+    -XX:+UseConcMarkSweepGC 
+    -Djava.awt.headless=true 
+    -XX:ReservedCodeCacheSize=128m 
+    $JAVA_OPTS"
+
+activemq_environment:
+  ACTIVEMQ_OPTS: "$ACTIVEMQ_OPTS -Xms128m -Xmx1g"
+
+search_environment: # This will add extra vars at the end of the solr.in.sh file
+  SOLR_JAVA_MEM: "-Xms1g -Xmx1g"
+
+sfs_environment:
+  JAVA_OPTS: "$JAVA_OPTS -Xms128m -Xmx512m "
+
+sync_environment:
+  JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx2g "
+
+tengine_environment:
+  JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx1536m "
+
+trouter_environment:
+  JAVA_OPTS: "$JAVA_OPTS -Xms128m -Xmx512m "
 
 dependencies_version:
   postgresql_connector: 42.2.16
