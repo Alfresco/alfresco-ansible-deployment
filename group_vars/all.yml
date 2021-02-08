@@ -60,6 +60,11 @@ amp_downloads:
   - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
 
+# A default keystore is stored in /var/opt/alfresco/content-services/keystore, 
+# to replace this with a custom keystore place the keystore file in the "configuration_files/keystores" folder 
+# and change this flag to true. See the deployment guide for more details.
+custom_keystores: false
+
 acs_environment:
   JAVA_OPTS: " -Xms512m -Xmx3g -XX:+DisableExplicitGC 
     -XX:+UseConcMarkSweepGC 
