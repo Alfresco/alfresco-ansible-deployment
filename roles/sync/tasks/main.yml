@@ -14,8 +14,26 @@
     state: present
   poll: 0
   loop: "{{ utils_sync }}"
-- name: Populate service facts
-  service_facts:
+# - name: Populate service facts
+#   service_facts:
+
+- name: Install rpm repo
+  become: true
+  become_user: root
+  yum:
+    name: "{{ postgresql_rpm_repo }}"
+    state: present
+    disable_gpg_check: True
+    when: ansible_distribution_major_version is version('7', eq) and dependencies_version.postgres_major_version is version('13', eq)
+
+- name: Install pspg.x86_64 package on repo and sync host
+  become: true
+  become_user: root
+  package:
+    name: pspg.x86_64
+    state: present
+  poll: 0
+  when: ansible_distribution_major_version is version('7', eq) and dependencies_version.postgres_major_version is version('13', eq)
 
 - name: Download sync servies {{ sync.version }}
   block:

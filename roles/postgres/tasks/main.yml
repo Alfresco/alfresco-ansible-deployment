@@ -4,6 +4,7 @@
 
 - name: Install rpm repo
   become: true
+  become_user: root
   yum:
     name: "{{ postgresql_rpm_repo }}"
     state: present
@@ -56,10 +57,16 @@
     backup: true
   with_items: "{{ postgres_config }}"
 
+# - name: Change scram-sha-256 auth method to md5
+#   replace:
+#     path: "{{ postgresql_conf_path }}/pg_hba.conf"
+#     regexp: "scram-sha-256"
+#     replace: "md5"
+
 - name: Configure postgresql client auth
   lineinfile:
     path: "{{ postgresql_conf_path }}/pg_hba.conf"
-    insertbefore: BOF
+    insertbefore: EOF
     line: "{{ item['type'] }}\t{{ item['database'] }}\t{{ item['user'] }}\t{{ item['address'] }}\t{{ item['method'] }}"
     state: "{{ item['state'] | default(omit) }}"
     backup: true
