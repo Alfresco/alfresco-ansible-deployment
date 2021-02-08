@@ -24,7 +24,7 @@
     name: "{{ postgresql_rpm_repo }}"
     state: present
     disable_gpg_check: True
-    when: ansible_distribution_major_version is version('7', eq) and dependencies_version.postgres_major_version is version('13', eq)
+  when: ansible_distribution_major_version is version('7', eq) and dependencies_version.postgres_major_version is version('13', eq)
 
 - name: Install pspg.x86_64 package on repo and sync host
   become: true
