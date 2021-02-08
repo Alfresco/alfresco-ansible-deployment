@@ -61,9 +61,9 @@ amp_downloads:
   - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
 
-# The default location where we copy all keystores from "configuration-files/keystores" is /var/opt/alfresco/content-services/keystore/
-# This location is defined by variables as follows: {{ data_folder }}/content-services/keystore or {{ content_data_folder }}/keystore
-# If you change any of those variables the location will change in consequence
+# A default keystore is stored in /var/opt/alfresco/content-services/keystore, 
+# to replace this with a custom keystore place the keystore file in the "configuration_files/keystores" folder 
+# and change this flag to true. See the deployment guide for more details.
 custom_keystores: false
 
 dependencies_version:
