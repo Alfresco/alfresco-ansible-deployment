@@ -233,7 +233,6 @@
       stat:
         path: "{{ content_folder }}/keystore"
       register: keystore
-      when: not custom_keystores
     - name: Copy keystore folder {{ content_data_folder }}
       copy:
         remote_src: true
@@ -265,7 +264,6 @@
       stat:
         path: "{{ content_folder }}/alf_data/keystore"
       register: keystore
-      when: not custom_keystores
     - name: Copy keystore folder {{ content_data_folder }}
       copy:
         remote_src: true
