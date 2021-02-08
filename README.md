@@ -1,6 +1,6 @@
 # Alfresco Ansible Deployment
 
-This project provides an [Ansible](https://www.ansible.com) playbook capable of deploying Alfresco Content Services (ACS) 6.2.2.
+This project provides an [Ansible](https://www.ansible.com) playbook capable of deploying Alfresco Content Services (ACS) Enterprise 7.x or 6.2.N.
 
 Ansible is an open-source software provisioning, configuration management and application-deployment tool enabling infrastructure as code.
 
