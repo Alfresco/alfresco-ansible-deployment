@@ -28,7 +28,7 @@ The following systemd services are deployed and can be used to stop and start Al
 | Service Name   | Purpose   |
 | ------ | --------- |
 | ```activemq.service``` | ActiveMQ Service |
-| ```postgresql-11.service``` | Postgresql DB Service |
+| ```postgresql-<version>.service``` | Postgresql DB Service (where `<version>` is 11 for ACS 6.2.N and 13 for ACS 7.x) |
 | ```tomcat.service``` | Tomcat Service |
 | ```solr.service``` | Alfresco Search Service |
 | ```alfresco-shared-fs.service``` | Alfresco Shared File Store Controller Service |
@@ -68,47 +68,141 @@ Once ACS has initialized access the system using the following URLs using a brow
 * Repository: [http://172.100.100.100/alfresco](http://172.100.100.100/alfresco)
 * API Explorer: [http://172.100.100.100/api-explorer](http://172.100.100.100/api-explorer)
 
+To access the machine vagrant created and ran the playbook on use `vagrant ssh`.
+
 ## Setup A Control Node
 
 As mentioned in the introduction a control node is required to run the playbook. You can use any computer that has a Python installation as a control node; laptops, shared desktops, and servers can all run Ansible.
 
 In the interest of keeping this guide simple we will use an AWS EC2 instance as the control node, the steps required are shown below:
 
-1. Launch an EC2 instance using the Centos 7 (x86_64) AMI from the Marketplace (instance size/type does not matter) and SSH into the machine
+1. Launch an EC2 instance using the Centos 7 or 8 (x86_64) AMI from the Marketplace (instance size/type does not matter)
 
     ![Centos AMI](./resources/centos-ami.png)
 
-2. Install Ansible
+2. Transfer the ZIP file to the control node and SSH into the machine
 
     ```bash
-    sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    scp <local-path>/alfresco-ansible-deployment-<version>.zip centos@<control-node-ip>:/home/centos/
+    ssh -i <yourpem-file> centos@<control-node-ip>
+    ```
+
+3. Install the required dependencies for Ansible (replace the 7 with 8 in the URL if you're using CentOS 8)
+
+    ```bash
+    sudo yum install -y unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    ```
+
+4. Install Ansible
+
+    ```bash
     sudo yum install -y ansible
     ```
 
-3. Install Git
+5. Extract the ZIP file
 
     ```bash
-    sudo yum install -y git
+    unzip alfresco-ansible-deployment-<version>.zip
     ```
 
-4. Clone the repository and switch to the stable tag:
-
-    ```bash
-    git clone https://github.com/Alfresco/alfresco-ansible-deployment.git
-    cd alfresco-ansible-deployment
-    git checkout tags/v1.0-A3
-    ```
-
-    > NOTE: As we protect the `Alfresco` organization with SAML SSO you will first have to authorize your SSH key or personal access token via [GitHub](https://github.com).
-
-5. Create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
+6. Create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
 
     ```bash
     export NEXUS_USERNAME="<your-username>"
     export NEXUS_PASSWORD="<your-password>"
     ```
 
-Now you have the control node setup you need to decide what kind of deployment you would like. To deploy everything on the control node follow the steps in the [Locahost Deployment](#localhost-deployment) section or to deploy to one or more other machines follow the steps in the [SSH Deployment](#ssh-deployment) section.
+Now you have the control node setup you can [configure](#configure-your-deployment) your deployment and decide what kind of deployment you would like.
+
+To deploy everything on the control node follow the steps in the [Locahost Deployment](#localhost-deployment) section or to deploy to one or more other machines follow the steps in the [SSH Deployment](#ssh-deployment) section.
+
+## Configure Your Deployment
+
+By default, without any configuration applied, the playbook will deploy a limited trial of the Enterprise version of Alfresco Content Services 7.x that goes into read-only mode after 2 days. If you'd like to try Alfresco Content Services for a longer period, request the 30-day [Download Trial](https://www.alfresco.com/platform/content-services-ecm/trial/download).
+
+The sections below describe how you can configure your deployment before running the playbook.
+
+### License
+
+If you have a valid license place your `*.lic` file in the `configuration_files` folder before running the playbook.
+
+>NOTE: You can also [upload a license](https://docs.alfresco.com/6.2/tasks/at-adminconsole-license.html) via the Admin Console once the system is running.
+
+### Alfresco Global Properties
+
+You can provide your [repository configuration](https://github.com/Alfresco/acs-deployment/blob/master/docs/properties-reference.md) by editing the `configuration_files/alfresco-global.properties` file.
+
+The properties defined in this file will be appended to the generated "alfresco-global.properties" located in "/etc/opt/alfresco/content-services/classpath".
+
+### Override Playbook Variables
+
+Ansible provides a mechanism to [override variables](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#defining-variables-at-runtime) provided by the playbook at runtime.
+
+Whilst it's possible to override any variable defined by the playbook we have only tested changing the variables defined in `group_vars/all.yml`.
+
+Variables can be overridden using either the `--extra-vars` or `-e` command line option when running the playbook.
+
+If you have more than one variable to override we recommend using a separate file. The file name must be prefixed with "@", for example:
+
+```bash
+ansible-playbook ... --extra-vars "@my-vars.yml"
+```
+
+### AMPs
+
+Several AMP files are downloaded and applied during playbook execution, these are defined in a variable that can be overridden using the mechanism described in the previous section. Follow the steps below to apply your own AMPs
+
+1. Open `group_vars/all.yml` and copy the whole `amp_downloads` variable definition
+2. Create a new file and paste the `amp_downloads` variable
+3. Add any additional AMPs you want to apply paying close attention to the `dest` property. If it's a repository AMP use the `amps_repo` folder, if it's a Share AMP use the `amps_share` folder
+4. Save the file and reference it via the `--extra-vars` option when running the playbook
+
+>NOTE: This mechanism will be improved in a future release.
+
+### JVM Options
+
+Each Java based service deployed by the playbook is configured with some default settings, including memory settings.
+
+The defaults are defined in group_vars/all.yml so they can be overridden using the mechanism described [above](#override-playbook-variables).
+
+For example, to override the JAVA_OPTS environment variable for the All In One Transformer Engine place the following in your extra vars file:
+
+```yaml
+tengine_environment:
+  JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx1g"
+```
+
+The `*_environment` variable is defined as a dictionary, all keys are added to the relevant components start script thus allowing you to define any number of environment variables.
+
+### Custom Keystore
+
+By default the playbook deploys a default keystore to ease the installation process, however, we recommend you [generate your own keystore](https://docs.alfresco.com/6.2/concepts/keystore-generate.html) following the [instructions here](https://docs.alfresco.com/6.2/concepts/keystore-config.html).
+
+There are three steps required to use a custom keystore:
+
+1. Place your generated keystore file in the `configuration_files/keystores` folder (these get copied to /var/opt/alfresco/content-services/keystore)
+2. Override the `custom_keystore` variable defined in group_vars/all.yml
+3. Override the `acs_environment` variable and define your custom JAVA_TOOL_OPTIONS configuration
+
+An example custom extra-vars file is shown below:
+
+```yaml
+custom_keystore: true
+acs_environment:
+  JAVA_OPTS: " -Xms512m -Xmx3g -XX:+DisableExplicitGC
+    -XX:+UseConcMarkSweepGC
+    -Djava.awt.headless=true
+    -XX:ReservedCodeCacheSize=128m
+    $JAVA_OPTS"
+  JAVA_TOOL_OPTIONS: " -Dencryption.keystore.type=pkcs12
+    -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding
+    -Dencryption.keyAlgorithm=AES
+    -Dencryption.keystore.location=/var/opt/alfresco/content-services/keystore/<your-keystore-file>
+    -Dmetadata-keystore.password=<your-keystore-password>
+    -Dmetadata-keystore.aliases=metadata
+    -Dmetadata-keystore.metadata.password=<your-keystore-password>
+    -Dmetadata-keystore.metadata.algorithm=AES"
+```
 
 ## Localhost Deployment
 
@@ -116,10 +210,16 @@ The diagram below shows the result of a localhost deployment.
 
 ![Localhost Deployment](./resources/acs-localhost.png)
 
-To deploy everything on the local machine just execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
+To deploy everything on the local machine navigate to the folder you extracted the ZIP to and execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
 
 ```bash
 ansible-playbook playbooks/acs.yml -i inventory_local.yml
+```
+
+Alternatively, to deploy an ACS 6.2.N system use the following command:
+
+```bash
+ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@6.2.N-extra-vars.yml"
 ```
 
 > NOTE: The playbook takes around 30 minutes to complete.
@@ -178,7 +278,7 @@ The diagram below shows the result of a single machine deployment.
 
 Once you have prepared the target host and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
-To check your inventory file is configured correctly and the control node is able to connect to the target host run the following command:
+To check your inventory file is configured correctly and the control node is able to connect to the target host navigate to the folder you extracted the ZIP to and run the following command:
 
 ```bash
 ansible all -m ping -i inventory_ssh.yml
@@ -188,6 +288,12 @@ To deploy everything on the target host execute the playbook as the current user
 
 ```bash
 ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
+```
+
+Alternatively, to deploy an ACS 6.2.N system use the following command:
+
+```bash
+ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@6.2.N-extra-vars.yml"
 ```
 
 > NOTE: The playbook takes around 30 minutes to complete.
@@ -235,6 +341,12 @@ To deploy everything on the target hosts execute the playbook as the current use
 ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
 ```
 
+Alternatively, to deploy an ACS 6.2.N system use the following command:
+
+```bash
+ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@6.2.N-extra-vars.yml"
+```
+
 > NOTE: The playbook takes around 30 minutes to complete.
 
 Once the playbook is complete Ansible will display a play recap to let you know that everything is done, similar to the block below:
@@ -258,24 +370,13 @@ Once ACS has initialized access the system using the following URLs with a brows
 * Repository: `http://<webservers-host-ip>/alfresco`
 * API Explorer: `http://<webservers-host-ip>/api-explorer`
 
-## Customizing the deployment
-
-For custom configuration on the deployment please refer to the [Customization Guide](./customization-guide.md).
-
 ## Known Issues
 
 * The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Verifying if `<file>` finished downloading (nnn retries left)" appearing many times. Despite the wording this is **not** an error so please ignore and be patient!
-* The playbook is not yet fully idempotent so may cause issues if you make changes and run many times
+* The playbook is not yet fully idempotent so may cause issues if you make changes and run multiple times
 
 ## Troubleshooting
 
-The best place to start if something is not working are the log files, these can be found in the following locations on the target hosts:
+If the playbook fails for some reason try re-running it with the `-v` option, if that still doesn't provide enough information try re-running with the `-vvv` option.
 
-* Nginx
-  * `/var/log/alfresco/nginx.alfresco.error.log`
-* Repository
-  * `/var/log/alfresco/alfresco.log`
-  * `/var/log/alfresco/catalina.out`
-* Share
-  * `/var/log/alfresco/share.log`
-
+If the playbook completes successfully but the system is not functionaing the best place to start is the log files, these can be found in the `/var/log/alfresco` folder on the target hosts. Please note the nginx log files are owned by root as the nginx process is running as root so it can listen on port 80.
