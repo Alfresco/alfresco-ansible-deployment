@@ -1,5 +1,5 @@
 ---
-- name: Create a new database with name "alfresco_sync"
+- name: Create a new database with name "alfresco-sync"
   postgresql_db:
     name: "{{ item['database'] }}"
     login_host: "{{ db_host }}"

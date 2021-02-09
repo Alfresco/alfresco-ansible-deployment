@@ -6,15 +6,6 @@
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
 
-- name: Ensure a list of packages installed
-  become: true
-  become_user: root
-  package:
-    name: "{{ item }}"
-    state: present
-  poll: 0
-  loop: "{{ utils_sync }}"
-
 - name: Install rpm repo
   become: true
   become_user: root
@@ -32,6 +23,15 @@
     state: present
   poll: 0
   when: ansible_distribution_major_version == "7" and dependencies_version.postgres_major_version == 13
+
+- name: Ensure a list of packages installed
+  become: true
+  become_user: root
+  package:
+    name: "{{ item }}"
+    state: present
+  poll: 0
+  loop: "{{ utils_sync }}"
 
 - name: Download sync servies {{ sync.version }}
   block:

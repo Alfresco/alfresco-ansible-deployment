@@ -7,7 +7,7 @@ postgres_client_auth:
     address:
     method: password
   - type: local
-    database: "alfresco_sync"
+    database: "alfresco-sync"
     user: "alfresco"
     address:
     method: password
