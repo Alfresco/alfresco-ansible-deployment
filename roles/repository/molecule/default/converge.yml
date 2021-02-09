@@ -2,6 +2,9 @@
 - name: Converge
   hosts: all
   tasks:
+    - name: create keystore
+      local_action:
+        module: shell keytool -genseckey -dname 'CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB' -validity 30 -alias metadata -keyalg AES -keysize 256 -keystore {{ playbook_dir }}/../../../../configuration_files/keystores/keystest -storetype pkcs12 -storepass mp6yc0UD9e
     - name: "Include postgres"
       include_role:
         name: "postgres"

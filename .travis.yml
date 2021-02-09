@@ -72,7 +72,6 @@ jobs:
     - stage: Verification
       name: Repository Role Verification
       script:
-        - keytool -genseckey -dname "CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB" -validity 30 -alias metadata -keyalg AES -keysize 256 -keystore configuration_files/keystores/keystest -storetype pkcs12 -storepass mp6yc0UD9e
         - cd roles/repository/ 
         - molecule converge
         - sleep 5m
