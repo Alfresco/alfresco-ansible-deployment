@@ -6,6 +6,10 @@ fi
 
 . /etc/opt/alfresco/setenv.sh
 
+{% for key, value in sync_environment.items() %}
+{{key}}="{{value}}"
+{% endfor %}
+
 ### Fill in these bits:
 USER="alfresco"
 ### Path to service-sync jar

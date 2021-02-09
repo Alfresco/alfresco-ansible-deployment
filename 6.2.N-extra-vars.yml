@@ -15,7 +15,7 @@ amps:
 api_explorer:
   version: 6.3.0
 
-solr:
+search:
   version: 1.4.3
 
 sfs:

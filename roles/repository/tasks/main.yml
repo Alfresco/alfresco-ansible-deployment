@@ -5,7 +5,7 @@
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
 
-- name: Install rpm repo
+- name: Install postgres rpm repository
   become: true
   become_user: root
   yum:
@@ -53,7 +53,6 @@
      - "{{ content_folder }}/alf_data"
      - "{{ content_folder }}/alfresco-mmt"
      - "{{ content_folder }}/webapps/alfresco"
-     - "{{ content_folder }}/licenses/"
      - "{{ content_folder }}/web-server/lib"
      - "{{ settings_folder }}/classpath/alfresco/extension/transform/pipelines"
      - "{{ settings_folder }}/classpath/alfresco/extension/transform/renditions"
@@ -62,7 +61,6 @@
      - "{{ content_data_folder }}/keystore"
      - "{{ tomcat_config_dir }}/lib"
      - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
-     - "{{ logs_folder }}/licenses/"
 
 - name: Check if Alfresco version {{ acs.version }} is installed
   stat:
@@ -131,7 +129,16 @@
   lineinfile:
     path: "/opt/alfresco/tomcat.sh"
     insertafter: 'CATALINA_OPTS'
-    line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}"
+    line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME} -Dats-tengine-aio.host={{ ats_tengine_aio_host }} -Dats-shared-fs.host={{ sfs_host }}"
+
+- name: Add additional env vars to tomcat.sh
+  become: true
+  become_user: "{{ username }}"
+  lineinfile:
+    path: "/opt/alfresco/tomcat.sh"
+    insertafter: 'CATALINA_OPTS'
+    line: export {{ item.key }}="{{ item.value }}"
+  loop: "{{ acs_environment | dict2items }}"
 
 - name: Verifying if the distribution zip finished downloading
   become: true
@@ -171,6 +178,10 @@
 
 - name: Move alfresco-share-services.amp to {{ content_folder }}/amps_repo folder
   block:
+    - name: Check if alfresco-share-services.amp file exists
+      stat:
+        path: "{{ content_folder }}/amps/alfresco-share-services.amp"
+      register: share_amp_exists
     - name: Copy alfresco-share-services.amp
       copy:
         remote_src: true
@@ -179,6 +190,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
+      when: share_amp_exists.stat.exists
     - name: Remove amps folder
       file:
         path: "{{ content_folder }}/amps"
@@ -210,27 +222,7 @@
     state: absent
   when: archive_exists.stat.exists
 
-- name: Move licenses folder
-  block:
-    - name: Check if source license folder exists
-      stat:
-        path: "{{ content_folder }}/licenses"
-      register: licences
-    - name: Copy licenses folder to {{ settings_folder }}
-      copy:
-        remote_src: true
-        src: "{{ content_folder }}/licenses"
-        dest: "{{ settings_folder }}"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
-      when: licences.stat.exists
-    - name: Remove licenses folder
-      file:
-        path: "{{ content_folder }}/licenses"
-        state: absent
-
-- name: Copy license files if existent in inventory
+- name: Copy user provided license file
   block:
     - name: copy local files to remote
       copy:
@@ -259,6 +251,7 @@
       stat:
         path: "{{ content_folder }}/keystore"
       register: keystore
+      when: not custom_keystores
     - name: Copy keystore folder {{ content_data_folder }}
       copy:
         remote_src: true
@@ -267,11 +260,21 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
-      when: keystore.stat.exists
+      when:
+        - keystore.stat.exists
+        - not custom_keystores
     - name: Remove keystore folder
       file:
         path: "{{ content_folder }}/keystore"
         state: absent
+    - name: copy custom keystore files
+      copy:
+        src: "{{ role_path }}/../../configuration_files/keystores/"
+        dest: "{{ content_data_folder }}/keystore/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+      when: custom_keystores
   when: acs.version is version('7.0.0', 'ge')
 
 - name: Move keystore folders for ACS6
@@ -280,6 +283,7 @@
       stat:
         path: "{{ content_folder }}/alf_data/keystore"
       register: keystore
+      when: not custom_keystores
     - name: Copy keystore folder {{ content_data_folder }}
       copy:
         remote_src: true
@@ -288,11 +292,21 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
-      when: keystore.stat.exists
+      when:
+        - keystore.stat.exists
+        - not custom_keystores
     - name: Remove keystore folder
       file:
         path: "{{ content_folder }}/alf_data/keystore"
         state: absent
+    - name: copy custom keystore file
+      copy:
+        src: "{{ role_path }}/../../configuration_files/keystores/"
+        dest: "{{ content_data_folder }}/keystore/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+      when: custom_keystores
   when: acs.version is version('7.0.0', 'lt')
 
 - name: Move classes folder
@@ -480,20 +494,15 @@
     regexp: '<PostResources base='
     line: '<PostResources base="/opt/alfresco/modules/acs-share"'
 
-- name: Check whether alfresco-global.properties already appended
-  command:
-    cmd: 'grep -q "#Add your properties here" {{ settings_folder }}/classpath/alfresco-global.properties'
-  check_mode: no
-  ignore_errors: yes
-  register: agp_already_appended
-
-- name: Check for "{{ inventory_dir }}/configuration_files/alfresco-global.properties"
-  stat: path="{{ inventory_dir }}/configuration_files/alfresco-global.properties"
-  register: stat_alfresco_global_properties
-
-- name: Append local alfresco-global.properties to generated
-  shell: 'cat {{ inventory_dir }}/configuration_files/alfresco-global.properties >> {{ settings_folder }}/classpath/alfresco-global.properties'
-  when: stat_alfresco_global_properties.stat.exists and agp_already_appended.rc == 1
+- name: Insert or Update custom properties added through configuration_files/alfresco-global.properties
+  blockinfile:
+    path: "{{ settings_folder }}/classpath/alfresco-global.properties"
+    marker: "{mark} - ANSIBLE MANAGED BLOCK"
+    marker_begin: "### Begin - Custom user properties"
+    marker_end: "### End - Custom user properties"
+    insertafter: EOF
+    block: "{{ lookup('file', role_path + '/../../configuration_files/alfresco-global.properties') }}"
+  notify: alfresco-content-restart
 
 - name: Ensure tomcat restarted
   systemd:

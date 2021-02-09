@@ -2,7 +2,7 @@
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
 
-- name: Install rpm repo
+- name: Install rpm repository
   become: true
   become_user: root
   yum:
