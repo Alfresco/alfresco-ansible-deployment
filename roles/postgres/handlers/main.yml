@@ -1,5 +1,5 @@
 ---
 - name: Restart postgresql
   systemd:
-    name: "{{ postgresql_service[postgres_major_version] }}"
+    name: "{{ postgresql_service }}"
     state: restarted
