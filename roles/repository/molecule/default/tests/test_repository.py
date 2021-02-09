@@ -48,6 +48,10 @@ def test_share_log_exists(host, get_ansible_vars):
     "Check that share.log exists in /var/log/alfresco"
     assert_that(host.file("/var/log/alfresco/share.log").exists)
 
+def test_keytest_keystore_exists(host, get_ansible_vars):
+    "Check that the custom keystore exists in /var/opt/alfresco/content-services/keystore/keystest"
+    assert_that(host.file("/var/opt/alfresco/content-services/keystore/keystest").exists)
+
 def test_share_context_200(host, get_ansible_vars):
     "Check that /share context is available and returns a HTTP 200 status code"
     cmd = host.run("curl -iL --user admin:admin --connect-timeout 5 http://{}:8080/share".format(test_host))

@@ -1,7 +1,5 @@
 ---
 postgres_pass: MyPass1
-repo_host_connect: "{{ hostvars['repository_1']['ansible_host'] }}"
-sync_host_connect: "{{ hostvars['syncservice_1']['ansible_host'] }}"
 postgres_client_auth:
   - type: local
     database: "alfresco"
@@ -9,7 +7,7 @@ postgres_client_auth:
     address:
     method: password
   - type: local
-    database: "alfresco_sync"
+    database: "alfresco-sync"
     user: "alfresco"
     address:
     method: password
@@ -21,10 +19,27 @@ postgres_client_auth:
   - type: host
     database: all
     user: all
-    address: "{{ repo_host_connect }}/32"
+    address: "{{ repo_host }}/32"
     method: md5
   - type: host
     database: all
     user: all
-    address: "{{ sync_host_connect }}/32"
+    address: "{{ sync_host }}/32"
     method: md5
+
+postgresql_rpm_repo: https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+
+postgresql_service: postgresql-{{ dependencies_version.postgres_major_version }}
+
+postgresql_setup_path: /usr/pgsql-{{ dependencies_version.postgres_major_version }}/bin/postgresql-{{ dependencies_version.postgres_major_version }}-setup
+
+postgresql_data_path: /var/lib/pgsql/{{ dependencies_version.postgres_major_version }}/data
+
+postgresql_conf_path: /var/lib/pgsql/{{ dependencies_version.postgres_major_version }}/data
+
+
+postgres_listen_addresses: "*"
+postgres_config: 
+  - line: max_connections = 300
+  - line: shared_buffers = 2GB
+    state: present
