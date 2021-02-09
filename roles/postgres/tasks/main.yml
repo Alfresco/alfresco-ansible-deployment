@@ -57,20 +57,13 @@
     backup: true
   with_items: "{{ postgres_config }}"
 
-# - name: Change scram-sha-256 auth method to md5
-#   replace:
-#     path: "{{ postgresql_conf_path }}/pg_hba.conf"
-#     regexp: "scram-sha-256"
-#     replace: "md5"
-
 - name: Configure postgresql client auth
-  lineinfile:
-    path: "{{ postgresql_conf_path }}/pg_hba.conf"
-    insertbefore: EOF
-    line: "{{ item['type'] }}\t{{ item['database'] }}\t{{ item['user'] }}\t{{ item['address'] }}\t{{ item['method'] }}"
-    state: "{{ item['state'] | default(omit) }}"
-    backup: true
-  with_items: "{{ postgres_client_auth }}"
+  template:
+    src: "pg_hba.conf.j2"
+    dest: "{{ postgresql_conf_path }}/pg_hba.conf"
+    owner: postgres
+    group: postgres
+    mode: 'u=rw'
 
 - name: Ensure postgresql service is started and enabled on boot
   systemd:
