@@ -1,5 +1,4 @@
 postgresql_packages:
-  11:
-    - postgresql11-server
-    - postgresql11
-    - python-psycopg2
+  - postgresql{{ dependencies_version.postgres_major_version }}-server
+  - postgresql{{ dependencies_version.postgres_major_version }}
+  - python-psycopg2
