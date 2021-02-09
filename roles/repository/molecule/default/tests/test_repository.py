@@ -23,6 +23,12 @@ def get_ansible_vars(host):
 
 test_host = os.environ.get('TEST_HOST')
 
+def test_newly_added_properties_are_set(host, get_ansible_vars):
+    "Check that extra props exists in global properties file"
+    content = host.file("/etc/opt/alfresco/content-services/classpath/alfresco-global.properties").content
+    assert b'index.recovery.mode=NONE' in content
+    assert b'index.subsystem.name=noindex' in content
+
 def test_repo_service_is_running_and_enabled(host, get_ansible_vars):
     """Check repository service"""
     repository = host.service("alfresco-content.service")

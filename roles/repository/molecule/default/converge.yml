@@ -2,6 +2,9 @@
 - name: Converge
   hosts: all
   tasks:
+    - name: Add custom global properties settings
+      local_action:
+        module: shell echo "\nindex.recovery.mode=NONE\nindex.subsystem.name=noindex" >> {{ playbook_dir }}/../../../../configuration_files/alfresco-global.properties
     - name: "Include postgres"
       include_role:
         name: "postgres"
