@@ -22,7 +22,7 @@
           JAVA_TOOL_OPTIONS: " -Dencryption.keystore.type=pkcs12
             -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding
             -Dencryption.keyAlgorithm=AES
-            -Dencryption.keystore.location=/var/opt/alfresco/content-services/keystore/keystore
+            -Dencryption.keystore.location=/var/opt/alfresco/content-services/keystore/keystest
             -Dmetadata-keystore.password=mp6yc0UD9e
             -Dmetadata-keystore.aliases=metadata
             -Dmetadata-keystore.metadata.password=mp6yc0UD9e
