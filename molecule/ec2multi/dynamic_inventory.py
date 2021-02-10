@@ -27,7 +27,7 @@ for item in parsed_yaml_file:
         'connection': 'ssh'
     })
 
-    if groupname=='webservers':
+    if groupname=='nginx':
         add_if_key_not_exist(inventoryfile['all']['children'], 'adw', {})
         add_if_key_not_exist(inventoryfile['all']['children']['adw'], 'hosts', {})
         add_if_key_not_exist(inventoryfile['all']['children']['adw']['hosts'], 'adw_1', {

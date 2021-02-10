@@ -21,7 +21,7 @@ all:
         search_1:
           ansible_connection: local
           ansible_host: "127.0.0.1"
-    webservers:
+    nginx:
       hosts:
         nginx_1:
           ansible_connection: local
