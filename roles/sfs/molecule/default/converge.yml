@@ -5,3 +5,6 @@
     - name: "Include sfs"
       include_role:
         name: "sfs"
+      vars:
+        sfs_environment:
+          JAVA_OPTS: "$JAVA_OPTS -Xms128m -Xmx900m "

@@ -48,3 +48,9 @@ def test_aio_root_api(host, get_ansible_vars):
     cmd = host.run("curl -iL http://{}:8090".format(test_host))
     assert_that(cmd.stdout, contains_string("All in One Transformer Test Transformation"), cmd.stdout)
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
+
+def test_environment_jvm_opts(host, get_ansible_vars):
+    "Check that overwritten JVM_OPTS are taken into consideration"
+    pid = host.run("/opt/openjdk*/bin/jps -lV | grep aio | awk '{print $1}'")
+    process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
+    assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))

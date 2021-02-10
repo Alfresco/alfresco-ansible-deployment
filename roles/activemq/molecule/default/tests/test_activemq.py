@@ -48,3 +48,9 @@ def test_activemq_web_console(host, get_ansible_vars):
     cmd = host.run("curl -iL --user admin:admin http://{}:8161".format(test_host))
     assert_that(cmd.stdout, contains_string("Welcome to the Apache ActiveMQ!"))
     assert_that(cmd.stdout, contains_string("200 OK"))
+
+def test_environment_jvm_opts(host, get_ansible_vars):
+    "Check that overwritten JVM_OPTS are taken into consideration"
+    pid = host.run("/opt/openjdk*/bin/jps -lV | grep activemq | awk '{print $1}'")
+    process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
+    assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
