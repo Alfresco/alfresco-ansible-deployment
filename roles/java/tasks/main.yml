@@ -19,17 +19,10 @@
   register: remote_java
   failed_when: false
 
-- name: Create temp dir
-  become: true
-  file:
-    path: "{{ temp_dir }}"
-    state: directory
-    mode: '0755'
-
 - name: Download file with check (md5)
   get_url:
     url: "{{ dependencies_url.jdk }}"
-    dest: "{{ temp_dir }}"
+    dest: "{{ download_location }}"
     checksum: "md5:{{ jdk_md5_checksum }}"
     timeout: 570
   register: remote_jdk_tar
@@ -37,22 +30,22 @@
 
 - name: Unarchive jdk tar.gz
   unarchive:
-    src: "{{ temp_dir }}/{{ jdk_tar_file }}"
-    dest: "{{ temp_dir }}"
+    src: "{{ download_location }}/{{ jdk_tar_file }}"
+    dest: "{{ download_location }}"
     remote_src: true
-    mode: '0755'
+    mode: 'u=rwx,g=rx,o=rx'
   when: not remote_java.stat.exists
 
 - name: Copy Java
   become: true
   become_user: root
   copy:
-    src: "{{ temp_dir }}/{{ jdk_folder }}/"
+    src: "{{ download_location }}/{{ jdk_folder }}/"
     dest: "{{ java_home }}"
     remote_src: true
     owner: root
     group: root
-    mode: 'u=rwx,go=rx'
+    mode: 'u=rwx,g=rx,o=rx'
   when: not remote_java.stat.exists
 
 - name: Check if setenv file exists
@@ -68,5 +61,5 @@
     dest: "{{ config_folder }}/setenv.sh"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'u=rwx,go=rx'
+    mode: 'u=rwx,g=rx,o=rx'
   when: not setenv_exists.stat.exists
