@@ -24,6 +24,7 @@ cp ../LICENSE $BUILD_FOLDER
 cp ../VERSION $BUILD_FOLDER
 cp ../6.2.N-extra-vars.yml $BUILD_FOLDER
 cp -r ../configuration_files $BUILD_FOLDER
+cp -r ../tests $BUILD_FOLDER
 
 # generate ZIP
 echo "Generating ZIP file..."
