@@ -127,7 +127,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
-  when: repo_db_url == ""
+  when: repo_db_url != ""
 
 - name: Add ACS home to setenv.sh
   become: true
