@@ -110,13 +110,18 @@ jdk_md5_checksum: "ac1bb98fe70314a67f6eb7a87e960d44"
 # EG: repo_db_url: jdbc:mysql://54.164.117.56:3306/alfresco?useUnicode=yes&characterEncoding=UTF-8
 # EG: repo_db_driver: com.mysql.jdbc.Driver
 repo_db_url: ""
-repo_db_driver: ""
-repo_db_username: ""
-repo_db_password: ""
+repo_db_driver: org.postgresql.Driver
+repo_db_username: "alfresco"
+repo_db_password: "alfresco"
+repo_db_name: "alfresco"
+repo_db_port: "5432"
+
 
 # EG: sync_db_url: jdbc:mysql://54.164.117.56:3306/alfresco_sync?useUnicode=yes&characterEncoding=UTF-8
 # EG: sync_db_driver: com.mysql.jdbc.Driver
 sync_db_url: ""
-sync_db_driver: ""
-sync_db_username: ""
-sync_db_password: ""
+sync_db_driver: org.postgresql.Driver
+sync_db_username: "alfresco"
+sync_db_password: "alfresco"
+sync_db_name: "alfresco"
+sync_db_port: "5432"

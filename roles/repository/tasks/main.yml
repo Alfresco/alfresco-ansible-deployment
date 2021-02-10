@@ -117,12 +117,12 @@
   async: 900
   poll: 0
 
-- name: Copy db_connector to {{ tomcat_config_dir }}/lib/ folder
+- name: Copy db_connector_repo to {{ tomcat_config_dir }}/lib/ folder
   block:
-    - name: Copy db_connector
+    - name: Copy db_connector_repo
       copy:
         remote_src: true
-        src: "{{ inventory_dir }}/configuration_files/db_connector/"
+        src: "{{ inventory_dir }}/configuration_files/db_connector_repo/"
         dest: "{{ tomcat_config_dir }}/lib/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
