@@ -4,7 +4,7 @@
   tasks:
     - name: Add custom global properties settings
       local_action:
-        module: shell echo "\nindex.recovery.mode=NONE\nindex.subsystem.name=noindex" >> {{ playbook_dir }}/../../../../configuration_files/alfresco-global.properties
+        module: shell echo "\nftp.enabled=true\nftp.port=1121\nindex.recovery.mode=NONE\nindex.subsystem.name=noindex" >> {{ playbook_dir }}/../../../../configuration_files/alfresco-global.properties
     - name: "Include postgres"
       include_role:
         name: "postgres"
