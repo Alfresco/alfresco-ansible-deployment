@@ -11,10 +11,14 @@ node "Control Node" as "control" #LightGrey {
     rectangle "inventory" #White
 }
 
-node "webservers" as ingressnode #lightgrey {
+node "nginx" as nginxnode #lightgrey {
     component "NGINX Proxy" as proxy #4d9cea
+    component "Common" as nginxcommon #4d9cea
+}
+
+node "adw" as adwnode #lightgrey {
     component "Digital Workspace" as adw #4d9cea
-    component "Common" as webserverscommon #4d9cea
+    component "Common" as adwcommon #4d9cea
 }
 
 node "repository" as reponode #lightgrey {
@@ -70,8 +74,8 @@ playbook -down-> proxy
 playbook -down-> adw
 
 amq .down.> amqjava
-adw .down.> webserverscommon
-proxy .down.> webserverscommon
+adw .down.> adwcommon
+proxy .down.> nginxcommon
 psql .down.> dbcommon
 repo .down.> tomcat
 search .down.> searchjava

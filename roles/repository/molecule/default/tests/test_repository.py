@@ -23,6 +23,13 @@ def get_ansible_vars(host):
 
 test_host = os.environ.get('TEST_HOST')
 
+def test_newly_added_properties_are_set(host, get_ansible_vars):
+    "Check that extra props exists in global properties file"
+    content = host.file("/etc/opt/alfresco/content-services/classpath/alfresco-global.properties").content
+    assert_that(b'index.recovery.mode=NONE' in content)
+    assert_that(b'index.subsystem.name=noindex' in content)
+    assert_that(host.socket("tcp://:::1121").is_listening)
+
 def test_repo_service_is_running_and_enabled(host, get_ansible_vars):
     """Check repository service"""
     repository = host.service("alfresco-content.service")
@@ -47,6 +54,10 @@ def test_alfresco_api(host, get_ansible_vars):
 def test_share_log_exists(host, get_ansible_vars):
     "Check that share.log exists in /var/log/alfresco"
     assert_that(host.file("/var/log/alfresco/share.log").exists)
+
+def test_keytest_keystore_exists(host, get_ansible_vars):
+    "Check that the custom keystore exists in /var/opt/alfresco/content-services/keystore/keystest"
+    assert_that(host.file("/var/opt/alfresco/content-services/keystore/keystest").exists)
 
 def test_share_context_200(host, get_ansible_vars):
     "Check that /share context is available and returns a HTTP 200 status code"

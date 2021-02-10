@@ -2,6 +2,12 @@
 - name: Converge
   hosts: all
   tasks:
+    - name: Add custom global properties settings
+      local_action:
+        module: shell echo "\nftp.enabled=true\nftp.port=1121\nindex.recovery.mode=NONE\nindex.subsystem.name=noindex" >> {{ playbook_dir }}/../../../../configuration_files/alfresco-global.properties
+    - name: Create keystore
+      local_action:
+        module: shell keytool -genseckey -dname 'CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB' -validity 30 -alias metadata -keyalg AES -keysize 256 -keystore {{ playbook_dir }}/../../../../configuration_files/keystores/keystest -storetype pkcs12 -storepass mp6yc0UD9e
     - name: "Include postgres"
       include_role:
         name: "postgres"
@@ -11,3 +17,19 @@
     - name: "Include repository"
       include_role:
         name: "repository"
+      vars:
+        use_custom_keystores: true
+        acs_environment:
+          JAVA_OPTS: " -Xms512m -Xmx3g -XX:+DisableExplicitGC
+            -XX:+UseConcMarkSweepGC
+            -Djava.awt.headless=true
+            -XX:ReservedCodeCacheSize=128m
+            $JAVA_OPTS"
+          JAVA_TOOL_OPTIONS: " -Dencryption.keystore.type=pkcs12
+            -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding
+            -Dencryption.keyAlgorithm=AES
+            -Dencryption.keystore.location=/var/opt/alfresco/content-services/keystore/keystest
+            -Dmetadata-keystore.password=mp6yc0UD9e
+            -Dmetadata-keystore.aliases=metadata
+            -Dmetadata-keystore.metadata.password=mp6yc0UD9e
+            -Dmetadata-keystore.metadata.algorithm=AES"

@@ -181,13 +181,13 @@ By default the playbook deploys a default keystore to ease the installation proc
 There are three steps required to use a custom keystore:
 
 1. Place your generated keystore file in the `configuration_files/keystores` folder (these get copied to /var/opt/alfresco/content-services/keystore)
-2. Override the `custom_keystore` variable defined in group_vars/all.yml
+2. Override the `use_custom_keystores` variable defined in group_vars/all.yml
 3. Override the `acs_environment` variable and define your custom JAVA_TOOL_OPTIONS configuration
 
 An example custom extra-vars file is shown below:
 
 ```yaml
-custom_keystore: true
+use_custom_keystores: true
 acs_environment:
   JAVA_OPTS: " -Xms512m -Xmx3g -XX:+DisableExplicitGC
     -XX:+UseConcMarkSweepGC
@@ -365,10 +365,10 @@ transformers_1             : ok=81   changed=10   unreachable=0    failed=0    s
 
 Once ACS has initialized access the system using the following URLs with a browser:
 
-* Digital Workspace: `http://<webservers-host-ip>/workspace`
-* Share: `http://<webservers-host-ip>/share`
-* Repository: `http://<webservers-host-ip>/alfresco`
-* API Explorer: `http://<webservers-host-ip>/api-explorer`
+* Digital Workspace: `http://<nginx-host-ip>/workspace`
+* Share: `http://<nginx-host-ip>/share`
+* Repository: `http://<nginx-host-ip>/alfresco`
+* API Explorer: `http://<nginx-host-ip>/api-explorer`
 
 ## Known Issues
 
