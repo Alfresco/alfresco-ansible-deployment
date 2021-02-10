@@ -1,6 +1,8 @@
 ---
 - name: Include vars for postgres credentials
   include_vars: "postgres.yml"
+  when: repo_db_url == ""
+
 
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
