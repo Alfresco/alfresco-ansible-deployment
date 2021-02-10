@@ -55,6 +55,7 @@ sql:
                 flag: true
                 lockRetryCount: 5
                 lockRetryWaitSeconds: 1
+{% if sync_db_url == "" %}
         driver: org.postgresql.Driver
 {% for items in postgres_client_config %}
         database: {{ items.database }}
@@ -64,6 +65,12 @@ sql:
         username: {{ items.user }}
         password: {{ items.passwd }}
 {% endfor %}
+{% else %}
+        driver: {{ repo_db_driver }}
+        url: {{ sync_db_url }}
+        username: {{ sync_db_username }}
+        password: {{ sync_db_password }}
+{% endif %}
         pool:
             initial: 50
             max: 100

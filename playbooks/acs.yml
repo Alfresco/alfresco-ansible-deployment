@@ -4,7 +4,7 @@
   become: true
   become_method: sudo
   roles:
-    - role: '../roles/postgres'
+    - { role: '../roles/postgres', when: repo_db_url == "" or sync_db_url == "" }
   tags:
     - database
 
