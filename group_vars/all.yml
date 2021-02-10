@@ -63,7 +63,7 @@ amp_downloads:
 # A default keystore is stored in /var/opt/alfresco/content-services/keystore, 
 # to replace this with a custom keystore place the keystore file in the "configuration_files/keystores" folder 
 # and change this flag to true. See the deployment guide for more details.
-custom_keystores: false
+use_custom_keystores: false
 
 acs_environment:
   JAVA_OPTS: " -Xms512m -Xmx3g -XX:+DisableExplicitGC 

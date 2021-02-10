@@ -251,7 +251,6 @@
       stat:
         path: "{{ content_folder }}/keystore"
       register: keystore
-      when: not custom_keystores
     - name: Copy keystore folder {{ content_data_folder }}
       copy:
         remote_src: true
@@ -262,7 +261,7 @@
         mode: 'u=rwx,g=rwx,o=rx'
       when:
         - keystore.stat.exists
-        - not custom_keystores
+        - not use_custom_keystores
     - name: Remove keystore folder
       file:
         path: "{{ content_folder }}/keystore"
@@ -274,7 +273,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
-      when: custom_keystores
+      when: use_custom_keystores
   when: acs.version is version('7.0.0', 'ge')
 
 - name: Move keystore folders for ACS6
@@ -283,7 +282,6 @@
       stat:
         path: "{{ content_folder }}/alf_data/keystore"
       register: keystore
-      when: not custom_keystores
     - name: Copy keystore folder {{ content_data_folder }}
       copy:
         remote_src: true
@@ -294,7 +292,7 @@
         mode: 'u=rwx,g=rwx,o=rx'
       when:
         - keystore.stat.exists
-        - not custom_keystores
+        - not use_custom_keystores
     - name: Remove keystore folder
       file:
         path: "{{ content_folder }}/alf_data/keystore"
@@ -306,7 +304,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
-      when: custom_keystores
+      when: use_custom_keystores
   when: acs.version is version('7.0.0', 'lt')
 
 - name: Move classes folder
