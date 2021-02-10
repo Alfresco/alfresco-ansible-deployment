@@ -134,7 +134,7 @@ jobs:
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
         - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y; sudo yum install -y -q ansible"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@6.2.N-extra-vars.yml\""
         - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "tests/test-config-acs6-stack.json" 
@@ -164,8 +164,8 @@ jobs:
         - scripts/generate-zip.sh
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
-        - ssh centos@${PUBLIC_IP} "sudo yum install -y unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y; sudo yum install -y ansible"
+        - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\""
         - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "tests/test-config.json" 
