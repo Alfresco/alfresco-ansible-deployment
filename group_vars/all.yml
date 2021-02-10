@@ -19,7 +19,7 @@ amps:
 api_explorer:
   version: 7.0.0-A3
 
-solr:
+search:
   version: 2.0.1
 
 transform:
@@ -37,11 +37,10 @@ adw:
 sync:
   version: 3.4.0-M2
 
-
 downloads:
   acs_zip_url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
   adw_zip_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
-  solr_zip_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-search-services/{{ solr.version }}/alfresco-search-services-{{ solr.version }}.zip"
+  solr_zip_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-search-services/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip"
   sfs_jar_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-shared-file-store-controller/{{ sfs.version }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar"
   trouter_jar_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-transform-router/{{ trouter.version }}/alfresco-transform-router-{{ trouter.version }}.jar"
   transform_jar_url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
@@ -61,8 +60,39 @@ amp_downloads:
   - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
 
+# A default keystore is stored in /var/opt/alfresco/content-services/keystore, 
+# to replace this with a custom keystore place the keystore file in the "configuration_files/keystores" folder 
+# and change this flag to true. See the deployment guide for more details.
+use_custom_keystores: false
+
+acs_environment:
+  JAVA_OPTS: " -Xms512m -Xmx3g -XX:+DisableExplicitGC 
+    -XX:+UseConcMarkSweepGC 
+    -Djava.awt.headless=true 
+    -XX:ReservedCodeCacheSize=128m 
+    $JAVA_OPTS"
+
+activemq_environment:
+  ACTIVEMQ_OPTS: "$ACTIVEMQ_OPTS -Xms128m -Xmx1g"
+
+search_environment: # This will add extra vars at the end of the solr.in.sh file
+  SOLR_JAVA_MEM: "-Xms1g -Xmx1g"
+
+sfs_environment:
+  JAVA_OPTS: "$JAVA_OPTS -Xms128m -Xmx512m "
+
+sync_environment:
+  JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx2g "
+
+tengine_environment:
+  JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx1536m "
+
+trouter_environment:
+  JAVA_OPTS: "$JAVA_OPTS -Xms128m -Xmx512m "
+
 dependencies_version:
-  postgresql_connector: 42.2.16
+  postgresql_connector: 42.2.18
+  postgres_major_version: 13
   activemq: 5.16.0
   jdk: 11.0.7
   jdk_arch: 10

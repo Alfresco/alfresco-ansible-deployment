@@ -15,7 +15,7 @@ amps:
 api_explorer:
   version: 6.3.0
 
-solr:
+search:
   version: 1.4.3
 
 sfs:
@@ -26,6 +26,7 @@ sync:
 
 dependencies_version:
   postgresql_connector: 42.2.13
+  postgres_major_version: 11
   activemq: 5.15.13
   jdk: 11.0.7
   jdk_arch: 10
