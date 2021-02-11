@@ -29,11 +29,6 @@
             "name": "AGS Enterprise Repo",
             "version": "3.5.0",
             "installed": true
-          },
-          {
-            "name": "AGS Enterprise Share",
-            "version": "3.5.0",
-            "installed": true
           }
         ]
       },
