@@ -88,13 +88,13 @@ def test_keytest_keystore_exists(host, get_ansible_vars):
 def test_ags_repo_is_installed_and_loaded(host, get_ansible_vars):
     "Check if rm amp is installed in repo war and loaded at startup"
     cmd = host.run("/opt/openjdk-" + get_ansible_vars["dependencies_version"]["jdk"] + "/bin/java -jar /opt/alfresco/content-services-" + get_ansible_vars["acs"]["version"] + "/bin/alfresco-mmt.jar list /opt/alfresco/content-services-" + get_ansible_vars["acs"]["version"] + "/web-server/webapps/alfresco.war")
-    assert_that(cmd.stdout, contains_string("AGS Repo\n   -    Version:      "+get_ansible_vars["amps"]["ags_repo"]["version"]))
+    assert_that(cmd.stdout, contains_string("AGS Repo\n   -    Version:      3.5.0"))
     getlog = host.run("cat /var/log/alfresco/alfresco.log")
-    assert_that(getlog.stdout, contains_string("Installing module 'alfresco-rm-enterprise-repo' version "+get_ansible_vars["amps"]["ags_repo"]["version"]))
+    assert_that(getlog.stdout, contains_string("Installing module 'alfresco-rm-enterprise-repo' version 3.5.0"))
 
 def test_ags_share_is_installed_and_loaded(host, get_ansible_vars):
     "Check if rm amp is installed in share war and loaded at startup"
     cmd = host.run("/opt/openjdk-" + get_ansible_vars["dependencies_version"]["jdk"] + "/bin/java -jar /opt/alfresco/content-services-" + get_ansible_vars["acs"]["version"] + "/bin/alfresco-mmt.jar list /opt/alfresco/content-services-" + get_ansible_vars["acs"]["version"] + "/web-server/webapps/share.war")
-    assert_that(cmd.stdout, contains_string("AGS Enterprise Share\n   -    Version:      " + get_ansible_vars["amps"]["ags_share"]["version"] ))
+    assert_that(cmd.stdout, contains_string("AGS Enterprise Share\n   -    Version:      3.5.0" ))
     getlog = host.run("cat /var/log/alfresco/share.log")
-    assert_that(getlog.stdout, contains_string("AGS Enterprise Share, "+get_ansible_vars["amps"]["ags_share"]["version"]+", Alfresco Governance Services Enterprise Share Extension"))
+    assert_that(getlog.stdout, contains_string("AGS Enterprise Share, 3.5.0, Alfresco Governance Services Enterprise Share Extension"))
