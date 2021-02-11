@@ -98,5 +98,3 @@ def test_ags_share_is_installed_and_loaded(host, get_ansible_vars):
     assert_that(cmd.stdout, contains_string("AGS Enterprise Share\n   -    Version:      " + get_ansible_vars["amps"]["ags_share"]["version"] ))
     getlog = host.run("cat /var/log/alfresco/share.log")
     assert_that(getlog.stdout, contains_string("AGS Enterprise Share, "+get_ansible_vars["amps"]["ags_share"]["version"]+", Alfresco Governance Services Enterprise Share Extension"))
-
-    
