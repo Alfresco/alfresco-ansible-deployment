@@ -6,7 +6,7 @@
     dest: /etc/yum.repos.d/nginx.repo
     owner: root
     group: root
-    mode: 0644
+    mode: 'u=rw,g=r,o=r'
 
 - name: Wait for yum lock release (Ansible 2.8.0 workaround)
   shell: ps -aux | grep yum
@@ -33,7 +33,7 @@
     dest: "{{ nginx_conf_file_path }}"
     owner: root
     group: "{{ root_group }}"
-    mode: 0644
+    mode: 'u=rw,g=r,o=r'
   notify:
     - reload nginx
 

@@ -46,7 +46,7 @@
       become_user: "{{ username }}"
       get_url:
         url: "{{ downloads.sync_zip_url }}"
-        dest: "{{ binaries_folder }}/sync-dist-6.x-{{ sync.version }}.zip"
+        dest: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
@@ -80,7 +80,7 @@
   become: true
   become_user: "{{ username }}"
   unarchive:
-    src: "{{ binaries_folder }}/sync-dist-6.x-{{ sync.version }}.zip"
+    src: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
     dest: "{{ sync_home }}"
     remote_src: yes
   when: sync_download_result.changed

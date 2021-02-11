@@ -1,12 +1,12 @@
 ---
 # tasks file for search-services
 - name: Check search is installed
-  command: "{{ dist_dir }}/solr/bin/solr.version"
-  register: solr_install_check
+  command: "{{ binaries_dir }}/solr/bin/solr.version"
+  register: search_install_check
   environment:
       JAVA_HOME: "{{ java_home }}"
   failed_when: false
-  changed_when: solr_install_check.rc != 0
+  changed_when: search_install_check.rc != 0
 
 - name: Ensure a list of packages installed
   become: true
@@ -17,105 +17,91 @@
   poll: 0
   loop: "{{ utils_search }}"
 
-- name: create "{{ dist_dir }}" dir
+- name: Create search binaries, config and data directories
   become: yes
   file:
-    path: "{{ dist_dir }}"
+    path: "{{ item }}"
     state: directory
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'u=rwx,go=rx'
+    mode: 'u=rwx,g=rx,o=rx'
+  with_items:
+    - "{{ binaries_dir }}"
+    - "{{ config_dir }}"
+    - "{{ data_dir }}"
 
-- name: create "{{ config_dir }}" dir
-  become: yes
-  file:
-    path: "{{ config_dir }}"
-    state: directory
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,go=rx'
-
-- name: create "{{ data_dir }}" dir
-  become: yes
-  file:
-    path: "{{ data_dir }}"
-    state: directory
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,go=rx'
-
-- name: check if zip file exists
+- name: "Check if alfresco-search-services-{{ search.version }}.zip exists"
   stat:
-    path: "{{ binaries_folder }}/alfresco-search-services-{{ search.version }}.zip"
-  register: solr_archive
+    path: "{{ download_location }}/alfresco-search-services-{{ search.version }}.zip"
+  register: search_archive
 
-- name: Download Solr zip {{ search.version }}
+- name: "Download alfresco-search-services-{{ search.version }}.zip"
   get_url:
-    url: "{{ downloads.solr_zip_url }}"
-    dest: "{{ binaries_folder }}/alfresco-search-services-{{ search.version }}.zip"
-    mode: 0444
+    url: "{{ downloads.search_zip_url }}"
+    dest: "{{ download_location }}/alfresco-search-services-{{ search.version }}.zip"
+    mode: 'u=r,g=r,o=r'
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
   register: download_result
   until: download_result is succeeded
-  when: not solr_archive.stat.exists and solr_install_check.rc != 0
+  when: not search_archive.stat.exists and search_install_check.rc != 0
 
-- name: Extract alfresco-search-services-{{ search.version }}.zip into {{ dist_dir }}
+- name: Extract alfresco-search-services-{{ search.version }}.zip into {{ binaries_dir }}
   become: yes
   unarchive:
-    src: "{{ binaries_folder }}/alfresco-search-services-{{ search.version }}.zip"
-    dest: "{{ dist_dir }}"
+    src: "{{ download_location }}/alfresco-search-services-{{ search.version }}.zip"
+    dest: "{{ binaries_dir }}"
     remote_src: yes
-    creates: "{{ dist_dir }}/README.MD"
+    creates: "{{ binaries_dir }}/README.MD"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-  failed_when: false
   when: download_result is succeeded
-  changed_when: false
 
-- name: Copy files from "{{ dist_dir }}/alfresco-search-services to {{ dist_dir }}/"
-  copy:
-    remote_src: True
-    src: "{{ dist_dir }}/alfresco-search-services/"
-    dest: "{{ dist_dir }}/"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-  changed_when: false
-  failed_when: false
+- name: "Move files from {{ binaries_dir }}/alfresco-search-services to {{ binaries_dir }}/"
+  block:
+    - name: "Check if {{ binaries_dir }}/alfresco-search-services exists"
+      stat: 
+        path: "{{ binaries_dir }}/alfresco-search-services"
+      register: search_services_exists
+    - name: "Copy files from {{ binaries_dir }}/alfresco-search-services to {{ binaries_dir }}/"
+      copy:
+        remote_src: True
+        src: "{{ binaries_dir }}/alfresco-search-services/"
+        dest: "{{ binaries_dir }}/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+      when: search_services_exists.stat.exists
+    - name: Remove old files {{ binaries_dir }}/alfresco-search-services
+      file: 
+        path: "{{ binaries_dir }}/alfresco-search-services" 
+        state: absent
 
-- name: Remove old files {{ dist_dir }}/alfresco-search-services
-  file: path="{{ dist_dir }}/alfresco-search-services" state=absent
-  changed_when: false
-
-- name: Add "{{ dist_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
+- name: Add "{{ binaries_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
   become: yes
   template:
     src: solrcore.properties
-    dest: "{{ dist_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
+    dest: "{{ binaries_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'ugo=rwx'
-  changed_when: false
+    mode: 'u=rwx,g=rwx,o=rwx'
 
-- name: Add "{{ dist_dir }}/solrhome/templates/noRerank/conf/solrcore.properties"
+- name: Add "{{ binaries_dir }}/solrhome/templates/noRerank/conf/solrcore.properties"
   become: yes
   template:
     src: solrcore.properties
-    dest: "{{ dist_dir }}/solrhome/templates/noRerank/conf/solrcore.properties"
+    dest: "{{ binaries_dir }}/solrhome/templates/noRerank/conf/solrcore.properties"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'ugo=rwx'
-  changed_when: false
+    mode: 'u=rwx,g=rwx,o=rwx'
 
-- name: Copy files from "{{ dist_dir }}/solrhome to {{ config_dir }}/"
+- name: Copy files from "{{ binaries_dir }}/solrhome to {{ config_dir }}/"
   copy:
     remote_src: True
-    src: "{{ dist_dir }}/solrhome"
+    src: "{{ binaries_dir }}/solrhome"
     dest: "{{ config_dir }}/"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-  changed_when: false
 
 - name: add solr home to setenv.sh
   become: true
@@ -123,13 +109,13 @@
   lineinfile:
     path: "{{ config_folder }}/setenv.sh"
     insertafter: EOF
-    line: "export SOLR_HOME={{ dist_dir }}"
+    line: "export SOLR_HOME={{ binaries_dir }}"
 
-- name: Add "{{ dist_dir }}/solr.sh"
+- name: Add "{{ binaries_dir }}/solr.sh"
   become: yes
   template:
     src: solr.sh
-    dest: "{{ dist_dir }}/solr.sh"
+    dest: "{{ binaries_dir }}/solr.sh"
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
@@ -144,7 +130,7 @@
     mode: 'u=rwx,g=rwx,o=rx'
 
 - name: Check Solr running
-  shell: "{{ dist_dir }}/solr/bin/solr status"
+  shell: "{{ binaries_dir }}/solr/bin/solr status"
   register: solr_started
   environment:
       JAVA_HOME: "{{ java_home }}"
