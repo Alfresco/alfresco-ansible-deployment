@@ -123,5 +123,5 @@ sync_db_url: ""
 sync_db_driver: org.postgresql.Driver
 sync_db_username: "alfresco"
 sync_db_password: "alfresco"
-sync_db_name: "alfresco"
+sync_db_name: "alfresco-sync"
 sync_db_port: "5432"

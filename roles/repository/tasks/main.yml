@@ -532,7 +532,7 @@
 - name: Notify alfresco content service
   wait_for:
     host: "{{ db_host }}"
-    port: 5432
+    port: "{{ repo_db_port }}"
   notify: alfresco-content-start
   when: repo_db_url == ""
 
