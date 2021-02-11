@@ -1,2 +1,3 @@
 ---
-postgres_pass: MyPass1
+sync_db_name: "alfresco-sync"
+sync_db_port: "5432"

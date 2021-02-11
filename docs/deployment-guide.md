@@ -370,6 +370,22 @@ Once ACS has initialized access the system using the following URLs with a brows
 * Repository: `http://<webservers-host-ip>/alfresco`
 * API Explorer: `http://<webservers-host-ip>/api-explorer`
 
+## External Databases
+
+In the `group_vars/all.yml` configuration file you can input your own database url, along with the corresponding driver type for repository and/or sync service. If the database urls are left empty the default postgres creation will occur.
+
+An example custom database url is shown below:
+
+```yaml
+repo_db_url: jdbc:mysql://54.164.117.56:3306/alfresco?useUnicode=yes&characterEncoding=UTF-8
+repo_db_driver: com.mysql.jdbc.Driver
+```
+
+Along with the url the database connector driver need to be provided for one or both services in `configuration_files/db_connector_repo` and/or `configuration_files/db_connector_sync` folders.
+More on url builds and drivers depending on your database type can be found on: [Configuring Databases](https://docs.alfresco.com/6.2/concepts/intro-db-setup.html).
+
+In this case the default username (`repo_db_username` and/or `sync_db_username`) and password (`repo_db_password` and/or `sync_db_password`) in the configuration file `group_vars/all.yml` need to be provided with your custom values.
+
 ## Known Issues
 
 * The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Verifying if `<file>` finished downloading (nnn retries left)" appearing many times. Despite the wording this is **not** an error so please ignore and be patient!
