@@ -41,6 +41,6 @@ def test_sync_health(host, get_ansible_vars):
 
 def test_environment_jvm_opts(host, get_ansible_vars):
     "Check that overwritten JVM_OPTS are taken into consideration"
-    pid = host.run("/opt/openjdk*/bin/jps -lV | grep sync | awk '{print $1}'")
+    pid = host.run("/opt/openjdk*/bin/jps -lV | grep SyncService | awk '{print $1}'")
     process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
     assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
