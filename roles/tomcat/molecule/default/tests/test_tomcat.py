@@ -5,7 +5,7 @@ from hamcrest import contains_string, assert_that
 # pylint: disable=redefined-outer-name
 @pytest.fixture()
 def get_ansible_vars(host):
-    """Define AnsibleVars"""
+    """Define get_ansible_vars"""
     java_role = "file=../../../java/vars/main.yml name=java_role"
     tomcat_role = "file=../../vars/main.yml name=tomcat_role"
     common_vars = "file=../../../common/vars/main.yml name=common_vars"
