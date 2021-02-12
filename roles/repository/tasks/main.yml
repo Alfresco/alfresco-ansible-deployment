@@ -1,6 +1,7 @@
 ---
 - name: Include vars for postgres credentials
   include_vars: "postgres.yml"
+  when: repo_db_url == ""
 
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
@@ -107,8 +108,21 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
   register: postgresql_download
+  when: repo_db_url == ""
   async: 900
   poll: 0
+
+- name: Copy db_connector_repo to {{ tomcat_config_dir }}/lib/ folder
+  block:
+    - name: Copy db_connector_repo
+      copy:
+        remote_src: true
+        src: "{{ inventory_dir }}/configuration_files/db_connector_repo/"
+        dest: "{{ tomcat_config_dir }}/lib/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+  when: repo_db_url != ""
 
 - name: Add ACS home to setenv.sh
   become: true
@@ -388,6 +402,7 @@
 
 - name: Include postgres task
   include_tasks: "postgres.yml"
+  when: repo_db_url == ""
 
 - name: Create alfresco-global.properties
   template:
@@ -428,6 +443,7 @@
   until: job_result.finished
   delay: 1
   retries: 300
+  when: repo_db_url == ""
 
 - name: Check on war download async task
   become: true
@@ -499,5 +515,10 @@
 - name: Notify alfresco content service
   wait_for:
     host: "{{ db_host }}"
-    port: 5432
+    port: "{{ repo_db_port }}"
   notify: alfresco-content-start
+  when: repo_db_url == ""
+
+- name: Alfresco content service for external db
+  service: name=alfresco-content state=restarted
+  when: repo_db_url != ""

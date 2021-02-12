@@ -1,19 +1,17 @@
 ---
 - name: Create a new database with name "alfresco-sync"
   postgresql_db:
-    name: "{{ item['database'] }}"
+    name: "{{ sync_db_name }}"
     login_host: "{{ db_host }}"
     login_password: "{{ postgres_pass }}"
-  with_items: "{{ postgres_client_config }}"
 
 - name: Connect to alfresco-sync  database and set user's password with no expire date
   postgresql_user:
     login_host: "{{ db_host }}"
     login_password: "{{ postgres_pass }}"
-    db: "{{ item['database'] }}"
-    name: "{{ item['user'] }}"
-    password: "{{ item['passwd'] }}"
+    db: "{{ sync_db_name }}"
+    name: "{{ sync_db_username }}"
+    password: "{{ sync_db_password }}"
     priv: "ALL"
     expires: infinity
     role_attr_flags: SUPERUSER
-  with_items: "{{ postgres_client_config }}"
