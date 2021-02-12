@@ -2,6 +2,7 @@
 # tasks file for sync
 - name: Include vars for postgres credentials
   include_vars: "postgres.yml"
+  when: sync_db_url == ""
 
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
@@ -13,7 +14,7 @@
     name: "{{ postgresql_rpm_repo }}"
     state: present
     disable_gpg_check: True
-  when: ansible_distribution_major_version == "7" and dependencies_version.postgres_major_version == 13
+  when: ansible_distribution_major_version == "7" and dependencies_version.postgres_major_version == 13 and sync_db_url == ""
 
 - name: Install pspg.x86_64 package
   become: true
@@ -22,7 +23,7 @@
     name: pspg.x86_64
     state: present
   poll: 0
-  when: ansible_distribution_major_version == "7" and dependencies_version.postgres_major_version == 13
+  when: ansible_distribution_major_version == "7" and dependencies_version.postgres_major_version == 13 and sync_db_url == ""
 
 - name: Ensure a list of packages installed
   become: true
@@ -46,7 +47,7 @@
       become_user: "{{ username }}"
       get_url:
         url: "{{ downloads.sync_zip_url }}"
-        dest: "{{ binaries_folder }}/sync-dist-6.x-{{ sync.version }}.zip"
+        dest: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
@@ -75,12 +76,22 @@
         group: "{{ group_name }}"
       register: postgresql_download
       until: postgresql_download is succeeded
+      when: sync_db_url == ""
+    - name: Copy db_connector to {{ sync_home }}/service-sync/connectors folder
+      copy:
+        remote_src: true
+        src: "{{ inventory_dir }}/configuration_files/db_connector_sync/"
+        dest: "{{ sync_home }}/service-sync/connectors/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+      when: sync_db_url != ""
 
 - name: Extract sync service to {{ sync_home }}
   become: true
   become_user: "{{ username }}"
   unarchive:
-    src: "{{ binaries_folder }}/sync-dist-6.x-{{ sync.version }}.zip"
+    src: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
     dest: "{{ sync_home }}"
     remote_src: yes
   when: sync_download_result.changed
@@ -106,6 +117,7 @@
 
 - name: Include postgres task
   include_tasks: "postgres.yml"
+  when: sync_db_url == ""  
 
 - name: Add config.yml file to {{ config_folder }}
   block:

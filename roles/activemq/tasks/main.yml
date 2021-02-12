@@ -1,6 +1,5 @@
 ---
 # tasks file for roles/activemq
-
 - name: Check if activemq executable exists
   stat:
       path: "{{ activemq_home }}/bin/activemq"
@@ -17,28 +16,45 @@
       mode: 'u=rwx,g=rwx,o=rx'
   when: not activemq_exe.stat.exists
 
-- name: Check if configuration folder exists
-  stat:
-    path: "{{ config_folder }}/activemq"
-  register: activemq_configs
-
-- name: Create configuration folder
-  file:
-    path: "{{ config_folder }}/activemq"
-    state: directory
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-  when: not activemq_configs.stat.exists
-
-- name: Check for conf folder
-  stat:
-    path: "{{ activemq_conf }}"
-  register: conf_existence
-
 - name: Move configuration files
-  command: "mv {{ activemq_home }}/conf {{ config_folder }}/activemq removes={{ activemq_home }}/conf"
-  when: not conf_existence.stat.exists
+  block:
+    - name: Check for conf folder
+      stat:
+        path: "{{ activemq_conf }}"
+      register: conf_existence
+    - name: "Copy configuration files to {{ config_folder }}/activemq"
+      copy:
+       remote_src: true
+       src: "{{ activemq_home }}/conf"
+       dest: "{{ config_folder }}/activemq"
+       owner: "{{ username }}"
+       group: "{{ group_name }}"
+       mode: 'u=rwx,g=rwx,o=rx'
+      when: not conf_existence.stat.exists
+    - name: Remove configuration folder from binaries folder
+      file:
+        path: "{{ activemq_home }}/conf"
+        state: absent
+
+- name: "Move data files to {{ data_folder }}/activemq"
+  block:
+    - name: Check for data folder
+      stat:
+        path: "{{ activemq_data }}"
+      register: data_existence
+    - name: "Copy data files to {{ data_folder }}/activemq"
+      copy:
+       remote_src: true
+       src: "{{ activemq_home }}/data"
+       dest: "{{ data_folder }}/activemq"
+       owner: "{{ username }}"
+       group: "{{ group_name }}"
+       mode: 'u=rwx,g=rwx,o=rx'
+      when: not data_existence.stat.exists
+    - name: Remove data folder from binaries folder
+      file:
+        path: "{{ activemq_home }}/data"
+        state: absent
 
 - name: Allow external connections to webconsole
   become: true
@@ -47,29 +63,6 @@
     path: "{{ activemq_conf }}/jetty.xml"
     regexp: "127.0.0.1"
     replace: "0.0.0.0"
-
-- name: Check if data folder exists
-  stat:
-    path: "{{ data_folder }}/activemq"
-  register: activemq_data_folder
-
-- name: Create data folder
-  file:
-    path: "{{ data_folder }}/activemq"
-    state: directory
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-  when: not activemq_data_folder.stat.exists
-
-- name: Check for data
-  stat:
-    path: "{{ activemq_data }}"
-  register: data_existence
-
-- name: Move data files
-  command: "mv {{ activemq_home }}/data {{ data_folder }}/activemq removes={{ activemq_home }}/data"
-  when: not data_existence.stat.exists
 
 - name: Change location of ActiveMQ logs
   become: true

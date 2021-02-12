@@ -19,3 +19,7 @@ sfs_host: "{{ hostvars['transformers_1']['ansible_host'] }}"
 trouter_host: "{{ hostvars['transformers_1']['ansible_host'] }}"
 adw_host: "{{ hostvars['adw_1']['ansible_host'] }}"
 sync_host: "{{ hostvars['syncservice_1']['ansible_host'] }}"
+
+
+# Default download location of necessary artefacts
+download_location: /tmp/ansible_artefacts

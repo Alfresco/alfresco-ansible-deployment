@@ -72,7 +72,7 @@
 
 # Alfresco configuration. This file is automatically included by solr. You can define your custom settings here
 SOLR_OPTS="$SOLR_OPTS -Dsolr.jetty.request.header.size=1000000 -Dsolr.jetty.threads.stop.timeout=300000 -Ddisable.configEdit=true"
-SOLR_OPTS="$SOLR_OPTS -Dsolr.content.dir={{ dist_dir }}/contentstore"
+SOLR_OPTS="$SOLR_OPTS -Dsolr.content.dir={{ binaries_dir }}/contentstore"
 
 # Anything you add to the SOLR_OPTS variable will be included in the java
 # start command line as-is, in ADDITION to other options. If you specify the

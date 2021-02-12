@@ -1,7 +1,3 @@
 ---
-postgres_client_config:
-  - database: "alfresco"
-    user: "alfresco"
-    passwd: "alfresco"
-    port: "5432"
-postgres_pass: MyPass1
+repo_db_name: "alfresco"
+repo_db_port: "5432"

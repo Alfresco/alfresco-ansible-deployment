@@ -5,3 +5,5 @@ skip_list:
   - 'command-instead-of-shell'
   - 'risky-shell-pipe'
   - 'no-handler'
+  - 'no-tabs'
+  - 'empty-string-compare'

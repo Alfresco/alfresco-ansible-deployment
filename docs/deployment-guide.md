@@ -122,6 +122,23 @@ By default, without any configuration applied, the playbook will deploy a limite
 
 The sections below describe how you can configure your deployment before running the playbook.
 
+## External Databases
+
+In case you want to use external databases in the `group_vars/all.yml` configuration file you can input your own database url, along with the corresponding driver type for repository and/or sync service. If the database urls are left empty the default postgres creation will occur.
+
+An example custom database url is shown below:
+
+```yaml
+repo_db_url: jdbc:mysql://54.164.117.56:3306/alfresco?useUnicode=yes&characterEncoding=UTF-8
+repo_db_driver: com.mysql.jdbc.Driver
+```
+
+Along with the url the database connector driver need to be provided for one or both services in `configuration_files/db_connector_repo` and/or `configuration_files/db_connector_sync` folders.
+More on url builds and drivers depending on your database type can be found on: [Configuring Databases](https://docs.alfresco.com/6.2/concepts/intro-db-setup.html).
+
+In this case the default username (`repo_db_username` and/or `sync_db_username`) and password (`repo_db_password` and/or `sync_db_password`) in the configuration file `group_vars/all.yml` need to be provided with your custom values.
+
+
 ### License
 
 If you have a valid license place your `*.lic` file in the `configuration_files` folder before running the playbook.
