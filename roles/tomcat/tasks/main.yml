@@ -16,7 +16,9 @@
   when: not wrapper.stat.exists
 
 - name: Check Tomcat version is installed
-  command: "su - {{ username }} -c '{{ binaries_folder }}/tomcat.sh configtest'"
+  become: true
+  become_user: "{{ username }}"
+  command: "{{ binaries_folder }}/tomcat.sh configtest"
   register: install_check
   environment:
       JAVA_HOME: "{{ java_home }}"

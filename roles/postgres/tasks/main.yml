@@ -77,3 +77,4 @@
   postgresql_user:
     name: "postgres"
     password: "{{ postgres_pass }}"
+  no_log: True
