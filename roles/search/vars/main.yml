@@ -1,5 +1,5 @@
 ---
 # vars file for search-services
-dist_dir: "{{ binaries_folder }}/search-services-{{ search.version }}"
+binaries_dir: "{{ binaries_folder }}/search-services-{{ search.version }}"
 config_dir: "{{ config_folder }}/search-services"
 data_dir: "{{ data_folder }}/search-services"

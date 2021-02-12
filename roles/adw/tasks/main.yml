@@ -1,29 +1,22 @@
 ---
 # tasks file for adw
-- name: check if "{{ temp_dir }}/alfresco-digital-workspace-{{ adw.version }}.zip" file exists
+- name: check if "{{ download_location }}/alfresco-digital-workspace-{{ adw.version }}.zip" file exists
   stat:
-    path:  "{{ temp_dir }}/alfresco-digital-workspace-{{ adw.version }}.zip"
+    path:  "{{ download_location }}/alfresco-digital-workspace-{{ adw.version }}.zip"
   register: adw_zip
-
-- name: Create temp dir
-  file:
-    path: "{{ temp_dir }}"
-    state: directory
-    mode: '0755'
-  when: not adw_zip.stat.exists
 
 - name: Create "{{ nginx_folder }}/{{ request_uri }}/" dir
   file:
     path: "{{ nginx_folder }}/{{ request_uri }}/"
     state: directory
-    mode: '0755'
+    mode: 'u=rwx,g=rx,o=rx'
   when: not adw_zip.stat.exists
 
 - name: Download alfresco-digital-workspace-{{ adw.version }}.zip
   get_url:
     url: "{{ downloads.adw_zip_url }}"
-    dest: "{{ temp_dir }}/alfresco-digital-workspace-{{ adw.version }}.zip"
-    mode: 0444
+    dest: "{{ download_location }}/alfresco-digital-workspace-{{ adw.version }}.zip"
+    mode: 'u=r,g=r,o=r'
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
@@ -34,7 +27,7 @@
 - name: Extract alfresco-digital-workspace-{{ adw.version }}.zip
   become: yes
   unarchive:
-    src: "{{ temp_dir }}/alfresco-digital-workspace-{{ adw.version }}.zip"
+    src: "{{ download_location }}/alfresco-digital-workspace-{{ adw.version }}.zip"
     dest: "{{ nginx_folder }}/{{ request_uri }}/"
     remote_src: yes
     creates: "{{ nginx_folder }}/{{ request_uri }}/app.config.json"

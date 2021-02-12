@@ -7,11 +7,7 @@
   include_vars: "nexus.yml"
   failed_when: false
 
-- name: Include host var file
-  include_vars: "hosts.yml"
-  failed_when: false
-
-- name: ensure a list of packages installed
+- name: Ensure a list of packages installed
   become: true
   package:
     name: "{{ item }}"
@@ -31,66 +27,16 @@
     system: yes
     group: "{{ group_name }}"
 
-- name: "Check for binaries folder"
-  stat:
-    path: '{{ binaries_folder }}'
-  register: binaries_exists
-  failed_when: false
-
-- name: Create binaries folder
+- name: Create binaries, configuration, data, logs and download folders 
   file:
-    path: "{{ binaries_folder }}"
+    path: "{{ item }}"
     state: directory
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    recurse: yes
     mode: 'u=rwx,g=rwx,o=rx'
-  when: not binaries_exists.stat.exists
-
-- name: "Check for configuration folder"
-  stat:
-    path: '{{ config_folder }}'
-  register: config_exists
-  failed_when: false
-
-- name: Create configuration folder
-  file:
-    path: "{{ config_folder }}"
-    state: directory
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    recurse: yes
-    mode: 'u=rwx,g=rwx,o=rx'
-  when: not config_exists.stat.exists
-
-- name: "Check for data folder"
-  stat:
-    path: '{{ data_folder }}'
-  register: data_exists
-  failed_when: false
-
-- name: Create data folder
-  file:
-    path: "{{ data_folder }}"
-    state: directory
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    recurse: yes
-    mode: 'u=rwx,g=rwx,o=rx'
-  when: not data_exists.stat.exists
-
-- name: "Check for logs folder"
-  stat:
-    path: '{{ logs_folder }}'
-  register: logs_exists
-  failed_when: false
-
-- name: Create logs folder
-  file:
-    path: "{{ logs_folder }}"
-    state: directory
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    recurse: yes
-    mode: 'u=rwx,g=rwx,o=rx'
-  when: not logs_exists.stat.exists
+  with_items:
+    - "{{ binaries_folder }}"
+    - "{{ data_folder }}"
+    - "{{ config_folder }}"
+    - "{{ logs_folder }}"
+    - "{{ download_location }}"

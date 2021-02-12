@@ -35,14 +35,12 @@
 - name: Create folders
   become: true
   become_user: root
-  changed_when: false
   file:
     path: "{{ item }}"
     state: directory
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'u=rwx,go=rx'
-    recurse: yes
+    mode: 'u=rwx,g=rx,o=rx'
   loop:
      - "{{ binaries_folder }}/modules/acs-platform"
      - "{{ binaries_folder }}/modules/acs-share"
@@ -62,18 +60,17 @@
      - "{{ tomcat_config_dir }}/lib"
      - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
 
-- name: Check if Alfresco version {{ acs.version }} is installed
+- name: Check if alfresco-content-services-distribution-{{ acs.version }}.zip file exists
   stat:
-    path: "{{ content_data_folder }}/webapps/alfresco/META-INF/MANIFEST.MF"
-  register: alf_install_check
+    path: "{{ download_location }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
+  register: archive_exists
 
-- name: Download DISTRIBUTION files
+- name: "Download alfresco-content-services-distribution-{{ acs.version }}.zip"
   become: true
   become_user: root
-  changed_when: false
   get_url:
     url: "{{ downloads.acs_zip_url }}"
-    dest: "{{ download_dest }}"
+    dest: "{{ download_location }}"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     owner: "{{ username }}"
@@ -82,7 +79,7 @@
   register: distribution_download_result
   async: 900
   poll: 0
-  when: not alf_install_check.stat.exists
+  when: not archive_exists.stat.exists
 
 - name: Download AMPS
   become: true
@@ -93,11 +90,10 @@
     dest: "{{ item.dest }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 0644
+    mode: 'u=rw,g=r,o=r'
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
   register: amp_download_result
-  when: not alf_install_check.stat.exists
   async: 900
   poll: 0
 
@@ -107,11 +103,10 @@
   get_url:
     url: "{{ dependencies_url.postgresql_connector }}"
     dest: "{{ tomcat_config_dir }}/lib/postgresql.jar"
-    mode: 0644
+    mode: 'u=rw,g=r,o=r'
     owner: "{{ username }}"
     group: "{{ group_name }}"
   register: postgresql_download
-  when: not alf_install_check.stat.exists
   async: 900
   poll: 0
 
@@ -149,6 +144,7 @@
   until: job_result.finished
   delay: 30
   retries: 20
+  when: not archive_exists.stat.exists
 
 - name: Add the configuration templates
   become: true
@@ -162,19 +158,15 @@
   loop: "{{ share_templates }}"
   changed_when: false
 
-- name: Check if zip file exists
-  stat:
-    path: "{{ content_folder }}/content-services-{{ acs.version }}.zip"
-  register: archive_exists
-
 - name: Extract content-services-{{ acs.version }}.zip into {{ content_folder }}
   become: true
   become_user: "{{ username }}"
   unarchive:
-    src: "{{ content_folder }}/content-services-{{ acs.version }}.zip"
+    src: "{{ download_location }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
     dest: "{{ content_folder }}"
     remote_src: yes
     creates: "{{ content_folder }}/bin"
+  when: not archive_exists.stat.exists
 
 - name: Move alfresco-share-services.amp to {{ content_folder }}/amps_repo folder
   block:
@@ -212,15 +204,6 @@
   register: war_download_result
   async: 900
   poll: 0
-  when: not alf_install_check.stat.exists
-
-- name: Remove Alfresco Content Services {{ acs.version }} zip file
-  changed_when: false
-  become: true
-  file:
-    path: "{{ content_folder }}/content-services-{{ acs.version }}.zip"
-    state: absent
-  when: archive_exists.stat.exists
 
 - name: Copy user provided license file
   block:
