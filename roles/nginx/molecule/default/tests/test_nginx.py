@@ -6,7 +6,7 @@ from hamcrest import contains_string, assert_that
 # pylint: disable=redefined-outer-name
 @pytest.fixture()
 def get_ansible_vars(host):
-    """Define AnsibleVars"""
+    """Define get_ansible_vars"""
     common_vars = "file=../../../common/vars/main.yml name=common_vars"
     common_defaults = "file=../../../common/defaults/main.yml name=common_defaults"
     nginx_vars = "file=../../vars/main.yml name=nginx_vars"

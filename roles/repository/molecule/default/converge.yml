@@ -46,7 +46,7 @@
             dest: "{{ content_folder }}/amps_share/ags-share.amp"
         use_custom_keystores: true
         acs_environment:
-          JAVA_OPTS: " -Xms512m -Xmx3g -XX:+DisableExplicitGC
+          JAVA_OPTS: " -Xms350m -Xmx900m -XX:+DisableExplicitGC
             -XX:+UseConcMarkSweepGC
             -Djava.awt.headless=true
             -XX:ReservedCodeCacheSize=128m

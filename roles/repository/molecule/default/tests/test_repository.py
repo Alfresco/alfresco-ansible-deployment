@@ -98,3 +98,9 @@ def test_ags_share_is_installed_and_loaded(host, get_ansible_vars):
     assert_that(cmd.stdout, contains_string("AGS Enterprise Share\n   -    Version:      3.5.0" ))
     getlog = host.run("cat /var/log/alfresco/share.log")
     assert_that(getlog.stdout, contains_string("AGS Enterprise Share, 3.5.0, Alfresco Governance Services Enterprise Share Extension"))
+
+def test_environment_jvm_opts(host, get_ansible_vars):
+    "Check that overwritten JVM_OPTS are taken into consideration"
+    pid = host.run("/opt/openjdk*/bin/jps -lV | grep org.apache.catalina.startup.Bootstrap | awk '{print $1}'")
+    process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
+    assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
