@@ -7,10 +7,6 @@
   include_vars: "nexus.yml"
   failed_when: false
 
-# - name: Include host var file
-#   include_vars: "hosts.yml"
-#   failed_when: false
-
 - name: Ensure a list of packages installed
   become: true
   package:
