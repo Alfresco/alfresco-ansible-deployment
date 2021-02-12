@@ -108,7 +108,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
   register: postgresql_download
-  when: not alf_install_check.stat.exists and repo_db_url == ""
+  when: repo_db_url == ""
   async: 900
   poll: 0
 
