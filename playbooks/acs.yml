@@ -72,7 +72,7 @@
     - sync
 
 - name: Nginx Role
-  hosts: webservers
+  hosts: nginx
   become: true
   become_method: sudo
   roles:

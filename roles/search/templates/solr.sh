@@ -5,4 +5,4 @@ if [ $(id -u) -eq 0 ]; then
 fi
 . {{ config_folder }}/setenv.sh
 export SOLR_INCLUDE={{ config_dir }}/solr.in.sh
-{{ dist_dir }}/solr/bin/solr $*
+{{ binaries_dir }}/solr/bin/solr $*

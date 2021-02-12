@@ -11,3 +11,6 @@
     - name: "Include trouter"
       include_role:
         name: "trouter"
+      vars:
+        trouter_environment:
+          JAVA_OPTS: "$JAVA_OPTS -Xms800m -Xmx900m "

@@ -5,3 +5,6 @@
     - name: "Include roles/activemq"
       include_role:
         name: "activemq"
+      vars:
+        activemq_environment:
+          ACTIVEMQ_OPTS: "$ACTIVEMQ_OPTS -Xms300m -Xmx900m"

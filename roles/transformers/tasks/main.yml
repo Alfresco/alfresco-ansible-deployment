@@ -12,14 +12,6 @@
   poll: 0
   loop: "{{ utils_transform }}"
 
-- name: Create temp dir
-  file:
-    path: "{{ temp_dir }}"
-    state: directory
-    mode: 'u=rwx,g=rwx,o=rx'
-  become: true
-  become_user: "{{ username }}"
-
 - name: Check if ImageMagick is installed
   command:
     cmd: "convert --version"
@@ -30,7 +22,7 @@
 - name: Download imagemagick-epel-dep.rpm
   get_url:
     url: "{{ imagemagick_dep_rpm }}"
-    dest: "{{ temp_dir }}/imagemagick-epel-dep.rpm"
+    dest: "{{ download_location }}/imagemagick-epel-dep.rpm"
     mode: 0444
     timeout: 570
   register: download_img_epel_dep
@@ -39,14 +31,14 @@
 
 - name: install imagemagick-epel-dep
   yum:
-    name: "{{ temp_dir }}/imagemagick-epel-dep.rpm"
+    name: "{{ download_location }}/imagemagick-epel-dep.rpm"
     state: present
   when: download_img_epel_dep is succeeded and magick_exists.rc != 0
 
 - name: Download imagemagick-distribution-linux.rpm
   get_url:
     url: "{{ imagemagick_rpm }}"
-    dest: "{{ temp_dir }}/imagemagick-distribution-linux.rpm"
+    dest: "{{ download_location }}/imagemagick-distribution-linux.rpm"
     mode: 0444
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
@@ -58,7 +50,7 @@
 - name: Download imagemagick-distribution-libs-linux.rpm
   get_url:
     url: "{{ imagemagick_lib_rpm }}"
-    dest: "{{ temp_dir }}/imagemagick-distribution-libs-linux.rpm"
+    dest: "{{ download_location }}/imagemagick-distribution-libs-linux.rpm"
     mode: 0444
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
@@ -69,14 +61,14 @@
 
 - name: install imagemagick-distribution-libs
   yum:
-    name: "{{ temp_dir }}/imagemagick-distribution-libs-linux.rpm"
+    name: "{{ download_location }}/imagemagick-distribution-libs-linux.rpm"
     state: present
     disable_gpg_check: True
   when: download_img_libs_dist is succeeded and magick_exists.rc != 0
 
 - name: install imagemagick-distribution
   yum:
-    name: "{{ temp_dir }}/imagemagick-distribution-linux.rpm"
+    name: "{{ download_location }}/imagemagick-distribution-linux.rpm"
     state: present
     disable_gpg_check: True
   when: download_img_dist is succeeded and magick_exists.rc != 0
@@ -91,7 +83,7 @@
 - name: "Download libreoffice {{ libreoffice }} rpm tar.gz"
   get_url:
     url: "{{ libreoffice_rpm }}"
-    dest: "{{ temp_dir }}/libreoffice.tar.gz"
+    dest: "{{ download_location }}/libreoffice.tar.gz"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     mode: 0444
@@ -115,13 +107,13 @@
 - name: Extract libreoffice-dist-linux.gz
   become: yes
   unarchive:
-    src: "{{ temp_dir }}/libreoffice.tar.gz"
-    dest: "{{ temp_dir }}/"
+    src: "{{ download_location }}/libreoffice.tar.gz"
+    dest: "{{ download_location }}/"
     remote_src: yes
   when: loffice_exists.rc != 0
 
 - name: install LibreOffice
-  shell: "yum localinstall -y {{ temp_dir }}/LibreOffice*/RPMS/*.rpm"
+  shell: "yum localinstall -y {{ download_location }}/LibreOffice*/RPMS/*.rpm"
   args:
     warn: false
   when: loffice_exists.rc != 0
@@ -143,7 +135,7 @@
       register: alfresco_pdf_renderer_exists
     - name: Check if alfresco-pdf-renderer archive exists
       stat:
-        path: "{{ ats_home }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
+        path: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
       register: alfresco_pdf_renderer_tgz_exists
 
 - name: Download alfresco-pdf-renderer-linux.tgz
@@ -153,7 +145,7 @@
       become_user: "{{ username }}"
       get_url:
         url: "{{ alfresco_pdf_renderer_lib_rpm }}"
-        dest: "{{ ats_home }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
+        dest: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
         mode: 'u=rwx,g=rwx,o=rx'
@@ -166,7 +158,7 @@
   become: true
   become_user: "{{ username }}"
   unarchive:
-    src: "{{ ats_home }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
+    src: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
     dest: "{{ ats_home }}"
     remote_src: yes
   when: not alfresco_pdf_renderer_exists.stat.exists
@@ -176,10 +168,6 @@
   - name: Remove from content services
     file:
       path: "{{ binaries_folder }}/content-services-{{ acs.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
-      state: absent
-  - name: Remove from transform services
-    file:
-      path: "{{ ats_home }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
       state: absent
 
 - name: Download alfresco-transform-core-aio-boot-{{ transform.version }}.jar

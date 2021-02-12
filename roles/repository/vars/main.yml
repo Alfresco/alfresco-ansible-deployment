@@ -1,6 +1,4 @@
 ---
-download_dest: "{{ content_folder }}/content-services-{{ acs.version }}.zip"
-
 content_folder: "{{ binaries_folder }}/content-services-{{ acs.version }}"
 settings_folder: "{{ config_folder }}/content-services"
 content_data_folder: "{{ data_folder }}/content-services"
@@ -41,5 +39,3 @@ CSRF:
   enabled: "false"
   referer: "{{ repository.protocol }}://{{ repository.host }}/.*"
   origin: "{{ repository.protocol }}://{{ repository.host }}"
-
-temp_dir: /tmp/ansible_share

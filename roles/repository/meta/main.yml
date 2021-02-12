@@ -1,15 +1,15 @@
----
 galaxy_info:
-  author: Lucian Suciu
-  description: Alfresco Repository
-  company: Alfresco
-  license: Alfresco
+  author: Alfresco
+  description: Deploys and configures the Alfresco Repository and Share
+  company: Alfresco Software Ltd
+  license: Apache
   platforms:
-  - name: Centos
-    versions:
-    - 7
+    - name: CentOS
+      versions:
+        - 7
+        - 8
   min_ansible_version: 2.9
   galaxy_tags: []
 allow_duplicates: false
 dependencies:
-- tomcat
+  - tomcat

@@ -1,14 +1,14 @@
----
 galaxy_info:
-  author: Andrei Ciubotaru
-  description: OpenJDK Setup
-  company: Alfresco
-  min_ansible_version: 2.9
-  license: Alfresco
+  author: Alfresco
+  description: Deploys Java using OpenJDK
+  company: Alfresco Software Ltd
+  license: Apache
   platforms:
-    - name: Centos
+    - name: CentOS
       versions:
         - 7
+        - 8
+  min_ansible_version: 2.9
   galaxy_tags: []
 allow_duplicates: false
 dependencies:

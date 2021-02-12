@@ -8,3 +8,6 @@
     - name: "Include transformers"
       include_role:
         name: "transformers"
+      vars:
+        tengine_environment:
+          JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx900m "

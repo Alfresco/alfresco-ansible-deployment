@@ -6,7 +6,7 @@ from hamcrest import contains_string, assert_that
 # pylint: disable=redefined-outer-name
 @pytest.fixture()
 def get_ansible_vars(host):
-    """Define AnsibleVars"""
+    """Define get_ansible_vars"""
     java_role = "file=../../../java/vars/main.yml name=java_role"
     common_vars = "file=../../../common/vars/main.yml name=common_vars"
     common_defaults = "file=../../../common/defaults/main.yml name=common_defaults"
@@ -39,3 +39,9 @@ def test_solr_stats_is_accesible(host, get_ansible_vars):
     archive_core_command = host.run("curl -iL http://{}:8983/solr/#/~cores/archive".format(test_host))
     assert_that(alfresco_core_command.stdout, contains_string("HTTP/1.1 200"))
     assert_that(archive_core_command.stdout, contains_string("HTTP/1.1 200"))
+
+def test_environment_jvm_opts(host, get_ansible_vars):
+    "Check that overwritten JVM_OPTS are taken into consideration"
+    pid = host.run("/opt/openjdk*/bin/jps -lV | grep start.jar | awk '{print $1}'")
+    process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
+    assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))

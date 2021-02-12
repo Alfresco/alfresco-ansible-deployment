@@ -5,8 +5,8 @@ from hamcrest import assert_that, contains_string
 
 # pylint: disable=redefined-outer-name
 @pytest.fixture()
-def AnsibleVars(host):
-    """Define AnsibleVars"""
+def get_ansible_vars(host):
+    """Define get_ansible_vars"""
     java_role = "file=../../../roles/java/vars/main.yml name=java_role"
     common_vars = "../../../common/vars/main.yml name=common_vars"
     common_defaults = "../../../common/defaults/main.yml name=common_defaults"
@@ -19,20 +19,25 @@ def AnsibleVars(host):
 
 test_host = os.environ.get('TEST_HOST')
 
-def test_sfs_service_is_running_and_enabled(host, AnsibleVars):
+def test_sfs_service_is_running_and_enabled(host, get_ansible_vars):
     """Check sfs service"""
     sfs = host.service("alfresco-shared-fs")
     assert_that(sfs.is_running)
     assert_that(sfs.is_enabled)
 
-def test_sfs_log_exists(host, AnsibleVars):
+def test_sfs_log_exists(host, get_ansible_vars):
     "Check that ats-shared-fs.log exists in /var/log/alfresco"
     assert_that(host.file("/var/log/alfresco/ats-shared-fs.log").exists)
 
-def test_sfs_response(host, AnsibleVars):
+def test_sfs_response(host, get_ansible_vars):
     "Check that sfs context is available and returns a HTTP 200 status code"
     ready = host.run("curl -iL http://{}:8099/ready".format(test_host))
     live = host.run("curl -iL http://{}:8099/live".format(test_host))
     assert_that(ready.stdout, contains_string("HTTP/1.1 200"))
     assert_that(live.stdout, contains_string("HTTP/1.1 200"))
-    
+
+def test_environment_jvm_opts(host, get_ansible_vars):
+    "Check that overwritten JVM_OPTS are taken into consideration"
+    pid = host.run("/opt/openjdk*/bin/jps -lV | grep shared-file-store | awk '{print $1}'")
+    process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
+    assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))

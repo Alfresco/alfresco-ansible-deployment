@@ -40,7 +40,7 @@ sync:
 downloads:
   acs_zip_url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
   adw_zip_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
-  solr_zip_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-search-services/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip"
+  search_zip_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-search-services/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip"
   sfs_jar_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-shared-file-store-controller/{{ sfs.version }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar"
   trouter_jar_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-transform-router/{{ trouter.version }}/alfresco-transform-router-{{ trouter.version }}.jar"
   transform_jar_url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
@@ -96,7 +96,7 @@ dependencies_version:
   activemq: 5.16.0
   jdk: 11.0.7
   jdk_arch: 10
-  tomcat: 8.5.56
+  tomcat: 9.0.41
 
 dependencies_url:
   postgresql_connector: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependencies_version.postgresql_connector }}/postgresql-{{ dependencies_version.postgresql_connector }}.jar"

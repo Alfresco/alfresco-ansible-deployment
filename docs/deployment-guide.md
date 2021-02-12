@@ -382,10 +382,10 @@ transformers_1             : ok=81   changed=10   unreachable=0    failed=0    s
 
 Once ACS has initialized access the system using the following URLs with a browser:
 
-* Digital Workspace: `http://<webservers-host-ip>/workspace`
-* Share: `http://<webservers-host-ip>/share`
-* Repository: `http://<webservers-host-ip>/alfresco`
-* API Explorer: `http://<webservers-host-ip>/api-explorer`
+* Digital Workspace: `http://<nginx-host-ip>/workspace`
+* Share: `http://<nginx-host-ip>/share`
+* Repository: `http://<nginx-host-ip>/alfresco`
+* API Explorer: `http://<nginx-host-ip>/api-explorer`
 
 ## Known Issues
 
