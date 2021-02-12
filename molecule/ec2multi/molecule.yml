@@ -48,7 +48,7 @@ platforms:
     instance_type: t3.xlarge
     region: us-east-1
     vpc_subnet_id: subnet-06ffe524598660d99
-  - name: "webservers"
+  - name: "nginx"
     count: 1
     spot_price: 0.0104
     image: ami-0667c462e50c0e905
