@@ -15,3 +15,4 @@
     priv: "ALL"
     expires: infinity
     role_attr_flags: SUPERUSER
+  no_log: true
