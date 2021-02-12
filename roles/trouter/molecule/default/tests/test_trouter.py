@@ -5,8 +5,8 @@ from hamcrest import assert_that, contains_string
 
 # pylint: disable=redefined-outer-name
 @pytest.fixture()
-def AnsibleVars(host):
-    """Define AnsibleVars"""
+def get_ansible_vars(host):
+    """Define get_ansible_vars"""
     java_role = "file=../../../roles/java/vars/main.yml name=java_role"
     common_vars = "../../../common/vars/main.yml name=common_vars"
     common_defaults = "../../../common/defaults/main.yml name=common_defaults"
@@ -19,17 +19,17 @@ def AnsibleVars(host):
 
 test_host = os.environ.get('TEST_HOST')
 
-def test_trouter_service_is_running_and_enabled(host, AnsibleVars):
+def test_trouter_service_is_running_and_enabled(host, get_ansible_vars):
     """Check sfs service"""
     trouter = host.service("alfresco-transform-router")
     assert_that(trouter.is_running)
     assert_that(trouter.is_enabled)
 
-def test_trouter_log_exists(host, AnsibleVars):
+def test_trouter_log_exists(host, get_ansible_vars):
     "Check that ats-atr.log exists in /var/log/alfresco"
     assert_that(host.file("/var/log/alfresco/ats-atr.log").exists)
 
-def test_trouter_response(host, AnsibleVars):
+def test_trouter_response(host, get_ansible_vars):
     "Check that sfs context is available and returns a HTTP 200 status code"
     cmd = host.run("curl -iL http://{}:8095/transform/config".format(test_host))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
@@ -40,3 +40,9 @@ def test_trouter_response(host, AnsibleVars):
     assert_that(cmd.stdout, contains_string("pdfboxOptions"))
     assert_that(cmd.stdout, contains_string("textToPdfOptions"))
     assert_that(cmd.stdout, contains_string("stringOptions"))
+
+def test_environment_jvm_opts(host, get_ansible_vars):
+    "Check that overwritten JVM_OPTS are taken into consideration"
+    pid = host.run("/opt/openjdk*/bin/jps -lV | grep transform-router | awk '{print $1}'")
+    process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
+    assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
