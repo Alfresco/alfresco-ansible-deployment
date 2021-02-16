@@ -5,7 +5,7 @@ nexus_repository:
 
 acs:
   version: 7.0.0-M3
-  edition: Enterprise
+  edition: Community
 
 amps:  
   aos_module:
