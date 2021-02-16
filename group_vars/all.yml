@@ -5,6 +5,7 @@ nexus_repository:
 
 acs:
   version: 7.0.0-M3
+  edition: Enterprise
 
 amps:  
   aos_module:
@@ -38,7 +39,8 @@ sync:
   version: 3.4.0-M2
 
 downloads:
-  acs_zip_url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
+  acs_enterprise_zip_url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
+  acs_community_zip_url: "https://artifacts.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/alfresco-content-services-community-distribution/{{ acs.version }}/alfresco-content-services-community-distribution-{{ acs.version }}.zip"
   adw_zip_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
   search_zip_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-search-services/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip"
   sfs_jar_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-shared-file-store-controller/{{ sfs.version }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar"
