@@ -14,3 +14,4 @@ export JAVA_OPTS="${JAVA_OPTS} -DFILE_STORE_URL=http://${ATS_SHARED_FS_HOST}:809
 export {{key}}="{{value}}"
 {% endfor %}
 ${JAVA_HOME}/bin/java ${JAVA_OPTS} -jar ${ATS_HOME}/alfresco-transform-core-aio-boot-*.jar > {{ logs_folder }}/ats-ate-aio.log
+chmod -R u+rwx,g+rw,o-rwx {{ logs_folder }}/

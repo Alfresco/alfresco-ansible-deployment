@@ -9,3 +9,4 @@ fi
 export {{key}}="{{value}}"
 {% endfor %}
 ${JAVA_HOME}/bin/java ${JAVA_OPTS} -jar ${ATS_HOME}/alfresco-shared-file-store-*.jar > /var/log/alfresco/ats-shared-fs.log
+chmod -R u+rwx,g+rw,o-rwx {{ logs_folder }}/

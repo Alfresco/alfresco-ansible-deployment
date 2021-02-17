@@ -13,3 +13,4 @@ export JAVA_OPTS="${JAVA_OPTS} -DFILE_STORE_URL=http://{{ sfs_host }}:8099/alfre
 export {{key}}="{{value}}"
 {% endfor %}
 ${JAVA_HOME}/bin/java ${JAVA_OPTS} -jar ${ATS_HOME}/alfresco-transform-router-*.jar > /var/log/alfresco/ats-atr.log
+chmod -R u+rwx,g+rw,o-rwx {{ logs_folder }}/
