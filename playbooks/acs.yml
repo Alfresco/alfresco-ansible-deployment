@@ -49,7 +49,7 @@
   become: true
   become_method: sudo
   roles:
-    - role: '../roles/trouter'
+    - { role: '../roles/trouter', when: acs.edition == "Enterprise" }
   tags:
     - trouter
 
@@ -58,7 +58,7 @@
   become: true
   become_method: sudo
   roles:
-    - role: '../roles/sfs'
+    - { role: '../roles/sfs', when: acs.edition == "Enterprise" }
   tags:
     - sfs
 
@@ -67,7 +67,7 @@
   become: true
   become_method: sudo
   roles:
-    - role: '../roles/sync'
+    - { role: '../roles/sync', when: acs.edition == "Enterprise" }
   tags:
     - sync
 
@@ -85,6 +85,6 @@
   become: true
   become_method: sudo
   roles:
-    - role: '../roles/adw'
+    - { role: '../roles/adw', when: acs.edition == "Enterprise" }
   tags:
     - adw
