@@ -32,16 +32,4 @@
     remote_src: yes
     creates: "{{ nginx_folder }}/{{ request_uri }}/app.config.json"
 
-- name: Create log file with correct permissions
-  become: true
-  become_user: "{{ username }}"
-  file:
-    path: "{{ item }}"
-    state: touch
-    mode: u=rwx,g=rw,o-rwx
-  with_items:
-    - "{{ logs_folder }}/nginx.alfresco.access.log"
-    - "{{ logs_folder }}/nginx.alfresco.error.log"
-  changed_when: false
-
 - include_tasks: nginx.yml
