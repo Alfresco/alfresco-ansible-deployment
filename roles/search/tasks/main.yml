@@ -111,6 +111,19 @@
     insertafter: EOF
     line: "export SOLR_HOME={{ binaries_dir }}"
 
+- name: Create log file with correct permissions
+  become: true
+  become_user: "{{ username }}"
+  file:
+    path: "{{ item }}"
+    state: touch
+    mode: u=rwx,g=rw,o-rwx
+  with_items:
+    - "{{ logs_folder }}/solr-8983-console.log"
+    - "{{ logs_folder }}/solr.log"
+    - "{{ logs_folder }}/solr_gc.log"
+  changed_when: false
+
 - name: Add "{{ binaries_dir }}/solr.sh"
   become: yes
   template:

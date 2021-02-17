@@ -82,6 +82,18 @@
       export ACTIVEMQ_HOME={{ activemq_home }}
       export ACTIVEMQ_HOST={{ activemq_host }}
 
+- name: Create log file with correct permissions
+  become: true
+  become_user: "{{ username }}"
+  file:
+    path: "{{ item }}"
+    state: touch
+    mode: u=rwx,g=rw,o-rwx
+  with_items:
+    - "{{ logs_folder }}/activemq.log"
+    - "{{ logs_folder }}/audit.log"
+  changed_when: false
+
 - name: Add activemq wrapper script
   become: true
   become_user: "{{ username }}"

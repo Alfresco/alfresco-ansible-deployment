@@ -21,8 +21,6 @@ DB_CONNECTORS_FOLDER=${JAR_LOCATION}/connectors
 SYNC_LOG_LOCATION={{ logs_folder }}
 NAME="alfresco-syncservice"
 
-chmod -R u+rwx,g+rw,o-rwx $SYNC_LOG_LOCATION/
-
 ### Start of JMX config ###
 ### true | false
 ENABLE_JMX_REMOTE=true

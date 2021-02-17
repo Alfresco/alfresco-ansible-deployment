@@ -6,4 +6,3 @@ fi
 . {{ config_folder }}/setenv.sh
 export SOLR_INCLUDE={{ config_dir }}/solr.in.sh
 {{ binaries_dir }}/solr/bin/solr $*
-chmod -R u+rwx,g+rw,o-rwx {{ logs_folder }}/

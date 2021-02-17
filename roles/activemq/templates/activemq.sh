@@ -17,4 +17,3 @@ export ACTIVEMQ_OPTS="${ACTIVEMQ_OPTS} -Dactivemq.log={{ logs_folder }}"
 export {{key}}="{{value}}"
 {% endfor %}
 ${ACTIVEMQ_HOME}/bin/activemq $*
-chmod -R u+rwx,g+rw,o-rwx {{ logs_folder }}/

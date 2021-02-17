@@ -142,6 +142,15 @@
     insertafter: EOF
   when: test_sync_home.rc != 0
 
+- name: Create log file with correct permissions
+  become: true
+  become_user: "{{ username }}"
+  file:
+    path: "{{ logs_folder }}/sync-service.log"
+    state: touch
+    mode: u=rwx,g=rw,o-rwx
+  changed_when: false
+
 - name: Add sync service startup script
   become: true
   become_user: "{{ username }}"
