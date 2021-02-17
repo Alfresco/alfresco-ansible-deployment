@@ -40,7 +40,7 @@ sync:
 
 downloads:
   acs_enterprise_zip_url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
-  acs_community_zip_url: "https://artifacts.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/alfresco-content-services-community-distribution/{{ acs.version }}/alfresco-content-services-community-distribution-{{ acs.version }}.zip"
+  acs_community_zip_url: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-content-services-community-distribution/{{ acs.version }}/alfresco-content-services-community-distribution-{{ acs.version }}.zip"
   adw_zip_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
   search_zip_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-search-services/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip"
   sfs_jar_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-shared-file-store-controller/{{ sfs.version }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar"
@@ -49,12 +49,13 @@ downloads:
   sync_zip_url: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"
 
 acs_zip_url: "{%if acs.edition == 'Enterprise' %}{{ downloads.acs_enterprise_zip_url }}{% else %}{{ downloads.acs_community_zip_url }}{% endif %}"
+acs_zip_file: "{%if acs.edition == 'Enterprise' %}alfresco-content-services-distribution-{{ acs.version }}.zip{% else %}alfresco-content-services-community-distribution-{{ acs.version }}.zip{% endif %}"
 
 war_downloads:
   - url: "{{ nexus_repository.releases }}org/alfresco/api-explorer/{{ api_explorer.version }}/api-explorer-{{ api_explorer.version }}.war"
     dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
 
-amp_downloads:
+amp_downloads_enterprise:
   - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/integrations/alfresco-googledrive-repo-enterprise/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-googledrive-repo-enterprise.amp"
   - url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp"
@@ -63,6 +64,14 @@ amp_downloads:
     dest: "{{ content_folder }}/amps_repo/alfresco-device-sync-repo.amp"
   - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
+
+amp_downloads_community:
+  - url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp"
+    dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
+  - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
+    dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
+
+amp_downloads: "{%if acs.edition == 'Enterprise' %}{{ amp_downloads_enterprise }}{% else %}{{ amp_downloads_community }}{% endif %}"
 
 # A default keystore is stored in /var/opt/alfresco/content-services/keystore, 
 # to replace this with a custom keystore place the keystore file in the "configuration_files/keystores" folder 
