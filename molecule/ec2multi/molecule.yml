@@ -10,49 +10,49 @@ platforms:
     count: 1
     spot_price: 0.0104
     image: ami-0667c462e50c0e905
-    instance_type: t3.xlarge
+    instance_type: t3.small
     region: us-east-1
     vpc_subnet_id: subnet-06ffe524598660d99
   - name: "activemq"
     count: 1
     spot_price: 0.0104
     image: ami-0667c462e50c0e905
-    instance_type: t3.xlarge
+    instance_type: t3.small
     region: us-east-1
     vpc_subnet_id: subnet-06ffe524598660d99
   - name: "search"
     count: 1
     spot_price: 0.0104
     image: ami-0667c462e50c0e905
-    instance_type: t3.xlarge
+    instance_type: t3.small
     region: us-east-1
     vpc_subnet_id: subnet-06ffe524598660d99
   - name: "repository"
     count: 1
     spot_price: 0.0208
     image: ami-0667c462e50c0e905
-    instance_type: t3.xlarge
+    instance_type: t3.small
     region: us-east-1
     vpc_subnet_id: subnet-06ffe524598660d99
   - name: "transformers"
     count: 1
     spot_price: 0.0104
     image: ami-0667c462e50c0e905
-    instance_type: t3.xlarge
+    instance_type: t3.small
     region: us-east-1
     vpc_subnet_id: subnet-06ffe524598660d99
   - name: "syncservice"
     count: 1
     spot_price: 0.0104
     image: ami-0667c462e50c0e905
-    instance_type: t3.xlarge
+    instance_type: t3.small
     region: us-east-1
     vpc_subnet_id: subnet-06ffe524598660d99
   - name: "nginx"
     count: 1
     spot_price: 0.0104
     image: ami-0667c462e50c0e905
-    instance_type: t3.xlarge
+    instance_type: t3.small
     region: us-east-1
     vpc_subnet_id: subnet-06ffe524598660d99
 
