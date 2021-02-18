@@ -4,7 +4,6 @@ acs_zip_file: "{%if acs.edition == 'Enterprise' %}alfresco-content-services-dist
 amp_downloads: "{%if acs.edition == 'Enterprise' %}{{ amp_downloads_enterprise }}{% else %}{{ amp_downloads_community }}{% endif %}"
 downloads: "{%if acs.edition == 'Enterprise' %}{{ downloads_enterprise }}{% else %}{{ downloads_community }}{% endif %}"
 
-downloads_enterprise
 content_folder: "{{ binaries_folder }}/content-services-{{ acs.version }}"
 settings_folder: "{{ config_folder }}/content-services"
 content_data_folder: "{{ data_folder }}/content-services"
