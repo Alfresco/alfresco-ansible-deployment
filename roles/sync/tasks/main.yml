@@ -13,7 +13,7 @@
   yum:
     name: "{{ postgresql_rpm_repo }}"
     state: present
-    disable_gpg_check: True
+    disable_gpg_check: true
   when: ansible_distribution_major_version == "7" and dependencies_version.postgres_major_version == 13 and sync_db_url == ""
 
 - name: Install pspg.x86_64 package
@@ -93,7 +93,7 @@
   unarchive:
     src: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
     dest: "{{ sync_home }}"
-    remote_src: yes
+    remote_src: true
   when: sync_download_result.changed
 
 - name: Move sync service files to {{ sync_home }}
@@ -108,7 +108,7 @@
         dest: "{{ sync_home }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        remote_src: yes
+        remote_src: true
       when: sync_folder.stat.exists
     - name: Remove old sync folder
       file:

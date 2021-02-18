@@ -17,7 +17,7 @@
       uri:
         url: https://api.ipify.org
         method: GET
-        return_content: yes
+        return_content: true
       register: ipv4_address
 
     - name: Get local ip

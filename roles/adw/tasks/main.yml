@@ -25,11 +25,11 @@
   when: not adw_zip.stat.exists
 
 - name: Extract alfresco-digital-workspace-{{ adw.version }}.zip
-  become: yes
+  become: true
   unarchive:
     src: "{{ download_location }}/alfresco-digital-workspace-{{ adw.version }}.zip"
     dest: "{{ nginx_folder }}/{{ request_uri }}/"
-    remote_src: yes
+    remote_src: true
     creates: "{{ nginx_folder }}/{{ request_uri }}/app.config.json"
 
 - include_tasks: nginx.yml
