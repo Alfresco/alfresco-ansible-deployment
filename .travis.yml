@@ -174,29 +174,36 @@ jobs:
         - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
     - stage: Verification
-      name: Single Machine Community Integration checks
-      env:
-        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\";export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-community/molecule_temp_dir; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-community/molecule_temp_dir/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-community"
-        - ANSIBLE_FORCE_COLOR=true
-      before_install:
+      name: Localhost Machine Community Integration (ACS community 7.0.0-A25 on CentOS 8)
         - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
         - eval "$(ssh-agent -s)"
         - chmod 600 /tmp/dbp-ansible
-        - ssh-add /tmp/dbp-ansible
+        - ssh-add /tmp/dbp-ansible      
+        - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+        - unzip awscli-bundle.zip
+        - ./awscli-bundle/install -b ~/bin/aws
+        - export PATH=~/bin:$PATH
+        - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+        - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        - export AWS_DEFAULT_REGION='us-east-1'
         - git clone --depth 1 --branch v1.0-M1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
       script:
-        - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
-        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-community/molecule_temp_dir/"
-        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/ ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-community
-        - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade --use-feature=2020-resolver awscli 'molecule-ec2==0.2';"
-        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-community/molecule_temp_dir/"
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" == *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=true;molecule create -s ec2"; else ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=false;molecule create -s ec2"; fi
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2/dynamic_inventory.py"
-        - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat molecule_temp_dir/instance_config.yml | yq .[].address -r")
-        - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS; ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-community/inventory_ssh.yml -e \"@/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-community/community-extra-vars.yml\""
-        - echo "wait for repo to be up" && sleep 5m
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; sed -i 's+TEST_URL+http://$TESTHOST+g' tests/test-config.json ; cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s"
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi
+        - aws ec2 run-instances --image-id ami-0d6e9a57f6259ba3a --count 1 --instance-type t3.xlarge --key-name dbp-ansible --security-group-ids sg-099a05787b0a322c3 --subnet-id subnet-06ffe524598660d99 --tag-specifications "ResourceType=instance,Tags=[{Key=local,Value=community_centos8_machine_no_${TRAVIS_BUILD_NUMBER}},{Key=Creator,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}},{Key=Owner,Value="Operator\ Experience\ Team"},{Key=Department,Value=Engineering},{Key=Purpose,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}_community_centos8},{Key=NoAutomaticShutdown,Value=false},{Key=Production,Value=False},{Key=Name,Value=molecule_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_community_centos8},{Key=instance,Value=${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_community_centos8}]"
+        - echo "wait for instance to be up" && sleep 4m
+        - export PUBLIC_IP=$(aws ec2 describe-instances --filters Name=instance-state-name,Values=running Name=tag-key,Values=local Name=tag-value,Values=community_centos8_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+        - export INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag-key,Values=local Name=tag-value,Values=community_centos8_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].InstanceId' --output text)
+        - ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
+        - scripts/generate-zip.sh
+        - export VERSION=$(cat VERSION)
+        - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
+        - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible"
+        - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
+        - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
+        - ssh centos@${PUBLIC_IP} "cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@community-extra-vars.yml\""
+        - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "tests/test-config-community.json" 
+        - cd dtas; pytest --tb=line --configuration ../tests/test-config-community.json tests/ -s
+        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
     - stage: Verification
       name: Single Machine Integration checks
       env:
