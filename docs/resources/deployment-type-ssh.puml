@@ -1,6 +1,6 @@
 @startuml deployment-type-ssh
 
-Title: SSH Delpoyment
+Title: SSH Deployment
 
 skinparam componentStyle uml2
 skinparam linetype ortho
