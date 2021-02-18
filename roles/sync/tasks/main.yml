@@ -50,7 +50,7 @@
         dest: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: 'u=rwx,g=rwx'
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
       register: sync_download_result
@@ -133,7 +133,7 @@
         dest: "{{ config_folder }}/sync-service/config.yml"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: 'u=rwx,g=rwx'
         force: yes
 
 - name: Check for SYNC_HOME in "{{ config_folder }}/setenv.sh"
@@ -154,6 +154,15 @@
     insertafter: EOF
   when: test_sync_home.rc != 0
 
+- name: Create log file with correct permissions
+  become: true
+  become_user: "{{ username }}"
+  file:
+    path: "{{ logs_folder }}/sync-service.log"
+    state: touch
+    mode: u=rwx,g=rw,o-rwx
+  changed_when: false
+
 - name: Add sync service startup script
   become: true
   become_user: "{{ username }}"
@@ -162,7 +171,7 @@
     dest: "{{ binaries_folder }}/syncservice.sh"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
+    mode: 'u=rwx,g=rwx'
     force: no
 
 - name: Add alfresco-sync.service service
@@ -172,7 +181,7 @@
     dest: "/etc/systemd/system/alfresco-sync.service"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
+    mode: 'u=rwx,g=rwx'
     force: yes
   notify: restart-sync
   when: not ansible_facts.services['alfresco-sync.service'] is defined
