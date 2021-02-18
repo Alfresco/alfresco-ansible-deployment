@@ -139,10 +139,12 @@
 
 - name: Add alfresco-search.service
   become: true
-  become_user: "{{ username }}"
   template:
       src: alfresco-search.service
       dest:  /etc/systemd/system/alfresco-search.service
+      owner: "{{ username }}"
+      group: "{{ group_name }}"
+      mode: 'u=rwx,g=rwx'
   notify: restart-search
   when: search_started.failed or '"No Solr nodes are running." in search_started.stdout'
 
