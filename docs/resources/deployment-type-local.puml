@@ -1,6 +1,6 @@
 @startuml deployment-type-local
 
-Title: Local Delpoyment
+Title: Local Deployment
 
 skinparam componentStyle uml2
 skinparam linetype ortho

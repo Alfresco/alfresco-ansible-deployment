@@ -83,7 +83,7 @@ In the interest of keeping this guide simple we will use an AWS EC2 instance as 
 2. Transfer the ZIP file to the control node and SSH into the machine
 
     ```bash
-    scp <local-path>/alfresco-ansible-deployment-<version>.zip centos@<control-node-ip>:/home/centos/
+    scp -i <yourpem-file> <local-path>/alfresco-ansible-deployment-<version>.zip centos@<control-node-ip>:/home/centos/
     ssh -i <yourpem-file> centos@<control-node-ip>
     ```
 
