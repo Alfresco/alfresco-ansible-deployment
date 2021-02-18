@@ -3,3 +3,4 @@
 binaries_dir: "{{ binaries_folder }}/search-services-{{ search.version }}"
 config_dir: "{{ config_folder }}/search-services"
 data_dir: "{{ data_folder }}/search-services"
+downloads: "{%if acs.edition == 'Enterprise' %}{{ downloads_enterprise }}{% else %}{{ downloads_community }}{% endif %}"
