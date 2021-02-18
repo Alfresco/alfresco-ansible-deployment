@@ -12,7 +12,7 @@
   yum:
     name: "{{ postgresql_rpm_repo }}"
     state: present
-    disable_gpg_check: True
+    disable_gpg_check: true
   when: ansible_distribution_major_version == "7" and dependencies_version.postgres_major_version == 13
 
 - name: Install pspg.x86_64 package
@@ -178,7 +178,7 @@
   unarchive:
     src: "{{ download_location }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
     dest: "{{ content_folder }}"
-    remote_src: yes
+    remote_src: true
     creates: "{{ content_folder }}/bin"
   when: not archive_exists.stat.exists
 
@@ -228,7 +228,7 @@
     - name: find license files
       find:
         paths: "/tmp/configuration_files"
-        recurse: yes
+        recurse: true
         patterns: "*.lic"
       register: licenses_to_copy
     - name: copy license files to alfresco webapps
@@ -314,7 +314,7 @@
       become: true
       become_user: "{{ username }}"
       copy:
-        remote_src: True
+        remote_src: true
         src: "{{ content_folder }}/shared/classes/"
         dest: "{{ settings_folder }}/classpath/"
         owner: "{{ username }}"
@@ -335,7 +335,7 @@
       become: true
       become_user: "{{ username }}"
       copy:
-        remote_src: True
+        remote_src: true
         src: "{{ content_folder }}/web-server/conf/Catalina/localhost/"
         dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/"
         owner: "{{ username }}"

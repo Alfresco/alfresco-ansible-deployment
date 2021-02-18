@@ -16,7 +16,9 @@
   when: not wrapper.stat.exists
 
 - name: Check Tomcat version is installed
-  command: "su - {{ username }} -c '{{ binaries_folder }}/tomcat.sh configtest'"
+  become: true
+  become_user: "{{ username }}"
+  command: "{{ binaries_folder }}/tomcat.sh configtest"
   register: install_check
   environment:
       JAVA_HOME: "{{ java_home }}"
@@ -57,7 +59,7 @@
   unarchive:
     src: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
     dest: "/opt/"
-    remote_src: yes
+    remote_src: true
   become: true
   become_user: root
   failed_when: false
@@ -67,7 +69,7 @@
   file:
     path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/"
     state: directory
-    recurse: yes
+    recurse: true
     group: "{{ group_name }}"
     owner: "{{ username }}"
     mode: 'o=r,g=rwx'
@@ -80,7 +82,7 @@
 
 - name: Copy files from "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf to {{ tomcat_config_dir }}"
   copy:
-    remote_src: True
+    remote_src: true
     src: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf"
     dest: "{{ tomcat_config_dir }}"
     group: "{{ group_name }}"
@@ -101,7 +103,7 @@
 
 - name: Copy files from "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/temp to {{ tomcat_working }}"
   copy:
-    remote_src: True
+    remote_src: true
     src: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/temp"
     dest: "{{ tomcat_working }}"
     group: "{{ group_name }}"
@@ -115,7 +117,7 @@
 
 - name: Copy files from "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/work to {{ tomcat_working }}"
   copy:
-    remote_src: True
+    remote_src: true
     src: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/work"
     dest: "{{ tomcat_working }}/work"
     group: "{{ group_name }}"
@@ -149,7 +151,7 @@
     group: "{{ group_name }}"
     owner: "{{ username }}"
     state: link
-    force: yes
+    force: true
 
 - name: Create a symbolic link "{{ tomcat_config_dir }}"/work
   file:
@@ -158,7 +160,7 @@
     group: "{{ group_name }}"
     owner: "{{ username }}"
     state: link
-    force: yes
+    force: true
 
 - name: checking for TOMCAT_HOME
   shell: cat {{ config_folder }}/setenv.sh | grep TOMCAT_HOME
