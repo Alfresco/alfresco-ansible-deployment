@@ -70,7 +70,7 @@
   become: true
   become_user: root
   get_url:
-    url: "{{ downloads.acs_zip_url }}"
+    url: "{{ acs_zip_url }}"
     dest: "{{ download_location }}"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"

@@ -33,7 +33,7 @@
     state: directory
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
+    mode: 'u=rwx,g=rwx,o-rwx'
   with_items:
     - "{{ binaries_folder }}"
     - "{{ data_folder }}"
