@@ -24,6 +24,10 @@ Resources:
                 - ec2:DescribeInstances
                 - ec2:DescribeTags
                 - ec2:TerminateInstances
+                - ec2:DescribeKeyPairs
+                - ec2:DeleteKeyPair
+                - ec2:DescribeSecurityGroups
+                - ec2:DeleteSecurityGroup
               Resource: "*"
       Events:
         ScheduledEvent:
