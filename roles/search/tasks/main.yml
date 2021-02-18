@@ -129,24 +129,24 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
 
-- name: Check Solr running
+- name: Check if alfresco-search is running
   shell: "{{ binaries_dir }}/solr/bin/solr status"
-  register: solr_started
+  register: search_started
   environment:
       JAVA_HOME: "{{ java_home }}"
   failed_when: false
-  changed_when: solr_started.rc != 0
+  changed_when: search_started.rc != 0
 
-- name: Add solr.service
+- name: Add alfresco-search.service
   become: true
   template:
-      src: solr.service
-      dest:  /etc/systemd/system/solr.service
-  notify: restart-solr
-  when: solr_started.failed or '"No Solr nodes are running." in solr_started.stdout'
+      src: alfresco-search.service
+      dest:  /etc/systemd/system/alfresco-search.service
+  notify: restart-search
+  when: search_started.failed or '"No Solr nodes are running." in search_started.stdout'
 
-- name: Ensure solr service is started and enabled on boot
+- name: Ensure search service is started and enabled on boot
   systemd:
-    name: solr.service
+    name: alfresco-search.service
     state: started
     enabled: true

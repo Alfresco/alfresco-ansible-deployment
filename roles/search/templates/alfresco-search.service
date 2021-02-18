@@ -1,5 +1,5 @@
 [Unit]
-Description=Apache SOLR
+Description=Alfresco Search Services
 After=syslog.target network.target remote-fs.target nss-lookup.target
 
 [Service]
