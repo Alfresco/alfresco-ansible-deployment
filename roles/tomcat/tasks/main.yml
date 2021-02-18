@@ -82,7 +82,7 @@
 
 - name: Copy files from "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf to {{ tomcat_config_dir }}"
   copy:
-    remote_src: True
+    remote_src: true
     src: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf"
     dest: "{{ tomcat_config_dir }}"
     group: "{{ group_name }}"
@@ -103,7 +103,7 @@
 
 - name: Copy files from "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/temp to {{ tomcat_working }}"
   copy:
-    remote_src: True
+    remote_src: true
     src: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/temp"
     dest: "{{ tomcat_working }}"
     group: "{{ group_name }}"
@@ -117,7 +117,7 @@
 
 - name: Copy files from "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/work to {{ tomcat_working }}"
   copy:
-    remote_src: True
+    remote_src: true
     src: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/work"
     dest: "{{ tomcat_working }}/work"
     group: "{{ group_name }}"

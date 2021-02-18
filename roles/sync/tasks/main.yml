@@ -13,7 +13,7 @@
   yum:
     name: "{{ postgresql_rpm_repo }}"
     state: present
-    disable_gpg_check: True
+    disable_gpg_check: true
   when: ansible_distribution_major_version == "7" and dependencies_version.postgres_major_version == 13 and sync_db_url == ""
 
 - name: Install pspg.x86_64 package

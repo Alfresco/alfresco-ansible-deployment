@@ -66,7 +66,7 @@
       register: search_services_exists
     - name: "Copy files from {{ binaries_dir }}/alfresco-search-services to {{ binaries_dir }}/"
       copy:
-        remote_src: True
+        remote_src: true
         src: "{{ binaries_dir }}/alfresco-search-services/"
         dest: "{{ binaries_dir }}/"
         owner: "{{ username }}"
@@ -97,7 +97,7 @@
 
 - name: Copy files from "{{ binaries_dir }}/solrhome to {{ config_dir }}/"
   copy:
-    remote_src: True
+    remote_src: true
     src: "{{ binaries_dir }}/solrhome"
     dest: "{{ config_dir }}/"
     owner: "{{ username }}"

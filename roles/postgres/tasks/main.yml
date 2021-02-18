@@ -8,7 +8,7 @@
   yum:
     name: "{{ postgresql_rpm_repo }}"
     state: present
-    disable_gpg_check: True
+    disable_gpg_check: true
 
 - name: Install packages required for CentOS 8
   package:
@@ -77,4 +77,4 @@
   postgresql_user:
     name: "postgres"
     password: "{{ postgres_pass }}"
-  no_log: True
+  no_log: true

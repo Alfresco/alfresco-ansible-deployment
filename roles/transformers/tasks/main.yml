@@ -63,14 +63,14 @@
   yum:
     name: "{{ download_location }}/imagemagick-distribution-libs-linux.rpm"
     state: present
-    disable_gpg_check: True
+    disable_gpg_check: true
   when: download_img_libs_dist is succeeded and magick_exists.rc != 0
 
 - name: install imagemagick-distribution
   yum:
     name: "{{ download_location }}/imagemagick-distribution-linux.rpm"
     state: present
-    disable_gpg_check: True
+    disable_gpg_check: true
   when: download_img_dist is succeeded and magick_exists.rc != 0
 
 - name: Check if LibreOffice exists
