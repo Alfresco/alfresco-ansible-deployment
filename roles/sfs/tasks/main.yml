@@ -41,7 +41,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-    force: yes
+    force: true
   notify: restart-sfs
 
 - name: Add paths to setenv file
@@ -77,7 +77,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-    force: yes
+    force: true
   notify: restart-sfs
 
 - name: clean all

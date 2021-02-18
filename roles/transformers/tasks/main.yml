@@ -105,11 +105,11 @@
   when: loffice_exists.rc != 0
 
 - name: Extract libreoffice-dist-linux.gz
-  become: yes
+  become: true
   unarchive:
     src: "{{ download_location }}/libreoffice.tar.gz"
     dest: "{{ download_location }}/"
-    remote_src: yes
+    remote_src: true
   when: loffice_exists.rc != 0
 
 - name: install LibreOffice
@@ -160,7 +160,7 @@
   unarchive:
     src: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
     dest: "{{ ats_home }}"
-    remote_src: yes
+    remote_src: true
   when: not alfresco_pdf_renderer_exists.stat.exists
 
 - name: Remove alfresco-pdf-renderer-linux.tgz
@@ -218,7 +218,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-    force: yes
+    force: true
 
 - name: Add alfresco-tengine-aio service
   become: true
@@ -228,7 +228,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-    force: yes
+    force: true
   notify: restart-aio
 
 - name: clean all

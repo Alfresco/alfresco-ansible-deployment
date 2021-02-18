@@ -178,7 +178,7 @@
   unarchive:
     src: "{{ download_location }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
     dest: "{{ content_folder }}"
-    remote_src: yes
+    remote_src: true
     creates: "{{ content_folder }}/bin"
   when: not archive_exists.stat.exists
 
@@ -228,7 +228,7 @@
     - name: find license files
       find:
         paths: "/tmp/configuration_files"
-        recurse: yes
+        recurse: true
         patterns: "*.lic"
       register: licenses_to_copy
     - name: copy license files to alfresco webapps

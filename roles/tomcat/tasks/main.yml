@@ -59,7 +59,7 @@
   unarchive:
     src: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
     dest: "/opt/"
-    remote_src: yes
+    remote_src: true
   become: true
   become_user: root
   failed_when: false
@@ -69,7 +69,7 @@
   file:
     path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/"
     state: directory
-    recurse: yes
+    recurse: true
     group: "{{ group_name }}"
     owner: "{{ username }}"
     mode: 'o=r,g=rwx'
@@ -151,7 +151,7 @@
     group: "{{ group_name }}"
     owner: "{{ username }}"
     state: link
-    force: yes
+    force: true
 
 - name: Create a symbolic link "{{ tomcat_config_dir }}"/work
   file:
@@ -160,7 +160,7 @@
     group: "{{ group_name }}"
     owner: "{{ username }}"
     state: link
-    force: yes
+    force: true
 
 - name: checking for TOMCAT_HOME
   shell: cat {{ config_folder }}/setenv.sh | grep TOMCAT_HOME

@@ -93,7 +93,7 @@
   unarchive:
     src: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
     dest: "{{ sync_home }}"
-    remote_src: yes
+    remote_src: true
   when: sync_download_result.changed
 
 - name: Move sync service files to {{ sync_home }}
@@ -108,7 +108,7 @@
         dest: "{{ sync_home }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        remote_src: yes
+        remote_src: true
       when: sync_folder.stat.exists
     - name: Remove old sync folder
       file:
@@ -134,7 +134,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
-        force: yes
+        force: true
 
 - name: Check for SYNC_HOME in "{{ config_folder }}/setenv.sh"
   shell: cat {{ config_folder }}/setenv.sh | grep SYNC_HOME
@@ -173,7 +173,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-    force: yes
+    force: true
   notify: restart-sync
   when: not ansible_facts.services['alfresco-sync.service'] is defined
 
