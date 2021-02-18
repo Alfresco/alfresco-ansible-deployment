@@ -122,23 +122,6 @@ By default, without any configuration applied, the playbook will deploy a limite
 
 The sections below describe how you can configure your deployment before running the playbook.
 
-## External Databases
-
-In case you want to use external databases in the `group_vars/all.yml` configuration file you can input your own database url, along with the corresponding driver type for repository and/or sync service. If the database urls are left empty the default postgres creation will occur.
-
-An example custom database url is shown below:
-
-```yaml
-repo_db_url: jdbc:mysql://54.164.117.56:3306/alfresco?useUnicode=yes&characterEncoding=UTF-8
-repo_db_driver: com.mysql.jdbc.Driver
-```
-
-Along with the url the database connector driver need to be provided for one or both services in `configuration_files/db_connector_repo` and/or `configuration_files/db_connector_sync` folders.
-More on url builds and drivers depending on your database type can be found on: [Configuring Databases](https://docs.alfresco.com/6.2/concepts/intro-db-setup.html).
-
-In this case the default username (`repo_db_username` and/or `sync_db_username`) and password (`repo_db_password` and/or `sync_db_password`) in the configuration file `group_vars/all.yml` need to be provided with your custom values.
-
-
 ### License
 
 If you have a valid license place your `*.lic` file in the `configuration_files` folder before running the playbook.
@@ -190,6 +173,23 @@ tengine_environment:
 ```
 
 The `*_environment` variable is defined as a dictionary, all keys are added to the relevant components start script thus allowing you to define any number of environment variables.
+
+### External Databases
+
+By default the playbook will deploy and configure a Postgres server for you. If you'd prefer to use an external database server you can override the `repo_db_url` variable as described [previously](#override-playbook-variables).
+
+An example custom database url is shown below:
+
+```yaml
+repo_db_url: jdbc:mysql://54.164.117.56:3306/alfresco?useUnicode=yes&characterEncoding=UTF-8
+repo_db_driver: com.mysql.jdbc.Driver
+```
+
+Along with the url the database driver binaries need to be provided for one or both services in the `configuration_files/db_connector_repo` and/or `configuration_files/db_connector_sync` folders.
+
+The default database username (`repo_db_username` and/or `sync_db_username`) and password (`repo_db_password` and/or `sync_db_password`) in the configuration file `group_vars/all.yml` can also be overidden with your custom values.
+
+Please refer to the [Configuring Databases](https://docs.alfresco.com/6.2/concepts/intro-db-setup.html) documentation for more detailed information.
 
 ### Custom Keystore
 
@@ -394,6 +394,34 @@ Once ACS has initialized access the system using the following URLs with a brows
 
 ## Troubleshooting
 
+### Failed Downloads
+
+If you see an error similar to the one below (in particular the mention of `HTTP Error 401: Unauthorized`) you've most likely forgotten to setup your Nexus credentials or mis-configured them.
+
+```bash
+fatal: [search_1]: FAILED! => {"attempts": 3, "changed": false, "dest": "/tmp/ansible_artefacts/alfresco-search-services-2.0.1.zip", "elapsed": 0, "msg": "Request failed", "response": "HTTP Error 401: Unauthorized", "status_code": 401, "url": "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content//org/alfresco/alfresco-search-services/2.0.1/alfresco-search-services-2.0.1.zip"}
+```
+
+You can run the command shown below in the same terminal you're using to run the playbook to quickly test downloading a protected resource from Nexus.
+
+```bash
+wget -qO /dev/null --user=${NEXUS_USERNAME} --password=${NEXUS_PASSWORD} https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-content-services-distribution/6.2.2/alfresco-content-services-distribution-6.2.2.pom
+```
+
+If everything is configured correctly you should see the following at the end of the output:
+
+```bash
+Saving to: ‘alfresco-content-services-distribution-6.2.2.pom’
+
+alfresco-content-services-distribution-6.2.2.pom      100%[=======================================================================================================================>]   8.53K  --.-KB/s    in 0.003s  
+
+2021-02-18 13:50:44 (2.54 MB/s) - ‘alfresco-content-services-distribution-6.2.2.pom’ saved [8739/8739]
+```
+
+### Playbook Failures
+
 If the playbook fails for some reason try re-running it with the `-v` option, if that still doesn't provide enough information try re-running with the `-vvv` option.
 
-If the playbook completes successfully but the system is not functionaing the best place to start is the log files, these can be found in the `/var/log/alfresco` folder on the target hosts. Please note the nginx log files are owned by root as the nginx process is running as root so it can listen on port 80.
+### Alfresco Failures
+
+If the playbook completes successfully but the system is not functioning the best place to start is the log files, these can be found in the `/var/log/alfresco` folder on the target hosts. Please note the nginx log files are owned by root as the nginx process is running as root so it can listen on port 80.

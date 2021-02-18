@@ -28,4 +28,7 @@ cp -r ../configuration_files $BUILD_FOLDER
 # generate ZIP
 echo "Generating ZIP file..."
 zip -r alfresco-ansible-deployment-${VERSION}.zip $BUILD_FOLDER
+
+# cleanup
+echo "Removing temporary folder..."
 rm -rf $BUILD_FOLDER
