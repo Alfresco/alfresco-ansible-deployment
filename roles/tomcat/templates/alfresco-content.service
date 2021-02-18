@@ -1,5 +1,5 @@
 [Unit]
-Description=Apache Tomcat - Alfresco instance
+Description=Apache Tomcat - Alfresco Content Services
 After=syslog.socket network.target
 
 [Service]

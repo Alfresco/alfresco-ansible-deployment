@@ -465,16 +465,6 @@
     regexp: '^common.loader='
     line: "common.loader=\"/etc/opt/alfresco/content-services/classpath\",\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\""
 
-- name: Add alfresco-content.service
-  become: true
-  become_user: root
-  template:
-    src: alfresco-content.service
-    dest: /etc/systemd/system/alfresco-content.service
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-  notify: alfresco-content-restart
-
 - name: Add PostResources to alfresco.xml
   become: true
   become_user: root
@@ -503,14 +493,8 @@
 
 - name: Ensure tomcat restarted
   systemd:
-    name: tomcat.service
-    state: started
-
-- name: Ensure alfresco content service enabled on boot
-  systemd:
     name: alfresco-content.service
-    state: stopped
-    enabled: true
+    state: started
 
 - name: Notify alfresco content service
   wait_for:
@@ -520,5 +504,7 @@
   when: repo_db_url == ""
 
 - name: Alfresco content service for external db
-  service: name=alfresco-content state=restarted
+  service: 
+    name: alfresco-content
+    state: restarted
   when: repo_db_url != ""

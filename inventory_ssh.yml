@@ -1,67 +1,82 @@
----
 all:
   children:
-    database:
-      hosts:
-        database_1:
-          connection: ssh
-          ansible_host: targetIP
-          ansible_private_key_file: "/path/ssh_key.pem"
-          ansible_user: centos           
-          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
-    repository:
-      hosts:
-        repository_1:
-          connection: shh
-          ansible_host: targetIP
-          ansible_private_key_file: "/path/ssh_key.pem"
-          ansible_user: centos           
-          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
     activemq:
       hosts:
         activemq_1:
+          ansible_host: 54.234.199.245
+          ansible_private_key_file: /Users/p3700750/.cache/molecule/alfresco-ansible-deployment/ec2multi/ssh_key
+          ansible_ssh_common_args: -o UserKnownHostsFile=/dev/null -o ControlMaster=auto
+            -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=no
+          ansible_user: centos
           connection: ssh
-          ansible_host: targetIP
-          ansible_private_key_file: "/path/ssh_key.pem"
-          ansible_user: centos           
-          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
-    search:
-      hosts:
-        search_1:
-          connection: ssh
-          ansible_host: targetIP
-          ansible_private_key_file: "/path/ssh_key.pem"
-          ansible_user: centos           
-          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
-    nginx:
-      hosts:
-        nginx_1:
-          connection: shh
-          ansible_host: targetIP
-          ansible_private_key_file: "/path/ssh_key.pem"
-          ansible_user: centos           
-          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
     adw:
       hosts:
         adw_1:
+          ansible_host: 54.234.199.245
+          ansible_private_key_file: /Users/p3700750/.cache/molecule/alfresco-ansible-deployment/ec2multi/ssh_key
+          ansible_ssh_common_args: -o UserKnownHostsFile=/dev/null -o ControlMaster=auto
+            -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=no
+          ansible_user: centos
           connection: ssh
-          ansible_host: targetIP
-          ansible_private_key_file: "/path/ssh_key.pem"
-          ansible_user: centos           
-          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
-    transformers:
+    database:
       hosts:
-        transformers_1:
+        database_1:
+          ansible_host: 54.234.199.245
+          ansible_private_key_file: /Users/p3700750/.cache/molecule/alfresco-ansible-deployment/ec2multi/ssh_key
+          ansible_ssh_common_args: -o UserKnownHostsFile=/dev/null -o ControlMaster=auto
+            -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=no
+          ansible_user: centos
           connection: ssh
-          ansible_host: targetIP
-          ansible_private_key_file: "/path/ssh_key.pem"
-          ansible_user: centos           
-          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+    nginx:
+      hosts:
+        nginx_1:
+          ansible_host: 54.234.199.245
+          ansible_private_key_file: /Users/p3700750/.cache/molecule/alfresco-ansible-deployment/ec2multi/ssh_key
+          ansible_ssh_common_args: -o UserKnownHostsFile=/dev/null -o ControlMaster=auto
+            -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=no
+          ansible_user: centos
+          connection: ssh
+    repository:
+      hosts:
+        repository_1:
+          ansible_host: 54.234.199.245
+          ansible_private_key_file: /Users/p3700750/.cache/molecule/alfresco-ansible-deployment/ec2multi/ssh_key
+          ansible_ssh_common_args: -o UserKnownHostsFile=/dev/null -o ControlMaster=auto
+            -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=no
+          ansible_user: centos
+          connection: ssh
+    search:
+      hosts:
+        search_1:
+          ansible_host: 54.234.199.245
+          ansible_private_key_file: /Users/p3700750/.cache/molecule/alfresco-ansible-deployment/ec2multi/ssh_key
+          ansible_ssh_common_args: -o UserKnownHostsFile=/dev/null -o ControlMaster=auto
+            -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=no
+          ansible_user: centos
+          connection: ssh
     syncservice:
       hosts:
         syncservice_1:
+          ansible_host: 54.234.199.245
+          ansible_private_key_file: /Users/p3700750/.cache/molecule/alfresco-ansible-deployment/ec2multi/ssh_key
+          ansible_ssh_common_args: -o UserKnownHostsFile=/dev/null -o ControlMaster=auto
+            -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=no
+          ansible_user: centos
           connection: ssh
-          ansible_host: targetIP
-          ansible_private_key_file: "/path/ssh_key.pem"
-          ansible_user: centos           
-          ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+    transformers:
+      hosts:
+        transformers_1:
+          ansible_host: 54.234.199.245
+          ansible_private_key_file: /Users/p3700750/.cache/molecule/alfresco-ansible-deployment/ec2multi/ssh_key
+          ansible_ssh_common_args: -o UserKnownHostsFile=/dev/null -o ControlMaster=auto
+            -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=no
+          ansible_user: centos
+          connection: ssh

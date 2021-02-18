@@ -8,6 +8,6 @@
 
     - name: Ensure tomcat service is started and enabled on boot
       systemd:
-        name: tomcat.service
+        name: alfresco-content.service
         state: started
       changed_when: false

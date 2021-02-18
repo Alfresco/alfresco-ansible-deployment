@@ -139,6 +139,7 @@
 
 - name: Add alfresco-search.service
   become: true
+  become_user: "{{ username }}"
   template:
       src: alfresco-search.service
       dest:  /etc/systemd/system/alfresco-search.service
