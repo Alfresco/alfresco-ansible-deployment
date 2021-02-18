@@ -48,9 +48,6 @@ downloads:
   transform_jar_url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
   sync_zip_url: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"
 
-acs_zip_url: "{%if acs.edition == 'Enterprise' %}{{ downloads.acs_enterprise_zip_url }}{% else %}{{ downloads.acs_community_zip_url }}{% endif %}"
-acs_zip_file: "{%if acs.edition == 'Enterprise' %}alfresco-content-services-distribution-{{ acs.version }}.zip{% else %}alfresco-content-services-community-distribution-{{ acs.version }}.zip{% endif %}"
-
 war_downloads:
   - url: "{{ nexus_repository.releases }}org/alfresco/api-explorer/{{ api_explorer.version }}/api-explorer-{{ api_explorer.version }}.war"
     dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
@@ -70,8 +67,6 @@ amp_downloads_community:
     dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
   - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
-
-amp_downloads: "{%if acs.edition == 'Enterprise' %}{{ amp_downloads_enterprise }}{% else %}{{ amp_downloads_community }}{% endif %}"
 
 # A default keystore is stored in /var/opt/alfresco/content-services/keystore, 
 # to replace this with a custom keystore place the keystore file in the "configuration_files/keystores" folder 
