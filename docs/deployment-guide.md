@@ -29,6 +29,7 @@ The following systemd services are deployed and can be used to stop and start Al
 | ------ | --------- |
 | ```activemq.service``` | ActiveMQ Service |
 | ```postgresql-<version>.service``` | Postgresql DB Service (where `<version>` is 11 for ACS 6.2.N and 13 for ACS 7.x) |
+| ```nginx.service``` | Nginx Service |
 | ```tomcat.service``` | Tomcat Service |
 | ```solr.service``` | Alfresco Search Service |
 | ```alfresco-shared-fs.service``` | Alfresco Shared File Store Controller Service |
@@ -386,6 +387,39 @@ Once ACS has initialized access the system using the following URLs with a brows
 * Share: `http://<nginx-host-ip>/share`
 * Repository: `http://<nginx-host-ip>/alfresco`
 * API Explorer: `http://<nginx-host-ip>/api-explorer`
+
+## Cleanup
+
+What needs to be removed from a system will depend on your inventory configuration. The steps below presume a localhost or single machine deployment i.e. where all roles were run on the same machine.
+
+1. Stop and remove the following systemd services:
+   * alfresco-transform-router.service
+   * alfresco-shared-fs.service
+   * alfresco-tengine-aio.service
+   * alfresco-sync.service
+   * alfresco-search.service
+   * alfresco-content.service
+   * nginx.service
+   * activemq.service
+   * postgres-`version`.service (where `version` is 11 for ACS 6.2.N and 13 for ACS 7.x)
+2. Remove the following yum packages:
+   * ImageMagick
+   * libreoffice
+   * nginx
+   * postgresql
+3. Remove the following folders:
+   * /opt/apache-activemq-`version`
+   * /opt/apache-tomcat-`version`
+   * /opt/libreoffice`version`
+   * /opt/openjdk-`version`
+   * /opt/alfresco
+   * /etc/opt/alfresco
+   * /var/opt/alfresco
+   * /var/log/alfresco
+   * /tmp/ansible_artefacts
+   * /tmp/Alfresco
+
+> NOTE: An additional "uninstall" playbook may be provided in the future.
 
 ## Known Issues
 
