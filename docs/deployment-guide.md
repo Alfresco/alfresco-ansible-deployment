@@ -419,7 +419,7 @@ What needs to be removed from a system will depend on your inventory configurati
    * /tmp/ansible_artefacts
    * /tmp/Alfresco
 
-> NOTE: An additional "uninstall" playbook will be provided in the future.
+> NOTE: An additional "uninstall" playbook may be provided in the future.
 
 ## Known Issues
 
