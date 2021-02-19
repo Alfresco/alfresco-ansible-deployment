@@ -2,7 +2,6 @@
 acs:
   version: 7.0.0-A25
   edition: Community
-
 amps:  
   aos_module:
     version: 1.4.0-M1
