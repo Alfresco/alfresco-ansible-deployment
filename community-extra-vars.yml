@@ -1,0 +1,14 @@
+---
+acs:
+  version: 7.0.0-A25
+  edition: Community
+
+amps:  
+  aos_module:
+    version: 1.4.0-M1
+  device_sync:
+    version: 3.4.0-M2
+  googledrive_repo:
+    version: 3.2.1-A2
+  googledrive_share:
+    version: 3.2.1-A2

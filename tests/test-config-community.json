@@ -1,0 +1,29 @@
+{
+    "config": {
+      "host": "TEST_URL",
+      "username": "admin",
+      "password": "admin"
+    },
+    "assertions": {
+      "acs": {
+        "edition": "Community",
+        "version": "7.0.0",
+        "identity": false,
+        "modules": [
+          {
+            "name": "Alfresco Office Services Module",
+            "version": "1.4.0-M1",
+            "installed": true
+          },
+          {
+            "name": "AGS Enterprise Repo",
+            "version": "3.5.0",
+            "installed": true
+          }
+        ]
+      },
+      "adw": {
+        "version": "1.6.0"
+      }
+    }
+  }
