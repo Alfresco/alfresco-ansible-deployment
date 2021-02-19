@@ -124,7 +124,7 @@ The sections below describe how you can configure your deployment before running
 
 ### License
 
-If you have a valid license place your `*.lic` file in the `configuration_files` folder before running the playbook.
+If you have a valid license place your `*.lic` file in the `configuration_files/licenses` folder before running the playbook.
 
 >NOTE: You can also [upload a license](https://docs.alfresco.com/6.2/tasks/at-adminconsole-license.html) via the Admin Console once the system is running.
 
