@@ -103,7 +103,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
 
-- name: add solr home to setenv.sh
+- name: Add solr home to setenv.sh
   become: true
   become_user: "{{ username }}"
   lineinfile:
