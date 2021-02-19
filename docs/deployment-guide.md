@@ -416,6 +416,8 @@ What needs to be removed from a system will depend on your inventory configurati
    * /etc/opt/alfresco
    * /var/opt/alfresco
    * /var/log/alfresco
+   * /tmp/ansible_artefacts
+   * /tmp/Alfresco
 
 > NOTE: An additional "uninstall" playbook will be provided in the future.
 
