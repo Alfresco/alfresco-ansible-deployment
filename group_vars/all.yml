@@ -74,7 +74,7 @@ amp_downloads_enterprise:
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
 
 amp_downloads_community:
-  - url: "https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/integrations/alfresco-googledrive-repo-community/{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-community-{ amps.googledrive_repo.version }}.amp"
+  - url: "https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/integrations/alfresco-googledrive-repo-community/{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_repo.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-googledrive-repo-enterprise.amp"
   - url: "https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/integrations/alfresco-googledrive-repo-community/{{ amps.googledrive_share.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_share.version }}.amp"
     dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
