@@ -47,7 +47,7 @@
         name: "{{ security_group_name }}"
         state: absent
       register: result
-      ignore_errors: yes
+      ignore_errors: true
       until: not result.failed
       retries: 100
       delay: 3

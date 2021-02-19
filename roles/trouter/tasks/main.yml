@@ -39,7 +39,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-    force: yes
+    force: true
 
 - name: Add paths to setenv file
   block:
@@ -66,6 +66,15 @@
         insertafter: EOF
       when: test_ats_home.rc != 0 and test_activemq_home.rc != 0
 
+- name: Create log file with correct permissions
+  become: true
+  become_user: "{{ username }}"
+  file:
+    path: "{{ logs_folder }}/ats-atr.log"
+    state: touch
+    mode: u=rwx,g=rw,o-rwx
+  changed_when: false
+
 - name: Add alfresco-transform-router service
   become: true
   template:
@@ -74,7 +83,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-    force: yes
+    force: true
   notify: restart-trouter
 
 - name: clean all

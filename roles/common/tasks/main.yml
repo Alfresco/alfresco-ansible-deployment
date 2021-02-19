@@ -18,13 +18,13 @@
 - name: "Create {{ group_name }} group"
   group:
       name: "{{ group_name }}"
-      system: yes
+      system: true
 
 - name: "Create {{ username }} user"
   user:
     name: "{{ username }}"
     comment: "{{ username }} user"
-    system: yes
+    system: true
     group: "{{ group_name }}"
 
 - name: Create binaries, configuration, data, logs and download folders 
@@ -33,7 +33,7 @@
     state: directory
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
+    mode: 'u=rwx,g=rwx,o-rwx'
   with_items:
     - "{{ binaries_folder }}"
     - "{{ data_folder }}"

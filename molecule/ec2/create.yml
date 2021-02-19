@@ -17,7 +17,7 @@
       uri:
         url: https://api.ipify.org
         method: GET
-        return_content: yes
+        return_content: true
       register: ipv4_address
 
     - name: Create security group
@@ -60,7 +60,6 @@
           sudo setsebool -P httpd_can_network_connect 1
           sudo setsebool -P nis_enabled 1
           sudo getsebool httpd_can_network_connect
-        # spot_price: "{{ item.spot_price }}"
         image: "{{ item.image }}"
         instance_type: "{{ item.instance_type }}"
         instance_initiated_shutdown_behavior: terminate

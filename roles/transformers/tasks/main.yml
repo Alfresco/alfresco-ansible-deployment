@@ -63,14 +63,14 @@
   yum:
     name: "{{ download_location }}/imagemagick-distribution-libs-linux.rpm"
     state: present
-    disable_gpg_check: True
+    disable_gpg_check: true
   when: download_img_libs_dist is succeeded and magick_exists.rc != 0
 
 - name: install imagemagick-distribution
   yum:
     name: "{{ download_location }}/imagemagick-distribution-linux.rpm"
     state: present
-    disable_gpg_check: True
+    disable_gpg_check: true
   when: download_img_dist is succeeded and magick_exists.rc != 0
 
 - name: Check if LibreOffice exists
@@ -105,11 +105,11 @@
   when: loffice_exists.rc != 0
 
 - name: Extract libreoffice-dist-linux.gz
-  become: yes
+  become: true
   unarchive:
     src: "{{ download_location }}/libreoffice.tar.gz"
     dest: "{{ download_location }}/"
-    remote_src: yes
+    remote_src: true
   when: loffice_exists.rc != 0
 
 - name: install LibreOffice
@@ -160,7 +160,7 @@
   unarchive:
     src: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
     dest: "{{ ats_home }}"
-    remote_src: yes
+    remote_src: true
   when: not alfresco_pdf_renderer_exists.stat.exists
 
 - name: Remove alfresco-pdf-renderer-linux.tgz
@@ -209,6 +209,15 @@
     insertafter: EOF
   when: test_ats_home.rc != 0
 
+- name: Create log file with correct permissions
+  become: true
+  become_user: "{{ username }}"
+  file:
+    path: "{{ logs_folder }}/ats-ate-aio.log"
+    state: touch
+    mode: u=rwx,g=rw,o-rwx
+  changed_when: false
+
 - name: Add AIO startup script
   become: true
   become_user: "{{ username }}"
@@ -218,7 +227,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-    force: yes
+    force: true
 
 - name: Add alfresco-tengine-aio service
   become: true
@@ -228,7 +237,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-    force: yes
+    force: true
   notify: restart-aio
 
 - name: clean all

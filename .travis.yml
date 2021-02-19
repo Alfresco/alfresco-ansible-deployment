@@ -123,7 +123,7 @@ jobs:
         - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
         - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
         - export AWS_DEFAULT_REGION='us-east-1'
-        - git clone --depth 1 --branch v1.0-M1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
+        - git clone --depth 1 --branch v1.0-M2 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
       script:
         - aws ec2 run-instances --image-id ami-0affd4508a5d2481b --count 1 --instance-type t3.large --key-name dbp-ansible --security-group-ids sg-099a05787b0a322c3 --subnet-id subnet-06ffe524598660d99 --tag-specifications "ResourceType=instance,Tags=[{Key=local,Value=machine_no_${TRAVIS_BUILD_NUMBER}},{Key=Creator,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}},{Key=Owner,Value="Operator\ Experience\ Team"},{Key=Department,Value=Engineering},{Key=Purpose,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}_local},{Key=NoAutomaticShutdown,Value=false},{Key=Production,Value=False},{Key=Name,Value=molecule_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_local},{Key=instance,Value=${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_local}]"
         - echo "wait for instance to be up" && sleep 4m
@@ -155,7 +155,7 @@ jobs:
         - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
         - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
         - export AWS_DEFAULT_REGION='us-east-1'
-        - git clone --depth 1 --branch v1.0-M1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
+        - git clone --depth 1 --branch v1.0-M2 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
       script:
         - aws ec2 run-instances --image-id ami-0d6e9a57f6259ba3a --count 1 --instance-type t3.large --key-name dbp-ansible --security-group-ids sg-099a05787b0a322c3 --subnet-id subnet-06ffe524598660d99 --tag-specifications "ResourceType=instance,Tags=[{Key=local,Value=centos8_machine_no_${TRAVIS_BUILD_NUMBER}},{Key=Creator,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}},{Key=Owner,Value="Operator\ Experience\ Team"},{Key=Department,Value=Engineering},{Key=Purpose,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}_centos8},{Key=NoAutomaticShutdown,Value=false},{Key=Production,Value=False},{Key=Name,Value=molecule_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_centos8},{Key=instance,Value=${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_centos8}]"
         - echo "wait for instance to be up" && sleep 4m
@@ -215,7 +215,7 @@ jobs:
         - eval "$(ssh-agent -s)"
         - chmod 600 /tmp/dbp-ansible
         - ssh-add /tmp/dbp-ansible
-        - git clone --depth 1 --branch v1.0-M1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
+        - git clone --depth 1 --branch v1.0-M2 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
       script:
         - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
         - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/"
@@ -239,7 +239,7 @@ jobs:
         - eval "$(ssh-agent -s)"
         - chmod 600 /tmp/dbp-ansible
         - ssh-add /tmp/dbp-ansible
-        - git clone --depth 1 --branch v1.0-M1 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
+        - git clone --depth 1 --branch v1.0-M2 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
       script:
         - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
         - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/"

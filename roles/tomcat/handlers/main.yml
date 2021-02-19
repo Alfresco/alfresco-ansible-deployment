@@ -3,10 +3,10 @@
   systemd:
     name: "tomcat"
     state: started
-    daemon_reload: yes
+    daemon_reload: true
 
 - name: tomcat-stop
   systemd:
     name: "tomcat"
     state: stopped
-    daemon_reload: yes
+    daemon_reload: true
