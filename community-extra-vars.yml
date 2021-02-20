@@ -1,6 +1,6 @@
 ---
 acs:
-  version: 7.0.0-A25a
+  version: 7.0.0-A27a
   edition: Community
 amps:  
   aos_module:
