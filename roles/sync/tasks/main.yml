@@ -7,24 +7,6 @@
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
 
-- name: Install postgres rpm repository
-  become: true
-  become_user: root
-  yum:
-    name: "{{ postgresql_rpm_repo }}"
-    state: present
-    disable_gpg_check: true
-  when: ansible_distribution_major_version == "7" and dependencies_version.postgres_major_version == 13 and sync_db_url == ""
-
-- name: Install pspg.x86_64 package
-  become: true
-  become_user: root
-  package:
-    name: pspg.x86_64
-    state: present
-  poll: 0
-  when: ansible_distribution_major_version == "7" and dependencies_version.postgres_major_version == 13 and sync_db_url == ""
-
 - name: Ensure a list of packages installed
   become: true
   become_user: root

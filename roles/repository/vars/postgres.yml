@@ -1,3 +1,2 @@
 ---
-repo_db_name: "alfresco"
 repo_db_port: "5432"
