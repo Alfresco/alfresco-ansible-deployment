@@ -11,3 +11,16 @@ amps:
     version: 3.2.1-A2
   googledrive_share:
     version: 3.2.1-A2
+
+downloads:
+  acs_zip_url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-content-services-community-distribution/{{ acs.version }}/alfresco-content-services-community-distribution-{{ acs.version }}.zip"
+  search_zip_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-search-services/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip"
+  transform_jar_url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
+
+amp_downloads:
+  - url: "https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/integrations/alfresco-googledrive-repo-community/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_repo.version }}.amp"
+    dest: "{{ content_folder }}/amps_repo/alfresco-googledrive-repo-enterprise.amp"
+  - url: "https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/integrations/alfresco-googledrive-repo-community/{{ amps.googledrive_share.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_share.version }}.amp"
+    dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
+  - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
+    dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"

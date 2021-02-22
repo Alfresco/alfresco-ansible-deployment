@@ -1,5 +1,4 @@
 ---
-acs_zip_url: "{%if acs.edition == 'Enterprise' %}{{ downloads.acs_enterprise_zip_url }}{% else %}{{ downloads.acs_community_zip_url }}{% endif %}"
 acs_zip_file: "{%if acs.edition == 'Enterprise' %}alfresco-content-services-distribution-{{ acs.version }}.zip{% else %}alfresco-content-services-community-distribution-{{ acs.version }}.zip{% endif %}"
 
 content_folder: "{{ binaries_folder }}/content-services-{{ acs.version }}"

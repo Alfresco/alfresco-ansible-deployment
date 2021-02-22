@@ -71,7 +71,7 @@
   become: true
   become_user: root
   get_url:
-    url: "{{ acs_zip_url }}"
+    url: "{{ downloads.acs_zip_url }}"
     dest: "{{ download_location }}"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
@@ -177,7 +177,7 @@
   become: true
   become_user: "{{ username }}"
   unarchive:
-    src: "{{ download_location }}/{{ acs_zip_file }}"
+    src: "{{ download_location }}/{{ downloads.acs_zip_url }}"
     dest: "{{ content_folder }}"
     remote_src: true
     creates: "{{ content_folder }}/bin"
