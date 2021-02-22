@@ -116,7 +116,6 @@
   block:
     - name: Copy db_connector_repo
       copy:
-        remote_src: true
         src: "{{ inventory_dir }}/configuration_files/db_connector_repo/"
         dest: "{{ tomcat_config_dir }}/lib/"
         owner: "{{ username }}"

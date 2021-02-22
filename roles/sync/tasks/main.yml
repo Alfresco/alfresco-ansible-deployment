@@ -79,7 +79,6 @@
       when: sync_db_url == ""
     - name: Copy db_connector to {{ sync_home }}/service-sync/connectors folder
       copy:
-        remote_src: true
         src: "{{ inventory_dir }}/configuration_files/db_connector_sync/"
         dest: "{{ sync_home }}/service-sync/connectors/"
         owner: "{{ username }}"
