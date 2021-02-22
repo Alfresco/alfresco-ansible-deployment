@@ -1,5 +1,4 @@
 ---
-postgres_pass: MyPass1
 postgres_client_auth:
   - type: local
     database: "{{ repo_db_name }}"
