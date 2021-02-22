@@ -115,10 +115,6 @@
         path: "{{ sync_home }}/sync"
         state: absent
 
-- name: Include postgres task
-  include_tasks: "postgres.yml"
-  when: sync_db_url == ""  
-
 - name: Add config.yml file to {{ config_folder }}
   block:
     - name: Create sync-service in {{ config_folder }}

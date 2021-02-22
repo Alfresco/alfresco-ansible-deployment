@@ -385,10 +385,6 @@
     mode: 'u=rwx,g=rwx,o=rx'
   when: not api_explorer_xml.stat.exists
 
-- name: Include postgres task
-  include_tasks: "postgres.yml"
-  when: repo_db_url == ""
-
 - name: Create alfresco-global.properties
   template:
     owner: "{{ username }}"

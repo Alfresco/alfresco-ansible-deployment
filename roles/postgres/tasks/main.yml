@@ -78,3 +78,36 @@
     name: "postgres"
     password: "{{ postgres_pass }}"
   no_log: true
+
+- name: "Create a new database with name {{ item }}"
+  postgresql_db:
+    name: "{{ item }}"
+    login_host: "{{ db_host }}"
+    login_password: "{{ postgres_pass }}"
+  loop:
+    - "{{ repo_db_name }}"
+    - "{{ sync_db_name }}"
+
+- name: "Connect to {{ repo_db_name }} database and set user's password with no expire date"
+  postgresql_user:
+    login_host: "{{ db_host }}"
+    login_password: "{{ postgres_pass }}"
+    db: "{{ repo_db_name }}"
+    name: "{{ repo_db_username }}"
+    password: "{{ repo_db_password }}"
+    priv: "ALL"
+    expires: infinity
+    role_attr_flags: SUPERUSER
+  no_log: true
+
+- name: "Connect to {{ sync_db_name }} database and set user's password with no expire date"
+  postgresql_user:
+    login_host: "{{ db_host }}"
+    login_password: "{{ postgres_pass }}"
+    db: "{{ sync_db_name }}"
+    name: "{{ sync_db_username }}"
+    password: "{{ sync_db_password }}"
+    priv: "ALL"
+    expires: infinity
+    role_attr_flags: SUPERUSER
+  no_log: true
