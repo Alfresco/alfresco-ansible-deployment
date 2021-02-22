@@ -82,7 +82,7 @@
 - name: "Create a new database with name {{ item }}"
   postgresql_db:
     name: "{{ item }}"
-    login_host: localhost
+    login_host: 127.0.0.1
     login_password: "{{ postgres_pass }}"
   loop:
     - "{{ repo_db_name }}"
@@ -90,7 +90,7 @@
 
 - name: "Connect to {{ repo_db_name }} database and set user's password with no expire date"
   postgresql_user:
-    login_host: localhost
+    login_host: 127.0.0.1
     login_password: "{{ postgres_pass }}"
     db: "{{ repo_db_name }}"
     name: "{{ repo_db_username }}"
@@ -102,7 +102,7 @@
 
 - name: "Connect to {{ sync_db_name }} database and set user's password with no expire date"
   postgresql_user:
-    login_host: "{{ db_host }}"
+    login_host: 127.0.0.1
     login_password: "{{ postgres_pass }}"
     db: "{{ sync_db_name }}"
     name: "{{ sync_db_username }}"
