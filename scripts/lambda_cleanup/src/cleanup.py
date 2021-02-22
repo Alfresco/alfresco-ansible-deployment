@@ -1,16 +1,18 @@
 from datetime import datetime, timedelta
 import logging
 from dateutil import parser
+import botocore
 import boto3
 
 _logger = logging.getLogger()
 _logger.setLevel(logging.INFO)
 _region = 'us-east-1'
 _ec2 = boto3.client('ec2', region_name=_region)
+_ec2_resource = boto3.resource('ec2')
 _filters = [
     {
         'Name': 'tag:Name',
-        'Values': ['molecule_OPSEXP-*', 'molecule_master_*']
+        'Values': ['molecule_OPSEXP*', 'molecule_master_*']
     },
     {
         'Name':'tag:NoAutomaticShutdown',
@@ -32,8 +34,17 @@ def lambda_handler(event, context):
             _ec2.terminate_instances(InstanceIds=[instance['InstanceId']])
             _logger.info('Terminated the following instance: %s', str(instance['InstanceId']))
             if instance['KeyName'] != "dbp-ansible":
-                _ec2.delete_security_group(GroupId=instance['GroupId'])
-                _logger.info('Deleted the following security group: %s', str(instance['GroupId']))
+                try:
+                    _boto_instance = _ec2_resource.Instance(instance['InstanceId'])
+                    _boto_instance.modify_attribute(Groups=['sg-c40c148f']) #Added here the default vpc sg since this list cant be passed empty
+                    _logger.info('Reassigned the security group for instance: %s', str(instance['InstanceId']))
+                    _ec2.delete_security_group(GroupId=instance['GroupId'])
+                    _logger.info('Deleted the following security group: %s', str(instance['GroupId']))
+                except botocore.exceptions.ClientError as error:
+                    if error.response['Error']['Code'] == 'DependencyViolation':
+                        _logger.warn('SG %s has a dependent object...',instance['GroupId'])
+                    else:
+                        raise error
                 _ec2.delete_key_pair(KeyName=instance['KeyName'])
                 _logger.info('Deleted the following key pair: %s', str(instance['KeyName']))
     else:
