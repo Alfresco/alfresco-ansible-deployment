@@ -173,11 +173,11 @@
   loop: "{{ share_templates }}"
   changed_when: false
 
-- name: Extract content-services-{{ acs.version }}.zip into {{ content_folder }}
+- name: Extract {{ acs_zip_file }} into {{ content_folder }}
   become: true
   become_user: "{{ username }}"
   unarchive:
-    src: "{{ download_location }}/{{ acs_zip_url }}"
+    src: "{{ download_location }}/{{ acs_zip_file }}"
     dest: "{{ content_folder }}"
     remote_src: true
     creates: "{{ content_folder }}/bin"
