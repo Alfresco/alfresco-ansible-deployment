@@ -177,7 +177,7 @@
   become: true
   become_user: "{{ username }}"
   unarchive:
-    src: "{{ download_location }}/{{ downloads.acs_zip_url }}"
+    src: "{{ download_location }}/{{ acs_zip_url }}"
     dest: "{{ content_folder }}"
     remote_src: true
     creates: "{{ content_folder }}/bin"
