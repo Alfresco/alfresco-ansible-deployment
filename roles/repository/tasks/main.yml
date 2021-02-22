@@ -53,6 +53,7 @@
      - "{{ content_folder }}/alfresco-mmt"
      - "{{ content_folder }}/webapps/alfresco"
      - "{{ content_folder }}/web-server/lib"
+     - "{{ content_folder }}/web-server/webapps"
      - "{{ settings_folder }}/classpath/alfresco/extension/transform/pipelines"
      - "{{ settings_folder }}/classpath/alfresco/extension/transform/renditions"
      - "{{ settings_folder }}/classpath/alfresco/extension/mimetypes"
@@ -61,16 +62,16 @@
      - "{{ tomcat_config_dir }}/lib"
      - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
 
-- name: Check if alfresco-content-services-distribution-{{ acs.version }}.zip file exists
+- name: Check if {{ acs_zip_file }} file exists
   stat:
-    path: "{{ download_location }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
+    path: "{{ download_location }}/{{ acs_zip_file }}"
   register: archive_exists
 
-- name: "Download alfresco-content-services-distribution-{{ acs.version }}.zip"
+- name: "Download {{ acs_zip_file }}"
   become: true
   become_user: root
   get_url:
-    url: "{{ acs_zip_url }}"
+    url: "{{ downloads.acs_zip_url }}"
     dest: "{{ download_location }}"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
@@ -172,11 +173,11 @@
   loop: "{{ share_templates }}"
   changed_when: false
 
-- name: Extract content-services-{{ acs.version }}.zip into {{ content_folder }}
+- name: Extract {{ acs_zip_file }} into {{ content_folder }}
   become: true
   become_user: "{{ username }}"
   unarchive:
-    src: "{{ download_location }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
+    src: "{{ download_location }}/{{ acs_zip_file }}"
     dest: "{{ content_folder }}"
     remote_src: true
     creates: "{{ content_folder }}/bin"

@@ -1,0 +1,26 @@
+{
+    "config": {
+      "host": "TEST_URL",
+      "username": "admin",
+      "password": "admin"
+    },
+    "assertions": {
+      "acs": {
+        "edition": "Community",
+        "version": "7.0.0",
+        "identity": false,
+        "modules": [
+          {
+            "name": "Alfresco / Google Docs Integration",
+            "version": "3.2.1-A2",
+            "installed": true
+          },
+          {
+            "name": "Alfresco Office Services Module",
+            "version": "1.4.0-M1",
+            "installed": true
+          }
+        ]
+      }
+    }
+  }
