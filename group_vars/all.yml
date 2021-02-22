@@ -113,10 +113,12 @@ jdk_md5_checksum: "ac1bb98fe70314a67f6eb7a87e960d44"
 
 repo_db_url: ""
 repo_db_driver: org.postgresql.Driver
+repo_db_name: "alfresco"
 repo_db_username: "alfresco"
 repo_db_password: "alfresco"
 
 sync_db_url: ""
 sync_db_driver: org.postgresql.Driver
+sync_db_name: "alfresco-sync"
 sync_db_username: "alfresco"
 sync_db_password: "alfresco"
