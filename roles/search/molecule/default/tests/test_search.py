@@ -27,8 +27,8 @@ def test_solr_log_exists(host, get_ansible_vars):
     assert_that(host.file("{}/solr.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
 
 @pytest.mark.parametrize("svc", ["alfresco-search"])
-def test_solr_service_running_and_enabled(host, svc):
-    """Check solr service"""
+def test_search_service_running_and_enabled(host, svc):
+    """Check alfresco-search service"""
     alfresco_search = host.service(svc)
     assert_that(alfresco_search.is_running)
     assert_that(alfresco_search.is_enabled)
