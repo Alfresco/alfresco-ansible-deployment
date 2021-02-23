@@ -42,7 +42,7 @@ def lambda_handler(event, context):
                     _logger.info('Deleted the following security group: %s', str(instance['GroupId']))
                 except botocore.exceptions.ClientError as error:
                     if error.response['Error']['Code'] == 'DependencyViolation':
-                        _logger.warn('SG %s has a dependent object...',instance['GroupId'])
+                        _logger.info('SG %s has a dependent object...',instance['GroupId'])
                     else:
                         raise error
                 _ec2.delete_key_pair(KeyName=instance['KeyName'])
