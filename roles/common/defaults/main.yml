@@ -11,16 +11,16 @@ ats_home: "{{ binaries_folder }}/transform-service"
 
 # Due to https://github.com/ansible/ansible/issues/64957
 # Using default() filter for hostvars 1st level key requires ansible 2.10+
-repo_host: "{% if groups.repository | length == 0 %}localhost{% else %}{{ groups.repository[0]['ansible_host'] | default('localhost') }}{% endif %}"
-activemq_host: "{% if groups.activemq | length == 0 %}localhost{% else %}{{ groups.activemq[0]['ansible_host'] | default('localhost') }}{% endif %}"
-db_host: "{% if groups.database | length == 0 %}localhost{% else %}{{ groups.database[0]['ansible_host'] | default('localhost') }}{% endif %}"
-solr_host: "{% if groups.search | length == 0 %}localhost{% else %}{{ groups.search[0]['ansible_host'] | default('localhost') }}{% endif %}"
+repo_host: "{% if groups.repository | length == 0 %}127.0.0.1{% else %}{{ groups.repository[0]['ansible_host'] | default('127.0.0.1') }}{% endif %}"
+activemq_host: "{% if groups.activemq | length == 0 %}127.0.0.1{% else %}{{ groups.activemq[0]['ansible_host'] | default('127.0.0.1') }}{% endif %}"
+db_host: "{% if groups.database | length == 0 %}127.0.0.1{% else %}{{ groups.database[0]['ansible_host'] | default('127.0.0.1') }}{% endif %}"
+solr_host: "{% if groups.search | length == 0 %}127.0.0.1{% else %}{{ groups.search[0]['ansible_host'] | default('127.0.0.1') }}{% endif %}"
 share_host: "{{ repo_host }}"
-ats_tengine_aio_host: "{% if groups.transformers | length == 0 %}localhost{% else %}{{ groups.transformers[0]['ansible_host'] | default('localhost') }}{% endif %}"
-sfs_host: "{% if groups.transformers | length == 0 %}localhost{% else %}{{ groups.transformers[0]['ansible_host'] | default('localhost') }}{% endif %}"
-trouter_host: "{% if groups.transformers | length == 0 %}localhost{% else %}{{ groups.transformers[0]['ansible_host'] | default('localhost') }}{% endif %}"
-adw_host: "{% if groups.adw | length == 0 %}localhost{% else %}{{ groups.adw[0]['ansible_host'] | default('localhost') }}{% endif %}"
-sync_host: "{% if groups.syncservice | length == 0 %}localhost{% else %}{{ groups.syncservice[0]['ansible_host'] | default('localhost') }}{% endif %}"
+ats_tengine_aio_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ groups.transformers[0]['ansible_host'] | default('127.0.0.1') }}{% endif %}"
+sfs_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ groups.transformers[0]['ansible_host'] | default('127.0.0.1') }}{% endif %}"
+trouter_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ groups.transformers[0]['ansible_host'] | default('127.0.0.1') }}{% endif %}"
+adw_host: "{% if groups.adw | length == 0 %}127.0.0.1{% else %}{{ groups.adw[0]['ansible_host'] | default('127.0.0.1') }}{% endif %}"
+sync_host: "{% if groups.syncservice | length == 0 %}127.0.0.1{% else %}{{ groups.syncservice[0]['ansible_host'] | default('127.0.0.1') }}{% endif %}"
 
 
 # Default download location of necessary artefacts
