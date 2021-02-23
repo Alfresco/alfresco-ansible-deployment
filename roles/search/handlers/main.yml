@@ -1,7 +1,7 @@
 ---
 # handlers file for search-services
-- name: restart-solr
+- name: restart-search
   service:
-    name: solr
+    name: alfresco-search
     state: restarted
     daemon_reload: true

@@ -1,5 +1,5 @@
 [Unit]
-Description=Apache SOLR
+Description=Alfresco Search Service
 After=syslog.target network.target remote-fs.target nss-lookup.target
 
 [Service]
@@ -16,4 +16,3 @@ Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
-
