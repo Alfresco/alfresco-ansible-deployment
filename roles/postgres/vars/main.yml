@@ -1,14 +1,13 @@
 ---
-postgres_pass: MyPass1
 postgres_client_auth:
   - type: local
-    database: "alfresco"
-    user: "alfresco"
+    database: "{{ repo_db_name }}"
+    user: "{{ repo_db_username }}"
     address:
     method: password
   - type: local
-    database: "alfresco-sync"
-    user: "alfresco"
+    database: "{{ sync_db_name }}"
+    user: "{{ sync_db_username }}"
     address:
     method: password
   - type: host

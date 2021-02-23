@@ -7,4 +7,3 @@ utils_repo:
   - freetype
   - libpng
   - dejavu-sans-fonts
-  - python3-psycopg2
