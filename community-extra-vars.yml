@@ -14,6 +14,7 @@ amps:
 
 downloads:
   acs_zip_url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-content-services-community-distribution/{{ acs.version }}/alfresco-content-services-community-distribution-{{ acs.version }}.zip"
+  search_zip_url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-search-services/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip"
   transform_jar_url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
 
 amp_downloads:
