@@ -31,10 +31,11 @@ The following systemd services are deployed and can be used to stop and start Al
 | ```postgresql-<version>.service``` | Postgresql DB Service (where `<version>` is 11 for ACS 6.2.N and 13 for ACS 7.x) |
 | ```nginx.service``` | Nginx Service |
 | ```tomcat.service``` | Tomcat Service |
+| ```alfresco-content.service``` | Alfresco Content Service |
 | ```alfresco-search.service``` | Alfresco Search Service |
 | ```alfresco-shared-fs.service``` | Alfresco Shared File Store Controller Service |
 | ```alfresco-sync.service``` | Alfresco Sync Service |
-| ```alfresco-tengine-aio.service``` | Alfresco AIO Transform Core Engine | 
+| ```alfresco-tengine-aio.service``` | Alfresco AIO Transform Core Engine |
 | ```alfresco-transform-router.service``` | Alfresco Transformation Router Service |
 
 ## Getting Started Quickly
@@ -106,7 +107,7 @@ In the interest of keeping this guide simple we will use an AWS EC2 instance as 
     unzip alfresco-ansible-deployment-<version>.zip
     ```
 
-6. Create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
+6. If you intend to deploy an Enterprise system, create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
 
     ```bash
     export NEXUS_USERNAME="<your-username>"
@@ -228,16 +229,22 @@ The diagram below shows the result of a localhost deployment.
 
 ![Localhost Deployment](./resources/acs-localhost.png)
 
-To deploy everything on the local machine navigate to the folder you extracted the ZIP to and execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
+To deploy ACS 7 Enterprise on the local machine navigate to the folder you extracted the ZIP to and execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
 
 ```bash
 ansible-playbook playbooks/acs.yml -i inventory_local.yml
 ```
 
-Alternatively, to deploy an ACS 6.2.N system use the following command:
+Alternatively, to deploy an ACS Enterprise 6.2.N system use the following command:
 
 ```bash
 ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@6.2.N-extra-vars.yml"
+```
+
+Or to deploy ACS Community use the following command:
+
+```bash
+ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@community-extra-vars.yml"
 ```
 
 > NOTE: The playbook takes around 30 minutes to complete.
@@ -258,7 +265,7 @@ transformers_1             : ok=81   changed=10   unreachable=0    failed=0    s
 
 Once ACS has initialized access the system using the following URLs with a browser:
 
-* Digital Workspace: `http://<control-node-public-ip>/workspace`
+* Digital Workspace: `http://<control-node-public-ip>/workspace` (Enterprise Only)
 * Share: `http://<control-node-public-ip>/share`
 * Repository: `http://<control-node-public-ip>/alfresco`
 * API Explorer: `http://<control-node-public-ip>/api-explorer`
@@ -302,16 +309,22 @@ To check your inventory file is configured correctly and the control node is abl
 ansible all -m ping -i inventory_ssh.yml
 ```
 
-To deploy everything on the target host execute the playbook as the current user using the following command:
+To deploy ACS 7 Enterprise on the target host execute the playbook as the current user using the following command:
 
 ```bash
 ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
 ```
 
-Alternatively, to deploy an ACS 6.2.N system use the following command:
+Alternatively, to deploy an ACS 6.2.N Enterprise system use the following command:
 
 ```bash
 ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@6.2.N-extra-vars.yml"
+```
+
+Or to deploy ACS Community use the following command:
+
+```bash
+ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@community-extra-vars.yml"
 ```
 
 > NOTE: The playbook takes around 30 minutes to complete.
@@ -332,7 +345,7 @@ transformers_1             : ok=81   changed=10   unreachable=0    failed=0    s
 
 Once ACS has initialized access the system using the following URLs with a browser:
 
-* Digital Workspace: `http://<target-host-ip>/workspace`
+* Digital Workspace: `http://<target-host-ip>/workspace` (Enterprise Only)
 * Share: `http://<target-host-ip>/share`
 * Repository: `http://<target-host-ip>/alfresco`
 * API Explorer: `http://<target-host-ip>/api-explorer`
@@ -353,16 +366,22 @@ To check your inventory file is configured correctly and the control node is abl
 ansible all -m ping -i inventory_ssh.yml
 ```
 
-To deploy everything on the target hosts execute the playbook as the current user using the following command:
+To deploy ACS 7 Enterprise on the target hosts execute the playbook as the current user using the following command:
 
 ```bash
 ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
 ```
 
-Alternatively, to deploy an ACS 6.2.N system use the following command:
+Alternatively, to deploy an ACS 6.2.N Enterprise system use the following command:
 
 ```bash
 ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@6.2.N-extra-vars.yml"
+```
+
+Or to deploy ACS Community use the following command:
+
+```bash
+ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@community-extra-vars.yml"
 ```
 
 > NOTE: The playbook takes around 30 minutes to complete.
@@ -383,7 +402,7 @@ transformers_1             : ok=81   changed=10   unreachable=0    failed=0    s
 
 Once ACS has initialized access the system using the following URLs with a browser:
 
-* Digital Workspace: `http://<nginx-host-ip>/workspace`
+* Digital Workspace: `http://<nginx-host-ip>/workspace` (Enterprise Only)
 * Share: `http://<nginx-host-ip>/share`
 * Repository: `http://<nginx-host-ip>/alfresco`
 * API Explorer: `http://<nginx-host-ip>/api-explorer`
