@@ -2,13 +2,6 @@
 acs:
   version: 7.0.0-A27
   edition: Community
-amps:  
-  aos_module:
-    version: 1.4.0-M1
-  googledrive_repo:
-    version: 3.2.1-A2
-  googledrive_share:
-    version: 3.2.1-A2
 
 downloads:
   acs_zip_url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-content-services-community-distribution/{{ acs.version }}/alfresco-content-services-community-distribution-{{ acs.version }}.zip"
