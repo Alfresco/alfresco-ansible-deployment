@@ -32,3 +32,5 @@ dependencies_version:
   jdk: 11.0.7
   jdk_arch: 10
   tomcat: 8.5.61
+
+acs_zip_sha1_checksum: "01f323b04bb5bd515d16d1bc4e8018b3c3178003"
