@@ -284,4 +284,5 @@ jobs:
         - scripts/generate-zip.sh
         - git checkout -B "${TRAVIS_BRANCH}"
         - export VERSION=`cat VERSION`
-        - curl -v -F hasPom=false -F r=releases -F g=org.alfresco -F a=alfresco-ansible-deployment -F v=$VERSION -F p=zip -F alfresco-ansible-deployment-${VERSION}.zip -u $NEXUS_USERNAME:$NEXUS_PASSWORD http://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/
+        - curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file alfresco-ansible-deployment-${VERSION}.zip http://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-ansible-deployment/${VERSION}/alfresco-ansible-deployment-${VERSION}.zip
+        
