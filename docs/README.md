@@ -57,19 +57,19 @@ The playbooks have been tested with Ansible 2.9.16 on target hosts with the foll
 
 The table below shows the version of the components deployed by the playbook for ACS 7.x and 6.2.N.
 
-| Component | 7.x | 6.2.N |
-|-|-|-|
-| OpenJDK | 11.0.7 | 11.0.7 |
-| Apache Tomcat | 9.0.41 | 8.5.56 |
-| PostgreSQL | 13.x | 11.x |
-| Apache ActiveMQ | 5.16 | 5.15.13 |
-| Repository | 7.0.0-M3 | 6.2.2 |
-| Share | 7.0.0-M3 | 6.2.2 |
-| Digital Workspace | 2.0.0 | 2.0.0 |
-| Search Services | 2.0.1 | 1.4.3 |
-| All-In-One Transformation Engine | 2.3.6 | 2.3.6 |
-| Transform Router | 1.3.1 |  1.3.1 |
-| Shared File Store | 0.10.0 | 0.8.0 |
-| AOS | 1.4.0-M1 | 1.3.1 |
-| Sync Service | 3.4.0-M2 | 3.3.3.1 |
-| GoogleDocs | 3.2.0 | 3.2.0 |
+| Component | 7.0 Enterprise | 6.2.N Enterprise | Community |
+|-|-|-|-|
+| OpenJDK | 11.0.7 | 11.0.7 | 11.0.7 |
+| Apache Tomcat | 9.0.41 | 8.5.56 | 9.0.41 |
+| PostgreSQL | 13.x | 11.x | 13.x |
+| Apache ActiveMQ | 5.16 | 5.15.13 | 5.16 |
+| Repository | 7.0.0-M3 | 6.2.2 | 7.0.0-A27 |
+| Share | 7.0.0-M3 | 6.2.2 | 7.0.0-M3 |
+| Digital Workspace | 2.0.0 | 2.0.0 | 2.0.0 |
+| Search Services | 2.0.1 | 1.4.3 | 2.0.1 |
+| All-In-One Transformation Engine | 2.3.6 | 2.3.6 | 2.3.6 |
+| Transform Router | 1.3.1 | 1.3.1 | 1.3.1 |
+| Shared File Store | 0.10.0 | 0.8.0 | 0.10.0 |
+| AOS | 1.4.0-M1 | 1.3.1 | 1.4.0-M1 |
+| Sync Service | 3.4.0-M2 | 3.3.3.1 | 3.4.0-M2 |
+| GoogleDocs | 3.2.0 | 3.2.0 | 3.2.1-A2 |

@@ -7,6 +7,3 @@ utils_repo:
   - freetype-2.8-14.el7
   - libpng
   - dejavu-sans-fonts-2.33-6.el7
-  - python-psycopg2
-
-postgresql_rpm_repo: https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm

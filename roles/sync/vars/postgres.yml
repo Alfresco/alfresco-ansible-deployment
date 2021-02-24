@@ -1,3 +1,2 @@
 ---
-sync_db_name: "alfresco-sync"
 sync_db_port: "5432"

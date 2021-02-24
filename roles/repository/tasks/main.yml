@@ -6,24 +6,6 @@
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
 
-- name: Install postgres rpm repository
-  become: true
-  become_user: root
-  yum:
-    name: "{{ postgresql_rpm_repo }}"
-    state: present
-    disable_gpg_check: true
-  when: ansible_distribution_major_version == "7" and dependencies_version.postgres_major_version == 13
-
-- name: Install pspg.x86_64 package
-  become: true
-  become_user: root
-  package:
-    name: pspg.x86_64
-    state: present
-  poll: 0
-  when: ansible_distribution_major_version == "7" and dependencies_version.postgres_major_version == 13
-
 - name: Ensure a list of packages installed
   become: true
   become_user: root
@@ -110,7 +92,6 @@
   block:
     - name: Copy db_connector_repo
       copy:
-        remote_src: true
         src: "{{ inventory_dir }}/configuration_files/db_connector_repo/"
         dest: "{{ tomcat_config_dir }}/lib/"
         owner: "{{ username }}"
@@ -374,10 +355,6 @@
     dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml"
     mode: 'u=rwx,g=rwx,o=rx'
   when: not api_explorer_xml.stat.exists
-
-- name: Include postgres task
-  include_tasks: "postgres.yml"
-  when: repo_db_url == ""
 
 - name: Create alfresco-global.properties
   template:
