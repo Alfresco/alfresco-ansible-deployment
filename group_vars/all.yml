@@ -107,6 +107,7 @@ dependencies_url:
 
 postgres_pass: MyPass1
 jdk_md5_checksum: "ac1bb98fe70314a67f6eb7a87e960d44"
+acs_zip_sha1_checksum: "fa12d3080d6948895815018054a45c0d87ab11f9"
 
 repo_db_url: ""
 repo_db_driver: org.postgresql.Driver
