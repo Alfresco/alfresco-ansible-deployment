@@ -19,9 +19,6 @@ api_explorer:
 search:
   version: 1.4.3
 
-sfs:
-  version: 0.8.0
-
 sync:
   version: 3.3.3.1
 
