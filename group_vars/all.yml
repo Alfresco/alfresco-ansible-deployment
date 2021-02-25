@@ -47,6 +47,15 @@ downloads:
   transform_jar_url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
   sync_zip_url: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"
 
+checksums:
+  acs_zip_sha1_checksum: "{{ lookup('url', downloads.acs_zip_url + '.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
+  adw_zip_sha1_checksum: "{{ lookup('url', downloads.adw_zip_url + '.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
+  search_zip_sha1_checksum: "{{ lookup('url', downloads.search_zip_url + '.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
+  sfs_jar_sha1_checksum: "{{ lookup('url', downloads.sfs_jar_url + '.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
+  trouter_jar_sha1_checksum: "{{ lookup('url', downloads.trouter_jar_url + '.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
+  transform_jar_sha1_checksum: "{{ lookup('url', downloads.transform_jar_url + '.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
+  sync_zip_sha1_checksum: "{{ lookup('url', downloads.sync_zip_url + '.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
+
 war_downloads:
   - url: "{{ nexus_repository.releases }}org/alfresco/api-explorer/{{ api_explorer.version }}/api-explorer-{{ api_explorer.version }}.war"
     dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
@@ -107,7 +116,6 @@ dependencies_url:
 
 postgres_pass: MyPass1
 jdk_md5_checksum: "ac1bb98fe70314a67f6eb7a87e960d44"
-acs_zip_sha1_checksum: "fa12d3080d6948895815018054a45c0d87ab11f9"
 
 repo_db_url: ""
 repo_db_driver: org.postgresql.Driver

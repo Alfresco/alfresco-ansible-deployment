@@ -22,5 +22,3 @@ amp_downloads:
     dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
   - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
-
-acs_zip_sha1_checksum: "09cc576ca6aedf8d112a7625e176c27f235de7a1"
