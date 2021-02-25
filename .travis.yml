@@ -24,7 +24,6 @@ env:
 install: pip install 'molecule[docker]'
 
 stages:
-  - name: ReleaseTest Stage
   - name: Linters
   - name: Verification
   - name: Release Stage
@@ -278,7 +277,7 @@ jobs:
         upload-dir: "enterprise/alfresco-ansible-deployment"
       after_deploy:
         - rm -fv dist/alfresco-ansible-release-*.zip
-    - stage: ReleaseTest Stage
+    - stage: Release Stage
       name: Release to NEXUS
       script:         
         - scripts/generate-zip.sh
