@@ -4,7 +4,7 @@ nexus_repository:
   enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
 
 acs:
-  version: 7.0.0-A27
+  version: 7.0.0-M3
   edition: Enterprise
 
 amps:  
@@ -36,7 +36,7 @@ adw:
   version: 2.0.0
 
 sync:
-  version: 3.4.0-M5
+  version: 3.4.0-M2
 
 downloads:
   acs_zip_url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
