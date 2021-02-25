@@ -65,11 +65,11 @@ The table below shows the version of the components deployed by the playbook for
 | Apache ActiveMQ | 5.16 | 5.15.13 | 5.16 |
 | Repository | 7.0.0-A27 | 6.2.2 | 7.0.0-A27 |
 | Share | 7.0.0-A17 | 6.2.2 | 7.0.0-A17 |
-| Digital Workspace | 2.0.0 | 2.0.0 | 2.0.0 |
+| Digital Workspace | 2.0.0 | 2.0.0 | N/A |
 | Search Services | 2.0.1 | 1.4.3 | 2.0.1 |
 | All-In-One Transformation Engine | 2.3.8 | 2.3.8 | 2.3.8 |
-| Transform Router | 1.3.2-A2 | 1.3.2-A2 | 1.3.2-A2 |
-| Shared File Store | 0.12.0 | 0.12.0 | 0.12.0 |
+| Transform Router | 1.3.2-A2 | 1.3.2-A2 | N/A |
+| Shared File Store | 0.12.0 | 0.12.0 | N/A |
 | AOS | 1.4.0-M2 | 1.3.1 | 1.4.0-M2 |
-| Sync Service | 3.4.0-M2 | 3.3.3.1 | 3.4.0-M2 |
+| Sync Service | 3.4.0-M2 | 3.3.3.1 | N/A |
 | GoogleDocs | 3.2.1-A2 | 3.2.0 | 3.2.1-A2 |
