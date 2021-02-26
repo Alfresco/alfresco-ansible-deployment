@@ -254,7 +254,7 @@ jobs:
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; sed -i 's+TEST_URL+http://$TESTHOST+g' tests/test-config.json; cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2multi"; fi
     - stage: Release Stage 
-      name: Release to S3
+      name: Release
       script:
         - scripts/generate-zip.sh
         # Travis CI runner work on DETACHED HEAD, so we need to checkout the branch
@@ -265,6 +265,7 @@ jobs:
         - export GIT_TAG="v$VERSION"
         - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
         - git push https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-ansible-deployment $GIT_TAG
+        - curl -v -F "r=releases" -F "g=org.alfresco" -F "a=alfresco-ansible-deployment" -F "v=${VERSION}" -F "p=zip" -F "file=@dist/alfresco-ansible-deployment-${VERSION}.zip" -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" https://artifacts.alfresco.com/nexus/service/local/artifact/maven/content        
       deploy:
         provider: s3
         access_key_id: "${STAGING_AWS_ACCESS_KEY}"
@@ -277,10 +278,3 @@ jobs:
         upload-dir: "enterprise/alfresco-ansible-deployment"
       after_deploy:
         - rm -fv dist/alfresco-ansible-release-*.zip
-    - stage: Release Stage
-      name: Release to NEXUS
-      script:         
-        - scripts/generate-zip.sh
-        - git checkout -B "${TRAVIS_BRANCH}"
-        - export VERSION=`cat VERSION`
-        - curl -v -F "r=releases" -F "g=org.alfresco" -F "a=alfresco-ansible-deployment" -F "v=${VERSION}" -F "p=zip" -F "file=@dist/alfresco-ansible-deployment-${VERSION}.zip" -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" https://artifacts.alfresco.com/nexus/service/local/artifact/maven/content
