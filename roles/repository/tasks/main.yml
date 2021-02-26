@@ -47,7 +47,7 @@
 - name: "Download {{ acs_zip_file }}"
   get_url:
     url: "{{ downloads.acs_zip_url }}"
-    dest: "{{ download_location }}"
+    dest: "{{ download_location }}/{{ acs_zip_file }}"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     checksum: "sha1:{{ downloads.acs_zip_sha1_checksum }}"
