@@ -19,21 +19,13 @@
   failed_when: false
   changed_when: magick_exists.rc != 0
 
-- name: Download imagemagick-epel-dep.rpm
-  get_url:
-    url: "{{ imagemagick_dep_rpm }}"
-    dest: "{{ download_location }}/imagemagick-epel-dep.rpm"
-    mode: 0444
-    timeout: 570
-  register: download_img_epel_dep
-  until: download_img_epel_dep is succeeded
-  when: magick_exists.rc != 0
-
-- name: install imagemagick-epel-dep
-  yum:
-    name: "{{ download_location }}/imagemagick-epel-dep.rpm"
-    state: present
-  when: download_img_epel_dep is succeeded and magick_exists.rc != 0
+- name: Enable EPEL repository
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-$releasever&arch=$basearch&infra=$infra&content=$contentdir
+    gpgcheck: yes
+    gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
 
 - name: Download imagemagick-distribution-linux.rpm
   get_url:
