@@ -31,9 +31,9 @@ def test_trouter_log_exists(host, get_ansible_vars):
 
 def test_trouter_response(host, get_ansible_vars):
     "Check that trouter context is available and returns a HTTP 200 status code"
-    cmd = host.run("curl -iL http://{}:8095/transform/config >> trouter_response.txt".format(test_host))
-    trouter_response = open('trouter_response.txt').read()
-    assert_that(trouter_response, contains_string("HTTP/1.1 200"))
+    cmd = host.run("curl -iL http://{}:8095/transform/config".format(test_host))
+    http_response = host.run("curl -sL -w '%{http_code}' http://" + test_host + ":8095/transform/config -o /dev/null")
+    assert_that(http_response.stdout, contains_string("200"))
     assert_that(cmd.stdout, contains_string("pdfRendererOptions"))
     assert_that(cmd.stdout, contains_string("archiveOptions"))
     assert_that(cmd.stdout, contains_string("imageMagickOptions"))
