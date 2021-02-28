@@ -84,7 +84,7 @@ You are now ready to run the playbook, please return to the [deployment guide an
 
 ## Generate Multiple Target Hosts
 
-To quickly provision multiple target hosts follow the steps below.
+To quickly provision multiple target hosts follow the steps bellow.
 
 1. Make sure you are in the root of the cloned repository i.e. in the `alfresco-ansible-deployment` folder
 
@@ -129,4 +129,4 @@ You are now ready to run the playbook, please return to the [deployment guide an
 
 ## Cleanup
 
-Molecule can also be used delete the resources we created by running `molecule destroy -s ec2` if you generated a single target host or `molecule destroy -s ec2multi` if you generated multiple target hosts.
+Molecule can also be used to delete the resources we created by running `molecule destroy -s ec2` if you generated a single target host or `molecule destroy -s ec2multi` if you generated multiple target hosts.
