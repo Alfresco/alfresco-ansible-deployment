@@ -1,28 +1,22 @@
 ---
 # tasks file for adw
-- name: check if "{{ download_location }}/alfresco-digital-workspace-{{ adw.version }}.zip" file exists
-  stat:
-    path:  "{{ download_location }}/alfresco-digital-workspace-{{ adw.version }}.zip"
-  register: adw_zip
-
 - name: Create "{{ nginx_folder }}/{{ request_uri }}/" dir
   file:
     path: "{{ nginx_folder }}/{{ request_uri }}/"
     state: directory
     mode: 'u=rwx,g=rx,o=rx'
-  when: not adw_zip.stat.exists
 
 - name: Download alfresco-digital-workspace-{{ adw.version }}.zip
   get_url:
     url: "{{ downloads.adw_zip_url }}"
     dest: "{{ download_location }}/alfresco-digital-workspace-{{ adw.version }}.zip"
+    checksum: "sha1:{{ downloads.adw_zip_sha1_checksum }}"
     mode: 'u=r,g=r,o=r'
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
   register: download_result
   until: download_result is succeeded
-  when: not adw_zip.stat.exists
 
 - name: Extract alfresco-digital-workspace-{{ adw.version }}.zip
   become: true

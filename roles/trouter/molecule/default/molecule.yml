@@ -8,8 +8,8 @@ scenario:
     - create
     - prepare
     - converge
-    - side_effect
     - verify
+    - side_effect
     - cleanup
     - destroy
 dependency:

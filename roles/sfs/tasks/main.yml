@@ -23,6 +23,7 @@
       get_url:
         url: "{{ downloads.sfs_jar_url }}"
         dest: "{{ ats_home }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar"
+        checksum: "sha1:{{ downloads.sfs_jar_sha1_checksum }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
