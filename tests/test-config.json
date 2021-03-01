@@ -12,7 +12,7 @@
         "modules": [
           {
             "name": "Alfresco / Google Docs Integration",
-            "version": "3.2.0",
+            "version": "3.2.1-A2",
             "installed": true
           },
           {
@@ -22,7 +22,7 @@
           },
           {
             "name": "Alfresco Device Sync Amp",
-            "version": "3.4.0-M2",
+            "version": "3.4.0-M5",
             "installed": true
           },
           {
@@ -33,7 +33,7 @@
         ]
       },
       "adw": {
-        "version": "1.6.0"
+        "version": "2.0.0"
       }
     }
   }
