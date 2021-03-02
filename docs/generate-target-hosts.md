@@ -84,7 +84,7 @@ You are now ready to run the playbook, please return to the [deployment guide an
 
 ## Generate Multiple Target Hosts
 
-To quickly provision multiple target hosts follow the steps bellow.
+To quickly provision multiple target hosts follow the steps below.
 
 1. Make sure you are in the root of the cloned repository i.e. in the `alfresco-ansible-deployment` folder
 
