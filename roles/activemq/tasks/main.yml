@@ -5,16 +5,40 @@
       path: "{{ activemq_home }}/bin/activemq"
   register: activemq_exe
 
-- name: Download and untar activemq
+- name: Download activemq tar
+  become: true
+  become_user: root
+  get_url:
+    url: "{{ dependencies_url.activemq }}"
+    dest: "/opt/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
+    mode: 'u=rwx,g=rwx,o=rx'
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+  register: activemq_download
+  when: not activemq_exe.stat.exists
+  async: 900
+  poll: 0
+
+- name: Check on activemq download async task
+  become: true
+  become_user: root
+  async_status:
+    jid: "{{ activemq_download.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 5
+  retries: 300
+  when: not activemq_exe.stat.exists
+
+- name: Extract apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz into /opt
   become: true
   unarchive:
-      src: "{{ dependencies_url.activemq }}"
-      remote_src: true
-      group: "{{ group_name }}"
-      owner: "{{ username }}"
-      dest: "/opt/"
-      mode: 'u=rwx,g=rwx,o=rx'
-  when: not activemq_exe.stat.exists
+    src: "/opt/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
+    dest: "/opt"
+    remote_src: true
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+  when: job_result is succeeded
 
 - name: Move configuration files
   block:

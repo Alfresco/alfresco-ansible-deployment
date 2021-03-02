@@ -92,7 +92,11 @@ jobs:
     - stage: Verification
       name: Trouter Role Verification
       script:
-        - cd roles/trouter/ && molecule test
+        - cd roles/trouter
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
     - stage: Verification
       name: Transform AIO Verification tests
       script:
@@ -265,6 +269,7 @@ jobs:
         - export GIT_TAG="v$VERSION"
         - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
         - git push https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-ansible-deployment $GIT_TAG
+        - curl -v -F "r=releases" -F "g=org.alfresco" -F "a=alfresco-ansible-deployment" -F "v=${VERSION}" -F "p=zip" -F "file=@dist/alfresco-ansible-deployment-${VERSION}.zip" -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" https://artifacts.alfresco.com/nexus/service/local/artifact/maven/content        
       deploy:
         provider: s3
         access_key_id: "${STAGING_AWS_ACCESS_KEY}"

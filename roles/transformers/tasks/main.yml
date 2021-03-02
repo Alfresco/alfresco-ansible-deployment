@@ -166,6 +166,7 @@
   get_url:
     url: "{{ downloads.transform_jar_url }}"
     dest: "{{ binaries_folder }}/transform-service/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
+    checksum: "sha1:{{ downloads.transform_jar_sha1_checksum }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'

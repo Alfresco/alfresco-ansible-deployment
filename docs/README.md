@@ -63,13 +63,13 @@ The table below shows the version of the components deployed by the playbook for
 | Apache Tomcat | 9.0.41 | 8.5.56 | 9.0.41 |
 | PostgreSQL | 13.x | 11.x | 13.x |
 | Apache ActiveMQ | 5.16 | 5.15.13 | 5.16 |
-| Repository | 7.0.0-M3 | 6.2.2 | 7.0.0-A27 |
-| Share | 7.0.0-M3 | 6.2.2 | 7.0.0-M3 |
-| Digital Workspace | 2.0.0 | 2.0.0 | 2.0.0 |
+| Repository | 7.0.0-A27 | 6.2.2 | 7.0.0-A27 |
+| Share | 7.0.0-A17 | 6.2.2 | 7.0.0-A17 |
 | Search Services | 2.0.1 | 1.4.3 | 2.0.1 |
-| All-In-One Transformation Engine | 2.3.6 | 2.3.6 | 2.3.6 |
-| Transform Router | 1.3.1 | 1.3.1 | 1.3.1 |
-| Shared File Store | 0.10.0 | 0.8.0 | 0.10.0 |
-| AOS | 1.4.0-M1 | 1.3.1 | 1.4.0-M1 |
-| Sync Service | 3.4.0-M2 | 3.3.3.1 | 3.4.0-M2 |
-| GoogleDocs | 3.2.0 | 3.2.0 | 3.2.1-A2 |
+| All-In-One Transformation Engine | 2.3.8 | 2.3.8 | 2.3.8 |
+| AOS | 1.4.0-M2 | 1.3.1 | 1.4.0-M2 |
+| GoogleDocs | 3.2.1-A2 | 3.2.0 | 3.2.1-A2 |
+| Digital Workspace | 2.0.0 | 2.0.0 | N/A |
+| Transform Router | 1.3.2-A2 | 1.3.2-A2 | N/A |
+| Shared File Store | 0.12.0 | 0.12.0 | N/A |
+| Sync Service | 3.4.0-M2 | 3.3.3.1 | N/A |
