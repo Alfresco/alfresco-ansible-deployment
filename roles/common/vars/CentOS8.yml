@@ -2,5 +2,6 @@
 utils:
   - sudo
   - unzip
+  - tar
   - python3-libselinux
   - python3-libsemanage
