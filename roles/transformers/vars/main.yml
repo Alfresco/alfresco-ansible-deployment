@@ -5,7 +5,7 @@ temp_dir: /tmp/ansible_transformation
 imagemagick_home: "/usr/lib64/ImageMagick-{{ imagemagick_version[0:6] }}"
 imagemagick_rpm: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version }}/imagemagick-distribution-{{ imagemagick_version }}-linux.rpm"
 imagemagick_lib_rpm: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/{{ imagemagick_version }}/imagemagick-distribution-{{ imagemagick_version }}-libs-linux.rpm"
-imagemagick_dep_rpm: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
+imagemagick_dep_rpm: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
 
 libreoffice_home: "/opt/libreoffice{{ libreoffice[0:3] }}/"
 libreoffice_rpm: "https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/libreoffice/libreoffice-dist/{{ libreoffice }}/libreoffice-dist-{{ libreoffice }}-linux.gz"
