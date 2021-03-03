@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
     v.cpus = 4
   end
   config.vm.provision "shell",
-    inline: "echo -e 'export NEXUS_USERNAME="+user+"\nexport NEXUS_PASSWORD="+pass+"\n' >> /home/vagrant/.bashrc"
+    inline: "echo -e 'export NEXUS_USERNAME=\""+user+"\"\nexport NEXUS_PASSWORD=\""+pass+"\"\n' >> /home/vagrant/.bashrc"
   config.vm.provision :ansible_local do |ansible|
     ansible.playbook = "playbooks/acs.yml"
     ansible.inventory_path = "inventory_local.yml"
