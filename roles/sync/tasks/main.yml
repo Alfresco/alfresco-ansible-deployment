@@ -113,6 +113,7 @@
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx'
         force: yes
+      notify: restart-sync
 
 - name: Check for SYNC_HOME in "{{ config_folder }}/setenv.sh"
   shell: cat {{ config_folder }}/setenv.sh | grep SYNC_HOME
