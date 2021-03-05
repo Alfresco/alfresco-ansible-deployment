@@ -14,8 +14,8 @@ The machine the playbook is run from is known as the control node. An inventory 
 
 Regardless of role and connection type a consistent folder structure is used, you will find the deployed files in the following locations:
 
-| Path   | Purpose   |
-| ------ | --------- |
+| Path | Purpose |
+| :--- | :--- |
 | ```/opt/alfresco```     | Binaries |
 | ```/etc/opt/alfresco``` | Configuration |
 | ```/var/opt/alfresco``` | Data |
@@ -25,8 +25,8 @@ Regardless of role and connection type a consistent folder structure is used, yo
 
 The following systemd services are deployed and can be used to stop and start Alfresco components:
 
-| Service Name   | Purpose   |
-| ------ | --------- |
+| Service Name | Purpose |
+| :--- | :--- |
 | ```activemq.service``` | ActiveMQ Service |
 | ```postgresql-<version>.service``` | Postgresql DB Service (where `<version>` is 11 for ACS 6.2.N and 13 for ACS 7.x) |
 | ```nginx.service``` | Nginx Service |
@@ -37,6 +37,34 @@ The following systemd services are deployed and can be used to stop and start Al
 | ```alfresco-sync.service``` | Alfresco Sync Service |
 | ```alfresco-tengine-aio.service``` | Alfresco AIO Transform Core Engine |
 | ```alfresco-transform-router.service``` | Alfresco Transformation Router Service |
+
+## TCP Port Configuration
+
+Several roles setup services that listen on TCP ports, they are shown in the table below.
+
+| Role | Port Number(s) |
+| :--- | :--- |
+| activemq | 8161, 61616 |
+| nginx | 80 |
+| postgres | 5432 |
+| search | 8983 |
+| sfs | 8099 |
+| sync | 9090 |
+| tomcat | 8080 |
+| transformers (aio t-engine) | 8090 |
+| trouter | 8095 |
+
+### Role communication
+
+Some roles wait for TCP ports to be listening before continuing execution, the table below shows the communication paths.
+
+| Source Role | Target Role | Port |
+| :--- | :--- | :--- |
+| repository | postgres | 5432 |
+| sync | postgres | 5432 |
+| sync | repository | 8080
+| transformers | activemq | 8161 |
+| trouter | transformers | 8090 |
 
 ## Getting Started Quickly
 
@@ -358,7 +386,7 @@ The diagram below shows the result of a multi machine deployment.
 
 > **NOTE**: You can optionally use the following [guide](./generate-target-hosts.md#generate-multiple-target-hosts) to generate target hosts and an inventory file for testing purposes.
 
-As of now, the playbook doesn't deal with targets' local firewall configuration. This can be a problem for multi-machines deployment. To workaround that either simply disable your local firewalls completely or make sure the follwoing rules have been set up:
+As of now, the playbook doesn't deal with targets' local firewall configuration. This can be a problem for multi-machines deployment. To workaround that either simply disable your local firewalls completely or make sure the following rules have been set up:
 
  TCP port |   target  | sources  | example command (doesn't take csources into account)
 ----------+-----------+----------+------------------------------------------------------
@@ -367,18 +395,18 @@ As of now, the playbook doesn't deal with targets' local firewall configuration.
    8090   | transformers hosts | repository hosts | `firewall-cmd --permanent --add-port=8090/tcp`
    8161   | activemq hosts | repository, transformers & syncservice hosts | `firewall-cmd --permanent --add-port=8161/tcp`
 
-Ports above are needed open for the deployment to succedd. For the complete architecture to work follwoing ports also need to be open (even thoug it doesn't break deployment):
+Ports above are needed open for the deployment to succeed. For the complete architecture to work the following ports also need to be open (even though it doesn't break deployment):
 
  TCP port |   target  | sources  | example command (doesn't take csources into account)
 ----------+-----------+----------+------------------------------------------------------
-   8983   | seach hosts | repository hosts (optionally proxy hosts for solr admin access) | `firewall-cmd --permanent --add-port=8983/tcp`
+   8983   | search hosts | repository hosts (optionally proxy hosts for solr admin access) | `firewall-cmd --permanent --add-port=8983/tcp`
    9090   | syncservice hosts | proxy hosts | `firewall-cmd --permanent --add-port=9090/tcp`
      80   | proxy hosts | any (or identified client address range) | `firewall-cmd --permanent --add-service=http`
     443   | proxy hosts | any (or identified client address range) | `firewall-cmd --permanent --add-service=https`
 
-> after firewall config has been set up a reload of the firewalld service is needed
+> After the firewall config has been set up a reload of the `firewalld` service is needed
 
-Once you have prepared the target hosts and configured the inventory_ssh.yaml file you are ready to run the playbook.
+Once you have prepared the target hosts (ensuring the [relevant ports](#tcp-port-configuration) are accessible) and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
 To check your inventory file is configured correctly and the control node is able to connect to the target hosts run the following command:
 
@@ -464,7 +492,8 @@ What needs to be removed from a system will depend on your inventory configurati
 
 * The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Verifying if `<file>` finished downloading (nnn retries left)" appearing many times. Despite the wording this is **not** an error so please ignore and be patient!
 * The playbook is not yet fully idempotent so may cause issues if you make changes and run multiple times
-* alfresco-content.service has the status "exited" because it is defined as a "oneshot" service that calls tomcat.service.
+* alfresco-content.service has the status "exited" because it is defined as a "oneshot" service that calls tomcat.service
+* The `firewalld` service can prevent the playbook from completing successfully if it's blocking the [ports required](#tcp-port-configuration) for communication between the roles
 
 ## Troubleshooting
 
