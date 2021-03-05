@@ -14,8 +14,8 @@ The machine the playbook is run from is known as the control node. An inventory 
 
 Regardless of role and connection type a consistent folder structure is used, you will find the deployed files in the following locations:
 
-| Path   | Purpose   |
-| ------ | --------- |
+| Path | Purpose |
+| :--- | :--- |
 | ```/opt/alfresco```     | Binaries |
 | ```/etc/opt/alfresco``` | Configuration |
 | ```/var/opt/alfresco``` | Data |
@@ -25,8 +25,8 @@ Regardless of role and connection type a consistent folder structure is used, yo
 
 The following systemd services are deployed and can be used to stop and start Alfresco components:
 
-| Service Name   | Purpose   |
-| ------ | --------- |
+| Service Name | Purpose |
+| :--- | :--- |
 | ```activemq.service``` | ActiveMQ Service |
 | ```postgresql-<version>.service``` | Postgresql DB Service (where `<version>` is 11 for ACS 6.2.N and 13 for ACS 7.x) |
 | ```nginx.service``` | Nginx Service |
@@ -42,8 +42,8 @@ The following systemd services are deployed and can be used to stop and start Al
 
 Several roles setup services that listen on TCP ports, they are shown in the table below.
 
-| Role | Port Number(s)   |
-| ------ | --------- |
+| Role | Port Number(s) |
+| :--- | :--- |
 | activemq | 8161, 61616 |
 | nginx | 80 |
 | postgres | 5432 |
@@ -59,7 +59,7 @@ Several roles setup services that listen on TCP ports, they are shown in the tab
 Some roles wait for TCP ports to be listening before continuing execution, the table below shows the communication paths.
 
 | Source Role | Target Role | Port |
-| ----- | ----- | ----- |
+| :--- | :--- | :--- |
 | repository | postgres | 5432 |
 | sync | repository | 8080
 | transformers | activemq | 8161 |
