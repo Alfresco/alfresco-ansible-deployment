@@ -38,6 +38,33 @@ The following systemd services are deployed and can be used to stop and start Al
 | ```alfresco-tengine-aio.service``` | Alfresco AIO Transform Core Engine |
 | ```alfresco-transform-router.service``` | Alfresco Transformation Router Service |
 
+## TCP Port Configuration
+
+Several roles setup services that listen on TCP ports, they are shown in the table below.
+
+| Role/Service   | Port Number(s)   |
+| ------ | --------- |
+| activemq | 8161, 61616 |
+| nginx | 80 |
+| postgres | 5432 |
+| search | 8983 |
+| sfs | 8099 |
+| sync | 9090 |
+| tomcat | 8080 |
+| transformers (aio t-engine) | 8090 |
+| trouter | 8095 |
+
+### Role communication
+
+Some roles wait for TCP ports to be listening before continuing execution, the table below shows the communication paths.
+
+| Source Role | Target Role | Port |
+| - | - | - |
+| repository | postgres | 5432 |
+| sync | repository | 8080
+| transformers | activemq | 8161 |
+| trouter | transformers | 8090 |
+
 ## Getting Started Quickly
 
 The quickest way to get started and experiment with the playbook is by leveraging Vagrant to create a Virtualbox virtual machine to act as the control node **and** the target host.
@@ -358,7 +385,7 @@ The diagram below shows the result of a multi machine deployment.
 
 > **NOTE**: You can optionally use the following [guide](./generate-target-hosts.md#generate-multiple-target-hosts) to generate target hosts and an inventory file for testing purposes.
 
-Once you have prepared the target hosts and configured the inventory_ssh.yaml file you are ready to run the playbook.
+Once you have prepared the target hosts (ensuring the [relevant ports](#tcp-port-configuration) are accessible) and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
 To check your inventory file is configured correctly and the control node is able to connect to the target hosts run the following command:
 
@@ -444,7 +471,8 @@ What needs to be removed from a system will depend on your inventory configurati
 
 * The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Verifying if `<file>` finished downloading (nnn retries left)" appearing many times. Despite the wording this is **not** an error so please ignore and be patient!
 * The playbook is not yet fully idempotent so may cause issues if you make changes and run multiple times
-* alfresco-content.service has the status "exited" because it is defined as a "oneshot" service that calls tomcat.service.
+* alfresco-content.service has the status "exited" because it is defined as a "oneshot" service that calls tomcat.service
+* The `firewalld` service can prevent the playbook from completing successfully if it's blocking the [ports required](#tcp-port-configuration) for communication between the roles
 
 ## Troubleshooting
 
