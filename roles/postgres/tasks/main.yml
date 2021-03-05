@@ -10,7 +10,7 @@
     state: present
     disable_gpg_check: true
 
-- name: Install packages required for CentOS 8
+- name: Install packages required for CentOS/RedHat 8
   package:
     name: "{{ item }}"
     state: present
