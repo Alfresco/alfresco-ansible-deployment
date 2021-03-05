@@ -42,7 +42,7 @@ The following systemd services are deployed and can be used to stop and start Al
 
 Several roles setup services that listen on TCP ports, they are shown in the table below.
 
-| Role/Service   | Port Number(s)   |
+| Role | Port Number(s)   |
 | ------ | --------- |
 | activemq | 8161, 61616 |
 | nginx | 80 |
@@ -59,7 +59,7 @@ Several roles setup services that listen on TCP ports, they are shown in the tab
 Some roles wait for TCP ports to be listening before continuing execution, the table below shows the communication paths.
 
 | Source Role | Target Role | Port |
-| - | - | - |
+| ----- | ----- | ----- |
 | repository | postgres | 5432 |
 | sync | repository | 8080
 | transformers | activemq | 8161 |
