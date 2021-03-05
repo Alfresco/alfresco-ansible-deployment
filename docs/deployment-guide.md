@@ -358,6 +358,26 @@ The diagram below shows the result of a multi machine deployment.
 
 > **NOTE**: You can optionally use the following [guide](./generate-target-hosts.md#generate-multiple-target-hosts) to generate target hosts and an inventory file for testing purposes.
 
+As of now, the playbook doesn't deal with targets' local firewall configuration. This can be a problem for multi-machines deployment. To workaround that either simply disable your local firewalls completely or make sure the follwoing rules have been set up:
+
+ TCP port |   target  | sources  | example command (doesn't take csources into account)
+----------+-----------+----------+------------------------------------------------------
+   5432   | database host | syncservice & repository hosts | `firewall-cmd --permanent --add-service=postgresql`
+   8080   | repository hosts | proxy, search & syncservice hosts | `firewall-cmd --permanent --add-port=8080/tcp`
+   8090   | transformers hosts | repository hosts | `firewall-cmd --permanent --add-port=8090/tcp`
+   8161   | activemq hosts | repository, transformers & syncservice hosts | `firewall-cmd --permanent --add-port=8161/tcp`
+
+Ports above are needed open for the deployment to succedd. For the complete architecture to work follwoing ports also need to be open (even thoug it doesn't break deployment):
+
+ TCP port |   target  | sources  | example command (doesn't take csources into account)
+----------+-----------+----------+------------------------------------------------------
+   8983   | seach hosts | repository hosts (optionally proxy hosts for solr admin access) | `firewall-cmd --permanent --add-port=8983/tcp`
+   9090   | syncservice hosts | proxy hosts | `firewall-cmd --permanent --add-port=9090/tcp`
+     80   | proxy hosts | any (or identified client address range) | `firewall-cmd --permanent --add-service=http`
+    443   | proxy hosts | any (or identified client address range) | `firewall-cmd --permanent --add-service=https`
+
+> after firewall config has been set up a reload of the firewalld service is needed
+
 Once you have prepared the target hosts and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
 To check your inventory file is configured correctly and the control node is able to connect to the target hosts run the following command:
