@@ -1,11 +1,11 @@
 ---
-- name: tomcat-start
+- name: alfresco-content-start
   systemd:
     name: "alfresco-content"
     state: started
     daemon_reload: true
 
-- name: tomcat-stop
+- name: alfresco-content-stop
   systemd:
     name: "alfresco-content"
     state: stopped

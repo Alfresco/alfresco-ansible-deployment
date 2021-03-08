@@ -179,7 +179,7 @@
 - name: Enable Sync service
   systemd:
     name: alfresco-sync.service
-    state: stopped
+    state: started
     enabled: true
 
 - name: Notify sync service service to start

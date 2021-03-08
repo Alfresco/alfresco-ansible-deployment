@@ -176,12 +176,12 @@
     line: "export TOMCAT_HOME=/opt/apache-tomcat-{{ dependencies_version.tomcat }}"
   when: test_tomcat_home.stdout != 0
 
-- name: Add tomcat.service
+- name: Add alfresco-content.service
   template:
       src: alfresco-content.service
       dest: /etc/systemd/system/alfresco-content.service
-      owner: root
-      group: root
+      owner: "{{ username }}"
+      group: "{{ group_name }}"
   when: install_check.rc != 0 or dependencies_version.tomcat not in install_check.stderr
 
 - name: Ensure tomcat service is enabled on boot
