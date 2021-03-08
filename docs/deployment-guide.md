@@ -270,7 +270,7 @@ ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@community-extra-v
 Once the playbook is complete Ansible will display a play recap to let you know that everything is done, similar to the block below:
 
 ```bash
-PLAY RECAP *****************************************************************************************************************************************************************
+PLAY RECAP *******************************************************************************************************
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
 adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
 database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
@@ -350,7 +350,7 @@ ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@community-extra-var
 Once the playbook is complete Ansible will display a play recap to let you know that everything is done, similar to the block below:
 
 ```bash  
-PLAY RECAP *****************************************************************************************************************************************************************
+PLAY RECAP *******************************************************************************************************
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
 adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
 database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
@@ -407,7 +407,7 @@ ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@community-extra-var
 Once the playbook is complete Ansible will display a play recap to let you know that everything is done, similar to the block below:
 
 ```bash  
-PLAY RECAP *****************************************************************************************************************************************************************
+PLAY RECAP *******************************************************************************************************
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
 adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
 database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
@@ -486,7 +486,7 @@ If everything is configured correctly you should see the following at the end of
 ```bash
 Saving to: ‘alfresco-content-services-distribution-6.2.2.pom’
 
-alfresco-content-services-distribution-6.2.2.pom      100%[=======================================================================================================================>]   8.53K  --.-KB/s    in 0.003s  
+alfresco-content-services-distribution-6.2.2.pom      100%[=============================================>]   8.53K  --.-KB/s    in 0.003s  
 
 2021-02-18 13:50:44 (2.54 MB/s) - ‘alfresco-content-services-distribution-6.2.2.pom’ saved [8739/8739]
 ```
@@ -496,7 +496,8 @@ alfresco-content-services-distribution-6.2.2.pom      100%[=====================
 If you are using a multi-machine deployment and the playbook fails with an error similar to the one shown below you may need to check the firewall configuration on the target hosts.
 
 ```bash
-TASK [../roles/repository : Notify alfresco content service] *******************************************************************************************************************************************************
+TASK [../roles/repository : Notify alfresco content service] 
+*******************************************************************************************************
 fatal: [repository_1]: FAILED! => {"changed": false, "elapsed": 300, "msg": "Timeout when waiting for 192.168.0.126:5432"}
 ```
 
