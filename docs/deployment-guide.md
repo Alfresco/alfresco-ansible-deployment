@@ -40,31 +40,21 @@ The following systemd services are deployed and can be used to stop and start Al
 
 ## TCP Port Configuration
 
-Several roles setup services that listen on TCP ports, they are shown in the table below.
+Several roles setup services that listen on TCP ports and several roles wait for TCP ports to be listening before continuing execution (indicated by `Yes` in the "Required For Deployment" column). The table below shows the communication paths and port numbers used.
 
-| Role | Port Number(s) |
-| :--- | :--- |
-| activemq | 8161, 61616 |
-| nginx | 80 |
-| postgres | 5432 |
-| search | 8983 |
-| sfs | 8099 |
-| sync | 9090 |
-| tomcat | 8080 |
-| transformers (aio t-engine) | 8090 |
-| trouter | 8095 |
+| Target Host | Target Port | Source Hosts | Required For Deployment |
+| :--- | :--- | :--- | :--- |
+| activemq | 61616 | repository, syncservice, transformers | Yes |
+| database | 5432 | repository, syncservice | Yes |
+| repository | 8080 | nginx, search, syncservice | Yes |
+| transformers (aio t-engine) | 8090 | repository | Yes |
+| search | 8983 | repository | No |
+| syncservice | 9090 | nginx | No |
+| adw | 80 | nginx | No |
+| nginx | 80 | `<client-ips>` | No |
+| nginx | 443 | `<client-ips>` | No |
 
-### Role communication
-
-Some roles wait for TCP ports to be listening before continuing execution, the table below shows the communication paths.
-
-| Source Role | Target Role | Port |
-| :--- | :--- | :--- |
-| repository | postgres | 5432 |
-| sync | postgres | 5432 |
-| sync | repository | 8080
-| transformers | activemq | 8161 |
-| trouter | transformers | 8090 |
+> NOTE: The transformers host will also contain the transform router process running on port 8095 and the shared file system process running on 8099 but communication between these components remains local.
 
 ## Getting Started Quickly
 
@@ -386,26 +376,6 @@ The diagram below shows the result of a multi machine deployment.
 
 > **NOTE**: You can optionally use the following [guide](./generate-target-hosts.md#generate-multiple-target-hosts) to generate target hosts and an inventory file for testing purposes.
 
-As of now, the playbook doesn't deal with targets' local firewall configuration. This can be a problem for multi-machines deployment. To workaround that either simply disable your local firewalls completely or make sure the following rules have been set up:
-
- TCP port |   target  | sources  | example command (doesn't take csources into account)
-----------+-----------+----------+------------------------------------------------------
-   5432   | database host | syncservice & repository hosts | `firewall-cmd --permanent --add-service=postgresql`
-   8080   | repository hosts | proxy, search & syncservice hosts | `firewall-cmd --permanent --add-port=8080/tcp`
-   8090   | transformers hosts | repository hosts | `firewall-cmd --permanent --add-port=8090/tcp`
-   8161   | activemq hosts | repository, transformers & syncservice hosts | `firewall-cmd --permanent --add-port=8161/tcp`
-
-Ports above are needed open for the deployment to succeed. For the complete architecture to work the following ports also need to be open (even though it doesn't break deployment):
-
- TCP port |   target  | sources  | example command (doesn't take csources into account)
-----------+-----------+----------+------------------------------------------------------
-   8983   | search hosts | repository hosts (optionally proxy hosts for solr admin access) | `firewall-cmd --permanent --add-port=8983/tcp`
-   9090   | syncservice hosts | proxy hosts | `firewall-cmd --permanent --add-port=9090/tcp`
-     80   | proxy hosts | any (or identified client address range) | `firewall-cmd --permanent --add-service=http`
-    443   | proxy hosts | any (or identified client address range) | `firewall-cmd --permanent --add-service=https`
-
-> After the firewall config has been set up a reload of the `firewalld` service is needed
-
 Once you have prepared the target hosts (ensuring the [relevant ports](#tcp-port-configuration) are accessible) and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
 To check your inventory file is configured correctly and the control node is able to connect to the target hosts run the following command:
@@ -520,6 +490,31 @@ alfresco-content-services-distribution-6.2.2.pom      100%[=====================
 
 2021-02-18 13:50:44 (2.54 MB/s) - ‘alfresco-content-services-distribution-6.2.2.pom’ saved [8739/8739]
 ```
+
+### Communication Failures
+
+If you are using a multi-machine deployment and the playbook fails with an error similar to the one shown below you may need to check the firewall configuration on the target hosts.
+
+```bash
+TASK [../roles/repository : Notify alfresco content service] *******************************************************************************************************************************************************
+fatal: [repository_1]: FAILED! => {"changed": false, "elapsed": 300, "msg": "Timeout when waiting for 192.168.0.126:5432"}
+```
+
+Either disable the firewall completely or refer to the [ports configuration](#tcp-port-configuration) section for what ports need to be accessible.
+
+Presuming you are using `firewalld` the following example commands can be used to open a port, replacing `<port-number>` with the approriate number or replacing `<service-name>` with a well know service name e.g. "http".
+
+```bash
+firewall-cmd --permanent --add-port=<port-number>/tcp
+```
+
+or
+
+```bash
+firewall-cmd --permanent --add-service=<service-name>
+```
+
+> After the firewall config has been set up a reload of the `firewalld` service is needed
 
 ### Playbook Failures
 
