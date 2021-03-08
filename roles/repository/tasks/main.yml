@@ -456,5 +456,5 @@
     state: restarted
   when: repo_db_url != ""
 
-- name: Flush handlers
-  meta: flush_handlers
+# - name: Flush handlers
+#   meta: flush_handlers
