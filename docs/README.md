@@ -6,7 +6,7 @@ This page provides an overview of Ansible, the project structure and the compone
 
 [Ansible](https://www.ansible.com/overview/how-ansible-works) models your IT infrastructure by describing how all of your systems inter-relate, rather than just managing one system at a time.
 
-It doesn't use any agents and no additional custom security infrastructure, so it's easy to deploy - and most importantly, it uses a very simple language, YAML, in the form of Ansible Playbooks, that allow you to describe your automation jobs in a way that approaches plain English.
+It doesn't use any agents nor additional custom security infrastructure, so it's easy to deploy - and most importantly, it uses a very simple language, YAML, in the form of Ansible Playbooks that allow you to describe your automation jobs in a way that approaches plain English.
 
 An Ansible playbook contains one or more roles. A role is an independent component which allows reuse of common configuration steps. It consists of a set of tasks used to configure a host to serve a certain purpose, for example, configuring a service. This is depicted in the diagram below.
 
@@ -14,15 +14,15 @@ An Ansible playbook contains one or more roles. A role is an independent compone
 
 Roles are defined using YAML files with a predefined directory structure.
 
-A role directory structure contains directories: defaults, vars, tasks, files, templates, meta, handlers.
+A role directory structure contains directories: defaults, vars, tasks, files, templates, meta, and handlers.
 
 * **defaults** contains default variables for the role. Variables in defaults have the lowest priority so they are easy to override
-* **vars** contains variables for the role. Variables in vars have higher priority than variables indefaults directory
+* **vars** contains variables for the role. Variables in vars have higher priority than variables in the defaults directory
 * **tasks** contains the main list of steps to be executed by the role
 * **files** contains files which we want to be copied to the remote host. We don’t need to specify a path of resources stored in this directory
-* **templates** contains file template which supports modifications from the role. We use the Jinja2 templating language for creating templates
-* **meta** contains metadata of role like an author, support platforms, dependencies
-* **handlers** contains handlers which can be invoked by “notify” directives and are associated withservice
+* **templates** contains file templates which support modifications from the role. We use the Jinja2 templating language for creating templates
+* **meta** contains metadata of the role like an author, support platforms, and dependencies
+* **handlers** contains handlers which can be invoked by “notify” directives and are associated with a service
 
 ## Project Overview
 
@@ -41,10 +41,10 @@ The playbook uses the following roles:
 * **repository** - deploys and configures Alfresco Repository and Alfresco Share
 * **search** - deploys and configures Alfresco Search Services
 * **sfs** - deploys and configures Alfresco Shared File Store
-* **sync** - deploys and configures Alfresco Sync Services
+* **sync** - deploys and configures Alfresco Sync Service
 * **tomcat** - deploys and configures Apache Tomcat
 * **transformers** - deploys and configures Alfresco Transform Service
-* **trouter** - deploys and configures Alfresco Transform Router
+* **trouter** - deploys and configures the Transform Router
 
 The same playbook can be run to deploy the system in several different ways, please refer to the [deployment guide](./deployment-guide.md) for a step by step set of instructions.
 
