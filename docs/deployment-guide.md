@@ -30,7 +30,6 @@ The following systemd services are deployed and can be used to stop and start Al
 | ```activemq.service``` | ActiveMQ Service |
 | ```postgresql-<version>.service``` | Postgresql DB Service (where `<version>` is 11 for ACS 6.2.N and 13 for ACS 7.x) |
 | ```nginx.service``` | Nginx Service |
-| ```tomcat.service``` | Tomcat Service |
 | ```alfresco-content.service``` | Alfresco Content Service |
 | ```alfresco-search.service``` | Alfresco Search Service |
 | ```alfresco-shared-fs.service``` | Alfresco Shared File Store Controller Service |
@@ -462,7 +461,6 @@ What needs to be removed from a system will depend on your inventory configurati
 
 * The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Verifying if `<file>` finished downloading (nnn retries left)" appearing many times. Despite the wording this is **not** an error so please ignore and be patient!
 * The playbook is not yet fully idempotent so may cause issues if you make changes and run multiple times
-* alfresco-content.service has the status "exited" because it is defined as a "oneshot" service that calls tomcat.service
 * The `firewalld` service can prevent the playbook from completing successfully if it's blocking the [ports required](#tcp-port-configuration) for communication between the roles
 
 ## Troubleshooting
