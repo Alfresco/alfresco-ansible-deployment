@@ -455,6 +455,3 @@
     name: alfresco-content 
     state: restarted
   when: repo_db_url != ""
-
-# - name: Flush handlers
-#   meta: flush_handlers

@@ -189,4 +189,5 @@
     name: alfresco-content.service
     state: stopped
     enabled: true
+    daemon_reload: yes
   changed_when: false
