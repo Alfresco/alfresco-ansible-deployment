@@ -14,8 +14,8 @@ The machine the playbook is run from is known as the control node. An inventory 
 
 Regardless of role and connection type a consistent folder structure is used, you will find the deployed files in the following locations:
 
-| Path   | Purpose   |
-| ------ | --------- |
+| Path | Purpose |
+| :--- | :--- |
 | ```/opt/alfresco```     | Binaries |
 | ```/etc/opt/alfresco``` | Configuration |
 | ```/var/opt/alfresco``` | Data |
@@ -25,8 +25,8 @@ Regardless of role and connection type a consistent folder structure is used, yo
 
 The following systemd services are deployed and can be used to stop and start Alfresco components:
 
-| Service Name   | Purpose   |
-| ------ | --------- |
+| Service Name | Purpose |
+| :--- | :--- |
 | ```activemq.service``` | ActiveMQ Service |
 | ```postgresql-<version>.service``` | Postgresql DB Service (where `<version>` is 11 for ACS 6.2.N and 13 for ACS 7.x) |
 | ```nginx.service``` | Nginx Service |
@@ -36,6 +36,24 @@ The following systemd services are deployed and can be used to stop and start Al
 | ```alfresco-sync.service``` | Alfresco Sync Service |
 | ```alfresco-tengine-aio.service``` | Alfresco AIO Transform Core Engine |
 | ```alfresco-transform-router.service``` | Alfresco Transformation Router Service |
+
+## TCP Port Configuration
+
+Several roles setup services that listen on TCP ports and several roles wait for TCP ports to be listening before continuing execution (indicated by `Yes` in the "Required For Deployment" column). The table below shows the communication paths and port numbers used.
+
+| Target Host | Target Port | Source Hosts | Required For Deployment |
+| :--- | :--- | :--- | :--- |
+| activemq | 61616 | repository, syncservice, transformers | Yes |
+| database | 5432 | repository, syncservice | Yes |
+| repository | 8080 | nginx, search, syncservice | Yes |
+| search | 8983 | repository | No |
+| transformers (aio t-engine) | 8090 | repository | No |
+| syncservice | 9090 | nginx | No |
+| adw | 80 | nginx | No |
+| nginx | 80 | `<client-ips>` | No |
+| nginx | 443 | `<client-ips>` | No |
+
+> NOTE: The transformers host will also contain the transform router process running on port 8095 and the shared file system process running on 8099 but communication between these components remains local.
 
 ## Getting Started Quickly
 
@@ -251,7 +269,7 @@ ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@community-extra-v
 Once the playbook is complete Ansible will display a play recap to let you know that everything is done, similar to the block below:
 
 ```bash
-PLAY RECAP *****************************************************************************************************************************************************************
+PLAY RECAP *******************************************************************************************************
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
 adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
 database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
@@ -331,7 +349,7 @@ ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@community-extra-var
 Once the playbook is complete Ansible will display a play recap to let you know that everything is done, similar to the block below:
 
 ```bash  
-PLAY RECAP *****************************************************************************************************************************************************************
+PLAY RECAP *******************************************************************************************************
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
 adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
 database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
@@ -357,7 +375,7 @@ The diagram below shows the result of a multi machine deployment.
 
 > **NOTE**: You can optionally use the following [guide](./generate-target-hosts.md#generate-multiple-target-hosts) to generate target hosts and an inventory file for testing purposes.
 
-Once you have prepared the target hosts and configured the inventory_ssh.yaml file you are ready to run the playbook.
+Once you have prepared the target hosts (ensuring the [relevant ports](#tcp-port-configuration) are accessible) and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
 To check your inventory file is configured correctly and the control node is able to connect to the target hosts run the following command:
 
@@ -388,7 +406,7 @@ ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@community-extra-var
 Once the playbook is complete Ansible will display a play recap to let you know that everything is done, similar to the block below:
 
 ```bash  
-PLAY RECAP *****************************************************************************************************************************************************************
+PLAY RECAP *******************************************************************************************************
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
 adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
 database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
@@ -443,6 +461,7 @@ What needs to be removed from a system will depend on your inventory configurati
 
 * The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Verifying if `<file>` finished downloading (nnn retries left)" appearing many times. Despite the wording this is **not** an error so please ignore and be patient!
 * The playbook is not yet fully idempotent so may cause issues if you make changes and run multiple times
+* The `firewalld` service can prevent the playbook from completing successfully if it's blocking the [ports required](#tcp-port-configuration) for communication between the roles
 
 ## Troubleshooting
 
@@ -465,10 +484,36 @@ If everything is configured correctly you should see the following at the end of
 ```bash
 Saving to: ‘alfresco-content-services-distribution-6.2.2.pom’
 
-alfresco-content-services-distribution-6.2.2.pom      100%[=======================================================================================================================>]   8.53K  --.-KB/s    in 0.003s  
+alfresco-content-services-distribution-6.2.2.pom      100%[=============================================>]   8.53K  --.-KB/s    in 0.003s  
 
 2021-02-18 13:50:44 (2.54 MB/s) - ‘alfresco-content-services-distribution-6.2.2.pom’ saved [8739/8739]
 ```
+
+### Communication Failures
+
+If you are using a multi-machine deployment and the playbook fails with an error similar to the one shown below you may need to check the firewall configuration on the target hosts.
+
+```bash
+TASK [../roles/repository : Notify alfresco content service] 
+*******************************************************************************************************
+fatal: [repository_1]: FAILED! => {"changed": false, "elapsed": 300, "msg": "Timeout when waiting for 192.168.0.126:5432"}
+```
+
+Either disable the firewall completely or refer to the [ports configuration](#tcp-port-configuration) section for what ports need to be accessible.
+
+Presuming you are using `firewalld` the following example commands can be used to open a port, replacing `<port-number>` with the approriate number or replacing `<service-name>` with a well know service name e.g. "http".
+
+```bash
+firewall-cmd --permanent --add-port=<port-number>/tcp
+```
+
+or
+
+```bash
+firewall-cmd --permanent --add-service=<service-name>
+```
+
+> After the firewall config has been set up a reload of the `firewalld` service is needed
 
 ### Playbook Failures
 
