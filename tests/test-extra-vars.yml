@@ -4,13 +4,13 @@ amps:
   device_sync:
     version: 3.4.0-M5
   googledrive_repo:
-    version: 3.2.1-A2
+    version: 3.2.1
   googledrive_share:
-    version: 3.2.1-A2
+    version: 3.2.1
   ags_repo:
-    version: 3.5.0-M1
+    version: 3.5.0
   ags_share:
-    version: 3.5.0-M1
+    version: 3.5.0
 amp_downloads:
   - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/integrations/alfresco-googledrive-repo-enterprise/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-googledrive-repo-enterprise.amp"
