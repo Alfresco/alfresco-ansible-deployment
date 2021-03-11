@@ -9,7 +9,7 @@ acs:
 
 amps:  
   aos_module:
-    version: 1.4.0-M1
+    version: 1.4.0
   device_sync:
     version: 3.4.0
   googledrive_repo:
