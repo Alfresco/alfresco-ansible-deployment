@@ -1,6 +1,6 @@
 ---
 acs:
-  version: 7.0.0-A28
+  version: 7.0.0
   edition: Community
 
 downloads:

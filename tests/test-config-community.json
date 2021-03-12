@@ -12,12 +12,12 @@
         "modules": [
           {
             "name": "Alfresco / Google Docs Integration",
-            "version": "3.2.1-A2",
+            "version": "3.2.1",
             "installed": true
           },
           {
             "name": "Alfresco Office Services Module",
-            "version": "1.4.0-M1",
+            "version": "1.4.0",
             "installed": true
           }
         ]

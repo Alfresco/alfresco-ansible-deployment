@@ -62,14 +62,14 @@ The table below shows the version of the components deployed by the playbook for
 | OpenJDK | 11.0.7 | 11.0.7 | 11.0.7 |
 | Apache Tomcat | 9.0.41 | 8.5.56 | 9.0.41 |
 | PostgreSQL | 13.x | 11.x | 13.x |
-| Apache ActiveMQ | 5.16 | 5.15.13 | 5.16 |
-| Repository | 7.0.0-A27 | 6.2.2 | 7.0.0-A27 |
-| Share | 7.0.0-A17 | 6.2.2 | 7.0.0-A17 |
+| Apache ActiveMQ | 5.16.1 | 5.15.13 | 5.16.1 |
+| Repository | 7.0.0 | 6.2.2 | 7.0.0 |
+| Share | 7.0.0 | 6.2.2 | 7.0.0 |
 | Search Services | 2.0.1 | 1.4.3 | 2.0.1 |
-| All-In-One Transformation Engine | 2.3.8 | 2.3.8 | 2.3.8 |
-| AOS | 1.4.0-M2 | 1.3.1 | 1.4.0-M2 |
-| GoogleDocs | 3.2.1-A2 | 3.2.0 | 3.2.1-A2 |
-| Digital Workspace | 2.0.0 | 2.0.0 | N/A |
-| Transform Router | 1.3.2-A2 | 1.3.2-A2 | N/A |
-| Shared File Store | 0.12.0 | 0.12.0 | N/A |
-| Sync Service | 3.4.0-M2 | 3.3.3.1 | N/A |
+| All-In-One Transformation Engine | 2.3.10 | 2.3.10 | 2.3.10 |
+| AOS | 1.4.0 | 1.3.1 | 1.4.0 |
+| GoogleDocs | 3.2.1 | 3.2.0 | 3.2.1 |
+| Digital Workspace | 2.1.0 | 2.1.0 | N/A |
+| Transform Router | 1.3.2 | 1.3.2 | N/A |
+| Shared File Store | 0.13.0 | 0.13.0 | N/A |
+| Sync Service | 3.4.0 | 3.3.3.1 | N/A |
