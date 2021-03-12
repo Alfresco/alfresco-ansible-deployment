@@ -467,10 +467,13 @@ What needs to be removed from a system will depend on your inventory configurati
 
 ### Failed Downloads
 
-If you see an error similar to the one below (in particular the mention of `HTTP Error 401: Unauthorized`) you've most likely forgotten to setup your Nexus credentials or mis-configured them.
+If you see an error similar to the one below (in particular the mention of `HTTP Error 401: Unauthorized` or `HTTP Error 401: basic auth failed`) you've most likely forgotten to setup your Nexus credentials or mis-configured them.
 
 ```bash
-fatal: [search_1]: FAILED! => {"attempts": 3, "changed": false, "dest": "/tmp/ansible_artefacts/alfresco-search-services-2.0.1.zip", "elapsed": 0, "msg": "Request failed", "response": "HTTP Error 401: Unauthorized", "status_code": 401, "url": "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content//org/alfresco/alfresco-search-services/2.0.1/alfresco-search-services-2.0.1.zip"}
+fatal: [transformers_1]: FAILED! => {"msg": "An unhandled exception occurred while templating '{u'acs_zip_sha1_checksum': u\"{{ lookup('url', '{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}\", u'adw_zip_sha1_checksum': u\"{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}\", u'acs_zip_url': u'{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip'
+...
+...
+Error was a <class 'ansible.errors.AnsibleError'>, original message: An unhandled exception occurred while running the lookup plugin 'url'. Error was a <class 'ansible.errors.AnsibleError'>, original message: Received HTTP error for https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-content-services-distribution/7.0.0/alfresco-content-services-distribution-7.0.0.zip.sha1 : HTTP Error 401: Unauthorized"}
 ```
 
 You can run the command shown below in the same terminal you're using to run the playbook to quickly test downloading a protected resource from Nexus.
