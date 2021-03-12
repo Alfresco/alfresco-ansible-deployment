@@ -377,6 +377,8 @@ The diagram below shows the result of a multi machine deployment.
 
 Once you have prepared the target hosts (ensuring the [relevant ports](#tcp-port-configuration) are accessible) and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
+> **NOTE** at this stage ADW must be deployed on the same host (adw_1) as the NGinx reverse proxy (nginx_1)
+
 To check your inventory file is configured correctly and the control node is able to connect to the target hosts run the following command:
 
 ```bash
@@ -487,6 +489,17 @@ Saving to: ‘alfresco-content-services-distribution-6.2.2.pom’
 alfresco-content-services-distribution-6.2.2.pom      100%[=============================================>]   8.53K  --.-KB/s    in 0.003s  
 
 2021-02-18 13:50:44 (2.54 MB/s) - ‘alfresco-content-services-distribution-6.2.2.pom’ saved [8739/8739]
+```
+
+### Nginx failure
+
+If the playbook fails not being able to start Nginx, make sure both ADW and NGinx point to the same host in the inventory file. Otherwise you'll encounter the error below:
+
+```
+TASK [../roles/adw : Ensure nginx service is running as configured.] **********************************
+fatal: [adw_1]: FAILED! => {"changed": false, "msg": "Unable to start service nginx: Job for nginx.service failed because the control process exited with error code.
+See "systemctl status nginx.service" and "journalctl -xe" for detail
+s.\n"}
 ```
 
 ### Communication Failures
