@@ -1,6 +1,6 @@
 # Deployment Guide
 
-This page describes how to deploy Alfresco Content Services (ACS) 6.2.x using the Ansible playbook found in this project.
+This page describes how to deploy Alfresco Content Services (ACS) using the Ansible playbook found in this project.
 
 Before continuing we need to introduce some more [Ansible concepts](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html); [control node](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html#control-node), [connection type](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#connecting-to-hosts-behavioral-inventory-parameters) and the [inventory file](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#intro-inventory).
 
@@ -145,7 +145,7 @@ The sections below describe how you can configure your deployment before running
 
 If you have a valid license place your `*.lic` file in the `configuration_files/licenses` folder before running the playbook.
 
->NOTE: You can also [upload a license](https://docs.alfresco.com/6.2/tasks/at-adminconsole-license.html) via the Admin Console once the system is running.
+>NOTE: You can also [upload a license](https://docs.alfresco.com/content-services/latest/admin/license/) via the Admin Console once the system is running.
 
 ### Alfresco Global Properties
 
@@ -208,11 +208,11 @@ Along with the url the database driver binaries need to be provided for one or b
 
 The default database username (`repo_db_username` and/or `sync_db_username`) and password (`repo_db_password` and/or `sync_db_password`) in the configuration file `group_vars/all.yml` can also be overidden with your custom values.
 
-Please refer to the [Configuring Databases](https://docs.alfresco.com/6.2/concepts/intro-db-setup.html) documentation for more detailed information.
+Please refer to the [Configuring Databases](https://docs.alfresco.com/content-services/latest/config/databases/) documentation for more detailed information.
 
 ### Custom Keystore
 
-By default the playbook deploys a default keystore to ease the installation process, however, we recommend you [generate your own keystore](https://docs.alfresco.com/6.2/concepts/keystore-generate.html) following the [instructions here](https://docs.alfresco.com/6.2/concepts/keystore-config.html).
+By default the playbook deploys a default keystore to ease the installation process, however, we recommend you [generate your own keystore](https://docs.alfresco.com/content-services/latest/admin/security/#managealfkeystores) following the [instructions here](https://docs.alfresco.com/content-services/latest/admin/security/#keystore-configuration).
 
 There are three steps required to use a custom keystore:
 
