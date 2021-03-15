@@ -377,6 +377,8 @@ The diagram below shows the result of a multi machine deployment.
 
 Once you have prepared the target hosts (ensuring the [relevant ports](#tcp-port-configuration) are accessible) and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
+> **NOTE** at this stage ADW must be deployed on the same host (adw_1) as the NGinx reverse proxy (nginx_1)
+
 To check your inventory file is configured correctly and the control node is able to connect to the target hosts run the following command:
 
 ```bash
@@ -462,6 +464,7 @@ What needs to be removed from a system will depend on your inventory configurati
 * The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Verifying if `<file>` finished downloading (nnn retries left)" appearing many times. Despite the wording this is **not** an error so please ignore and be patient!
 * The playbook is not yet fully idempotent so may cause issues if you make changes and run multiple times
 * The `firewalld` service can prevent the playbook from completing successfully if it's blocking the [ports required](#tcp-port-configuration) for communication between the roles
+* The nginx and adw roles need to be deployed to the same host otherwise the [playbook fails](#nginx-failure)
 
 ## Troubleshooting
 
@@ -490,6 +493,17 @@ Saving to: ‘alfresco-content-services-distribution-6.2.2.pom’
 alfresco-content-services-distribution-6.2.2.pom      100%[=============================================>]   8.53K  --.-KB/s    in 0.003s  
 
 2021-02-18 13:50:44 (2.54 MB/s) - ‘alfresco-content-services-distribution-6.2.2.pom’ saved [8739/8739]
+```
+
+### Nginx Failure
+
+If the playbook fails not being able to start Nginx, make sure both ADW and Nginx point to the same host in the inventory file. Otherwise you'll encounter the error below:
+
+```
+TASK [../roles/adw : Ensure nginx service is running as configured.] **********************************
+fatal: [adw_1]: FAILED! => {"changed": false, "msg": "Unable to start service nginx: Job for nginx.service failed because the control process exited with error code.
+See "systemctl status nginx.service" and "journalctl -xe" for detail
+s.\n"}
 ```
 
 ### Communication Failures
