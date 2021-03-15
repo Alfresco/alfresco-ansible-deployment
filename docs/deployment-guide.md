@@ -464,6 +464,7 @@ What needs to be removed from a system will depend on your inventory configurati
 * The playbook downloads several large files so you will experience some pauses while they transfer and you'll also see the message "FAILED - RETRYING: Verifying if `<file>` finished downloading (nnn retries left)" appearing many times. Despite the wording this is **not** an error so please ignore and be patient!
 * The playbook is not yet fully idempotent so may cause issues if you make changes and run multiple times
 * The `firewalld` service can prevent the playbook from completing successfully if it's blocking the [ports required](#tcp-port-configuration) for communication between the roles
+* The nginx and adw roles need to be deployed to the same host otherwise the [playbook fails](#nginx-failure)
 
 ## Troubleshooting
 
@@ -491,9 +492,9 @@ alfresco-content-services-distribution-6.2.2.pom      100%[=====================
 2021-02-18 13:50:44 (2.54 MB/s) - ‘alfresco-content-services-distribution-6.2.2.pom’ saved [8739/8739]
 ```
 
-### Nginx failure
+### Nginx Failure
 
-If the playbook fails not being able to start Nginx, make sure both ADW and NGinx point to the same host in the inventory file. Otherwise you'll encounter the error below:
+If the playbook fails not being able to start Nginx, make sure both ADW and Nginx point to the same host in the inventory file. Otherwise you'll encounter the error below:
 
 ```
 TASK [../roles/adw : Ensure nginx service is running as configured.] **********************************
