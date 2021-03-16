@@ -40,34 +40,34 @@
       until: sync_download_result is succeeded
   when: not ansible_facts.services['alfresco-sync.service'] is defined
 
-- name: Download postgresql jar
-  block:
-    - name: Create connectors folder
-      become: true
-      become_user: "{{ username }}"
-      file:
-        path: "{{ sync_home }}/service-sync/connectors"
-        state: directory
-    - name: Download artefact
-      become: true
-      become_user: "{{ username }}"
-      get_url:
-        url: "{{ dependencies_url.postgresql_connector }}"
-        dest: "{{ sync_home }}/service-sync/connectors/postgresql.jar"
-        mode: 'u=rwx,g=rwx,o=rx'
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-      register: postgresql_download
-      until: postgresql_download is succeeded
-      when: sync_db_url == ""
-    - name: Copy db_connector to {{ sync_home }}/service-sync/connectors folder
-      copy:
-        src: "{{ inventory_dir }}/configuration_files/db_connector_sync/"
-        dest: "{{ sync_home }}/service-sync/connectors/"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
-      when: sync_db_url != ""
+- name: Create connectors folder
+  become: true
+  become_user: "{{ username }}"
+  file:
+    path: "{{ sync_home }}/service-sync/connectors"
+    state: directory
+
+- name: Download artefact
+  become: true
+  become_user: "{{ username }}"
+  get_url:
+    url: "{{ dependencies_url.postgresql_connector }}"
+    dest: "{{ sync_home }}/service-sync/connectors/postgresql.jar"
+    mode: 'u=rwx,g=rwx,o=rx'
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+  register: postgresql_download
+  until: postgresql_download is succeeded
+  when: sync_db_url == ""
+
+- name: Copy db_connector to {{ sync_home }}/service-sync/connectors folder
+  copy:
+    src: "{{ inventory_dir }}/configuration_files/db_connector_sync/"
+    dest: "{{ sync_home }}/service-sync/connectors/"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+  when: sync_db_url != ""
 
 - name: Extract sync service to {{ sync_home }}
   become: true
