@@ -52,12 +52,11 @@
   become_user: "{{ username }}"
   get_url:
     url: "{{ dependencies_url.postgresql_connector }}"
+    checksum: "{{ dependencies_url.postgresql_connector_sha1_checksum }}"
     dest: "{{ sync_home }}/service-sync/connectors/postgresql.jar"
     mode: 'u=rwx,g=rwx,o=rx'
     owner: "{{ username }}"
     group: "{{ group_name }}"
-  register: postgresql_download
-  until: postgresql_download is succeeded
   when: sync_db_url == ""
 
 - name: Copy db_connector to {{ sync_home }}/service-sync/connectors folder
