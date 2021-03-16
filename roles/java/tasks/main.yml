@@ -23,7 +23,7 @@
   get_url:
     url: "{{ dependencies_url.jdk }}"
     dest: "{{ download_location }}"
-    checksum: "md5:{{ jdk_md5_checksum }}"
+    checksum: "md5:{{ dependencies_url.jdk_md5_checksum }}"
     timeout: 570
   register: remote_jdk_tar
   when: not remote_java.stat.exists
