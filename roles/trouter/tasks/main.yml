@@ -41,31 +41,19 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
+  notify: restart-trouter
 
 - name: Add paths to setenv file
-  block:
-    - name: Check for ATS_HOME in "{{ config_folder }}/setenv.sh"
-      shell: cat {{ config_folder }}/setenv.sh | grep ATS_HOME
-      register: test_ats_home
-      failed_when: false
-      changed_when: test_ats_home.rc != 0
-    - name: Check for ACTIVEMQ_HOST in "{{ config_folder }}/setenv.sh"
-      shell: cat {{ config_folder }}/setenv.sh | grep ACTIVEMQ_HOST
-      register: test_activemq_home
-      failed_when: false
-      changed_when: test_activemq_home.rc != 0
-    - name: Add paths to setenv file
-      become: true
-      become_user: "{{ username }}"
-      blockinfile:
-        path: "{{ config_folder }}/setenv.sh"
-        marker: "# {mark} ROUTER ENV VARS"
-        block: |
-          export ATS_HOME={{ binaries_folder }}/transform-service
-          export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
-          export ATS_SHARED_FS_HOST={{ sfs_host }}
-        insertafter: EOF
-      when: test_ats_home.rc != 0 and test_activemq_home.rc != 0
+  become: true
+  become_user: "{{ username }}"
+  blockinfile:
+    path: "{{ config_folder }}/setenv.sh"
+    marker: "# {mark} ATS COMMON ENV VARS"
+    block: |
+      export ATS_HOME={{ binaries_folder }}/transform-service
+      export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
+      export ATS_SHARED_FS_HOST={{ sfs_host }}
+    insertafter: EOF
 
 - name: Create log file with correct permissions
   become: true
@@ -85,7 +73,7 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
-  notify: restart-trouter
+  notify: reload-trouter
 
 - name: clean all
   command: yum clean all
@@ -97,11 +85,4 @@
   wait_for:
     host: "{{ ats_tengine_aio_host }}"
     port: 8090
-  register: go_signal
-
-- name: Enable and start t-router service
-  systemd:
-    name: alfresco-transform-router.service
-    state: started
-    enabled: true
-  when: not go_signal.failed
+  notify: enable-start-trouter

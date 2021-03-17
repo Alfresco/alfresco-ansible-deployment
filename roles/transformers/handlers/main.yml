@@ -5,16 +5,24 @@
   service:
     name: alfresco-tengine-aio
     state: restarted
-    daemon_reload: true
 
 - name: start-aio
   service:
     name: alfresco-tengine-aio
     state: started
-    daemon_reload: true
+
+- name: enable-start-aio
+  service:
+    name: alfresco-tengine-aio
+    state: start
+    enabled: true
 
 - name: stop-aio
   service:
     name: alfresco-tengine-aio
     state: stopped
-    daemon_reload: true
+
+- name: reload-aio
+  service:
+    name: alfresco-tengine-aio
+    state: reloaded

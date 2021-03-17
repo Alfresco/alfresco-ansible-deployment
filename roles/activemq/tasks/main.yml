@@ -127,7 +127,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,go=rx'
-  notify: activemq-restart
+  notify: restart-activemq
 
 - name: Add activemq.service
   template:
@@ -136,10 +136,4 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-  notify: activemq-restart
-
-- name: Ensure activemq service is started and enabled on boot
-  systemd:
-    name: activemq.service
-    state: started
-    enabled: true
+  notify: enable-start-activemq

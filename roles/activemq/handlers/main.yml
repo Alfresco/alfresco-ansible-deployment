@@ -1,6 +1,13 @@
 ---
-- name: activemq-restart
-  systemd:
+- name: restart-activemq
+  service:
     name: activemq
     state: restarted
+    daemon_reload: true
+
+- name: enable-start-activemq
+  service:
+    name: activemq
+    state: started
+    enabled: true
     daemon_reload: true

@@ -1,25 +1,25 @@
 ---
 # handlers file for repository
-- name: alfresco-content-restart
-  systemd:
+- name: restart-alfresco-content
+  service:
     name: "alfresco-content"
     state: restarted
     daemon_reload: true
 
-- name: alfresco-content-reload
-  systemd:
+- name: reload-alfresco-content
+  service:
     name: "alfresco-content"
     state: reloaded
     daemon_reload: true
 
-- name: alfresco-content-stop
-  systemd:
+- name: stop-alfresco-content
+  service:
     name: "alfresco-content"
     state: stopped
     daemon_reload: true
 
-- name: alfresco-content-start
-  systemd:
+- name: start-alfresco-content
+  service:
     name: "alfresco-content"
     state: started
     daemon_reload: true

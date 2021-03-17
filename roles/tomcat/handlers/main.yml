@@ -1,12 +1,19 @@
 ---
-- name: alfresco-content-start
-  systemd:
+- name: start-alfresco-content
+  service:
     name: "alfresco-content"
     state: started
     daemon_reload: true
 
-- name: alfresco-content-stop
-  systemd:
+- name: stop-alfresco-content
+  service:
     name: "alfresco-content"
     state: stopped
+    daemon_reload: true
+
+- name: enable-alfresco-content
+  service:
+    name: "alfresco-content"
+    state: stopped
+    enabled: true
     daemon_reload: true

@@ -176,31 +176,34 @@
   register: download_result
   until: download_result is succeeded
 
-- name: Check for ATS_HOME in "{{ config_folder }}/setenv.sh"
-  shell: cat {{ config_folder }}/setenv.sh | grep ATS_HOME
-  register: test_ats_home
-  failed_when: false
-  changed_when: test_ats_home.rc != 0
-
 - name: Add paths to setenv file
-  become: true
-  become_user: "{{ username }}"
-  blockinfile:
-    path: "{{ config_folder }}/setenv.sh"
-    marker: "# {mark} ATS ENV VARS"
-    block: |
-      export LIBREOFFICE_HOME={{ libreoffice_home }}
-      export IMAGEMAGICK_HOME={{ imagemagick_home }}
-      export IMAGEMAGICK_DYN=/usr/lib64
-      export IMAGEMAGICK_CONFIG=${IMAGEMAGICK_HOME}/config-Q16HDRI
-      export IMAGEMAGICK_CODERS=${IMAGEMAGICK_HOME}/modules-Q16HDRI/coders
-      export IMAGEMAGICK_EXE=/usr/bin/magick
-      export IMAGEMAGICK_EXE=/usr/bin/convert
-      export ATS_HOME={{ binaries_folder }}/transform-service
-      export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
-      export ATS_SHARED_FS_HOST={{ sfs_host }}
-    insertafter: EOF
-  when: test_ats_home.rc != 0
+  block:
+    - name: Add ats common vars to setenv file
+      become: true
+      become_user: "{{ username }}"
+      blockinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        marker: "# {mark} ATS COMMON ENV VARS"
+        block: |          
+          export ATS_HOME={{ binaries_folder }}/transform-service
+          export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
+          export ATS_SHARED_FS_HOST={{ sfs_host }}
+        insertafter: EOF
+    - name: Add ats dependencies vars to setenv file
+      become: true
+      become_user: "{{ username }}"
+      blockinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        marker: "# {mark} ATS DEPENDENCIES ENV VARS"
+        block: |          
+          export LIBREOFFICE_HOME={{ libreoffice_home }}
+          export IMAGEMAGICK_HOME={{ imagemagick_home }}
+          export IMAGEMAGICK_DYN=/usr/lib64
+          export IMAGEMAGICK_CONFIG=${IMAGEMAGICK_HOME}/config-Q16HDRI
+          export IMAGEMAGICK_CODERS=${IMAGEMAGICK_HOME}/modules-Q16HDRI/coders
+          export IMAGEMAGICK_EXE=/usr/bin/magick
+          export IMAGEMAGICK_EXE=/usr/bin/convert
+        insertafter: EOF
 
 - name: Create log file with correct permissions
   become: true
@@ -221,6 +224,7 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
+  notify: restart-aio
 
 - name: Add alfresco-tengine-aio service
   become: true
@@ -231,7 +235,7 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
-  notify: restart-aio
+  notify: reload-aio
 
 - name: clean all
   command: yum clean all
@@ -245,11 +249,4 @@
     wait_for:
       host: "{{ activemq_host }}"
       port: 61616
-    register: activemq_go
-
-- name: Enable and start AIO service
-  systemd:
-    name: alfresco-tengine-aio.service
-    state: started
-    enabled: true
-  when: not activemq_go.failed
+    notify: enable-start-aio

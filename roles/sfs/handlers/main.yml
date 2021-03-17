@@ -4,16 +4,19 @@
   service:
     name: alfresco-shared-fs
     state: restarted
-    daemon_reload: true
 
 - name: start-sfs
   service:
     name: alfresco-shared-fs
     state: started
-    daemon_reload: true
+
+- name: start-enable-sfs
+  service:
+    name: alfresco-shared-fs
+    state: started
+    enabled: true
 
 - name: stop-sfs
   service:
     name: alfresco-shared-fs
     state: stopped
-    daemon_reload: true
