@@ -48,7 +48,7 @@
   become_user: "{{ username }}"
   get_url:
     url: "{{ dependencies_url.postgresql_connector }}"
-    checksum: "{{ dependencies_url.postgresql_connector_sha1_checksum }}"
+    checksum: sha1:{{ dependencies_url.postgresql_connector_sha1_checksum }}
     dest: "{{ sync_home }}/service-sync/connectors/postgresql.jar"
     mode: 'u=rwx,g=rwx,o=rx'
     owner: "{{ username }}"
@@ -71,7 +71,7 @@
     src: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
     dest: "{{ sync_home }}"
     remote_src: true
-    creates: "{{ sync_home }}/sync/service-sync/syncservice.sh"
+    creates: "{{ sync_home }}/service-sync/service-sync-{{ sync.version }}.jar"
 
 - name: Move sync service files to {{ sync_home }}
   block:
