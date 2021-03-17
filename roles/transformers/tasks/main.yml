@@ -12,13 +12,6 @@
   poll: 0
   loop: "{{ utils_transform }}"
 
-- name: Check if ImageMagick is installed
-  command:
-    cmd: "convert --version"
-  register: magick_exists
-  failed_when: false
-  changed_when: magick_exists.rc != 0
-
 - name: Enable EPEL repository
   yum_repository:
     name: epel
@@ -30,40 +23,31 @@
 - name: Download imagemagick-distribution-linux.rpm
   get_url:
     url: "{{ imagemagick_rpm }}"
+    checksum: sha1:{{ imagemagick_sha1_checksum }}
     dest: "{{ download_location }}/imagemagick-distribution-linux.rpm"
     mode: 0444
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
-  register: download_img_dist
-  until: download_img_dist is succeeded
-  when: magick_exists.rc != 0
 
 - name: Download imagemagick-distribution-libs-linux.rpm
   get_url:
     url: "{{ imagemagick_lib_rpm }}"
+    checksum: sha1:{{ imagemagick_lib_sha1_checksum }}
     dest: "{{ download_location }}/imagemagick-distribution-libs-linux.rpm"
     mode: 0444
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
-  register: download_img_libs_dist
-  until: download_img_libs_dist is succeeded
-  when: magick_exists.rc != 0
 
-- name: install imagemagick-distribution-libs
+- name: install imagemagick
   yum:
     name: "{{ download_location }}/imagemagick-distribution-libs-linux.rpm"
     state: present
     disable_gpg_check: true
-  when: download_img_libs_dist is succeeded and magick_exists.rc != 0
-
-- name: install imagemagick-distribution
-  yum:
-    name: "{{ download_location }}/imagemagick-distribution-linux.rpm"
-    state: present
-    disable_gpg_check: true
-  when: download_img_dist is succeeded and magick_exists.rc != 0
+  loop:
+    - imagemagick-distribution-libs-linux.rpm
+    - imagemagick-distribution-linux.rpm
 
 - name: Check if LibreOffice exists
   command:
