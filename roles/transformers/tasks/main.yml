@@ -235,7 +235,7 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
-  notify: reload-aio
+  notify: restart-aio
 
 - name: clean all
   command: yum clean all
