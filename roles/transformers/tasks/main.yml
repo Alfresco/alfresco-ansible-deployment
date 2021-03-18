@@ -49,16 +49,10 @@
     - imagemagick-distribution-libs-linux.rpm
     - imagemagick-distribution-linux.rpm
 
-- name: Check if LibreOffice exists
-  command:
-    cmd: "{{ libreoffice_home }}/program/soffice --version"
-  register: loffice_exists
-  failed_when: false
-  changed_when: loffice_exists.rc != 0
-
 - name: "Download libreoffice {{ libreoffice }} rpm tar.gz"
   get_url:
     url: "{{ libreoffice_rpm }}"
+    checksum: sha1:{{ libreoffice_sha1_checksum }}
     dest: "{{ download_location }}/libreoffice.tar.gz"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
@@ -67,7 +61,6 @@
   register: libreoffice_download
   async: 900
   poll: 0
-  when: loffice_exists.rc != 0
 
 - name: Verifying if libreoffice finished downloading
   become: true
@@ -77,8 +70,7 @@
   register: job_result
   until: job_result.finished
   delay: 30
-  retries: 30
-  when: loffice_exists.rc != 0
+  retries: 20
 
 - name: Extract libreoffice-dist-linux.gz
   become: true
@@ -86,13 +78,14 @@
     src: "{{ download_location }}/libreoffice.tar.gz"
     dest: "{{ download_location }}/"
     remote_src: true
-  when: loffice_exists.rc != 0
+    list_files: true
+    creates: "{{ lookup('fileglob', download_location + '/LibreOffice_' + libreoffice + '*_Linux_' + ansible_architecture | replace('_','-') + '_rpm/RPMS/', errors='ignore') | first | default('') }}"
 
 - name: install LibreOffice
-  shell: "yum localinstall -y {{ download_location }}/LibreOffice*/RPMS/*.rpm"
+  shell: "yum localinstall -y {{ download_location }}/LibreOffice_{{ libreoffice }}*_Linux_{{ ansible_architecture | replace('_','-') }}_rpm/RPMS/*.rpm"
   args:
+    creates: /opt/libreoffice{{ libreoffice | regex_search('[0-9]+.[0-9]+') }}/program/soffice.bin
     warn: false
-  when: loffice_exists.rc != 0
   changed_when: false
 
 - name: Create transform-services folder
