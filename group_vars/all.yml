@@ -119,7 +119,7 @@ dependencies_url:
   jdk: "https://github.com/AdoptOpenJDK/openjdk11-upstream-binaries/releases/download/jdk-{{ dependencies_version.jdk }}+{{ dependencies_version.jdk_arch }}/OpenJDK11U-jdk_x64_linux_{{ dependencies_version.jdk }}_{{ dependencies_version.jdk_arch }}.tar.gz"
   jdk_md5_checksum: "ac1bb98fe70314a67f6eb7a87e960d44"
   tomcat: "http://archive.apache.org/dist/tomcat/tomcat-{{ dependencies_version.tomcat[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
-  tomcat_sha512_checksum: "http://archive.apache.org/dist/tomcat/tomcat-{{ dependencies_version.tomcat[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz.sha512"
+  tomcat_sha512_checksum: "{{ lookup('url', 'http://archive.apache.org/dist/tomcat/tomcat-{{ dependencies_version.tomcat[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz.sha512').split(' ')[0] }}"
 
 postgres_pass: MyPass1
 
