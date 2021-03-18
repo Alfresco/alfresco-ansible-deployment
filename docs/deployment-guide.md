@@ -439,7 +439,7 @@ What needs to be removed from a system will depend on your inventory configurati
    * alfresco-content.service
    * nginx.service
    * activemq.service
-   * postgres-`version`.service (where `version` is 11 for ACS 6.2.N and 13 for ACS 7.x)
+   * postgresql-`version`.service (where `version` is 11 for ACS 6.2.N and 13 for ACS 7.x)
 2. Remove the following yum packages:
    * ImageMagick
    * libreoffice
