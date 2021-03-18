@@ -4,6 +4,7 @@
   service:
     name: alfresco-transform-router
     state: restarted
+    daemon_reload: true
 
 - name: reload-trouter
   service:
