@@ -96,32 +96,17 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
 
-- name: Check if alfresco-pdf-renderer exe or archive exists
-  block:
-    - name: Check if alfresco-pdf-renderer exists
-      stat:
-        path: "{{ ats_home }}/alfresco-pdf-renderer"
-      register: alfresco_pdf_renderer_exists
-    - name: Check if alfresco-pdf-renderer archive exists
-      stat:
-        path: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
-      register: alfresco_pdf_renderer_tgz_exists
-
 - name: Download alfresco-pdf-renderer-linux.tgz
-  block:
-    - name: Download alfresco-pdf-renderer-linux.tgz
-      become: true
-      become_user: "{{ username }}"
-      get_url:
-        url: "{{ alfresco_pdf_renderer_lib_rpm }}"
-        dest: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
-        url_username: "{{ nexus_user }}"
-        url_password: "{{ nexus_password }}"
-        mode: 'u=rwx,g=rwx,o=rx'
-        timeout: 570
-      register: download_pdf_renderer
-      until: download_pdf_renderer is succeeded
-      when: not alfresco_pdf_renderer_tgz_exists.stat.exists and not alfresco_pdf_renderer_exists.stat.exists
+  become: true
+  become_user: "{{ username }}"
+  get_url:
+    url: "{{ alfresco_pdf_renderer_lib_rpm }}"
+    checksum: sha1:{{ alfresco_pdf_renderer_lib_sha1_checksum }}
+    dest: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    timeout: 570
 
 - name: Extract alfresco-pdf-renderer-linux.tgz
   become: true
@@ -130,7 +115,7 @@
     src: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
     dest: "{{ ats_home }}"
     remote_src: true
-  when: not alfresco_pdf_renderer_exists.stat.exists
+    creates: "{{ ats_home }}/alfresco-pdf-renderer"
 
 - name: Remove alfresco-pdf-renderer-linux.tgz
   block:
@@ -150,8 +135,6 @@
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
-  register: download_result
-  until: download_result is succeeded
 
 - name: Check for ATS_HOME in "{{ config_folder }}/setenv.sh"
   shell: cat {{ config_folder }}/setenv.sh | grep ATS_HOME

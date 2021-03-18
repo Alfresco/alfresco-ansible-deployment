@@ -14,3 +14,4 @@ libreoffice_rpm: "https://nexus.alfresco.com/nexus/service/local/repositories/th
 libreoffice_sha1_checksum: "{{ lookup('url', 'https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/libreoffice/libreoffice-dist/{{ libreoffice }}/libreoffice-dist-{{ libreoffice }}-linux.gz.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
 
 alfresco_pdf_renderer_lib_rpm: "https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-pdf-renderer/{{ pdf_renderer }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
+alfresco_pdf_renderer_lib_sha1_checksum: "{{ lookup('url', 'https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-pdf-renderer/{{ pdf_renderer }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
