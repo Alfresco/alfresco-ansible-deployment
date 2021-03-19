@@ -16,53 +16,54 @@
   poll: 0
   loop: "{{ utils_sync }}"
 
-- name: Create sync services folder
-  become: true
-  become_user: "{{ username }}"
-  file:
-    path: "{{ sync_home }}"
-    state: directory
+- name: Download sync servies {{ sync.version }}
+  block:
+    - name: Create sync services folder
+      become: true
+      become_user: "{{ username }}"
+      file:
+        path: "{{ sync_home }}"
+        state: directory
+    - name: Download artefact
+      become: true
+      become_user: "{{ username }}"
+      get_url:
+        url: "{{ downloads.sync_zip_url }}"
+        dest: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
+        checksum: "sha1:{{ downloads.sync_zip_sha1_checksum }}"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx'
+        url_username: "{{ nexus_user }}"
+        url_password: "{{ nexus_password }}"
 
-- name: Download artefact
-  become: true
-  become_user: "{{ username }}"
-  get_url:
-    url: "{{ downloads.sync_zip_url }}"
-    dest: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
-    checksum: "sha1:{{ downloads.sync_zip_sha1_checksum }}"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx'
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-
-- name: Create connectors folder
-  become: true
-  become_user: "{{ username }}"
-  file:
-    path: "{{ sync_home }}/service-sync/connectors"
-    state: directory
-
-- name: Download artefact
-  become: true
-  become_user: "{{ username }}"
-  get_url:
-    url: "{{ dependencies_url.postgresql_connector }}"
-    checksum: sha1:{{ dependencies_url.postgresql_connector_sha1_checksum }}
-    dest: "{{ sync_home }}/service-sync/connectors/postgresql.jar"
-    mode: 'u=rwx,g=rwx,o=rx'
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-  when: sync_db_url == ""
-
-- name: Copy db_connector to {{ sync_home }}/service-sync/connectors folder
-  copy:
-    src: "{{ inventory_dir }}/configuration_files/db_connector_sync/"
-    dest: "{{ sync_home }}/service-sync/connectors/"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-  when: sync_db_url != ""
+- name: Download postgresql jar
+  block:
+    - name: Create connectors folder
+      become: true
+      become_user: "{{ username }}"
+      file:
+        path: "{{ sync_home }}/service-sync/connectors"
+        state: directory
+    - name: Download artefact
+      become: true
+      become_user: "{{ username }}"
+      get_url:
+        url: "{{ dependencies_url.postgresql_connector }}"
+        checksum: sha1:{{ dependencies_url.postgresql_connector_sha1_checksum }}
+        dest: "{{ sync_home }}/service-sync/connectors/postgresql.jar"
+        mode: 'u=rwx,g=rwx,o=rx'
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+      when: sync_db_url == ""
+    - name: Copy db_connector to {{ sync_home }}/service-sync/connectors folder
+      copy:
+        src: "{{ inventory_dir }}/configuration_files/db_connector_sync/"
+        dest: "{{ sync_home }}/service-sync/connectors/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+      when: sync_db_url != ""
 
 - name: Extract sync service to {{ sync_home }}
   become: true
