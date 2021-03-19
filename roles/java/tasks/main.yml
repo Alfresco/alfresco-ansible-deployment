@@ -13,20 +13,12 @@
   become_user: root
   shell: 'echo "nameserver 8.8.8.8" > /etc/resolv.conf'
 
-- name: check for JDK on remote box
-  stat:
-    path: '{{ java_home }}'
-  register: remote_java
-  failed_when: false
-
 - name: Download file with check (md5)
   get_url:
     url: "{{ dependencies_url.jdk }}"
-    dest: "{{ download_location }}"
+    dest: "{{ download_location }}/{{ jdk_tar_file }}"
     checksum: "md5:{{ dependencies_url.jdk_md5_checksum }}"
     timeout: 570
-  register: remote_jdk_tar
-  when: not remote_java.stat.exists
 
 - name: Unarchive jdk tar.gz
   unarchive:
@@ -34,7 +26,7 @@
     dest: "{{ download_location }}"
     remote_src: true
     mode: 'u=rwx,g=rx,o=rx'
-  when: not remote_java.stat.exists
+    creates: "{{ download_location }}/{{ jdk_folder }}/"
 
 - name: Copy Java
   become: true
@@ -46,7 +38,6 @@
     owner: root
     group: root
     mode: 'u=rwx,g=rx,o=rx'
-  when: not remote_java.stat.exists
 
 - name: Check if setenv file exists
   stat:
