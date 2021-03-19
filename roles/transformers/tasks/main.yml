@@ -42,7 +42,7 @@
 
 - name: install imagemagick
   yum:
-    name: "{{ download_location }}/imagemagick-distribution-libs-linux.rpm"
+    name: "{{ download_location }}/{{ item }}"
     state: present
     disable_gpg_check: true
   loop:
@@ -78,11 +78,13 @@
     src: "{{ download_location }}/libreoffice.tar.gz"
     dest: "{{ download_location }}/"
     remote_src: true
-    list_files: true
-    creates: "{{ lookup('fileglob', download_location + '/LibreOffice_' + libreoffice + '*_Linux_' + ansible_architecture | replace('_','-') + '_rpm/RPMS/', errors='ignore') | first | default('') }}"
+    extra_opts:
+      - --xform
+      - s/LibreOffice_{{ libreoffice }}.[0-9]+_Linux/LibreOffice_{{ libreoffice }}_Linux/gx
+    creates: "{{ download_location }}/LibreOffice_{{ libreoffice }}_Linux_{{ ansible_architecture | replace('_','-') }}_rpm/RPMS/"
 
 - name: install LibreOffice
-  shell: "yum localinstall -y {{ download_location }}/LibreOffice_{{ libreoffice }}*_Linux_{{ ansible_architecture | replace('_','-') }}_rpm/RPMS/*.rpm"
+  shell: "yum localinstall -y {{ download_location }}/LibreOffice_{{ libreoffice }}_Linux_{{ ansible_architecture | replace('_','-') }}_rpm/RPMS/*.rpm"
   args:
     creates: /opt/libreoffice{{ libreoffice | regex_search('[0-9]+.[0-9]+') }}/program/soffice.bin
     warn: false
