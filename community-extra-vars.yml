@@ -14,11 +14,11 @@ downloads:
 
 amp_downloads:
   - url: "{{ nexus_repository.releases }}/org/alfresco/integrations/alfresco-googledrive-repo-community/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_repo.version }}.amp"
-    sha1_checksum: "{{ nexus_repository.releases }}/org/alfresco/integrations/alfresco-googledrive-repo-community/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_repo.version }}.amp.sha1"
+    sha1_checkcum: "{{ lookup('url', '{{ nexus_repository.releases }}/org/alfresco/integrations/alfresco-googledrive-repo-community/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_repo.version }}.amp.sha1') }}"
     dest: "{{ content_folder }}/amps_repo/alfresco-googledrive-repo-enterprise.amp"
   - url: "{{ nexus_repository.releases }}/org/alfresco/integrations/alfresco-googledrive-repo-community/{{ amps.googledrive_share.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_share.version }}.amp"
-    sha1_checksum: "{{ nexus_repository.releases }}/org/alfresco/integrations/alfresco-googledrive-repo-community/{{ amps.googledrive_share.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_share.version }}.amp.sha1"
+    sha1_checkcum: "{{ lookup('url', '{{ nexus_repository.releases }}/org/alfresco/integrations/alfresco-googledrive-repo-community/{{ amps.googledrive_share.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_share.version }}.amp.sha1') }}"
     dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
   - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
-    sha1_checksum: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp.sha1"
+    sha1_checkcum: "{{ lookup('url', '{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp.sha1') }}"
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
