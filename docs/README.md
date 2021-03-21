@@ -53,7 +53,7 @@ The same playbook can be run to deploy the system in several different ways, ple
 The playbooks have been tested with Ansible 2.9.16 on target hosts with the following operating systems:
 
 * CentOS 7 and 8
-* Red Hat Enterprise Linux 7.6
+* Red Hat Enterprise Linux 7 and 8
 
 The table below shows the version of the components deployed by the playbook for ACS 7.x and 6.2.N.
 
