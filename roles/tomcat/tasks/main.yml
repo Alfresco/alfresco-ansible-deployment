@@ -183,4 +183,6 @@
       owner: "{{ username }}"
       group: "{{ group_name }}"
   when: install_check.rc != 0 or dependencies_version.tomcat not in install_check.stderr
-  notify: enable-alfresco-content
+  notify:
+    - get-services
+    - enable-alfresco-content
