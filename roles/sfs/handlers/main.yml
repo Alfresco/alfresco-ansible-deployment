@@ -1,20 +1,29 @@
 ---
 # handlers file for sfs
-- name: restart-sfs
-  service:
+- name: get-services
+  service_facts:
+  register: services_state
+
+- name: enable-sfs
+  service: 
     name: alfresco-shared-fs
-    state: restarted
+    enabled: true
+    daemon_reload: true
+  when: services_state.ansible_facts.services['alfresco-shared-fs.service'].status != 'enabled'
 
 - name: start-sfs
   service:
     name: alfresco-shared-fs
     state: started
-
-- name: start-enable-sfs
+    daemon_reload: true
+  when: services_state.ansible_facts.services['alfresco-shared-fs.service'].state != 'running'
+    
+- name: restart-sfs
   service:
     name: alfresco-shared-fs
-    state: started
-    enabled: true
+    state: restarted
+    daemon_reload: true
+  when: services_state.ansible_facts.services['alfresco-shared-fs.service'].state == 'running'
 
 - name: stop-sfs
   service:

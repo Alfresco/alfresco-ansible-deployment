@@ -41,7 +41,9 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
-  notify: restart-trouter
+  notify:
+    - get-services
+    - restart-trouter
 
 - name: Add paths to setenv file
   become: true
@@ -64,6 +66,12 @@
     mode: u=rwx,g=rw,o-rwx
   changed_when: false
 
+- name: clean all
+  command: yum clean all
+  args:
+    warn: false
+  changed_when: false
+
 - name: Add alfresco-transform-router service
   become: true
   template:
@@ -73,16 +81,9 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
-  notify: restart-trouter
-
-- name: clean all
-  command: yum clean all
-  args:
-    warn: false
-  changed_when: false
-
-- name: Getting go_signal for t-router to start
-  wait_for:
-    host: "{{ ats_tengine_aio_host }}"
-    port: 8090
-  notify: enable-start-trouter
+  notify:
+    - get-services
+    - wait-for-aio
+    - enable-trouter
+    - start-trouter
+    - restart-trouter

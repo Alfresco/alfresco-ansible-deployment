@@ -1,26 +1,35 @@
 ---
 # handlers file for trouter
-- name: restart-trouter
-  service:
-    name: alfresco-transform-router
-    state: restarted
-    daemon_reload: true
+- name: get-services
+  service_facts:
+  register: services_state
 
-- name: reload-trouter
+- name: wait-for-aio
+  wait_for:
+    host: "{{ ats_tengine_aio_host }}"
+    port: 8090
+  register: go_signal
+
+- name: enable-trouter
   service:
     name: alfresco-transform-router
-    state: reloaded
+    enabled: true
+    daemon_reload: true
+  when: not go_signal.failed and services_state.ansible_facts.services['alfresco-transform-router.service'].status != 'enabled'
 
 - name: start-trouter
   service:
     name: alfresco-transform-router
     state: started
+    daemon_reload: true
+  when: not go_signal.failed and services_state.ansible_facts.services['alfresco-transform-router.service'].state != 'running'
 
-- name: enable-start-trouter
+- name: restart-trouter
   service:
     name: alfresco-transform-router
-    state: started
-    enabled: true
+    state: restarted
+    daemon_reload: true
+  when: not go_signal.failed and services_state.ansible_facts.services['alfresco-transform-router.service'].state == 'running'
 
 - name: stop-trouter
   service:

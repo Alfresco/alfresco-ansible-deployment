@@ -43,7 +43,10 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
-  notify: restart-sfs
+  notify:
+    - get-services
+    - restart-sfs
+
 
 - name: Add paths to setenv file
   become: true
@@ -81,4 +84,8 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
-  notify: start-enable-sfs
+  notify:
+    - get-services
+    - enable-sfs
+    - start-sfs
+    - restart-sfs

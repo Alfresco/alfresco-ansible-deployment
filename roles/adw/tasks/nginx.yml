@@ -32,12 +32,12 @@
     path: "{{ nginx_vhost_path }}/vhosts.conf"
     state: absent
 
-- name: Ensure nginx service is running as configured.
-  service:
-    name: nginx
-    state: started
-    enabled: true
-  notify: restart nginx
+# - name: Ensure nginx service is running as configured.
+#   service:
+#     name: nginx
+#     state: started
+#     enabled: true
+#   notify: restart-nginx
 
 - name: Add managed vhost config files.
   template:
@@ -47,4 +47,8 @@
     owner: root
     group: root
     mode: 'u=rw,g=r,o=r'
-  notify: reload nginx
+  notify:
+    - get-services
+    - enable-nginx
+    - start-nginx
+    - restart-nginx

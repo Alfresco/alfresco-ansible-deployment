@@ -214,6 +214,12 @@
     mode: u=rwx,g=rw,o-rwx
   changed_when: false
 
+- name: clean all
+  command: yum clean all
+  args:
+    warn: false
+  changed_when: false
+
 - name: Add AIO startup script
   become: true
   become_user: "{{ username }}"
@@ -224,7 +230,10 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
-  notify: restart-aio
+  notify: 
+    - get-services
+    - wait-for-activemq
+    - restart-aio
 
 - name: Add alfresco-tengine-aio service
   become: true
@@ -235,18 +244,9 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
-  notify: restart-aio
-
-- name: clean all
-  command: yum clean all
-  args:
-    warn: false
-  changed_when: false
-
-- name: Getting go_signal tengine-aio service to start
-  block:
-  - name: Check for activemq "{{ activemq_host }}"
-    wait_for:
-      host: "{{ activemq_host }}"
-      port: 61616
-    notify: enable-start-aio
+  notify: 
+    - get-services
+    - wait-for-activemq
+    - enable-aio
+    - start-aio
+    - restart-aio
