@@ -163,6 +163,7 @@
     force: no
   notify:
     - get-services
+    - wait-for-repo
     - restart-sync
 
 - name: Add alfresco-sync.service service
@@ -176,6 +177,7 @@
     force: yes
   notify:
   - get-services
+  - wait-for-repo
   - enable-sync
   - start-sync 
   - restart-sync
