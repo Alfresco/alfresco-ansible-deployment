@@ -7,7 +7,7 @@
 - name: enable-alfresco-content
   service:
     name: "alfresco-content"
-    state: enabled
+    enabled: true
     daemon_reload: true
   when: services_state.ansible_facts.services['alfresco-content.service'].status != 'enabled'
 
