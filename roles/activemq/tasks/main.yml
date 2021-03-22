@@ -139,7 +139,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-  notify: 
+  notify:
     - get-services
     - enable-activemq
     - start-activemq

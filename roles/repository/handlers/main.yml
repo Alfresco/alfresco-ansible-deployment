@@ -9,6 +9,14 @@
     host: "{{ db_host }}"
     port: "{{ repo_db_port }}"
   register: go_signal
+  when: repo_db_url == ""
+
+- name: set-go-signal
+  set_fact:
+    go_signal: {
+      'failed': false
+    }
+  when: repo_db_url != ""
 
 - name: enable-alfresco-content
   service:
