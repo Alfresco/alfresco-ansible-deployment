@@ -183,11 +183,6 @@
       owner: "{{ username }}"
       group: "{{ group_name }}"
   when: install_check.rc != 0 or dependencies_version.tomcat not in install_check.stderr
-
-- name: Ensure tomcat service is enabled on boot
-  systemd:
-    name: alfresco-content.service
-    state: stopped
-    enabled: true
-    daemon_reload: yes
-  changed_when: false
+  notify:
+    - get-services
+    - enable-alfresco-content

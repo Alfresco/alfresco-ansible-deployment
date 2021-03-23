@@ -43,32 +43,22 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
-  notify: restart-sfs
+  notify:
+    - get-services
+    - restart-sfs
+
 
 - name: Add paths to setenv file
-  block:
-    - name: Check for ATS_HOME in "{{ config_folder }}/setenv.sh"
-      shell: cat {{ config_folder }}/setenv.sh | grep ATS_HOME
-      register: test_ats_home
-      failed_when: false
-      changed_when: test_ats_home.rc != 0
-    - name: Check for ACTIVEMQ_HOST in "{{ config_folder }}/setenv.sh"
-      shell: cat {{ config_folder }}/setenv.sh | grep ACTIVEMQ_HOST
-      register: test_activemq_home
-      failed_when: false
-      changed_when: test_activemq_home.rc != 0
-    - name: Add paths to setenv file
-      become: true
-      become_user: "{{ username }}"
-      blockinfile:
-        path: "{{ config_folder }}/setenv.sh"
-        marker: "# {mark} SFS ENV VARS"
-        block: |
-          export ATS_HOME={{ binaries_folder }}/transform-service
-          export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
-          export ATS_SHARED_FS_HOST={{ sfs_host }}
-        insertafter: EOF
-      when: test_ats_home.rc != 0 and test_activemq_home.rc != 0
+  become: true
+  become_user: "{{ username }}"
+  blockinfile:
+    path: "{{ config_folder }}/setenv.sh"
+    marker: "# {mark} ATS COMMON ENV VARS"
+    block: |
+      export ATS_HOME={{ binaries_folder }}/transform-service
+      export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
+      export ATS_SHARED_FS_HOST={{ sfs_host }}
+    insertafter: EOF
 
 - name: Create log file with correct permissions
   become: true
@@ -77,6 +67,12 @@
     path: "{{ logs_folder }}/ats-shared-fs.log"
     state: touch
     mode: u=rwx,g=rw,o-rwx
+  changed_when: false
+
+- name: clean all
+  command: yum clean all
+  args:
+    warn: false
   changed_when: false
 
 - name: Add alfresco-shared-fs service
@@ -88,16 +84,8 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
-  notify: restart-sfs
-
-- name: clean all
-  command: yum clean all
-  args:
-    warn: false
-  changed_when: false
-
-- name: Enable and start sfs service
-  systemd:
-    name: alfresco-shared-fs.service
-    enabled: true
-  notify: start-sfs
+  notify:
+    - get-services
+    - enable-sfs
+    - start-sfs
+    - restart-sfs

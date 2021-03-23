@@ -10,7 +10,7 @@
   become_user: root
   get_url:
     url: "{{ dependencies_url.activemq }}"
-    dest: "/opt/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
+    dest: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
     mode: 'u=rwx,g=rwx,o=rx'
     owner: "{{ username }}"
     group: "{{ group_name }}"
@@ -33,11 +33,12 @@
 - name: Extract apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz into /opt
   become: true
   unarchive:
-    src: "/opt/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
+    src: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
     dest: "/opt"
     remote_src: true
     owner: "{{ username }}"
     group: "{{ group_name }}"
+    creates: "/opt/apache-activemq-{{ dependencies_version.activemq }}/bin"
   when: job_result is succeeded
 
 - name: Move configuration files
@@ -127,7 +128,9 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,go=rx'
-  notify: activemq-restart
+  notify:
+    - get-services
+    - restart-activemq
 
 - name: Add activemq.service
   template:
@@ -136,10 +139,8 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-  notify: activemq-restart
-
-- name: Ensure activemq service is started and enabled on boot
-  systemd:
-    name: activemq.service
-    state: started
-    enabled: true
+  notify:
+    - get-services
+    - enable-activemq
+    - start-activemq
+    - restart-activemq
