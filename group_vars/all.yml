@@ -1,7 +1,7 @@
 ---
 nexus_repository:
-  releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/"
-  enterprise_releases: "https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/"
+  releases: "https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco"
+  enterprise_releases: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco"
 
 acs:
   version: 7.0.0
@@ -39,33 +39,33 @@ sync:
   version: 3.4.0
 
 downloads:
-  acs_zip_url: "{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
-  acs_zip_sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}org/alfresco/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
-  adw_zip_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
-  adw_zip_sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
-  search_zip_url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-search-services/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip"
-  search_zip_sha1_checksum: "{{ lookup('url', '{{ nexus_repository.releases }}/org/alfresco/alfresco-search-services/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
-  sfs_jar_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-shared-file-store-controller/{{ sfs.version }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar"
-  sfs_jar_sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-shared-file-store-controller/{{ sfs.version }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
-  trouter_jar_url: "{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-transform-router/{{ trouter.version }}/alfresco-transform-router-{{ trouter.version }}.jar"
-  trouter_jar_sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/org/alfresco/alfresco-transform-router/{{ trouter.version }}/alfresco-transform-router-{{ trouter.version }}.jar.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
-  transform_jar_url: "{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
-  transform_jar_sha1_checksum: "{{ lookup('url', '{{ nexus_repository.releases }}/org/alfresco/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
-  sync_zip_url: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"
-  sync_zip_sha1_checksum: "{{ lookup('url', 'https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
+  acs_zip_url: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
+  acs_zip_sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
+  adw_zip_url: "{{ nexus_repository.enterprise_releases }}/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
+  adw_zip_sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/alfresco-digital-workspace/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
+  search_zip_url: "{{ nexus_repository.releases }}/alfresco-search-services/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip"
+  search_zip_sha1_checksum: "{{ lookup('url', '{{ nexus_repository.releases }}/alfresco-search-services/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
+  sfs_jar_url: "{{ nexus_repository.enterprise_releases }}/alfresco-shared-file-store-controller/{{ sfs.version }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar"
+  sfs_jar_sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/alfresco-shared-file-store-controller/{{ sfs.version }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
+  trouter_jar_url: "{{ nexus_repository.enterprise_releases }}/alfresco-transform-router/{{ trouter.version }}/alfresco-transform-router-{{ trouter.version }}.jar"
+  trouter_jar_sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/alfresco-transform-router/{{ trouter.version }}/alfresco-transform-router-{{ trouter.version }}.jar.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
+  transform_jar_url: "{{ nexus_repository.releases }}/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
+  transform_jar_sha1_checksum: "{{ lookup('url', '{{ nexus_repository.releases }}/alfresco-transform-core-aio-boot/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
+  sync_zip_url: "{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"
+  sync_zip_sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
 
 war_downloads:
-  - url: "{{ nexus_repository.releases }}org/alfresco/api-explorer/{{ api_explorer.version }}/api-explorer-{{ api_explorer.version }}.war"
+  - url: "{{ nexus_repository.releases }}/api-explorer/{{ api_explorer.version }}/api-explorer-{{ api_explorer.version }}.war"
     dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
 
 amp_downloads:
-  - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/integrations/alfresco-googledrive-repo-enterprise/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp"
+  - url: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-googledrive-repo-enterprise.amp"
-  - url: "{{ nexus_repository.releases }}/org/alfresco/integrations/alfresco-googledrive-share/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp"
+  - url: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp"
     dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
-  - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/services/sync/alfresco-device-sync-repo/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp"
+  - url: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-device-sync-repo.amp"
-  - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
+  - url: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
 
 # A default keystore is stored in /var/opt/alfresco/content-services/keystore, 

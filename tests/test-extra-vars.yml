@@ -12,15 +12,15 @@ amps:
   ags_share:
     version: 3.5.0
 amp_downloads:
-  - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/integrations/alfresco-googledrive-repo-enterprise/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp"
+  - url: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-googledrive-repo-enterprise.amp"
-  - url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/public/content/org/alfresco/integrations/alfresco-googledrive-share/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp"
+  - url: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp"
     dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
-  - url: "{{ nexus_repository.enterprise_releases }}org/alfresco/services/sync/alfresco-device-sync-repo/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp"
+  - url: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-device-sync-repo.amp"
-  - url: "{{ nexus_repository.releases }}org/alfresco/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
+  - url: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
-  - url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/private/content/org/alfresco/alfresco-governance-services-enterprise-repo/{{ amps.ags_repo.version }}/alfresco-governance-services-enterprise-repo-{{ amps.ags_repo.version }}.amp"
+  - url: "{{ nexus_repository.enterprise_releases }}/alfresco-governance-services-enterprise-repo/{{ amps.ags_repo.version }}/alfresco-governance-services-enterprise-repo-{{ amps.ags_repo.version }}.amp"
     dest: "{{ content_folder }}/amps_repo/ags-repo.amp"
-  - url: "https://nexus.alfresco.com/nexus/service/local/repo_groups/private/content/org/alfresco/alfresco-governance-services-enterprise-share/{{ amps.ags_share.version }}/alfresco-governance-services-enterprise-share-{{ amps.ags_share.version }}.amp"
+  - url: "{{ nexus_repository.enterprise_releases }}/alfresco-governance-services-enterprise-share/{{ amps.ags_share.version }}/alfresco-governance-services-enterprise-share-{{ amps.ags_share.version }}.amp"
     dest: "{{ content_folder }}/amps_share/ags-share.amp"
