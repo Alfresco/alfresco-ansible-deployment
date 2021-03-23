@@ -32,13 +32,6 @@
     path: "{{ nginx_vhost_path }}/vhosts.conf"
     state: absent
 
-# - name: Ensure nginx service is running as configured.
-#   service:
-#     name: nginx
-#     state: started
-#     enabled: true
-#   notify: restart-nginx
-
 - name: Add managed vhost config files.
   template:
     src: alfresco_adw.conf
@@ -47,8 +40,16 @@
     owner: root
     group: root
     mode: 'u=rw,g=r,o=r'
-  notify:
+    notify:
     - get-services
     - enable-nginx
     - start-nginx
     - restart-nginx
+
+- name: Set nis_enabled flag on and keep it persistent across reboots
+  become: true
+  seboolean:
+    name: nis_enabled
+    state: true
+    persistent: true
+  when: ansible_selinux.status == "enabled"
