@@ -49,8 +49,4 @@
     name: nginx
     state: "{{ nginx_service_state }}"
     enabled: "{{ nginx_service_enabled }}"
-<<<<<<< HEAD
   notify: reload-nginx
-=======
-  notify: reload nginx
->>>>>>> master
