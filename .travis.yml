@@ -16,7 +16,7 @@ branches:
     - /OPSEXP-.*/
 
 before_install:
-  - pip install ansible==2.9.16 molecule==3.0.8 ansible-lint PyHamcrest pylint pytest-testinfra
+  - pip install ansible==2.9.18 molecule==3.0.8 ansible-lint PyHamcrest pylint pytest-testinfra
 
 env:
   - MOLECULE_NO_LOG=false
@@ -138,7 +138,7 @@ jobs:
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
         - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-2.9.18-1.el7.noarch"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
         - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@6.2.N-extra-vars.yml\""
@@ -170,7 +170,7 @@ jobs:
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
         - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-2.9.18-1.el8.noarch"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
         - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\""
@@ -202,7 +202,7 @@ jobs:
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
         - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-2.9.18-1.el8.noarch"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
         - ssh centos@${PUBLIC_IP} "cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@community-extra-vars.yml\""
