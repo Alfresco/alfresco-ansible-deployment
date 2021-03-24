@@ -444,17 +444,9 @@
     marker_end: "### End - Custom user properties"
     insertafter: EOF
     block: "{{ lookup('file', role_path + '/../../configuration_files/alfresco-global.properties') }}"
-  notify: alfresco-content-restart
-
-- name: Notify alfresco content service
-  wait_for:
-    host: "{{ db_host }}"
-    port: "{{ repo_db_port }}"
-  notify: alfresco-content-start
-  when: repo_db_url == ""
-
-- name: Alfresco content service for external db
-  service:
-    name: alfresco-content 
-    state: restarted
-  when: repo_db_url != ""
+  notify:
+    - get-services
+    - wait-for-db
+    - set-go-signal
+    - start-alfresco-content
+    - restart-alfresco-content

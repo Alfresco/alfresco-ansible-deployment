@@ -15,7 +15,7 @@ VERSION=`cat ../VERSION`
 echo "Copying required files to temporary folder..."
 BUILD_FOLDER=alfresco-ansible-deployment-${VERSION}
 mkdir -p $BUILD_FOLDER
-echo "For more info on this project goto https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/README.md" > $BUILD_FOLDER/README.txt
+echo "You can find full documentation on how to use the playbook for Enterprise deployments here https://docs.alfresco.com/content-services/latest/install/ansible and for Community deployments here https://docs.alfresco.com/content-services/community/install/ansible" > $BUILD_FOLDER/README.txt
 cp -r ../group_vars $BUILD_FOLDER
 cp -r ../playbooks $BUILD_FOLDER
 rsync -rvq --exclude molecule/ ../roles $BUILD_FOLDER

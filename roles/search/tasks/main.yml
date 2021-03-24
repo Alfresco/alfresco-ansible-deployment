@@ -103,6 +103,9 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
+  notify:
+    - get-services
+    - restart-search
 
 - name: Add "{{ config_dir }}/solr.in.sh"
   become: true
@@ -112,6 +115,9 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
+  notify:
+    - get-services
+    - restart-search
 
 - name: Check Solr running
   shell: "{{ binaries_dir }}/solr/bin/solr status"
@@ -129,11 +135,9 @@
       owner: "{{ username }}"
       group: "{{ group_name }}"
       mode: 'u=rwx,g=rwx'
-  notify: restart-search
+  notify: 
+    - get-services
+    - enable-search
+    - start-search
+    - restart-search
   when: search_started.failed or '"No Solr nodes are running." in search_started.stdout'
-
-- name: Ensure Alfresco Search service is started and enabled on boot
-  systemd:
-    name: alfresco-search.service
-    state: started
-    enabled: true

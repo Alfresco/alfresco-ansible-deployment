@@ -50,7 +50,7 @@ The same playbook can be run to deploy the system in several different ways, ple
 
 ## Versioning
 
-The playbooks have been tested with Ansible 2.9.16 on target hosts with the following operating systems:
+The playbooks have been tested with Ansible 2.9.18 on target hosts with the following operating systems:
 
 * CentOS 7 and 8
 * Red Hat Enterprise Linux 7 and 8
