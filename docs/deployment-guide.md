@@ -112,10 +112,10 @@ In the interest of keeping this guide simple we will use an AWS EC2 instance as 
     sudo yum install -y unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
     ```
 
-4. Install Ansible
+4. Install Ansible (replace el7 with el8 in the package name if you're using CentOS 8)
 
     ```bash
-    sudo yum install -y ansible
+    sudo yum install -y ansible-2.9.18-1.el7.noarch
     ```
 
 5. Extract the ZIP file
