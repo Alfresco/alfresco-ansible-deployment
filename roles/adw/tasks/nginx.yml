@@ -48,3 +48,11 @@
     group: root
     mode: 'u=rw,g=r,o=r'
   notify: reload nginx
+
+- name: Set nis_enabled flag on and keep it persistent across reboots
+  become: true
+  seboolean:
+    name: nis_enabled
+    state: true
+    persistent: true
+  when: ansible_selinux.status == "enabled"
