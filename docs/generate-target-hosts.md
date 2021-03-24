@@ -19,7 +19,7 @@ Molecule provides support for testing with multiple instances, operating systems
 4. Install ansible, molecule and molecule-ec2, pyyaml on the control node
 
     ```bash
-    sudo pip3 install ansible==2.9.15 molecule==3.0.8 molecule-ec2==0.2 pyyaml
+    sudo pip3 install ansible==2.9.16 molecule==3.0.8 molecule-ec2==0.2 pyyaml
     ```
 
 5. As the scripts are designed to work in our build environment a `TRAVIS_BUILD_NUMBER` and `TRAVIS_BRANCH` environment variable is expected. These can be set to whatever you want, they are used to name the EC2 instances.
