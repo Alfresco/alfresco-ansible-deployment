@@ -37,33 +37,23 @@
     - "{{ tomcat_config_dir }}/conf"
     - "{{ tomcat_working }}/webapps"
 
-- name: check if "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/" dir exists
-  shell: "ls -l {{ tomcat_config_dir }}/"
-  failed_when: false
-  changed_when: false
-  register: tomcat_dir
-
 - name: Download Tomcat
   get_url:
     url: "{{ dependencies_url.tomcat }}"
+    checksum: sha512:{{ dependencies_url.tomcat_sha512_checksum }}
     dest: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
     timeout: 570
-  register: download
-  until: download is succeeded
-  failed_when: false
   become: true
   become_user: root
-  changed_when: tomcat_dir.rc !=0
 
 - name: Unarchive a file with extra options
   unarchive:
     src: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
     dest: "/opt/"
     remote_src: true
+    creates: /opt/apache-tomcat-{{ dependencies_version.tomcat }}/
   become: true
   become_user: root
-  failed_when: false
-  changed_when: tomcat_dir.rc != 0
 
 - name: Recursively change ownership of "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/"
   file:
@@ -73,7 +63,6 @@
     group: "{{ group_name }}"
     owner: "{{ username }}"
     mode: 'o=r,g=rwx'
-  changed_when: tomcat_dir.rc != 0
 
 - name: check if "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf" dir exists
   stat:

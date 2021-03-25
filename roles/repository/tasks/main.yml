@@ -61,9 +61,10 @@
 - name: Download AMPS
   become: true
   become_user: root
-  loop: "{{ query('items', amp_downloads) }}"
+  loop: "{{ amp_downloads }}"
   get_url:
     url: "{{ item.url }}"
+    checksum: sha1:{{ item.sha1_checksum }}
     dest: "{{ item.dest }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
@@ -79,6 +80,7 @@
   become_user: root
   get_url:
     url: "{{ dependencies_url.postgresql_connector }}"
+    checksum: sha1:{{ dependencies_url.postgresql_connector_sha1_checksum }}
     dest: "{{ tomcat_config_dir }}/lib/postgresql.jar"
     mode: 'u=rw,g=r,o=r'
     owner: "{{ username }}"
@@ -176,10 +178,11 @@
 - name: Download war files
   become: true
   become_user: root
-  loop: "{{ query('items', war_downloads) }}"
+  loop: "{{ war_downloads }}"
   changed_when: false
   get_url:
     url: "{{ item.url }}"
+    checksum: sha1:{{ item.sha1_checksum }}
     dest: "{{ item.dest }}"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"

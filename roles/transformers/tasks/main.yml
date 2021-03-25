@@ -12,13 +12,6 @@
   poll: 0
   loop: "{{ utils_transform }}"
 
-- name: Check if ImageMagick is installed
-  command:
-    cmd: "convert --version"
-  register: magick_exists
-  failed_when: false
-  changed_when: magick_exists.rc != 0
-
 - name: Enable EPEL repository
   yum_repository:
     name: epel
@@ -30,51 +23,36 @@
 - name: Download imagemagick-distribution-linux.rpm
   get_url:
     url: "{{ imagemagick_rpm }}"
+    checksum: sha1:{{ imagemagick_sha1_checksum }}
     dest: "{{ download_location }}/imagemagick-distribution-linux.rpm"
     mode: 0444
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
-  register: download_img_dist
-  until: download_img_dist is succeeded
-  when: magick_exists.rc != 0
 
 - name: Download imagemagick-distribution-libs-linux.rpm
   get_url:
     url: "{{ imagemagick_lib_rpm }}"
+    checksum: sha1:{{ imagemagick_lib_sha1_checksum }}
     dest: "{{ download_location }}/imagemagick-distribution-libs-linux.rpm"
     mode: 0444
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
-  register: download_img_libs_dist
-  until: download_img_libs_dist is succeeded
-  when: magick_exists.rc != 0
 
-- name: install imagemagick-distribution-libs
+- name: install imagemagick
   yum:
-    name: "{{ download_location }}/imagemagick-distribution-libs-linux.rpm"
+    name: "{{ download_location }}/{{ item }}"
     state: present
     disable_gpg_check: true
-  when: download_img_libs_dist is succeeded and magick_exists.rc != 0
-
-- name: install imagemagick-distribution
-  yum:
-    name: "{{ download_location }}/imagemagick-distribution-linux.rpm"
-    state: present
-    disable_gpg_check: true
-  when: download_img_dist is succeeded and magick_exists.rc != 0
-
-- name: Check if LibreOffice exists
-  command:
-    cmd: "{{ libreoffice_home }}/program/soffice --version"
-  register: loffice_exists
-  failed_when: false
-  changed_when: loffice_exists.rc != 0
+  loop:
+    - imagemagick-distribution-libs-linux.rpm
+    - imagemagick-distribution-linux.rpm
 
 - name: "Download libreoffice {{ libreoffice }} rpm tar.gz"
   get_url:
     url: "{{ libreoffice_rpm }}"
+    checksum: sha1:{{ libreoffice_sha1_checksum }}
     dest: "{{ download_location }}/libreoffice.tar.gz"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
@@ -83,7 +61,6 @@
   register: libreoffice_download
   async: 900
   poll: 0
-  when: loffice_exists.rc != 0
 
 - name: Verifying if libreoffice finished downloading
   become: true
@@ -93,8 +70,7 @@
   register: job_result
   until: job_result.finished
   delay: 30
-  retries: 30
-  when: loffice_exists.rc != 0
+  retries: 20
 
 - name: Extract libreoffice-dist-linux.gz
   become: true
@@ -102,13 +78,16 @@
     src: "{{ download_location }}/libreoffice.tar.gz"
     dest: "{{ download_location }}/"
     remote_src: true
-  when: loffice_exists.rc != 0
+    extra_opts:
+      - --xform
+      - s/LibreOffice_{{ libreoffice }}.[0-9]+_Linux/LibreOffice_{{ libreoffice }}_Linux/gx
+    creates: "{{ download_location }}/LibreOffice_{{ libreoffice }}_Linux_{{ ansible_architecture | replace('_','-') }}_rpm/RPMS/"
 
 - name: install LibreOffice
-  shell: "yum localinstall -y {{ download_location }}/LibreOffice*/RPMS/*.rpm"
+  shell: "yum localinstall -y {{ download_location }}/LibreOffice_{{ libreoffice }}_Linux_{{ ansible_architecture | replace('_','-') }}_rpm/RPMS/*.rpm"
   args:
+    creates: /opt/libreoffice{{ libreoffice | regex_search('[0-9]+.[0-9]+') }}/program/soffice.bin
     warn: false
-  when: loffice_exists.rc != 0
   changed_when: false
 
 - name: Create transform-services folder
@@ -119,32 +98,17 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
 
-- name: Check if alfresco-pdf-renderer exe or archive exists
-  block:
-    - name: Check if alfresco-pdf-renderer exists
-      stat:
-        path: "{{ ats_home }}/alfresco-pdf-renderer"
-      register: alfresco_pdf_renderer_exists
-    - name: Check if alfresco-pdf-renderer archive exists
-      stat:
-        path: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
-      register: alfresco_pdf_renderer_tgz_exists
-
 - name: Download alfresco-pdf-renderer-linux.tgz
-  block:
-    - name: Download alfresco-pdf-renderer-linux.tgz
-      become: true
-      become_user: "{{ username }}"
-      get_url:
-        url: "{{ alfresco_pdf_renderer_lib_rpm }}"
-        dest: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
-        url_username: "{{ nexus_user }}"
-        url_password: "{{ nexus_password }}"
-        mode: 'u=rwx,g=rwx,o=rx'
-        timeout: 570
-      register: download_pdf_renderer
-      until: download_pdf_renderer is succeeded
-      when: not alfresco_pdf_renderer_tgz_exists.stat.exists and not alfresco_pdf_renderer_exists.stat.exists
+  become: true
+  become_user: "{{ username }}"
+  get_url:
+    url: "{{ alfresco_pdf_renderer_lib_rpm }}"
+    checksum: sha1:{{ alfresco_pdf_renderer_lib_sha1_checksum }}
+    dest: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    timeout: 570
 
 - name: Extract alfresco-pdf-renderer-linux.tgz
   become: true
@@ -153,7 +117,7 @@
     src: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
     dest: "{{ ats_home }}"
     remote_src: true
-  when: not alfresco_pdf_renderer_exists.stat.exists
+    creates: "{{ ats_home }}/alfresco-pdf-renderer"
 
 - name: Remove alfresco-pdf-renderer-linux.tgz
   block:
@@ -173,8 +137,6 @@
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
-  register: download_result
-  until: download_result is succeeded
 
 - name: Add paths to setenv file
   block:

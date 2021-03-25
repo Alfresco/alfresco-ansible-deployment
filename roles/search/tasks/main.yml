@@ -31,8 +31,6 @@
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
-  register: download_result
-  until: download_result is succeeded
 
 - name: Extract alfresco-search-services-{{ search.version }}.zip into {{ binaries_dir }}
   become: true
@@ -43,7 +41,6 @@
     creates: "{{ binaries_dir }}/README.MD"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-  when: download_result is succeeded
 
 - name: "Move files from {{ binaries_dir }}/alfresco-search-services to {{ binaries_dir }}/"
   block:
