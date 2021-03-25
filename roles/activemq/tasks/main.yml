@@ -13,6 +13,7 @@
   register: activemq_download
   async: 900
   poll: 0
+  changed_when: false
 
 - name: Check on activemq download async task
   become: true
