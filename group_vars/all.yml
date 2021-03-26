@@ -64,7 +64,7 @@ amp_downloads:
     sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
     dest: "{{ content_folder }}/amps_repo/alfresco-googledrive-repo-enterprise.amp"
   - url: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp"
-    sha1_checksum: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp.sha1') }}"
+    sha1_checksum: "{{ lookup('url', '{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp.sha1') }}"
     dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
   - url: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp"
     sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
