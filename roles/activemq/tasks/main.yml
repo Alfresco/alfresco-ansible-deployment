@@ -1,23 +1,19 @@
 ---
 # tasks file for roles/activemq
-- name: Check if activemq executable exists
-  stat:
-      path: "{{ activemq_home }}/bin/activemq"
-  register: activemq_exe
-
 - name: Download activemq tar
   become: true
   become_user: root
   get_url:
     url: "{{ dependencies_url.activemq }}"
-    dest: "/opt/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
+    checksum: sha512:{{ dependencies_url.activemq_sha512_checksum }}
+    dest: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
     mode: 'u=rwx,g=rwx,o=rx'
     owner: "{{ username }}"
     group: "{{ group_name }}"
   register: activemq_download
-  when: not activemq_exe.stat.exists
   async: 900
   poll: 0
+  changed_when: false
 
 - name: Check on activemq download async task
   become: true
@@ -28,16 +24,16 @@
   until: job_result.finished
   delay: 5
   retries: 300
-  when: not activemq_exe.stat.exists
 
 - name: Extract apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz into /opt
   become: true
   unarchive:
-    src: "/opt/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
+    src: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
     dest: "/opt"
     remote_src: true
     owner: "{{ username }}"
     group: "{{ group_name }}"
+    creates: /opt/apache-activemq-{{ dependencies_version.activemq }}/bin/activemq
   when: job_result is succeeded
 
 - name: Move configuration files
@@ -127,7 +123,9 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,go=rx'
-  notify: activemq-restart
+  notify:
+    - get-services
+    - restart-activemq
 
 - name: Add activemq.service
   template:
@@ -136,10 +134,8 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-  notify: activemq-restart
-
-- name: Ensure activemq service is started and enabled on boot
-  systemd:
-    name: activemq.service
-    state: started
-    enabled: true
+  notify:
+    - get-services
+    - enable-activemq
+    - start-activemq
+    - restart-activemq

@@ -34,8 +34,7 @@
     owner: root
     group: "{{ root_group }}"
     mode: 'u=rw,g=r,o=r'
-  notify:
-    - reload nginx
+  notify: reload-nginx
 
 - name: Set httpd_can_network_connect flag on and keep it persistent across reboots
   become: true
@@ -50,4 +49,4 @@
     name: nginx
     state: "{{ nginx_service_state }}"
     enabled: "{{ nginx_service_enabled }}"
-  notify: reload nginx
+  notify: reload-nginx

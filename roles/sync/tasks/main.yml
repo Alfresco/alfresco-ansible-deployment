@@ -36,9 +36,6 @@
         mode: 'u=rwx,g=rwx'
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
-      register: sync_download_result
-      until: sync_download_result is succeeded
-  when: not ansible_facts.services['alfresco-sync.service'] is defined
 
 - name: Download postgresql jar
   block:
@@ -53,12 +50,11 @@
       become_user: "{{ username }}"
       get_url:
         url: "{{ dependencies_url.postgresql_connector }}"
+        checksum: sha1:{{ dependencies_url.postgresql_connector_sha1_checksum }}
         dest: "{{ sync_home }}/service-sync/connectors/postgresql.jar"
         mode: 'u=rwx,g=rwx,o=rx'
         owner: "{{ username }}"
         group: "{{ group_name }}"
-      register: postgresql_download
-      until: postgresql_download is succeeded
       when: sync_db_url == ""
     - name: Copy db_connector to {{ sync_home }}/service-sync/connectors folder
       copy:
@@ -76,7 +72,7 @@
     src: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
     dest: "{{ sync_home }}"
     remote_src: true
-  when: sync_download_result.changed
+    creates: "{{ sync_home }}/service-sync/service-sync-{{ sync.version }}.jar"
 
 - name: Move sync service files to {{ sync_home }}
   block:
@@ -113,7 +109,10 @@
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx'
         force: yes
-      notify: restart-sync
+      notify:
+        - get-services
+        - wait-for-repo 
+        - restart-sync
 
 - name: Check for SYNC_HOME in "{{ config_folder }}/setenv.sh"
   shell: cat {{ config_folder }}/setenv.sh | grep SYNC_HOME
@@ -142,6 +141,12 @@
     mode: u=rwx,g=rw,o-rwx
   changed_when: false
 
+- name: clean all
+  command: yum clean all
+  args:
+    warn: false
+  changed_when: false
+
 - name: Add sync service startup script
   become: true
   become_user: "{{ username }}"
@@ -152,6 +157,10 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx'
     force: no
+  notify:
+    - get-services
+    - wait-for-repo
+    - restart-sync
 
 - name: Add alfresco-sync.service service
   become: true
@@ -162,28 +171,9 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx'
     force: yes
-  notify: restart-sync
-  when: not ansible_facts.services['alfresco-sync.service'] is defined
-
-- name: clean all
-  command: yum clean all
-  args:
-    warn: false
-  changed_when: false
-
-- name: Remove sync service archive
-  file:
-    path: "{{ binaries_folder }}/sync-dist-6.x-{{ sync.version }}.zip"
-    state: absent
-
-- name: Enable Sync service
-  systemd:
-    name: alfresco-sync.service
-    state: stopped
-    enabled: true
-
-- name: Notify sync service service to start
-  wait_for:
-    host: "{{ repo_host }}"
-    port: 8080
-  notify: start-sync
+  notify:
+  - get-services
+  - wait-for-repo
+  - enable-sync
+  - start-sync 
+  - restart-sync

@@ -1,12 +1,24 @@
 ---
-- name: alfresco-content-start
-  systemd:
+# handlers file for tomcat (alfresco-content)
+- name: get-services
+  service_facts:
+  register: services_state
+
+- name: enable-alfresco-content
+  service:
+    name: "alfresco-content"
+    enabled: true
+    daemon_reload: true
+  when: services_state.ansible_facts.services['alfresco-content.service'].status != 'enabled'
+
+- name: start-alfresco-content
+  service:
     name: "alfresco-content"
     state: started
     daemon_reload: true
+  when: services_state.ansible_facts.services['alfresco-content.service'].state != 'running'
 
-- name: alfresco-content-stop
-  systemd:
+- name: stop-alfresco-content
+  service:
     name: "alfresco-content"
     state: stopped
-    daemon_reload: true
