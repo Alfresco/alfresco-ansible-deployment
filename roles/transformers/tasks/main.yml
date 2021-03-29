@@ -1,8 +1,9 @@
 ---
 # vars file for transformers
-
 - name: Check if OS specific file exists
-  local_action: stat path="{{ role_path }}/vars/{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+  stat: 
+    path: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+  delegate_to: localhost
   register: os_file
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
