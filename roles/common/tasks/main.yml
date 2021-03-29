@@ -1,7 +1,13 @@
 ---
 # tasks file for central
+- name: Check if OS specific file exists
+  stat: 
+    path: "{{ role_path }}/vars/{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+  delegate_to: localhost
+  register: os_file
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+  when: os_file.stat.exists
 
 - name: Include nexus credentials for local testing
   include_vars: "nexus.yml"
@@ -14,6 +20,7 @@
     state: present
   poll: 0
   loop: "{{ utils }}"
+  when: os_file.stat.exists
 
 - name: "Create {{ group_name }} group"
   group:
