@@ -14,11 +14,11 @@
 
 - name: Include ssl vhost if enabled
   include_vars: "ssl.yml"
-  when: enable_ssl == "true"
-  
+  when: enable_ssl
+
 - name: Add ssl key
   template:
-    src: "{{ item.cert_key }}"
+    src: "{{ role_path }}/../../configuration_files/ssl_certificates/{{ item.cert_key }}"
     dest: "/etc/nginx/{{ item.cert_key }}"
     force: true
     owner: root
@@ -27,7 +27,7 @@
 
 - name: Add ssl cert
   template:
-    src: "{{ item.cert_crt }}"
+    src: "{{ role_path }}/../../configuration_files/ssl_certificates/{{ item.cert_crt }}"
     dest: "/etc/nginx/{{ item.cert_crt }}"
     force: true
     owner: root

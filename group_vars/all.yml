@@ -135,5 +135,5 @@ sync_db_name: "alfresco-sync"
 sync_db_username: "alfresco"
 sync_db_password: "alfresco"
 
-enable_ssl: true
-fqdn_alfresco: "pentest.opsexp.alfresco.me"
+enable_ssl: false
+fqdn_alfresco: "your_domain.com"
