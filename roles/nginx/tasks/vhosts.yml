@@ -12,6 +12,10 @@
     state: directory
   notify: reload-nginx
 
+- name: Include ssl vhost if enabled
+  include_vars: "ssl.yml"
+  when: enable_ssl == "true"
+  
 - name: Add ssl key
   template:
     src: "{{ item.cert_key }}"
