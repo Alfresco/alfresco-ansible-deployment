@@ -1,0 +1,139 @@
+---
+- name: prerequisite checks
+  hosts: repository
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/helper_modules'
+  tasks:
+  - name: check db connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.database | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.database[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "5432"
+      delegate_target: "{{ groups.database | first }}"
+    when: repo_db_url == ""
+  - name: check activemq connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.activemq | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.activemq[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "61616"
+      delegate_target: "{{ groups.activemq | first }}"
+  - name: check search connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.search | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.search[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "8983"
+      delegate_target: "{{ groups.search | first }}"
+  - name: check sync connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.syncservice | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.syncservice[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "9090"
+      delegate_target: "{{ groups.syncservice | first }}"
+  - name: check sfs connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.transformers[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "8099"
+      delegate_target: "{{ groups.transformers | first }}"
+  - name: check trouter connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.transformers[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "8095"
+      delegate_target: "{{ groups.transformers | first }}"
+  - name: check tengine connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.transformers[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "8090"
+      delegate_target: "{{ groups.transformers | first }}"
+
+- name: prerequisite checks
+  hosts: search
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/helper_modules'
+  tasks:
+  - name: check repo connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.repository | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.repository[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "8080"
+      delegate_target: "{{ groups.repository | first }}"
+
+- name: prerequisite checks
+  hosts: transformers
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/helper_modules'
+  tasks:
+  - name: check activemq connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.activemq | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.activemq[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "61616"
+      delegate_target: "{{ groups.activemq | first }}"
+
+- name: prerequisite checks
+  hosts: syncservice
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/helper_modules'
+  tasks:
+  - name: check repo connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.repository | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.repository[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "8080"
+      delegate_target: "{{ groups.repository | first }}"
+  - name: check activemq connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.activemq | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.activemq[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "61616"
+      delegate_target: "{{ groups.activemq | first }}"
+
+- name: prerequisite checks
+  hosts: adw
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/helper_modules'
+  tasks:
+  - name: check repo connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.repository | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.repository[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "8080"
+      delegate_target: "{{ groups.repository | first }}"
+
+- name: prerequisite checks
+  hosts: nginx
+  become: true
+  become_method: sudo
+  roles:
+    - role: '../roles/helper_modules'
+  tasks:
+  - name: check repo connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.repository | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.repository[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "8080"
+      delegate_target: "{{ groups.repository | first }}"
+  - name: check sync connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.syncservice | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.syncservice[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "9090"
+      delegate_target: "{{ groups.syncservice | first }}"  
+  - name: check adw connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.adw | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.adw[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "8880"
+      delegate_target: "{{ groups.adw | first }}"
