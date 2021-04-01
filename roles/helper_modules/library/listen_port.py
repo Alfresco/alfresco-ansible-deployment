@@ -1,4 +1,9 @@
 #!/usr/bin/python
+import socket
+import time
+
+from ansible.module_utils.basic import AnsibleModule
+
 DOCUMENTATION = '''
 ---
 module: listen_port
@@ -13,30 +18,27 @@ EXAMPLES = '''
   async: 10
   poll: 0
 '''
-import socket
-import sys
-import time
-
-from ansible.module_utils.basic import *
 
 def main():
-  fields = {
-        "port": {"required": True, "type": "str"},
-        }
+    """listen port main function"""
 
-  module = AnsibleModule(argument_spec=fields)
-  response = {"socket": "listen on " + module.params['port']}
+    fields = {
+    "port": {"required": True, "type": "str"},
+    }
 
-  sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  server_address = ('', int(module.params['port']))
-  sock.bind(server_address)
-  sock.listen(1)
-  while True:
-    connection, client_address = sock.accept()
-    time.sleep(5)
-    connection.close()
-    break
-  module.exit_json(changed=True, meta=response)
+    module = AnsibleModule(argument_spec=fields)
+    response = {"socket": "listen on " + module.params['port']}
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_address = ('', int(module.params['port']))
+    sock.bind(server_address)
+    sock.listen(1)
+    while True:
+        connection, client_address = sock.accept() # pylint: disable=unused-variable
+        time.sleep(5)
+        connection.close()
+        break
+    module.exit_json(changed=True, meta=response)
 
 if __name__ == '__main__':
-  main()
+    main()
