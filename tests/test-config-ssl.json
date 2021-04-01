@@ -1,0 +1,39 @@
+{
+    "config": {
+      "host": "https://ansible-test.trial-dev.alfresco.me",
+      "username": "admin",
+      "password": "admin"
+    },
+    "assertions": {
+      "acs": {
+        "edition": "Enterprise",
+        "version": "7.0.0",
+        "identity": false,
+        "modules": [
+          {
+            "name": "Alfresco / Google Docs Integration",
+            "version": "3.2.1",
+            "installed": true
+          },
+          {
+            "name": "Alfresco Office Services Module",
+            "version": "1.4.0",
+            "installed": true
+          },
+          {
+            "name": "Alfresco Device Sync Amp",
+            "version": "3.4.0",
+            "installed": true
+          },
+          {
+            "name": "AGS Enterprise Repo",
+            "version": "3.5.0",
+            "installed": true
+          }
+        ]
+      },
+      "adw": {
+        "version": "2.0.0"
+      }
+    }
+  }
