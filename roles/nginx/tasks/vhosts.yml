@@ -14,7 +14,7 @@
 
 - name: Include ssl vhost if enabled
   include_vars: "ssl.yml"
-  when: enable_ssl
+  when: use_ssl
 
 - name: Add ssl key
   template:
