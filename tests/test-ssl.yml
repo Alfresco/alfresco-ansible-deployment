@@ -1,0 +1,3 @@
+---
+enable_ssl: true
+fqdn_alfresco: "ansible-test.trial-dev.alfresco.me"
