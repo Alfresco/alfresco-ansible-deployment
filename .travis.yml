@@ -202,7 +202,7 @@ jobs:
         - sed -i "s+XXXXXX+$PUBLIC_IP+g" "tests/delete_ansible-test.trial-dev.alfresco.me.yaml"
         - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/create_ansible-test.trial-dev.alfresco.me.yaml"
         - aws route53 change-resource-record-sets --hosted-zone-id ${HOSTED_ZONE_TRIAL_DEV_ALFRESCO_ME} --change-batch file://tests/create_ansible-test.trial-dev.alfresco.me.yaml
-        - echo "wait for dns entry to be created" && sleep 5m
+        - echo "wait for dns entry to be created" && sleep 1m
         - ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
         - scripts/generate-zip.sh
         - export VERSION=$(cat VERSION)
@@ -211,7 +211,7 @@ jobs:
         - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - ssh centos@${PUBLIC_IP} "mkdir /home/centos/alfresco-ansible-deployment-${VERSION}/configuration_files/ssl_certificates/"
-        - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/test-ssl.yaml"
+        - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/test-ssl.yml"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
         - aws secretsmanager get-secret-value --secret-id ${SSL_CERT_KEY_PATH} --query SecretString --output text > certificate.key
         - aws secretsmanager get-secret-value --secret-id ${SSL_CERT_PATH} --query SecretString --output text > certificate.crt
