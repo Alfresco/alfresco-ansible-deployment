@@ -200,7 +200,7 @@ jobs:
         - sed -i "s+XXXXXX+$PUBLIC_IP+g" "tests/create_ansible-test.trial-dev.alfresco.me.yaml"
         - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/create_ansible-test.trial-dev.alfresco.me.yaml"
         - sed -i "s+XXXXXX+$PUBLIC_IP+g" "tests/delete_ansible-test.trial-dev.alfresco.me.yaml"
-        - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/create_ansible-test.trial-dev.alfresco.me.yaml"
+        - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/delete_ansible-test.trial-dev.alfresco.me.yaml"
         - aws route53 change-resource-record-sets --hosted-zone-id ${HOSTED_ZONE_TRIAL_DEV_ALFRESCO_ME} --change-batch file://tests/create_ansible-test.trial-dev.alfresco.me.yaml
         - echo "wait for dns entry to be created" && sleep 1m
         - ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
@@ -221,6 +221,7 @@ jobs:
         - sed -i "s+TEST_URL+https://ansible-test-${TRAVIS_BUILD_NUMBER}.trial-dev.alfresco.me+g" "tests/test-config.json"
         - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
+        - cd ..
         - aws route53 change-resource-record-sets --hosted-zone-id ${HOSTED_ZONE_TRIAL_DEV_ALFRESCO_ME} --change-batch file://tests/delete_ansible-test.trial-dev.alfresco.me.yaml
     - stage: Verification
       name: Localhost community integration (ACS Community 7.0.0 on CentOS 8)
