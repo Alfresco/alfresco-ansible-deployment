@@ -198,7 +198,9 @@ jobs:
         - export PUBLIC_IP=$(aws ec2 describe-instances --filters Name=instance-state-name,Values=running Name=tag-key,Values=local Name=tag-value,Values=centos8_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
         - export INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag-key,Values=local Name=tag-value,Values=centos8_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].InstanceId' --output text)
         - sed -i "s+XXXXXX+$PUBLIC_IP+g" "tests/create_ansible-test.trial-dev.alfresco.me.yaml"
+        - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/create_ansible-test.trial-dev.alfresco.me.yaml"
         - sed -i "s+XXXXXX+$PUBLIC_IP+g" "tests/delete_ansible-test.trial-dev.alfresco.me.yaml"
+        - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/create_ansible-test.trial-dev.alfresco.me.yaml"
         - aws route53 change-resource-record-sets --hosted-zone-id ${HOSTED_ZONE_TRIAL_DEV_ALFRESCO_ME} --change-batch file://tests/create_ansible-test.trial-dev.alfresco.me.yaml
         - echo "wait for dns entry to be created" && sleep 5m
         - ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
@@ -209,13 +211,15 @@ jobs:
         - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - ssh centos@${PUBLIC_IP} "mkdir /home/centos/alfresco-ansible-deployment-${VERSION}/configuration_files/ssl_certificates/"
+        - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/test-ssl.yaml"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
         - aws secretsmanager get-secret-value --secret-id ${SSL_CERT_KEY_PATH} --query SecretString --output text > certificate.key
         - aws secretsmanager get-secret-value --secret-id ${SSL_CERT_PATH} --query SecretString --output text > certificate.crt
         - scp -r certificate.key centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/configuration_files/ssl_certificates/ansible-test.trial-dev.alfresco.me.key
         - scp -r certificate.crt centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/configuration_files/ssl_certificates/ansible-test.trial-dev.alfresco.me.crt
         - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\" -e \"@tests/test-ssl.yml\"""
-        - cd dtas; pytest --tb=line --configuration ../tests/test-config-ssl.json tests/ -s
+        - sed -i "s+TEST_URL+https://ansible-test-${TRAVIS_BUILD_NUMBER}.trial-dev.alfresco.me+g" "tests/test-config.json"
+        - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
         - aws route53 change-resource-record-sets --hosted-zone-id ${HOSTED_ZONE_TRIAL_DEV_ALFRESCO_ME} --change-batch file://tests/delete_ansible-test.trial-dev.alfresco.me.yaml
     - stage: Verification

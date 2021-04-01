@@ -3,7 +3,7 @@
     {
       "Action": "DELETE",
       "ResourceRecordSet": {
-        "Name": "ansible-test.trial-dev.alfresco.me",
+        "Name": "ansible-test-YYYYYY.trial-dev.alfresco.me",
         "Type": "A",
         "TTL": 300,
         "ResourceRecords": [
