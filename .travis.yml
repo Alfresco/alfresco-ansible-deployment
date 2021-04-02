@@ -119,7 +119,7 @@ jobs:
         - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
         - eval "$(ssh-agent -s)"
         - chmod 600 /tmp/dbp-ansible
-        - ssh-add /tmp/dbp-ansible      
+        - ssh-add /tmp/dbp-ansible
         - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
         - unzip awscli-bundle.zip
         - ./awscli-bundle/install -b ~/bin/aws
@@ -170,7 +170,7 @@ jobs:
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
         - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}-1.el8.noarch"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}.el8.noarch"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
         - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\""
@@ -202,7 +202,7 @@ jobs:
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
         - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}-1.el8.noarch"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}.el8.noarch"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
         - ssh centos@${PUBLIC_IP} "cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@community-extra-vars.yml\""
@@ -246,17 +246,17 @@ jobs:
         - ssh-add /tmp/dbp-ansible
         - git clone --depth 1 --branch v1.0-M2 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
       script:
-        - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
-        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/"
-        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
-        - ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade --use-feature=2020-resolver awscli 'molecule-ec2==0.2';"
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" == *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=true;molecule create -s ec2multi"; else ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=false;molecule create -s ec2multi"; fi
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2multi/dynamic_inventory.py"
-        - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat inventory_ssh.yml | yq .all.children.nginx.hosts.nginx_1.ansible_host -r")
-        - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory_ssh.yml -e \"@tests/test-extra-vars.yml\""
-        - echo "wait for repo to be up" && sleep 5m
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; sed -i 's+TEST_URL+http://$TESTHOST+g' tests/test-config.json; cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s"
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2multi"; fi
+ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
+ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/"
+rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
+ssh ec2-user@$control_machine_ip "source ~/.bash_profile;pip install --upgrade --use-feature=2020-resolver awscli 'molecule-ec2==0.2';"
+if [[ "$TRAVIS_COMMIT_MESSAGE" == *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=true;molecule create -s ec2multi"; else ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=false;molecule create -s ec2multi"; fi
+ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2multi/dynamic_inventory.py"
+export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat inventory_ssh.yml | yq .all.children.nginx.hosts.nginx_1.ansible_host -r")
+ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory_ssh.yml -e \"@tests/test-extra-vars.yml\""
+echo "wait for repo to be up" && sleep 5m
+ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; sed -i 's+TEST_URL+http://$TESTHOST+g' tests/test-config.json; cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s"
+if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2multi"; fi
     - stage: Release Stage 
       name: Release
       script:
