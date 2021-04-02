@@ -26,7 +26,7 @@ def main():
     "port": {"required": True, "type": "str"},
     }
 
-    module = AnsibleModule(argument_spec=fields)
+    module = AnsibleModule(argument_spec=fields,supports_check_mode=False)
     response = {"socket": "listen on " + module.params['port']}
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
