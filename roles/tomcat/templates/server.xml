@@ -66,9 +66,9 @@
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL/TLS HTTP/1.1 Connector on port 8080
     -->
-    <Connector port="8080"{% if use_ssl %} scheme="https"{% endif %} protocol="HTTP/1.1"
+    <Connector port="{{ ports_cfg.repository.http }}"{% if use_ssl %} scheme="https"{% endif %} protocol="HTTP/1.1"
                connectionTimeout="20000"
-               redirectPort="8443" />
+	    redirectPort="{{ ports_cfg.repository.https }}" />
     <!-- A "Connector" using the shared thread pool-->
     <!--
     <Connector executor="tomcatThreadPool"
