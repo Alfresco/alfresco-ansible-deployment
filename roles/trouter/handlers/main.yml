@@ -7,7 +7,7 @@
 - name: wait-for-aio
   wait_for:
     host: "{{ ats_tengine_aio_host }}"
-    port: 8090
+    port: "{{ ports_cfg.trouter.http }}"
   register: go_signal
 
 - name: enable-trouter
