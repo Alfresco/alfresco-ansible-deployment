@@ -1,6 +1,12 @@
 ---
+- name: Check if OS specific file exists
+  stat: 
+    path: "{{ role_path }}/vars/{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+  delegate_to: localhost
+  register: os_file
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+  when: os_file.stat.exists
 
 - name: Install rpm repository
   become: true
@@ -9,14 +15,6 @@
     name: "{{ postgresql_rpm_repo }}"
     state: present
     disable_gpg_check: true
-
-- name: Install packages required for CentOS/RedHat 8
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - glibc-langpack-en
-  when: ansible_distribution_major_version == "8"
 
 - name: Disable the built-in PostgreSQL module
   command: dnf -qy module disable postgresql

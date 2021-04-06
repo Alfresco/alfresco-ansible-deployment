@@ -4,8 +4,14 @@
   include_vars: "postgres.yml"
   when: sync_db_url == ""
 
+- name: Check if OS specific file exists
+  stat: 
+    path: "{{ role_path }}/vars/{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+  delegate_to: localhost
+  register: os_file
 - name: Include OS specific variables
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+  when: os_file.stat.exists
 
 - name: Ensure a list of packages installed
   become: true
@@ -36,9 +42,6 @@
         mode: 'u=rwx,g=rwx'
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
-      register: sync_download_result
-      until: sync_download_result is succeeded
-  when: not ansible_facts.services['alfresco-sync.service'] is defined
 
 - name: Download postgresql jar
   block:
@@ -53,12 +56,11 @@
       become_user: "{{ username }}"
       get_url:
         url: "{{ dependencies_url.postgresql_connector }}"
+        checksum: sha1:{{ dependencies_url.postgresql_connector_sha1_checksum }}
         dest: "{{ sync_home }}/service-sync/connectors/postgresql.jar"
         mode: 'u=rwx,g=rwx,o=rx'
         owner: "{{ username }}"
         group: "{{ group_name }}"
-      register: postgresql_download
-      until: postgresql_download is succeeded
       when: sync_db_url == ""
     - name: Copy db_connector to {{ sync_home }}/service-sync/connectors folder
       copy:
@@ -76,7 +78,7 @@
     src: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
     dest: "{{ sync_home }}"
     remote_src: true
-  when: sync_download_result.changed
+    creates: "{{ sync_home }}/service-sync/service-sync-{{ sync.version }}.jar"
 
 - name: Move sync service files to {{ sync_home }}
   block:

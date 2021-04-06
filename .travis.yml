@@ -27,7 +27,7 @@ stages:
   - name: Linters
   - name: Verification
   - name: Release Stage
-    if: branch = master AND commit_message = "[release]"
+    if: branch = master AND commit_message = *"[release]"*
 
 jobs:
   include:
@@ -170,13 +170,59 @@ jobs:
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
         - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}-1.el8.noarch"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
         - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\""
         - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "tests/test-config.json"
         - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
+    - stage: Verification
+      name: SSL integration checks (ACS 7.0.0 on CentOS 8)
+      before_install:
+        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
+        - eval "$(ssh-agent -s)"
+        - chmod 600 /tmp/dbp-ansible
+        - ssh-add /tmp/dbp-ansible      
+        - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+        - unzip awscli-bundle.zip
+        - ./awscli-bundle/install -b ~/bin/aws
+        - export PATH=~/bin:$PATH
+        - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+        - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        - export AWS_DEFAULT_REGION='us-east-1'
+        - git clone --depth 1 --branch v1.0-M2 https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
+      script:
+        - aws ec2 run-instances --image-id ami-0d6e9a57f6259ba3a --count 1 --instance-type t3.large --key-name dbp-ansible --security-group-ids sg-099a05787b0a322c3 --subnet-id subnet-06ffe524598660d99 --tag-specifications "ResourceType=instance,Tags=[{Key=local,Value=centos8_ssl_machine_no_${TRAVIS_BUILD_NUMBER}},{Key=Creator,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}},{Key=Owner,Value="Operator\ Experience\ Team"},{Key=Department,Value=Engineering},{Key=Purpose,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}_ssl_centos8},{Key=NoAutomaticShutdown,Value=false},{Key=Production,Value=False},{Key=Name,Value=molecule_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_ssl_centos8},{Key=instance,Value=${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_ssl_centos8}]"
+        - echo "wait for instance to be up" && sleep 4m
+        - export PUBLIC_IP=$(aws ec2 describe-instances --filters Name=instance-state-name,Values=running Name=tag-key,Values=local Name=tag-value,Values=centos8_ssl_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+        - export INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag-key,Values=local Name=tag-value,Values=centos8_ssl_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].InstanceId' --output text)
+        - sed -i "s+XXXXXX+$PUBLIC_IP+g" "tests/create_ansible-test.trial-dev.alfresco.me.yaml"
+        - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/create_ansible-test.trial-dev.alfresco.me.yaml"
+        - sed -i "s+XXXXXX+$PUBLIC_IP+g" "tests/delete_ansible-test.trial-dev.alfresco.me.yaml"
+        - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/delete_ansible-test.trial-dev.alfresco.me.yaml"
+        - aws route53 change-resource-record-sets --hosted-zone-id ${HOSTED_ZONE_TRIAL_DEV_ALFRESCO_ME} --change-batch file://tests/create_ansible-test.trial-dev.alfresco.me.yaml
+        - echo "wait for dns entry to be created" && sleep 1m
+        - ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
+        - scripts/generate-zip.sh
+        - export VERSION=$(cat VERSION)
+        - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
+        - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}"
+        - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
+        - ssh centos@${PUBLIC_IP} "mkdir /home/centos/alfresco-ansible-deployment-${VERSION}/configuration_files/ssl_certificates/"
+        - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/test-ssl.yml"
+        - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
+        - aws secretsmanager get-secret-value --secret-id ${SSL_CERT_KEY_PATH} --query SecretString --output text > certificate.key
+        - aws secretsmanager get-secret-value --secret-id ${SSL_CERT_PATH} --query SecretString --output text > certificate.crt
+        - scp -r certificate.key centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/configuration_files/ssl_certificates/ansible-test-${TRAVIS_BUILD_NUMBER}.trial-dev.alfresco.me.key
+        - scp -r certificate.crt centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/configuration_files/ssl_certificates/ansible-test-${TRAVIS_BUILD_NUMBER}.trial-dev.alfresco.me.crt
+        - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\" -e \"@tests/test-ssl.yml\""
+        - sed -i "s+TEST_URL+https://ansible-test-${TRAVIS_BUILD_NUMBER}.trial-dev.alfresco.me+g" "tests/test-config.json"
+        - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
+        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
+        - cd ..
+        - aws route53 change-resource-record-sets --hosted-zone-id ${HOSTED_ZONE_TRIAL_DEV_ALFRESCO_ME} --change-batch file://tests/delete_ansible-test.trial-dev.alfresco.me.yaml
     - stage: Verification
       name: Localhost community integration (ACS Community 7.0.0 on CentOS 8)
       before_install:
@@ -202,7 +248,7 @@ jobs:
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
         - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}-1.el8.noarch"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
         - ssh centos@${PUBLIC_IP} "cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@community-extra-vars.yml\""
