@@ -19,14 +19,6 @@ nginx_service_enabled: true
 nginx_vhost_template: "alfresco.conf"
 nginx_vhosts:
   - listen: "80"
-#    server_name: "{{ nginx_domain }}" # this should be an input from the client
     root: "/usr/share/nginx/html"
     index: "index.html index.htm"
     filename: "alfresco.conf"
-#  - listen: "443"
-#    server_name: "{{ nginx_domain }}" # this should be an input from the client
-#    root: "/usr/share/nginx/html"
-#    index: "index.html index.htm"
-#    filename: "ssl.{{ nginx_domain }}.conf"
-#    cert_crt: "{{ nginx_domain }}.crt"
-#    cert_key: "{{ nginx_domain }}.key"

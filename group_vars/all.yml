@@ -134,3 +134,6 @@ sync_db_driver: org.postgresql.Driver
 sync_db_name: "alfresco-sync"
 sync_db_username: "alfresco"
 sync_db_password: "alfresco"
+
+use_ssl: false
+fqdn_alfresco: "your_domain.com"
