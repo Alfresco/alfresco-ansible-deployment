@@ -9,7 +9,7 @@ export JAVA_OPTS="${JAVA_OPTS} -DPDFRENDERER_EXE={{ ats_home }}/alfresco-pdf-ren
 export JAVA_OPTS="${JAVA_OPTS} -DLIBREOFFICE_HOME=${LIBREOFFICE_HOME}"
 export JAVA_OPTS="${JAVA_OPTS} -DIMAGEMAGICK_ROOT=${IMAGEMAGICK_HOME} -DIMAGEMAGICK_DYN=${IMAGEMAGICK_DYN} -DIMAGEMAGICK_EXE=${IMAGEMAGICK_EXE} -DIMAGEMAGICK_CONFIG=${IMAGEMAGICK_CONFIG} -DIMAGEMAGICK_CODERS=${IMAGEMAGICK_CODERS}"
 {% if acs.edition == 'Enterprise' %}
-export JAVA_OPTS="${JAVA_OPTS} -DACTIVEMQ_URL=failover:(tcp://{{ activemq_host }}:61616)?timeout=3000"
+export JAVA_OPTS="${JAVA_OPTS} -DACTIVEMQ_URL=failover:(tcp://{{ activemq_host }}:{{ ports_cfg.activemq.openwire }})?timeout=3000"
 export JAVA_OPTS="${JAVA_OPTS} -DFILE_STORE_URL=http://${ATS_SHARED_FS_HOST}:8099/alfresco/api/-default-/private/sfs/versions/1/file"
 {% endif %}
 
