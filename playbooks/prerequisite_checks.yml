@@ -2,7 +2,6 @@
 - name: prerequisite checks
   hosts: repository
   become: true
-  become_method: sudo
   roles:
     - role: '../roles/helper_modules'
   tasks:
@@ -53,7 +52,6 @@
 - name: prerequisite checks
   hosts: search
   become: true
-  become_method: sudo
   roles:
     - role: '../roles/helper_modules'
   tasks:
@@ -67,7 +65,6 @@
 - name: prerequisite checks
   hosts: transformers
   become: true
-  become_method: sudo
   roles:
     - role: '../roles/helper_modules'
   tasks:
@@ -81,7 +78,6 @@
 - name: prerequisite checks
   hosts: syncservice
   become: true
-  become_method: sudo
   roles:
     - role: '../roles/helper_modules'
   tasks:
@@ -101,7 +97,6 @@
 - name: prerequisite checks
   hosts: adw
   become: true
-  become_method: sudo
   roles:
     - role: '../roles/helper_modules'
   tasks:
@@ -115,7 +110,6 @@
 - name: prerequisite checks
   hosts: nginx
   become: true
-  become_method: sudo
   roles:
     - role: '../roles/helper_modules'
   tasks:

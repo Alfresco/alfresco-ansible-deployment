@@ -2,7 +2,6 @@
 - name: Database Role
   hosts: database
   become: true
-  become_method: sudo
   roles:
     - { role: '../roles/postgres', when: repo_db_url == "" or sync_db_url == "" }
   tags:
@@ -11,7 +10,6 @@
 - name: Activemq Role
   hosts: activemq
   become: true
-  become_method: sudo
   roles:
     - role: '../roles/activemq'
   tags:
@@ -20,7 +18,6 @@
 - name: Transformers Role
   hosts: transformers
   become: true
-  become_method: sudo
   roles:
     - role: '../roles/transformers'
   tags:
@@ -29,7 +26,6 @@
 - name: Alfresco Search Role
   hosts: search
   become: true
-  become_method: sudo
   roles:
     - role: '../roles/search'
   tags:
@@ -38,7 +34,6 @@
 - name: Alfresco Repository Role
   hosts: repository
   become: true
-  become_method: sudo
   roles:
     - role: '../roles/repository'
   tags:
@@ -47,7 +42,6 @@
 - name: T-Router Role
   hosts: transformers
   become: true
-  become_method: sudo
   roles:
     - { role: '../roles/trouter', when: acs.edition == "Enterprise" }
   tags:
@@ -56,7 +50,6 @@
 - name: Shared File Store Role
   hosts: transformers
   become: true
-  become_method: sudo
   roles:
     - { role: '../roles/sfs', when: acs.edition == "Enterprise" }
   tags:
@@ -65,7 +58,6 @@
 - name: Sync Service Role
   hosts: syncservice
   become: true
-  become_method: sudo
   roles:
     - { role: '../roles/sync', when: acs.edition == "Enterprise" }
   tags:
@@ -74,7 +66,6 @@
 - name: Nginx Role
   hosts: nginx
   become: true
-  become_method: sudo
   roles:
     - role: '../roles/nginx'
   tags:
@@ -83,7 +74,6 @@
 - name: Alfresco Digital Workspace Role
   hosts: adw
   become: true
-  become_method: sudo
   roles:
     - { role: '../roles/adw', when: acs.edition == "Enterprise" }
   tags:
