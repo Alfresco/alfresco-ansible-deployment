@@ -25,10 +25,6 @@ sync_host: "{% if groups.syncservice | length == 0 %}127.0.0.1{% else %}{{ hostv
 ports_cfg:
   activemq:
     openwire: "{{ ports.activemq.openwire | default(61616) }}"
-    amqp: "{{ ports.activemq.amqp | default(5672) }}"
-    stomp: "{{ ports.activemq.stomp | default(61613) }}"
-    mqtt: "{{ ports.activemq.mqtt | default(1883) }}"
-    ws: "{{ ports.activemq.ws | default(61614) }}"
   repository:
     ajp: "{{ ports.repository.ajp | default(8009) }}"
     http: "{{ ports.repository.http | default(8080) }}"
