@@ -35,6 +35,8 @@ ports_cfg:
     http: "{{ ports.trouter.http | default('8090') }}"
   sfs:
     http: "{{ ports.sfs.http | default('8099') }}"
+  search:
+    http: "{{ ports.search.http | default('8983') }}"
   sync:
     http: "{{ ports.sync.http | default('9090') }}"
     admin: "{{ ports.sync.admin | default('9093') }}"

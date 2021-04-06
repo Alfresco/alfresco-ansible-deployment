@@ -12,8 +12,6 @@ keystore_password: mp6yc0UD9e
 CATALINA_OPTS: " -Xms1000M -Xmx1000M"
 JAVA_OPTS: ""
 
-solr_port: "8983"
-
 share_folders:
   - /shared/classes/alfresco/web-extension
   - /amps_share
