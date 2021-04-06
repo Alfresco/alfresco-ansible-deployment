@@ -56,7 +56,7 @@ sql:
                 lockRetryCount: 5
                 lockRetryWaitSeconds: 1
 {% if sync_db_url == "" %}
-        url: jdbc:postgresql://${sql.db.host}:{{ sync_db_port }}/{{ sync_db_name }}
+        url: jdbc:postgresql://${sql.db.host}:{{ ports_cfg.postgres.sql }}/{{ sync_db_name }}
         host: {{ db_host }}
 {% else %}
         url: {{ sync_db_url }}
