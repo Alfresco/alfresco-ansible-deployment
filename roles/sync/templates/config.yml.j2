@@ -115,7 +115,7 @@ server:
     type: default
     applicationConnectors:
         - type: http
-          port: 9090
+          port: {{ ports_cfg.sync.http }}
           type: http
           keyStorePath: ./sync.p12
           keyStorePassword: N9SnIgrcAx7zWr
