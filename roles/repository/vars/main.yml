@@ -13,7 +13,6 @@ CATALINA_OPTS: " -Xms1000M -Xmx1000M"
 JAVA_OPTS: ""
 
 main_port: "8080"
-shutdown_port: "8005"
 redirect_port: "8443"
 solr_port: "8983"
 share_port: "8080"
