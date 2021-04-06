@@ -31,7 +31,7 @@ ports_cfg:
     https: "{{ ports.repository.https | default(8443) }}"
     shutdown: "{{ ports.repository.shutdown | default(8005) }}"
   postgres:
-    sql: "{{ ports.postgres/sql | default(5432) }}"
+    sql: "{{ ports.postgres.sql | default(5432) }}"
   trouter:
     http: "{{ ports.trouter.http | default('8090') }}"
   sfs:
