@@ -38,6 +38,8 @@ ports_cfg:
     sql: "{{ ports.postgres/sql | default(5432) }}"
   trouter:
     http: "{{ ports.trouter.http | default('8090') }}"
+  sfs:
+    http: "{{ ports.sfs.http | default('8099') }}"
   sync:
     http: "{{ ports.sync.http | default('9090') }}"
     admin: "{{ ports.sync.admin | default('9093') }}"
