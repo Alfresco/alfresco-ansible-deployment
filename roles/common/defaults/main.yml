@@ -22,6 +22,25 @@ trouter_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ h
 adw_host: "{% if groups.adw | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.adw[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
 sync_host: "{% if groups.syncservice | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.syncservice[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
 
-
+ports_cfg:
+  activemq:
+    openwire: "{{ ports.activemq.openwire | default(61616) }}"
+    amqp: "{{ ports.activemq.amqp | default(5672) }}"
+    stomp: "{{ ports.activemq.stomp | default(61613) }}"
+    mqtt: "{{ ports.activemq.mqtt | default(1883) }}"
+    ws: "{{ ports.activemq.ws | default(61614) }}"
+  repository:
+    ajp: "{{ ports.repository.ajp | default(8009) }}"
+    http: "{{ ports.repository.http | default(8080) }}"
+    https: "{{ ports.repository.https | default(8443) }}"
+    shutdown: "{{ ports.repository.shutdown | default(8005) }}"
+  postgres:
+    sql: "{{ ports.postgres/sql | default(5432) }}"
+  trouter:
+    http: "{{ ports.trouter.http | default('8090') }}"
+  sync:
+    http: "{{ ports.sync.http | default('9090') }}"
+    admin: "{{ ports.sync.admin | default('9093') }}"
+    
 # Default download location of necessary artefacts
 download_location: /tmp/ansible_artefacts
