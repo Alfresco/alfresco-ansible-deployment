@@ -391,6 +391,12 @@ To check your inventory file is configured correctly and the control node is abl
 ansible all -m ping -i inventory_ssh.yml
 ```
 
+**Optional** To check if the required ports for the deployment are available on the target machine and we also have connectivity between nodes (ex. repository connecting to the db on 5432) please run the prerequisite_checks playbook before you deploy ACS. If there are any firewalls blocking connectivity this playbook will discover them.
+
+```bash
+ansible-playbook playbooks/prerequisite_checks.yml -i inventory_ssh.yml
+```
+
 To deploy ACS 7 Enterprise on the target hosts execute the playbook as the current user using the following command:
 
 ```bash

@@ -1,0 +1,25 @@
+  - name: check connectivity
+    block:
+    - name: "Check if {{ checked_port }} already open on {{ delegate_target }}"
+      wait_for:
+        host: "127.0.0.1"
+        port: "{{ checked_port }}"
+        state: stopped
+        delay: 0
+        timeout: 2
+        msg: "Port {{ checked_port }} is already in use on {{ delegate_target }}/{{ checked_host }}!"
+      delegate_to: "{{ delegate_target }}"
+    - name: "Start to listen on {{ delegate_target }}:{{ checked_port }}"
+      listen_port:
+        port: "{{ checked_port }}"
+      delegate_to: "{{ delegate_target }}"
+      async: 10
+      poll: 0
+    - name: "Verify if {{ inventory_hostname }} can reach {{ delegate_target }}:{{ checked_port }}"
+      wait_for:
+        host: "{{ checked_host }}"
+        port: "{{ checked_port }}"
+        state: started
+        delay: 0
+        timeout: 5
+        msg: "Port {{ checked_port }} on the {{ delegate_target }}/{{ checked_host }} machine cannot be reached, please check your firewall!"
