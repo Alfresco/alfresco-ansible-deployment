@@ -13,7 +13,7 @@
       listen_port:
         port: "{{ checked_port }}"
       delegate_to: "{{ delegate_target }}"
-      async: 0
+      async: 10
       poll: 0
     - name: "Verify if {{ inventory_hostname }} can reach {{ delegate_target }}:{{ checked_port }}"
       wait_for:
