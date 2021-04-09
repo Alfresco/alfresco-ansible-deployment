@@ -1,3 +1,6 @@
+  - name: include common defaults
+    include_vars: ../../common/defaults/main.yml
+
   - name: check connectivity
     block:
     - name: "Check if {{ checked_port }} already open on {{ delegate_target }}"
