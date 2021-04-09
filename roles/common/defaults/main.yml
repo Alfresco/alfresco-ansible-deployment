@@ -32,8 +32,8 @@ ports_cfg:
   postgres:
     sql: "{{ ports.postgres.sql | default(5432) }}"
   transformers:
-    tengine: "{{ ports.transformer.tengine | default('8090') }}"
-    tengine: "{{ ports.transformer.trouter | default('8095') }}"
+    tengine: "{{ ports.transformers.tengine | default('8090') }}"
+    trouter: "{{ ports.transformers.trouter | default('8095') }}"
   sfs:
     http: "{{ ports.sfs.http | default('8099') }}"
   search:
