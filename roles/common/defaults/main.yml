@@ -31,8 +31,8 @@ ports_cfg:
     shutdown: "{{ ports.repository.shutdown | default(8005) }}"
   postgres:
     sql: "{{ ports.postgres.sql | default(5432) }}"
-  trouter:
-    http: "{{ ports.trouter.http | default('8090') }}"
+  transformers:
+    tengine: "{{ ports.transformer.tengine | default('8090') }}"
   sfs:
     http: "{{ ports.sfs.http | default('8099') }}"
   search:
