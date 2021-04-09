@@ -3,7 +3,10 @@
 
   - name: check connectivity
     block:
+    # This task needs to be retried in case a previous iteration still listens (default retry of 3 is fine as it aligns with async 10 of listen tasks)
     - name: "Check if {{ checked_port }} already open on {{ delegate_target }}"
+      register: r_connect
+      until: not r_connect.failed
       wait_for:
         host: "127.0.0.1"
         port: "{{ checked_port }}"
