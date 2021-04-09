@@ -7,7 +7,7 @@
 - name: wait-for-activemq
   wait_for:
     host: "{{ activemq_host }}"
-    port: 61616
+    port: "{{ ports_cfg.activemq.openwire }}"
   register: go_signal
 
 - name: enable-aio

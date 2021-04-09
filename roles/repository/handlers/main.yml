@@ -7,7 +7,7 @@
 - name: wait-for-db
   wait_for:
     host: "{{ db_host }}"
-    port: "{{ repo_db_port }}"
+    port: "{{ ports_cfg.postgres.sql }}"
   register: go_signal
   when: repo_db_url == ""
 

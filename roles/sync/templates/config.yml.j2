@@ -29,7 +29,7 @@ messaging:
                    bean: org.apache.activemq:type=Broker,brokerName=localhost,destinationType=${messaging.events.repo.node.endpoint.type},destinationName=${messaging.events.repo.node.endpoint.name}
     broker:
         host: {{ activemq_host }}
-        port: 61616
+        port: {{ ports_cfg.activemq.openwire }}
         protocol: tcp
         endpoint: ${messaging.broker.protocol}://${messaging.broker.host}:${messaging.broker.port}
         url: failover:(${messaging.broker.endpoint}?wireFormat.maxInactivityDurationInitalDelay=30000)?timeout=3000&jms.useCompression=true&startupMaxReconnectAttempts=0&jms.redeliveryPolicy.maximumRedeliveries=${messaging.events.repo.node.maxConsumers}
@@ -56,7 +56,7 @@ sql:
                 lockRetryCount: 5
                 lockRetryWaitSeconds: 1
 {% if sync_db_url == "" %}
-        url: jdbc:postgresql://${sql.db.host}:{{ sync_db_port }}/{{ sync_db_name }}
+        url: jdbc:postgresql://${sql.db.host}:{{ ports_cfg.postgres.sql }}/{{ sync_db_name }}
         host: {{ db_host }}
 {% else %}
         url: {{ sync_db_url }}
@@ -115,7 +115,7 @@ server:
     type: default
     applicationConnectors:
         - type: http
-          port: 9090
+          port: {{ ports_cfg.sync.http }}
           type: http
           keyStorePath: ./sync.p12
           keyStorePassword: N9SnIgrcAx7zWr
@@ -123,14 +123,14 @@ server:
           validateCerts: false
     adminConnectors:
         - type: http
-          port: 9093
+          port: {{ ports_cfg.sync.admin }}
     requestLog:
         appenders: []
 
 repo:
     scheme: http
     hostname: {{ repo_host }}
-    port: 8080
+    port: {{ ports_cfg.repository.http }}
     syncconfig:
         url: ${repo.scheme}://${repo.hostname}:${repo.port}/alfresco/service/devicesync/config
         # maximum retries for connection with repo in case of unavailaible service

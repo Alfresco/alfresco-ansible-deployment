@@ -12,13 +12,6 @@ keystore_password: mp6yc0UD9e
 CATALINA_OPTS: " -Xms1000M -Xmx1000M"
 JAVA_OPTS: ""
 
-main_port: "8080"
-shutdown_port: "8005"
-redirect_port: "8443"
-ajp_port: "8009"
-solr_port: "8983"
-share_port: "8080"
-
 share_folders:
   - /shared/classes/alfresco/web-extension
   - /amps_share
@@ -35,7 +28,9 @@ resource_path: target
 repository:
   protocol: http
   host: "{{ repo_host }}"
-  port: 8080
+  port: "{{ ports_cfg.repository.http }}"
+
+share_port: "{{ ports_cfg.repository.http }}"
 
 CSRF:
   enabled: "false"

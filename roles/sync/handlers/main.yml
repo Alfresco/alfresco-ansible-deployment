@@ -7,7 +7,7 @@
 - name: wait-for-repo
   wait_for:
     host: "{{ repo_host }}"
-    port: 8080
+    port: "{{ ports_cfg.repository.http }}"
   register: go_signal
 
 - name: enable-sync
