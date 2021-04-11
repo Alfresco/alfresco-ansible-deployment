@@ -44,3 +44,12 @@ ports_cfg:
     
 # Default download location of necessary artefacts
 download_location: /tmp/ansible_artefacts
+
+os_fallback:
+  - ../vars/{{ ansible_distribution }}{{ ansible_distribution_version }}.yml
+  - ../vars/{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml
+  - ../vars/{{ ansible_os_family }}{{ ansible_distribution_version }}.yml
+  - ../vars/{{ ansible_os_family }}{{ ansible_distribution_major_version }}.yml
+  - ../vars/{{ ansible_distribution }}.yml
+  - ../vars/{{ ansible_os_family }}.yml
+  - ../vars/{{ ansible_system }}.yml
