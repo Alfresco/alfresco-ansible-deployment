@@ -11,12 +11,12 @@
         "identity": false,
         "modules": [
           {
-            "name": "Alfresco / Google Docs Integration",
+            "id": "org.alfresco.integrations.google.docs",
             "version": "3.2.1",
             "installed": true
           },
           {
-            "name": "Alfresco Office Services Module",
+            "id": "alfresco-aos-module",
             "version": "1.4.0",
             "installed": true
           }

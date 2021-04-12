@@ -11,29 +11,29 @@
         "identity": false,
         "modules": [
           {
-            "name": "Alfresco / Google Docs Integration",
+            "id": "org.alfresco.integrations.google.docs",
             "version": "3.2.0",
             "installed": true
           },
           {
-            "name": "Alfresco Office Services Module",
+            "id": "alfresco-aos-module",
             "version": "1.3.1",
             "installed": true
           },
           {
-            "name": "Alfresco Device Sync Amp",
+            "id": "org_alfresco_device_sync_repo",
             "version": "3.3.3.1",
             "installed": true
           },
           {
-            "name": "AGS Enterprise Repo",
+            "id": "alfresco-rm-enterprise-repo",
             "version": "3.4.0",
             "installed": false
           }
         ]
       },
       "adw": {
-        "version": "1.6.0"
+        "version": "2.1.0"
       }
     }
   }
