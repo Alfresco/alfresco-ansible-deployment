@@ -1,0 +1,5 @@
+postgresql_packages:
+  - postgresql{{ dependencies_version.postgres_major_version }}-server
+  - postgresql{{ dependencies_version.postgres_major_version }}
+  - python3-psycopg2
+  - glibc-langpack-en
