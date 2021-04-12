@@ -1,8 +1,8 @@
 ---
 # tasks file for sync
 - name: Include OS specific variables
-  include_vars: "{{ lookup('first_found', os_fallback) }}"
-  failed_when: false
+  include_vars: "{{ item }}"
+  loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
 - name: Ensure a list of packages installed
   become: true
