@@ -544,6 +544,24 @@ firewall-cmd --permanent --add-service=<service-name>
 
 > After the firewall config has been set up a reload of the `firewalld` service is needed
 
+If you are using a host that is behind a proxy you might experience timeouts or `HTTP Error 401: Unauthorized` errors.
+
+A possible quick fix is to make `http_proxy` and `https_proxy` available to either current user or to the entire system.
+
+```bash
+export http_proxy=<protocol><proxy_address>
+export https_proxy=<protocol><proxy_address>
+```
+
+or add the values in the `/etc/environment`
+
+```bash
+echo http_proxy=<protocol><proxy_address> >> /etc/environment
+echo https_proxy=<protocol><proxy_address> >> /etc/environment
+```
+
+If this does not solve the issue, check the proxy configuration or contact your system administrator
+
 ### Playbook Failures
 
 If the playbook fails for some reason try re-running it with the `-v` option, if that still doesn't provide enough information try re-running with the `-vvv` option.
