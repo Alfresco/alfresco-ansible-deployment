@@ -1,13 +1,8 @@
 ---
 # tasks file for sync
-- name: Check if OS specific file exists
-  stat: 
-    path: "{{ role_path }}/vars/{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
-  delegate_to: localhost
-  register: os_file
 - name: Include OS specific variables
-  include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
-  when: os_file.stat.exists
+  include_vars: "{{ item }}"
+  loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
 - name: Ensure a list of packages installed
   become: true
@@ -18,17 +13,13 @@
   poll: 0
   loop: "{{ utils_sync }}"
 
-- name: Download sync servies {{ sync.version }}
+- name: Download sync services {{ sync.version }}
   block:
     - name: Create sync services folder
-      become: true
-      become_user: "{{ username }}"
       file:
         path: "{{ sync_home }}"
         state: directory
     - name: Download artefact
-      become: true
-      become_user: "{{ username }}"
       get_url:
         url: "{{ downloads.sync_zip_url }}"
         dest: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
@@ -38,18 +29,16 @@
         mode: 'u=rwx,g=rwx'
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
-
+  become: true
+  become_user: "{{ username }}"
+    
 - name: Download postgresql jar
   block:
     - name: Create connectors folder
-      become: true
-      become_user: "{{ username }}"
       file:
         path: "{{ sync_home }}/service-sync/connectors"
         state: directory
     - name: Download artefact
-      become: true
-      become_user: "{{ username }}"
       get_url:
         url: "{{ dependencies_url.postgresql_connector }}"
         checksum: sha1:{{ dependencies_url.postgresql_connector_sha1_checksum }}
@@ -66,6 +55,8 @@
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
       when: sync_db_url != ""
+  become: true
+  become_user: "{{ username }}"
 
 - name: Extract sync service to {{ sync_home }}
   become: true
