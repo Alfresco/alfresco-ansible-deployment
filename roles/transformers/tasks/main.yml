@@ -4,6 +4,16 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
+- name: Download libreoffice package archive 
+  get_url:
+    url: "{{ libreoffice_archive }}"
+    checksum: sha1:{{ libreoffice_archive_sha1_checksum }}
+    dest: "{{ download_location }}/libreoffice.tar.gz"
+    timeout: 950
+  register: libreoffice_download
+  async: 900
+  poll: 0
+
 - name: Ensure a list of packages installed
   become: true
   become_user: root
@@ -20,6 +30,7 @@
     metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch&infra=$infra&content=$contentdir
     gpgcheck: yes
     gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+  when: ansible_os_family == 'RedHat'
 
 - name: Download imagemagick-distribution-linux.rpm
   get_url:
@@ -50,22 +61,7 @@
     - imagemagick-distribution-libs-linux.rpm
     - imagemagick-distribution-linux.rpm
 
-- name: "Download libreoffice {{ libreoffice }} rpm tar.gz"
-  get_url:
-    url: "{{ libreoffice_rpm }}"
-    checksum: sha1:{{ libreoffice_sha1_checksum }}
-    dest: "{{ download_location }}/libreoffice.tar.gz"
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    mode: 0444
-    timeout: 950
-  register: libreoffice_download
-  async: 900
-  poll: 0
-
 - name: Verifying if libreoffice finished downloading
-  become: true
-  become_user: root
   async_status:
     jid: "{{ libreoffice_download.ansible_job_id }}"
   register: job_result
@@ -79,10 +75,7 @@
     src: "{{ download_location }}/libreoffice.tar.gz"
     dest: "{{ download_location }}/"
     remote_src: true
-    extra_opts:
-      - --xform
-      - s/LibreOffice_{{ libreoffice }}.[0-9]+_Linux/LibreOffice_{{ libreoffice }}_Linux/gx
-    creates: "{{ download_location }}/LibreOffice_{{ libreoffice }}_Linux_{{ ansible_architecture | replace('_','-') }}_rpm/RPMS/"
+    creates: "{{ download_location }}/LibreOffice_{{ libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | replace('_','-') }}_{% if ansible_pkg_mgr == 'apt'%}deb{% else %}rpm{% endif %}/{% if ansible_pkg_mgr == 'apt'%}DEBS{% else %}RPMS{% endif %}/"
 
 - name: install LibreOffice
   shell: "yum localinstall -y {{ download_location }}/LibreOffice_{{ libreoffice }}_Linux_{{ ansible_architecture | replace('_','-') }}_rpm/RPMS/*.rpm"

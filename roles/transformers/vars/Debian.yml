@@ -2,3 +2,8 @@
 imagemagick_version: 7.0.10-59
 libreoffice: 6.3.5.2
 pdf_renderer: 1.1
+
+utils_transform:
+  - libcairo2
+  - libcups2
+  - libsm6
