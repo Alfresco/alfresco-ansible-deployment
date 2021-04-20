@@ -3,21 +3,8 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
-- name: Install rpm repository
-  become: true
-  become_user: root
-  yum:
-    name: "{{ postgresql_rpm_repo }}"
-    state: present
-    disable_gpg_check: true
-
-- name: Disable the built-in PostgreSQL module
-  command: dnf -qy module disable postgresql
-  args:
-    warn: false  # set warn=false to prevent warning
-  register: disable_dnf_module
-  changed_when: "'Nothing to do.' not in disable_dnf_module.stdout"
-  when: ansible_distribution_major_version == "8"
+- name: Prepare package manager
+  include_tasks: "{{ ansible_pkg_mgr }}_repo.yml"
 
 - name: Install packages
   package:
