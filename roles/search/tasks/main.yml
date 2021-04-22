@@ -1,5 +1,9 @@
 ---
 # tasks file for search-services
+- name: Include OS specific variables
+  include_vars: "{{ item }}"
+  loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
+
 - name: Ensure a list of packages installed
   become: true
   become_user: root
@@ -68,7 +72,7 @@
     dest: "{{ binaries_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rwx'
+    mode: 'u=rw,g=rw,o=r'
 
 - name: Add "{{ binaries_dir }}/solrhome/templates/noRerank/conf/solrcore.properties"
   become: true
@@ -77,7 +81,7 @@
     dest: "{{ binaries_dir }}/solrhome/templates/noRerank/conf/solrcore.properties"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rwx'
+    mode: 'u=rw,g=rw,o=r'
 
 - name: Copy files from "{{ binaries_dir }}/solrhome to {{ config_dir }}/"
   copy:
@@ -89,11 +93,12 @@
 
 - name: add solr home to setenv.sh
   become: true
-  become_user: "{{ username }}"
   lineinfile:
     path: "{{ config_folder }}/setenv.sh"
     insertafter: EOF
     line: "export SOLR_HOME={{ binaries_dir }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
 
 - name: Add "{{ binaries_dir }}/solr.sh"
   become: true
@@ -134,7 +139,7 @@
       dest:  /etc/systemd/system/alfresco-search.service
       owner: "{{ username }}"
       group: "{{ group_name }}"
-      mode: 'u=rwx,g=rwx'
+      mode: 'u=rw,g=rw,o=r'
   notify: 
     - get-services
     - enable-search
