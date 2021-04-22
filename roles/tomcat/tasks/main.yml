@@ -17,7 +17,6 @@
 
 - name: Check Tomcat version is installed
   become: true
-  become_user: "{{ username }}"
   command: "{{ binaries_folder }}/tomcat.sh configtest"
   register: install_check
   environment:

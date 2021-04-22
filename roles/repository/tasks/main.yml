@@ -41,7 +41,7 @@
     checksum: "sha1:{{ downloads.acs_zip_sha1_checksum }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
+    mode: 'u=rw,g=r,o=r'
   register: distribution_download_result
   async: 900
   poll: 0
@@ -91,27 +91,30 @@
 
 - name: Add ACS home to setenv.sh
   become: true
-  become_user: "{{ username }}"
   lineinfile:
     path: "{{ config_folder }}/setenv.sh"
     insertafter: EOF
     line: "export ACS_HOME={{ binaries_folder }}/content-services-{{ acs.version }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
 
 - name: Add ACS home to tomcat.sh
   become: true
-  become_user: "{{ username }}"
   lineinfile:
     path: "/opt/alfresco/tomcat.sh"
     insertafter: 'CATALINA_OPTS'
     line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME} -Dats-tengine-aio.host={{ ats_tengine_aio_host }} -Dats-shared-fs.host={{ sfs_host }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
 
 - name: Add additional env vars to tomcat.sh
   become: true
-  become_user: "{{ username }}"
   lineinfile:
     path: "/opt/alfresco/tomcat.sh"
     insertafter: 'CATALINA_OPTS'
     line: export {{ item.key }}="{{ item.value }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
   loop: "{{ acs_environment | dict2items }}"
 
 - name: Verifying if the distribution zip finished downloading
@@ -124,7 +127,6 @@
 
 - name: Add the configuration templates
   become: true
-  become_user: "{{ username }}"
   template:
     owner: "{{ username }}"
     group: "{{ group_name }}"
@@ -136,12 +138,13 @@
 
 - name: Extract {{ acs_zip_file }} into {{ content_folder }}
   become: true
-  become_user: "{{ username }}"
   unarchive:
     src: "{{ download_location }}/{{ acs_zip_file }}"
     dest: "{{ content_folder }}"
     remote_src: true
     creates: "{{ content_folder }}/bin"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
 
 - name: Move alfresco-share-services.amp to {{ content_folder }}/amps_repo folder
   block:
@@ -259,7 +262,6 @@
       register: classes
     - name: Copy classes
       become: true
-      become_user: "{{ username }}"
       copy:
         remote_src: true
         src: "{{ content_folder }}/shared/classes/"
@@ -280,7 +282,6 @@
       register: conf_exists
     - name: Copy conf
       become: true
-      become_user: "{{ username }}"
       copy:
         remote_src: true
         src: "{{ content_folder }}/web-server/conf/Catalina/localhost/"
@@ -401,12 +402,13 @@
 
 - name: Setup common loader
   become: true
-  become_user: "{{ username }}"
   failed_when: false
   lineinfile:
     path: "{{ tomcat_config_dir }}/conf/catalina.properties"
     regexp: '^common.loader='
     line: "common.loader=\"/etc/opt/alfresco/content-services/classpath\",\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\""
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
 
 - name: Add PostResources to alfresco.xml
   become: true
