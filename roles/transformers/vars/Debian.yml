@@ -8,3 +8,8 @@ utils_transform:
   - libcairo2
   - libcups2
   - libsm6
+  - fontconfig
+  - fonts-dejavu
+  - libfreetype6
+  - libpng
+  - ghostscript

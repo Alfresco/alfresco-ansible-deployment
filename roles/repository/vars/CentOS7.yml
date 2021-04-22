@@ -1,9 +1,0 @@
----
-# defaults file for repository
-utils_repo:
-  - fontconfig-2.13.0-4.3.el7
-  - dejavu-fonts-common-2.33-6.el7
-  - fontpackages-filesystem-1.44-8.el7
-  - freetype-2.8-14.el7
-  - libpng
-  - dejavu-sans-fonts-2.33-6.el7

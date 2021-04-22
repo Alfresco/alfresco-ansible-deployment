@@ -6,5 +6,11 @@ utils_transform:
   - libSM
   - unzip
   - which
+  - fontconfig
+  - dejavu-fonts-common
+  - fontpackages-filesystem
+  - freetype
+  - libpng
+  - dejavu-sans-fonts
 
 pkg_fmt: "{% if ansible_pkg_mgr == 'apt' %}deb{% else %}rpm{% endif %}"
