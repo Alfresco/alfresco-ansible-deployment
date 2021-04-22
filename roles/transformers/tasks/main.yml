@@ -146,9 +146,9 @@
       block: |          
         export LIBREOFFICE_HOME={{ libreoffice_home }}
         export IMAGEMAGICK_HOME={{ imagemagick_home }}
-        export IMAGEMAGICK_DYN="{% if pkg_fmt == 'deb' %}${IMAGEMAGICK_HOME}/lib{% else %}/usr/lib64{% endif %}"
-        export IMAGEMAGICK_CONFIG=${IMAGEMAGICK_HOME}/config-Q16HDRI
-        export IMAGEMAGICK_CODERS=${IMAGEMAGICK_HOME}/modules-Q16HDRI/coders
+        export IMAGEMAGICK_DYN={% if pkg_fmt == 'deb' %}${IMAGEMAGICK_HOME}/lib{% else %}/usr/lib64{% endif %}
+        export IMAGEMAGICK_CONFIG=${IMAGEMAGICK_HOME}{% if pkg_fmt == 'deb' %}/lib/x86_64-linux-gnu/ImageMagick-{{ imagemagick_version.split('-')[0] }}{% endif %}/config-Q16HDRI
+        export IMAGEMAGICK_CODERS=${IMAGEMAGICK_HOME}{% if pkg_fmt == 'deb' %}/lib/x86_64-linux-gnu/ImageMagick-{{ imagemagick_version.split('-')[0] }}{% endif %}/modules-Q16HDRI/coders
         export IMAGEMAGICK_EXE="{% if pkg_fmt == 'deb' %}${IMAGEMAGICK_HOME}/bin/{% endif %}convert"
       insertafter: EOF
 
