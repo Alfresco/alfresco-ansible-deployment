@@ -1,0 +1,7 @@
+---
+utils_search:
+  - lsof 
+  - ca-certificates
+  - wget
+  - libssl
+  - libssl-dev
