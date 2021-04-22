@@ -1,0 +1,15 @@
+---
+- name: Install imagemagick
+  yum:
+    name: "{{ download_location }}/{{ item }}"
+    state: present
+    disable_gpg_check: true
+  loop:
+    - imagemagick-distribution-libs-linux.rpm
+    - imagemagick-distribution-linux.rpm
+
+- name: Install LibreOffice RPMs
+  shell:
+    cmd: "yum localinstall -y {{ download_location }}/LibreOffice_{{ libreoffice }}_Linux_{{ ansible_architecture | replace('_','-') }}_rpm/RPMS/*.rpm"
+    creates: /opt/libreoffice{{ libreoffice | regex_search('^[0-9]+.[0-9]+') }}/program/soffice.bin
+    warn: false

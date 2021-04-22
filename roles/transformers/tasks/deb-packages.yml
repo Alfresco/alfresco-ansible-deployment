@@ -1,0 +1,24 @@
+---
+- name: Download imagemagick DEB
+  debug:
+    msg: TODO, package needs to be completed and upload to artifact repo first
+
+- name: "Get ImageMagick deb file from {{ download_location }}"
+  find:
+    path: "{{ download_location }}"
+    patterns: imagemagick-{{ imagemagick_version | regex_search('^[0-9]+')}}.q16_*.deb
+  register: im_debs
+
+- name: Install imagemagick
+  become: true
+  apt:
+    deb: "{{ item.path }}"
+    state: present
+  loop: "{{ im_debs.files }}"
+
+- name: Install LibreOffice DEBs
+  become: true
+  shell:
+    cmd: "yes | dpkg -i {{ download_location }}/LibreOffice_{{ libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | replace('_','-') }}_deb/DEBS/*.deb"
+    creates: /opt/libreoffice{{ libreoffice | regex_search('^[0-9]+.[0-9]+') }}/program/soffice.bin
+    warn: false

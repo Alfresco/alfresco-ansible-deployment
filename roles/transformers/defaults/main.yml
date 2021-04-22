@@ -6,3 +6,5 @@ utils_transform:
   - libSM
   - unzip
   - which
+
+pkg_fmt: "{% if ansible_pkg_mgr == 'apt' %}deb{% else %}rpm{% endif %}"
