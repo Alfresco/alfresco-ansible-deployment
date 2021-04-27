@@ -1,0 +1,3 @@
+---
+nginx_user: "nginx"
+nginx_folder: "/usr/share/nginx/html"
