@@ -1,0 +1,4 @@
+---
+nginx_version: 1.18.0
+nginx_user: nginx
+nginx_default_vhost_path: /etc/nginx/conf.d/default.conf
