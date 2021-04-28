@@ -1,12 +1,18 @@
 ---
+- name: Enable EPEL repository
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch&infra=$infra&content=$contentdir
+    gpgcheck: yes
+    gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+
 - name: Install imagemagick
   yum:
-    name: "{{ download_location }}/{{ item }}"
+    name: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_pkg.version) }}.{{ pkg_fmt }}"
     state: present
     disable_gpg_check: true
-  loop:
-    - imagemagick-distribution-libs-linux.rpm
-    - imagemagick-distribution-linux.rpm
+  loop: "{{  imagemagick_pkg.pkgs }}"
 
 - name: Install LibreOffice RPMs
   shell:

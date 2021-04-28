@@ -1,20 +1,10 @@
 ---
-- name: Download imagemagick DEB
-  debug:
-    msg: TODO, package needs to be completed and upload to artifact repo first
-
-- name: "Get ImageMagick deb file from {{ download_location }}"
-  find:
-    path: "{{ download_location }}"
-    patterns: imagemagick-{{ imagemagick_version | regex_search('^[0-9]+')}}.q16_*.deb
-  register: im_debs
-
 - name: Install imagemagick
   become: true
   apt:
-    deb: "{{ item.path }}"
+    deb: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_pkg.version) }}.{{ pkg_fmt }}"
     state: present
-  loop: "{{ im_debs.files }}"
+  loop: "{{  imagemagick_pkg.pkgs }}"
 
 - name: Install LibreOffice DEBs
   become: true

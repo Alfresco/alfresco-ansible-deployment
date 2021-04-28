@@ -4,7 +4,7 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
-- name: Download libreoffice package archive 
+- name: Download libreoffice package archive
   get_url:
     url: "{{ libreoffice_archive }}"
     checksum: sha1:{{ libreoffice_archive_sha1_checksum }}
@@ -13,6 +13,18 @@
   register: libreoffice_download
   async: 900
   poll: 0
+
+- name: Download ImageMagick distribution
+  vars:
+    pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_pkg.version) }}.{{ pkg_fmt }}"
+    pkg_url: "{{ nexus_repository.releases }}/../imagemagick/imagemagick-distribution/{{ imagemagick_pkg.version }}/{{ pkg_name }}"
+  get_url:
+    url: "{{ pkg_url }}"
+    checksum: "sha1:{{ lookup('url', pkg_url + '.sha1') }}"
+    dest: "{{ download_location }}/{{ pkg_name }}"
+    mode: 0444
+    timeout: 570
+  loop: "{{  imagemagick_pkg.pkgs }}"
 
 - name: Ensure a list of packages installed
   become: true
@@ -33,26 +45,6 @@
         metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch&infra=$infra&content=$contentdir
         gpgcheck: yes
         gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
-    
-    - name: Download imagemagick-distribution-linux.rpm
-      get_url:
-        url: "{{ imagemagick_rpm }}"
-        checksum: sha1:{{ imagemagick_sha1_checksum }}
-        dest: "{{ download_location }}/imagemagick-distribution-linux.rpm"
-        mode: 0444
-        url_username: "{{ nexus_user }}"
-        url_password: "{{ nexus_password }}"
-        timeout: 570
-    
-    - name: Download imagemagick-distribution-libs-linux.rpm
-      get_url:
-        url: "{{ imagemagick_lib_rpm }}"
-        checksum: sha1:{{ imagemagick_lib_sha1_checksum }}
-        dest: "{{ download_location }}/imagemagick-distribution-libs-linux.rpm"
-        mode: 0444
-        url_username: "{{ nexus_user }}"
-        url_password: "{{ nexus_password }}"
-        timeout: 570
 
 - name: Verifying if libreoffice finished downloading
   async_status:
@@ -87,8 +79,6 @@
     url: "{{ alfresco_pdf_renderer }}"
     checksum: sha1:{{ alfresco_pdf_renderer_sha1_checksum }}
     dest: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
@@ -132,7 +122,7 @@
       marker: "# {mark} ATS COMMON ENV VARS"
       owner: "{{ username }}"
       group: "{{ group_name }}"
-      block: |          
+      block: |
         export ATS_HOME={{ binaries_folder }}/transform-service
         export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
         export ATS_SHARED_FS_HOST={{ sfs_host }}
@@ -143,12 +133,12 @@
       marker: "# {mark} ATS DEPENDENCIES ENV VARS"
       owner: "{{ username }}"
       group: "{{ group_name }}"
-      block: |          
+      block: |
         export LIBREOFFICE_HOME={{ libreoffice_home }}
         export IMAGEMAGICK_HOME={{ imagemagick_home }}
         export IMAGEMAGICK_DYN={% if pkg_fmt == 'deb' %}${IMAGEMAGICK_HOME}/lib/x86_64-linux-gnu{% else %}/usr/lib64{% endif %}/
-        export IMAGEMAGICK_CONFIG={% if pkg_fmt == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/config-Q16HDRI
-        export IMAGEMAGICK_CODERS={% if pkg_fmt == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/modules-Q16HDRI/coders
+        export IMAGEMAGICK_CONFIG={% if pkg_fmt == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_pkg.version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/config-Q16HDRI
+        export IMAGEMAGICK_CODERS={% if pkg_fmt == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_pkg.version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/modules-Q16HDRI/coders
         export IMAGEMAGICK_EXE="{% if pkg_fmt == 'deb' %}${IMAGEMAGICK_HOME}/bin/{% endif %}convert"
       insertafter: EOF
 
@@ -171,7 +161,7 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
-  notify: 
+  notify:
     - get-services
     - wait-for-activemq
     - restart-aio
@@ -185,7 +175,7 @@
     group: "{{ group_name }}"
     mode: 'u=rw,g=rw,o=r'
     force: true
-  notify: 
+  notify:
     - get-services
     - wait-for-activemq
     - enable-aio
