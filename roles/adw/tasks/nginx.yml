@@ -17,7 +17,7 @@
       delay: 6
       until: yum_lock.stdout_lines|length <= 2
       changed_when: false
-  when: ansible_mkg_mgr != 'apt'
+  when: ansible_pkg_mgr != 'apt'
 
 - name: Ensure nginx in adw.
   package:
