@@ -2,7 +2,7 @@
 imagemagick_version: 7.0.10-59
 libreoffice: 6.3.5.2
 pdf_renderer: 1.1
-imagemagick_home: "/opt/alfresco/imagemagick-{{ imagemagick_version | regex_search('^[0-9]+') }}"
+imagemagick_home: "/opt/imagemagick-{{ imagemagick_version | regex_search('^[0-9]+') }}"
 
 utils_transform:
   - libcairo2
