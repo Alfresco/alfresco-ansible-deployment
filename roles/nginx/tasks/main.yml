@@ -25,7 +25,7 @@
 
 - name: Ensure nginx is installed.
   package:
-    name: "{{ nginx_pack }}"
+    name: "{{ nginx_pack }}{%if ansible_pkg_mgr != 'apt' %}-{{ nginx_version }}{% endif %}"
     state: present
 
 # Vhost configuration.
