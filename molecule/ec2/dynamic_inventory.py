@@ -1,3 +1,7 @@
+"""
+Generate inventory from Molecule scenario
+"""
+
 import os
 import yaml
 
@@ -22,7 +26,7 @@ address = parsed_yaml_file[0]['address']
 identity_file = parsed_yaml_file[0]['identity_file']
 
 for item in parsed_old_inventory['all']['children']:
-    print(item)
+    print item
     groupname = item + "_1"
     add_if_key_not_exist(inventoryfile['all']['children'], item, {})
     add_if_key_not_exist(inventoryfile['all']['children'][item], 'hosts', {})

@@ -1,3 +1,7 @@
+"""
+Generate inventory from Molecule scenario
+"""
+
 import os
 import re
 import yaml
@@ -15,7 +19,7 @@ def add_if_key_not_exist(dict_obj, key, value):
         dict_obj.update({key: value})
 
 for item in parsed_yaml_file:
-    print(item)
+    print item
     groupname = re.sub(r'_.*', '', item['instance'])
     add_if_key_not_exist(inventoryfile['all']['children'], groupname, {})
     add_if_key_not_exist(inventoryfile['all']['children'][groupname], 'hosts', {})

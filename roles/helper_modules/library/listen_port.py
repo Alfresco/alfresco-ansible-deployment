@@ -1,4 +1,8 @@
 #!/usr/bin/python
+"""
+Ansible module to listen on a local INET socket
+"""
+
 import socket
 import time
 
@@ -23,7 +27,7 @@ def main():
     """listen port main function"""
 
     fields = {
-    "port": {"required": True, "type": "str"},
+        "port": {"required": True, "type": "str"},
     }
 
     module = AnsibleModule(argument_spec=fields,supports_check_mode=False)
