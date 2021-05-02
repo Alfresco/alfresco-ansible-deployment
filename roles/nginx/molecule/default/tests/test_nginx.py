@@ -10,19 +10,23 @@ def get_ansible_vars(host):
     common_vars = "file=../../../common/vars/main.yml name=common_vars"
     common_defaults = "file=../../../common/defaults/main.yml name=common_defaults"
     nginx_vars = "file=../../vars/main.yml name=nginx_vars"
+    nginx_dist_version_vars = "file=../../vars/" + host.ansible("setup")["ansible_facts"]["ansible_distribution"] + host.ansible("setup")["ansible_facts"]["ansible_distribution_version"] + ".yml name=nginx_dist_version_vars"
+    nginx_osfam_vars = "file=../../vars/" + host.ansible("setup")["ansible_facts"]["ansible_os_family"] + ".yml name=nginx_osfam_vars"
     ansible_vars = host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"]
     ansible_vars.update(host.ansible("include_vars", common_defaults)["ansible_facts"]["common_defaults"])
     ansible_vars.update(host.ansible("include_vars", nginx_vars)["ansible_facts"]["nginx_vars"])
+    ansible_vars.update(host.ansible("include_vars", nginx_osfam_vars)["ansible_facts"]["nginx_osfam_vars"])
+    ansible_vars.update(host.ansible("include_vars", nginx_dist_version_vars)["ansible_facts"]["nginx_dist_version_vars"])
     return ansible_vars
 
 test_host = os.environ.get('TEST_HOST')
 
 def test_selinux(host, get_ansible_vars):
     "Check that the selinux config is valid"
-    virt_system = host.ansible("setup")["ansible_facts"]['ansible_virtualization_type']
-    if virt_system != 'docker':
-        cmd = host.run("sudo getsebool httpd_can_network_connect")
-        assert_that(cmd, contains_string("{} syntax is ok".format(get_ansible_vars["nginx_conf_file_path"])))
+    selinux_status = host.ansible("setup")["ansible_facts"]["ansible_selinux"]["status"]
+    if selinux_status != 'disabled':
+        cmd = host.run("getsebool httpd_can_network_connect")
+        assert_that(cmd, contains_string("--> off"))
 
 def test_nginx_files_exist(host, get_ansible_vars):
     "Check that nginx file exist"
