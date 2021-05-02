@@ -205,7 +205,7 @@ jobs:
         - ssh ubuntu@${PUBLIC_IP} "DEBIAN_FRONTEND=noninteractive sudo -E apt-get update && sudo -E apt-get install -y unzip python3 virtualenvwrapper"
         - ssh ubuntu@${PUBLIC_IP} ". /usr/share/virtualenvwrapper/virtualenvwrapper.sh && mkvirtualenv ansible-${ANSIBLE_VERSION} && [ -n $VIRTUAL_ENV ] || workon ansible-${ANSIBLE_VERSION} && pip install ansible==${ANSIBLE_VERSION}"
         - ssh ubuntu@${PUBLIC_IP} "unzip /tmp/alfresco-ansible-deployment-${VERSION}.zip"
-        - scp tests -r ubuntu@${PUBLIC_IP}:alfresco-ansible-deployment-${VERSION}/
+        - scp -r tests ubuntu@${PUBLIC_IP}:alfresco-ansible-deployment-${VERSION}/
         - ssh ubuntu@${PUBLIC_IP} ". /usr/share/virtualenvwrapper/virtualenvwrapper.sh && workon ansible-${ANSIBLE_VERSION} && export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\""
         - sed -i 's+TEST_URL+http://$PUBLIC_IP+g' tests/test-config.json
         - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
