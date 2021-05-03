@@ -8,4 +8,4 @@ fi
 {% for key, value in sfs_environment.items() %}
 export {{key}}="{{value}}"
 {% endfor %}
-${JAVA_HOME}/bin/java ${JAVA_OPTS} -jar ${ATS_HOME}/alfresco-shared-file-store-*.jar > /var/log/alfresco/ats-shared-fs.log
+${JAVA_HOME}/bin/java ${JAVA_OPTS} -jar ${ATS_HOME}/alfresco-shared-file-store-*.jar > {{ logs_folder }}/ats-shared-fs.log

@@ -78,37 +78,41 @@
 
 - name: Allow external connections to webconsole
   become: true
-  become_user: "{{ username }}"
   replace:
     path: "{{ activemq_conf }}/jetty.xml"
     regexp: "127.0.0.1"
     replace: "0.0.0.0"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
 
 - name: Change location of ActiveMQ logs
   become: true
-  become_user: "{{ username }}"
   replace:
     path: "{{ activemq_conf }}/log4j.properties"
     regexp: "activemq.data"
     replace: "activemq.log"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
 
 - name: Add activemq_home and host to setenv script
   become: true
-  become_user: "{{ username }}"
   blockinfile:
     path: "{{ config_folder }}/setenv.sh"
     marker: "# {mark} ACTIVEMQ ENV VARS"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
     block: |
       export ACTIVEMQ_HOME={{ activemq_home }}
       export ACTIVEMQ_HOST={{ activemq_host }}
 
 - name: Create log file with correct permissions
   become: true
-  become_user: "{{ username }}"
   file:
     path: "{{ item }}"
     state: touch
     mode: u=rwx,g=rw,o-rwx
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
   with_items:
     - "{{ logs_folder }}/activemq.log"
     - "{{ logs_folder }}/audit.log"
@@ -116,7 +120,6 @@
 
 - name: Add activemq wrapper script
   become: true
-  become_user: "{{ username }}"
   template:
     src: "activemq.sh"
     dest: "{{ binaries_folder }}"

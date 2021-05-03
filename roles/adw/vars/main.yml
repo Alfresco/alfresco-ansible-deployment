@@ -1,4 +1,3 @@
 ---
 nginx_package_name: "nginx"
-nginx_folder: "/usr/share/nginx/html"
 request_uri: "workspace"

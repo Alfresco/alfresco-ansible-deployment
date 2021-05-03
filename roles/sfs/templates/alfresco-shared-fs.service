@@ -4,8 +4,8 @@ After=syslog.socket network.target
 
 [Service]
 Type=simple
-User=alfresco
-ExecStart=/opt/alfresco/ats-shared-fs.sh
+User={{ username }}
+ExecStart={{ binaries_folder }}/ats-shared-fs.sh
 
 [Install]
 WantedBy=multi-user.target

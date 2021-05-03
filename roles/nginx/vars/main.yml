@@ -1,15 +1,10 @@
 ---
 # vars file for nginx
-nginx_version: 1.18.0
 nginx_pack: nginx
-nginx_rpm_url: https://nginx.org/packages/centos/7/x86_64/RPMS/nginx-1.18.0-1.el7.ngx.x86_64.rpm
 root_group: root
-nginx_conf_path: /etc/nginx/conf.d
 nginx_conf_file_path: /etc/nginx/nginx.conf
 nginx_mime_file_path: /etc/nginx/mime.types
 nginx_pidfile: /run/nginx.pid
-nginx_default_vhost_path: /etc/nginx/conf.d/default.conf
-nginx_user: "nginx"
 nginx_remove_default_vhost: true
 nginx_package_name: "nginx"
 nginx_conf_template: "nginx.conf"
@@ -17,8 +12,3 @@ nginx_yum_repo_enabled: true
 nginx_service_state: started
 nginx_service_enabled: true
 nginx_vhost_template: "alfresco.conf"
-nginx_vhosts:
-  - listen: "80"
-    root: "/usr/share/nginx/html"
-    index: "index.html index.htm"
-    filename: "alfresco.conf"

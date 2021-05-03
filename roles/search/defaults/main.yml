@@ -1,9 +1,2 @@
 ---
 # defaults file for search-services
-utils_search:
-  - unzip
-  - lsof 
-  - ca-certificates
-  - wget
-  - openssl
-  - openssl-devel

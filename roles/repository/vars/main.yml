@@ -22,9 +22,6 @@ share_templates:
   - share-config-custom.xml
   - smartfolders-amp-actions-config.xml
 
-instance_name: share
-resource_path: target
-
 repository:
   protocol: http
   host: "{{ repo_host }}"

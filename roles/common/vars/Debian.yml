@@ -1,0 +1,8 @@
+---
+utils:
+  - sudo
+  - unzip
+  - tar
+  - xz-utils
+  - python3-selinux
+  - python3-semanage

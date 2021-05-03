@@ -137,11 +137,12 @@ jobs:
         - scripts/generate-zip.sh
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
-        - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}"
+        - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip python3 python-virtualenv"
+        - ssh centos@${PUBLIC_IP} "mkdir ~/.pythonvenv && virtualenv -p /usr/bin/python3 ~/.pythonvenv/ansible-${ANSIBLE_VERSION}"
+        - ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip install --upgrade pip && pip install ansible==${ANSIBLE_VERSION}"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
-        - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@6.2.N-extra-vars.yml\""
+        - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@6.2.N-extra-vars.yml\""
         - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "tests/test-config-acs6-stack.json" 
         - cd dtas; pytest --tb=line --configuration ../tests/test-config-acs6-stack.json tests/ -s
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
@@ -175,6 +176,38 @@ jobs:
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
         - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\""
         - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "tests/test-config.json"
+        - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
+        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
+    - stage: Verification
+      name: Localhost integration checks (ACS 7.0.0 on Ubuntu 20.04)
+      before_install:
+        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
+        - eval "$(ssh-agent -s)"
+        - chmod 600 /tmp/dbp-ansible
+        - ssh-add /tmp/dbp-ansible
+        - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+        - unzip awscli-bundle.zip
+        - ./awscli-bundle/install -b ~/bin/aws
+        - export PATH=~/bin:$PATH
+        - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+        - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        - export AWS_DEFAULT_REGION='us-east-1'
+        - git clone --depth 1 --branch $DTAS_VERSION https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
+      script:
+        - aws ec2 run-instances --image-id ami-09e67e426f25ce0d7 --count 1 --instance-type t3.large --key-name dbp-ansible --security-group-ids sg-099a05787b0a322c3 --subnet-id subnet-06ffe524598660d99 --tag-specifications "ResourceType=instance,Tags=[{Key=local,Value=ubuntu20.04_machine_no_${TRAVIS_BUILD_NUMBER}},{Key=Creator,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}},{Key=Owner,Value="Operator\ Experience\ Team"},{Key=Department,Value=Engineering},{Key=Purpose,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}_ubuntu20.04},{Key=NoAutomaticShutdown,Value=false},{Key=Production,Value=False},{Key=Name,Value=molecule_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_ubuntu20.04},{Key=instance,Value=${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_ubuntu20.04}]"
+        - echo "wait for instance to be up" && sleep 4m
+        - export PUBLIC_IP=$(aws ec2 describe-instances --filters Name=instance-state-name,Values=running Name=tag-key,Values=local Name=tag-value,Values=ubuntu20.04_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+        - export INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag-key,Values=local Name=tag-value,Values=ubuntu20.04_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].InstanceId' --output text)
+        - ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
+        - scripts/generate-zip.sh
+        - export VERSION=$(cat VERSION)
+        - scp dist/alfresco-ansible-deployment-${VERSION}.zip ubuntu@${PUBLIC_IP}:/tmp
+        - ssh ubuntu@${PUBLIC_IP} "DEBIAN_FRONTEND=noninteractive sudo -E apt-get update && sudo -E apt-get install -y unzip python3 virtualenvwrapper"
+        - ssh ubuntu@${PUBLIC_IP} ". /usr/share/virtualenvwrapper/virtualenvwrapper.sh && mkvirtualenv ansible-${ANSIBLE_VERSION} && [ -n $VIRTUAL_ENV ] || workon ansible-${ANSIBLE_VERSION} && pip install ansible==${ANSIBLE_VERSION}"
+        - ssh ubuntu@${PUBLIC_IP} "unzip /tmp/alfresco-ansible-deployment-${VERSION}.zip"
+        - scp -r tests ubuntu@${PUBLIC_IP}:alfresco-ansible-deployment-${VERSION}/
+        - ssh ubuntu@${PUBLIC_IP} ". /usr/share/virtualenvwrapper/virtualenvwrapper.sh && workon ansible-${ANSIBLE_VERSION} && export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\""
+        - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" tests/test-config.json
         - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
     - stage: Verification

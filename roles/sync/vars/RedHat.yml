@@ -1,4 +1,4 @@
 ---
-# defaults file for sync
 utils_sync:
   - unzip
+  - which

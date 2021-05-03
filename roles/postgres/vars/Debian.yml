@@ -1,0 +1,6 @@
+postgresql_packages:
+  - postgresql-{{ dependencies_version.postgres_major_version }}
+  - python3-psycopg2
+
+postgresql_service: postgresql
+postgresql_conf_path: /etc/postgresql/{{ dependencies_version.postgres_major_version }}/main

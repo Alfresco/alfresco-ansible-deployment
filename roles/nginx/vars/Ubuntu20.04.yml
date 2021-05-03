@@ -1,0 +1,4 @@
+---
+nginx_version: 1.18.0
+nginx_user: www-data
+nginx_default_vhost_path: /etc/nginx/sites-enabled/default
