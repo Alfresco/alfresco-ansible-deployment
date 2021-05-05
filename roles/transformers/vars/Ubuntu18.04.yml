@@ -1,0 +1,18 @@
+---
+imagemagick_pkg:
+  version: 7.0.10-11
+  pkgs:
+    - imagemagick-distribution-linux
+
+libreoffice: 6.3.5.2
+pdf_renderer: 1.1
+imagemagick_home: "/opt/imagemagick-{{ imagemagick_pkg.version | regex_search('^[0-9]+') }}"
+
+utils_transform:
+  - libcairo2
+  - libcups2
+  - libsm6
+  - fontconfig
+  - fonts-dejavu
+  - libfreetype6
+  - ghostscript
