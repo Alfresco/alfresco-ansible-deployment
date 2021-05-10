@@ -28,4 +28,4 @@ dependencies_version:
   activemq: 5.15.14
   jdk: 11.0.11
   jdk_arch: 10
-  tomcat: 8.5.61
+  tomcat: 8.5.65
