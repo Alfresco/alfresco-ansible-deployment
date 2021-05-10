@@ -108,7 +108,7 @@ dependencies_version:
   postgres_major_version: 13
   activemq: 5.16.1
   jdk: 11.0.11
-  jdk_arch: 10
+  jdk_arch: 9
   tomcat: 9.0.45
 
 dependencies_url:
