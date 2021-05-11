@@ -6,7 +6,7 @@
 
 - name: Download libreoffice package archive
   get_url:
-    url: "{{ libreoffice_archive }}"
+    url: "{{ libreoffice_archive_url }}"
     checksum: sha1:{{ libreoffice_archive_sha1_checksum }}
     dest: "{{ download_location }}/libreoffice.tar.gz"
     timeout: 950
@@ -58,7 +58,7 @@
     src: "{{ download_location }}/libreoffice.tar.gz"
     dest: "{{ download_location }}/"
     remote_src: true
-    creates: "{{ download_location }}/LibreOffice_{{ libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | replace('_','-') }}_{% if ansible_pkg_mgr == 'apt'%}deb{% else %}rpm{% endif %}/{% if ansible_pkg_mgr == 'apt'%}DEBS{% else %}RPMS{% endif %}/"
+    creates: "{{ download_location }}/LibreOffice_{{ libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | replace('_','-') }}_{{ pkg_format }}/{{ pkg_format | upper }}/"
 
 - name: Install LibreOffice & imageMagick
   include_tasks: "{{ pkg_format }}-packages.yml"
