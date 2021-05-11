@@ -35,16 +35,14 @@
   poll: 0
   loop: "{{ utils_transform }}"
 
-- name: Prepare RPM based systems
+- name: Enable EPEL repository
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch&infra=$infra&content=$contentdir
+    gpgcheck: yes
+    gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
   when: pkg_format != 'deb'
-  block:
-    - name: Enable EPEL repository
-      yum_repository:
-        name: epel
-        description: EPEL YUM repo
-        metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch&infra=$infra&content=$contentdir
-        gpgcheck: yes
-        gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
 
 - name: Verifying if libreoffice finished downloading
   async_status:
