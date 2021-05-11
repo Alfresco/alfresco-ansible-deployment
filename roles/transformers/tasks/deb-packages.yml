@@ -2,7 +2,7 @@
 - name: Install imagemagick
   become: true
   apt:
-    deb: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_pkg.version) }}.{{ pkg_fmt }}"
+    deb: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_pkg.version) }}.{{ pkg_format }}"
     state: present
   loop: "{{  imagemagick_pkg.pkgs }}"
 
