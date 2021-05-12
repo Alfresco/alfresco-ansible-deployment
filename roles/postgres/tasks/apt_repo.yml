@@ -2,9 +2,10 @@
 # Ansible module apt_repository rely on unmaintained python libs so using template instead
 - name: Install PostgreSQL deb repository
   become: true
-  template:
-    src: apt_repo.j2
-    dest: /etc/apt/sources.list.d/pgdg.list
+  lineinfile:
+    path: /etc/apt/sources.list.d/pgdg.list
+    line: deb http://apt.postgresql.org/pub/repos/apt {{ ansible_lsb.codename }}-pgdg main 
+    create: yes
     owner: root
     group: root
     mode: 0644
