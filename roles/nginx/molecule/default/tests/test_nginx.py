@@ -33,11 +33,6 @@ def test_nginx_files_exist(host, get_ansible_vars):
     assert_that(host.file("/usr/sbin/nginx").exists)
     assert_that(host.file(get_ansible_vars["nginx_conf_file_path"]).exists)
 
-def test_nginx_version(host, get_ansible_vars):
-    "Check that the version is valid"
-    cmd = host.run("nginx -v")
-    assert_that(cmd.stderr, contains_string("{}".format(get_ansible_vars["nginx_version"])))
-
 def test_configuration_syntax(host, get_ansible_vars):
     "Check that the configuration is valid"
     cmd = host.run("nginx -t")
