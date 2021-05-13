@@ -3,6 +3,15 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
+- name: Enable EPEL repository
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch&infra=$infra&content=$contentdir
+    gpgcheck: yes
+    gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+  when: ansible_distribution in [ 'RedHat', 'CentOS' ] and ansible_distribution_major_version == '7'
+
 - name: Ensure nginx is installed.
   package:
     name: "{{ nginx_pack }}"

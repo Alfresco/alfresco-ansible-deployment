@@ -13,4 +13,4 @@ utils_transform:
   - libpng
   - dejavu-sans-fonts
 
-pkg_fmt: "{% if ansible_pkg_mgr == 'apt' %}deb{% else %}rpm{% endif %}"
+pkg_format: "{% if ansible_pkg_mgr == 'apt' %}deb{% else %}rpm{% endif %}"

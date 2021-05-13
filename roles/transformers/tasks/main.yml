@@ -6,7 +6,7 @@
 
 - name: Download libreoffice package archive
   get_url:
-    url: "{{ libreoffice_archive }}"
+    url: "{{ libreoffice_archive_url }}"
     checksum: sha1:{{ libreoffice_archive_sha1_checksum }}
     dest: "{{ download_location }}/libreoffice.tar.gz"
     timeout: 950
@@ -16,7 +16,7 @@
 
 - name: Download ImageMagick distribution
   vars:
-    pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_pkg.version) }}.{{ pkg_fmt }}"
+    pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_pkg.version) }}.{{ pkg_format }}"
     pkg_url: "{{ nexus_repository.releases }}/../imagemagick/imagemagick-distribution/{{ imagemagick_pkg.version }}/{{ pkg_name }}"
   get_url:
     url: "{{ pkg_url }}"
@@ -35,24 +35,13 @@
   poll: 0
   loop: "{{ utils_transform }}"
 
-- name: Prepare RPM based systems
-  when: pkg_fmt != 'deb'
-  block:
-    - name: Enable EPEL repository
-      yum_repository:
-        name: epel
-        description: EPEL YUM repo
-        metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch&infra=$infra&content=$contentdir
-        gpgcheck: yes
-        gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
-
 - name: Verifying if libreoffice finished downloading
   async_status:
     jid: "{{ libreoffice_download.ansible_job_id }}"
   register: job_result
   until: job_result.finished
   delay: 30
-  retries: 20
+  retries: 29
 
 - name: Extract libreoffice-dist-linux.gz
   become: true
@@ -60,10 +49,10 @@
     src: "{{ download_location }}/libreoffice.tar.gz"
     dest: "{{ download_location }}/"
     remote_src: true
-    creates: "{{ download_location }}/LibreOffice_{{ libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | replace('_','-') }}_{% if ansible_pkg_mgr == 'apt'%}deb{% else %}rpm{% endif %}/{% if ansible_pkg_mgr == 'apt'%}DEBS{% else %}RPMS{% endif %}/"
+    creates: "{{ download_location }}/LibreOffice_{{ libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | replace('_','-') }}_{{ pkg_format }}/{{ pkg_format | upper }}/"
 
 - name: Install LibreOffice & imageMagick
-  include_tasks: "{{ pkg_fmt }}-packages.yml"
+  include_tasks: "{{ pkg_format }}-packages.yml"
 
 - name: Create transform-services folder
   file:
@@ -136,10 +125,10 @@
       block: |
         export LIBREOFFICE_HOME={{ libreoffice_home }}
         export IMAGEMAGICK_HOME={{ imagemagick_home }}
-        export IMAGEMAGICK_DYN={% if pkg_fmt == 'deb' %}${IMAGEMAGICK_HOME}/lib/x86_64-linux-gnu{% else %}/usr/lib64{% endif %}/
-        export IMAGEMAGICK_CONFIG={% if pkg_fmt == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_pkg.version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/config-Q16HDRI
-        export IMAGEMAGICK_CODERS={% if pkg_fmt == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_pkg.version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/modules-Q16HDRI/coders
-        export IMAGEMAGICK_EXE="{% if pkg_fmt == 'deb' %}${IMAGEMAGICK_HOME}/bin/{% endif %}convert"
+        export IMAGEMAGICK_DYN={% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/lib/x86_64-linux-gnu{% else %}/usr/lib64{% endif %}/
+        export IMAGEMAGICK_CONFIG={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_pkg.version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/config-Q16HDRI
+        export IMAGEMAGICK_CODERS={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_pkg.version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/modules-Q16HDRI/coders
+        export IMAGEMAGICK_EXE="{% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/bin/{% endif %}convert"
       insertafter: EOF
 
 - name: Create log file with correct permissions
