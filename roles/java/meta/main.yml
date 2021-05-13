@@ -7,6 +7,7 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - 20.04
+        - 18.04
     - name: CentOS
       versions:
         - 7
