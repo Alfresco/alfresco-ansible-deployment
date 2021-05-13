@@ -1,0 +1,7 @@
+---
+# defaults file for nginx
+nginx_vhosts:
+  - listen: "80"
+    root: "{% if ansible_os_family == 'Debian' %}/var/www/html{% else %}/usr/share/nginx/html{% endif %}"
+    index: "index.html index.htm"
+    filename: "alfresco.conf"

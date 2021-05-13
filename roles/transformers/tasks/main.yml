@@ -4,6 +4,28 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
+- name: Download libreoffice package archive
+  get_url:
+    url: "{{ libreoffice_archive_url }}"
+    checksum: sha1:{{ libreoffice_archive_sha1_checksum }}
+    dest: "{{ download_location }}/libreoffice.tar.gz"
+    timeout: 950
+  register: libreoffice_download
+  async: 900
+  poll: 0
+
+- name: Download ImageMagick distribution
+  vars:
+    pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_pkg.version) }}.{{ pkg_format }}"
+    pkg_url: "{{ nexus_repository.releases }}/../imagemagick/imagemagick-distribution/{{ imagemagick_pkg.version }}/{{ pkg_name }}"
+  get_url:
+    url: "{{ pkg_url }}"
+    checksum: "sha1:{{ lookup('url', pkg_url + '.sha1') }}"
+    dest: "{{ download_location }}/{{ pkg_name }}"
+    mode: 0444
+    timeout: 570
+  loop: "{{  imagemagick_pkg.pkgs }}"
+
 - name: Ensure a list of packages installed
   become: true
   become_user: root
@@ -13,65 +35,13 @@
   poll: 0
   loop: "{{ utils_transform }}"
 
-- name: Enable EPEL repository
-  yum_repository:
-    name: epel
-    description: EPEL YUM repo
-    metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch&infra=$infra&content=$contentdir
-    gpgcheck: yes
-    gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
-
-- name: Download imagemagick-distribution-linux.rpm
-  get_url:
-    url: "{{ imagemagick_rpm }}"
-    checksum: sha1:{{ imagemagick_sha1_checksum }}
-    dest: "{{ download_location }}/imagemagick-distribution-linux.rpm"
-    mode: 0444
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    timeout: 570
-
-- name: Download imagemagick-distribution-libs-linux.rpm
-  get_url:
-    url: "{{ imagemagick_lib_rpm }}"
-    checksum: sha1:{{ imagemagick_lib_sha1_checksum }}
-    dest: "{{ download_location }}/imagemagick-distribution-libs-linux.rpm"
-    mode: 0444
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    timeout: 570
-
-- name: install imagemagick
-  yum:
-    name: "{{ download_location }}/{{ item }}"
-    state: present
-    disable_gpg_check: true
-  loop:
-    - imagemagick-distribution-libs-linux.rpm
-    - imagemagick-distribution-linux.rpm
-
-- name: "Download libreoffice {{ libreoffice }} rpm tar.gz"
-  get_url:
-    url: "{{ libreoffice_rpm }}"
-    checksum: sha1:{{ libreoffice_sha1_checksum }}
-    dest: "{{ download_location }}/libreoffice.tar.gz"
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    mode: 0444
-    timeout: 950
-  register: libreoffice_download
-  async: 900
-  poll: 0
-
 - name: Verifying if libreoffice finished downloading
-  become: true
-  become_user: root
   async_status:
     jid: "{{ libreoffice_download.ansible_job_id }}"
   register: job_result
   until: job_result.finished
   delay: 30
-  retries: 20
+  retries: 29
 
 - name: Extract libreoffice-dist-linux.gz
   become: true
@@ -79,17 +49,10 @@
     src: "{{ download_location }}/libreoffice.tar.gz"
     dest: "{{ download_location }}/"
     remote_src: true
-    extra_opts:
-      - --xform
-      - s/LibreOffice_{{ libreoffice }}.[0-9]+_Linux/LibreOffice_{{ libreoffice }}_Linux/gx
-    creates: "{{ download_location }}/LibreOffice_{{ libreoffice }}_Linux_{{ ansible_architecture | replace('_','-') }}_rpm/RPMS/"
+    creates: "{{ download_location }}/LibreOffice_{{ libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | replace('_','-') }}_{{ pkg_format }}/{{ pkg_format | upper }}/"
 
-- name: install LibreOffice
-  shell: "yum localinstall -y {{ download_location }}/LibreOffice_{{ libreoffice }}_Linux_{{ ansible_architecture | replace('_','-') }}_rpm/RPMS/*.rpm"
-  args:
-    creates: /opt/libreoffice{{ libreoffice | regex_search('[0-9]+.[0-9]+') }}/program/soffice.bin
-    warn: false
-  changed_when: false
+- name: Install LibreOffice & imageMagick
+  include_tasks: "{{ pkg_format }}-packages.yml"
 
 - name: Create transform-services folder
   file:
@@ -101,23 +64,23 @@
 
 - name: Download alfresco-pdf-renderer-linux.tgz
   become: true
-  become_user: "{{ username }}"
   get_url:
-    url: "{{ alfresco_pdf_renderer_lib_rpm }}"
-    checksum: sha1:{{ alfresco_pdf_renderer_lib_sha1_checksum }}
+    url: "{{ alfresco_pdf_renderer }}"
+    checksum: sha1:{{ alfresco_pdf_renderer_sha1_checksum }}
     dest: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     timeout: 570
 
 - name: Extract alfresco-pdf-renderer-linux.tgz
   become: true
-  become_user: "{{ username }}"
   unarchive:
     src: "{{ download_location }}/alfresco-pdf-renderer-{{ pdf_renderer }}-linux.tgz"
     dest: "{{ ats_home }}"
     remote_src: true
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
     creates: "{{ ats_home }}/alfresco-pdf-renderer"
 
 - name: Remove alfresco-pdf-renderer-linux.tgz
@@ -140,52 +103,46 @@
     timeout: 570
 
 - name: Add paths to setenv file
+  become: true
   block:
-    - name: Add ats common vars to setenv file
-      become: true
-      become_user: "{{ username }}"
-      blockinfile:
-        path: "{{ config_folder }}/setenv.sh"
-        marker: "# {mark} ATS COMMON ENV VARS"
-        block: |          
-          export ATS_HOME={{ binaries_folder }}/transform-service
-          export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
-          export ATS_SHARED_FS_HOST={{ sfs_host }}
-        insertafter: EOF
-    - name: Add ats dependencies vars to setenv file
-      become: true
-      become_user: "{{ username }}"
-      blockinfile:
-        path: "{{ config_folder }}/setenv.sh"
-        marker: "# {mark} ATS DEPENDENCIES ENV VARS"
-        block: |          
-          export LIBREOFFICE_HOME={{ libreoffice_home }}
-          export IMAGEMAGICK_HOME={{ imagemagick_home }}
-          export IMAGEMAGICK_DYN=/usr/lib64
-          export IMAGEMAGICK_CONFIG=${IMAGEMAGICK_HOME}/config-Q16HDRI
-          export IMAGEMAGICK_CODERS=${IMAGEMAGICK_HOME}/modules-Q16HDRI/coders
-          export IMAGEMAGICK_EXE=/usr/bin/magick
-          export IMAGEMAGICK_EXE=/usr/bin/convert
-        insertafter: EOF
+  - name: Add ats common vars to setenv file
+    blockinfile:
+      path: "{{ config_folder }}/setenv.sh"
+      marker: "# {mark} ATS COMMON ENV VARS"
+      owner: "{{ username }}"
+      group: "{{ group_name }}"
+      block: |
+        export ATS_HOME={{ binaries_folder }}/transform-service
+        export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
+        export ATS_SHARED_FS_HOST={{ sfs_host }}
+      insertafter: EOF
+  - name: Add ats dependencies vars to setenv file
+    blockinfile:
+      path: "{{ config_folder }}/setenv.sh"
+      marker: "# {mark} ATS DEPENDENCIES ENV VARS"
+      owner: "{{ username }}"
+      group: "{{ group_name }}"
+      block: |
+        export LIBREOFFICE_HOME={{ libreoffice_home }}
+        export IMAGEMAGICK_HOME={{ imagemagick_home }}
+        export IMAGEMAGICK_DYN={% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/lib/x86_64-linux-gnu{% else %}/usr/lib64{% endif %}/
+        export IMAGEMAGICK_CONFIG={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_pkg.version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/config-Q16HDRI
+        export IMAGEMAGICK_CODERS={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_pkg.version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/modules-Q16HDRI/coders
+        export IMAGEMAGICK_EXE="{% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/bin/{% endif %}convert"
+      insertafter: EOF
 
 - name: Create log file with correct permissions
   become: true
-  become_user: "{{ username }}"
   file:
     path: "{{ logs_folder }}/ats-ate-aio.log"
     state: touch
     mode: u=rwx,g=rw,o-rwx
-  changed_when: false
-
-- name: clean all
-  command: yum clean all
-  args:
-    warn: false
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
   changed_when: false
 
 - name: Add AIO startup script
   become: true
-  become_user: "{{ username }}"
   template:
     src: ats-ate-aio.sh
     dest: "{{ binaries_folder }}/ats-ate-aio.sh"
@@ -193,7 +150,7 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
-  notify: 
+  notify:
     - get-services
     - wait-for-activemq
     - restart-aio
@@ -205,9 +162,9 @@
     dest: "/etc/systemd/system/alfresco-tengine-aio.service"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
+    mode: 'u=rw,g=rw,o=r'
     force: true
-  notify: 
+  notify:
     - get-services
     - wait-for-activemq
     - enable-aio

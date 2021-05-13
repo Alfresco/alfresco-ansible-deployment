@@ -19,6 +19,8 @@
       file:
         path: "{{ sync_home }}"
         state: directory
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
     - name: Download artefact
       get_url:
         url: "{{ downloads.sync_zip_url }}"
@@ -30,7 +32,6 @@
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
   become: true
-  become_user: "{{ username }}"
     
 - name: Download postgresql jar
   block:
@@ -38,6 +39,8 @@
       file:
         path: "{{ sync_home }}/service-sync/connectors"
         state: directory
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
     - name: Download artefact
       get_url:
         url: "{{ dependencies_url.postgresql_connector }}"
@@ -56,16 +59,16 @@
         mode: 'u=rwx,g=rwx,o=rx'
       when: sync_db_url != ""
   become: true
-  become_user: "{{ username }}"
 
 - name: Extract sync service to {{ sync_home }}
   become: true
-  become_user: "{{ username }}"
   unarchive:
     src: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
     dest: "{{ sync_home }}"
     remote_src: true
     creates: "{{ sync_home }}/service-sync/service-sync-{{ sync.version }}.jar"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
 
 - name: Move sync service files to {{ sync_home }}
   block:
@@ -90,10 +93,11 @@
   block:
     - name: Create sync-service in {{ config_folder }}
       become: true
-      become_user: "{{ username }}"
       file:
         path: "{{ config_folder }}/sync-service"
         state: directory
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
     - name: Add config.yml template
       template:
         src: "config.yml.j2"
@@ -115,10 +119,11 @@
 
 - name: Add paths to setenv file
   become: true
-  become_user: "{{ username }}"
   blockinfile:
     path: "{{ config_folder }}/setenv.sh"
     marker: "# {mark} SYNC ENV VARS"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
     block: |
       export SYNC_VERSION={{ sync.version }}
       export SYNC_HOME={{ sync_home }}
@@ -127,22 +132,16 @@
 
 - name: Create log file with correct permissions
   become: true
-  become_user: "{{ username }}"
   file:
     path: "{{ logs_folder }}/sync-service.log"
     state: touch
     mode: u=rwx,g=rw,o-rwx
-  changed_when: false
-
-- name: clean all
-  command: yum clean all
-  args:
-    warn: false
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
   changed_when: false
 
 - name: Add sync service startup script
   become: true
-  become_user: "{{ username }}"
   template:
     src: syncservice.sh
     dest: "{{ binaries_folder }}/syncservice.sh"

@@ -17,7 +17,6 @@
 
 - name: Check Tomcat version is installed
   become: true
-  become_user: "{{ username }}"
   command: "{{ binaries_folder }}/tomcat.sh configtest"
   register: install_check
   environment:
@@ -159,10 +158,11 @@
 
 - name: Add TOMCAT_HOME to setenv script
   become: true
-  become_user: "{{ username }}"
   lineinfile:
     path: "{{ config_folder }}/setenv.sh"
     line: "export TOMCAT_HOME=/opt/apache-tomcat-{{ dependencies_version.tomcat }}"
+    group: "{{ group_name }}"
+    owner: "{{ username }}"
   when: test_tomcat_home.stdout != 0
 
 - name: Add alfresco-content.service

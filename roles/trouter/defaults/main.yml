@@ -1,5 +1,3 @@
 ---
 # defaults file for trouter
-utils_trouter:
-  - unzip
-  - which
+utils_trouter: []

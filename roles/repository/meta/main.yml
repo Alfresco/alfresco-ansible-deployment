@@ -4,6 +4,9 @@ galaxy_info:
   company: Alfresco Software Ltd
   license: Apache
   platforms:
+    - name: Ubuntu
+      versions:
+        - 20.04
     - name: CentOS
       versions:
         - 7

@@ -46,7 +46,6 @@
 
 - name: Add setenv bash file
   become: true
-  become_user: "{{ username }}"
   template:
     src: setenv.sh
     dest: "{{ config_folder }}/setenv.sh"

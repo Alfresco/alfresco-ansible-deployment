@@ -13,7 +13,6 @@
   block:
     - name: Create transform services folder
       become: true
-      become_user: "{{ username }}"
       file:
         path: "{{ ats_home }}"
         state: directory
@@ -33,7 +32,6 @@
 
 - name: Add sfs startup script
   become: true
-  become_user: "{{ username }}"
   template:
     src: ats-shared-fs.sh
     dest: "{{ binaries_folder }}/ats-shared-fs.sh"
@@ -48,10 +46,11 @@
 
 - name: Add paths to setenv file
   become: true
-  become_user: "{{ username }}"
   blockinfile:
     path: "{{ config_folder }}/setenv.sh"
     marker: "# {mark} ATS COMMON ENV VARS"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
     block: |
       export ATS_HOME={{ binaries_folder }}/transform-service
       export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
@@ -60,17 +59,12 @@
 
 - name: Create log file with correct permissions
   become: true
-  become_user: "{{ username }}"
   file:
     path: "{{ logs_folder }}/ats-shared-fs.log"
     state: touch
     mode: u=rwx,g=rw,o-rwx
-  changed_when: false
-
-- name: clean all
-  command: yum clean all
-  args:
-    warn: false
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
   changed_when: false
 
 - name: Add alfresco-shared-fs service
