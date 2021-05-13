@@ -1,5 +1,9 @@
 ---
 # tasks file for Transformation Router
+- name: Include OS specific variables
+  include_vars: "{{ item }}"
+  loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
+
 - name: Ensure a list of packages installed
   become: true
   become_user: root
@@ -31,7 +35,6 @@
 
 - name: Add t-router startup script
   become: true
-  become_user: "{{ username }}"
   template:
     src: ats-atr.sh
     dest: "{{ binaries_folder }}/ats-atr.sh"
@@ -45,9 +48,10 @@
 
 - name: Add paths to setenv file
   become: true
-  become_user: "{{ username }}"
   blockinfile:
     path: "{{ config_folder }}/setenv.sh"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
     marker: "# {mark} ATS COMMON ENV VARS"
     block: |
       export ATS_HOME={{ binaries_folder }}/transform-service
@@ -57,17 +61,12 @@
 
 - name: Create log file with correct permissions
   become: true
-  become_user: "{{ username }}"
   file:
     path: "{{ logs_folder }}/ats-atr.log"
     state: touch
     mode: u=rwx,g=rw,o-rwx
-  changed_when: false
-
-- name: clean all
-  command: yum clean all
-  args:
-    warn: false
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
   changed_when: false
 
 - name: Add alfresco-transform-router service

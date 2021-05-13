@@ -1,3 +1,7 @@
+"""
+Cleanup AWS resources left behind by molecule if any
+"""
+
 from datetime import datetime, timedelta
 import logging
 from dateutil import parser
@@ -22,14 +26,14 @@ _filters = [
         'Name': 'instance-state-name',
         'Values': ['running']
     }
-        ]
+]
 
 def lambda_handler(event, context):
     """ Lambda Handler """
 
     response = _ec2.describe_instances(Filters=_filters)
     instances_to_terminate = _get_instances_to_terminate(response)
-    if len(instances_to_terminate) > 0:
+    if instances_to_terminate:
         for instance in instances_to_terminate:
             _ec2.terminate_instances(InstanceIds=[instance['InstanceId']])
             _logger.info('Terminated the following instance: %s', str(instance['InstanceId']))
@@ -54,7 +58,7 @@ def _get_instances_to_terminate(response):
     """ Getting instances that need to be cleaned up"""
 
     instances_to_terminate = []
-    if 'Reservations' in response and len(response['Reservations']) > 0:
+    if 'Reservations' in response and response['Reservations']:
         for reservation in response['Reservations']:
             for instance in reservation['Instances']:
                 launchTime = parser.parse(str(instance['LaunchTime'])).replace(tzinfo=None)

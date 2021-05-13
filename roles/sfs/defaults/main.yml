@@ -1,5 +1,3 @@
 ---
 # defaults file for trouter
-utils_sfs:
-  - unzip
-  - which
+utils_sfs: []

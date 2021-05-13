@@ -1,0 +1,14 @@
+---
+- name: Install imagemagick
+  become: true
+  apt:
+    deb: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_pkg.version) }}.{{ pkg_format }}"
+    state: present
+  loop: "{{  imagemagick_pkg.pkgs }}"
+
+- name: Install LibreOffice DEBs
+  become: true
+  shell:
+    cmd: "yes | dpkg -i {{ download_location }}/LibreOffice_{{ libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | replace('_','-') }}_deb/DEBS/*.deb"
+    creates: /opt/libreoffice{{ libreoffice | regex_search('^[0-9]+.[0-9]+') }}/program/soffice.bin
+    warn: false

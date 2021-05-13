@@ -3,36 +3,21 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
-- name: Install rpm repository
-  become: true
-  become_user: root
-  yum:
-    name: "{{ postgresql_rpm_repo }}"
-    state: present
-    disable_gpg_check: true
-
-- name: Disable the built-in PostgreSQL module
-  command: dnf -qy module disable postgresql
-  args:
-    warn: false  # set warn=false to prevent warning
-  register: disable_dnf_module
-  changed_when: "'Nothing to do.' not in disable_dnf_module.stdout"
-  when: ansible_distribution_major_version == "8"
+- name: Prepare package manager
+  include_tasks: "{{ ansible_pkg_mgr }}_repo.yml"
 
 - name: Install packages
   package:
     name: "{{ item }}"
     state: present
+    update_cache: yes
   with_items: "{{ postgresql_packages }}"
 
-- name: Check if PG_VERSION exists
-  stat:
-    path: "{{ postgresql_data_path }}/PG_VERSION"
-  register: pg_version
-
 - name: Initialize the system database
-  command: "{{ postgresql_setup_path }} initdb"
-  when: not pg_version.stat.exists
+  command:
+    cmd: "{{ postgresql_setup_path }} initdb"
+    creates: "{{ postgresql_data_path }}/PG_VERSION"
+  when: ansible_os_family == 'RedHat'
 
 - name: Configure postgresql to listen on all IP interfaces
   lineinfile:
@@ -61,46 +46,38 @@
 - name: Ensure postgresql service is started and enabled on boot
   systemd:
     name: "{{ postgresql_service }}"
-    state: started
+    state: restarted
     enabled: true
 
-- name: Change "postgres" pass
+- name: Configure Alfresco related Databases
   become: true
   become_user: postgres
-  postgresql_user:
-    name: "postgres"
-    password: "{{ postgres_pass }}"
-  no_log: true
-
-- name: "Create a new database with name {{ item }}"
-  postgresql_db:
-    name: "{{ item }}"
-    login_host: 127.0.0.1
-    login_password: "{{ postgres_pass }}"
-  loop:
-    - "{{ repo_db_name }}"
-    - "{{ sync_db_name }}"
-
-- name: "Connect to {{ repo_db_name }} database and set user's password with no expire date"
-  postgresql_user:
-    login_host: 127.0.0.1
-    login_password: "{{ postgres_pass }}"
-    db: "{{ repo_db_name }}"
-    name: "{{ repo_db_username }}"
-    password: "{{ repo_db_password }}"
-    priv: "ALL"
-    expires: infinity
-    role_attr_flags: SUPERUSER
-  no_log: true
-
-- name: "Connect to {{ sync_db_name }} database and set user's password with no expire date"
-  postgresql_user:
-    login_host: 127.0.0.1
-    login_password: "{{ postgres_pass }}"
-    db: "{{ sync_db_name }}"
-    name: "{{ sync_db_username }}"
-    password: "{{ sync_db_password }}"
-    priv: "ALL"
-    expires: infinity
-    role_attr_flags: SUPERUSER
-  no_log: true
+  vars:
+    ansible_ssh_pipelining: yes
+  block:
+    - name: "Create a new database with name {{ item }}"
+      postgresql_db:
+        name: "{{ item }}"
+      loop:
+        - "{{ repo_db_name }}"
+        - "{{ sync_db_name }}"
+    
+    - name: "Connect to {{ repo_db_name }} database and set user's password with no expire date"
+      postgresql_user:
+        db: "{{ repo_db_name }}"
+        name: "{{ repo_db_username }}"
+        password: "{{ repo_db_password }}"
+        priv: "ALL"
+        expires: infinity
+        role_attr_flags: SUPERUSER
+      no_log: true
+    
+    - name: "Connect to {{ sync_db_name }} database and set user's password with no expire date"
+      postgresql_user:
+        db: "{{ sync_db_name }}"
+        name: "{{ sync_db_username }}"
+        password: "{{ sync_db_password }}"
+        priv: "ALL"
+        expires: infinity
+        role_attr_flags: SUPERUSER
+      no_log: true
