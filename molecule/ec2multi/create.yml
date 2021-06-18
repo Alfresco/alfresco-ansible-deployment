@@ -68,7 +68,8 @@
         mode: 0600
       when: keypair.changed
 
-    - set_fact:
+    - name: set molecule platform definition facts
+      set_fact:
         platforms_fact: "{{ platforms_fact|default([]) +
                   [{'name': item.name,
                     'count': range(1, item.count + 1)|list,

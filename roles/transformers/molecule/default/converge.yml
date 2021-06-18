@@ -5,7 +5,8 @@
     - name: "Include activemq"
       include_role:
         name: "activemq"
-    - meta: flush_handlers
+    - name: Flush Handlers
+      meta: flush_handlers
     - name: "Include transformers"
       include_role:
         name: "transformers"
