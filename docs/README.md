@@ -50,10 +50,23 @@ The same playbook can be run to deploy the system in several different ways, ple
 
 ## Versioning
 
-The playbooks have been tested with Ansible 2.9.18 on target hosts with the following operating systems:
+While ACS supports a wide range of OS, the playbook is only known to work and is supported for a subset of them. The table below gives detailled information on the status of supported OS (which we aim at growing with time).
 
-* CentOS 7 and 8
-* Red Hat Enterprise Linux 7 and 8
+| OS Flavor / version | 7.0 Enterprise | 6.2.2 Enterprise | Community |
+|-|-|-|-|
+| Amazon Linux (v2) | :x: | :x: | :x: |
+| Amazon Linux (v1) | :x: | :x: | :x: |
+| RHEL 8.2 | :heavy_check_mark: | - | :heavy_check_mark: |
+| RHEL 7.7 | :heavy_check_mark: | - | :heavy_check_mark: |
+| RHEL 7.6 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| CentOS 8 x64 | :heavy_check_mark: | - | :heavy_check_mark: |
+| CentOS 7 x64 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| Ubuntu 20.04 | :heavy_check_mark: | - | :heavy_check_mark: |
+| Ubuntu 18.04 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| SUSE 15.0 | :x: | - | :x: |
+| SUSE 12.0 SP1 x64 | :x: | :x: | :x: |
+
+> Ansible version 2.9.18+ have been used for testing
 
 The table below shows the version of the components deployed by the playbook for ACS 7.x and 6.2.N.
 
