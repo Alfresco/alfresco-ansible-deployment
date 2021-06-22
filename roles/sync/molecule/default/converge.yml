@@ -8,7 +8,8 @@
     - name: "Include repository"
       include_role:
         name: "repository"
-    - meta: flush_handlers
+    - name: Flush Handlers
+      meta: flush_handlers
     - name: "Include activemq"
       include_role:
         name: "activemq"

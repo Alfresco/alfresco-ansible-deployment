@@ -9,9 +9,6 @@ cert_name: "\"CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Ma
 cert_validity: 36525
 keystore_password: mp6yc0UD9e
 
-CATALINA_OPTS: " -Xms1000M -Xmx1000M"
-JAVA_OPTS: ""
-
 share_folders:
   - /shared/classes/alfresco/web-extension
   - /amps_share
@@ -29,7 +26,7 @@ repository:
 
 share_port: "{{ ports_cfg.repository.http }}"
 
-CSRF:
+csrf_config:
   enabled: "false"
   referer: "{{ repository.protocol }}://{{ repository.host }}/.*"
   origin: "{{ repository.protocol }}://{{ repository.host }}"
