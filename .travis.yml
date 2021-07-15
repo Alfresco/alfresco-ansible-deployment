@@ -16,12 +16,12 @@ branches:
     - /OPSEXP-.*/
 
 before_install:
-  - pip install ansible==${ANSIBLE_VERSION} molecule==3.0.8 ansible-lint==5.0.12 PyHamcrest==2.0.2 pylint==2.8.2 pytest-testinfra==6.3.0 jmespath==0.10.0
+  - pip install ansible==${ANSIBLE_VERSION} molecule==3.0.8 ansible-lint==5.0.12 PyHamcrest==2.0.2 pylint==2.8.2 pytest-testinfra==6.3.0
 
 env:
   - MOLECULE_NO_LOG=false
 
-install: pip install molecule-docker==0.2.4
+install: pip install molecule-docker==0.2.4 jmespath==0.10.0
 
 stages:
   - name: Linters
