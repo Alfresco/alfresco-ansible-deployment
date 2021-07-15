@@ -170,7 +170,7 @@ jobs:
         - scripts/generate-zip.sh
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
-        - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip python3"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q unzip python3 ansible-${ANSIBLE_VERSION}"
         - ssh centos@${PUBLIC_IP} "sudo pip3 install virtualenv"
         - ssh centos@${PUBLIC_IP} "mkdir ~/.pythonvenv && virtualenv -p /usr/bin/python3 ~/.pythonvenv/ansible-${ANSIBLE_VERSION}"
         - ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip3 install --upgrade pip && pip3 install ansible==${ANSIBLE_VERSION}"
