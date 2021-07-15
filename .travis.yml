@@ -16,7 +16,7 @@ branches:
     - /OPSEXP-.*/
 
 before_install:
-  - pip install ansible==${ANSIBLE_VERSION} molecule==3.0.8 ansible-lint==5.0.12 PyHamcrest==2.0.2 pylint==2.8.2 pytest-testinfra==6.3.0
+  - pip install ansible==${ANSIBLE_VERSION} molecule==3.0.8 ansible-lint==5.0.12 PyHamcrest==2.0.2 pylint==2.8.2 pytest-testinfra==6.3.0 jmespath==0.10.0
 
 env:
   - MOLECULE_NO_LOG=false
@@ -174,7 +174,7 @@ jobs:
         - ssh centos@${PUBLIC_IP} "sudo pip3 install ansible==${ANSIBLE_VERSION}"
         - ssh centos@${PUBLIC_IP} "sudo pip3 install virtualenv"
         - ssh centos@${PUBLIC_IP} "mkdir ~/.pythonvenv && virtualenv -p /usr/bin/python3 ~/.pythonvenv/ansible-${ANSIBLE_VERSION}"
-        - ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip3 install --upgrade pip && pip3 install ansible==${ANSIBLE_VERSION} jmespath"
+        - ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip3 install --upgrade pip && pip3 install ansible==${ANSIBLE_VERSION}"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
         - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\""
