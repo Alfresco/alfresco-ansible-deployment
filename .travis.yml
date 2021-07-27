@@ -21,7 +21,7 @@ before_install:
 env:
   - MOLECULE_NO_LOG=false
 
-install: pip install molecule-docker==0.2.4
+install: pip install molecule-docker==0.2.4 jmespath==0.10.0
 
 stages:
   - name: Linters
@@ -170,8 +170,11 @@ jobs:
         - scripts/generate-zip.sh
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
-        - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q unzip python3"
+        - ssh centos@${PUBLIC_IP} "sudo pip3 install ansible==${ANSIBLE_VERSION}"
+        - ssh centos@${PUBLIC_IP} "sudo pip3 install virtualenv"
+        - ssh centos@${PUBLIC_IP} "mkdir ~/.pythonvenv && virtualenv -p /usr/bin/python3 ~/.pythonvenv/ansible-${ANSIBLE_VERSION}"
+        - ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip3 install --upgrade pip && pip3 install ansible==${ANSIBLE_VERSION}"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
         - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\""
@@ -240,8 +243,11 @@ jobs:
         - scripts/generate-zip.sh
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
-        - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q unzip python3"
+        - ssh centos@${PUBLIC_IP} "sudo pip3 install ansible==${ANSIBLE_VERSION}"
+        - ssh centos@${PUBLIC_IP} "sudo pip3 install virtualenv"
+        - ssh centos@${PUBLIC_IP} "mkdir ~/.pythonvenv && virtualenv -p /usr/bin/python3 ~/.pythonvenv/ansible-${ANSIBLE_VERSION}"
+        - ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip3 install --upgrade pip && pip3 install ansible==${ANSIBLE_VERSION}"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - ssh centos@${PUBLIC_IP} "mkdir /home/centos/alfresco-ansible-deployment-${VERSION}/configuration_files/ssl_certificates/"
         - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/test-ssl.yml"
@@ -280,8 +286,11 @@ jobs:
         - scripts/generate-zip.sh
         - export VERSION=$(cat VERSION)
         - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
-        - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q ansible-${ANSIBLE_VERSION}"
+        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q unzip python3"
+        - ssh centos@${PUBLIC_IP} "sudo pip3 install ansible==${ANSIBLE_VERSION}"
+        - ssh centos@${PUBLIC_IP} "sudo pip3 install virtualenv"
+        - ssh centos@${PUBLIC_IP} "mkdir ~/.pythonvenv && virtualenv -p /usr/bin/python3 ~/.pythonvenv/ansible-${ANSIBLE_VERSION}"
+        - ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip3 install --upgrade pip && pip3 install ansible==${ANSIBLE_VERSION}"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
         - ssh centos@${PUBLIC_IP} "cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@community-extra-vars.yml\""

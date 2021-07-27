@@ -24,11 +24,6 @@
             "id": "org_alfresco_device_sync_repo",
             "version": "3.4.0",
             "installed": true
-          },
-          {
-            "id": "alfresco-rm-enterprise-repo",
-            "version": "3.5.0",
-            "installed": true
           }
         ]
       },
