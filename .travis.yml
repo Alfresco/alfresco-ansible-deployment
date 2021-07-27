@@ -176,7 +176,7 @@ jobs:
         - ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip3 install --upgrade pip && pip3 install ansible==${ANSIBLE_VERSION}"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
-        - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\""
+        - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\""
         - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "tests/test-config.json"
         - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
@@ -254,7 +254,7 @@ jobs:
         - aws secretsmanager get-secret-value --secret-id ${SSL_CERT_PATH} --query SecretString --output text > certificate.crt
         - scp -r certificate.key centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/configuration_files/ssl_certificates/ansible-test-${TRAVIS_BUILD_NUMBER}.trial-dev.alfresco.me.key
         - scp -r certificate.crt centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/configuration_files/ssl_certificates/ansible-test-${TRAVIS_BUILD_NUMBER}.trial-dev.alfresco.me.crt
-        - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\" -e \"@tests/test-ssl.yml\""
+        - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\" -e \"@tests/test-ssl.yml\""
         - sed -i "s+TEST_URL+https://ansible-test-${TRAVIS_BUILD_NUMBER}.trial-dev.alfresco.me+g" "tests/test-config.json"
         - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
@@ -290,7 +290,7 @@ jobs:
         - ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip3 install --upgrade pip && pip3 install ansible==${ANSIBLE_VERSION}"
         - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
         - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
-        - ssh centos@${PUBLIC_IP} "cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@community-extra-vars.yml\""
+        - ssh centos@${PUBLIC_IP} "cd alfresco-ansible-deployment-${VERSION}; source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@community-extra-vars.yml\""
         - sed -i "s+google-edit-flat+document-view-googlemaps+g" "dtas/tests/conftest.py"
         - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "tests/test-config-community.json" 
         - cd dtas; pytest --tb=line --configuration ../tests/test-config-community.json tests/ -s
