@@ -4,7 +4,7 @@ nexus_repository:
   enterprise_releases: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco"
 
 acs:
-  version: 7.0.0
+  version: 7.1.0-M2
   edition: Enterprise
 
 amps:  
