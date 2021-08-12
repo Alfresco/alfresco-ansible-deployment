@@ -66,7 +66,7 @@ While ACS supports a wide range of OS, the playbook is only known to work and is
 | SUSE 15.0 | :x: | - | :x: |
 | SUSE 12.0 SP1 x64 | :x: | :x: | :x: |
 
-> Ansible version 2.9.18+ have been used for testing
+> Ansible version 2.9.21 have been used for testing
 
 The table below shows the version of the components deployed by the playbook for ACS 7.x and 6.2.N.
 
