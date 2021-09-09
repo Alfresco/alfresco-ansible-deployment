@@ -5,13 +5,13 @@ Generate inventory from Molecule scenario
 import os
 import yaml
 
-with open(os.environ['MOLECULE_EPHEMERAL_DIRECTORY'] + "/instance_config.yml") as yamlfile:
+with open(os.environ['MOLECULE_EPHEMERAL_DIRECTORY'] + "/instance_config.yml", encoding='utf-8') as yamlfile:
     parsed_yaml_file = yaml.load(yamlfile, Loader=yaml.FullLoader)
 
-with  open(os.path.dirname(os.path.abspath(__file__)) + "/../../inventory_ssh.yml", "r") as old_inventory:
+with  open(os.path.dirname(os.path.abspath(__file__)) + "/../../inventory_ssh.yml", "r", encoding='utf-8') as old_inventory:
     parsed_old_inventory = yaml.load(old_inventory, Loader=yaml.FullLoader)
 
-with open(os.path.dirname(os.path.abspath(__file__)) + "/../../inventory_ssh.yml", "w") as new_inventory:
+with open(os.path.dirname(os.path.abspath(__file__)) + "/../../inventory_ssh.yml", "w", encoding='utf-8') as new_inventory:
     inventoryfile = {'all': {'children':{}}}
 
     def add_if_key_not_exist(dict_obj, key, value):
