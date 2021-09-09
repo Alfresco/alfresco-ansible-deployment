@@ -7,7 +7,7 @@ acs:
   version: 7.1.0-M2
   edition: Enterprise
 
-amps:  
+amps:
   aos_module:
     version: 1.4.0
   device_sync:
@@ -67,7 +67,7 @@ amp_downloads:
     sha1_checksum: "{{ lookup('url', '{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp.sha1') }}"
     dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
   - url: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp"
-    sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}" # pragma: allowlist secret 
+    sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}" # pragma: allowlist secret
     dest: "{{ content_folder }}/amps_repo/alfresco-device-sync-repo.amp"
   - url: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     sha1_checksum: "{{ lookup('url', '{{ nexus_repository.releases }}/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp.sha1') }}"
@@ -79,10 +79,10 @@ amp_downloads:
 use_custom_keystores: false
 
 acs_environment:
-  JAVA_OPTS: " -Xms512m -Xmx3g -XX:+DisableExplicitGC 
-    -XX:+UseConcMarkSweepGC 
-    -Djava.awt.headless=true 
-    -XX:ReservedCodeCacheSize=128m 
+  JAVA_OPTS: " -Xms512m -Xmx3g -XX:+DisableExplicitGC
+    -XX:+UseConcMarkSweepGC
+    -Djava.awt.headless=true
+    -XX:ReservedCodeCacheSize=128m
     $JAVA_OPTS"
 
 activemq_environment:
@@ -109,7 +109,7 @@ dependencies_version:
   activemq: 5.16.1
   jdk: 11.0.12
   jdk_arch: 7
-  tomcat: 9.0.45
+  tomcat: 9.0.52
 
 dependencies_url:
   postgresql_connector: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependencies_version.postgresql_connector }}/postgresql-{{ dependencies_version.postgresql_connector }}.jar"
