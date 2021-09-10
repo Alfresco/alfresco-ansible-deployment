@@ -9,7 +9,7 @@
     url: "{{ libreoffice_archive_url }}"
     checksum: sha1:{{ libreoffice_archive_sha1_checksum }}
     dest: "{{ download_location }}/libreoffice.tar.gz"
-    timeout: 950
+    timeout: 3600
   register: libreoffice_download
   async: 900
   poll: 0
@@ -40,8 +40,8 @@
     jid: "{{ libreoffice_download.ansible_job_id }}"
   register: job_result
   until: job_result.finished
-  delay: 30
-  retries: 32
+  delay: 120
+  retries: 30
 
 - name: Extract libreoffice-dist-linux.gz
   become: true
