@@ -16,12 +16,10 @@ branches:
     - /OPSEXP-.*/
 
 before_install:
-  - pip install ansible==${ANSIBLE_VERSION} molecule==3.0.8 ansible-lint==5.0.12 PyHamcrest==2.0.2 pylint==2.8.2 pytest-testinfra==6.3.0
+  - pip install ansible==${ANSIBLE_VERSION}
 
 env:
   - MOLECULE_NO_LOG=false
-
-install: pip install molecule-docker==0.2.4 jmespath==0.10.0
 
 stages:
   - name: Linters
@@ -33,15 +31,12 @@ jobs:
   include:
     - stage: Linters
       name: "ansible-lint"
-      install: pip install --upgrade ansible-lint
       script:
         - ansible-lint -v playbooks/acs.yml
     - name: "pylint"
-      install: pip install --upgrade pylint
       script:
         - find . -name "*.py" ! -name __init__.py | xargs pylint
     - name: "yamllint"
-      install: pip install --upgrade yamllint
       script:
         - yamllint .
     - stage: Verification

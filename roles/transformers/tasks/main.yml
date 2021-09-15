@@ -9,9 +9,9 @@
     url: "{{ libreoffice_archive_url }}"
     checksum: sha1:{{ libreoffice_archive_sha1_checksum }}
     dest: "{{ download_location }}/libreoffice.tar.gz"
-    timeout: 950
+    timeout: 3600
   register: libreoffice_download
-  async: 900
+  async: 3600
   poll: 0
 
 - name: Download ImageMagick distribution
@@ -40,8 +40,8 @@
     jid: "{{ libreoffice_download.ansible_job_id }}"
   register: job_result
   until: job_result.finished
-  delay: 30
-  retries: 29
+  delay: 60
+  retries: 59
 
 - name: Extract libreoffice-dist-linux.gz
   become: true
