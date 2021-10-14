@@ -26,7 +26,7 @@ postgres_client_auth:
     address: "{{ sync_host }}/32"
     method: md5
 
-postgresql_rpm_repo: https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+postgresql_rpm_repo: http://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm
 
 postgresql_service: postgresql-{{ dependencies_version.postgres_major_version }}
 
