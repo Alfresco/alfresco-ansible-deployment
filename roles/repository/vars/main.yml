@@ -21,8 +21,8 @@ share_templates:
 
 repository:
   protocol: http
-  host: "{{ repo_host }}"
-  port: "{{ ports_cfg.repository.http }}"
+  host: "{%if groups['repository'] | length > 1 %}{{ nginx_host }}{% else %}{{ repo_host }}{% endif %}"
+  port: "{%if groups['repository'] | length > 1 %}}{{ ports_cfg.nginx.http }}{% else %}{{ ports_cfg.repository.http }}{% endif %}"
 
 share_port: "{{ ports_cfg.repository.http }}"
 
