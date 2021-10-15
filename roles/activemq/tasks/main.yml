@@ -127,7 +127,6 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,go=rx'
   notify:
-    - get-services
     - restart-activemq
 
 - name: Add activemq.service
@@ -138,7 +137,5 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
   notify:
-    - get-services
     - enable-activemq
-    - start-activemq
     - restart-activemq

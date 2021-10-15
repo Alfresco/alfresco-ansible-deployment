@@ -1,31 +1,13 @@
 ---
 # handlers file for search-services
-- name: get-services
-  service_facts:
-  register: services_state
-
 - name: enable-search
   service:
     name: alfresco-search
     enabled: true
     daemon_reload: true
-  when: services_state.ansible_facts.services['alfresco-search.service'].status != 'enabled'
-
-- name: start-search
-  service:
-    name: alfresco-search
-    state: started
-    daemon_reload: true
-  when: services_state.ansible_facts.services['alfresco-search.service'].state != 'running'
 
 - name: restart-search
   service:
     name: alfresco-search
     state: restarted
     daemon_reload: true
-  when: services_state.ansible_facts.services['alfresco-search.service'].state == 'running'
-
-- name: stop-search
-  service:
-    name: alfresco-search
-    state: stopped

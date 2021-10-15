@@ -1,9 +1,5 @@
 ---
 # handlers file for repository
-- name: get-services
-  service_facts:
-  register: services_state
-
 - name: wait-for-db
   wait_for:
     host: "{{ db_host }}"
@@ -18,34 +14,9 @@
     }
   when: repo_db_url != ""
 
-- name: enable-alfresco-content
-  service:
-    name: "alfresco-content"
-    enabled: true
-    daemon_reload: true
-  when: not go_signal.failed and services_state.ansible_facts.services['alfresco-content.service'].status != 'enabled'
-
-- name: start-alfresco-content
-  service:
-    name: "alfresco-content"
-    state: started
-    daemon_reload: true
-  when: not go_signal.failed and services_state.ansible_facts.services['alfresco-content.service'].state != 'running'
-
 - name: restart-alfresco-content
   service:
     name: "alfresco-content"
     state: restarted
     daemon_reload: true
-  when: not go_signal.failed and services_state.ansible_facts.services['alfresco-content.service'].state == 'running'
-
-- name: reload-alfresco-content
-  service:
-    name: "alfresco-content"
-    state: reloaded
-    daemon_reload: true
-
-- name: stop-alfresco-content
-  service:
-    name: "alfresco-content"
-    state: stopped
+  when: not go_signal.failed and
