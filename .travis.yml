@@ -142,7 +142,7 @@ jobs:
         - cd dtas; pytest --tb=line --configuration ../tests/test-config-acs6-stack.json tests/ -s
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
     - stage: Verification
-      name: Localhost integration checks (ACS 7.0.0 on CentOS 8)
+      name: Localhost integration checks (ACS 7.1.0 on CentOS 8)
       before_install:
         - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
         - eval "$(ssh-agent -s)"
@@ -177,7 +177,7 @@ jobs:
         - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
     - stage: Verification
-      name: Localhost integration checks (ACS 7.0.0 on Ubuntu 20.04)
+      name: Localhost integration checks (ACS 7.1.0 on Ubuntu 20.04)
       before_install:
         - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
         - eval "$(ssh-agent -s)"
@@ -209,7 +209,7 @@ jobs:
         - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
     - stage: Verification
-      name: SSL integration checks (ACS 7.0.0 on CentOS 8)
+      name: SSL integration checks (ACS 7.1.0 on CentOS 8)
       before_install:
         - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
         - eval "$(ssh-agent -s)"
@@ -258,7 +258,7 @@ jobs:
         - cd ..
         - aws route53 change-resource-record-sets --hosted-zone-id ${HOSTED_ZONE_TRIAL_DEV_ALFRESCO_ME} --change-batch file://tests/delete_ansible-test.trial-dev.alfresco.me.yaml
     - stage: Verification
-      name: Localhost community integration (ACS Community 7.0.0 on CentOS 8)
+      name: Localhost community integration (ACS Community on CentOS 8)
       before_install:
         - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
         - eval "$(ssh-agent -s)"

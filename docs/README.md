@@ -70,19 +70,19 @@ While ACS supports a wide range of OS, the playbook is only known to work and is
 
 The table below shows the version of the components deployed by the playbook for ACS 7.x and 6.2.N.
 
-| Component | 7.0 Enterprise | 6.2.N Enterprise | Community |
+| Component | 7.1 Enterprise | 7.0 Enterprise | 6.2.N Enterprise | Community |
 |-|-|-|-|
-| OpenJDK | 11.0.7 | 11.0.7 | 11.0.7 |
-| Apache Tomcat | 9.0.41 | 8.5.56 | 9.0.41 |
-| PostgreSQL | 13.x | 11.x | 13.x |
-| Apache ActiveMQ | 5.16.1 | 5.15.13 | 5.16.1 |
-| Repository | 7.0.0 | 6.2.2 | 7.0.0 |
-| Share | 7.0.0 | 6.2.2 | 7.0.0 |
-| Search Services | 2.0.1 | 1.4.3 | 2.0.1 |
-| All-In-One Transformation Engine | 2.3.10 | 2.3.10 | 2.3.10 |
+| OpenJDK | 11.0.12 | 11.0.12 | 11.0.12 | 11.0.12 |
+| Apache Tomcat | 9.0.52 | 9.0.52 | 8.5.65 | 9.0.52 |
+| PostgreSQL | 13.x | 13.x | 11.x | 13.x |
+| Apache ActiveMQ | 5.16.1 | 5.16.1 | 5.15.13 | 5.16.1 |
+| Repository | 7.1.0.1 | 7.0.1.4 | 6.2.2 | 7.0.0 |
+| Share | 7.1.0.1 | 7.0.1.4 | 6.2.2 | 7.0.0 |
+| Search Services | 2.0.2 | 2.0.1 | 1.4.3 | 2.0.1 |
+| All-In-One Transformation Engine | 2.5.3 | 2.3.10 | 2.3.10 | 2.3.10 |
 | AOS | 1.4.0 | 1.3.1 | 1.4.0 |
 | GoogleDocs | 3.2.1 | 3.2.0 | 3.2.1 |
-| Digital Workspace | 2.1.0 | 2.1.0 | N/A |
-| Transform Router | 1.3.2 | 1.3.2 | N/A |
-| Shared File Store | 0.13.0 | 0.13.0 | N/A |
-| Sync Service | 3.4.0 | 3.3.3.1 | N/A |
+| Digital Workspace | 2.4.0 | 2.1.0 | 2.1.0 | N/A |
+| Transform Router | 1.4.1 | 1.3.2 | 1.3.2 | N/A |
+| Shared File Store | 0.16.0 | 0.13.0 | 0.13.0 | N/A |
+| Sync Service | 3.4.1-M1 | 3.4.0 | 3.3.3.1 | N/A |
