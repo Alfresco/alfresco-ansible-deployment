@@ -19,4 +19,4 @@
     name: "alfresco-content"
     state: restarted
     daemon_reload: true
-  when: not go_signal.failed and
+  when: not go_signal.failed
