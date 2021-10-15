@@ -15,7 +15,6 @@ share_folders:
   - /alfresco-mmt
 
 share_templates:
-  - custom-slingshot-application-context.xml
   - share-config-custom.xml
   - smartfolders-amp-actions-config.xml
 
