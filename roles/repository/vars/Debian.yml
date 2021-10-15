@@ -7,3 +7,4 @@ utils_repo:
   - fonts-dejavu
   - libfreetype6
   - ghostscript
+  - nfs-common

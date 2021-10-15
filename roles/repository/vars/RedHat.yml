@@ -11,3 +11,4 @@ utils_repo:
   - freetype
   - libpng
   - dejavu-sans-fonts
+  - nfs-utils
