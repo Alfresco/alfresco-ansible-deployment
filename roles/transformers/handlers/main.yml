@@ -1,9 +1,5 @@
 ---
 # handlers file for roles/transformers
-- name: get-services
-  service_facts:
-  register: services_state
-
 - name: wait-for-activemq
   wait_for:
     host: "{{ activemq_host }}"
@@ -15,23 +11,10 @@
     name: alfresco-tengine-aio
     enabled: true
     daemon_reload: true
-  when: not go_signal.failed and services_state.ansible_facts.services['alfresco-tengine-aio.service'].status != 'enabled'
-
-- name: start-aio
-  service:
-    name: alfresco-tengine-aio
-    state: started
-    daemon_reload: true
-  when: not go_signal.failed and services_state.ansible_facts.services['alfresco-tengine-aio.service'].state != 'running'
 
 - name: restart-aio
   service:
     name: alfresco-tengine-aio
     state: restarted
     daemon_reload: true
-  when: not go_signal.failed and services_state.ansible_facts.services['alfresco-tengine-aio.service'].state == 'running'
-
-- name: stop-aio
-  service:
-    name: alfresco-tengine-aio
-    state: stopped
+  when: not go_signal.failed

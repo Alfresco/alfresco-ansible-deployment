@@ -43,7 +43,6 @@
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
   notify:
-    - get-services
     - restart-trouter
 
 - name: Add paths to setenv file
@@ -79,8 +78,6 @@
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
   notify:
-    - get-services
     - wait-for-aio
     - enable-trouter
-    - start-trouter
     - restart-trouter

@@ -1,9 +1,5 @@
 ---
 # handlers file for adw
-- name: get-services
-  service_facts:
-  register: services_state
-
 - name: enable-nginx
   service:
     name: nginx
@@ -11,29 +7,11 @@
     daemon_reload: true
   become: true
   become_user: root
-  when: services_state.ansible_facts.services['nginx.service'].status != 'enabled'
-
-- name: start-nginx
-  service: 
-    name: nginx 
-    state: started
-    daemon_reload: true
-  become: true
-  become_user: root
-  when: services_state.ansible_facts.services['nginx.service'].state != 'running'
 
 - name: restart-nginx
   service: 
     name: nginx 
     state: restarted
     daemon_reload: true
-  become: true
-  become_user: root
-  when: services_state.ansible_facts.services['nginx.service'].state == 'running'
-
-- name: reload-nginx
-  service: 
-    name: nginx 
-    state: reloaded
   become: true
   become_user: root

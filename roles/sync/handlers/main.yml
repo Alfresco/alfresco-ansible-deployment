@@ -1,9 +1,5 @@
 ---
 # handlers file for trouter
-- name: get-services
-  service_facts:
-  register: services_state
-
 - name: wait-for-repo
   wait_for:
     host: "{{ repo_host }}"
@@ -15,23 +11,11 @@
     name: alfresco-sync
     enabled: true
     daemon_reload: true
-  when: not go_signal.failed and services_state.ansible_facts.services['alfresco-sync.service'].status != 'enabled'
-
-- name: start-sync
-  service:
-    name: alfresco-sync
-    state: started
-    daemon_reload: true
-  when: not go_signal.failed and services_state.ansible_facts.services['alfresco-sync.service'].state != 'running'
+  when: not go_signal.failed
 
 - name: restart-sync
   service:
     name: alfresco-sync
     state: restarted
     daemon_reload: true
-  when: not go_signal.failed and services_state.ansible_facts.services['alfresco-sync.service'].state == 'running'
-
-- name: stop-sync
-  service:
-    name: alfresco-sync
-    state: stopped
+  when: not go_signal.failed

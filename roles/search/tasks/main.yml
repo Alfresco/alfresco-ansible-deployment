@@ -109,7 +109,6 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
   notify:
-    - get-services
     - restart-search
 
 - name: Add "{{ config_dir }}/solr.in.sh"
@@ -121,7 +120,6 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
   notify:
-    - get-services
     - restart-search
 
 - name: Check Solr running
@@ -141,8 +139,6 @@
       group: "{{ group_name }}"
       mode: 'u=rw,g=rw,o=r'
   notify: 
-    - get-services
     - enable-search
-    - start-search
     - restart-search
   when: search_started.failed or '"No Solr nodes are running." in search_started.stdout'

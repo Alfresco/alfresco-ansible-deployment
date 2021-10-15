@@ -30,7 +30,7 @@
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx'
         url_username: "{{ nexus_user }}"
-        url_password: "{{ nexus_password }}"
+        url_password: "{{ nexus_password }}" # pragma: allowlist secret
   become: true
     
 - name: Download postgresql jar
@@ -107,7 +107,6 @@
         mode: 'u=rwx,g=rwx'
         force: yes
       notify:
-        - get-services
         - wait-for-repo 
         - restart-sync
 
@@ -150,7 +149,6 @@
     mode: 'u=rwx,g=rwx'
     force: no
   notify:
-    - get-services
     - wait-for-repo
     - restart-sync
 
@@ -164,8 +162,6 @@
     mode: 'u=rwx,g=rwx'
     force: yes
   notify:
-  - get-services
   - wait-for-repo
   - enable-sync
-  - start-sync 
   - restart-sync

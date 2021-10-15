@@ -32,9 +32,7 @@
     group: root
     mode: 'u=rw,g=r,o=r'
   notify:
-    - get-services
     - enable-nginx
-    - start-nginx
     - restart-nginx
 
 - name: Set nis_enabled flag on and keep it persistent across reboots
