@@ -6,3 +6,4 @@ utils:
   - xz-utils
   - python3-selinux
   - python3-semanage
+  - gpg

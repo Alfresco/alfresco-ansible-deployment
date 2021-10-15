@@ -4,3 +4,4 @@ utils:
   - unzip
   - python3-libselinux
   - python3-libsemanage
+  - gpg

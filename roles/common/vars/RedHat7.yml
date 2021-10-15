@@ -4,3 +4,4 @@ utils:
   - unzip
   - libselinux-python
   - libsemanage-python
+  - gpg
