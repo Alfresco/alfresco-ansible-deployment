@@ -11,9 +11,31 @@
     state: present
   loop: "{{ utils_repo }}"
 
+- name: Create contentstore folders
+  become: true
+  file:
+    path: "{{ content_data_folder }}/content"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rx,o=rx'
+
+- name: Mount ACS ContentStore
+  become: true
+  vars:
+    mnt_opts:
+      - "{{ contentstore_mnt_dev.opts | default('defaults') }}"
+      - _netdev
+  mount:
+    state: mounted
+    path: "{{ content_data_folder }}/content"
+    src: "{{ contentstore_mnt_dev.device }}"
+    fstype: "{{ contentstore_mnt_dev.type | default('nfs') }}"
+    opts: "{{ mnt_opts | join(',') }}"
+  when: contentstore_mnt_dev.device is defined
+
 - name: Create folders
   become: true
-  become_user: root
   file:
     path: "{{ item }}"
     state: directory
@@ -143,8 +165,17 @@
     dest: "{{ settings_folder }}/classpath/alfresco/web-extension/{{ item }}"
     mode: 'u=rwx,g=rwx,o=rx'
   loop: "{{ share_templates }}"
-  changed_when: false
 
+- name: Add Hazelcast cluster config for Share
+  template:
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    src: custom-slingshot-application-context.xml
+    dest: "{{ settings_folder }}/classpath/alfresco/web-extension/custom-slingshot-application-context.xml"
+    mode: 'u=rw,g=,o='
+  become: true
+  when: groups['repository'] | length > 1
+   
 - name: Extract {{ acs_zip_file }} into {{ content_folder }}
   become: true
   unarchive:
