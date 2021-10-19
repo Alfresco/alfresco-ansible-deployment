@@ -12,6 +12,7 @@ ats_home: "{{ binaries_folder }}/transform-service"
 # Due to https://github.com/ansible/ansible/issues/64957
 # Using default() filter for hostvars 1st level key requires ansible 2.10+
 repo_host: "{% if groups.repository | length > 1 %}{{ hostvars[groups.nginx[0]].ansible_host | default('127.0.0.1') }}{% elif groups.repository | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.repository[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+nginx_host: "{% if groups.nginx | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.nginx[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
 activemq_host: "{% if groups.activemq | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.activemq[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
 db_host: "{% if groups.database | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.database[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
 solr_host: "{% if groups.search | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.search[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
@@ -20,7 +21,6 @@ sfs_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ hostv
 trouter_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.transformers[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
 adw_host: "{% if groups.adw | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.adw[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
 sync_host: "{% if groups.syncservice | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.syncservice[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
-nginx_host: "{% if groups.nginx | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.nginx[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
 share_host: "{% if groups.repository | length > 1 %}{{ hostvars[groups.nginx[0]].ansible_host | default('127.0.0.1') }}{% else %}{{ repo_host }}{% endif %}"
 
 ports_cfg:
