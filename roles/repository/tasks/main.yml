@@ -315,7 +315,6 @@
     path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/share.xml"
     regexp: '<Context crossContext="true">'
     line: '<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/share.war">'
-  when: not (acs.edition == 'Community' and acs.version is version('7.1.0','ge'))
 
 - name: Check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml" exists
   stat:
@@ -436,7 +435,6 @@
     path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/share.xml"
     regexp: '<PostResources base='
     line: '<PostResources base="/opt/alfresco/modules/acs-share"'
-  when: not (acs.edition == 'Community' and acs.version is version('7.1.0','ge'))
 
 - name: Insert or Update custom properties added through configuration_files/alfresco-global.properties
   blockinfile:
