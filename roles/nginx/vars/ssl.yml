@@ -1,7 +1,8 @@
 nginx_vhosts:
   - listen: "80"
     server_name: "{{ fqdn_alfresco }}" # this should be an input from the client
-    filename: "alfresco_redirect.conf"
+    template: "alfresco_redirect.conf"
+    filename: "alfresco.conf"
   - listen: "443"
     server_name: "{{ fqdn_alfresco }}" # this should be an input from the client
     root: "/usr/share/nginx/html"
