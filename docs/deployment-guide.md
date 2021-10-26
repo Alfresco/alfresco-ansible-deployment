@@ -252,10 +252,16 @@ The diagram below shows the result of a localhost deployment.
 
 ![Localhost Deployment](./resources/acs-localhost.png)
 
-To deploy ACS 7 Enterprise on the local machine navigate to the folder you extracted the ZIP to and execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
+To deploy ACS 7.1 Enterprise on the local machine navigate to the folder you extracted the ZIP to and execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
 
 ```bash
 ansible-playbook playbooks/acs.yml -i inventory_local.yml
+```
+
+Alternatively, to deploy an ACS Enterprise 7.0 system use the following command:
+
+```bash
+ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@7.0.N-extra-vars.yml"
 ```
 
 Alternatively, to deploy an ACS Enterprise 6.2.N system use the following command:
@@ -332,10 +338,16 @@ To check your inventory file is configured correctly and the control node is abl
 ansible all -m ping -i inventory_ssh.yml
 ```
 
-To deploy ACS 7 Enterprise on the target host execute the playbook as the current user using the following command:
+To deploy ACS 7.1 Enterprise on the target host execute the playbook as the current user using the following command:
 
 ```bash
 ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
+```
+
+Alternatively, to deploy an ACS 7.0 Enterprise system use the following command:
+
+```bash
+ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.0.N-extra-vars.yml"
 ```
 
 Alternatively, to deploy an ACS 6.2.N Enterprise system use the following command:

@@ -1,31 +1,14 @@
 ---
 # handlers file for activemq
-- name: get-services
-  service_facts:
-  register: services_state
-
 - name: enable-activemq
   service:
     name: activemq
     enabled: true
-    daemon_reload: true
-  when: services_state.ansible_facts.services['activemq.service'].status != 'enabled'
-
-- name: start-activemq
-  service:
-    name: activemq
     state: started
     daemon_reload: true
-  when: services_state.ansible_facts.services['activemq.service'].state != 'running'
-
+    
 - name: restart-activemq
   service:
     name: activemq
     state: restarted
     daemon_reload: true
-  when: services_state.ansible_facts.services['activemq.service'].state == 'running'
-
-- name: stop-activemq
-  service:
-    name: activemq
-    state: stopped

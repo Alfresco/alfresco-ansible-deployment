@@ -151,7 +151,6 @@
     mode: 'u=rwx,g=rwx,o=rx'
     force: true
   notify:
-    - get-services
     - wait-for-activemq
     - restart-aio
 
@@ -165,8 +164,6 @@
     mode: 'u=rw,g=rw,o=r'
     force: true
   notify:
-    - get-services
     - wait-for-activemq
     - enable-aio
-    - start-aio
     - restart-aio

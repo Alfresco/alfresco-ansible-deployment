@@ -49,7 +49,7 @@ def test_alfresco_context_200(host, get_ansible_vars):
 def test_alfresco_api(host, get_ansible_vars):
     "Check the repository is installed correctly by calling the discovery API (/alfresco/api/discovery)"
     cmd = host.run("curl -iL --user admin:admin --connect-timeout 5 http://{}:8080/alfresco/api/discovery".format(test_host))
-    assert_that(cmd.stdout, contains_string(get_ansible_vars["acs"]["version"].split('-')[0]))
+    assert_that(cmd.stdout, contains_string('.'.join(get_ansible_vars["acs"]["version"].split('.')[:3])))
 
 def test_share_log_exists(host, get_ansible_vars):
     "Check that share.log exists in /var/log/alfresco"

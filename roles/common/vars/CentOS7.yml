@@ -5,3 +5,4 @@ utils:
   - tar
   - libselinux-python
   - libsemanage-python
+  - gpg

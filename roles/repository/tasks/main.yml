@@ -445,8 +445,6 @@
     insertafter: EOF
     block: "{{ lookup('file', role_path + '/../../configuration_files/alfresco-global.properties') }}"
   notify:
-    - get-services
     - wait-for-db
     - set-go-signal
-    - start-alfresco-content
     - restart-alfresco-content
