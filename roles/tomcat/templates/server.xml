@@ -66,7 +66,7 @@
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL/TLS HTTP/1.1 Connector on port 8080
     -->
-    <Connector port="{{ ports_cfg.repository.http }}"{% if use_ssl %} scheme="https"{% endif %} protocol="HTTP/1.1"
+    <Connector port="{{ ports_cfg.repository.http }}" scheme="http" protocol="HTTP/1.1"
                connectionTimeout="20000"
 	    redirectPort="{{ ports_cfg.repository.https }}" />
     <!-- A "Connector" using the shared thread pool-->
@@ -164,7 +164,7 @@
         <!-- <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
                prefix="localhost_access_log" suffix=".txt"
                pattern="%h %l %u %t &quot;%r&quot; %s %b" /> -->
-
+	<Valve className="org.apache.catalina.valves.RemoteIpValve" />
       </Host>
     </Engine>
   </Service>
