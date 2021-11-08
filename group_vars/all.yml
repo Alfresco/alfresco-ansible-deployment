@@ -33,7 +33,7 @@ sfs:
   version: 0.16.0
 
 adw:
-  version: 2.4.0
+  version: 2.4.2
 
 sync:
   version: 3.4.1-M1
