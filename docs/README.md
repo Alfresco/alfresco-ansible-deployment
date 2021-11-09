@@ -82,7 +82,7 @@ The table below shows the version of the components deployed by the playbook for
 | All-In-One Transformation Engine | 2.5.3 | 2.3.10 | 2.3.10 | 2.3.10 |
 | AOS | 1.4.0 | 1.3.1 | 1.4.0 |
 | GoogleDocs | 3.2.1 | 3.2.0 | 3.2.1 |
-| Digital Workspace | 2.4.0 | 2.1.0 | 2.1.0 | N/A |
+| Digital Workspace | 2.4.2 | 2.1.0 | 2.1.0 | N/A |
 | Transform Router | 1.4.1 | 1.3.2 | 1.3.2 | N/A |
 | Shared File Store | 0.16.0 | 0.13.0 | 0.13.0 | N/A |
-| Sync Service | 3.4.1-M1 | 3.4.0 | 3.3.3.1 | N/A |
+| Sync Service | 3.4.0 | 3.4.0 | 3.3.3.1 | N/A |
