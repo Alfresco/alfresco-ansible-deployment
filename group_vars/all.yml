@@ -36,7 +36,7 @@ adw:
   version: 2.4.2
 
 sync:
-  version: 3.4.1-M1
+  version: 3.4.0
 
 downloads:
   acs_zip_url: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
