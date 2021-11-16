@@ -71,7 +71,7 @@ While ACS supports a wide range of OS, the playbook is only known to work and is
 The table below shows the version of the components deployed by the playbook for ACS 7.x and 6.2.N.
 
 | Component | 7.1 Enterprise | 7.0 Enterprise | 6.2.N Enterprise | Community |
-|-|-|-|-|
+|-|-|-|-|-|
 | OpenJDK | 11.0.12 | 11.0.12 | 11.0.12 | 11.0.12 |
 | Apache Tomcat | 9.0.52 | 9.0.52 | 8.5.65 | 9.0.52 |
 | PostgreSQL | 13.x | 13.x | 11.x | 13.x |
@@ -85,4 +85,4 @@ The table below shows the version of the components deployed by the playbook for
 | Digital Workspace | 2.4.0 | 2.1.0 | 2.1.0 | N/A |
 | Transform Router | 1.4.1 | 1.3.2 | 1.3.2 | N/A |
 | Shared File Store | 0.16.0 | 0.13.0 | 0.13.0 | N/A |
-| Sync Service | 3.4.1-M1 | 3.4.0 | 3.3.3.1 | N/A |
+| Sync Service | 3.4.0 | 3.4.0 | 3.3.3.1 | N/A |
