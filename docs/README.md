@@ -80,8 +80,8 @@ The table below shows the version of the components deployed by the playbook for
 | Share | 7.1.0.1 | 7.0.1.4 | 6.2.2 | 7.1.0.1 |
 | Search Services | 2.0.2 | 2.0.1.1 | 1.4.3 | 2.0.2 |
 | All-In-One Transformation Engine | 2.5.3 | 2.3.10 | 2.5.3 | 2.5.3 |
-| AOS | 1.4.0 | 1.4.0 | 1.3.1 | 1.4.0 |
-| GoogleDocs | 3.2.1 | 3.2.1 | 3.2.0 | 3.2.1 |
+| AOS | 1.4.0 | 1.4.0 | 1.3.1 |  |
+| GoogleDocs | 3.2.1 | 3.2.1 | 3.2.0 |  |
 | Digital Workspace | 2.4.2 | 2.1.0 | 2.4.2 | N/A |
 | Transform Router | 1.4.1 | 1.3.2 | 1.4.1 | N/A |
 | Shared File Store | 0.16.0 | 0.13.0 | 0.16.0 | N/A |
