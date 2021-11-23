@@ -38,6 +38,6 @@ repos:
   - repo: local
     hooks:
       - id: custom
-        name: Generate-components-version-table
+        name: Generate components version table
         entry: scripts/generate-comp-ver-table.py
         language: python

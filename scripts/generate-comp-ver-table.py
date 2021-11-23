@@ -99,6 +99,8 @@ def get_content_of_new_table():
                 version= str(version) + '.x'
 
             line_in_table+=f"{version} | "
+
+        line_in_table=line_in_table[:-1]
         end_table+=f"{line_in_table}\n"
     return end_table
 
@@ -124,4 +126,5 @@ def modify_table():
 
     new_file.close()
 
-modify_table()
+if __name__ == '__main__':
+    modify_table()
