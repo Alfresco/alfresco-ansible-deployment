@@ -43,7 +43,7 @@ jobs:
       scripts:
         - echo 'test'
         - python3 --version
-        - scripts/generate-comp-ver-table.py
+        - python3 scripts/generate-comp-ver-table.py
     - stage: Verification
       name: Search Role Verification
       script:
