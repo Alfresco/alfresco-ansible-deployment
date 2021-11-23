@@ -90,7 +90,7 @@ def get_content_of_new_table():
 
             if values_file == 'community-extra-vars.yml' and component in ['Digital_Workspace', 'Transform_Router', 'Shared_File_Store', 'Sync_Service']:
                 version = 'N/A'
-            if values_file == 'community-extra-vars.yml' and component in ['AOS', 'GoogleDocs']:
+            elif values_file == 'community-extra-vars.yml' and component in ['AOS', 'GoogleDocs']:
                 version = ''
             #use values from group_vars if None
             elif version is None:
