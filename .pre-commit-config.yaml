@@ -34,3 +34,10 @@ repos:
     hooks:
       - id: giticket
         args: ['--regex', '[A-Z]+-\d+[0-9]', '--format', '{ticket}: {commit_msg}', '--mode', 'regex_match']
+
+  - repo: local
+    hooks:
+      - id: custom
+        name: Generate-components-version-table
+        entry: scripts/generate-comp-ver-table.py
+        language: python

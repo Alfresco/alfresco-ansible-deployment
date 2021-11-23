@@ -17,6 +17,7 @@ branches:
 
 before_install:
   - pip install ansible==${ANSIBLE_VERSION}
+  - pip install pyyaml
 
 env:
   - MOLECULE_NO_LOG=false
