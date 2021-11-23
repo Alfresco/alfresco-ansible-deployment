@@ -39,11 +39,6 @@ jobs:
     - name: "yamllint"
       script:
         - yamllint .
-    - name: Check components version table
-      scripts:
-        - echo 'test'
-        - python3 --version
-        - python3 scripts/generate-comp-ver-table.py
     - stage: Verification
       name: Search Role Verification
       script:
