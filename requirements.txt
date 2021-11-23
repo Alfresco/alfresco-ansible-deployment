@@ -7,4 +7,4 @@ pylint==2.10.2
 pytest-testinfra==6.3.0
 requests==2.25.1
 yamllint==1.26.1
-PyYAML==6.0
+PyYAML==5.4.1
