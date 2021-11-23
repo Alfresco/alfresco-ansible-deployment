@@ -39,7 +39,9 @@ jobs:
     - name: "yamllint"
       script:
         - yamllint .
-    - name: Check components version table  
+    - name: Check components version table
+      language: python
+      python: 3.9
       scripts:
         - scripts/generate-comp-ver-table.py
     - stage: Verification
