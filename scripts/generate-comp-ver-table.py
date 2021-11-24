@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""Generate components version table in docs/README.md based on extra-vars.yml. """
+"""Generate components version table in docs/README.md based on extra-vars.yml."""
 
 import sys
 import glob
@@ -8,7 +8,7 @@ import yaml
 
 
 def get_acs_extra_values_files():
-    """Return list of extra-values files in repository. """
+    """Return list of extra-values files in repository."""
     var_files = glob.glob("*-extra-vars.yml")[::-1]
     #move community to the end of list
     var_files.append(var_files.pop(var_files.index('community-extra-vars.yml')))
@@ -16,7 +16,7 @@ def get_acs_extra_values_files():
     return var_files
 
 def get_latest_acs_version():
-    """Return version of current acs release. """
+    """Return version of current acs release."""
     with open("group_vars/all.yml", "r", encoding="utf-8") as stream:
         try:
             values = yaml.safe_load(stream)
@@ -27,7 +27,7 @@ def get_latest_acs_version():
     return latest_version
 
 def get_first_line_of_table():
-    """Generate table header. """
+    """Generate table header."""
     first_line = "| Component |"
     for values_file in get_acs_extra_values_files():
         if values_file == 'group_vars/all.yml':
@@ -45,7 +45,7 @@ def get_first_line_of_table():
 
 
 def get_components_versions(file_path):
-    """Return dict of components version for given values file. """
+    """Return dict of components version for given values file."""
     with open(file_path, "r", encoding="utf-8") as stream:
         try:
             values = yaml.safe_load(stream)
@@ -73,7 +73,7 @@ def get_components_versions(file_path):
 
 
 def get_content_of_new_table():
-    """Generate content of new table. """
+    """Generate content of new table."""
     end_table = ""
     first_line = get_first_line_of_table()
     end_table+=f"{first_line}\n"
@@ -107,7 +107,7 @@ def get_content_of_new_table():
     return end_table
 
 def modify_table():
-    """Delete old table from README.md, and put new one. """
+    """Delete old table from README.md, and put new one."""
     delete_next_lines = False
     with open("docs/README.md", "r", encoding="utf-8") as old_file:
         lines = old_file.readlines()
