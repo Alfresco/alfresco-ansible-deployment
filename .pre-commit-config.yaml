@@ -37,7 +37,7 @@ repos:
 
   - repo: local
     hooks:
-      - id: custom
+      - id: generate-table
         name: Generate components version table
         entry: scripts/generate-comp-ver-table.py
         language: python
