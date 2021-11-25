@@ -40,10 +40,10 @@ jobs:
       script:
         - yamllint .
     - name: Check components version table
-      cripts:
+      scripts:
         - python3 scripts/generate-comp-ver-table.py
         - git_status_out=$(git status)
-        - if [[ "$git_status_out" == *"docs/README.md"* ]]; then exit 1; fi
+        - if [[ "$git_status_out" == *"docs/README.md"* ]]; then echo "Error- Components version was not changed. Download pre-commit tool";exit 1; fi
     - stage: Verification
       name: Search Role Verification
       script:

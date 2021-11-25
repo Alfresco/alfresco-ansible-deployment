@@ -7,8 +7,8 @@ import glob
 import yaml
 
 
-def get_acs_extra_values_files():
-    """Return list of extra-values files in repository."""
+def get_acs_extra_vars_files():
+    """Return list of extra-vars files in repository."""
     var_files = glob.glob("*-extra-vars.yml")[::-1]
     #move community to the end of list
     var_files.append(var_files.pop(var_files.index('community-extra-vars.yml')))
@@ -29,7 +29,7 @@ def get_latest_acs_version():
 def get_first_line_of_table():
     """Generate table header."""
     first_line = "| Component |"
-    for values_file in get_acs_extra_values_files():
+    for values_file in get_acs_extra_vars_files():
         if values_file == 'group_vars/all.yml':
             acs_release = get_latest_acs_version()
             acs_release = f"{acs_release.split('.')[0]}.{acs_release.split('.')[1]} Enterprise"
@@ -45,7 +45,7 @@ def get_first_line_of_table():
 
 
 def get_components_versions(file_path):
-    """Return dict of components version for given values file."""
+    """Return dict of components version for given vars file."""
     with open(file_path, "r", encoding="utf-8") as stream:
         try:
             values = yaml.safe_load(stream)
@@ -84,7 +84,7 @@ def get_content_of_new_table():
         line_in_table = ''
         line_in_table+=f"| {component.replace('_', ' ')} | "
 
-        for values_file in get_acs_extra_values_files():
+        for values_file in get_acs_extra_vars_files():
             components_versions = get_components_versions(values_file)
             version = (components_versions[component])
 
@@ -94,7 +94,7 @@ def get_content_of_new_table():
                 version = ''
             #use values from group_vars if None
             elif version is None:
-                components_versions = get_components_versions(get_acs_extra_values_files()[0])
+                components_versions = get_components_versions(get_acs_extra_vars_files()[0])
                 version = (components_versions[component])
 
             if component == 'PostgreSQL':
