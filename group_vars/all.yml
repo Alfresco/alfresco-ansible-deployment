@@ -107,8 +107,8 @@ dependencies_version:
   postgresql_connector: 42.2.19
   postgres_major_version: 13
   activemq: 5.16.1
-  jdk: 11.0.12
-  jdk_arch: 7
+  jdk: 11.0.13
+  jdk_arch: 8
   tomcat: 9.0.52
 
 dependencies_url:
@@ -116,8 +116,8 @@ dependencies_url:
   postgresql_connector_sha1_checksum: "{{ lookup('url', '{{ maven_repository.org }}/postgresql/postgresql/{{ dependencies_version.postgresql_connector }}/postgresql-{{ dependencies_version.postgresql_connector }}.jar.sha1') }}"
   activemq: "http://archive.apache.org/dist/activemq/{{ dependencies_version.activemq }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
   activemq_sha512_checksum: "http://archive.apache.org/dist/activemq/{{ dependencies_version.activemq }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz.sha512"
-  jdk: "https://github.com/AdoptOpenJDK/openjdk11-upstream-binaries/releases/download/jdk-{{ dependencies_version.jdk }}+{{ dependencies_version.jdk_arch }}/OpenJDK11U-jdk_x64_linux_{{ dependencies_version.jdk }}_{{ dependencies_version.jdk_arch }}.tar.gz"
-  jdk_md5_checksum: "0ef1a441de21ea20929550df66b6a7c4" # pragma: allowlist secret
+  jdk: "https://github.com/AdoptOpenJDK/openjdk11-upstream-binaries/releases/download/jdk-{{ dependencies_version.jdk }}%2B{{ dependencies_version.jdk_arch }}/OpenJDK11U-jdk_x64_linux_{{ dependencies_version.jdk }}_{{ dependencies_version.jdk_arch }}.tar.gz"
+  jdk_md5_checksum: "94d3a426587340b83c3a58c238b636a2" # pragma: allowlist secret
   tomcat: "http://archive.apache.org/dist/tomcat/tomcat-{{ dependencies_version.tomcat[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
   tomcat_sha512_checksum: "{{ lookup('url', 'http://archive.apache.org/dist/tomcat/tomcat-{{ dependencies_version.tomcat[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz.sha512').split(' ')[0] }}"
 
