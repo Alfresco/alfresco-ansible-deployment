@@ -72,7 +72,7 @@ The table below shows the version of the components deployed by the playbook for
 
 | Component | 7.1 Enterprise | 7.0.N Enterprise | 6.2.N Enterprise | Community |
 |-|-|-|-|-|
-| OpenJDK | 11.0.12 | 11.0.12 | 11.0.12 | 11.0.12 |
+| OpenJDK | 11.0.13 | 11.0.13 | 11.0.13 | 11.0.13 |
 | Apache Tomcat | 9.0.52 | 9.0.52 | 8.5.65 | 9.0.52 |
 | PostgreSQL | 13.x | 13.x | 11.x | 13.x |
 | Apache ActiveMQ | 5.16.1 | 5.16.1 | 5.15.14 | 5.16.1 |
