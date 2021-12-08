@@ -7,4 +7,4 @@ imagemagick_pkg:
 
 libreoffice: 6.3.5.2
 pdf_renderer: 1.1
-imagemagick_home: "/usr/lib64/ImageMagick-{{ imagemagick_pkg.version.split('-',0) }}"
+imagemagick_home: "/usr/lib64/ImageMagick-{{ imagemagick_pkg.version.split('-')[0] }}"
