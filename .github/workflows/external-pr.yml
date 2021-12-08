@@ -1,7 +1,7 @@
 on:
   label:
 
-job:
+jobs:
   external_PR:
     name: External PR acceptance
     runs-on: ubuntu-latest
