@@ -1,0 +1,9 @@
+on:
+  label:
+
+job:
+  external_PR:
+    name: External PR acceptance
+    runs-on: ubuntu-latest
+    steps:
+      run: echo OK
