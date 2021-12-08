@@ -6,4 +6,5 @@ jobs:
     name: External PR acceptance
     runs-on: ubuntu-latest
     steps:
-      run: echo OK
+      - name: Debug action
+        uses: hmarr/debug-action@v2.0.1
