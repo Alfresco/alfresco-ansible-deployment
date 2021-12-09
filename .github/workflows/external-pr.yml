@@ -24,7 +24,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           project: OPSEXP
-          issuetype: Contribution
+          issuetype: Task
           summary: |
             Review external pull request from ${{ github.repository }}
           description: |
