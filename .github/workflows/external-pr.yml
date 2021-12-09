@@ -6,6 +6,39 @@ jobs:
   external_PR:
     name: External PR acceptance
     runs-on: ubuntu-latest
+    env:
+      JIRA_BASE_URL: https://alfresco.atlassian.net
+      JIRA_USER_EMAIL: alfresco-build@hyland.com
+    if: github.event.label.name == "ready-to-test"
     steps:
       - name: Debug action
         uses: hmarr/debug-action@v2.0.1
+      - name: Jira Login
+        uses: atlassian/gajira-login@v2.0.0
+        env:
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+      - id: jira_create
+        name: Create JIRA issue
+        uses: atlassian/gajira-create@v2.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          project: OPSEXP
+          issuetype: Contribution
+          summary: |
+            Review external pull request from ${{ github.repository }}
+          description: |
+            ${{ github.event.pull_request.head.user.login }} created a PR on github:
+            ${{ github.event.pull_request._links.html.refs }}
+            
+            This PR has been triaged and needs to be tested on the CI pipeline.
+            The goal of this issue is to track merging activity and allow merging if PR is approved 
+          fields: >-
+            {
+            "components": "Ansible Deployment",
+            "security": "none",
+            "customfield_14728": "OPS Experience",
+            "assignee": "${{ env.GITHUB_ACTOR }}"
+            }
+      - name: return Issue
+        run: echo "Issue ${{ steps.jira_create.outputs.issue }} was created"
