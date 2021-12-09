@@ -1,5 +1,6 @@
 on:
-  label:
+  pull_request:
+    types :labeled
 
 jobs:
   external_PR:
