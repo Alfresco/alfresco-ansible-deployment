@@ -9,7 +9,7 @@ jobs:
     env:
       JIRA_BASE_URL: https://alfresco.atlassian.net
       JIRA_USER_EMAIL: alfresco-build@hyland.com
-    if: github.event.label.name == "ready-to-test"
+    if: github.event.label.name == 'ready-to-test'
     steps:
       - name: Debug action
         uses: hmarr/debug-action@v2.0.1
