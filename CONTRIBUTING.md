@@ -19,5 +19,14 @@ Please follow the [coding standards](https://community.alfresco.com/docs/DOC-465
 Code of Conduct is adapted from the [Contributor Covenant][homepage], version 1.4,
 available at [http://contributor-covenant.org/version/1/4][version]
 
+## Contributing to this project
+
+In addition to following the rules above, we ask you that any PR submitted be against the `contribs` branch.
+We might close any PR that's requested against `mùaster`on any other branch.
+
+This is to allow us run our tests before we merge to master.
+
+Thank you for your patience!
+
 [homepage]: http://contributor-covenant.org
 [version]: http://contributor-covenant.org/version/1/4/
