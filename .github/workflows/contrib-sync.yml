@@ -1,0 +1,16 @@
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  sync-contribs:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged && github.event.pull_request.head.ref == 'contribs'
+    steps:
+      - name: Sync Branch
+        uses: connor-baer/action-sync-branch@v.1.0.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: contribs
+          force: true
