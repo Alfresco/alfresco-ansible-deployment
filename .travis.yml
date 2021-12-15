@@ -11,6 +11,7 @@ services:
 branches:
   only:
     - master
+    - contribs
     - /feature.*/
     - /fix.*/
     - /OPSEXP-.*/
