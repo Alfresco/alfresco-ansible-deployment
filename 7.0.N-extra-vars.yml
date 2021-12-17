@@ -28,6 +28,6 @@ dependencies_version:
   postgresql_connector: 42.2.18
   postgres_major_version: 13
   activemq: 5.16.1
-  jdk: 11.0.12
-  jdk_arch: 7
-  tomcat: 9.0.52
+  jdk: 11.0.13
+  jdk_arch: 8
+  tomcat: 9.0.54

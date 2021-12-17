@@ -11,6 +11,7 @@ services:
 branches:
   only:
     - master
+    - contribs
     - /feature.*/
     - /fix.*/
     - /OPSEXP-.*/
@@ -39,6 +40,11 @@ jobs:
     - name: "yamllint"
       script:
         - yamllint .
+    - name: Check components version table
+      scripts:
+        - python3 scripts/generate-comp-ver-table.py
+        - git_status_out=$(git status)
+        - if [[ "$git_status_out" == *"docs/README.md"* ]]; then echo "Error- Components version was not changed. Download pre-commit tool";exit 1; fi
     - stage: Verification
       name: Search Role Verification
       script:
@@ -296,7 +302,7 @@ jobs:
     - stage: Verification
       name: Single Machine Integration checks
       env:
-        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\";export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single" # pragma: allowlist secret
+        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\";export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single" # pragma: allowlist secret
         - ANSIBLE_FORCE_COLOR=true
       before_install:
         - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
@@ -306,21 +312,23 @@ jobs:
         - git clone --depth 1 --branch $DTAS_VERSION https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
       script:
         - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
-        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/"
-        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/ ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single
-        - ssh ec2-user@$control_machine_ip "source ~/.bash_profile; mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/"
+        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/"
+        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/ ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single
+        - ssh ec2-user@$control_machine_ip "source ~/.bash_profile; mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" == *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=true;molecule create -s ec2"; else ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=false;molecule create -s ec2"; fi
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2/dynamic_inventory.py"
         - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat molecule_temp_dir/instance_config.yml | yq .[].address -r")
-        - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS; ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/inventory_ssh.yml -e \"@/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment-single/tests/test-extra-vars.yml\""
+        - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS; ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single/inventory_ssh.yml -e \"@/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single/tests/test-extra-vars.yml\""
         - echo "wait for repo to be up" && sleep 5m
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; sed -i 's+TEST_URL+http://$TESTHOST+g' tests/test-config.json ; cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi
+      after_script:
+        - ssh ec2-user@$control_machine_ip "rm -rf /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/"
     - stage: Verification
       name: Multi Machine Integration checks
       env:
         - ANSIBLE_FORCE_COLOR=true
-        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME;export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\";export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment" # pragma: allowlist secret
+        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME;export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\";export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment" # pragma: allowlist secret
       before_install:
         - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
         - eval "$(ssh-agent -s)"
@@ -329,16 +337,18 @@ jobs:
         - git clone --depth 1 --branch $DTAS_VERSION https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
       script:
         - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
-        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/"
-        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER
+        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/"
+        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER
         - ssh ec2-user@$control_machine_ip "source ~/.bash_profile"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" == *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=true;molecule create -s ec2multi"; else ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=false;molecule create -s ec2multi"; fi
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2multi/dynamic_inventory.py"
         - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat inventory_ssh.yml | yq .all.children.nginx.hosts.nginx_1.ansible_host -r")
-        - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_BUILD_NUMBER/alfresco-ansible-deployment/inventory_ssh.yml -e \"@tests/test-extra-vars.yml\""
+        - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment/inventory_ssh.yml -e \"@tests/test-extra-vars.yml\""
         - echo "wait for repo to be up" && sleep 5m
         - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; sed -i 's+TEST_URL+http://$TESTHOST+g' tests/test-config.json; cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s"
         - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2multi"; fi
+      after_script:
+        - ssh ec2-user@$control_machine_ip "rm -rf /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/"
     - stage: Release Stage 
       name: Release
       script:

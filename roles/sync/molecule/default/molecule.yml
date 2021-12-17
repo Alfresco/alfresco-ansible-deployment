@@ -53,7 +53,7 @@ provisioner:
     - --inventory=../../../../inventory_local.yml
     - --limit=instance
   inventory:
-    links: 
+    links:
       group_vars: ../../../../group_vars
   playbooks:
     converge: converge.yml

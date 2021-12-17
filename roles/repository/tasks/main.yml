@@ -345,7 +345,7 @@
   lineinfile:
     path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/share.xml"
     regexp: '<Context crossContext="true">'
-    line: '<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/share.war">'
+    line: '<Context crossContext="true" cachingAllowed="true" cacheMaxSize="100000" docBase="{{ content_folder }}/web-server/webapps/share.war">'
 
 - name: Check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml" exists
   stat:
