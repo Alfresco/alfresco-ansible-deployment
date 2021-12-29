@@ -4,7 +4,7 @@ if [ $(id -u) -eq 0 ]; then
     exit
 fi
 
-. /etc/opt/alfresco/setenv.sh
+. {{ config_folder }}/setenv.sh
 
 {% for key, value in sync_environment.items() %}
 {{key}}="{{value}}"
