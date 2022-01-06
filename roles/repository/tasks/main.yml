@@ -372,22 +372,6 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
 
-- name: Add PostResources to alfresco.xml
-  become: true
-  become_user: root
-  lineinfile:
-    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/alfresco.xml"
-    regexp: '<PostResources base='
-    line: '<PostResources base="/opt/alfresco/modules/acs-platform"'
-
-- name: Add PostResources to share.xml
-  become: true
-  become_user: root
-  lineinfile:
-    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/share.xml"
-    regexp: '<PostResources base='
-    line: '<PostResources base="/opt/alfresco/modules/acs-share"'
-
 - name: Insert or Update custom properties added through configuration_files/alfresco-global.properties
   blockinfile:
     path: "{{ settings_folder }}/classpath/alfresco-global.properties"
