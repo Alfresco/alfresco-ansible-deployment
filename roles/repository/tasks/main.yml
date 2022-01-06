@@ -282,79 +282,33 @@
         path: "{{ content_folder }}/shared/classes/"
         state: absent
 
-- name: Move conf folder
+- name: Create web application config files
   block:
-    - name: Check if conf files exist
-      stat:
-        path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/alfresco.xml"
-      register: conf_exists
-    - name: Copy conf
-      become: true
-      copy:
-        remote_src: true
-        src: "{{ content_folder }}/web-server/conf/Catalina/localhost/"
-        dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/"
+    - name: Create config folders
+      file:
+        state: directory
+        path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/"
+        mode: 0755
         owner: "{{ username }}"
         group: "{{ group_name }}"
-      when: not conf_exists.stat.exists
+    - name: Create config files
+      template:
+        src: "{{ item }}.xml"
+        dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/{{ item }}.xml"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 0644
+      loop:
+        - alfresco
+        - share
+        - ROOT
+        - _vti_bin
+        - api-explorer
     - name: Remove conf files
       file:
         path: "{{ content_folder }}/web-server/conf"
         state: absent
-
-- name: Add context home to alfresco.xml
-  lineinfile:
-    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/alfresco.xml"
-    regexp: '<Context crossContext="true">'
-    line: '<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/alfresco.war">'
-
-- name: Add context home to share.xml
-  lineinfile:
-    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/share.xml"
-    regexp: '<Context crossContext="true">'
-    line: '<Context crossContext="true" cachingAllowed="true" cacheMaxSize="100000" docBase="{{ content_folder }}/web-server/webapps/share.war">'
-
-- name: Check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml" exists
-  stat:
-    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml"
-  register: root_xml
-
-- name: Create ROOT.xml
-  template:
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    src: ROOT.xml
-    dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml"
-    mode: 'u=rwx,g=rwx,o=rx'
-  when: not root_xml.stat.exists
-
-- name: Check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml" exists
-  stat:
-    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml"
-  register: vti_xml
-
-- name: Create _vti_bin.xml
-  template:
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    src: _vti_bin.xml
-    dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml"
-    mode: 'u=rwx,g=rwx,o=rx'
-  when: not vti_xml.stat.exists
-
-- name: Check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml" exists
-  stat:
-    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml"
-  register: api_explorer_xml
-
-- name: Create api-explorer.xml
-  template:
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    src: api-explorer.xml
-    dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml"
-    mode: 'u=rwx,g=rwx,o=rx'
-  when: not api_explorer_xml.stat.exists
+  become: true
 
 - name: Create alfresco-global.properties
   template:
