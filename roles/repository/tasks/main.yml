@@ -21,8 +21,6 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rx,o=rx'
   loop:
-     - "{{ binaries_folder }}/modules/acs-platform"
-     - "{{ binaries_folder }}/modules/acs-share"
      - "{{ content_folder }}/modules/acs-platform"
      - "{{ content_folder }}/modules/acs-share"
      - "{{ content_folder }}/amps_repo"
