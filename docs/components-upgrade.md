@@ -59,6 +59,9 @@ acs:
 ...
 ```
 
+> IMPORTANT: make sure you do not set the version to a version number that's not a hotfix (version number needs to be 4 digits and the 3 first ones needs to match the ones of the initially deployed version)
+> This is because, as eplained earlier, "in-place" upgrades are only supported for hotfixes
+
 Once these changes are saved run the command bellow:
 
 ```
