@@ -37,9 +37,9 @@ Alfresco also releases some hotfixes and an hotfix upgrade would be moving from 
 
 In order to apply a later hotfix, you need to first match the pre-requisites, then change the ACS version to point to the hotfix version in the appropriate file, and finally run the playbook again.
 
-In the example bellow we want to upgrade from the initial 7.0.1 installtion to 7.0.1.4 hotfix:
+In the example bellow we want to upgrade from the initial 7.0.1 installation to 7.0.1.4 hotfix:
 
-Edit `7.0.N-extra-vars.yml` and changes the the bellow snippet
+Edit `7.0.N-extra-vars.yml` and changes the the bellow snippet:
 
 ```
 ---           
@@ -49,7 +49,7 @@ acs:
 ...
 ```
 
-to
+to:
 
 ```
 ---           
