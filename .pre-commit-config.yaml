@@ -1,9 +1,11 @@
 ---
 repos:
   - repo: https://github.com/PyCQA/pylint
-    rev: v2.12.2
+    rev: v2.10.2
     hooks:
       - id: pylint
+        types: [file, python]
+        exclude: '__init__.py'
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.26.3
     hooks:
