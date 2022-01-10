@@ -1,36 +1,36 @@
 ---
 repos:
   - repo: https://github.com/PyCQA/pylint
-    rev: pylint-2.5.0
+    rev: v2.12.2
     hooks:
       - id: pylint
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.23.0
+    rev: v1.26.3
     hooks:
       - id: yamllint
         files: \.(yaml|yml)$
         types: [file, yaml]
         entry: yamllint --strict
   - repo: https://github.com/ansible/ansible-lint
-    rev: v5.0.12
+    rev: v5.3.2
     hooks:
       - id: ansible-lint
         entry: ansible-lint -v
         name: ansible-lint
         files: \.(yaml|yml)$
   - repo: https://github.com/Yelp/detect-secrets
-    rev: v0.13.1
+    rev: v1.1.0
     hooks:
       - id: detect-secrets
         name: detect generic secrets
-        args: ['--baseline', '.secrets.baseline']
+        args: ['--baseline', '.secrets.baseline', '--exclude-secrets', '(admin|mp6yc0UD9e)']
   - repo: https://github.com/awslabs/git-secrets
     rev: master
     hooks:
       - id: git-secrets
         name: detect aws secrets
   - repo: https://github.com/milin/giticket
-    rev: 6f166c66f2423e8e27898b39385d1166f9b643a3
+    rev: v1.3
     hooks:
       - id: giticket
         args: ['--regex', '[A-Z]+-\d+[0-9]', '--format', '{ticket}: {commit_msg}', '--mode', 'regex_match']

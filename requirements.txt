@@ -1,10 +1,10 @@
-ansible-lint==5.0.12
+ansible-lint==5.3.2
 jmespath==0.10.0
 molecule==3.0.8
 molecule-docker==0.2.4
 PyHamcrest==2.0.2
-pylint==2.10.2
+pylint==2.12.2
 pytest-testinfra==6.3.0
 requests==2.25.1
-yamllint==1.26.1
+yamllint==1.26.3
 pyyaml==5.4.1

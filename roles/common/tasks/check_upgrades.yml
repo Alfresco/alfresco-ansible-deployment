@@ -8,7 +8,7 @@
 
 - name: read installed versions
   include_vars: 
-    file: /tmp/{{ inventory_hostname }}/{{ansible_installation_status_file }}
+    file: /tmp/{{ inventory_hostname }}/{{ ansible_installation_status_file }}
     name: installed_components
   when: ansible_components_status.msg is undefined
 
