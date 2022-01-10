@@ -33,7 +33,7 @@ Alfresco also releases some hotfixes and an hotfix upgrade would be moving from 
 
 > Please note that "in-place" upgrade still need to match the upgrade pre-requisites
 
-#### Proceeding to an "in-place" hotfix upgrade
+#### Proceeding to a hotfix "in-place" upgrade
 
 In order to apply a later hotfix, you need to first match the pre-requisites, then change the ACS version to point to the hotfix version in the appropriate file, and finally run the playbook again.
 
@@ -71,7 +71,15 @@ ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.0.N-extra-vars.ym
 > Note: Use whatever inventory and config file that matches your use case
 > If you're applying a hotfix to the latest major release (7.1 as of writing) you don't need to specify an extra config file with "-e @file"
 
-After the playbook ran successfully your environment delivers the upgraded version of repo.
+After the playbook ran successfully your environment delivers the upgraded version of repo but the previous installation is still on the target machine. It is the admin responsability to make sure the new system works as expected and no rollback is needed. If all is OK, the old installation previous installation can be cleaned by removing the folder: `{{ binaries_folder }}/content-services-{{ acs.version }}` (by default points to: `/opt/alfresco/content-services-7.0.1`).
+
+#### Rolling back a hotfix "in-place" upgrade
+
+If something goes wrong with the upgrade, or if tests are not successful after upgrade completed, rolling back the environment can be done by following the steps bellow:
+
+ - restoring Database and contentstore backup
+ - reverting the version changes to previous state in the config file (either `group_vars/all` or version specific config files)
+ - running the playbook again.
 
 ## Upgrade impacts
 
