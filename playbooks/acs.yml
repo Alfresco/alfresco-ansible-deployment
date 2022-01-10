@@ -20,6 +20,18 @@
   become: true
   roles:
     - role: '../roles/transformers'
+  post_tasks:
+    - name: update installation status file with Transformers
+      vars:
+        transform_components:
+          transform:
+            "{{ transform }}"
+      blockinfile:
+        block: "{{ transform_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: TRANSFORM_BEGIN
+        marker_end: TRANSFORM_END
   tags:
     - transformers
 
@@ -28,6 +40,18 @@
   become: true
   roles:
     - role: '../roles/search'
+  post_tasks:
+    - name: update installation status file with  Search
+      vars:
+        search_components:
+          search:
+            "{{ search }}"
+      blockinfile:
+        block: "{{ search_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: SEARCH_BEGIN
+        marker_end: SEARCH_END
   tags:
     - search
 
@@ -36,6 +60,22 @@
   become: true
   roles:
     - role: '../roles/repository'
+  post_tasks:
+    - name: update installation status file with ACS
+      vars:
+        acs_components:
+          acs:
+            "{{ acs }}"
+          amps:
+            "{{ amps }}"
+          api_explorer: 
+            "{{ api_explorer }}"
+      blockinfile:
+        block: "{{ acs_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: ACS_BEGIN
+        marker_end: ACS_END
   tags:
     - repository
 
@@ -44,6 +84,18 @@
   become: true
   roles:
     - { role: '../roles/trouter', when: acs.edition == "Enterprise" }
+  post_tasks:
+    - name: update installation status file with Trouter
+      vars:
+        trouter_components:
+          trouter:
+            "{{ trouter }}"
+      blockinfile:
+        block: "{{ trouter_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: TROUTER_BEGIN
+        marker_end: TROUTER_END
   tags:
     - trouter
 
@@ -52,6 +104,18 @@
   become: true
   roles:
     - { role: '../roles/sfs', when: acs.edition == "Enterprise" }
+  post_tasks:
+    - name: update installation status file with SFS
+      vars:
+        sfs_components:
+         sfs:
+            "{{ sfs }}"
+      blockinfile:
+        block: "{{ sfs_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: SFS_BEGIN
+        marker_end: SFS_END
   tags:
     - sfs
 
@@ -60,6 +124,18 @@
   become: true
   roles:
     - { role: '../roles/sync', when: acs.edition == "Enterprise" }
+  post_tasks:
+    - name: update installation status file with Sync
+      vars:
+        sync_components:
+         sync:
+            "{{ sync }}"
+      blockinfile:
+        block: "{{ sync_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: SYNC_BEGIN
+        marker_end: SYNC_END
   tags:
     - sync
 
@@ -76,5 +152,17 @@
   become: true
   roles:
     - { role: '../roles/adw', when: acs.edition == "Enterprise" }
+  post_tasks:
+    - name: update installation status file with ADW
+      vars:
+        adw_components:
+          adw:
+            "{{ adw }}"
+      blockinfile:
+        block: "{{ adw_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: ADW_BEGIN
+        marker_end: ADW_END
   tags:
     - adw

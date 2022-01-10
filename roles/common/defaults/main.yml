@@ -55,3 +55,5 @@ os_fallback:
   - ../vars/{{ ansible_distribution }}.yml
   - ../vars/{{ ansible_os_family }}.yml
   - ../vars/{{ ansible_system }}.yml
+
+ansible_installation_status_file: "{{ binaries_folder }}/.ansible_alfresco_components.status"
