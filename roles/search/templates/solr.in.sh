@@ -83,7 +83,7 @@ SOLR_OPTS="$SOLR_OPTS -Dsolr.content.dir={{ binaries_dir }}/contentstore"
 
 # Location where the bin/solr script will save PID files for running instances
 # If not set, the script will create PID files in $SOLR_TIP/bin
-SOLR_PID_DIR="/var/opt/alfresco"
+SOLR_PID_DIR="{{ data_folder }}"
 
 # Path to a directory for Solr to store cores and their data. By default, Solr will use server/solr
 # If solr.xml is not stored in ZooKeeper, this directory needs to contain solr.xml
