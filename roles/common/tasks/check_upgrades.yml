@@ -58,7 +58,7 @@
           - installed_components.search is defined
           - search != installed_components.search
 
-    - name: Fail on unsupported Sync  upgrades
+    - name: Fail on unsupported Sync upgrades
       fail:
       when:
           - installed_components.sync is defined
