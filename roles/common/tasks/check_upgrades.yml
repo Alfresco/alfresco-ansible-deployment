@@ -52,7 +52,7 @@
         - installed_components.sfs is defined
         - sfs != installed_components.sfs
           
-    - name: Fail on unsupported Search  upgrades
+    - name: Fail on unsupported Search upgrades
       fail:
       when:
           - installed_components.search is defined
