@@ -311,7 +311,7 @@ The example snippet below demonstrates how to deploy the repository to a host wi
 repository:
   hosts:
     repository_1:
-    connection: shh
+    connection: ssh
     ansible_host: 50.6.51.7
     ansible_private_key_file: "/path/to/ssh_key.pem"
     ansible_user: centos
