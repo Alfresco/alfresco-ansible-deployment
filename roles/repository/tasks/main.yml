@@ -368,7 +368,7 @@
   lineinfile:
     path: "{{ tomcat_config_dir }}/conf/catalina.properties"
     regexp: '^common.loader='
-    line: "common.loader=\"/etc/opt/alfresco/content-services/classpath\",\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\""
+    line: "common.loader=\"{{ config_folder }}/content-services/classpath\",\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\""
     owner: "{{ username }}"
     group: "{{ group_name }}"
 
