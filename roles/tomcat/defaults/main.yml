@@ -1,2 +1,3 @@
 ---
 # defaults file for tomcat
+tomcat_home_prefix: /opt/apache-tomcat
