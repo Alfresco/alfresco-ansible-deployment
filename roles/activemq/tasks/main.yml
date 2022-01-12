@@ -33,7 +33,7 @@
     remote_src: true
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    creates: /opt/apache-activemq-{{ dependencies_version.activemq }}/bin/activemq
+    creates: "{{ activemq_home }}/bin/activemq"
   when: job_result is succeeded
 
 - name: Move configuration files
