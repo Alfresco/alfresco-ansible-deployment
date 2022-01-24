@@ -20,7 +20,9 @@ before_install:
   - pip install ansible==${ANSIBLE_VERSION}
 
 env:
-  - MOLECULE_NO_LOG=false
+  global:
+    - MOLECULE_NO_LOG=false
+    - ANSIBLE_VERSION="2.9.21"
 
 stages:
   - name: Linters
