@@ -3,6 +3,7 @@
 AMI_ID=$1
 EXTRA_VARS_FILE=$2
 TEST_CONFIG_FILE=$3
+FLAVOUR=$4
 TEST_ID="${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_$4"
 
 function cleanup {
@@ -46,16 +47,31 @@ ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
 
 ./scripts/generate-zip.sh
 export VERSION=$(cat VERSION)
-scp ./dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
-ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip python3 && sudo pip3 install virtualenv"
-ssh centos@${PUBLIC_IP} "mkdir ~/.pythonvenv && virtualenv -p /usr/bin/python3 ~/.pythonvenv/ansible-${ANSIBLE_VERSION}"
-ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip install --upgrade pip && pip install ansible==${ANSIBLE_VERSION}"
-ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
-scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
-ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@${EXTRA_VARS_FILE}\""
 
-sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "tests/${TEST_CONFIG_FILE}"
+if [[ $FLAVOUR == centos* ]]; then
+  SSH_CONNECTION_STRING=centos@${PUBLIC_IP}
+  SSH_HOME="/home/centos"
+  INSTALL_DEPENDENCIES="sudo yum install -y -q unzip python3 && sudo pip3 install virtualenv"
+elif [[ $FLAVOUR == ubuntu* ]]; then
+  SSH_CONNECTION_STRING=ubuntu@${PUBLIC_IP}
+  SSH_HOME="/hom/ubuntu"
+  INSTALL_DEPENDENCIES="sudo apt-get update -q && sudo apt-get install -qy unzip python3 virtualenvwrapper""
+else
+  echo "${FLAVOUR} not supported"
+  exit 1
+fi
+
+scp ./dist/alfresco-ansible-deployment-${VERSION}.zip ${SSH_CONNECTION_STRING}:${SSH_HOME}/
+ssh ${SSH_CONNECTION_STRING} ${INSTALL_DEPENDENCIES}
+ssh ${SSH_CONNECTION_STRING} "mkdir ~/.pythonvenv && virtualenv -p /usr/bin/python3 ~/.pythonvenv/ansible-${ANSIBLE_VERSION}"
+ssh ${SSH_CONNECTION_STRING} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip install --upgrade pip && pip install ansible==${ANSIBLE_VERSION}"
+ssh ${SSH_CONNECTION_STRING} "unzip alfresco-ansible-deployment-${VERSION}.zip"
+scp -r tests ${SSH_CONNECTION_STRING}:${SSH_HOME}/alfresco-ansible-deployment-${VERSION}/
+ssh ${SSH_CONNECTION_STRING} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@${EXTRA_VARS_FILE}\""
+
+sed -i "s+TEST_URL+http://${PUBLIC_IP}+g" "tests/$TEST_CONFIG_FILE"
 cd dtas
 pytest --tb=line --configuration ../tests/${TEST_CONFIG_FILE} tests/ -s
-if [[ "$TRAVIS_COMMIT_MESSAGE" == *"[keep env]"* ]]; then exit 0; fi
-aws ec2 terminate-instances --instance-ids $INSTANCE_ID
+
+if [[ $TRAVIS_COMMIT_MESSAGE == *[keep env]* ]]; then exit 0; fi
+aws ec2 terminate-instances --instance-ids ${INSTANCE_ID}

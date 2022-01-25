@@ -37,3 +37,7 @@ jobs:
       name: Localhost integration checks (ACS 7.1.0 on CentOS 8)
       script:
         - ./scripts/integration/script.sh ami-0d6e9a57f6259ba3a tests/test-extra-vars.yml test-config.json centos8
+    - stage: Verification
+      name: Localhost integration checks (ACS 7.1.0 on Ubuntu 20.04)
+      script:
+        - ./scripts/integration/script.sh ami-09e67e426f25ce0d7 tests/test-extra-vars.yml test-config.json ubuntu2004
