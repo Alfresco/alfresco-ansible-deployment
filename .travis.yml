@@ -38,4 +38,4 @@ jobs:
       name: Localhost integration checks (ACS 7.1.0 on CentOS 8)
       install: skip
       script:
-        - ./scripts/integration/script.sh ami-0d6e9a57f6259ba3a test-extra-vars.yml test-config.json centos8
+        - ./scripts/integration/script.sh ami-0d6e9a57f6259ba3a tests/test-extra-vars.yml test-config.json centos8

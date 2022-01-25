@@ -47,12 +47,12 @@ ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
 ./scripts/generate-zip.sh
 export VERSION=$(cat VERSION)
 scp ./dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
-ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip python3 python-virtualenv"
+ssh centos@${PUBLIC_IP} "sudo yum update && sudo yum install -y -q unzip python3 python-virtualenv"
 ssh centos@${PUBLIC_IP} "mkdir ~/.pythonvenv && virtualenv -p /usr/bin/python3 ~/.pythonvenv/ansible-${ANSIBLE_VERSION}"
 ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip install --upgrade pip && pip install ansible==${ANSIBLE_VERSION}"
 ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
 scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
-ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/${EXTRA_VARS_FILE}\""
+ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@${EXTRA_VARS_FILE}\""
 
 sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "tests/${TEST_CONFIG_FILE}"
 cd dtas
