@@ -31,11 +31,9 @@ jobs:
   include:
     - stage: Verification
       name: Localhost integration checks (ACS 6.2.2 on CentOS 7)
-      install: skip
       script:
         - ./scripts/integration/script.sh ami-0affd4508a5d2481b 6.2.N-extra-vars.yml test-config-acs6-stack.json centos7
     - stage: Verification
       name: Localhost integration checks (ACS 7.1.0 on CentOS 8)
-      install: skip
       script:
         - ./scripts/integration/script.sh ami-0d6e9a57f6259ba3a tests/test-extra-vars.yml test-config.json centos8
