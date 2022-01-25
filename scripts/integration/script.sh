@@ -47,7 +47,7 @@ ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
 ./scripts/generate-zip.sh
 export VERSION=$(cat VERSION)
 scp ./dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
-ssh centos@${PUBLIC_IP} "sudo yum update && sudo yum install -y -q unzip python3 python-virtualenv"
+ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip python3 python-virtualenv"
 ssh centos@${PUBLIC_IP} "mkdir ~/.pythonvenv && virtualenv -p /usr/bin/python3 ~/.pythonvenv/ansible-${ANSIBLE_VERSION}"
 ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip install --upgrade pip && pip install ansible==${ANSIBLE_VERSION}"
 ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
