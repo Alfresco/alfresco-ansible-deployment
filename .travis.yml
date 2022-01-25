@@ -31,7 +31,6 @@ jobs:
   include:
     - stage: Verification
       name: Localhost integration checks (ACS 6.2.2 on CentOS 7)
-      before_install:
-        - ./scripts/integration/before_install.sh
+      install: skip
       script:
         - ./scripts/integration/script.sh
