@@ -7,8 +7,8 @@ from hamcrest import assert_that, contains_string
 @pytest.fixture()
 def get_ansible_vars(host):
     """Define get_ansible_vars"""
-    common_vars = "../../../common/vars/main.yml name=common_vars"
-    common_hosts = "../../../common/defaults/main.yml name=common_hosts"
+    common_vars = "file=../common/vars/main.yml name=common_vars"
+    common_hosts = "file=../common/defaults/main.yml name=common_hosts"
     ansible_vars = host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"]
     ansible_vars.update(host.ansible("include_vars", common_hosts)["ansible_facts"]["common_hosts"])
     return ansible_vars

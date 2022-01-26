@@ -7,11 +7,11 @@ from hamcrest import contains_string, assert_that
 @pytest.fixture()
 def get_ansible_vars(host):
     """Define get_ansible_vars"""
-    common_vars = "file=../../../common/vars/main.yml name=common_vars"
-    common_defaults = "file=../../../common/defaults/main.yml name=common_defaults"
-    nginx_vars = "file=../../vars/main.yml name=nginx_vars"
-    nginx_dist_version_vars = "file=../../vars/" + host.ansible("setup")["ansible_facts"]["ansible_distribution"] + host.ansible("setup")["ansible_facts"]["ansible_distribution_version"] + ".yml name=nginx_dist_version_vars"
-    nginx_osfam_vars = "file=../../vars/" + host.ansible("setup")["ansible_facts"]["ansible_os_family"] + ".yml name=nginx_osfam_vars"
+    common_vars = "file=../common/vars/main.yml name=common_vars"
+    common_defaults = "file=../common/defaults/main.yml name=common_defaults"
+    nginx_vars = "file=./vars/main.yml name=nginx_vars"
+    nginx_dist_version_vars = "file=./vars/" + host.ansible("setup")["ansible_facts"]["ansible_distribution"] + host.ansible("setup")["ansible_facts"]["ansible_distribution_version"] + ".yml name=nginx_dist_version_vars"
+    nginx_osfam_vars = "file=./vars/" + host.ansible("setup")["ansible_facts"]["ansible_os_family"] + ".yml name=nginx_osfam_vars"
     ansible_vars = host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"]
     ansible_vars.update(host.ansible("include_vars", common_defaults)["ansible_facts"]["common_defaults"])
     ansible_vars.update(host.ansible("include_vars", nginx_vars)["ansible_facts"]["nginx_vars"])

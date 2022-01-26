@@ -50,7 +50,7 @@ platforms:
 provisioner:
   name: ansible
   ansible_args:
-    - --inventory=../../../../inventory_local.yml
+    - --inventory=../../inventory_local.yml
     - --limit=instance
   inventory:
     links:
