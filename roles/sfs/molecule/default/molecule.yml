@@ -22,7 +22,7 @@ platforms:
     image: centos/systemd:latest
     privileged: true
     volume_mounts:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     command: "/usr/sbin/init"
     exposed_ports:
       - 80/tcp
