@@ -17,8 +17,8 @@ branches:
     - /OPSEXP-.*/
 
 before_install:
-  - pip install ansible==${ANSIBLE_VERSION}
-  - ansible-galaxy collection install community.docker
+  - travis_retry pip install ansible==${ANSIBLE_VERSION}
+  - travis_retry ansible-galaxy collection install community.docker
 
 env:
   global:
