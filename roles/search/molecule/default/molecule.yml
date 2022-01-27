@@ -17,11 +17,15 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: centos/systemd:latest
+    image: centos:8
     privileged: true
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    command: "/usr/sbin/init"
+    command: /sbin/init
     exposed_ports:
       - 80/tcp
       - 443/tcp
