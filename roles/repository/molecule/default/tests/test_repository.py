@@ -28,7 +28,7 @@ def test_newly_added_properties_are_set(host, get_ansible_vars):
     content = host.file("/etc/opt/alfresco/content-services/classpath/alfresco-global.properties").content
     assert_that(b'index.recovery.mode=NONE' in content)
     assert_that(b'index.subsystem.name=noindex' in content)
-    assert_that(host.socket("tcp://:::1121").is_listening)
+    assert_that(host.socket("tcp://0.0.0.0:1121").is_listening)
 
 def test_repo_service_is_running_and_enabled(host, get_ansible_vars):
     """Check repository service"""
