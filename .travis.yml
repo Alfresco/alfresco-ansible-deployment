@@ -25,6 +25,7 @@ env:
   global:
     - MOLECULE_NO_LOG=false
     - ANSIBLE_VERSION="2.9.21"
+    - AWS_REGION=us-east-1
 
 stages:
   - name: Linters
@@ -56,15 +57,18 @@ jobs:
 
     - stage: Verification
       name: Molecule ACS 7.1.0 on RHEL8
-      env: AWS_REGION=us-east-1 MOLECULE_CONFIG=molecule-rhel8.yml
+      env: MOLECULE_CONFIG=molecule-rhel8.yml
 
     - stage: Verification
       name: Molecule ACS 7.1.0 on Ubuntu 20.04
-      env: AWS_REGION=us-east-1 MOLECULE_CONFIG=molecule-ubuntu2004.yml
+      env: MOLECULE_CONFIG=molecule-ubuntu2004.yml
 
+    - stage: Verification
+      name: Molecule ACS Community on RHEL8
+      env: MOLECULE_CONFIG=molecule-rhel8-community.yml
 
 script:
-  - molecule -e $MOLECULE_CONFIG converge
+  - molecule -e $MOLECULE_CONFIG converge || exit 1
   - molecule -e $MOLECULE_CONFIG verify
 after_script:
   - molecule -e $MOLECULE_CONFIG destroy

@@ -9,7 +9,7 @@
     - name: "Set variables"
       set_fact:
         dta_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dta"
-        test_config_file: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/tests/test-config.json"
+        test_config_file: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/{{ lookup('env', 'MOLECULE_IT_TEST_CONFIG') }}"
 
     - name: Git checkout
       delegate_to: localhost
