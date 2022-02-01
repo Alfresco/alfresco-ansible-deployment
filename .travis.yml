@@ -56,5 +56,6 @@ jobs:
         AWS_REGION=us-east-1
       script:
         - molecule converge
+        - molecule verify
       after_script: 
         - molecule destroy
