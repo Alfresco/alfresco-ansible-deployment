@@ -51,6 +51,8 @@ jobs:
 
     - stage: Verification
       name: Molecule ACS 7.1.0 on RHEL8
+      env:
+        AWS_REGION=us-east-1
       script:
         - molecule converge
       after_script: 
