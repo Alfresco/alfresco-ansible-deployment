@@ -11,7 +11,7 @@ platforms:
     instance_type: t3.large
     vpc_subnet_id: subnet-06ffe524598660d99
     tags:
-      Name: molecule_instance
+      Name: molecule_rhel8_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
