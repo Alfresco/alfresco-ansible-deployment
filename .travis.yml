@@ -38,24 +38,33 @@ jobs:
       name: "ansible-lint"
       script:
         - ansible-lint -v playbooks/acs.yml
+      after_script: exit 0
     - name: "pylint"
       script:
         - find . -name "*.py" ! -name __init__.py | xargs pylint
+      after_script: exit 0
     - name: "yamllint"
       script:
         - yamllint .
+      after_script: exit 0
     - name: Check components version table
       script:
         - python3 scripts/generate-comp-ver-table.py
         - git_status_out=$(git status)
         - if [[ "$git_status_out" == *"docs/README.md"* ]]; then echo "Error- Components version was not changed. Download pre-commit tool";exit 1; fi
+      after_script: exit 0
 
     - stage: Verification
       name: Molecule ACS 7.1.0 on RHEL8
-      env:
-        AWS_REGION=us-east-1
-      script:
-        - molecule converge
-        - molecule verify
-      after_script: 
-        - molecule destroy
+      env: AWS_REGION=us-east-1 MOLECULE_CONFIG=molecule-rhel8.yml
+
+    - stage: Verification
+      name: Molecule ACS 7.1.0 on Ubuntu 20.04
+      env: AWS_REGION=us-east-1 MOLECULE_CONFIG=molecule-ubuntu2004.yml
+
+
+script:
+  - molecule -e $MOLECULE_CONFIG converge
+  - molecule -e $MOLECULE_CONFIG verify
+after_script:
+  - molecule -e $MOLECULE_CONFIG destroy
