@@ -26,6 +26,7 @@ env:
     - MOLECULE_NO_LOG=false
     - ANSIBLE_VERSION="2.9.21"
     - AWS_REGION=us-east-1
+    - DTAS_VERSION=master
 
 stages:
   - name: Linters
