@@ -2,7 +2,7 @@
 # handlers file for roles/transformers
 - name: wait-for-activemq
   wait_for:
-    host: "{{ activemq_host }}"
+    host: "127.0.0.1" # FIXME
     port: "{{ ports_cfg.activemq.openwire }}"
   register: go_signal
 
