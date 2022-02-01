@@ -201,7 +201,6 @@
       ec2_instance:
         profile: "{{ item.aws_profile | default(omit) }}"
         region: "{{ item.region | default(omit) }}"
-        #filters: "{{ platform_filters }}"
         instance_type: "{{ item.instance_type }}"
         image_id: "{{ platform_image_id }}"
         vpc_subnet_id: "{{ item.vpc_subnet_id }}"
@@ -235,8 +234,6 @@
           instance: "{{ item.name }}"
           "molecule-run-id": "{{ run_config.run_id }}"
         platform_tags: "{{ (item.tags or {}) | combine(platform_generated_tags) }}"
-        #platform_filter_keys: "{{ platform_generated_tags.keys() | map('regex_replace', '^(.+)$', 'tag:\\1') }}"
-        #platform_filters: "{{ dict(platform_filter_keys | zip(platform_generated_tags.values())) }}"
       loop: "{{ platforms }}"
       loop_control:
         index_var: index
