@@ -2,6 +2,7 @@
 configuration_files/ssl_certificates/
 configuration_files/keystores/
 dta
+.env.credentials
 
 # # Byte-compiled / optimized / DLL files
 __pycache__/

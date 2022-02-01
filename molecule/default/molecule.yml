@@ -7,7 +7,7 @@ driver:
 
 platforms:
   - name: instance
-    image: ami-098bb5d92c8886ca1
+    image: ami-098bb5d92c8886ca1 # rhel8
     instance_type: t3.large
     vpc_subnet_id: subnet-06ffe524598660d99
     tags:
