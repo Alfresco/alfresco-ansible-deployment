@@ -28,7 +28,8 @@ platforms:
 provisioner:
   name: ansible
   ansible_args:
-    - -e "@${MOLECULE_IT_EXTRA_VARS}"
+    - -e
+    - "@${MOLECULE_IT_EXTRA_VARS}"
   inventory:
     links: 
       group_vars: ../../group_vars
