@@ -26,7 +26,7 @@ env:
     - MOLECULE_NO_LOG=false
     - ANSIBLE_VERSION="2.9.21"
     - AWS_REGION=us-east-1
-    - DTAS_VERSION=master
+    - DTAS_VERSION=OPSEXP-1208-handle-google-docs-url-community
 
 stages:
   - name: Linters
