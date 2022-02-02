@@ -21,10 +21,19 @@
       community.crypto.openssl_privatekey:
         path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ certificate_domain }}.key"
 
-    - name: Create simple self-signed certificate for {{ certificate_domain }}
+    - name: Create CSR for {{ certificate_domain }} self-signed certificate
+      delegate_to: localhost
+      community.crypto.openssl_csr_pipe:
+        privatekey_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ certificate_domain }}.key"
+        common_name: "{{ certificate_domain }}"
+        organization_name: Hyland
+      register: csr
+
+    - name: Create self-signed certificate from CSR
       delegate_to: localhost
       community.crypto.x509_certificate:
         path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ certificate_domain }}.crt"
+        csr_content: "{{ csr.csr }}"
         privatekey_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ certificate_domain }}.key"
         provider: selfsigned
 
