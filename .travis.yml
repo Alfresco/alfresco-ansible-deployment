@@ -57,6 +57,10 @@ jobs:
       after_script: exit 0
 
     - stage: Verification
+      name: Molecule ACS 6.2.2 on Centos 7
+      env: MOLECULE_CONFIG=molecule-centos7.yml
+
+    - stage: Verification
       name: Molecule ACS 7.1.0 on RHEL8
       env: MOLECULE_CONFIG=molecule-rhel8.yml
 
