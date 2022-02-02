@@ -72,7 +72,6 @@ jobs:
       env: MOLECULE_CONFIG=molecule-rhel8-community.yml
 
 script:
-  - molecule -e $MOLECULE_CONFIG converge || exit 1
-  - molecule -e $MOLECULE_CONFIG verify
+  - molecule -e $MOLECULE_CONFIG converge && molecule -e $MOLECULE_CONFIG verify
 after_script:
   - molecule -e $MOLECULE_CONFIG destroy
