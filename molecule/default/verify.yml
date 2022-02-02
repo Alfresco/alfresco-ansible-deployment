@@ -8,6 +8,7 @@
 
     - name: "Set variables"
       set_fact:
+        project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
         dta_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dta"
         test_config_file: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/{{ lookup('env', 'MOLECULE_IT_TEST_CONFIG') }}"
 
@@ -29,10 +30,10 @@
       ansible.builtin.replace:
         path: "{{ test_config_file }}"
         regexp: 'TEST_URL'
-        replace: 'http://{{ ansible_ec2_public_ipv4 }}'
+        replace: 'https://{{ ansible_ec2_public_hostname }}'
 
     - name: Run pytest
       delegate_to: localhost
       ansible.builtin.shell:
         chdir: "{{ dta_dir }}"
-        cmd: pytest --tb=line --configuration {{ test_config_file }} tests/ -s
+        cmd: REQUESTS_CA_BUNDLE={{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt pytest --tb=line --configuration {{ test_config_file }} tests/ -s
