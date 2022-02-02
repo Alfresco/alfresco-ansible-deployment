@@ -8,10 +8,8 @@
   become: true
   become_user: root
   package:
-    name: "{{ item }}"
+    name: "{{ utils_search }}"
     state: present
-  poll: 0
-  loop: "{{ utils_search }}"
 
 - name: Create search binaries, config and data directories
   become: true

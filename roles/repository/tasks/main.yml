@@ -7,9 +7,8 @@
   become: true
   become_user: root
   package:
-    name: "{{ item }}"
+    name: "{{ utils_repo }}"
     state: present
-  loop: "{{ utils_repo }}"
 
 - name: Create folders
   become: true

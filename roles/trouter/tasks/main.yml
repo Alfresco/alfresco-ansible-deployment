@@ -8,10 +8,8 @@
   become: true
   become_user: root
   package:
-    name: "{{ item }}"
+    name: "{{ utils_trouter }}"
     state: present
-  poll: 0
-  loop: "{{ utils_trouter }}"
 
 - name: Download alfresco-transform-router-{{ trouter.version }}.jar
   block:
