@@ -1,0 +1,36 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Make sure python3 is installed
+      package:
+        name: python3
+        state: present
+      become: true
+
+    - amazon.aws.ec2_metadata_facts:
+
+    - name: "Set variables"
+      set_fact:
+        project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+        certificate_domain: "{{ ansible_ec2_public_hostname }}"
+
+    - name: Create private key (RSA, 4096 bits)
+      delegate_to: localhost
+      community.crypto.openssl_privatekey:
+        path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ certificate_domain }}.key"
+
+    - name: Create simple self-signed certificate for {{ certificate_domain }}
+      delegate_to: localhost
+      community.crypto.x509_certificate:
+        path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ certificate_domain }}.crt"
+        privatekey_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ certificate_domain }}.key"
+        provider: selfsigned
+
+    - name: Configure FQDN in extra vars file
+      delegate_to: localhost
+      ansible.builtin.replace:
+        path: "{{ project_dir }}/tests/test-ssl.yml"
+        regexp: 'TEST_FQDN'
+        replace: '{{ certificate_domain }}'
