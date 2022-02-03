@@ -26,6 +26,7 @@ env:
     - ANSIBLE_VERSION="2.9.21"
     - AWS_REGION=us-east-1
     - DTAS_VERSION=v1.1.1
+    - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
 
 before_install:
   - travis_retry pip install ansible==${ANSIBLE_VERSION}

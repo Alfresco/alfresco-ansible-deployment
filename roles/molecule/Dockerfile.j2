@@ -1,0 +1,7 @@
+FROM {{ item.image }}
+
+{% if 'ubuntu' in item.image %}
+RUN apt-get update && apt-get install -y systemd sudo ca-certificates && apt-get clean
+{% endif %}
+
+CMD [ "/lib/systemd/systemd" ]

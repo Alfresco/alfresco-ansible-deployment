@@ -1,25 +1,12 @@
 ---
-scenario:
-  test_sequence:
-    - lint
-    - cleanup
-    - destroy
-    - syntax
-    - create
-    - prepare
-    - converge
-    - idempotence
-    - side_effect
-    - verify
-    - cleanup
-    - destroy
 dependency:
   name: galaxy
 driver:
   name: docker
 platforms:
   - name: instance
-    image: centos:7
+    image: ${MOLECULE_ROLE_IMAGE:-centos:7}
+    dockerfile: ../../../molecule/Dockerfile.j2
     privileged: true
     tmpfs:
       - /run
@@ -27,19 +14,6 @@ platforms:
       - /tmp
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    command: /sbin/init
-    exposed_ports:
-      - 80/tcp
-      - 443/tcp
-      - 5432/tcp
-      - 8161/tcp
-      - 8080/tcp
-      - 8082/tcp
-      - 8083/tcp
-      - 8090/tcp
-      - 8099/tcp
-      - 8983/tcp
-      - 9090/tcp
     published_ports:
       - 0.0.0.0:80:80/tcp
       - 0.0.0.0:443:443/tcp
@@ -49,6 +23,7 @@ platforms:
       - 0.0.0.0:8082:8082/tcp
       - 0.0.0.0:8083:8083/tcp
       - 0.0.0.0:8090:8090/tcp
+      - 0.0.0.0:8095:8095/tcp
       - 0.0.0.0:8099:8099/tcp
       - 0.0.0.0:8983:8983/tcp
       - 0.0.0.0:9090:9090/tcp
