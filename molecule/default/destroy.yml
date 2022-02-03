@@ -1,4 +1,5 @@
 ---
+# This file has been generated via `molecule init scenario -d ec2`
 - name: Destroy
   hosts: localhost
   connection: local

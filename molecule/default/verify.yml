@@ -6,11 +6,12 @@
 
     - amazon.aws.ec2_metadata_facts:
 
-    - name: "Set variables"
+    - name: "Set common variables"
       set_fact:
         project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
         dta_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dta"
         test_config_file: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/{{ lookup('env', 'MOLECULE_IT_TEST_CONFIG') }}"
+        selfsigned_cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
 
     - name: Git checkout
       delegate_to: localhost
@@ -25,7 +26,7 @@
         chdir: "{{ dta_dir }}"
         cmd: pip install -r requirements.txt
 
-    - name: Configure URL
+    - name: Configure deployment URL
       delegate_to: localhost
       ansible.builtin.replace:
         path: "{{ test_config_file }}"
@@ -36,4 +37,6 @@
       delegate_to: localhost
       ansible.builtin.shell:
         chdir: "{{ dta_dir }}"
-        cmd: REQUESTS_CA_BUNDLE={{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt pytest --tb=line --configuration {{ test_config_file }} tests/ -s
+        cmd: |
+          REQUESTS_CA_BUNDLE={{ selfsigned_cert_path }}
+          pytest --tb=line --configuration {{ test_config_file }} tests/ -s

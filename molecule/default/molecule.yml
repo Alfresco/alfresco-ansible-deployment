@@ -9,7 +9,7 @@ platforms:
   - name: instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.large
-    vpc_subnet_id: subnet-06ffe524598660d99
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
     tags:
       Name: molecule_${MOLECULE_IT_PLATFORM}_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}
       Owner: Ops Readiness Team
