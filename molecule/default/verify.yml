@@ -41,5 +41,5 @@
       ansible.builtin.shell:
         chdir: "{{ dta_dir }}"
         cmd: |
-          REQUESTS_CA_BUNDLE={{ selfsigned_cert_path }}
+          export REQUESTS_CA_BUNDLE={{ selfsigned_cert_path }}
           pytest --tb=line --configuration {{ test_config_file }} tests/ -s
