@@ -16,10 +16,6 @@ branches:
     - /fix.*/
     - /OPSEXP-.*/
 
-before_install:
-  - travis_retry pip install ansible==${ANSIBLE_VERSION}
-  - travis_retry ansible-galaxy collection install community.docker amazon.aws community.crypto
-
 env:
   global:
     - MOLECULE_NO_LOG=false
@@ -27,9 +23,22 @@ env:
     - AWS_REGION=us-east-1
     - DTAS_VERSION=OPSEXP-1208-handle-google-docs-url-community
 
+before_install:
+  - travis_retry pip install ansible==${ANSIBLE_VERSION}
+  - travis_retry ansible-galaxy collection install community.docker amazon.aws community.crypto
+
+script:
+  - molecule -e $MOLECULE_CONFIG converge && molecule -e $MOLECULE_CONFIG verify
+after_script:
+  - |
+    if [ -n "$MOLECULE_CONFIG" ]; then
+      molecule -e $MOLECULE_CONFIG destroy
+    fi
+
 stages:
   - name: Linters
-  - name: Verification
+  - name: Roles tests
+  - name: Integration tests
   - name: Release Stage
     if: branch = master AND commit_message =~ /\[release\]/
 
@@ -39,39 +48,142 @@ jobs:
       name: "ansible-lint"
       script:
         - ansible-lint -v playbooks/acs.yml
-      after_script: exit 0
+
     - name: "pylint"
       script:
         - find . -name "*.py" ! -name __init__.py | xargs pylint
-      after_script: exit 0
+
     - name: "yamllint"
       script:
         - yamllint .
-      after_script: exit 0
+
     - name: Check components version table
       script:
         - python3 scripts/generate-comp-ver-table.py
         - git_status_out=$(git status)
         - if [[ "$git_status_out" == *"docs/README.md"* ]]; then echo "Error- Components version was not changed. Download pre-commit tool";exit 1; fi
-      after_script: exit 0
 
-    - stage: Verification
+    - stage: Roles tests
+      name: Search Role Verification
+      script:
+        - molecule --version
+        - cd roles/search/
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Common Role Verification
+      script:
+        - cd roles/common/ && molecule test
+
+    - stage: Roles tests
+      name: Java Role Verification
+      script:
+        - cd roles/java/ && molecule test
+
+    - stage: Roles tests
+      name: Tomcat Role Verification
+      script:
+        - cd roles/tomcat/ && molecule test
+
+    - stage: Roles tests
+      name: ActiveMQ Role Verification
+      script:
+        - cd roles/activemq/ && molecule test
+
+    - stage: Roles tests
+      name: Repository Role Verification
+      script:
+        - cd roles/repository/
+        - molecule converge
+        - sleep 5m
+        - travis_wait 30 molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: ADW Role Verification
+      script:
+        - cd roles/adw/ && molecule test
+
+    - stage: Roles tests
+      name: Nginx Role Verification
+      script:
+        - cd roles/nginx/ && molecule test
+
+    - stage: Roles tests
+      name: SFS Role Verification
+      script:
+        - cd roles/sfs/ && molecule test
+
+    - stage: Roles tests
+      name: Trouter Role Verification
+      script:
+        - cd roles/trouter
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Transform AIO Verification tests
+      script:
+        - cd roles/transformers
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Sync Service Verification tests
+      script:
+        - cd roles/sync
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Integration tests
       name: Molecule ACS 6.2.2 on Centos 7
       env: MOLECULE_CONFIG=molecule-centos7.yml
 
-    - stage: Verification
+    - stage: Integration tests
       name: Molecule ACS 7.1.0 on RHEL8
       env: MOLECULE_CONFIG=molecule-rhel8.yml
 
-    - stage: Verification
+    - stage: Integration tests
       name: Molecule ACS 7.1.0 on Ubuntu 20.04
       env: MOLECULE_CONFIG=molecule-ubuntu2004.yml
 
-    - stage: Verification
+    - stage: Integration tests
       name: Molecule ACS Community on RHEL8
       env: MOLECULE_CONFIG=molecule-rhel8-community.yml
 
-script:
-  - molecule -e $MOLECULE_CONFIG converge && molecule -e $MOLECULE_CONFIG verify
-after_script:
-  - molecule -e $MOLECULE_CONFIG destroy
+    - stage: Release Stage
+      name: Release
+      script:
+        - scripts/generate-zip.sh
+        # Travis CI runner work on DETACHED HEAD, so we need to checkout the branch
+        - git checkout -B "${TRAVIS_BRANCH}"
+        - git config --local user.email "alfresco-build@alfresco.com"
+        - export VERSION=`cat VERSION`
+        - echo "Tagging repository with v$VERSION..."
+        - export GIT_TAG="v$VERSION"
+        - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
+        - git push https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-ansible-deployment $GIT_TAG
+        - git tag -d latest
+        - git tag -a -m "current latest -> $GIT_TAG" -f latest ${GIT_TAG}^{}
+        - for ref in ':refs/tags/latest' 'latest'; do git push https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-ansible-deployment $ref; done
+        - curl -v -F "r=releases" -F "g=org.alfresco" -F "a=alfresco-ansible-deployment" -F "v=${VERSION}" -F "p=zip" -F "file=@dist/alfresco-ansible-deployment-${VERSION}.zip" -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" https://artifacts.alfresco.com/nexus/service/local/artifact/maven/content
+      deploy:
+        provider: s3
+        access_key_id: "${STAGING_AWS_ACCESS_KEY}"
+        secret_access_key: "${STAGING_AWS_SECRET_KEY}"
+        bucket: "${S3_STAGING_BUCKET}"
+        region: "eu-west-1"
+        local_dir: dist
+        glob: "*.zip"
+        upload-dir: "enterprise/alfresco-ansible-deployment"
+      after_deploy:
+        - rm -fv dist/alfresco-ansible-release-*.zip
