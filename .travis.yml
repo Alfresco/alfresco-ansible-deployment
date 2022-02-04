@@ -72,6 +72,20 @@ jobs:
 
     - stage: Roles tests
       name: Search Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - molecule --version
+        - cd roles/search/
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Search Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - molecule --version
         - cd roles/search/
@@ -82,26 +96,75 @@ jobs:
 
     - stage: Roles tests
       name: Common Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/common/ && molecule test
+
+    - stage: Roles tests
+      name: Common Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/common/ && molecule test
 
     - stage: Roles tests
       name: Java Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/java/ && molecule test
+
+    - stage: Roles tests
+      name: Java Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/java/ && molecule test
 
     - stage: Roles tests
       name: Tomcat Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/tomcat/ && molecule test
+
+    - stage: Roles tests
+      name: Tomcat Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/tomcat/ && molecule test
 
     - stage: Roles tests
       name: ActiveMQ Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/activemq/ && molecule test
+
+    - stage: Roles tests
+      name: ActiveMQ Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/activemq/ && molecule test
 
     - stage: Roles tests
       name: Repository Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/repository/
+        - molecule converge
+        - sleep 5m
+        - travis_wait 30 molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Repository Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/repository/
         - molecule converge
@@ -111,21 +174,61 @@ jobs:
 
     - stage: Roles tests
       name: ADW Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/adw/ && molecule test
+
+    - stage: Roles tests
+      name: ADW Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/adw/ && molecule test
 
     - stage: Roles tests
       name: Nginx Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/nginx/ && molecule test
+
+    - stage: Roles tests
+      name: Nginx Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/nginx/ && molecule test
 
     - stage: Roles tests
       name: SFS Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/sfs/ && molecule test
+
+    - stage: Roles tests
+      name: SFS Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/sfs/ && molecule test
 
     - stage: Roles tests
       name: Trouter Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/trouter
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Trouter Role Verification
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/trouter
         - molecule converge
@@ -135,6 +238,19 @@ jobs:
 
     - stage: Roles tests
       name: Transform AIO Verification tests
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/transformers
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Transform AIO Verification tests
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/transformers
         - molecule converge
@@ -144,6 +260,19 @@ jobs:
 
     - stage: Roles tests
       name: Sync Service Verification tests
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/sync
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Sync Service Verification tests
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/sync
         - molecule converge
