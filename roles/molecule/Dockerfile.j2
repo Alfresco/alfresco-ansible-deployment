@@ -1,7 +1,5 @@
 FROM {{ item.image }}
 
 {% if 'ubuntu' in item.image %}
-RUN apt-get update && apt-get install -y systemd sudo ca-certificates curl && apt-get clean
+RUN apt-get update && apt-get install -y systemd sudo ca-certificates curl net-tools && apt-get clean
 {% endif %}
-
-CMD [ "/lib/systemd/systemd" ]
