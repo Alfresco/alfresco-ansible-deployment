@@ -7,6 +7,7 @@ platforms:
   - name: instance
     image: ${MOLECULE_ROLE_IMAGE:-centos:7}
     dockerfile: ../../../molecule/Dockerfile.j2
+    command: "/lib/systemd/systemd"
     privileged: true
     tmpfs:
       - /run
