@@ -38,14 +38,6 @@
         from_port: "{{ default_ssh_port }}"
         to_port: "{{ default_ssh_port }}"
         cidr_ip: "0.0.0.0/0"
-      - proto: tcp
-        from_port: "80"
-        to_port: "80"
-        cidr_ip: "0.0.0.0/0"
-      - proto: tcp
-        from_port: "443"
-        to_port: "443"
-        cidr_ip: "0.0.0.0/0"
       - proto: icmp
         from_port: 8
         to_port: -1
