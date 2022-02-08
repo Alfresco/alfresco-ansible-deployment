@@ -5,6 +5,7 @@
   vars:
     project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
     dta_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dta"
+    test_config_file: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/{{ lookup('env', 'MOLECULE_IT_TEST_CONFIG') }}"
   tasks:
 
     - amazon.aws.ec2_metadata_facts:
@@ -33,7 +34,6 @@
       delegate_to: localhost
       vars:
           selfsigned_cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
-          test_config_file: "{{ project_dir }}/{{ lookup('env', 'MOLECULE_IT_TEST_CONFIG') }}"
       ansible.builtin.shell:
         chdir: "{{ dta_dir }}"
         cmd: |
