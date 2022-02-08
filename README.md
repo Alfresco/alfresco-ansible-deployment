@@ -45,10 +45,10 @@ Some environment variables are required to execute integration tests locally, pl
 
 To have environment variables automatically loaded when entering the root folder, please install [direnv](https://direnv.net/).
 
-Scenario-specific variables are defined in the `molecule-scenario.yml` files.
+Scenario-specific variables are defined in the `vars-scenario.yml` files.
 
-To run an integration test you need execute molecule with `-e molecule-scenario.yml` parameter:
+To run an integration test you need execute molecule with `-e molecule/default/vars-scenario.yml` parameter:
 
 ```bash
-molecule -e molecule-rhel8.yml test
+molecule -e molecule/default/vars-rhel8.yml test
 ```
