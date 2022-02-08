@@ -18,6 +18,8 @@ branches:
 
 env:
   global:
+    - BRANCH_NAME="${TRAVIS_BRANCH}"
+    - BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}"
     - MOLECULE_NO_LOG=false
     - ANSIBLE_VERSION="2.9.21"
     - AWS_REGION=us-east-1
