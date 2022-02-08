@@ -2,6 +2,8 @@
 - name: Prepare
   hosts: all
   gather_facts: false
+  vars:
+    project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
   tasks:
     - name: Make sure python3 is installed
       package:
@@ -11,15 +13,11 @@
 
     - amazon.aws.ec2_metadata_facts:
 
-    - name: "Set common variables"
+    - name: "Set variables"
       set_fact:
-        project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
         certificate_domain: "{{ ansible_ec2_public_hostname }}"
-
-    - name: "Set certificate variables"
-      set_fact:
-        private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ certificate_domain }}.key"
-        cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ certificate_domain }}.crt"
+        private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.key"
+        cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
 
     - name: Create private key (RSA, 4096 bits)
       delegate_to: localhost
