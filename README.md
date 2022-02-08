@@ -43,9 +43,9 @@ On the root folder there is a molecule scenario to run the entire playbook on EC
 
 Some environment variables are required to execute integration tests locally, please take a look at the [.envrc](.envrc) file.
 
-To have environment variables automatically loaded when entering the root folder, please install [direnv](https://direnv.net/).
+To have environment variables automatically loaded when entering the project folder on your machine, you may want to install [direnv](https://direnv.net/).
 
-Scenario-specific variables are defined in the `vars-scenario.yml` files.
+Scenario-specific variables are defined in the `vars-scenario.yml` files inside the `molecule/default` folder.
 
 To run an integration test you need execute molecule with `-e molecule/default/vars-scenario.yml` parameter:
 
