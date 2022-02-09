@@ -24,7 +24,7 @@ env:
     - MOLECULE_IT_PATH=molecule/default
     - ANSIBLE_VERSION="2.9.21"
     - AWS_REGION=us-east-1
-    - DTAS_VERSION=OPSEXP-1208-handle-google-docs-url-community
+    - DTAS_VERSION=v1.1.1
 
 before_install:
   - travis_retry pip install ansible==${ANSIBLE_VERSION}
