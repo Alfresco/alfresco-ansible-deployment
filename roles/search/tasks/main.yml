@@ -28,7 +28,7 @@
   get_url:
     url: "{{ downloads.search_zip_url }}"
     dest: "{{ download_location }}/alfresco-search-services-{{ search.version }}.zip"
-    checksum: "sha1:{{ downloads.search_zip_sha1_checksum }}"
+    checksum: "sha1:{{ lookup('url', downloads.search_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}"
     mode: 'u=r,g=r,o=r'
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
