@@ -1,0 +1,48 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: false
+  vars:
+    project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+  tasks:
+    - name: Make sure python3 is installed
+      package:
+        name: python3
+        state: present
+      become: true
+
+    - amazon.aws.ec2_metadata_facts:
+
+    - name: "Set variables"
+      set_fact:
+        certificate_domain: "{{ ansible_ec2_public_hostname }}"
+        private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.key"
+        cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
+
+    - name: Create private key (RSA, 4096 bits)
+      delegate_to: localhost
+      community.crypto.openssl_privatekey:
+        path: "{{ private_key_path }}"
+
+    - name: Create CSR for {{ certificate_domain }} self-signed certificate
+      delegate_to: localhost
+      community.crypto.openssl_csr_pipe:
+        privatekey_path: "{{ private_key_path }}"
+        common_name: "{{ certificate_domain }}"
+        organization_name: Hyland
+      register: csr
+
+    - name: Create self-signed certificate from CSR
+      delegate_to: localhost
+      community.crypto.x509_certificate:
+        path: "{{ cert_path }}"
+        csr_content: "{{ csr.csr }}"
+        privatekey_path: "{{ private_key_path }}"
+        provider: selfsigned
+
+    - name: Configure FQDN in extra vars file
+      delegate_to: localhost
+      ansible.builtin.replace:
+        path: "{{ project_dir }}/tests/test-ssl.yml"
+        regexp: 'TEST_FQDN'
+        replace: '{{ certificate_domain }}'

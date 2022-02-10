@@ -11,6 +11,12 @@
   include_vars: "nexus.yml"
   failed_when: false
 
+- name: Ensure apt indices are up-to-date
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600 # 1 hour
+  when: ansible_pkg_mgr == 'apt'
+
 - name: Ensure a list of packages installed
   become: true
   package:

@@ -1,0 +1,4 @@
+MOLECULE_IT_IMAGE_ID: ami-0affd4508a5d2481b
+MOLECULE_IT_EXTRA_VARS: 6.2.N-extra-vars.yml
+MOLECULE_IT_TEST_CONFIG: tests/test-config-acs6-stack.json
+MOLECULE_IT_PLATFORM: centos7

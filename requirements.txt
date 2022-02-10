@@ -2,6 +2,8 @@ ansible-lint==5.3.2
 jmespath==0.10.0
 molecule==3.5.2
 molecule-docker==1.1.0
+molecule-ec2==0.4
+boto3==1.20.46
 PyHamcrest==2.0.2
 pylint==2.10.2
 pytest-testinfra==6.3.0
