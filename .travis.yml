@@ -15,6 +15,7 @@ branches:
     - /feature.*/
     - /fix.*/
     - /OPSEXP-.*/
+    - /^dependabot\/.*$/
 
 env:
   global:
