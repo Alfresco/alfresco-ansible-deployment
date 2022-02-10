@@ -25,7 +25,6 @@ env:
     - BRANCH_NAME="${TRAVIS_BRANCH}"
     - BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}"
     - MOLECULE_NO_LOG=false
-    - MOLECULE_IT_PATH=molecule/default
     - ANSIBLE_VERSION="2.9.21"
     - AWS_REGION=us-east-1
     - DTAS_VERSION=v1.1.1
@@ -36,12 +35,15 @@ before_install:
 
 script:
   - |
-    molecule -e $MOLECULE_IT_PATH/$MOLECULE_IT_CONFIG converge -s multinode && \
-    molecule -e $MOLECULE_IT_PATH/$MOLECULE_IT_CONFIG verify -s multinode
-after_script:
-  - |
-    if [ -n "$MOLECULE_IT_CONFIG" ]; then
-      molecule -e $MOLECULE_IT_PATH/$MOLECULE_IT_CONFIG destroy
+    if [ -n "$MOLECULE_IT_SCENARIO" ]; then
+      EXTRA_CONFIG=""
+      MOLECULE_IT_PATH="molecule/$MOLECULE_IT_SCENARIO"
+      if [ -n "$MOLECULE_IT_CONFIG" ]; then
+        EXTRA_CONFIG="-e $MOLECULE_IT_PATH/$MOLECULE_IT_CONFIG"
+      fi
+      molecule $EXTRA_CONFIG converge -s $MOLECULE_IT_SCENARIO && \
+        molecule $EXTRA_CONFIG verify -s $MOLECULE_IT_SCENARIO
+      molecule $EXTRA_CONFIG destroy -s $MOLECULE_IT_SCENARIO
     fi
 
 cache:
@@ -93,8 +95,10 @@ jobs:
       env: MOLECULE_IT_CONFIG=vars-rhel8-community.yml
 
     - stage: Integration tests
-      name: Molecule ACS 7.1.0 on multi-node RHEL8
-      env: MOLECULE_IT_CONFIG=vars-rhel8.yml
+      name: Molecule ACS 7.1.1 on multiple RHEL8
+      env:
+        MOLECULE_IT_SCENARIO=multimachine
+        MOLECULE_IT_CONFIG=vars.yml
 
     - stage: Release Stage
       name: Release
