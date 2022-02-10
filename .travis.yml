@@ -237,19 +237,19 @@ jobs:
         - molecule destroy
 
     - stage: Integration tests
-      name: Molecule ACS 6.2.2 on Centos 7
+      name: Molecule ACS 6.2.2 Enterprise on Centos 7
       env: MOLECULE_IT_CONFIG=vars-centos7.yml
 
     - stage: Integration tests
-      name: Molecule ACS 7.1.0 on RHEL8
+      name: Molecule ACS 7.1.1 Enterprise on RHEL8
       env: MOLECULE_IT_CONFIG=vars-rhel8.yml
 
     - stage: Integration tests
-      name: Molecule ACS 7.1.0 on Ubuntu 20.04
+      name: Molecule ACS 7.1.1 Enterprise on Ubuntu 20.04
       env: MOLECULE_IT_CONFIG=vars-ubuntu2004.yml
 
     - stage: Integration tests
-      name: Molecule ACS Community on RHEL8
+      name: Molecule ACS 7.1.1 Community on RHEL8
       env: MOLECULE_IT_CONFIG=vars-rhel8-community.yml
 
     - stage: Release Stage
