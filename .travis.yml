@@ -71,77 +71,77 @@ jobs:
         - if [[ "$git_status_out" == *"docs/README.md"* ]]; then echo "Error- Components version was not changed. Download pre-commit tool";exit 1; fi
 
     - stage: Roles tests
-      name: Search Role Verification on Centos
+      name: Search tests on Centos
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/search && molecule test
 
     - stage: Roles tests
-      name: Search Role Verification on Ubuntu
+      name: Search tests on Ubuntu
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/search && molecule test
 
     - stage: Roles tests
-      name: Common Role Verification on Centos
+      name: Common tests on Centos
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/common/ && molecule test
 
     - stage: Roles tests
-      name: Common Role Verification on Ubuntu
+      name: Common tests on Ubuntu
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/common/ && molecule test
 
     - stage: Roles tests
-      name: Java Role Verification on Centos
+      name: Java tests on Centos
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/java/ && molecule test
 
     - stage: Roles tests
-      name: Java Role Verification on Ubuntu
+      name: Java tests on Ubuntu
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/java/ && molecule test
 
     - stage: Roles tests
-      name: Tomcat Role Verification on Centos
+      name: Tomcat tests on Centos
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/tomcat/ && molecule test
 
     - stage: Roles tests
-      name: Tomcat Role Verification on Ubuntu
+      name: Tomcat tests on Ubuntu
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/tomcat/ && molecule test
 
     - stage: Roles tests
-      name: ActiveMQ Role Verification on Centos
+      name: ActiveMQ tests on Centos
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/activemq/ && molecule test
 
     - stage: Roles tests
-      name: ActiveMQ Role Verification on Ubuntu
+      name: ActiveMQ tests on Ubuntu
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/activemq/ && molecule test
 
     - stage: Roles tests
-      name: Repository Role Verification on Centos
+      name: Repository tests on Centos
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
@@ -152,7 +152,7 @@ jobs:
         - molecule destroy
 
     - stage: Roles tests
-      name: Repository Role Verification on Ubuntu
+      name: Repository tests on Ubuntu
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
@@ -163,49 +163,49 @@ jobs:
         - molecule destroy
 
     - stage: Roles tests
-      name: ADW Role Verification on Centos
+      name: ADW tests on Centos
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/adw/ && molecule test
 
     - stage: Roles tests
-      name: ADW Role Verification on Ubuntu
+      name: ADW tests on Ubuntu
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/adw/ && molecule test
 
     - stage: Roles tests
-      name: Nginx Role Verification on Centos
+      name: Nginx tests on Centos
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/nginx/ && molecule test
 
     - stage: Roles tests
-      name: Nginx Role Verification on Ubuntu
+      name: Nginx tests on Ubuntu
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/nginx/ && molecule test
 
     - stage: Roles tests
-      name: SFS Role Verification on Centos
+      name: SFS tests on Centos
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/sfs/ && molecule test
 
     - stage: Roles tests
-      name: SFS Role Verification on Ubuntu
+      name: SFS tests on Ubuntu
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/sfs/ && molecule test
 
     - stage: Roles tests
-      name: Trouter Role Verification on Centos
+      name: Trouter tests on Centos
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
@@ -216,7 +216,7 @@ jobs:
         - molecule destroy
 
     - stage: Roles tests
-      name: Trouter Role Verification on Ubuntu
+      name: Trouter tests on Ubuntu
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
@@ -227,7 +227,7 @@ jobs:
         - molecule destroy
 
     - stage: Roles tests
-      name: Transform AIO Verification on Centos
+      name: Transformers tests on Centos
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
@@ -238,7 +238,7 @@ jobs:
         - molecule destroy
 
     - stage: Roles tests
-      name: Transform AIO Verification on Ubuntu
+      name: Transformers tests on Ubuntu
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
@@ -249,7 +249,7 @@ jobs:
         - molecule destroy
 
     - stage: Roles tests
-      name: Sync Service Verification on Centos
+      name: Sync tests on Centos
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
@@ -260,7 +260,7 @@ jobs:
         - molecule destroy
 
     - stage: Roles tests
-      name: Sync Service Verification on Ubuntu
+      name: Sync tests on Ubuntu
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
