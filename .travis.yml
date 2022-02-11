@@ -75,24 +75,14 @@ jobs:
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
-        - molecule --version
-        - cd roles/search/
-        - molecule converge
-        - sleep 1m
-        - molecule verify
-        - molecule destroy
+        - cd roles/search && molecule test
 
     - stage: Roles tests
       name: Search Role Verification on Ubuntu
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
-        - molecule --version
-        - cd roles/search/
-        - molecule converge
-        - sleep 1m
-        - molecule verify
-        - molecule destroy
+        - cd roles/search && molecule test
 
     - stage: Roles tests
       name: Common Role Verification on Centos
