@@ -85,4 +85,4 @@ The table below shows the version of the components deployed by the playbook for
 | Digital Workspace | 2.6.0 | 2.1.0 | 2.6.0 | N/A |
 | Transform Router | 1.5.1 | 1.3.2 | 1.5.1 | N/A |
 | Shared File Store | 0.16.1 | 0.13.0 | 0.16.1 | N/A |
-| Sync Service | 3.5.0 | 3.4.0 | 3.3.3.1 | N/A |
+| Sync Service | 3.4.0 | 3.4.0 | 3.3.3.1 | N/A |
