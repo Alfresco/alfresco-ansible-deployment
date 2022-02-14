@@ -35,7 +35,7 @@ platforms:
     groups:
       - search
     tags:
-      Name: molecule_${MOLECULE_IT_PLATFORM}_se_${BRANCH_NAME}_${BUILD_NUMBER}
+      Name: molecule_${MOLECULE_IT_PLATFORM}_search_${BRANCH_NAME}_${BUILD_NUMBER}
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
@@ -46,7 +46,7 @@ platforms:
     groups:
       - repository
     tags:
-      Name: molecule_${MOLECULE_IT_PLATFORM}_r_${BRANCH_NAME}_${BUILD_NUMBER}
+      Name: molecule_${MOLECULE_IT_PLATFORM}_repo_${BRANCH_NAME}_${BUILD_NUMBER}
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
@@ -57,7 +57,7 @@ platforms:
     groups:
       - transformers
     tags:
-      Name: molecule_${MOLECULE_IT_PLATFORM}_t_${BRANCH_NAME}_${BUILD_NUMBER}
+      Name: molecule_${MOLECULE_IT_PLATFORM}_trans_${BRANCH_NAME}_${BUILD_NUMBER}
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
@@ -68,7 +68,18 @@ platforms:
     groups:
       - syncservice
     tags:
-      Name: molecule_${MOLECULE_IT_PLATFORM}_sy_${BRANCH_NAME}_${BUILD_NUMBER}
+      Name: molecule_${MOLECULE_IT_PLATFORM}_sync_${BRANCH_NAME}_${BUILD_NUMBER}
+      Owner: Ops Readiness Team
+      Department: Engineering
+      Production: false
+  - name: adw
+    image: ${MOLECULE_IT_IMAGE_ID}
+    instance_type: t3.medium
+    vpc_subnet_id: subnet-06ffe524598660d99
+    groups:
+      - adw
+    tags:
+      Name: molecule_${MOLECULE_IT_PLATFORM}_adw_${BRANCH_NAME}_${BUILD_NUMBER}
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
@@ -79,7 +90,7 @@ platforms:
     groups:
       - nginx
     tags:
-      Name: molecule_${MOLECULE_IT_PLATFORM}_n_${BRANCH_NAME}_${BUILD_NUMBER}
+      Name: molecule_${MOLECULE_IT_PLATFORM}_nginx_${BRANCH_NAME}_${BUILD_NUMBER}
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
