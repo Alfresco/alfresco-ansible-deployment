@@ -2,9 +2,9 @@
 dependency:
   name: galaxy
 driver:
-  name: adw
+  name: docker
 platforms:
-  - name: instance
+  - name: adw
     image: ${MOLECULE_ROLE_IMAGE:-centos:7}
     dockerfile: ../../../../tests/molecule/Dockerfile.j2
     command: "/lib/systemd/systemd"
