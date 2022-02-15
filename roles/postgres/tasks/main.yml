@@ -8,10 +8,9 @@
 
 - name: Install packages
   package:
-    name: "{{ item }}"
+    name: "{{ postgresql_packages }}"
     state: present
     update_cache: yes
-  with_items: "{{ postgresql_packages }}"
 
 - name: Initialize the system database
   command:

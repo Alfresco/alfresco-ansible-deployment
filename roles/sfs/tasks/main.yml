@@ -4,10 +4,8 @@
   become: true
   become_user: root
   package:
-    name: "{{ item }}"
+    name: "{{ utils_sfs }}"
     state: present
-  poll: 0
-  loop: "{{ utils_sfs }}"
 
 - name: Download alfresco-shared-file-store-controller-{{ sfs.version }}.jar
   block:

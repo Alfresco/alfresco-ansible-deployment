@@ -20,10 +20,8 @@
 - name: Ensure a list of packages installed
   become: true
   package:
-    name: "{{ item }}"
+    name: "{{ utils }}"
     state: present
-  poll: 0
-  loop: "{{ utils }}"
 
 - name: "Create {{ group_name }} group"
   group:

@@ -8,10 +8,8 @@
   become: true
   become_user: root
   package:
-    name: "{{ item }}"
+    name: "{{ utils_sync }}"
     state: present
-  poll: 0
-  loop: "{{ utils_sync }}"
 
 - name: Download sync services {{ sync.version }}
   block:

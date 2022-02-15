@@ -30,10 +30,8 @@
   become: true
   become_user: root
   package:
-    name: "{{ item }}"
+    name: "{{ utils_transform }}"
     state: present
-  poll: 0
-  loop: "{{ utils_transform }}"
 
 - name: Verifying if libreoffice finished downloading
   async_status:
