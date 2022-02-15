@@ -41,6 +41,12 @@ after_script:
       molecule -e $MOLECULE_IT_PATH/$MOLECULE_IT_CONFIG destroy
     fi
 
+cache:
+  pip: true
+  directories:
+  - $HOME/.cache/pre-commit
+  - $HOME/.ansible/collections
+
 stages:
   - name: Linters
   - name: Roles tests
@@ -51,23 +57,11 @@ stages:
 jobs:
   include:
     - stage: Linters
-      name: "ansible-lint"
+      name: "Run all pre-commit hooks"
+      before_script:
+        - pip install pre-commit
       script:
-        - ansible-lint -v playbooks/acs.yml
-
-    - name: "pylint"
-      script:
-        - find . -name "*.py" ! -name __init__.py | xargs pylint
-
-    - name: "yamllint"
-      script:
-        - yamllint .
-
-    - name: Check components version table
-      script:
-        - python3 scripts/generate-comp-ver-table.py
-        - git_status_out=$(git status)
-        - if [[ "$git_status_out" == *"docs/README.md"* ]]; then echo "Error- Components version was not changed. Download pre-commit tool";exit 1; fi
+        - pre-commit run --all-files -v
 
     - stage: Roles tests
       name: ActiveMQ tests on Centos 7
