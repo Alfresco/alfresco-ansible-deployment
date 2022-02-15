@@ -2,7 +2,7 @@
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: adw
 platforms:
   - name: instance
     image: ${MOLECULE_ROLE_IMAGE:-centos:7}
@@ -19,7 +19,7 @@ provisioner:
   name: ansible
   ansible_args:
     - --inventory=../../inventory_local.yml
-    - --limit=instance
+    - --limit=adw
   inventory:
     links: 
       group_vars: ../../../../group_vars
