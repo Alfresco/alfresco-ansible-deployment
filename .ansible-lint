@@ -10,3 +10,6 @@ skip_list:
   - 'no-handler'
   - 'no-tabs'
   - 'empty-string-compare'
+
+kinds:
+  - yaml: "**/molecule/**/vars-*.yml"
