@@ -11,7 +11,8 @@
         state: present
       become: true
 
-    - amazon.aws.ec2_metadata_facts:
+    - name: Gather EC2 facts
+      amazon.aws.ec2_metadata_facts:
 
     - name: "Set variables"
       set_fact:

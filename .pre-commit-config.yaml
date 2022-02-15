@@ -17,9 +17,6 @@ repos:
     rev: v5.3.2
     hooks:
       - id: ansible-lint
-        entry: ansible-lint -v
-        name: ansible-lint
-        files: \.(yaml|yml)$
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.1.0
     hooks:
