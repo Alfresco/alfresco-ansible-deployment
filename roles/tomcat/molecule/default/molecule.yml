@@ -23,16 +23,10 @@ provisioner:
   inventory:
     links: 
       group_vars: ../../../../group_vars
-  playbooks:
-    converge: converge.yml
 verifier:
   name: testinfra
-  directory: tests
   env:
     TEST_HOST: "localhost"
-    ANSIBLE_TIMEOUT: "30"
-    ANSIBLE_SSH_RETRIES: "15"
-    PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
   options:
-    v: 1
+    verbose: true
     s: true
