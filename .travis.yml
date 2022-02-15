@@ -131,7 +131,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/repository/
-        - molecule converge
+        - molecule converge || return 1
         - sleep 5m
         - travis_wait 30 molecule verify
         - molecule destroy
@@ -142,7 +142,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/repository/
-        - molecule converge
+        - molecule converge || return 1
         - sleep 5m
         - travis_wait 30 molecule verify
         - molecule destroy
@@ -181,7 +181,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/sync
-        - molecule converge
+        - molecule converge || return 1
         - sleep 1m
         - molecule verify
         - molecule destroy
@@ -192,7 +192,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/sync
-        - molecule converge
+        - molecule converge || return 1
         - sleep 1m
         - molecule verify
         - molecule destroy
@@ -210,7 +210,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/transformers
-        - molecule converge
+        - molecule converge || return 1
         - sleep 1m
         - molecule verify
         - molecule destroy
@@ -221,7 +221,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/transformers
-        - molecule converge
+        - molecule converge || return 1
         - sleep 1m
         - molecule verify
         - molecule destroy
@@ -232,7 +232,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/trouter
-        - molecule converge
+        - molecule converge || return 1
         - sleep 1m
         - molecule verify
         - molecule destroy
@@ -243,7 +243,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/trouter
-        - molecule converge
+        - molecule converge || return 1
         - sleep 1m
         - molecule verify
         - molecule destroy
