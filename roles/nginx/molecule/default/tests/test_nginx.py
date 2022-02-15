@@ -39,7 +39,6 @@ def test_nginx_configuration(host, get_ansible_vars):
 
 def test_nginx_secure_solr_paths(host):
     "Check that different solr http endpoints are blocked and returns 403"
-
     cmd = host.run("curl -iL --connect-timeout 5 http://{}/alfresco/service/api/solr/test".format(test_host))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 403"))
 
