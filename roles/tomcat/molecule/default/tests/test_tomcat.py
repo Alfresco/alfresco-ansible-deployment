@@ -3,7 +3,7 @@ import pytest
 from hamcrest import contains_string, assert_that
 
 # pylint: disable=redefined-outer-name
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def get_ansible_vars(host):
     """Define get_ansible_vars"""
     java_role = "file=../java/vars/main.yml name=java_role"

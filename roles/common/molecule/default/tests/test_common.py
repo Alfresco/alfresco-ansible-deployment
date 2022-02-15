@@ -3,7 +3,7 @@ import pytest
 from hamcrest import assert_that, equal_to
 
 # pylint: disable=redefined-outer-name
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def get_ansible_vars(host):
     """Define get_ansible_vars"""
     common_role = "file=./vars/main.yml name=common_role"
