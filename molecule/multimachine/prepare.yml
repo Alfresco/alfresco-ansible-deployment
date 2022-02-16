@@ -1,6 +1,6 @@
 ---
 - name: Prepare
-  hosts: all
+  hosts: nginx
   gather_facts: false
   tasks:
     - name: Make sure python3 is installed
