@@ -106,4 +106,8 @@ provisioner:
     links: 
       group_vars: ../../group_vars
   playbooks:
+    create: ../default/create.yml
+    prepare: ../default/prepare.yml
     converge: ../../playbooks/acs.yml
+    verify: ../default/verify.yml
+    destroy: ../default/destroy.yml

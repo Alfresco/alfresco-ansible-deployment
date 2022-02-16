@@ -1,6 +1,6 @@
 ---
 - name: Prepare
-  hosts: all
+  hosts: nginx
   gather_facts: false
   vars:
     project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
