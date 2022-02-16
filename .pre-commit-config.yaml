@@ -8,14 +8,6 @@ repos:
         types: [file, python]
         exclude: "__init__.py"
 
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.26.3
-    hooks:
-      - id: yamllint
-        files: \.(yaml|yml)$
-        types: [file, yaml]
-        entry: yamllint --strict
-
   - repo: https://github.com/ansible/ansible-lint
     rev: v5.3.2
     hooks:
