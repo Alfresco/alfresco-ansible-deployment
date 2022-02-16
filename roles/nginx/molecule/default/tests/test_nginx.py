@@ -22,23 +22,24 @@ def get_ansible_vars(host):
 test_host = os.environ.get('TEST_HOST')
 
 def test_selinux(host):
-    "Check that the selinux config is valid"
+    """Check that the selinux config is valid"""
     selinux_status = host.ansible("setup")["ansible_facts"]["ansible_selinux"]["status"]
     if selinux_status != 'disabled':
         cmd = host.run("getsebool httpd_can_network_connect")
         assert_that(cmd, contains_string("--> off"))
 
 def test_nginx_configuration(host, get_ansible_vars):
-    "Check that nginx file exist"
+    """Check that nginx file exist"""
     assert_that(host.file("/usr/sbin/nginx").exists)
     assert_that(host.file(get_ansible_vars["nginx_conf_file_path"]).exists)
-    "Check that the configuration is valid"
+
+    """Check that the configuration is valid"""
     cmd = host.run("nginx -t")
     assert_that(cmd.stderr, contains_string("{} syntax is ok".format(get_ansible_vars["nginx_conf_file_path"])))
     assert_that(cmd.stderr, contains_string("{} test is successful".format(get_ansible_vars["nginx_conf_file_path"])))
 
 def test_nginx_secure_solr_paths(host):
-    "Check that different solr http endpoints are blocked and returns 403"
+    """Check that different solr http endpoints are blocked and returns 403"""
     cmd = host.run("curl -iL --connect-timeout 5 http://{}/alfresco/service/api/solr/test".format(test_host))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 403"))
 
@@ -64,6 +65,6 @@ def test_nginx_secure_solr_paths(host):
     assert_that(cmd.stdout, contains_string("HTTP/1.1 403"))
 
 def test_nginx_secure_prometheus_path(host):
-    "Check that /.*/s/prometheus is blocked and returns a HTTP 403 status code"
+    """Check that /.*/s/prometheus is blocked and returns a HTTP 403 status code"""
     cmd = host.run("curl -iL --connect-timeout 5 http://{}/alfresco/s/prometheus".format(test_host))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 403"))
