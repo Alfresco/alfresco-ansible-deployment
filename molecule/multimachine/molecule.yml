@@ -6,10 +6,10 @@ driver:
   name: ec2
 
 platforms:
-  - name: database
+  - name: database_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
-    vpc_subnet_id: subnet-06ffe524598660d99
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
     groups:
       - database
     tags:
@@ -17,10 +17,10 @@ platforms:
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
-  - name: activemq
+  - name: activemq_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
-    vpc_subnet_id: subnet-06ffe524598660d99
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
     groups:
       - activemq
     tags:
@@ -28,10 +28,10 @@ platforms:
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
-  - name: search
+  - name: search_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
-    vpc_subnet_id: subnet-06ffe524598660d99
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
     groups:
       - search
     tags:
@@ -39,10 +39,10 @@ platforms:
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
-  - name: repository
+  - name: repository_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
-    vpc_subnet_id: subnet-06ffe524598660d99
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
     groups:
       - repository
     tags:
@@ -50,10 +50,10 @@ platforms:
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
-  - name: transformers
+  - name: transformers_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
-    vpc_subnet_id: subnet-06ffe524598660d99
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
     groups:
       - transformers
     tags:
@@ -61,10 +61,10 @@ platforms:
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
-  - name: syncservice
+  - name: syncservice_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
-    vpc_subnet_id: subnet-06ffe524598660d99
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
     groups:
       - syncservice
     tags:
@@ -72,10 +72,10 @@ platforms:
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
-  - name: adw
+  - name: adw_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
-    vpc_subnet_id: subnet-06ffe524598660d99
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
     groups:
       - adw
     tags:
@@ -83,10 +83,10 @@ platforms:
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
-  - name: nginx
+  - name: nginx_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
-    vpc_subnet_id: subnet-06ffe524598660d99
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
     groups:
       - nginx
     tags:
