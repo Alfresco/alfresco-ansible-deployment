@@ -127,4 +127,4 @@ def modify_table():
 
 if __name__ == '__main__':
     modify_table()
-    print("done")
+    print("Component versions table regenerated successfully")
