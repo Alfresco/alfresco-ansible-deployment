@@ -17,6 +17,7 @@ platforms:
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
+
   - name: activemq_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
@@ -28,6 +29,7 @@ platforms:
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
+
   - name: search_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
@@ -39,6 +41,7 @@ platforms:
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
+
   - name: repository_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
@@ -50,6 +53,7 @@ platforms:
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
+
   - name: transformers_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
@@ -61,6 +65,7 @@ platforms:
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
+
   - name: syncservice_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
@@ -72,6 +77,7 @@ platforms:
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
+
   - name: adw_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
@@ -83,6 +89,7 @@ platforms:
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false
+
   - name: nginx_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
