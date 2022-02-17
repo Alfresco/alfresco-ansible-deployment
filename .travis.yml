@@ -34,17 +34,10 @@ before_install:
   - travis_retry ansible-galaxy collection install community.docker amazon.aws community.crypto
 
 script:
-  - |
-    if [ -n "$MOLECULE_IT_SCENARIO" ]; then
-      EXTRA_CONFIG=""
-      MOLECULE_IT_PATH="molecule/$MOLECULE_IT_SCENARIO"
-      if [ -n "$MOLECULE_IT_CONFIG" ]; then
-        EXTRA_CONFIG="-e $MOLECULE_IT_PATH/$MOLECULE_IT_CONFIG"
-      fi
-      molecule $EXTRA_CONFIG converge -s $MOLECULE_IT_SCENARIO && \
-        molecule $EXTRA_CONFIG verify -s $MOLECULE_IT_SCENARIO
-      molecule $EXTRA_CONFIG destroy -s $MOLECULE_IT_SCENARIO
-    fi
+  - ./tests/molecule_it/script.sh verify
+
+after_script:
+  - ./tests/molecule_it/script.sh destroy
 
 cache:
   directories:
