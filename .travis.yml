@@ -71,6 +71,185 @@ jobs:
         - git_status_out=$(git status)
         - if [[ "$git_status_out" == *"docs/README.md"* ]]; then echo "Error- Components version was not changed. Download pre-commit tool";exit 1; fi
 
+    - stage: Roles tests
+      name: ActiveMQ tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/activemq/ && molecule test
+
+    - stage: Roles tests
+      name: ActiveMQ tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/activemq/ && molecule test
+
+    - stage: Roles tests
+      name: ADW tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/adw/ && molecule test
+
+    - stage: Roles tests
+      name: ADW tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/adw/ && molecule test
+
+    - stage: Roles tests
+      name: Common tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/common/ && molecule test
+
+    - stage: Roles tests
+      name: Java tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/java/ && molecule test
+
+    - stage: Roles tests
+      name: Nginx tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/nginx/ && molecule test
+
+    - stage: Roles tests
+      name: Nginx tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/nginx/ && molecule test
+
+    - stage: Roles tests
+      name: Repository tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/repository/
+        - molecule converge
+        - sleep 5m
+        - travis_wait 30 molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Repository tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/repository/
+        - molecule converge
+        - sleep 5m
+        - travis_wait 30 molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Search tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/search && molecule test
+
+    - stage: Roles tests
+      name: Search tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/search && molecule test
+
+    - stage: Roles tests
+      name: SFS tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/sfs/ && molecule test
+
+    - stage: Roles tests
+      name: SFS tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/sfs/ && molecule test
+
+    - stage: Roles tests
+      name: Sync tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/sync
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Sync tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/sync
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Tomcat tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/tomcat/ && molecule test
+
+    - stage: Roles tests
+      name: Transformers tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/transformers
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Transformers tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/transformers
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Trouter tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/trouter
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Trouter tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/trouter
+        - molecule converge
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
     - stage: Integration tests
       name: Molecule ACS 6.2.2 Enterprise on Centos 7
       env: MOLECULE_IT_CONFIG=vars-centos7.yml
