@@ -3,7 +3,7 @@ import pytest
 from hamcrest import contains_string, assert_that
 
 # pylint: disable=redefined-outer-name
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def get_ansible_vars(host):
     """Define get_ansible_vars"""
     java_role = "file=../java/vars/main.yml name=java_role"
@@ -24,12 +24,12 @@ def test_tomcat_exe_exists(host, get_ansible_vars):
 
 def test_tomcat_version(host, get_ansible_vars):
     "Check that Tomcat version is correct"
-    cmd = host.run("source {}/setenv.sh && $TOMCAT_HOME/bin/catalina.sh version".format(get_ansible_vars["config_folder"]))
+    cmd = host.run(". {}/setenv.sh && $TOMCAT_HOME/bin/catalina.sh version".format(get_ansible_vars["config_folder"]))
     assert_that(cmd.stdout, contains_string("Server version: Apache Tomcat/{}".format(get_ansible_vars["dependencies_version"]["tomcat"])))
 
 def test_tomcat_home(host, get_ansible_vars):
     "Check that TOMCAT_HOME variable is set"
-    cmd = host.run("source {}/setenv.sh && echo $TOMCAT_HOME".format(get_ansible_vars["config_folder"]))
+    cmd = host.run(". {}/setenv.sh && echo $TOMCAT_HOME".format(get_ansible_vars["config_folder"]))
     assert_that(cmd.stdout, contains_string("/opt/apache-tomcat-{}".format(get_ansible_vars["dependencies_version"]["tomcat"])))
 
 def test_catalina_home(host, get_ansible_vars):

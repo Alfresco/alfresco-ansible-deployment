@@ -21,3 +21,4 @@ disable=
     I0020,
     R1732,
     consider-using-f-string,
+    pointless-string-statement,

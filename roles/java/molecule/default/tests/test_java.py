@@ -3,7 +3,7 @@ import pytest
 from hamcrest import contains_string, assert_that
 
 # pylint: disable=redefined-outer-name
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def get_ansible_vars(host):
     """Define get_ansible_vars"""
     java_role = "file=./vars/main.yml name=java_role"
@@ -28,5 +28,5 @@ def test_java_version(host, get_ansible_vars):
 
 def test_java_home(host, get_ansible_vars):
     "Check that JAVA_HOME is environment variable is set"
-    cmd = host.run("source {}/setenv.sh && echo $JAVA_HOME".format(get_ansible_vars["config_folder"]))
+    cmd = host.run(". {}/setenv.sh && echo $JAVA_HOME".format(get_ansible_vars["config_folder"]))
     assert_that(cmd.stdout, contains_string("/opt/openjdk-{}".format(get_ansible_vars["dependencies_version"]["jdk"])))
