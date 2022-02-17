@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  gather_facts: false
   tasks:
     - name: Gather facts from all hosts
       ansible.builtin.setup:
