@@ -145,14 +145,6 @@
   tags:
     - sync
 
-- name: Nginx Role
-  hosts: nginx
-  become: true
-  roles:
-    - role: '../roles/nginx'
-  tags:
-    - nginx
-
 - name: Alfresco Digital Workspace Role
   hosts: adw
   become: true
@@ -172,3 +164,11 @@
         marker_end: ADW_END
   tags:
     - adw
+
+- name: Nginx Role
+  hosts: nginx
+  become: true
+  roles:
+    - role: '../roles/nginx'
+  tags:
+    - nginx
