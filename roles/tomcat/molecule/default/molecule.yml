@@ -29,4 +29,3 @@ verifier:
     TEST_HOST: "localhost"
   options:
     verbose: true
-    s: true
