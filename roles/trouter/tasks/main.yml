@@ -23,7 +23,7 @@
       get_url:
         url: "{{ downloads.trouter_jar_url }}"
         dest: "{{ ats_home }}/alfresco-transform-router-{{ trouter.version }}.jar"
-        checksum: "sha1:{{ lookup('url', downloads.trouter_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }}"
+        checksum: sha1:{{ lookup('url', downloads.trouter_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'

@@ -2,7 +2,7 @@
 # vars file for transformers
 libreoffice_repo: "http://downloadarchive.documentfoundation.org/libreoffice/old"
 libreoffice_repo_path: "{{ libreoffice }}/{{ pkg_format }}/{{ ansible_architecture }}"
-libreoffice_archive_name: "/LibreOffice_{{ libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | regex_replace('_','-') }}_{{ pkg_format }}.tar.gz"
+libreoffice_archive_name: /LibreOffice_{{ libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | regex_replace('_','-') }}_{{ pkg_format }}.tar.gz
 libreoffice_archive_url: "{{ libreoffice_repo }}/{{ libreoffice_repo_path }}/{{ libreoffice_archive_name }}"
 libreoffice_archive_sha1_checksum_url: "{{ libreoffice_archive_url }}.sha1"
 libreoffice_home: "/opt/libreoffice{{ libreoffice[0:3] }}/"

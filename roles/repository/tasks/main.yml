@@ -46,7 +46,7 @@
     dest: "{{ download_location }}/{{ acs_zip_file }}"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
-    checksum: "sha1:{{ lookup('url', downloads.acs_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}"
+    checksum: sha1:{{ lookup('url', downloads.acs_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rw,g=r,o=r'
