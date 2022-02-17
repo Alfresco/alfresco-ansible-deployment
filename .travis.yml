@@ -1,4 +1,7 @@
 ---
+import:
+  - source: Alfresco/alfresco-build-tools:.travis.pre-commit.yml@v1.1.9
+
 os: linux
 dist: xenial
 language: python
@@ -42,13 +45,11 @@ after_script:
     fi
 
 cache:
-  pip: true
   directories:
-  - $HOME/.cache/pre-commit
   - $HOME/.ansible/collections
 
 stages:
-  - name: Linters
+  - name: lint
   - name: Roles tests
   - name: Integration tests
   - name: Release Stage
@@ -56,13 +57,6 @@ stages:
 
 jobs:
   include:
-    - stage: Linters
-      name: "Run all pre-commit hooks"
-      before_script:
-        - pip install pre-commit
-      script:
-        - pre-commit run --all-files -v
-
     - stage: Roles tests
       name: ActiveMQ tests on Centos 7
       env:
