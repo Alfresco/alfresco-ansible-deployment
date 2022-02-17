@@ -2,8 +2,6 @@
 # vars file for common
 #nginx_domain: ""
 nginx_vhost_path: /etc/nginx/conf.d
-nexus_user: "{%if acs.edition == 'Enterprise' %}{{ lookup('env', 'NEXUS_USERNAME') }}{% endif %}"
-nexus_password: "{%if acs.edition == 'Enterprise' %}{{ lookup('env', 'NEXUS_PASSWORD') }}{% endif %}"
 
 group_name: alfresco
 username: alfresco
