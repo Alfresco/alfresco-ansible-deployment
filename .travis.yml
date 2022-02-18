@@ -52,24 +52,6 @@ stages:
 
 jobs:
   include:
-    - stage: Linters
-      name: "ansible-lint"
-      script:
-        - ansible-lint -v playbooks/acs.yml
-
-    - name: "pylint"
-      script:
-        - find . -name "*.py" ! -name __init__.py | xargs pylint
-
-    - name: "yamllint"
-      script:
-        - yamllint .
-
-    - name: Check components version table
-      script:
-        - python3 scripts/generate-comp-ver-table.py
-        - git_status_out=$(git status)
-        - if [[ "$git_status_out" == *"docs/README.md"* ]]; then echo "Error- Components version was not changed. Download pre-commit tool";exit 1; fi
 
     - stage: Roles tests
       name: ActiveMQ tests on Centos 7
@@ -133,7 +115,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/repository/
-        - molecule converge
+        - molecule converge || return 1
         - sleep 5m
         - travis_wait 30 molecule verify
         - molecule destroy
@@ -144,7 +126,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/repository/
-        - molecule converge
+        - molecule converge || return 1
         - sleep 5m
         - travis_wait 30 molecule verify
         - molecule destroy
@@ -183,7 +165,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/sync
-        - molecule converge
+        - molecule converge || return 1
         - sleep 1m
         - molecule verify
         - molecule destroy
@@ -194,7 +176,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/sync
-        - molecule converge
+        - molecule converge || return 1
         - sleep 1m
         - molecule verify
         - molecule destroy
@@ -212,7 +194,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/transformers
-        - molecule converge
+        - molecule converge || return 1
         - sleep 1m
         - molecule verify
         - molecule destroy
@@ -223,7 +205,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/transformers
-        - molecule converge
+        - molecule converge || return 1
         - sleep 1m
         - molecule verify
         - molecule destroy
@@ -234,7 +216,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/trouter
-        - molecule converge
+        - molecule converge || return 1
         - sleep 1m
         - molecule verify
         - molecule destroy
@@ -245,7 +227,7 @@ jobs:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
         - cd roles/trouter
-        - molecule converge
+        - molecule converge || return 1
         - sleep 1m
         - molecule verify
         - molecule destroy
