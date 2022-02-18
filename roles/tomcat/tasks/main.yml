@@ -39,7 +39,7 @@
 - name: Download Tomcat
   get_url:
     url: "{{ dependencies_url.tomcat }}"
-    checksum: "sha512:{{ lookup('url', dependencies_url.tomcat_sha512_checksum_url).split(' ')[0] }}"
+    checksum: sha512:{{ dependencies_url.tomcat_sha512_checksum_url }}"
     dest: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
     timeout: 570
   become: true
