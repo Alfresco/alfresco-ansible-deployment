@@ -77,7 +77,7 @@
   become_user: root
   get_url:
     url: "{{ dependencies_url.postgresql_connector }}"
-    checksum: sha1:{{ dependencies_url.postgresql_connector_sha1_checksum_url }}
+    checksum: sha1:{{ lookup('url', dependencies_url.postgresql_connector_sha1_checksum_url) }}
     dest: "{{ tomcat_config_dir }}/lib/postgresql.jar"
     mode: 'u=rw,g=r,o=r'
     owner: "{{ username }}"
