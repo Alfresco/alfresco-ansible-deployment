@@ -1,6 +1,6 @@
 ---
 - name: Verify
-  hosts: nginx
+  hosts: localhost
   gather_facts: false
   vars:
     project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
@@ -9,23 +9,21 @@
   tasks:
 
     - name: Gather EC2 facts
+      delegate_to: "{{ groups['nginx'][0] }}"
       amazon.aws.ec2_metadata_facts:
 
     - name: Git checkout
-      delegate_to: localhost
       ansible.builtin.git:
         repo: "https://{{ lookup('env', 'GITHUB_TOKEN') }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
         dest: "{{ dta_dir }}"
         version: "{{ lookup('env', 'DTAS_VERSION') }}"
 
     - name: Install pytest requirements
-      delegate_to: localhost
       pip:
         chdir: "{{ dta_dir }}"
         requirements: requirements.txt
 
     - name: Configure deployment URL
-      delegate_to: localhost
       ansible.builtin.replace:
         path: "{{ test_config_file }}"
         regexp: 'TEST_URL'
