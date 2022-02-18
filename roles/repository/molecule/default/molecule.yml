@@ -32,7 +32,7 @@ platforms:
 provisioner:
   name: ansible
   ansible_args:
-    - --limit=repository1
+    - --limit=repository1,localhost
   config_options:
     defaults:
       pipelining: True
