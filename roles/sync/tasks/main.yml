@@ -42,7 +42,7 @@
     - name: Download artefact
       get_url:
         url: "{{ dependencies_url.postgresql_connector }}"
-        checksum: sha1:{{ lookup('url', dependencies_url.postgresql_connector_sha1_checksum_url) }}
+        checksum: sha1:{{ dependencies_url.postgresql_connector_sha1_checksum_url }}
         dest: "{{ sync_home }}/service-sync/connectors/postgresql.jar"
         mode: 'u=rwx,g=rwx,o=rx'
         owner: "{{ username }}"
