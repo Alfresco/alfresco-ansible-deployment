@@ -19,5 +19,5 @@ if [ -n "$MOLECULE_IT_SCENARIO" ]; then
         exit 1
     fi
 else
-    echo "no molecule it scenario is set, doing nothig"
+    echo "no molecule it scenario is set, doing nothing"
 fi
