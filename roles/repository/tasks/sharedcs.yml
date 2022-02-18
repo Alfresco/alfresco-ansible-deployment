@@ -1,0 +1,31 @@
+---
+- name: Shared contentstore preparation
+  become: true
+  when: cs_storage.device is defined
+  block:
+    - name: Create contentstore folders
+      file:
+        path: "{{ content_data_folder }}/content"
+        state: directory
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 0750
+    - name: Mount ACS ContentStore
+      vars:
+        mnt_options:
+          - "{{ cs_storage.options | default('defaults') }}"
+          - _netdev
+      mount:
+        state: mounted
+        path: "{{ content_data_folder }}/content"
+        src: "{{ cs_storage.device }}"
+        fstype: "{{ cs_storage.type }}"
+        opts: "{{ mnt_options | join(',') }}"
+    
+    - name: Ensure permission after mount
+      file:
+        path: "{{ content_data_folder }}/content"
+        state: directory
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 0750

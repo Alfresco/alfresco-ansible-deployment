@@ -7,7 +7,7 @@
   become: true
   become_user: root
   package:
-    name: "{{ utils_repo }}"
+    name: "{{ utils_repo }} + {{ utils_storage[cs_storage.type | default('tmpfs')] }}"
     state: present
 
 - name: Create folders
@@ -36,6 +36,9 @@
      - "{{ content_data_folder }}/keystore"
      - "{{ tomcat_config_dir }}/lib"
      - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
+
+- name: Proceed with Shared contentstore tasks
+  include_tasks: sharedcs.yml
 
 - name: "Download {{ acs_zip_file }}"
   get_url:
