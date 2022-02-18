@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 """Generate components version table in docs/README.md based on extra-vars.yml."""
 
@@ -127,3 +127,4 @@ def modify_table():
 
 if __name__ == '__main__':
     modify_table()
+    print("Component versions table regenerated successfully")

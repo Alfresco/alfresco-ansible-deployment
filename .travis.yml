@@ -1,4 +1,7 @@
 ---
+import:
+  - source: Alfresco/alfresco-build-tools:.travis.pre-commit.yml@v1.1.9
+
 os: linux
 dist: xenial
 language: python
@@ -41,8 +44,12 @@ after_script:
       molecule -e $MOLECULE_IT_PATH/$MOLECULE_IT_CONFIG destroy
     fi
 
+cache:
+  directories:
+  - $HOME/.ansible/collections
+
 stages:
-  - name: Linters
+  - name: lint
   - name: Roles tests
   - name: Integration tests
   - name: Release Stage
@@ -50,25 +57,6 @@ stages:
 
 jobs:
   include:
-    - stage: Linters
-      name: "ansible-lint"
-      script:
-        - ansible-lint -v playbooks/acs.yml
-
-    - name: "pylint"
-      script:
-        - find . -name "*.py" ! -name __init__.py | xargs pylint
-
-    - name: "yamllint"
-      script:
-        - yamllint .
-
-    - name: Check components version table
-      script:
-        - python3 scripts/generate-comp-ver-table.py
-        - git_status_out=$(git status)
-        - if [[ "$git_status_out" == *"docs/README.md"* ]]; then echo "Error- Components version was not changed. Download pre-commit tool";exit 1; fi
-
     - stage: Roles tests
       name: ActiveMQ tests on Centos 7
       env:
