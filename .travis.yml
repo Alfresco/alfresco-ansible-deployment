@@ -14,7 +14,7 @@ branches:
     - contribs
     - /feature.*/
     - /fix.*/
-    - /OPSEXP-.*/i
+    - /(?i:OPSEXP)-.*/
     - /^dependabot\/.*$/
 
 env:
