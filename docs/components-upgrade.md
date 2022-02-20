@@ -2,25 +2,25 @@
 
 The ACS installation is made of several components among which:
 
- - Content service
- - share
- - digital workspace
- - Search service
- - ...
+- Content service
+- share
+- digital workspace
+- Search service
+- ...
 
 ## Pre-requisites
 
 Before proceeding to an upgrade, an administrator needs to:
 
- * Make sure the [upgrade path and documentation](https://docs.alfresco.com/content-services/latest/upgrade/) is followed
-
- * Appropriate backups of database, contentstore and indexes are done and can be restored in case a rollback is needed
-
- * Initial deployment must have been done using this Ansible playbook
+- Make sure the [upgrade path and documentation](https://docs.alfresco.com/content-services/latest/upgrade/) is followed
+- Appropriate backups of database, contentstore and indexes are done and can be restored in case a rollback is needed
+- Initial deployment must have been done using this Ansible playbook
 
 ## Supported Components
 
-### Content service
+Bellow is a description of the supported upgrade procedure for each supported component (at the time of wrinting it's only hotfix upgrades for ACS repository)
+
+### Content service (repository)
 
 #### Upgrade types
 
@@ -41,32 +41,32 @@ In the example bellow we want to upgrade from the initial 7.0.1 installation to 
 
 Edit `7.0.N-extra-vars.yml` and changes the the bellow snippet:
 
-```
----           
-acs:         
-  version: 7.0.1
-  edition: Enterprise 
-...
-```
+    ```yaml
+    ---           
+    acs:         
+      version: 7.0.1
+      edition: Enterprise 
+    ...
+    ```
 
 to:
 
-```
----           
-acs:         
-  version: 7.0.1.4
-  edition: Enterprise 
-...
-```
+    ```yaml
+    ---           
+    acs:         
+      version: 7.0.1.4
+      edition: Enterprise 
+    ...
+    ```
 
 > IMPORTANT: make sure you do not set the version to a version number that's not a hotfix (version number needs to be 4 digits and the 3 first ones needs to match the ones of the initially deployed version)
 > This is because, as eplained earlier, "in-place" upgrades are only supported for hotfixes
 
 Once these changes are saved run the command bellow:
 
-```
-ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.0.N-extra-vars.yml"
-```
+    ```bash
+    ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.0.N-extra-vars.yml"
+    ```
 
 > Note: Use whatever inventory and config file that matches your use case
 > If you're applying a hotfix to the latest major release (7.1 as of writing) you don't need to specify an extra config file with "-e @file"
@@ -77,9 +77,9 @@ After the playbook ran successfully your environment delivers the upgraded versi
 
 If something goes wrong with the upgrade, or if tests are not successful after upgrade completed, rolling back the environment can be done by following the steps bellow:
 
- - restoring Database and contentstore backup
- - reverting the version changes to previous state in the config file (either `group_vars/all` or version specific config files)
- - running the playbook again.
+- restoring Database and contentstore backup
+- reverting the version changes to previous state in the config file (either `group_vars/all` or version specific config files)
+- running the playbook again.
 
 ## Upgrade impacts
 

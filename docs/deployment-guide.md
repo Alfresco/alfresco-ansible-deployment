@@ -523,22 +523,16 @@ alfresco-content-services-distribution-6.2.2.pom      100%[=====================
 
 If the playbook fails not being able to start Nginx, make sure both ADW and Nginx point to the same host in the inventory file. Otherwise you'll encounter the error below:
 
-```
-TASK [../roles/adw : Ensure nginx service is running as configured.] **********************************
-fatal: [adw_1]: FAILED! => {"changed": false, "msg": "Unable to start service nginx: Job for nginx.service failed because the control process exited with error code.
-See "systemctl status nginx.service" and "journalctl -xe" for detail
-s.\n"}
-```
+> TASK [../roles/adw : Ensure nginx service is running as configured.] *********
+> fatal: [adw_1]: FAILED! => {"changed": false, "msg": "Unable to start service nginx: Job for nginx.service failed because the control process exited with error code.
+> See "systemctl status nginx.service" and "journalctl -xe" for details.\n"}
 
 ### Communication Failures
 
 If you are using a multi-machine deployment and the playbook fails with an error similar to the one shown below you may need to check the firewall configuration on the target hosts.
 
-```bash
-TASK [../roles/repository : Notify alfresco content service] 
-*******************************************************************************************************
-fatal: [repository_1]: FAILED! => {"changed": false, "elapsed": 300, "msg": "Timeout when waiting for 192.168.0.126:5432"}
-```
+> TASK [../roles/repository : Notify alfresco content service] *****************
+> fatal: [repository_1]: FAILED! => {"changed": false, "elapsed": 300, "msg": "Timeout when waiting for 192.168.0.126:5432"}
 
 Either disable the firewall completely or refer to the [ports configuration](#tcp-port-configuration) section for what ports need to be accessible.
 
