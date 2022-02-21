@@ -106,7 +106,7 @@ def test_environment_jvm_opts(host, get_ansible_vars):
     assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
 
 def test_mounting_storage(host):
-    """Check wether Content Store has been properly mounted as per config"""
+    """Check wether Content Store has been properly mounted as per config."""
     dir_root='/var/opt/alfresco/content-services/content'
     repovars = host.ansible.get_variables()
     assert_that(host.mount_point(dir_root).exists == isinstance(repovars["cs_storage"]["device"], str))
@@ -115,4 +115,4 @@ def test_mounting_storage(host):
         assert_that(host.mount_point(dir_root).filesystem == repovars["cs_storage"]["type"])
     # Best effort options check: at least find one common option (options may not be returned as passed)
     if repovars["cs_storage"]["options"]:
-        assert_that(len(set(host.mount_point(dir_root).options) & set(repovars["cs_storage"]["options"].split(','))) > 0)
+        assert_that(set(host.mount_point(dir_root).options) & set(repovars["cs_storage"]["options"].split(',')))
