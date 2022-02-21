@@ -274,8 +274,7 @@ jobs:
         secret_access_key: "${STAGING_AWS_SECRET_KEY}"
         bucket: "${S3_STAGING_BUCKET}"
         region: "eu-west-1"
+        skip_cleanup: true
         local_dir: dist
         glob: "*.zip"
         upload-dir: "enterprise/alfresco-ansible-deployment"
-      after_deploy:
-        - rm -fv dist/alfresco-ansible-release-*.zip
