@@ -31,12 +31,20 @@
         regexp: 'TEST_URL'
         replace: 'https://{{ ansible_ec2_public_hostname }}'
 
-    - name: Run pytest
-      delegate_to: localhost
-      vars:
-          selfsigned_cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
-      ansible.builtin.shell:
-        chdir: "{{ dta_dir }}"
-        cmd: |
-          export REQUESTS_CA_BUNDLE={{ selfsigned_cert_path }}
-          pytest --tb=line --configuration {{ test_config_file }} tests/ -s
+    - name: Run tests
+      block:
+        - name: Run pytest
+          delegate_to: localhost
+          vars:
+              selfsigned_cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
+          ansible.builtin.shell:
+            chdir: "{{ dta_dir }}"
+            cmd: |
+              export REQUESTS_CA_BUNDLE={{ selfsigned_cert_path }}
+              pytest --tb=line --configuration {{ test_config_file }} tests/ -s
+      rescue:
+        - name: Print multiline pytest stdout as best as we can
+          debug:
+            msg: "{{ ansible_failed_result.stdout_lines }}"
+        - name: Explicit failure after printing failure debug
+          fail: msg="Aborting due to pytest failure"
