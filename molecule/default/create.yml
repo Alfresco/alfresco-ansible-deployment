@@ -224,7 +224,7 @@
             - name: "{{ item.ssh_user }}"
               ssh_authorized_keys:
                 - "{{ local_keypairs.results[index].public_key }}"
-              sudo: "ALL=(ALL) NOPASSWD:ALL"
+              sudo: "ALL=(ALL) NOPASSWD:ALL" # pragma: allowlist secret
         platform_cloud_config: >-
           {{ (item.key_inject_method == 'cloud-init')
                | ternary((item.cloud_config | combine(platform_generated_cloud_config)), item.cloud_config) }}

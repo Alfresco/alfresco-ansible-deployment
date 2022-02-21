@@ -1,4 +1,5 @@
 ---
+
 repos:
   - repo: https://github.com/jackdewinter/pymarkdown
     rev: v0.9.5
@@ -11,43 +12,53 @@ repos:
         args:
           - --config=.pymarkdown.json
           - scan
+          
   - repo: https://github.com/PyCQA/pylint
-    rev: v2.10.2
+    rev: v2.12.2
     hooks:
       - id: pylint
         types: [file, python]
-        exclude: '__init__.py'
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.26.3
-    hooks:
-      - id: yamllint
-        files: \.(yaml|yml)$
-        types: [file, yaml]
-        entry: yamllint --strict
+        exclude: "__init__.py"
+
   - repo: https://github.com/ansible/ansible-lint
     rev: v5.3.2
     hooks:
       - id: ansible-lint
+
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.1.0
     hooks:
       - id: detect-secrets
         name: detect generic secrets
-        args: ['--baseline', '.secrets.baseline', '--exclude-secrets', '(admin|mp6yc0UD9e)']
+        args: ["--baseline", ".secrets.baseline", '--exclude-secrets', '(admin|mp6yc0UD9e|alfresco)']
+
   - repo: https://github.com/awslabs/git-secrets
-    rev: master
+    rev: b9e96b3
     hooks:
       - id: git-secrets
         name: detect aws secrets
+
   - repo: https://github.com/milin/giticket
     rev: v1.3
     hooks:
       - id: giticket
-        args: ['--regex', '[A-Z]+-\d+[0-9]', '--format', '{ticket}: {commit_msg}', '--mode', 'regex_match']
+        args:
+          [
+            "--regex",
+            '[A-Z]+-\d+[0-9]',
+            "--format",
+            "{ticket}: {commit_msg}",
+            "--mode",
+            "regex_match",
+          ]
 
   - repo: local
     hooks:
       - id: generate-table
         name: Generate components version table
-        entry: scripts/generate-comp-ver-table.py
+        entry: python ./scripts/generate-comp-ver-table.py
         language: python
+        language_version: python3.9
+        additional_dependencies: [pyyaml]
+        pass_filenames: false
+        always_run: true
