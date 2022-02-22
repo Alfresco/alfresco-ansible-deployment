@@ -48,6 +48,12 @@
         to_port: 0
         cidr_ip: "0.0.0.0/0"
 
+    default_root_volume:
+      device_name: /dev/sda1
+      ebs:
+        volume_size: 10
+        delete_on_termination: yes
+
     platform_defaults:
       assign_public_ip: "{{ default_assign_public_ip }}"
       aws_profile: "{{ default_aws_profile }}"
@@ -208,7 +214,7 @@
         security_groups: "{{ platform_security_groups }}"
         network:
           assign_public_ip: "{{ item.assign_public_ip }}"
-        volumes: "{{ item.volumes }}"
+        volumes: "{{ [default_root_volume] + item.volumes }}"
         key_name: "{{ (item.key_inject_method == 'ec2') | ternary(item.key_name, omit) }}"
         name: "{{ platform_tags['Name'] }}"
         tags: "{{ platform_tags }}"
