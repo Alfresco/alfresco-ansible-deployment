@@ -53,7 +53,7 @@ To quickly provision a single target host follow the steps below.
     molecule create -s ec2
     ```
 
-    Once complete you will see ouptut similar to that shown below:
+    Once complete you will see output similar to that shown below:
 
     > TASK [Wait for SSH] **********************************************************
     > ok: [localhost] => (item={'address': 'EC2_IP_ADDRESS', 'identity_file': '/home/centos/.cache/molecule/alfresco-ansible-deployment/ec2/ssh_key', 'instance': 'EC2_INSTANCE_NAME', 'instance_ids': ['EC2_INSTANCE_ID'], 'port': 22, 'user': 'centos'})
