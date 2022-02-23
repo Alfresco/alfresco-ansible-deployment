@@ -64,9 +64,11 @@
     src: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
     dest: "{{ sync_home }}"
     remote_src: true
-    creates: "{{ sync_home }}/service-sync/service-sync-{{ sync.version }}.jar"
+    creates: "{{ sync_home }}/{{ sync_dist.files | last }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
+    list_files: yes
+  register: sync_dist
 
 - name: Move sync service files to {{ sync_home }}
   block:

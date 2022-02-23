@@ -26,6 +26,8 @@
     src: "{{ download_location }}/alfresco-digital-workspace-{{ adw.version }}.zip"
     dest: "{{ nginx_folder }}/{{ request_uri }}/"
     remote_src: true
-    creates: "{{ nginx_folder }}/{{ request_uri }}/app.config.json"
+    creates: "{{ nginx_folder }}/{{ request_uri }}/{{ adw_dist.files | last }}"
+    list_files: yes
+  register: adw_dist
 
 - include_tasks: nginx.yml
