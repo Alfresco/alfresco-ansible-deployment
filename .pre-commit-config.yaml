@@ -25,6 +25,17 @@ repos:
     hooks:
       - id: ansible-lint
 
+  - repo: https://github.com/thibaudcolas/curlylint
+    rev: 'v0.13.0'
+    hooks:
+      - id: curlylint
+        name: curlylint
+        description: A linter which checks the indentation and the correctness of Jinja-like/HTML templates.
+        language: python
+        language_version: python3
+        entry: curlylint
+        files: '\.(j2)$'
+
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.1.0
     hooks:
