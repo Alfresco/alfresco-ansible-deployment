@@ -25,13 +25,11 @@ env:
     - BRANCH_NAME="${TRAVIS_BRANCH}"
     - BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}"
     - MOLECULE_NO_LOG=false
-    - ANSIBLE_VERSION="2.12.2"
     - AWS_REGION=eu-west-1
     - MOLECULE_IT_AWS_VPC_SUBNET_ID=subnet-6bdd4223
     - DTAS_VERSION=v1.1.1
 
-before_install:
-  - travis_retry pip install ansible-core==${ANSIBLE_VERSION}
+before_script:
   - travis_retry ansible-galaxy install -r requirements.yml
 
 script:
