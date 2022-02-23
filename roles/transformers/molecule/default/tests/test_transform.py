@@ -4,14 +4,14 @@ import pytest
 from hamcrest import contains_string, assert_that
 
 # pylint: disable=redefined-outer-name
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def get_ansible_vars(host):
     """Define get_ansible_vars"""
-    java_role = "file=../../../java/vars/main.yml name=java_role"
-    common_vars = "file=../../../common/vars/main.yml name=common_vars"
-    common_defaults = "file=../../../common/defaults/main.yml name=common_defaults"
-    common_hosts = "file=../../../common/vars/hosts.yml name=common_hosts"
-    transform_services = "file=../../vars/main.yml name=transform_services"
+    java_role = "file=../java/vars/main.yml name=java_role"
+    common_vars = "file=../common/vars/main.yml name=common_vars"
+    common_defaults = "file=../common/defaults/main.yml name=common_defaults"
+    common_hosts = "file=../common/vars/hosts.yml name=common_hosts"
+    transform_services = "file=./vars/main.yml name=transform_services"
     ansible_vars = host.ansible("include_vars", java_role)["ansible_facts"]["java_role"]
     ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
     ansible_vars.update(host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"])

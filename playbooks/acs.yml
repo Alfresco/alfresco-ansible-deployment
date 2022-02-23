@@ -1,6 +1,13 @@
 ---
+- hosts: all
+  gather_facts: false
+  tasks:
+    - name: Gather facts from all hosts
+      ansible.builtin.setup:
+
 - name: Database Role
   hosts: database
+  gather_facts: false
   become: true
   roles:
     - { role: '../roles/postgres', when: repo_db_url == "" or sync_db_url == "" }
@@ -9,6 +16,7 @@
 
 - name: Activemq Role
   hosts: activemq
+  gather_facts: false
   become: true
   roles:
     - role: '../roles/activemq'
@@ -17,64 +25,160 @@
 
 - name: Transformers Role
   hosts: transformers
+  gather_facts: false
   become: true
   roles:
     - role: '../roles/transformers'
+  post_tasks:
+    - name: update installation status file with Transformers
+      vars:
+        transform_components:
+          transform:
+            "{{ transform }}"
+      blockinfile:
+        block: "{{ transform_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: TRANSFORM_BEGIN
+        marker_end: TRANSFORM_END
   tags:
     - transformers
 
 - name: Alfresco Search Role
   hosts: search
+  gather_facts: false
   become: true
   roles:
     - role: '../roles/search'
+  post_tasks:
+    - name: update installation status file with  Search
+      vars:
+        search_components:
+          search:
+            "{{ search }}"
+      blockinfile:
+        block: "{{ search_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: SEARCH_BEGIN
+        marker_end: SEARCH_END
   tags:
     - search
 
 - name: Alfresco Repository Role
   hosts: repository
+  gather_facts: false
   become: true
   roles:
     - role: '../roles/repository'
+  post_tasks:
+    - name: update installation status file with ACS
+      vars:
+        acs_components:
+          acs:
+            "{{ acs }}"
+          amps:
+            "{{ amps }}"
+          api_explorer: 
+            "{{ api_explorer }}"
+      blockinfile:
+        block: "{{ acs_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: ACS_BEGIN
+        marker_end: ACS_END
   tags:
     - repository
 
 - name: T-Router Role
   hosts: transformers
+  gather_facts: false
   become: true
   roles:
     - { role: '../roles/trouter', when: acs.edition == "Enterprise" }
+  post_tasks:
+    - name: update installation status file with Trouter
+      vars:
+        trouter_components:
+          trouter:
+            "{{ trouter }}"
+      blockinfile:
+        block: "{{ trouter_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: TROUTER_BEGIN
+        marker_end: TROUTER_END
   tags:
     - trouter
 
 - name: Shared File Store Role
   hosts: transformers
+  gather_facts: false
   become: true
   roles:
     - { role: '../roles/sfs', when: acs.edition == "Enterprise" }
+  post_tasks:
+    - name: update installation status file with SFS
+      vars:
+        sfs_components:
+         sfs:
+            "{{ sfs }}"
+      blockinfile:
+        block: "{{ sfs_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: SFS_BEGIN
+        marker_end: SFS_END
   tags:
     - sfs
 
 - name: Sync Service Role
   hosts: syncservice
+  gather_facts: false
   become: true
   roles:
     - { role: '../roles/sync', when: acs.edition == "Enterprise" }
+  post_tasks:
+    - name: update installation status file with Sync
+      vars:
+        sync_components:
+         sync:
+            "{{ sync }}"
+      blockinfile:
+        block: "{{ sync_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: SYNC_BEGIN
+        marker_end: SYNC_END
   tags:
     - sync
 
+- name: Alfresco Digital Workspace Role
+  hosts: adw
+  gather_facts: false
+  become: true
+  roles:
+    - { role: '../roles/adw', when: acs.edition == "Enterprise" }
+  post_tasks:
+    - name: update installation status file with ADW
+      vars:
+        adw_components:
+          adw:
+            "{{ adw }}"
+      blockinfile:
+        block: "{{ adw_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: ADW_BEGIN
+        marker_end: ADW_END
+  tags:
+    - adw
+
 - name: Nginx Role
   hosts: nginx
+  gather_facts: false
   become: true
   roles:
     - role: '../roles/nginx'
   tags:
     - nginx
-
-- name: Alfresco Digital Workspace Role
-  hosts: adw
-  become: true
-  roles:
-    - { role: '../roles/adw', when: acs.edition == "Enterprise" }
-  tags:
-    - adw

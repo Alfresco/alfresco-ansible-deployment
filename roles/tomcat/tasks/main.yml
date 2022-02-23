@@ -50,77 +50,77 @@
     src: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
     dest: "/opt/"
     remote_src: true
-    creates: /opt/apache-tomcat-{{ dependencies_version.tomcat }}/
+    creates: "{{ tomcat_home }}/"
   become: true
   become_user: root
 
-- name: Recursively change ownership of "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/"
+- name: Recursively change ownership of "{{ tomcat_home }}/"
   file:
-    path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/"
+    path: "{{ tomcat_home }}/"
     state: directory
     recurse: true
     group: "{{ group_name }}"
     owner: "{{ username }}"
     mode: 'o=r,g=rwx'
 
-- name: check if "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf" dir exists
+- name: check if "{{ tomcat_home }}/conf" dir exists
   stat:
-    path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf"
+    path: "{{ tomcat_home }}/conf"
   register: conf_dir_exists
 
-- name: Copy files from "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf to {{ tomcat_config_dir }}"
+- name: Copy files from "{{ tomcat_home }}/conf to {{ tomcat_config_dir }}"
   copy:
     remote_src: true
-    src: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf"
+    src: "{{ tomcat_home }}/conf"
     dest: "{{ tomcat_config_dir }}"
     group: "{{ group_name }}"
     owner: "{{ username }}"
   when: conf_dir_exists.stat.exists
   changed_when: False
 
-- name: Remove old files /opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf
+- name: Remove old files {{ tomcat_home }}/conf
   file:
-    path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/conf"
+    path: "{{ tomcat_home }}/conf"
     state: absent
   changed_when: False
 
-- name: check if "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/temp" dir exists
+- name: check if "{{ tomcat_home }}/temp" dir exists
   stat:
-    path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/temp"
+    path: "{{ tomcat_home }}/temp"
   register: temp_dir_exists
 
-- name: Copy files from "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/temp to {{ tomcat_working }}"
+- name: Copy files from "{{ tomcat_home }}/temp to {{ tomcat_working }}"
   copy:
     remote_src: true
-    src: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/temp"
+    src: "{{ tomcat_home }}/temp"
     dest: "{{ tomcat_working }}"
     group: "{{ group_name }}"
     owner: "{{ username }}"
   when: temp_dir_exists.stat.exists
 
-- name: check if "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/work" dir exists
+- name: check if "{{ tomcat_home }}/work" dir exists
   stat:
-    path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/work"
+    path: "{{ tomcat_home }}/work"
   register: work_dir_exists
 
-- name: Copy files from "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/work to {{ tomcat_working }}"
+- name: Copy files from "{{ tomcat_home }}/work to {{ tomcat_working }}"
   copy:
     remote_src: true
-    src: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/work"
+    src: "{{ tomcat_home }}/work"
     dest: "{{ tomcat_working }}/work"
     group: "{{ group_name }}"
     owner: "{{ username }}"
   when: work_dir_exists.stat.exists
 
-- name: Remove old files "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/logs"
+- name: Remove old files "{{ tomcat_home }}/logs"
   file:
-    path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/logs"
+    path: "{{ tomcat_home }}/logs"
     state: absent
   changed_when: False
 
-- name: Remove old files "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/webapps"
+- name: Remove old files "{{ tomcat_home }}/webapps"
   file:
-    path: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}/webapps"
+    path: "{{ tomcat_home }}/webapps"
     state: absent
   changed_when: False
 
@@ -160,7 +160,7 @@
   become: true
   lineinfile:
     path: "{{ config_folder }}/setenv.sh"
-    line: "export TOMCAT_HOME=/opt/apache-tomcat-{{ dependencies_version.tomcat }}"
+    line: "export TOMCAT_HOME={{ tomcat_home }}"
     group: "{{ group_name }}"
     owner: "{{ username }}"
   when: test_tomcat_home.stdout != 0

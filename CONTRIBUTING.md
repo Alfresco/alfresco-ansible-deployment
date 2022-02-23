@@ -22,7 +22,7 @@ available at [http://contributor-covenant.org/version/1/4][version]
 ## Contributing to this project
 
 In addition to following the rules above, we ask you that any PR submitted be against the `contribs` branch.
-We might close any PR that's requested against `mùaster`on any other branch.
+We might close any PR that's requested against `master`on any other branch.
 
 This is to allow us run our tests before we merge to master.
 

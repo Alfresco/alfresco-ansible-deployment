@@ -1,0 +1,43 @@
+---
+all:
+  vars:
+    ## EACH OF THE VARIABLES BELLOW CAN BE MOVED TO A GROUPS (all.children.*.vars) OR
+    ## HOSTS (all.children.group.hosts.*) SEcTIONS IN CASE VARS NEED TO DIFFER FOR EACH.
+    ## PRECEDENCE; HOSTS_VARS > GROUPS_VARS > GLOBAL_VARS.
+    # More details: https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#define-variables-in-inventory
+    ansible_connection: ssh
+    # Comment if no SSH key is used and use `-k` on the command line instead (or `-K`in case sudo requires password)
+    ansible_private_key_file: "/path/ssh_key.dsa"
+    ansible_user: root
+  children:
+    database:
+      hosts:
+        db.infra.local:
+    repository:
+      vars:
+        # Set the contentstore storage details as per the `mount` options
+        cs_storage:
+          type: nfs
+          device: nas.infra.local:/exports/contentstore
+          options: _netdev,noatime,nodiratime
+      hosts:
+        ecm1.infra.local:
+        ecm2.infra.local:
+    activemq:
+      hosts:
+        mq.infra.local:
+    search:
+      hosts:
+        fts.infra.local:
+    nginx:
+      hosts:
+        proxy.infra.local:
+    adw:
+      hosts:
+        web.infra.local:
+    transformers:
+      hosts:
+        render.infra.local:
+    syncservice:
+      hosts:
+        sync.infra.local:

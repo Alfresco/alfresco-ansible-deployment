@@ -1,55 +1,39 @@
 ---
 dependency:
   name: galaxy
+
 driver:
-  name: docker
+  name: ec2
+
 platforms:
   - name: instance
-    image: centos/systemd:latest
-    privileged: true
-    volume_mounts:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
-    command: "/usr/sbin/init"
-    exposed_ports:
-      - 80/tcp
-      - 443/tcp
-      - 5432/tcp
-      - 8161/tcp
-      - 8080/tcp
-      - 8082/tcp
-      - 8083/tcp
-      - 8090/tcp
-      - 8095/tcp
-      - 8099/tcp
-      - 8983/tcp
-      - 9090/tcp
-    published_ports:
-      - 0.0.0.0:80:80/tcp
-      - 0.0.0.0:443:443/tcp
-      - 0.0.0.0:5432:5432/tcp
-      - 0.0.0.0:8161:8161/tcp
-      - 0.0.0.0:8080:8080/tcp
-      - 0.0.0.0:8082:8082/tcp
-      - 0.0.0.0:8083:8083/tcp
-      - 0.0.0.0:8090:8090/tcp
-      - 0.0.0.0:8095:8095/tcp
-      - 0.0.0.0:8099:8099/tcp
-      - 0.0.0.0:8983:8983/tcp
-      - 0.0.0.0:9090:9090/tcp
+    image: ${MOLECULE_IT_IMAGE_ID}
+    instance_type: t3.large
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    tags:
+      Name: molecule_${MOLECULE_IT_PLATFORM}_${BRANCH_NAME}_${BUILD_NUMBER}
+      Owner: Ops Readiness Team
+      Department: Engineering
+      Production: false
+    groups:
+      - database
+      - activemq
+      - transformers
+      - search
+      - repository
+      - syncservice
+      - adw
+      - nginx
+
 provisioner:
   name: ansible
+  ansible_args:
+    - -e
+    - "@${MOLECULE_IT_EXTRA_VARS}"
+    - -e
+    - "@tests/test-ssl.yml"
   inventory:
     links: 
       group_vars: ../../group_vars
   playbooks:
     converge: ../../playbooks/acs.yml
-verifier:
-  name: testinfra
-  directory: tests
-  env:
-    ANSIBLE_TIMEOUT: "30"
-    ANSIBLE_SSH_RETRIES: "15"
-    PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
-  options:
-    v: 1
-    s: true

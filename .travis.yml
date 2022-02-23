@@ -1,4 +1,7 @@
 ---
+import:
+  - source: Alfresco/alfresco-build-tools:.travis.pre-commit.yml@v1.1.9
+
 os: linux
 dist: xenial
 language: python
@@ -14,342 +17,252 @@ branches:
     - contribs
     - /feature.*/
     - /fix.*/
-    - /OPSEXP-.*/
-
-before_install:
-  - pip install ansible==${ANSIBLE_VERSION}
+    - /(?i:OPSEXP)-.*/
+    - /^dependabot\/.*$/
 
 env:
-  - MOLECULE_NO_LOG=false
+  global:
+    - BRANCH_NAME="${TRAVIS_BRANCH}"
+    - BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}"
+    - MOLECULE_NO_LOG=false
+    - ANSIBLE_VERSION="2.9.21"
+    - AWS_REGION=us-east-1
+    - DTAS_VERSION=v1.1.1
+
+before_install:
+  - travis_retry pip install ansible==${ANSIBLE_VERSION}
+  - travis_retry ansible-galaxy collection install community.docker amazon.aws community.crypto
+
+script:
+  - ./tests/molecule_it/script.sh verify
+
+after_script:
+  - ./tests/molecule_it/script.sh destroy
+
+cache:
+  directories:
+  - $HOME/.ansible/collections
 
 stages:
-  - name: Linters
-  - name: Verification
+  - name: lint
+  - name: Roles tests
+  - name: Integration tests
   - name: Release Stage
     if: branch = master AND commit_message =~ /\[release\]/
 
 jobs:
   include:
-    - stage: Linters
-      name: "ansible-lint"
-      script:
-        - ansible-lint -v playbooks/acs.yml
-    - name: "pylint"
-      script:
-        - find . -name "*.py" ! -name __init__.py | xargs pylint
-    - name: "yamllint"
-      script:
-        - yamllint .
-    - name: Check components version table
-      scripts:
-        - python3 scripts/generate-comp-ver-table.py
-        - git_status_out=$(git status)
-        - if [[ "$git_status_out" == *"docs/README.md"* ]]; then echo "Error- Components version was not changed. Download pre-commit tool";exit 1; fi
-    - stage: Verification
-      name: Search Role Verification
-      script:
-        - molecule --version
-        - cd roles/search/
-        - molecule converge
-        - sleep 1m
-        - molecule verify
-        - molecule destroy   
-    - stage: Verification
-      name: Common Role Verification
-      script:
-        - cd roles/common/ && molecule test
-    - stage: Verification
-      name: Java Role Verification
-      script:
-        - cd roles/java/ && molecule test
-    - stage: Verification
-      name: Tomcat Role Verification
-      script:
-        - cd roles/tomcat/ && molecule test
-    - stage: Verification
-      name: ActiveMQ Role Verification
+
+    - stage: Roles tests
+      name: ActiveMQ tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/activemq/ && molecule test
-    - stage: Verification
-      name: Repository Role Verification
+
+    - stage: Roles tests
+      name: ActiveMQ tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
-        - cd roles/repository/ 
-        - molecule converge
+        - cd roles/activemq/ && molecule test
+
+    - stage: Roles tests
+      name: ADW tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/adw/ && molecule test
+
+    - stage: Roles tests
+      name: ADW tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/adw/ && molecule test
+
+    - stage: Roles tests
+      name: Common tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/common/ && molecule test
+
+    - stage: Roles tests
+      name: Java tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/java/ && molecule test
+
+    - stage: Roles tests
+      name: Nginx tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/nginx/ && molecule test
+
+    - stage: Roles tests
+      name: Nginx tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/nginx/ && molecule test
+
+    - stage: Roles tests
+      name: Repository tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/repository/
+        - molecule converge || return 1
         - sleep 5m
         - travis_wait 30 molecule verify
         - molecule destroy
-    - stage: Verification
-      name: ADW Role Verification
+
+    - stage: Roles tests
+      name: Repository tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
-        - cd roles/adw/ && molecule test
-    - stage: Verification
-      name: Nginx Role Verification
+        - cd roles/repository/
+        - molecule converge || return 1
+        - sleep 5m
+        - travis_wait 30 molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Search tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
-        - cd roles/nginx/ && molecule test
-    - stage: Verification
-      name: SFS Role Verification
+        - cd roles/search && molecule test
+
+    - stage: Roles tests
+      name: Search tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/search && molecule test
+
+    - stage: Roles tests
+      name: SFS tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/sfs/ && molecule test
-    - stage: Verification
-      name: Trouter Role Verification
+
+    - stage: Roles tests
+      name: SFS tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
-        - cd roles/trouter
-        - molecule converge
-        - sleep 1m
-        - molecule verify
-        - molecule destroy
-    - stage: Verification
-      name: Transform AIO Verification tests
-      script:
-        - cd roles/transformers
-        - molecule converge
-        - sleep 1m
-        - molecule verify
-        - molecule destroy
-    - stage: Verification
-      name: Sync Service Verification tests
+        - cd roles/sfs/ && molecule test
+
+    - stage: Roles tests
+      name: Sync tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
         - cd roles/sync
-        - molecule converge
+        - molecule converge || return 1
         - sleep 1m
         - molecule verify
         - molecule destroy
-    - stage: Verification
-      name: Localhost integration checks (ACS 6.2.2 on CentOS 7)
-      before_install:
-        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
-        - eval "$(ssh-agent -s)"
-        - chmod 600 /tmp/dbp-ansible
-        - ssh-add /tmp/dbp-ansible
-        - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-        - unzip awscli-bundle.zip
-        - ./awscli-bundle/install -b ~/bin/aws
-        - export PATH=~/bin:$PATH
-        - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-        - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-        - export AWS_DEFAULT_REGION='us-east-1'
-        - git clone --depth 1 --branch $DTAS_VERSION https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
-      script:
-        - aws ec2 run-instances --image-id ami-0affd4508a5d2481b --count 1 --instance-type t3.large --key-name dbp-ansible --security-group-ids sg-099a05787b0a322c3 --subnet-id subnet-06ffe524598660d99 --tag-specifications "ResourceType=instance,Tags=[{Key=local,Value=machine_no_${TRAVIS_BUILD_NUMBER}},{Key=Creator,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}},{Key=Owner,Value="Operator\ Experience\ Team"},{Key=Department,Value=Engineering},{Key=Purpose,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}_local},{Key=NoAutomaticShutdown,Value=false},{Key=Production,Value=False},{Key=Name,Value=molecule_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_local},{Key=instance,Value=${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_local}]"
-        - echo "wait for instance to be up" && sleep 4m
-        - export PUBLIC_IP=$(aws ec2 describe-instances --filters Name=instance-state-name,Values=running Name=tag-key,Values=local Name=tag-value,Values=machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-        - export INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag-key,Values=local Name=tag-value,Values=machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].InstanceId' --output text)
-        - ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
-        - scripts/generate-zip.sh
-        - export VERSION=$(cat VERSION)
-        - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
-        - ssh centos@${PUBLIC_IP} "sudo yum install -y -q unzip python3 python-virtualenv"
-        - ssh centos@${PUBLIC_IP} "mkdir ~/.pythonvenv && virtualenv -p /usr/bin/python3 ~/.pythonvenv/ansible-${ANSIBLE_VERSION}"
-        - ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip install --upgrade pip && pip install ansible==${ANSIBLE_VERSION}"
-        - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
-        - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
-        - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@6.2.N-extra-vars.yml\""
-        - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "tests/test-config-acs6-stack.json" 
-        - cd dtas; pytest --tb=line --configuration ../tests/test-config-acs6-stack.json tests/ -s
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
-    - stage: Verification
-      name: Localhost integration checks (ACS 7.1.0 on CentOS 8)
-      before_install:
-        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
-        - eval "$(ssh-agent -s)"
-        - chmod 600 /tmp/dbp-ansible
-        - ssh-add /tmp/dbp-ansible      
-        - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-        - unzip awscli-bundle.zip
-        - ./awscli-bundle/install -b ~/bin/aws
-        - export PATH=~/bin:$PATH
-        - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-        - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-        - export AWS_DEFAULT_REGION='us-east-1'
-        - git clone --depth 1 --branch $DTAS_VERSION https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
-      script:
-        - aws ec2 run-instances --image-id ami-0d6e9a57f6259ba3a --count 1 --instance-type t3.large --key-name dbp-ansible --security-group-ids sg-099a05787b0a322c3 --subnet-id subnet-06ffe524598660d99 --tag-specifications "ResourceType=instance,Tags=[{Key=local,Value=centos8_machine_no_${TRAVIS_BUILD_NUMBER}},{Key=Creator,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}},{Key=Owner,Value="Operator\ Experience\ Team"},{Key=Department,Value=Engineering},{Key=Purpose,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}_centos8},{Key=NoAutomaticShutdown,Value=false},{Key=Production,Value=False},{Key=Name,Value=molecule_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_centos8},{Key=instance,Value=${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_centos8}]"
-        - echo "wait for instance to be up" && sleep 4m
-        - export PUBLIC_IP=$(aws ec2 describe-instances --filters Name=instance-state-name,Values=running Name=tag-key,Values=local Name=tag-value,Values=centos8_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-        - export INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag-key,Values=local Name=tag-value,Values=centos8_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].InstanceId' --output text)
-        - ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
-        - scripts/generate-zip.sh
-        - export VERSION=$(cat VERSION)
-        - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q unzip python3"
-        - ssh centos@${PUBLIC_IP} "sudo pip3 install ansible==${ANSIBLE_VERSION}"
-        - ssh centos@${PUBLIC_IP} "sudo pip3 install virtualenv"
-        - ssh centos@${PUBLIC_IP} "mkdir ~/.pythonvenv && virtualenv -p /usr/bin/python3 ~/.pythonvenv/ansible-${ANSIBLE_VERSION}"
-        - ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip3 install --upgrade pip && pip3 install ansible==${ANSIBLE_VERSION}"
-        - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
-        - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
-        - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\""
-        - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "tests/test-config.json"
-        - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
-    - stage: Verification
-      name: Localhost integration checks (ACS 7.1.0 on Ubuntu 20.04)
-      before_install:
-        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
-        - eval "$(ssh-agent -s)"
-        - chmod 600 /tmp/dbp-ansible
-        - ssh-add /tmp/dbp-ansible
-        - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-        - unzip awscli-bundle.zip
-        - ./awscli-bundle/install -b ~/bin/aws
-        - export PATH=~/bin:$PATH
-        - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-        - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-        - export AWS_DEFAULT_REGION='us-east-1'
-        - git clone --depth 1 --branch $DTAS_VERSION https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
-      script:
-        - aws ec2 run-instances --image-id ami-09e67e426f25ce0d7 --count 1 --instance-type t3.large --key-name dbp-ansible --security-group-ids sg-099a05787b0a322c3 --subnet-id subnet-06ffe524598660d99 --tag-specifications "ResourceType=instance,Tags=[{Key=local,Value=ubuntu20.04_machine_no_${TRAVIS_BUILD_NUMBER}},{Key=Creator,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}},{Key=Owner,Value="Operator\ Experience\ Team"},{Key=Department,Value=Engineering},{Key=Purpose,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}_ubuntu20.04},{Key=NoAutomaticShutdown,Value=false},{Key=Production,Value=False},{Key=Name,Value=molecule_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_ubuntu20.04},{Key=instance,Value=${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_ubuntu20.04}]"
-        - echo "wait for instance to be up" && sleep 4m
-        - export PUBLIC_IP=$(aws ec2 describe-instances --filters Name=instance-state-name,Values=running Name=tag-key,Values=local Name=tag-value,Values=ubuntu20.04_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-        - export INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag-key,Values=local Name=tag-value,Values=ubuntu20.04_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].InstanceId' --output text)
-        - ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
-        - scripts/generate-zip.sh
-        - export VERSION=$(cat VERSION)
-        - scp dist/alfresco-ansible-deployment-${VERSION}.zip ubuntu@${PUBLIC_IP}:/tmp
-        - ssh ubuntu@${PUBLIC_IP} "DEBIAN_FRONTEND=noninteractive sudo -E apt-get update && sudo -E apt-get install -y unzip python3 virtualenvwrapper"
-        - ssh ubuntu@${PUBLIC_IP} ". /usr/share/virtualenvwrapper/virtualenvwrapper.sh && mkvirtualenv ansible-${ANSIBLE_VERSION} && [ -n $VIRTUAL_ENV ] || workon ansible-${ANSIBLE_VERSION} && pip install ansible==${ANSIBLE_VERSION}"
-        - ssh ubuntu@${PUBLIC_IP} "unzip /tmp/alfresco-ansible-deployment-${VERSION}.zip"
-        - scp -r tests ubuntu@${PUBLIC_IP}:alfresco-ansible-deployment-${VERSION}/
-        - ssh ubuntu@${PUBLIC_IP} ". /usr/share/virtualenvwrapper/virtualenvwrapper.sh && workon ansible-${ANSIBLE_VERSION} && export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\""
-        - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" tests/test-config.json
-        - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
-    - stage: Verification
-      name: SSL integration checks (ACS 7.1.0 on CentOS 8)
-      before_install:
-        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
-        - eval "$(ssh-agent -s)"
-        - chmod 600 /tmp/dbp-ansible
-        - ssh-add /tmp/dbp-ansible      
-        - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-        - unzip awscli-bundle.zip
-        - ./awscli-bundle/install -b ~/bin/aws
-        - export PATH=~/bin:$PATH
-        - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-        - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-        - export AWS_DEFAULT_REGION='us-east-1'
-        - git clone --depth 1 --branch $DTAS_VERSION https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
-      script:
-        - aws ec2 run-instances --image-id ami-0d6e9a57f6259ba3a --count 1 --instance-type t3.large --key-name dbp-ansible --security-group-ids sg-099a05787b0a322c3 --subnet-id subnet-06ffe524598660d99 --tag-specifications "ResourceType=instance,Tags=[{Key=local,Value=centos8_ssl_machine_no_${TRAVIS_BUILD_NUMBER}},{Key=Creator,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}},{Key=Owner,Value="Operator\ Experience\ Team"},{Key=Department,Value=Engineering},{Key=Purpose,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}_ssl_centos8},{Key=NoAutomaticShutdown,Value=false},{Key=Production,Value=False},{Key=Name,Value=molecule_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_ssl_centos8},{Key=instance,Value=${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_ssl_centos8}]"
-        - echo "wait for instance to be up" && sleep 4m
-        - export PUBLIC_IP=$(aws ec2 describe-instances --filters Name=instance-state-name,Values=running Name=tag-key,Values=local Name=tag-value,Values=centos8_ssl_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-        - export INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag-key,Values=local Name=tag-value,Values=centos8_ssl_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].InstanceId' --output text)
-        - sed -i "s+XXXXXX+$PUBLIC_IP+g" "tests/create_ansible-test.trial-dev.alfresco.me.yaml"
-        - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/create_ansible-test.trial-dev.alfresco.me.yaml"
-        - sed -i "s+XXXXXX+$PUBLIC_IP+g" "tests/delete_ansible-test.trial-dev.alfresco.me.yaml"
-        - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/delete_ansible-test.trial-dev.alfresco.me.yaml"
-        - aws route53 change-resource-record-sets --hosted-zone-id ${HOSTED_ZONE_TRIAL_DEV_ALFRESCO_ME} --change-batch file://tests/create_ansible-test.trial-dev.alfresco.me.yaml
-        - echo "wait for dns entry to be created" && sleep 1m
-        - ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
-        - scripts/generate-zip.sh
-        - export VERSION=$(cat VERSION)
-        - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q unzip python3"
-        - ssh centos@${PUBLIC_IP} "sudo pip3 install ansible==${ANSIBLE_VERSION}"
-        - ssh centos@${PUBLIC_IP} "sudo pip3 install virtualenv"
-        - ssh centos@${PUBLIC_IP} "mkdir ~/.pythonvenv && virtualenv -p /usr/bin/python3 ~/.pythonvenv/ansible-${ANSIBLE_VERSION}"
-        - ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip3 install --upgrade pip && pip3 install ansible==${ANSIBLE_VERSION}"
-        - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
-        - ssh centos@${PUBLIC_IP} "mkdir /home/centos/alfresco-ansible-deployment-${VERSION}/configuration_files/ssl_certificates/"
-        - sed -i "s+YYYYYY+$TRAVIS_BUILD_NUMBER+g" "tests/test-ssl.yml"
-        - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
-        - aws secretsmanager get-secret-value --secret-id ${SSL_CERT_KEY_PATH} --query SecretString --output text > certificate.key
-        - aws secretsmanager get-secret-value --secret-id ${SSL_CERT_PATH} --query SecretString --output text > certificate.crt
-        - scp -r certificate.key centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/configuration_files/ssl_certificates/ansible-test-${TRAVIS_BUILD_NUMBER}.trial-dev.alfresco.me.key
-        - scp -r certificate.crt centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/configuration_files/ssl_certificates/ansible-test-${TRAVIS_BUILD_NUMBER}.trial-dev.alfresco.me.crt
-        - ssh centos@${PUBLIC_IP} "export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\"; cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@tests/test-extra-vars.yml\" -e \"@tests/test-ssl.yml\""
-        - sed -i "s+TEST_URL+https://ansible-test-${TRAVIS_BUILD_NUMBER}.trial-dev.alfresco.me+g" "tests/test-config.json"
-        - cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
-        - cd ..
-        - aws route53 change-resource-record-sets --hosted-zone-id ${HOSTED_ZONE_TRIAL_DEV_ALFRESCO_ME} --change-batch file://tests/delete_ansible-test.trial-dev.alfresco.me.yaml
-    - stage: Verification
-      name: Localhost community integration (ACS Community on CentOS 8)
-      before_install:
-        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
-        - eval "$(ssh-agent -s)"
-        - chmod 600 /tmp/dbp-ansible
-        - ssh-add /tmp/dbp-ansible      
-        - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-        - unzip awscli-bundle.zip
-        - ./awscli-bundle/install -b ~/bin/aws
-        - export PATH=~/bin:$PATH
-        - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-        - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-        - export AWS_DEFAULT_REGION='us-east-1'
-        - git clone --depth 1 --branch $DTAS_VERSION https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
-      script:
-        - aws ec2 run-instances --image-id ami-0d6e9a57f6259ba3a --count 1 --instance-type t3.large --key-name dbp-ansible --security-group-ids sg-099a05787b0a322c3 --subnet-id subnet-06ffe524598660d99 --tag-specifications "ResourceType=instance,Tags=[{Key=local,Value=community_centos8_machine_no_${TRAVIS_BUILD_NUMBER}},{Key=Creator,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}},{Key=Owner,Value="Operator\ Experience\ Team"},{Key=Department,Value=Engineering},{Key=Purpose,Value=${TRAVIS_BUILD_NUMBER}_${TRAVIS_BUILD_NUMBER}_community_centos8},{Key=NoAutomaticShutdown,Value=false},{Key=Production,Value=False},{Key=Name,Value=molecule_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_community_centos8},{Key=instance,Value=${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}_community_centos8}]"
-        - echo "wait for instance to be up" && sleep 4m
-        - export PUBLIC_IP=$(aws ec2 describe-instances --filters Name=instance-state-name,Values=running Name=tag-key,Values=local Name=tag-value,Values=community_centos8_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-        - export INSTANCE_ID=$(aws ec2 describe-instances --filters Name=tag-key,Values=local Name=tag-value,Values=community_centos8_machine_no_${TRAVIS_BUILD_NUMBER} --query 'Reservations[*].Instances[*].InstanceId' --output text)
-        - ssh-keyscan $PUBLIC_IP >> ~/.ssh/known_hosts
-        - scripts/generate-zip.sh
-        - export VERSION=$(cat VERSION)
-        - scp dist/alfresco-ansible-deployment-${VERSION}.zip centos@${PUBLIC_IP}:/home/centos/
-        - ssh centos@${PUBLIC_IP} "sudo yum update -y -q; sudo yum install -y -q unzip python3"
-        - ssh centos@${PUBLIC_IP} "sudo pip3 install ansible==${ANSIBLE_VERSION}"
-        - ssh centos@${PUBLIC_IP} "sudo pip3 install virtualenv"
-        - ssh centos@${PUBLIC_IP} "mkdir ~/.pythonvenv && virtualenv -p /usr/bin/python3 ~/.pythonvenv/ansible-${ANSIBLE_VERSION}"
-        - ssh centos@${PUBLIC_IP} "source ~/.pythonvenv/ansible-${ANSIBLE_VERSION}/bin/activate && pip3 install --upgrade pip && pip3 install ansible==${ANSIBLE_VERSION}"
-        - ssh centos@${PUBLIC_IP} "unzip alfresco-ansible-deployment-${VERSION}.zip"
-        - scp -r tests centos@${PUBLIC_IP}:/home/centos/alfresco-ansible-deployment-${VERSION}/
-        - ssh centos@${PUBLIC_IP} "cd alfresco-ansible-deployment-${VERSION}; ansible-playbook playbooks/acs.yml -i inventory_local.yml -e \"@community-extra-vars.yml\""
-        - sed -i "s+google-edit-flat+document-view-googlemaps+g" "dtas/tests/conftest.py"
-        - sed -i "s+TEST_URL+http://$PUBLIC_IP+g" "tests/test-config-community.json" 
-        - cd dtas; pytest --tb=line --configuration ../tests/test-config-community.json tests/ -s
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then aws ec2 terminate-instances --instance-ids $INSTANCE_ID; fi
-    - stage: Verification
-      name: Single Machine Integration checks
+
+    - stage: Roles tests
+      name: Sync tests on Ubuntu 20.04
       env:
-        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME; export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\";export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single" # pragma: allowlist secret
-        - ANSIBLE_FORCE_COLOR=true
-      before_install:
-        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
-        - eval "$(ssh-agent -s)"
-        - chmod 600 /tmp/dbp-ansible
-        - ssh-add /tmp/dbp-ansible
-        - git clone --depth 1 --branch $DTAS_VERSION https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
-        - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
-        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/"
-        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/ ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single
-        - ssh ec2-user@$control_machine_ip "source ~/.bash_profile; mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single/molecule_temp_dir/"
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" == *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=true;molecule create -s ec2"; else ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=false;molecule create -s ec2"; fi
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2/dynamic_inventory.py"
-        - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat molecule_temp_dir/instance_config.yml | yq .[].address -r")
-        - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS; ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single/inventory_ssh.yml -e \"@/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment-single/tests/test-extra-vars.yml\""
-        - echo "wait for repo to be up" && sleep 5m
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; sed -i 's+TEST_URL+http://$TESTHOST+g' tests/test-config.json ; cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s"
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2"; fi
-      after_script:
-        - ssh ec2-user@$control_machine_ip "rm -rf /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/"
-    - stage: Verification
-      name: Multi Machine Integration checks
+        - cd roles/sync
+        - molecule converge || return 1
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Tomcat tests on Ubuntu 20.04
       env:
-        - ANSIBLE_FORCE_COLOR=true
-        - COMMON_COMMANDS="source ~/.bash_profile;export NEXUS_USERNAME=$NEXUS_USERNAME;export NEXUS_PASSWORD=\"$NEXUS_PASSWORD\";export MOLECULE_NO_LOG=false;export EC2_REGION=us-east-1;export TRAVIS_BRANCH=$TRAVIS_BRANCH;export TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER;export TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER;export MOLECULE_EPHEMERAL_DIRECTORY=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m; export ANSIBLE_CONFIG=/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment/molecule_temp_dir_m/ansible.cfg; cd /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment" # pragma: allowlist secret
-      before_install:
-        - openssl aes-256-cbc -K $encrypted_6c8b9ee48a27_key -iv $encrypted_6c8b9ee48a27_iv -in alfresco-ansible.pem.enc -out /tmp/dbp-ansible -d
-        - eval "$(ssh-agent -s)"
-        - chmod 600 /tmp/dbp-ansible
-        - ssh-add /tmp/dbp-ansible
-        - git clone --depth 1 --branch $DTAS_VERSION https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git dtas
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
-        - ssh-keyscan $control_machine_ip >> ~/.ssh/known_hosts
-        - ssh ec2-user@$control_machine_ip "mkdir -p /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/"
-        - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR ec2-user@$control_machine_ip:/opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER
-        - ssh ec2-user@$control_machine_ip "source ~/.bash_profile"
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" == *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=true;molecule create -s ec2multi"; else ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;export KEEP_ENV=false;molecule create -s ec2multi"; fi
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;python molecule/ec2multi/dynamic_inventory.py"
-        - export TESTHOST=$(ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS;cat inventory_ssh.yml | yq .all.children.nginx.hosts.nginx_1.ansible_host -r")
-        - ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;ansible-playbook playbooks/acs.yml -i /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/alfresco-ansible-deployment/inventory_ssh.yml -e \"@tests/test-extra-vars.yml\""
-        - echo "wait for repo to be up" && sleep 5m
-        - ssh ec2-user@$control_machine_ip "$COMMON_COMMANDS; sed -i 's+TEST_URL+http://$TESTHOST+g' tests/test-config.json; cd dtas; pytest --tb=line --configuration ../tests/test-config.json tests/ -s"
-        - if [[ "$TRAVIS_COMMIT_MESSAGE" != *"[keep env]"* ]]; then ssh -tt ec2-user@$control_machine_ip "$COMMON_COMMANDS;molecule destroy -s ec2multi"; fi
-      after_script:
-        - ssh ec2-user@$control_machine_ip "rm -rf /opt/buildacs/$TRAVIS_BRANCH/$TRAVIS_JOB_NUMBER/"
-    - stage: Release Stage 
+        - cd roles/tomcat/ && molecule test
+
+    - stage: Roles tests
+      name: Transformers tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/transformers
+        - molecule converge || return 1
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Transformers tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/transformers
+        - molecule converge || return 1
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Trouter tests on Centos 7
+      env:
+        - "MOLECULE_ROLE_IMAGE=centos:7"
+      script:
+        - cd roles/trouter
+        - molecule converge || return 1
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Roles tests
+      name: Trouter tests on Ubuntu 20.04
+      env:
+        - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
+      script:
+        - cd roles/trouter
+        - molecule converge || return 1
+        - sleep 1m
+        - molecule verify
+        - molecule destroy
+
+    - stage: Integration tests
+      name: Molecule ACS 6.2.2 Enterprise on Centos 7
+      env:
+        MOLECULE_IT_SCENARIO=default
+        MOLECULE_IT_CONFIG=vars-centos7.yml
+
+    - stage: Integration tests
+      name: Molecule ACS 7.1.1 Enterprise on RHEL8
+      env:
+        MOLECULE_IT_SCENARIO=default
+        MOLECULE_IT_CONFIG=vars-rhel8.yml
+
+    - stage: Integration tests
+      name: Molecule ACS 7.1.1 Enterprise on Ubuntu 20.04
+      env:
+        MOLECULE_IT_SCENARIO=default
+        MOLECULE_IT_CONFIG=vars-ubuntu2004.yml
+
+    - stage: Integration tests
+      name: Molecule ACS 7.1.1 Community on RHEL8
+      env:
+        MOLECULE_IT_SCENARIO=default
+        MOLECULE_IT_CONFIG=vars-rhel8-community.yml
+
+    - stage: Integration tests
+      name: Molecule ACS 7.1.1 Enterprise on multiple RHEL8
+      env:
+        MOLECULE_IT_SCENARIO=multimachine
+        MOLECULE_IT_CONFIG=vars.yml
+
+    - stage: Release Stage
       name: Release
       script:
         - scripts/generate-zip.sh
@@ -364,16 +277,14 @@ jobs:
         - git tag -d latest
         - git tag -a -m "current latest -> $GIT_TAG" -f latest ${GIT_TAG}^{}
         - for ref in ':refs/tags/latest' 'latest'; do git push https://$GITHUB_TOKEN@github.com/Alfresco/alfresco-ansible-deployment $ref; done
-        - curl -v -F "r=releases" -F "g=org.alfresco" -F "a=alfresco-ansible-deployment" -F "v=${VERSION}" -F "p=zip" -F "file=@dist/alfresco-ansible-deployment-${VERSION}.zip" -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" https://artifacts.alfresco.com/nexus/service/local/artifact/maven/content        
+        - curl -F "r=releases" -F "g=org.alfresco" -F "a=alfresco-ansible-deployment" -F "v=${VERSION}" -F "p=zip" -F "file=@dist/alfresco-ansible-deployment-${VERSION}.zip" -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" https://artifacts.alfresco.com/nexus/service/local/artifact/maven/content
       deploy:
         provider: s3
         access_key_id: "${STAGING_AWS_ACCESS_KEY}"
         secret_access_key: "${STAGING_AWS_SECRET_KEY}"
         bucket: "${S3_STAGING_BUCKET}"
-        skip_cleanup: true
         region: "eu-west-1"
+        skip_cleanup: true
         local_dir: dist
         glob: "*.zip"
         upload-dir: "enterprise/alfresco-ansible-deployment"
-      after_deploy:
-        - rm -fv dist/alfresco-ansible-release-*.zip

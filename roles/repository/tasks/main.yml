@@ -7,9 +7,8 @@
   become: true
   become_user: root
   package:
-    name: "{{ item }}"
+    name: "{{ utils_repo }} + {{ utils_storage[cs_storage.type | default('tmpfs')] }}"
     state: present
-  loop: "{{ utils_repo }}"
 
 - name: Create contentstore folders
   become: true
@@ -43,8 +42,6 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rx,o=rx'
   loop:
-     - "{{ binaries_folder }}/modules/acs-platform"
-     - "{{ binaries_folder }}/modules/acs-share"
      - "{{ content_folder }}/modules/acs-platform"
      - "{{ content_folder }}/modules/acs-share"
      - "{{ content_folder }}/amps_repo"
@@ -61,6 +58,9 @@
      - "{{ content_data_folder }}/keystore"
      - "{{ tomcat_config_dir }}/lib"
      - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
+
+- name: Proceed with Shared contentstore tasks
+  include_tasks: sharedcs.yml
 
 - name: "Download {{ acs_zip_file }}"
   get_url:
@@ -132,7 +132,7 @@
 - name: Add ACS home to tomcat.sh
   become: true
   lineinfile:
-    path: "/opt/alfresco/tomcat.sh"
+    path: "{{ binaries_folder }}/tomcat.sh"
     insertafter: 'CATALINA_OPTS'
     line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME} -Dats-tengine-aio.host={{ ats_tengine_aio_host }} -Dats-shared-fs.host={{ sfs_host }}"
     owner: "{{ username }}"
@@ -141,7 +141,7 @@
 - name: Add additional env vars to tomcat.sh
   become: true
   lineinfile:
-    path: "/opt/alfresco/tomcat.sh"
+    path: "{{ binaries_folder }}/tomcat.sh"
     insertafter: 'CATALINA_OPTS'
     line: export {{ item.key }}="{{ item.value }}"
     owner: "{{ username }}"
@@ -315,79 +315,33 @@
         path: "{{ content_folder }}/shared/classes/"
         state: absent
 
-- name: Move conf folder
+- name: Create web application config files
   block:
-    - name: Check if conf files exist
-      stat:
-        path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/alfresco.xml"
-      register: conf_exists
-    - name: Copy conf
-      become: true
-      copy:
-        remote_src: true
-        src: "{{ content_folder }}/web-server/conf/Catalina/localhost/"
-        dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/"
+    - name: Create config folders
+      file:
+        state: directory
+        path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/"
+        mode: 0755
         owner: "{{ username }}"
         group: "{{ group_name }}"
-      when: not conf_exists.stat.exists
+    - name: Create config files
+      template:
+        src: "{{ item }}.xml"
+        dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/{{ item }}.xml"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 0644
+      loop:
+        - alfresco
+        - share
+        - ROOT
+        - _vti_bin
+        - api-explorer
     - name: Remove conf files
       file:
         path: "{{ content_folder }}/web-server/conf"
         state: absent
-
-- name: Add context home to alfresco.xml
-  lineinfile:
-    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/alfresco.xml"
-    regexp: '<Context crossContext="true">'
-    line: '<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/alfresco.war">'
-
-- name: Add context home to share.xml
-  lineinfile:
-    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/share.xml"
-    regexp: '<Context crossContext="true">'
-    line: '<Context crossContext="true" cachingAllowed="true" cacheMaxSize="100000" docBase="{{ content_folder }}/web-server/webapps/share.war">'
-
-- name: Check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml" exists
-  stat:
-    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml"
-  register: root_xml
-
-- name: Create ROOT.xml
-  template:
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    src: ROOT.xml
-    dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/ROOT.xml"
-    mode: 'u=rwx,g=rwx,o=rx'
-  when: not root_xml.stat.exists
-
-- name: Check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml" exists
-  stat:
-    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml"
-  register: vti_xml
-
-- name: Create _vti_bin.xml
-  template:
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    src: _vti_bin.xml
-    dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/_vti_bin.xml"
-    mode: 'u=rwx,g=rwx,o=rx'
-  when: not vti_xml.stat.exists
-
-- name: Check if "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml" exists
-  stat:
-    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml"
-  register: api_explorer_xml
-
-- name: Create api-explorer.xml
-  template:
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    src: api-explorer.xml
-    dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/api-explorer.xml"
-    mode: 'u=rwx,g=rwx,o=rx'
-  when: not api_explorer_xml.stat.exists
+  become: true
 
 - name: Create alfresco-global.properties
   template:
@@ -447,25 +401,9 @@
   lineinfile:
     path: "{{ tomcat_config_dir }}/conf/catalina.properties"
     regexp: '^common.loader='
-    line: "common.loader=\"/etc/opt/alfresco/content-services/classpath\",\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\""
+    line: "common.loader=\"{{ config_folder }}/content-services/classpath\",\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\""
     owner: "{{ username }}"
     group: "{{ group_name }}"
-
-- name: Add PostResources to alfresco.xml
-  become: true
-  become_user: root
-  lineinfile:
-    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/alfresco.xml"
-    regexp: '<PostResources base='
-    line: '<PostResources base="/opt/alfresco/modules/acs-platform"'
-
-- name: Add PostResources to share.xml
-  become: true
-  become_user: root
-  lineinfile:
-    path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/share.xml"
-    regexp: '<PostResources base='
-    line: '<PostResources base="/opt/alfresco/modules/acs-share"'
 
 - name: Insert or Update custom properties added through configuration_files/alfresco-global.properties
   blockinfile:

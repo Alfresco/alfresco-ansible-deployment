@@ -1,0 +1,66 @@
+@startuml
+
+left to right direction
+
+skinparam linetype ortho
+skinparam defaultFontColor #DimGrey
+skinparam defaultFontName Cantarell
+
+skinparam rectangle {
+    BorderColor #DimGrey
+    RoundCorner 20
+    FontSize    24
+}
+
+skinparam database {
+    FontColor   #white
+    BorderColor #white
+}
+
+skinparam storage {
+    FontColor   #white
+    BorderColor #white
+}
+
+skinparam node {
+    BorderColor     #DimGrey
+    BackgroundColor #ivory
+}
+
+skinparam component {
+    BorderColor #DimGrey
+}
+
+skinparam cloud {
+    BorderColor #DimGrey
+}
+
+rectangle "Alfresco Components" as alfcomp #mintcream {
+    node "Cluster member 1" as node1 {
+        component "repository 1" as repo1 #mediumspringgreen
+        component "share UI 1" as share1 #lightblue
+    }
+
+    node "Cluster member 2" as node2 {
+        component "repository 2" as repo2 #mediumspringgreen
+        component "share UI 2" as share2 #lightblue
+    }
+    cloud "repository cluster domain" as repocloud #mediumspringgreen
+    cloud "share cluster domain" as sharecloud #lightblue
+}
+
+rectangle "External Components" as extcomp #lightyellow{
+    database "RDBMS" as db #steelblue
+    storage "<&folder*3>" as nfs #plum
+}
+
+repo1 ~[#dimgrey]~ repocloud
+repocloud ~[#dimgrey]~ repo2
+share1 ~[#dimgrey]~ sharecloud
+sharecloud ~[#dimgrey]~ share2
+node1 =[#dimgrey]= nfs
+nfs =[#dimgrey]= node2
+repo1 =[#dimgrey]= db
+repo2 =[#dimgrey]= db
+
+@enduml

@@ -4,4 +4,4 @@
 tomcat_working: "{{ data_folder }}/tomcat"
 tomcat_config_dir: "{{ config_folder }}/tomcat"
 
-tomcat_home: "/opt/apache-tomcat-{{ dependencies_version.tomcat }}"
+tomcat_home: "{{ tomcat_home_prefix }}-{{ dependencies_version.tomcat }}"

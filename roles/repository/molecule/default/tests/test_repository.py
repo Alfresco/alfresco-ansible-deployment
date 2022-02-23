@@ -4,15 +4,15 @@ import pytest
 from hamcrest import assert_that, contains_string
 
 # pylint: disable=redefined-outer-name
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def get_ansible_vars(host):
     """Define get_ansible_vars"""
-    repository_role = "file=../../vars/main.yml name=repository_role"
-    tomcat_role = "file=../../../tomcat/vars/main.yml name=tomcat_role"
-    java_role = "file=../../../java/vars/main.yml name=java_role"
-    common_vars = "../../../common/vars/main.yml name=common_vars"
-    common_defaults = "../../../common/defaults/main.yml name=common_defaults"
-    group_vars = "../../../../group_vars/all.yml name=group_vars"
+    repository_role = "file=./vars/main.yml name=repository_role"
+    tomcat_role = "file=../tomcat/vars/main.yml name=tomcat_role"
+    java_role = "file=../java/vars/main.yml name=java_role"
+    common_vars = "file=../common/vars/main.yml name=common_vars"
+    common_defaults = "file=../common/defaults/main.yml name=common_defaults"
+    group_vars = "file=../../group_vars/all.yml name=group_vars"
     ansible_vars = host.ansible("include_vars", group_vars)["ansible_facts"]["group_vars"]
     ansible_vars.update(host.ansible("include_vars", common_defaults)["ansible_facts"]["common_defaults"])
     ansible_vars.update(host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"])
@@ -28,7 +28,7 @@ def test_newly_added_properties_are_set(host, get_ansible_vars):
     content = host.file("/etc/opt/alfresco/content-services/classpath/alfresco-global.properties").content
     assert_that(b'index.recovery.mode=NONE' in content)
     assert_that(b'index.subsystem.name=noindex' in content)
-    assert_that(host.socket("tcp://:::1121").is_listening)
+    assert_that(host.socket("tcp://0.0.0.0:1121").is_listening)
 
 def test_repo_service_is_running_and_enabled(host, get_ansible_vars):
     """Check repository service"""
@@ -104,3 +104,15 @@ def test_environment_jvm_opts(host, get_ansible_vars):
     pid = host.run("/opt/openjdk*/bin/jps -lV | grep org.apache.catalina.startup.Bootstrap | awk '{print $1}'")
     process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
     assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
+
+def test_mounting_storage(host):
+    """Check wether Content Store has been properly mounted as per config."""
+    dir_root='/var/opt/alfresco/content-services/content'
+    repovars = host.ansible.get_variables()
+    assert_that(host.mount_point(dir_root).exists == isinstance(repovars["cs_storage"]["device"], str))
+    print(host.mount_point(dir_root).options)
+    if repovars["cs_storage"]["type"]:
+        assert_that(host.mount_point(dir_root).filesystem == repovars["cs_storage"]["type"])
+    # Best effort options check: at least find one common option (options may not be returned as passed)
+    if repovars["cs_storage"]["options"]:
+        assert_that(set(host.mount_point(dir_root).options) & set(repovars["cs_storage"]["options"].split(',')))

@@ -311,7 +311,7 @@ The example snippet below demonstrates how to deploy the repository to a host wi
 repository:
   hosts:
     repository_1:
-    connection: shh
+    connection: ssh
     ansible_host: 50.6.51.7
     ansible_private_key_file: "/path/to/ssh_key.pem"
     ansible_user: centos
@@ -454,8 +454,8 @@ Once ACS has initialized access the system using the following URLs with a brows
 
 Due to load or high availabilityneeds you might want to deploy a cluster of several repository nodes. This can be acheived rather simply by:
 
- * giving the playbbok the location of the shared storage used for the ACS contentstore
- * specifying several hosts within the repository hosts group
+* giving the playbbok the location of the shared storage used for the ACS contentstore
+* specifying several hosts within the repository hosts group
 
 #### Shared storage
 
@@ -466,7 +466,7 @@ However, we know NFS is a widely used storage solution for Alfresco contentstore
 
 The storage location must be specified per host in the inventory file following the data structure bellow:
 
-```
+```yaml
 ---
 all:
   children:
@@ -566,22 +566,16 @@ alfresco-content-services-distribution-6.2.2.pom      100%[=====================
 
 If the playbook fails not being able to start Nginx, make sure both ADW and Nginx point to the same host in the inventory file. Otherwise you'll encounter the error below:
 
-```
-TASK [../roles/adw : Ensure nginx service is running as configured.] **********************************
-fatal: [adw_1]: FAILED! => {"changed": false, "msg": "Unable to start service nginx: Job for nginx.service failed because the control process exited with error code.
-See "systemctl status nginx.service" and "journalctl -xe" for detail
-s.\n"}
-```
+> TASK [../roles/adw : Ensure nginx service is running as configured.] *********
+> fatal: [adw_1]: FAILED! => {"changed": false, "msg": "Unable to start service nginx: Job for nginx.service failed because the control process exited with error code.
+> See "systemctl status nginx.service" and "journalctl -xe" for details.\n"}
 
 ### Communication Failures
 
 If you are using a multi-machine deployment and the playbook fails with an error similar to the one shown below you may need to check the firewall configuration on the target hosts.
 
-```bash
-TASK [../roles/repository : Notify alfresco content service] 
-*******************************************************************************************************
-fatal: [repository_1]: FAILED! => {"changed": false, "elapsed": 300, "msg": "Timeout when waiting for 192.168.0.126:5432"}
-```
+> TASK [../roles/repository : Notify alfresco content service] *****************
+> fatal: [repository_1]: FAILED! => {"changed": false, "elapsed": 300, "msg": "Timeout when waiting for 192.168.0.126:5432"}
 
 Either disable the firewall completely or refer to the [ports configuration](#tcp-port-configuration) section for what ports need to be accessible.
 

@@ -1,4 +1,24 @@
 [MESSAGES CONTROL]
 
 enable=all
-disable=C0103,C0114,C0301,C0326,E0401,R0912,R1705,R1723,W0511,W0613,W0703,E1101,duplicate-code,too-many-arguments,no-self-use,I0011,I0020,R1732
+disable=
+    C0103,
+    C0114,
+    C0301,
+    C0326,
+    E0401,
+    R0912,
+    R1705,
+    R1723,
+    W0511,
+    W0613,
+    W0703,
+    E1101,
+    duplicate-code,
+    too-many-arguments,
+    no-self-use,
+    I0011,
+    I0020,
+    R1732,
+    consider-using-f-string,
+    pointless-string-statement,

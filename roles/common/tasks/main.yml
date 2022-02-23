@@ -1,5 +1,8 @@
 ---
 # tasks file for common
+- name: Check for upgrades
+  import_tasks: check_upgrades.yml
+
 - name: Include OS specific variables
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
@@ -8,13 +11,17 @@
   include_vars: "nexus.yml"
   failed_when: false
 
+- name: Ensure apt indices are up-to-date
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600 # 1 hour
+  when: ansible_pkg_mgr == 'apt'
+
 - name: Ensure a list of packages installed
   become: true
   package:
-    name: "{{ item }}"
+    name: "{{ utils }}"
     state: present
-  poll: 0
-  loop: "{{ utils }}"
 
 - name: "Create {{ group_name }} group"
   group:

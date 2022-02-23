@@ -2,12 +2,6 @@
 - name: Converge
   hosts: all
   tasks:
-    - name: Add custom global properties settings
-      local_action:
-        module: shell echo "\nftp.enabled=true\nftp.port=1121\nindex.recovery.mode=NONE\nindex.subsystem.name=noindex" >> {{ playbook_dir }}/../../../../configuration_files/alfresco-global.properties
-    - name: Create keystore
-      local_action:
-        module: shell keytool -genseckey -dname 'CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB' -validity 30 -alias metadata -keyalg AES -keysize 256 -keystore {{ playbook_dir }}/../../../../configuration_files/keystores/keystest -storetype pkcs12 -storepass mp6yc0UD9e
     - name: "Include postgres"
       include_role:
         name: "postgres"
@@ -17,51 +11,3 @@
     - name: "Include repository"
       include_role:
         name: "repository"
-      vars:
-        amps:  
-          aos_module:
-            version: 1.4.0
-          device_sync:
-            version: 3.4.0
-          googledrive_repo:
-            version: 3.2.1
-          googledrive_share:
-            version: 3.2.1
-          ags_repo:
-            version: 3.5.0
-          ags_share:
-            version: 3.5.0
-        amp_downloads:
-          - url: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp"
-            sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
-            dest: "{{ content_folder }}/amps_repo/alfresco-googledrive-repo-enterprise.amp"
-          - url: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp"
-            sha1_checksum: "{{ lookup('url', '{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp.sha1') }}"
-            dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
-          - url: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp"
-            sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
-            dest: "{{ content_folder }}/amps_repo/alfresco-device-sync-repo.amp"
-          - url: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
-            sha1_checksum: "{{ lookup('url', '{{ nexus_repository.releases }}/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp.sha1') }}"
-            dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
-          - url: "{{ nexus_repository.enterprise_releases }}/alfresco-governance-services-enterprise-repo/{{ amps.ags_repo.version }}/alfresco-governance-services-enterprise-repo-{{ amps.ags_repo.version }}.amp"
-            sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/alfresco-governance-services-enterprise-repo/{{ amps.ags_repo.version }}/alfresco-governance-services-enterprise-repo-{{ amps.ags_repo.version }}.amp.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
-            dest: "{{ content_folder }}/amps_repo/ags-repo.amp"
-          - url: "{{ nexus_repository.enterprise_releases }}/alfresco-governance-services-enterprise-share/{{ amps.ags_share.version }}/alfresco-governance-services-enterprise-share-{{ amps.ags_share.version }}.amp"
-            sha1_checksum: "{{ lookup('url', '{{ nexus_repository.enterprise_releases }}/alfresco-governance-services-enterprise-share/{{ amps.ags_share.version }}/alfresco-governance-services-enterprise-share-{{ amps.ags_share.version }}.amp.sha1', username=lookup('env', 'NEXUS_USERNAME'), password=lookup('env', 'NEXUS_PASSWORD')) }}"
-            dest: "{{ content_folder }}/amps_share/ags-share.amp"            
-        use_custom_keystores: true
-        acs_environment:
-          JAVA_OPTS: " -Xms350m -Xmx900m -XX:+DisableExplicitGC
-            -XX:+UseConcMarkSweepGC
-            -Djava.awt.headless=true
-            -XX:ReservedCodeCacheSize=128m
-            $JAVA_OPTS"
-          JAVA_TOOL_OPTIONS: " -Dencryption.keystore.type=pkcs12
-            -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding
-            -Dencryption.keyAlgorithm=AES
-            -Dencryption.keystore.location=/var/opt/alfresco/content-services/keystore/keystest
-            -Dmetadata-keystore.password=mp6yc0UD9e
-            -Dmetadata-keystore.aliases=metadata
-            -Dmetadata-keystore.metadata.password=mp6yc0UD9e
-            -Dmetadata-keystore.metadata.algorithm=AES"

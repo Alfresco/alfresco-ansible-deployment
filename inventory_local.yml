@@ -1,43 +1,29 @@
 ---
 all:
+  vars:
+    ansible_connection: local
   children:
-    database:
-      hosts:
-        database_1:         
-          ansible_connection: local
-          ansible_host: "127.0.0.1"
     repository:
       hosts:
-        repository_1:
-          ansible_connection: local
-          ansible_host: "127.0.0.1"
+        localhost:
+    database:
+      children:
+        repository:
     activemq:
-      hosts:
-        activemq_1:
-          ansible_connection: local
-          ansible_host: "127.0.0.1"
+      children:
+        repository:
     search:
-      hosts:
-        search_1:
-          ansible_connection: local
-          ansible_host: "127.0.0.1"
+      children:
+        repository:
     nginx:
-      hosts:
-        nginx_1:
-          ansible_connection: local
-          ansible_host: "127.0.0.1"
+      children:
+        repository:
     adw:
-      hosts:
-        adw_1:
-          ansible_connection: local
-          ansible_host: "127.0.0.1"
+      children:
+        repository:
     transformers:
-      hosts:
-        transformers_1:
-          ansible_connection: local
-          ansible_host: "127.0.0.1"
+      children:
+        repository:
     syncservice:
-      hosts:
-        syncservice_1:
-          ansible_connection: local
-          ansible_host: "127.0.0.1"
+      children:
+        repository:

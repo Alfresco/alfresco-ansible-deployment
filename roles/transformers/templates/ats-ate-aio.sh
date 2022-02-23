@@ -4,7 +4,7 @@ if [ $(id -u) -eq 0 ]; then
     exit
 fi
 
-. /etc/opt/alfresco/setenv.sh
+. {{ config_folder }}/setenv.sh
 export JAVA_OPTS="${JAVA_OPTS} -DPDFRENDERER_EXE={{ ats_home }}/alfresco-pdf-renderer"
 export JAVA_OPTS="${JAVA_OPTS} -DLIBREOFFICE_HOME=${LIBREOFFICE_HOME}"
 export JAVA_OPTS="${JAVA_OPTS} -DIMAGEMAGICK_ROOT=${IMAGEMAGICK_HOME} -DIMAGEMAGICK_DYN=${IMAGEMAGICK_DYN} -DIMAGEMAGICK_EXE=${IMAGEMAGICK_EXE} -DIMAGEMAGICK_CONFIG=${IMAGEMAGICK_CONFIG} -DIMAGEMAGICK_CODERS=${IMAGEMAGICK_CODERS}"

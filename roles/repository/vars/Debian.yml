@@ -7,4 +7,14 @@ utils_repo:
   - fonts-dejavu
   - libfreetype6
   - ghostscript
-  - nfs-common
+
+utils_storage:
+  nfs:
+    - nfs-common
+  cifs:
+    - cifs-utils
+  glusterfs:
+    - glusterfs-client
+  gfs2:
+    - gfs2-utils
+  tmpfs: []
