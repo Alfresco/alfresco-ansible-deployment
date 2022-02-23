@@ -1,0 +1,18 @@
+---
+- name: Cleanup
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Add custom global properties settings
+      blockinfile:
+        state: absent
+        path: "{{ playbook_dir }}/../../../../configuration_files/alfresco-global.properties"
+        block: |
+          ftp.enabled=true
+          ftp.port=1121
+          index.recovery.mode=NONE
+          index.subsystem.name=noindex
+    - name: Create keystore
+      file:
+        state: absent
+        path: "{{ playbook_dir }}/../../../../configuration_files/keystores/keystest"

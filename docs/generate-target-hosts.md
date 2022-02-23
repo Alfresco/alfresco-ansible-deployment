@@ -53,20 +53,18 @@ To quickly provision a single target host follow the steps below.
     molecule create -s ec2
     ```
 
-    Once complete you will see ouptut similar to that shown below:
+    Once complete you will see output similar to that shown below:
 
-    ```bash
-    TASK [Wait for SSH] ************************************************************
-        ok: [localhost] => (item={'address': 'EC2_IP_ADDRESS', 'identity_file': '/home/centos/.cache/molecule/alfresco-ansible-deployment/ec2/ssh_key', 'instance': 'EC2_INSTANCE_NAME', 'instance_ids': ['EC2_INSTANCE_ID'], 'port': 22, 'user': 'centos'})
-
-        TASK [Wait for boot process to finish] *****************************************
-        Pausing for 120 seconds
-        (ctrl+C then 'C' = continue early, ctrl+C then 'A' = abort)
-        ok: [localhost]
-
-        PLAY RECAP *********************************************************************
-        localhost                  : ok=14   changed=7    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-    ```
+    > TASK [Wait for SSH] **********************************************************
+    > ok: [localhost] => (item={'address': 'EC2_IP_ADDRESS', 'identity_file': '/home/centos/.cache/molecule/alfresco-ansible-deployment/ec2/ssh_key', 'instance': 'EC2_INSTANCE_NAME', 'instance_ids': ['EC2_INSTANCE_ID'], 'port': 22, 'user': 'centos'})
+    >
+    > TASK [Wait for boot process to finish] ***************************************
+    > Pausing for 120 seconds
+    > (ctrl+C then 'C' = continue early, ctrl+C then 'A' = abort)
+    > ok: [localhost]
+    >
+    > PLAY RECAP *******************************************************************
+    > localhost                  : ok=14   changed=7    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 4. Create a `MOLECULE_EPHEMERAL_DIRECTORY` environment variable
 
@@ -100,18 +98,16 @@ To quickly provision multiple target hosts follow the steps below.
 
     Once complete you will see ouptut similar to that shown below:
 
-    ```bash
-    TASK [Wait for SSH] ************************************************************
-        ok: [localhost] => (item={'address': 'EC2_IP_ADDRESS', 'identity_file': '/home/centos/.cache/molecule/alfresco-ansible-deployment/ec2/ssh_key', 'instance': 'EC2_INSTANCE_NAME', 'instance_ids': ['EC2_INSTANCE_ID'], 'port': 22, 'user': 'centos'})
-
-        TASK [Wait for boot process to finish] *****************************************
-        Pausing for 120 seconds
-        (ctrl+C then 'C' = continue early, ctrl+C then 'A' = abort)
-        ok: [localhost]
-
-        PLAY RECAP *********************************************************************
-        localhost                  : ok=14   changed=7    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-    ```
+    > TASK [Wait for SSH] **********************************************************
+    > ok: [localhost] => (item={'address': 'EC2_IP_ADDRESS', 'identity_file': '/home/centos/.cache/molecule/alfresco-ansible-deployment/ec2/ssh_key', 'instance': 'EC2_INSTANCE_NAME', 'instance_ids': ['EC2_INSTANCE_ID'], 'port': 22, 'user': 'centos'})
+    >
+    > TASK [Wait for boot process to finish] ***************************************
+    > Pausing for 120 seconds
+    > (ctrl+C then 'C' = continue early, ctrl+C then 'A' = abort)
+    > ok: [localhost]
+    >
+    > PLAY RECAP *******************************************************************
+    > localhost                  : ok=14   changed=7    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 4. Create a `MOLECULE_EPHEMERAL_DIRECTORY` environment variable
 

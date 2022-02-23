@@ -9,37 +9,35 @@ all:
     # Comment if no SSH key is used and use `-k` on the command line instead (or `-K`in case sudo requires password)
     ansible_private_key_file: "/path/ssh_key.dsa"
     ansible_user: root
-
   children:
     database:
       hosts:
-        database_1:
-          ansible_host: targetIP
+        db.infra.local:
     repository:
+      vars:
+        # Set the contentstore storage details as per the `mount` options
+        cs_storage:
+          type: nfs
+          device: nas.infra.local:/exports/contentstore
+          options: _netdev,noatime,nodiratime
       hosts:
-        repository_1:
-          ansible_host: targetIP
+        ecm1.infra.local:
+        ecm2.infra.local:
     activemq:
       hosts:
-        activemq_1:
-          ansible_host: targetIP
+        mq.infra.local:
     search:
       hosts:
-        search_1:
-          ansible_host: targetIP
+        fts.infra.local:
     nginx:
       hosts:
-        nginx_1:
-          ansible_host: targetIP
+        proxy.infra.local:
     adw:
       hosts:
-        adw_1:
-          ansible_host: targetIP
+        web.infra.local:
     transformers:
       hosts:
-        transformers_1:
-          ansible_host: targetIP
+        render.infra.local:
     syncservice:
       hosts:
-        syncservice_1:
-          ansible_host: targetIP
+        sync.infra.local:

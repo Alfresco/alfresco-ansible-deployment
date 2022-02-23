@@ -11,3 +11,14 @@ utils_repo:
   - freetype
   - libpng
   - dejavu-sans-fonts
+
+utils_storage:
+  nfs:
+    - nfs-utils
+  cifs:
+    - cifs-utils
+  glusterfs:
+    - glusterfs-fuse
+  gfs2:
+    - gfs2-utils
+  tmpfs: []

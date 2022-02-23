@@ -4,7 +4,17 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: repository
+  - name: dummy
+    image: ${MOLECULE_ROLE_IMAGE:-centos:7}
+    command: /bin/true
+    groups:
+      - syncservice
+      - sfs
+      - search
+      - nginx
+      - adw
+      - transformers
+  - name: repository1
     image: ${MOLECULE_ROLE_IMAGE:-centos:7}
     dockerfile: ../../../../tests/molecule/Dockerfile.j2
     command: "/lib/systemd/systemd"
@@ -15,17 +25,25 @@ platforms:
       - /tmp
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    groups:
+      - repository
+      - activemq
+      - database
 provisioner:
   name: ansible
   ansible_args:
-    - --inventory=../../inventory_local.yml
-    - --limit=repository
+    - --limit=repository1,localhost
+  config_options:
+    defaults:
+      pipelining: True
   inventory:
     links: 
       group_vars: ../../../../group_vars
+      host_vars: host_vars
 verifier:
   name: testinfra
   env:
     TEST_HOST: "localhost"
   options:
     verbose: true
+    hosts: repository1

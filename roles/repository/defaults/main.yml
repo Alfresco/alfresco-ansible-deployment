@@ -1,3 +1,5 @@
 ---
 # defaults file for roles/repository
 utils_repo: []
+utils_storage:
+  tmpfs: []
