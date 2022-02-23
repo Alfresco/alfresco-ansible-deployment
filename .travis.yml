@@ -30,7 +30,10 @@ env:
     - DTAS_VERSION=v1.1.1
 
 before_script:
-  - travis_retry ansible-galaxy install -r requirements.yml
+  - |
+    if [ -n "$MOLECULE_ROLE_IMAGE" ] || [ -n "$MOLECULE_IT_SCENARIO" ]; then
+      travis_retry ansible-galaxy install -r requirements.yml
+    fi
 
 script:
   - ./tests/molecule_it/script.sh verify
