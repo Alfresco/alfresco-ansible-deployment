@@ -21,11 +21,3 @@
         src: "{{ cs_storage.device }}"
         fstype: "{{ cs_storage.type }}"
         opts: "{{ mnt_options | join(',') }}"
-    
-    - name: Ensure permission after mount
-      file:
-        path: "{{ content_data_folder }}/content"
-        state: directory
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 0750
