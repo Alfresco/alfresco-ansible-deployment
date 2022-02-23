@@ -55,11 +55,11 @@ cs_storage:
   options:
 ```
 
-Given this variable defines a chunk of the deployment architecture we recommend you set it in the ansible inventory file. The file `inventory_nfs.yml` gives an example of how to use that feature.
+Given this variable defines a chunk of the deployment architecture we recommend you set it in the ansible inventory file. The file `inventory_ha.yml` gives an example of how to use that feature.
 
 #### Typical clusters
 
-For most clusters setting the `cs_storage` variable under the `repository` group is sensible as it makes that config available to all cluster nodes without repeating the config in different places. This is what is done in the example file `inventory_nfs.yml` and match most case such as those shown below:
+For most clusters setting the `cs_storage` variable under the `repository` group is sensible as it makes that config available to all cluster nodes without repeating the config in different places. This is what is done in the example file `inventory_ha.yml` and match most case such as those shown below:
 
 ![ACS basic cluster storage](resources/acs-ha-contentstore.png)
 

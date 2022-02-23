@@ -452,46 +452,26 @@ Once ACS has initialized access the system using the following URLs with a brows
 
 ### ACS cluster
 
-Due to load or high availabilityneeds you might want to deploy a cluster of several repository nodes. This can be acheived rather simply by:
+Due to load or high availability needs, you might want to deploy a cluster of several repository nodes. This can be acheived rather simply by:
 
-* giving the playbbok the location of the shared storage used for the ACS contentstore
-* specifying several hosts within the repository hosts group
+* Giving the playbbok the location of the shared storage used for the ACS contentstore (See [Shared storage docuemntation](shared-contentstore.md) for details).
+* Specifying several hosts within the repository hosts group
 
-#### Shared storage
+For example:
 
-Deploying a shared storage for the repositoiry hosts to use as a contentstore is out of the scope of the playbook. This needs to be done in advance.
-The main reason is that an organisation will anyway most likely want to rely on their storage infrastructure rather than using a storage that's not well integrated with their monitoring and backup infrastructure.
-That type of storage can be anything that's known to work with ACS and deliver the expected level of performance.
-However, we know NFS is a widely used storage solution for Alfresco contentstore, that's why the following examples are based on NFS and some client libs will be installed on repository hosts when using cluster configuration. That said, if you take care of pre-installing the appropriate client libraries any kind of storage can be used.
-
-The storage location must be specified per host in the inventory file following the data structure bellow:
-
-```yaml
----
-all:
-  children:
+````yaml
+...
     repository:
+      vars:
+        cs_storage:
+          type: nfs
+          device: nas.infra.local:/exports/contentstore
+          options: _netdev,noatime,nodiratim
       hosts:
-        ecm1.domain.local:
-          contentstore_mnt_dev:
-            device: storage.datahub1.loc:/nfs/contentstore
-            type: nfs
-            opts: vers=4,rsize=32768,wsize=32768,soft
-          connection: ssh
-          ansible_user: wheel
-        ecm2.domain.local:
-          contentstore_mnt_dev:
-            device: storage.datahub1.loc:/nfs/contentstore
-            type: nfs
-            opts: vers=4,rsize=32768,wsize=32768,soft
-          connection: ssh
-          ansible_user: wheel
+        ecm1.infra.local:
+        ecm2.infra.local:
 ...
 ```
-
-All `contentstore_mnt_dev.*` parameters must be formatted according to fstab(5)
-
-Note that the storage declaration needs to be done for each repository host. While that may sound teadious, the purpose is to be able to tweak the storage for each host or even use different network interface depending on the network topology.
 
 ## Cleanup
 
