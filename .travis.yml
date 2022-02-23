@@ -32,7 +32,7 @@ env:
 
 before_install:
   - travis_retry pip install ansible-core==${ANSIBLE_VERSION}
-  - travis_retry ansible-galaxy collection install community.docker amazon.aws community.crypto
+  - travis_retry ansible-galaxy install -r requirements.yml
 
 script:
   - ./tests/molecule_it/script.sh verify
