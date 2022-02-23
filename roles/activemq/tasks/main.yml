@@ -33,9 +33,7 @@
     remote_src: true
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    creates: /opt/{{ activemq_dist.files | last }}
-    list_files: yes
-  register: activemq_dist
+    creates: "{{ activemq_home }}/bin/activemq"
   when: job_result is succeeded
 
 - name: Move configuration files

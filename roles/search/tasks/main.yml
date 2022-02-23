@@ -40,11 +40,9 @@
     src: "{{ download_location }}/alfresco-search-services-{{ search.version }}.zip"
     dest: "{{ binaries_dir }}"
     remote_src: true
-    creates: "{{ binaries_dir }}/{{ search_dist.files | last }}"
+    creates: "{{ binaries_dir }}/README.MD"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    list_files: yes
-  register: search_dist
 
 - name: "Move files from {{ binaries_dir }}/alfresco-search-services to {{ binaries_dir }}/"
   block:

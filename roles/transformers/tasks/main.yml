@@ -47,9 +47,7 @@
     src: "{{ download_location }}/libreoffice.tar.gz"
     dest: "{{ download_location }}/"
     remote_src: true
-    creates: "{{ download_location }}/{{ libreoffice_dist.files | last }}"
-    list_files: yes
-  register: libreoffice_dist
+    creates: "{{ download_location }}/LibreOffice_{{ libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | replace('_','-') }}_{{ pkg_format }}/{{ pkg_format | upper }}/"
 
 - name: Install LibreOffice & imageMagick
   include_tasks: "{{ pkg_format }}-packages.yml"
@@ -81,9 +79,7 @@
     remote_src: true
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    creates: "{{ ats_home }}/{{ pdfrenderer_dist.files | last }}"
-    list_files: yes
-  register: pdfrenderer_dist
+    creates: "{{ ats_home }}/alfresco-pdf-renderer"
 
 - name: Remove alfresco-pdf-renderer-linux.tgz
   block:

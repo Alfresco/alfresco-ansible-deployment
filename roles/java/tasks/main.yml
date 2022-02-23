@@ -26,9 +26,7 @@
     dest: "{{ download_location }}"
     remote_src: true
     mode: 'u=rwx,g=rx,o=rx'
-    list_files: yes
-    creates: "{{ download_location }}/{{ java_dist.files | last }}"
-  register: java_dist
+    creates: "{{ download_location }}/{{ jdk_folder }}/"
 
 - name: Copy Java
   become: true

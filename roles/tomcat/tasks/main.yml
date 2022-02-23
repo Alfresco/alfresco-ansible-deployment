@@ -50,9 +50,7 @@
     src: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
     dest: "/opt/"
     remote_src: true
-    creates: /opt/{{ tomcat_dist.files | last }}
-    list_files: yes
-  register: tomcat_dist
+    creates: "{{ tomcat_home }}/"
   become: true
   become_user: root
 

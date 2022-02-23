@@ -182,11 +182,9 @@
     src: "{{ download_location }}/{{ acs_zip_file }}"
     dest: "{{ content_folder }}"
     remote_src: true
-    creates: "{{ content_folder }}/{{ acs_dist.files | last }}"
+    creates: "{{ content_folder }}/bin"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    list_files: yes
-  register: acs_dist
 
 - name: Move alfresco-share-services.amp to {{ content_folder }}/amps_repo folder
   block:
