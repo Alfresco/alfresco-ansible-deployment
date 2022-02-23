@@ -26,7 +26,7 @@ env:
     - BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}"
     - MOLECULE_NO_LOG=false
     - ANSIBLE_VERSION="2.9.21"
-    - AWS_REGION=us-east-1
+    - AWS_REGION=eu-west-1
     - DTAS_VERSION=v1.1.1
 
 before_install:
@@ -46,6 +46,7 @@ cache:
 stages:
   - name: lint
   - name: Roles tests
+    if: branch = master
   - name: Integration tests
   - name: Release Stage
     if: branch = master AND commit_message =~ /\[release\]/
