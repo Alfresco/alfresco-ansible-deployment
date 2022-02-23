@@ -10,30 +10,6 @@ platforms:
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.large
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
-    security_group_name: molecule_${MOLECULE_IT_PLATFORM}_${BRANCH_NAME}_${BUILD_NUMBER}
-    security_group_description: Integration tests for the alfresco ansible deployment
-    security_group_rules:
-      - proto: tcp
-        from_port: "22"
-        to_port: "22"
-        cidr_ip: "0.0.0.0/0"
-      - proto: tcp
-        from_port: "80"
-        to_port: "80"
-        cidr_ip: "0.0.0.0/0"
-      - proto: tcp
-        from_port: "443"
-        to_port: "443"
-        cidr_ip: "0.0.0.0/0"
-      - proto: icmp
-        from_port: 8
-        to_port: -1
-        cidr_ip: "0.0.0.0/0"
-    security_group_rules_egress:
-      - proto: -1
-        from_port: 0
-        to_port: 0
-        cidr_ip: "0.0.0.0/0"
     tags:
       Name: molecule_${MOLECULE_IT_PLATFORM}_${BRANCH_NAME}_${BUILD_NUMBER}
       Owner: Ops Readiness Team

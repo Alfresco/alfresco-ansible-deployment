@@ -7,6 +7,7 @@
 
 - name: Database Role
   hosts: database
+  gather_facts: false
   become: true
   roles:
     - { role: '../roles/postgres', when: repo_db_url == "" or sync_db_url == "" }
@@ -15,6 +16,7 @@
 
 - name: Activemq Role
   hosts: activemq
+  gather_facts: false
   become: true
   roles:
     - role: '../roles/activemq'
@@ -23,6 +25,7 @@
 
 - name: Transformers Role
   hosts: transformers
+  gather_facts: false
   become: true
   roles:
     - role: '../roles/transformers'
@@ -43,6 +46,7 @@
 
 - name: Alfresco Search Role
   hosts: search
+  gather_facts: false
   become: true
   roles:
     - role: '../roles/search'
@@ -63,6 +67,7 @@
 
 - name: Alfresco Repository Role
   hosts: repository
+  gather_facts: false
   become: true
   roles:
     - role: '../roles/repository'
@@ -87,6 +92,7 @@
 
 - name: T-Router Role
   hosts: transformers
+  gather_facts: false
   become: true
   roles:
     - { role: '../roles/trouter', when: acs.edition == "Enterprise" }
@@ -107,6 +113,7 @@
 
 - name: Shared File Store Role
   hosts: transformers
+  gather_facts: false
   become: true
   roles:
     - { role: '../roles/sfs', when: acs.edition == "Enterprise" }
@@ -127,6 +134,7 @@
 
 - name: Sync Service Role
   hosts: syncservice
+  gather_facts: false
   become: true
   roles:
     - { role: '../roles/sync', when: acs.edition == "Enterprise" }
@@ -145,16 +153,9 @@
   tags:
     - sync
 
-- name: Nginx Role
-  hosts: nginx
-  become: true
-  roles:
-    - role: '../roles/nginx'
-  tags:
-    - nginx
-
 - name: Alfresco Digital Workspace Role
   hosts: adw
+  gather_facts: false
   become: true
   roles:
     - { role: '../roles/adw', when: acs.edition == "Enterprise" }
@@ -172,3 +173,12 @@
         marker_end: ADW_END
   tags:
     - adw
+
+- name: Nginx Role
+  hosts: nginx
+  gather_facts: false
+  become: true
+  roles:
+    - role: '../roles/nginx'
+  tags:
+    - nginx

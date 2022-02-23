@@ -12,4 +12,4 @@ skip_list:
   - 'empty-string-compare'
 
 kinds:
-  - yaml: "**/molecule/**/vars-*.yml"
+  - yaml: "**/molecule/**/vars*.yml"

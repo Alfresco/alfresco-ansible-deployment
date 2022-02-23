@@ -1,0 +1,120 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: ec2
+
+platforms:
+  - name: database_instance
+    image: ${MOLECULE_IT_IMAGE_ID}
+    instance_type: t3.medium
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    groups:
+      - database
+    tags:
+      Name: molecule_${MOLECULE_IT_PLATFORM}_db_${BRANCH_NAME}_${BUILD_NUMBER}
+      Owner: Ops Readiness Team
+      Department: Engineering
+      Production: false
+
+  - name: activemq_instance
+    image: ${MOLECULE_IT_IMAGE_ID}
+    instance_type: t3.medium
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    groups:
+      - activemq
+    tags:
+      Name: molecule_${MOLECULE_IT_PLATFORM}_mq_${BRANCH_NAME}_${BUILD_NUMBER}
+      Owner: Ops Readiness Team
+      Department: Engineering
+      Production: false
+
+  - name: search_instance
+    image: ${MOLECULE_IT_IMAGE_ID}
+    instance_type: t3.medium
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    groups:
+      - search
+    tags:
+      Name: molecule_${MOLECULE_IT_PLATFORM}_search_${BRANCH_NAME}_${BUILD_NUMBER}
+      Owner: Ops Readiness Team
+      Department: Engineering
+      Production: false
+
+  - name: repository_instance
+    image: ${MOLECULE_IT_IMAGE_ID}
+    instance_type: t3.medium
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    groups:
+      - repository
+    tags:
+      Name: molecule_${MOLECULE_IT_PLATFORM}_repo_${BRANCH_NAME}_${BUILD_NUMBER}
+      Owner: Ops Readiness Team
+      Department: Engineering
+      Production: false
+
+  - name: transformers_instance
+    image: ${MOLECULE_IT_IMAGE_ID}
+    instance_type: t3.medium
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    groups:
+      - transformers
+    tags:
+      Name: molecule_${MOLECULE_IT_PLATFORM}_trans_${BRANCH_NAME}_${BUILD_NUMBER}
+      Owner: Ops Readiness Team
+      Department: Engineering
+      Production: false
+
+  - name: syncservice_instance
+    image: ${MOLECULE_IT_IMAGE_ID}
+    instance_type: t3.medium
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    groups:
+      - syncservice
+    tags:
+      Name: molecule_${MOLECULE_IT_PLATFORM}_sync_${BRANCH_NAME}_${BUILD_NUMBER}
+      Owner: Ops Readiness Team
+      Department: Engineering
+      Production: false
+
+  - name: adw_instance
+    image: ${MOLECULE_IT_IMAGE_ID}
+    instance_type: t3.medium
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    groups:
+      - adw
+    tags:
+      Name: molecule_${MOLECULE_IT_PLATFORM}_adw_${BRANCH_NAME}_${BUILD_NUMBER}
+      Owner: Ops Readiness Team
+      Department: Engineering
+      Production: false
+
+  - name: nginx_instance
+    image: ${MOLECULE_IT_IMAGE_ID}
+    instance_type: t3.medium
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    groups:
+      - nginx
+    tags:
+      Name: molecule_${MOLECULE_IT_PLATFORM}_nginx_${BRANCH_NAME}_${BUILD_NUMBER}
+      Owner: Ops Readiness Team
+      Department: Engineering
+      Production: false
+
+provisioner:
+  name: ansible
+  ansible_args:
+    - -e
+    - "@${MOLECULE_IT_EXTRA_VARS}"
+    - -e
+    - "@tests/test-ssl.yml"
+  inventory:
+    links: 
+      group_vars: ../../group_vars
+  playbooks:
+    create: ../default/create.yml
+    prepare: ../default/prepare.yml
+    converge: ../../playbooks/acs.yml
+    verify: ../default/verify.yml
+    destroy: ../default/destroy.yml
