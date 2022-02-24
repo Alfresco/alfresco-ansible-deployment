@@ -454,7 +454,7 @@ Once ACS has initialized access the system using the following URLs with a brows
 
 Due to load or high availability needs, you might want to deploy a cluster of several repository nodes. This can be achieved rather simply by:
 
-* Giving the playbbok the location of the shared storage used for the ACS contentstore (See [Shared storage docuemntation](shared-contentstore.md) for details).
+* Giving the playbook the location of the shared storage used for the ACS contentstore (See [Shared storage documentation](shared-contentstore.md) for details).
 * Specifying several hosts within the repository hosts group
 
 For example:
