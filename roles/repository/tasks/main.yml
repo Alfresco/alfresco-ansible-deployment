@@ -10,29 +10,6 @@
     name: "{{ utils_repo }} + {{ utils_storage[cs_storage.type | default('tmpfs')] }}"
     state: present
 
-- name: Create contentstore folders
-  become: true
-  file:
-    path: "{{ content_data_folder }}/content"
-    state: directory
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rx,o=rx'
-
-- name: Mount ACS ContentStore
-  become: true
-  vars:
-    mnt_opts:
-      - "{{ contentstore_mnt_dev.opts | default('defaults') }}"
-      - _netdev
-  mount:
-    state: mounted
-    path: "{{ content_data_folder }}/content"
-    src: "{{ contentstore_mnt_dev.device }}"
-    fstype: "{{ contentstore_mnt_dev.type | default('nfs') }}"
-    opts: "{{ mnt_opts | join(',') }}"
-  when: contentstore_mnt_dev.device is defined
-
 - name: Create folders
   become: true
   file:
