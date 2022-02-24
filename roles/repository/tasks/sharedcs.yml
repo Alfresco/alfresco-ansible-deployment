@@ -7,9 +7,6 @@
       file:
         path: "{{ content_data_folder }}/content"
         state: directory
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 0750
     - name: Mount ACS ContentStore
       vars:
         mnt_options:
