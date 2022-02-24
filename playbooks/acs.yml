@@ -132,27 +132,6 @@
   tags:
     - sfs
 
-- name: Sync Service Role
-  hosts: syncservice
-  gather_facts: false
-  become: true
-  roles:
-    - { role: '../roles/sync', when: acs.edition == "Enterprise" }
-  post_tasks:
-    - name: update installation status file with Sync
-      vars:
-        sync_components:
-         sync:
-            "{{ sync }}"
-      blockinfile:
-        block: "{{ sync_components | to_nice_yaml(indent=2) }}"
-        create: yes
-        path: "{{ ansible_installation_status_file }}"
-        marker_begin: SYNC_BEGIN
-        marker_end: SYNC_END
-  tags:
-    - sync
-
 - name: Alfresco Digital Workspace Role
   hosts: adw
   gather_facts: false
@@ -182,3 +161,24 @@
     - role: '../roles/nginx'
   tags:
     - nginx
+
+- name: Sync Service Role
+  hosts: syncservice
+  gather_facts: false
+  become: true
+  roles:
+    - { role: '../roles/sync', when: acs.edition == "Enterprise" }
+  post_tasks:
+    - name: update installation status file with Sync
+      vars:
+        sync_components:
+         sync:
+            "{{ sync }}"
+      blockinfile:
+        block: "{{ sync_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: SYNC_BEGIN
+        marker_end: SYNC_END
+  tags:
+    - sync
