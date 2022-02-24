@@ -47,7 +47,6 @@ cache:
 stages:
   - name: lint
   - name: Roles tests
-    if: branch = master
   - name: Integration tests
   - name: Release Stage
     if: branch = master AND commit_message =~ /\[release\]/
