@@ -85,3 +85,54 @@ all:
 ```
 
 > The example above could be used in case of sites replicated real-time through low latency links between sites. That's a feature high storage vendors can offer.
+
+## Dealing with permissions
+
+It is important to note that all of the repository cluster members needs to be able to write to the whole directory structure of the contentstore. Depending on your underlying storage technology this can have different implications.
+In many cases POSIX permission model applies. However there are 2 things to take into account re garding how the playbook works:
+
+- Installed services are run as a specific user `alfresco`, part of a specific group `Àlfresco`.
+- In order to avoid conflicts, and stick to each distribution best pratice or preconfiguration, the playbook do not force any UID/GID for that dedicated user and group.
+
+Because POSIX model rely on UID/GID rather than user and group names, this can lead to situations where setting the right permissions for every hosts is closed to impossible.
+
+> Keep in mind that, not only the root of the contentstore needs to be write-able by every node, but so does each folder created by any of the nodes.
+
+We'll describe bellow ways to fix or mitigate that problem.
+
+### Mitigations
+
+If all the targets repository hosts are built from the same OS image and strictly confugred the same way, there is no to very little chance for the UID/GID to get inconsistent accross nodes. This greatly limits the problem and most of the time if you stick to that principal you can use regular POSIX model approach
+
+If all the target repository hosts are bound to a centralized user/group directory, an option can be to manually created the `alfresco` user and `Alfresco` group within this directory so all nodes will for sure share the same UID/GID. Though you need to realize that it introduce a dependency on the platform to that directory system.
+
+### Properly configuring your storage system
+
+Many storage technologies implement features to workaround this problem. Please see bellow some examples showing how to reliably setup shared storage for diverse clients.
+
+#### NFS
+
+This example takes advantage of the squashing mecanism NFS offers. this basically allows to map all NFS client requests to a single user (usually `nobody`) regardless of the UID/GID seen on the client.
+Configuration of a Linux NFS server explained (`/etc/exports`):
+
+````config
+/nfs/contentstore 192.168.0.0/24(rw,async,no_subtree_check,all_squash,anonuid=65534,anongid=65534)
+```
+
+- `/nfs/contentstore`: The path of the filesystem to export
+- `192.168.0.0/24`: The CIDR network from which clients are allowed
+- `(...)`: NFS options
+  - `rw`: filesystem is available for write access (of permissions allow)
+  - `all_squash`: all client requests will be mapped to the anonymous user and group
+  - anonuid``: UID of the anonymous user (65534 is widely recognized accross many NFS clients as the nfs anonymous UID)
+  - anongid``: GID of the anonymous group (65534 is widely recognized accross many NFS clients as the nfs anonymous GID)
+
+> Of course depending on your NFS vendors options and ways of configuring them will largely differ. Please refer to your vendor documentation.
+
+Permissions on the exported filesystem would look like that on the NFS server:
+
+````bash
+drwxr-xr-x. 4 65534 65534 54 23 févr. 22:13 /nfs/contentstore
+```
+
+TODO: add more examples
