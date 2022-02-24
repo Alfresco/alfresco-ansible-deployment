@@ -2,20 +2,17 @@
 # handlers file for trouter
 - name: wait-for-repo
   wait_for:
-    host: "{{ repo_host }}"
-    port: "{{ ports_cfg.repository.http }}"
-  register: go_signal
+    host: "{% if repo_hosts | length > 1 %}{{ nginx_host }}{% else %}{{ repo_host }}{% endif %}"
+    port: "{% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_cfg.nginx.http }}{% endif %}"
 
 - name: enable-sync
   service:
     name: alfresco-sync
     enabled: true
     daemon_reload: true
-  when: not go_signal.failed
 
 - name: restart-sync
   service:
     name: alfresco-sync
     state: restarted
     daemon_reload: true
-  when: not go_signal.failed
