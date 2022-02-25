@@ -20,3 +20,10 @@
     state: restarted
     daemon_reload: true
   when: not go_signal.failed
+  notify:
+   - wait-alfresco-content-ready
+
+- name: wait-alfresco-content-ready
+  wait_for:
+    port: "{{ ports_cfg.repository.http }}"
+    delay: 120

@@ -386,9 +386,3 @@
     - wait-for-db
     - set-go-signal
     - restart-alfresco-content
-
-- name: Wait for alfresco-content ready
-  wait_for:
-    port: "{{ ports_cfg.repository.http }}"
-    delay: 30
-    timeout: 600
