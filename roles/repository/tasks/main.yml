@@ -53,6 +53,8 @@
   register: distribution_download_result
   async: 900
   poll: 0
+  tags:
+    - molecule-idempotence-notest
 
 - name: Download AMPS
   become: true
@@ -71,6 +73,8 @@
   async: 900
   no_log: true
   poll: 0
+  tags:
+    - molecule-idempotence-notest
 
 - name: Download postgresql jar
   become: true
@@ -86,6 +90,8 @@
   when: repo_db_url == ""
   async: 900
   poll: 0
+  tags:
+    - molecule-idempotence-notest
 
 - name: Copy db_connector_repo to {{ tomcat_config_dir }}/lib/ folder
   block:
@@ -386,3 +392,5 @@
     - wait-for-db
     - set-go-signal
     - restart-alfresco-content
+  tags:
+    - molecule-idempotence-notest
