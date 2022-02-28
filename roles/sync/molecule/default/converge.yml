@@ -13,6 +13,9 @@
     - name: "Include activemq"
       include_role:
         name: "activemq"
+    - name: "Include NGINX"
+      include_role:
+        name: "nginx"
     - name: "Include sync"
       include_role:
         name: "sync"
