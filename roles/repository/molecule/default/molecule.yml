@@ -4,16 +4,6 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: dummy
-    image: ${MOLECULE_ROLE_IMAGE:-centos:7}
-    command: /bin/true
-    groups:
-      - syncservice
-      - sfs
-      - search
-      - nginx
-      - adw
-      - transformers
   - name: repository1
     image: ${MOLECULE_ROLE_IMAGE:-centos:7}
     dockerfile: ../../../../tests/molecule/Dockerfile.j2
@@ -23,16 +13,20 @@ platforms:
       - /run
       - /run/lock
       - /tmp
-    volume_mounts:
+    volume:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
       - repository
       - activemq
       - database
+      - syncservice
+      - sfs
+      - search
+      - nginx
+      - adw
+      - transformers
 provisioner:
   name: ansible
-  ansible_args:
-    - --limit=repository1,localhost
   config_options:
     defaults:
       pipelining: True
@@ -46,4 +40,3 @@ verifier:
     TEST_HOST: "localhost"
   options:
     verbose: true
-    hosts: repository1
