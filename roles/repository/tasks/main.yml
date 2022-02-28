@@ -187,7 +187,6 @@
   become: true
   become_user: root
   loop: "{{ war_downloads }}"
-  changed_when: false
   get_url:
     url: "{{ item.url }}"
     checksum: sha1:{{ item.sha1_checksum }}
@@ -201,6 +200,8 @@
   async: 900
   no_log: true
   poll: 0
+  tags:
+    - molecule-idempotence-notest
 
 - name: Copy user provided license file
   copy:
@@ -377,6 +378,8 @@
   delay: 2
   retries: 300
   loop: "{{ war_download_result.results }}"
+  tags:
+    - molecule-idempotence-notest
 
 - name: Setup common loader
   become: true
