@@ -362,6 +362,8 @@
   delay: 1
   retries: 300
   when: repo_db_url == ""
+  tags:
+    - molecule-idempotence-notest
 
 - name: Check on war download async task
   become: true
