@@ -23,6 +23,9 @@
    - wait-alfresco-sync-ready
 
 - name: wait-alfresco-sync-ready
-  wait_for:
-    port: "{{ ports_cfg.sync.http }}"
-    delay: 120
+  uri:
+    url: "http://127.0.0.1:{{ ports_cfg.sync.http }}/alfresco/healthcheck"
+  register: result
+  until: result.status == 200
+  retries: 60
+  delay: 10
