@@ -354,6 +354,8 @@
   shell: '{{ content_folder }}/apply_amps.sh -nobackup -force'
   register: mmt_install
   changed_when: mmt_install.rc != 0
+  tags:
+    - molecule-idempotence-notest
 
 - name: Check on postgres download async task
   become: true
