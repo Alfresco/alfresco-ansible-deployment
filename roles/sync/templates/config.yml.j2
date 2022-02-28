@@ -128,12 +128,9 @@ server:
         appenders: []
 
 repo:
-    scheme: http{% if use_ssl | bool %}s{% endif %}
-
-    hostname: {% if repo_hosts | length > 1 %}{{ nginx_host }}{% else %}{{ repo_host }}{% endif %}
-
-    port: {% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_cfg.nginx.http }}{% endif %}
-
+    scheme: http
+    hostname: {{ nginx_host }}
+    port: {{ ports_cfg.nginx.http }}
     syncconfig:
         url: ${repo.scheme}://${repo.hostname}:${repo.port}/alfresco/service/devicesync/config
         # maximum retries for connection with repo in case of unavailaible service
