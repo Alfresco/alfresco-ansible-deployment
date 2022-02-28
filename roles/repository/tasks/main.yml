@@ -151,7 +151,7 @@
     dest: "{{ settings_folder }}/classpath/alfresco/web-extension/custom-slingshot-application-context.xml"
     mode: 'u=rw,g=,o='
   become: true
-  when: groups['repository'] | length > 1
+  when: groups['repository'] | length > 1 and not cluster_keepoff
    
 - name: Extract {{ acs_zip_file }} into {{ content_folder }}
   become: true

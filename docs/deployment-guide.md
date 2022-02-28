@@ -470,8 +470,13 @@ For example:
       hosts:
         ecm1.infra.local:
         ecm2.infra.local:
+        ingester.infra.local:
+          cluster_keepoff: true
 ...
 ```
+
+In some circumstances, you may want to have a repo node that's dedicated to a scheduled task (such as ingesting massive amount of documents). Depending on the nature of the task and the requirements of your organisation, it may be preferable to not make this node part of the ACS cluster.
+In that case, you can add the `cluster_keepoff` variable to one of the `repository` group nodes'. It will provision the node with teh repository and share services but make sure it not taking part in neither the share, nor the repository cluster realm.
 
 ## Cleanup
 
