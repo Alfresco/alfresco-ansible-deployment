@@ -5,14 +5,12 @@
 
 - name: Ensure a list of packages installed
   become: true
-  become_user: root
   package:
     name: "{{ utils_repo }} + {{ utils_storage[cs_storage.type | default('tmpfs')] }}"
     state: present
 
 - name: Create folders
   become: true
-  become_user: root
   file:
     path: "{{ item }}"
     state: directory
@@ -58,7 +56,6 @@
 
 - name: Download AMPS
   become: true
-  become_user: root
   loop: "{{ amp_downloads }}"
   get_url:
     url: "{{ item.url }}"
@@ -78,7 +75,6 @@
 
 - name: Download postgresql jar
   become: true
-  become_user: root
   get_url:
     url: "{{ dependencies_url.postgresql_connector }}"
     checksum: sha1:{{ dependencies_url.postgresql_connector_sha1_checksum }}
@@ -94,14 +90,12 @@
     - molecule-idempotence-notest
 
 - name: Copy db_connector_repo to {{ tomcat_config_dir }}/lib/ folder
-  block:
-    - name: Copy db_connector_repo
-      copy:
-        src: "{{ inventory_dir }}/configuration_files/db_connector_repo/"
-        dest: "{{ tomcat_config_dir }}/lib/"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
+  copy:
+    src: "{{ inventory_dir }}/configuration_files/db_connector_repo/"
+    dest: "{{ tomcat_config_dir }}/lib/"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
   when: repo_db_url != ""
 
 - name: Add ACS home to setenv.sh
@@ -151,7 +145,6 @@
     dest: "{{ settings_folder }}/classpath/alfresco/web-extension/{{ item }}"
     mode: 'u=rwx,g=rwx,o=rx'
   loop: "{{ share_templates }}"
-  changed_when: false
 
 - name: Extract {{ acs_zip_file }} into {{ content_folder }}
   become: true
@@ -185,7 +178,6 @@
 
 - name: Download war files
   become: true
-  become_user: root
   loop: "{{ war_downloads }}"
   get_url:
     url: "{{ item.url }}"
@@ -294,6 +286,7 @@
         state: absent
 
 - name: Create web application config files
+  become: true
   block:
     - name: Create config folders
       file:
@@ -319,7 +312,6 @@
       file:
         path: "{{ content_folder }}/web-server/conf"
         state: absent
-  become: true
 
 - name: Create alfresco-global.properties
   template:
@@ -358,8 +350,6 @@
     - molecule-idempotence-notest
 
 - name: Check on postgres download async task
-  become: true
-  become_user: root
   async_status:
     jid: "{{ postgresql_download.ansible_job_id }}"
   register: job_result
@@ -371,8 +361,6 @@
     - molecule-idempotence-notest
 
 - name: Check on war download async task
-  become: true
-  become_user: root
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: job_result
@@ -385,7 +373,6 @@
 
 - name: Setup common loader
   become: true
-  failed_when: false
   lineinfile:
     path: "{{ tomcat_config_dir }}/conf/catalina.properties"
     regexp: '^common.loader='
