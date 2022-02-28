@@ -163,8 +163,3 @@
   - wait-for-repo
   - enable-sync
   - restart-sync
-
-- name: Wait for alfresco-sync ready
-  wait_for:
-    port: "{{ ports_cfg.sync.http }}"
-    delay: 10

@@ -139,6 +139,8 @@
   delay: 30
   retries: 20
   register: job_result
+  tags:
+    - molecule-idempotence-notest
 
 - name: Add the configuration templates
   become: true
