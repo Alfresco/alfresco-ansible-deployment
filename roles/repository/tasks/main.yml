@@ -223,7 +223,7 @@
         dest: "{{ content_data_folder }}/keystore/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: 'u=rwx,g=rx,o=rx'
       when:
         - keystore.stat.exists
         - not use_custom_keystores
@@ -237,7 +237,7 @@
         dest: "{{ content_data_folder }}/keystore/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: 'u=rwx,g=rx,o=rx'
       when: use_custom_keystores
   when: acs.version is version('7.0.0', 'ge')
 
@@ -254,7 +254,7 @@
         dest: "{{ content_data_folder }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: 'u=rwx,g=rx,o=rx'
       when:
         - keystore.stat.exists
         - not use_custom_keystores
@@ -268,7 +268,7 @@
         dest: "{{ content_data_folder }}/keystore/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: 'u=rwx,g=rx,o=rx'
       when: use_custom_keystores
   when: acs.version is version('7.0.0', 'lt')
 
