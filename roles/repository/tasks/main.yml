@@ -336,6 +336,8 @@
   delay: 1
   retries: 300
   loop: "{{ amp_download_result.results }}"
+  tags:
+    - molecule-idempotence-notest
 
 - name: Create apply_amps.sh
   template:
