@@ -1,0 +1,32 @@
+upstream repo_lb {
+        least_conn;
+{% for repo in repo_hosts %}
+{% if not host_vars[repo].cluster_keepoff | default(false) %}
+        server {{ repo }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s;
+{% endif %}
+{% endfor %}
+    }
+
+upstream share_lb {
+        ip_hash;
+{% for repo in repo_hosts %}
+{% if not host_vars[repo].cluster_keepoff | default(false) %}
+        server {{ repo }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s;
+{% endif %}
+{% endfor %}
+    }
+
+server {
+    access_log {{ logs_folder }}/nginx.alfresco.access.log;
+    error_log  {{ logs_folder }}/nginx.alfresco.error.log error;
+
+    listen {{ item.listen | default('80') }}{% if item.listen == '443' %} ssl{% endif %};
+{% if item.server_name is defined %}
+    server_name {{ item.server_name }};
+{% endif %}
+{% if item.listen == '443' %}
+    ssl_certificate /etc/nginx/{{ item.cert_crt }};
+    ssl_certificate_key /etc/nginx/{{ item.cert_key }};
+{% endif %}
+    include {{ nginx_vhost_path }}/alfresco_proxy.include;
+}
