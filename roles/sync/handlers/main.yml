@@ -2,8 +2,8 @@
 # handlers file for trouter
 - name: wait-for-repo
   wait_for:
-    host: "{% if repo_hosts | length > 1 %}{{ nginx_host }}{% else %}{{ repo_host }}{% endif %}"
-    port: "{% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_cfg.nginx.http }}{% endif %}"
+    host: "{{ nginx_host }}"
+    port: "{{ ports_cfg.nginx.http }}"
 
 - name: enable-sync
   service:
