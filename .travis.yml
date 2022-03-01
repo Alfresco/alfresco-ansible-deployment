@@ -116,16 +116,14 @@ jobs:
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
-        - cd roles/repository
-        - molecule test
+        - cd roles/repository && travis_retry molecule test
 
     - stage: Roles tests
       name: Repository tests on Ubuntu 20.04
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
-        - cd roles/repository
-        - molecule test
+        - cd roles/repository && molecule test
 
     - stage: Roles tests
       name: Search tests on Centos 7
@@ -160,7 +158,7 @@ jobs:
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
-        - cd roles/sync && molecule test
+        - cd roles/sync && travis_retry molecule test
 
     - stage: Roles tests
       name: Sync tests on Ubuntu 20.04
@@ -181,32 +179,28 @@ jobs:
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
-        - cd roles/transformers
-        - molecule test
+        - cd roles/transformers && molecule test
 
     - stage: Roles tests
       name: Transformers tests on Ubuntu 20.04
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
-        - cd roles/transformers
-        - molecule test
+        - cd roles/transformers && molecule test
 
     - stage: Roles tests
       name: Trouter tests on Centos 7
       env:
         - "MOLECULE_ROLE_IMAGE=centos:7"
       script:
-        - cd roles/trouter
-        - molecule test
+        - cd roles/trouter && molecule test
 
     - stage: Roles tests
       name: Trouter tests on Ubuntu 20.04
       env:
         - "MOLECULE_ROLE_IMAGE=ubuntu:20.04"
       script:
-        - cd roles/trouter
-        - molecule test
+        - cd roles/trouter && molecule test
 
     - stage: Integration tests
       name: Molecule ACS 6.2.2 Enterprise on Centos 7
