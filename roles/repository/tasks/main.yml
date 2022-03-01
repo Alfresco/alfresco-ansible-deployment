@@ -46,7 +46,7 @@
     dest: "{{ download_location }}/{{ acs_zip_file }}"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
-    checksum: "sha1:{{ downloads.acs_zip_sha1_checksum }}"
+    checksum: sha1:{{ lookup('url', downloads.acs_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rw,g=r,o=r'
@@ -60,7 +60,7 @@
   loop: "{{ amp_downloads }}"
   get_url:
     url: "{{ item.url }}"
-    checksum: sha1:{{ item.sha1_checksum }}
+    checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
     dest: "{{ item.dest }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
@@ -77,7 +77,7 @@
   become_user: root
   get_url:
     url: "{{ dependencies_url.postgresql_connector }}"
-    checksum: sha1:{{ dependencies_url.postgresql_connector_sha1_checksum }}
+    checksum: sha1:{{ lookup('url', dependencies_url.postgresql_connector_sha1_checksum_url) }}
     dest: "{{ tomcat_config_dir }}/lib/postgresql.jar"
     mode: 'u=rw,g=r,o=r'
     owner: "{{ username }}"
@@ -182,7 +182,7 @@
   changed_when: false
   get_url:
     url: "{{ item.url }}"
-    checksum: sha1:{{ item.sha1_checksum }}
+    checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
     dest: "{{ item.dest }}"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
