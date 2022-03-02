@@ -1,5 +1,10 @@
 ---
 # tasks file for roles/activemq
+
+- name: Skip play when hosts is managed externally
+  meta: end_play
+  when: activemq_managed
+
 - name: Download activemq tar
   become: true
   become_user: root

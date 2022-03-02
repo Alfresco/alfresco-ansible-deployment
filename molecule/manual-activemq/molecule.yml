@@ -31,7 +31,6 @@ provisioner:
     - "@${MOLECULE_IT_EXTRA_VARS}"
     - -e
     - "@tests/test-ssl.yml"
-    - --limit=instance
   inventory:
     links:
       hosts: ./hosts.yml
