@@ -9,6 +9,6 @@
 - name: Install LibreOffice DEBs
   become: true
   shell:
-    cmd: "yes | dpkg -i {{ download_location }}/LibreOffice_{{ libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | replace('_','-') }}_deb/DEBS/*.deb"
-    creates: /opt/libreoffice{{ libreoffice | regex_search('^[0-9]+.[0-9]+') }}/program/soffice.bin
+    cmd: "yes | dpkg -i {{ download_location }}/LibreOffice_{{ libreoffice_version }}_{{ ansible_system }}_{{ ansible_architecture | replace('_','-') }}_deb/DEBS/*.deb"
+    creates: /opt/libreoffice{{ libreoffice_version | regex_search('^[0-9]+.[0-9]+') }}/program/soffice.bin
     warn: false
