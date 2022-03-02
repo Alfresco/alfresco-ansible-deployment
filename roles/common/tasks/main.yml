@@ -1,5 +1,9 @@
 ---
 # tasks file for common
+- name: Skip play when hosts is managed externally
+  meta: end_play
+  when: managed_host is defined
+
 - name: Check for upgrades
   import_tasks: check_upgrades.yml
 
