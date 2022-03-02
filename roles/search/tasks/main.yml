@@ -66,7 +66,7 @@
 - name: Add solrcore.properties to solr templates
   become: true
   template:
-    src: solrcore.properties
+    src: solrcore.properties.j2
     dest: "{{ binaries_dir }}/solrhome/templates/{{ item }}/conf/solrcore.properties"
     owner: "{{ username }}"
     group: "{{ group_name }}"
