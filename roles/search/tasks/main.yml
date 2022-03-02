@@ -63,23 +63,17 @@
         path: "{{ binaries_dir }}/alfresco-search-services" 
         state: absent
 
-- name: Add "{{ binaries_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
+- name: Add solrcore.properties to solr templates
   become: true
   template:
     src: solrcore.properties
-    dest: "{{ binaries_dir }}/solrhome/templates/rerank/conf/solrcore.properties"
+    dest: "{{ binaries_dir }}/solrhome/templates/{{ item }}/conf/solrcore.properties"
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rw,g=rw,o=r'
-
-- name: Add "{{ binaries_dir }}/solrhome/templates/noRerank/conf/solrcore.properties"
-  become: true
-  template:
-    src: solrcore.properties
-    dest: "{{ binaries_dir }}/solrhome/templates/noRerank/conf/solrcore.properties"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rw,g=rw,o=r'
+  loop:
+    - rerank
+    - noRerank
 
 - name: Copy files from "{{ binaries_dir }}/solrhome to {{ config_dir }}/"
   copy:
