@@ -216,6 +216,26 @@ The default database username (`repo_db_username` and/or `sync_db_username`) and
 
 Please refer to the [Configuring Databases](https://docs.alfresco.com/content-services/latest/config/databases/) documentation for more detailed information.
 
+### External ActiveMQ
+
+By default the playbook will deploy and configure an ActiveMQ instance that is
+suitable for testing/evaluation only (single instance and default credentials).
+
+It's strongly suggested that you provide your own ActiveMQ instance by defining
+into the inventory file one host into to `activemq` group as follows:
+
+```yaml
+    activemq:
+      hosts:
+        activemq.example.com:
+          managed_host:
+          activemq_username: alfresco
+          activemq_password: alfresco
+          activemq_port: 61617
+```
+
+The `managed_host` variable is used to prevent the playbook to manage that host.
+
 ### Custom Keystore
 
 By default the playbook deploys a default keystore to ease the installation process, however, we recommend you [generate your own keystore](https://docs.alfresco.com/content-services/latest/admin/security/#managealfkeystores) following the [instructions here](https://docs.alfresco.com/content-services/latest/admin/security/#keystore-configuration).
