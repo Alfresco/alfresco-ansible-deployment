@@ -1,9 +1,22 @@
+map $remote_addr $solr_trackers {
+    default     0;
+{% for solr_tracker in [ solr_host ] | unique %}
+    {{ solr_tracker }}	   1;
+{% endfor %}
+}
+
 upstream repo_lb {
         least_conn;
 {% for repo in repo_hosts %}
 {% if not host_vars[repo].cluster_keepoff | default(false) %}
         server {{ repo }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s;
 {% endif %}
+{% endfor %}
+    }
+
+upstream tracker_lb {
+{% for repo in repo_hosts %}
+        server {{ repo }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s {% if not host_vars[repo].cluster_keepoff | default(false) and repo_hosts | map('extract', hostvars) | selectattr('cluster_keepoff', 'true') %}backup{% endif %}; 
 {% endfor %}
     }
 
