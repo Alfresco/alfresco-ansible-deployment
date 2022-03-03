@@ -30,7 +30,6 @@
 
 - name: Ensure a list of packages installed
   become: true
-  become_user: root
   package:
     name: "{{ utils_transform }}"
     state: present
