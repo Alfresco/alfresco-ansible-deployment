@@ -29,3 +29,4 @@ dependencies_version:
   jdk: 11.0.13
   jdk_arch: 8
   tomcat: 8.5.76
+  libreoffice: 6.3.5.2
