@@ -1,5 +1,4 @@
 ---
-
 repos:
   - repo: https://github.com/jackdewinter/pymarkdown
     rev: v0.9.5
@@ -12,13 +11,11 @@ repos:
         args:
           - --config=.pymarkdown.json
           - scan
-          
-  - repo: https://github.com/PyCQA/pylint
-    rev: v2.12.2
+
+  - repo: https://github.com/PyCQA/prospector
+    rev: 1.7.5
     hooks:
-      - id: pylint
-        types: [file, python]
-        exclude: "__init__.py"
+      - id: prospector
 
   - repo: https://github.com/ansible/ansible-lint
     rev: v5.3.2
@@ -30,7 +27,13 @@ repos:
     hooks:
       - id: detect-secrets
         name: detect generic secrets
-        args: ["--baseline", ".secrets.baseline", '--exclude-secrets', '(admin|mp6yc0UD9e|alfresco)']
+        args:
+          [
+            "--baseline",
+            ".secrets.baseline",
+            "--exclude-secrets",
+            "(admin|mp6yc0UD9e|alfresco)",
+          ]
 
   - repo: https://github.com/awslabs/git-secrets
     rev: b9e96b3

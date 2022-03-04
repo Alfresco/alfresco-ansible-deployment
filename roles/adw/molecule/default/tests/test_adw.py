@@ -3,6 +3,10 @@ import os
 import pytest
 from hamcrest import assert_that, contains_string
 
+
+test_host = os.environ.get('TEST_HOST')
+
+
 # pylint: disable=redefined-outer-name
 @pytest.fixture(scope="module")
 def get_ansible_vars(host):
@@ -12,8 +16,6 @@ def get_ansible_vars(host):
     ansible_vars = host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"]
     ansible_vars.update(host.ansible("include_vars", common_hosts)["ansible_facts"]["common_hosts"])
     return ansible_vars
-
-test_host = os.environ.get('TEST_HOST')
 
 def test_digital_workspace_200(host, get_ansible_vars):
     "Check that ADW is available and returns a HTTP 200 status code"

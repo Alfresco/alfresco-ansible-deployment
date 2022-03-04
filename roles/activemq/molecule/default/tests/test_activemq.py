@@ -3,6 +3,9 @@ import os
 import pytest
 from hamcrest import assert_that, contains_string
 
+test_host = os.environ.get('TEST_HOST')
+
+
 # pylint: disable=redefined-outer-name
 @pytest.fixture(scope="module")
 def get_ansible_vars(host):
@@ -21,8 +24,6 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", activemq_role)["ansible_facts"]["activemq_role"])
     ansible_vars.update(host.ansible("include_vars", group_vars)["ansible_facts"]["group_vars"])
     return ansible_vars
-
-test_host = os.environ.get('TEST_HOST')
 
 def test_activemq_exe_exists(host, get_ansible_vars):
     """Check that ActiveMQ executable exists"""
