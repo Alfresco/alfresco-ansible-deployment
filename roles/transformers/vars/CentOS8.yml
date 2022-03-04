@@ -20,4 +20,3 @@ utils_transform:
   - freetype
   - libpng
   - dejavu-sans-fonts
-  - libX11-xcb
