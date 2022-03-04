@@ -111,6 +111,7 @@ dependencies_version:
   jdk_arch: 8
   tomcat: 9.0.59
   libreoffice: 7.0.6.2
+  pdf_renderer: 1.1
 
 apache_archive_url: https://archive.apache.org
 tomcat_archive_url: "{{ apache_archive_url}}/dist/tomcat"

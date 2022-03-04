@@ -4,7 +4,6 @@ imagemagick_pkg:
   pkgs:
     - imagemagick-distribution-linux
 
-pdf_renderer: 1.1
 imagemagick_home: "/opt/imagemagick-{{ imagemagick_pkg.version | regex_search('^[0-9]+') }}"
 
 utils_transform:
