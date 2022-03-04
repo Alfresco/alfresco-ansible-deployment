@@ -90,7 +90,8 @@ def test_ags_repo_is_installed_and_loaded(host, get_ansible_vars):
     """Check if rm amp is installed in repo war and loaded at startup"""
     java_version = get_ansible_vars["dependencies_version"]["jdk"]
     acs_version = get_ansible_vars["acs"]["version"]
-    cmd = host.run("/opt/openjdk-" + java_version +
+    cmd = host.run(
+        "/opt/openjdk-" + java_version +
         "/bin/java -jar /opt/alfresco/content-services-" + acs_version +
         "/bin/alfresco-mmt.jar list /opt/alfresco/content-services-" + acs_version +
         "/web-server/webapps/alfresco.war"
@@ -103,7 +104,8 @@ def test_ags_share_is_installed_and_loaded(host, get_ansible_vars):
     """Check if rm amp is installed in share war and loaded at startup"""
     java_version = get_ansible_vars["dependencies_version"]["jdk"]
     acs_version = get_ansible_vars["acs"]["version"]
-    cmd = host.run("/opt/openjdk-" + java_version +
+    cmd = host.run(
+        "/opt/openjdk-" + java_version +
         "/bin/java -jar /opt/alfresco/content-services-" + acs_version +
         "/bin/alfresco-mmt.jar list /opt/alfresco/content-services-" + acs_version +
         "/web-server/webapps/share.war"
