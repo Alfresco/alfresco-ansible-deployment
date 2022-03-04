@@ -27,7 +27,10 @@ def get_ansible_vars(host):
 
 def test_activemq_exe_exists(host, get_ansible_vars):
     """Check that ActiveMQ executable exists"""
-    assert_that(host.file("/opt/apache-activemq-{}/bin/activemq".format(get_ansible_vars["dependencies_version"]["activemq"])).exists, get_ansible_vars["activemq_home"])
+    activemq_version = get_ansible_vars["dependencies_version"]["activemq"]
+    activemq_binary_path = "/opt/apache-activemq-{}/bin/activemq".format(activemq_version)
+    activemq_binary = host.file(activemq_binary_path)
+    assert_that(activemq_binary.exists, True)
 
 def test_activemq_version(host, get_ansible_vars):
     """Check that ActiveMQ version is correct"""
