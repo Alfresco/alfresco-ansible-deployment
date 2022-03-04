@@ -30,3 +30,4 @@ dependencies_version:
   jdk_arch: 8
   tomcat: 8.5.76
   libreoffice: 6.3.5.2
+  pdf_renderer: 1.1
