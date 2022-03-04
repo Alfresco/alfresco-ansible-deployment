@@ -27,7 +27,7 @@ def test_sync_log_exists(host, get_ansible_vars):
     assert_that(host.file("{}/sync-service.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
 
 def test_sync_service(host, get_ansible_vars):
-    "Check that Sync Service is enabled and running"
+    """Check that Sync Service is enabled and running"""
     assert_that(host.service("alfresco-sync").is_running)
     assert_that(host.service("alfresco-sync").is_enabled)
 

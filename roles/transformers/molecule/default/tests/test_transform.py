@@ -27,7 +27,7 @@ def test_aio_log_exists(host, get_ansible_vars):
     assert_that(host.file("{}/ats-ate-aio.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
 
 def test_aio_service(host, get_ansible_vars):
-    "Check that Transform AIO is enabled and running"
+    """Check that Transform AIO is enabled and running"""
     assert_that(host.service("alfresco-tengine-aio").is_running)
     assert_that(host.service("alfresco-tengine-aio").is_enabled)
 

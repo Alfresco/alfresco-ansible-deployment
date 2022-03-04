@@ -23,7 +23,7 @@ def get_ansible_vars(host):
 test_host = os.environ.get('TEST_HOST')
 
 def test_solr_log_exists(host, get_ansible_vars):
-    "Check that solr log"
+    """Check that solr log"""
     assert_that(host.file("{}/solr.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
 
 @pytest.mark.parametrize("svc", ["alfresco-search"])
