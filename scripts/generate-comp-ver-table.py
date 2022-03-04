@@ -125,6 +125,7 @@ def modify_table():
             else:
                 new_file.write(line)
 
+
 if __name__ == '__main__':
     modify_table()
     print("Component versions table regenerated successfully")
