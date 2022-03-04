@@ -1,10 +1,8 @@
 ---
-imagemagick_pkg:
-  version: 7.0.10-59
-  pkgs:
-    - imagemagick-distribution-linux
+imagemagick_packages:
+  - imagemagick-distribution-linux
 
-imagemagick_home: "/opt/imagemagick-{{ imagemagick_pkg.version | regex_search('^[0-9]+') }}"
+imagemagick_home: "/opt/imagemagick-{{ imagemagick_version | regex_search('^[0-9]+') }}"
 
 utils_transform:
   - libcairo2

@@ -9,10 +9,10 @@
 
 - name: Install imagemagick
   yum:
-    name: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_pkg.version) }}.{{ pkg_format }}"
+    name: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}.{{ pkg_format }}"
     state: present
     disable_gpg_check: true
-  loop: "{{  imagemagick_pkg.pkgs }}"
+  loop: "{{  imagemagick_packages }}"
 
 - name: Install LibreOffice RPMs
   shell:

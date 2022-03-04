@@ -1,8 +1,12 @@
 ---
 # tasks file for transformers
-- name: Include OS specific variables
-  include_vars: "{{ item }}"
-  loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
+- name: Include OS family variables
+  include_vars:
+    file: "{{ os_family_yml }}"
+
+- name: Include OS version variables
+  include_vars:
+    file: "{{ os_version_yml }}"
 
 - name: Download libreoffice package archive
   get_url:
@@ -18,15 +22,15 @@
 
 - name: Download ImageMagick distribution
   vars:
-    pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_pkg.version) }}.{{ pkg_format }}"
-    pkg_url: "{{ nexus_repository.releases }}/../imagemagick/imagemagick-distribution/{{ imagemagick_pkg.version }}/{{ pkg_name }}"
+    pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}.{{ pkg_format }}"
+    pkg_url: "{{ nexus_repository.releases }}/../imagemagick/imagemagick-distribution/{{ imagemagick_version }}/{{ pkg_name }}"
   get_url:
     url: "{{ pkg_url }}"
     checksum: "sha1:{{ lookup('url', pkg_url + '.sha1') }}"
     dest: "{{ download_location }}/{{ pkg_name }}"
     mode: 0444
     timeout: 570
-  loop: "{{  imagemagick_pkg.pkgs }}"
+  loop: "{{  imagemagick_packages }}"
 
 - name: Ensure a list of packages installed
   become: true
@@ -127,8 +131,8 @@
         export LIBREOFFICE_HOME={{ libreoffice_home }}
         export IMAGEMAGICK_HOME={{ imagemagick_home }}
         export IMAGEMAGICK_DYN={% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/lib/x86_64-linux-gnu{% else %}/usr/lib64{% endif %}/
-        export IMAGEMAGICK_CONFIG={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_pkg.version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/config-Q16HDRI
-        export IMAGEMAGICK_CODERS={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_pkg.version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/modules-Q16HDRI/coders
+        export IMAGEMAGICK_CONFIG={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/config-Q16HDRI
+        export IMAGEMAGICK_CODERS={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/modules-Q16HDRI/coders
         export IMAGEMAGICK_EXE="{% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/bin/{% endif %}convert"
       insertafter: EOF
 
