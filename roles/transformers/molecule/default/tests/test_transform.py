@@ -44,7 +44,7 @@ def test_aio_config_api(host, get_ansible_vars):
     assert_that(cmd.stdout, contains_string("stringOptions"))
 
 def test_aio_root_api(host, get_ansible_vars):
-    """Check that Transform AIO root api works"""
+    """Check that Transform AIO root api works s"""
     cmd = host.run("curl -iL http://{}:8090".format(test_host))
     assert_that(cmd.stdout, contains_string("All in One Transformer Test Transformation"), cmd.stdout)
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
