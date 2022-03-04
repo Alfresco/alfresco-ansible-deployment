@@ -57,5 +57,6 @@ def test_environment_jvm_opts(host, get_ansible_vars):
     assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
 
 def test_libreoffice_install(host):
+    """Check that libreoffice binary doesn't miss any dependencies"""
     p = host.run("/opt/libreoffice7.0/program/soffice.bin --version")
     assert_that(p.stdout, contains_string("LibreOffice 7.0.6.2 144abb84a525d8e30c9dbbefa69cbbf2d8d4ae3b"))
