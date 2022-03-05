@@ -8,23 +8,23 @@ map $remote_addr $solr_trackers {
 upstream repo_lb {
         least_conn;
 {% for repo in repo_hosts %}
-{% if not host_vars[repo].cluster_keepoff | default(false) %}
-        server {{ repo }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s;
+{% if not repo.cluster_keepoff | default(false) %}
+        server {{ repo.local_addr | default(repo.inventory_name) }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s;
 {% endif %}
 {% endfor %}
     }
 
 upstream tracker_lb {
 {% for repo in repo_hosts %}
-        server {{ repo }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s {% if not host_vars[repo].cluster_keepoff | default(false) and repo_hosts | map('extract', hostvars) | selectattr('cluster_keepoff', 'true') %}backup{% endif %}; 
+        server {{ repo.local_addr | default(repo.inventory_name) }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s {% if not repo.cluster_keepoff | default(false) and repo_hosts | selectattr('cluster_keepoff', 'true') %}backup{% endif %}; 
 {% endfor %}
     }
 
 upstream share_lb {
         ip_hash;
 {% for repo in repo_hosts %}
-{% if not host_vars[repo].cluster_keepoff | default(false) %}
-        server {{ repo }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s;
+{% if not repo.cluster_keepoff | default(false) %}
+        server {{ repo.local_addr | default(repo.inventory_name) }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s;
 {% endif %}
 {% endfor %}
     }
