@@ -1,3 +1,2 @@
 ---
 # defaults file for search-services
-dedicated_trackers: "{{ repo_hosts | map('extract', hostvars) | selectattr('cluster_keepoff', 'true') }}"

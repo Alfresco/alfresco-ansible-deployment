@@ -15,15 +15,9 @@ data.dir.root={{ data_dir }}
 # Properties loaded during alfresco tracking
 #
 
-{% if dedicated_trackers %}
-alfresco.host={{ dedicated_trackers | map(attribute="ansible_default_ipv4.address", default=myhost[0].inventory_hostname) }}
-alfresco.port={{ ports_cfg.repository.http }}
-alfresco.port.ssl={{ ports_cfg.repository.https }}
-{% else %}
 alfresco.host={{ nginx_host }}
 alfresco.port={{ ports_cfg.nginx.http }}
 alfresco.port.ssl={{ ports_cfg.nginx.https }}
-{% endif %}
 
 #alfresco.index.transformContent=false
 #alfresco.ignore.datatype.1=d:content
