@@ -27,7 +27,7 @@
                      multicast-group="224.2.2.5"
                      multicast-port="54327"/>
                <hz:tcp-ip enabled="true">
-                   <hz:members>{{ groups['repository'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join(',') }}</hz:members>
+                   <hz:members>{{ groups['repository'] | map('extract', hostvars) | selectattr('cluster_keepoff','undefined') | map(attribute='ansible_default_ipv4.address') | join(',') }}</hz:members>
                </hz:tcp-ip>
             </hz:join>
 	    <hz:interfaces enabled="false">
