@@ -138,7 +138,7 @@
   template:
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    src: "{{ item }}"
+    src: "{{ item }}.j2"
     dest: "{{ settings_folder }}/classpath/alfresco/web-extension/{{ item }}"
     mode: 'u=rwx,g=rwx,o=rx'
   loop: "{{ share_templates }}"
@@ -303,7 +303,7 @@
         group: "{{ group_name }}"
     - name: Create config files
       template:
-        src: "{{ item }}.xml"
+        src: "{{ item }}.xml.j2"
         dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/{{ item }}.xml"
         owner: "{{ username }}"
         group: "{{ group_name }}"
