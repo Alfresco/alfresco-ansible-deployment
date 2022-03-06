@@ -7,7 +7,7 @@ map $remote_addr $solr_trackers {
 
 upstream repo_lb {
         least_conn;
-{% for repo in repo_hosts %}
+{% for repo in repo_hosts | unique %}
 {% if not repo.cluster_keepoff | default(false) %}
         server {{ repo.local_addr | default(repo.inventory_name) }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s;
 {% endif %}
@@ -15,14 +15,14 @@ upstream repo_lb {
     }
 
 upstream tracker_lb {
-{% for repo in repo_hosts %}
+{% for repo in repo_hosts | unique %}
         server {{ repo.local_addr | default(repo.inventory_name) }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s {% if not repo.cluster_keepoff | default(false) and repo_hosts | selectattr('cluster_keepoff', 'true') %}backup{% endif %}; 
 {% endfor %}
     }
 
 upstream share_lb {
         ip_hash;
-{% for repo in repo_hosts %}
+{% for repo in repo_hosts | unique %}
 {% if not repo.cluster_keepoff | default(false) %}
         server {{ repo.local_addr | default(repo.inventory_name) }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s;
 {% endif %}
