@@ -64,7 +64,15 @@ def _get_instances_to_terminate(response):
                 launchTime = parser.parse(str(instance['LaunchTime'])).replace(tzinfo=None)
                 time_to_delete = datetime.now() + timedelta(days = -1)
                 if launchTime < time_to_delete:
-                    _logger.info(str({'InstanceId': instance['InstanceId'], 'KeyName': instance['KeyName'], 'GroupId': instance['SecurityGroups'][0]['GroupId']}))
+                    _logger.info(str({
+                        'InstanceId': instance['InstanceId'],
+                        'KeyName': instance['KeyName'],
+                        'GroupId': instance['SecurityGroups'][0]['GroupId'],
+                    }))
                     _logger.info('Add ec2 instance Id to terminate list: %s', instance['InstanceId'])
-                    instances_to_terminate.append({'InstanceId': instance['InstanceId'], 'KeyName': instance['KeyName'], 'GroupId': instance['SecurityGroups'][0]['GroupId']})
+                    instances_to_terminate.append({
+                        'InstanceId': instance['InstanceId'],
+                        'KeyName': instance['KeyName'],
+                        'GroupId': instance['SecurityGroups'][0]['GroupId'],
+                    })
     return instances_to_terminate

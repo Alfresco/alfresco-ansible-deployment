@@ -3,6 +3,9 @@ import os
 import pytest
 from hamcrest import assert_that, contains_string
 
+test_host = os.environ.get('TEST_HOST')
+
+
 # pylint: disable=redefined-outer-name
 @pytest.fixture(scope="module")
 def get_ansible_vars(host):
@@ -21,10 +24,8 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", repository_role)["ansible_facts"]["repository_role"])
     return ansible_vars
 
-test_host = os.environ.get('TEST_HOST')
-
 def test_newly_added_properties_are_set(host, get_ansible_vars):
-    "Check that extra props exists in global properties file"
+    """Check that extra props exists in global properties file"""
     content = host.file("/etc/opt/alfresco/content-services/classpath/alfresco-global.properties").content
     assert_that(b'index.recovery.mode=NONE' in content)
     assert_that(b'index.subsystem.name=noindex' in content)
@@ -86,15 +87,29 @@ def test_keytest_keystore_exists(host, get_ansible_vars):
     assert_that(host.file("/var/opt/alfresco/content-services/keystore/keystest").exists)
 
 def test_ags_repo_is_installed_and_loaded(host, get_ansible_vars):
-    "Check if rm amp is installed in repo war and loaded at startup"
-    cmd = host.run("/opt/openjdk-" + get_ansible_vars["dependencies_version"]["jdk"] + "/bin/java -jar /opt/alfresco/content-services-" + get_ansible_vars["acs"]["version"] + "/bin/alfresco-mmt.jar list /opt/alfresco/content-services-" + get_ansible_vars["acs"]["version"] + "/web-server/webapps/alfresco.war")
+    """Check if rm amp is installed in repo war and loaded at startup"""
+    java_version = get_ansible_vars["dependencies_version"]["jdk"]
+    acs_version = get_ansible_vars["acs"]["version"]
+    cmd = host.run(
+        "/opt/openjdk-" + java_version +
+        "/bin/java -jar /opt/alfresco/content-services-" + acs_version +
+        "/bin/alfresco-mmt.jar list /opt/alfresco/content-services-" + acs_version +
+        "/web-server/webapps/alfresco.war"
+    )
     assert_that(cmd.stdout, contains_string("AGS Repo\n   -    Version:      3.5.0"))
     getlog = host.run("cat /var/log/alfresco/alfresco.log")
     assert_that(getlog.stdout, contains_string("Installing module 'alfresco-rm-enterprise-repo' version 3.5.0"))
 
 def test_ags_share_is_installed_and_loaded(host, get_ansible_vars):
-    "Check if rm amp is installed in share war and loaded at startup"
-    cmd = host.run("/opt/openjdk-" + get_ansible_vars["dependencies_version"]["jdk"] + "/bin/java -jar /opt/alfresco/content-services-" + get_ansible_vars["acs"]["version"] + "/bin/alfresco-mmt.jar list /opt/alfresco/content-services-" + get_ansible_vars["acs"]["version"] + "/web-server/webapps/share.war")
+    """Check if rm amp is installed in share war and loaded at startup"""
+    java_version = get_ansible_vars["dependencies_version"]["jdk"]
+    acs_version = get_ansible_vars["acs"]["version"]
+    cmd = host.run(
+        "/opt/openjdk-" + java_version +
+        "/bin/java -jar /opt/alfresco/content-services-" + acs_version +
+        "/bin/alfresco-mmt.jar list /opt/alfresco/content-services-" + acs_version +
+        "/web-server/webapps/share.war"
+    )
     assert_that(cmd.stdout, contains_string("AGS Enterprise Share\n   -    Version:      3.5.0" ))
     getlog = host.run("cat /var/log/alfresco/share.log")
     assert_that(getlog.stdout, contains_string("AGS Enterprise Share, 3.5.0, Alfresco Governance Services Enterprise Share Extension"))

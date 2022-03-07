@@ -3,6 +3,9 @@ import os
 import pytest
 from hamcrest import contains_string, assert_that
 
+test_host = os.environ.get('TEST_HOST')
+
+
 # pylint: disable=redefined-outer-name
 @pytest.fixture(scope="module")
 def get_ansible_vars(host):
@@ -10,7 +13,9 @@ def get_ansible_vars(host):
     common_vars = "file=../common/vars/main.yml name=common_vars"
     common_defaults = "file=../common/defaults/main.yml name=common_defaults"
     nginx_vars = "file=./vars/main.yml name=nginx_vars"
-    nginx_dist_version_vars = "file=./vars/" + host.ansible("setup")["ansible_facts"]["ansible_distribution"] + host.ansible("setup")["ansible_facts"]["ansible_distribution_version"] + ".yml name=nginx_dist_version_vars"
+    distribution_name = host.ansible("setup")["ansible_facts"]["ansible_distribution"]
+    distribution_version = host.ansible("setup")["ansible_facts"]["ansible_distribution_version"]
+    nginx_dist_version_vars = "file=./vars/{}{}.yml name=nginx_dist_version_vars".format(distribution_name, distribution_version)
     nginx_osfam_vars = "file=./vars/" + host.ansible("setup")["ansible_facts"]["ansible_os_family"] + ".yml name=nginx_osfam_vars"
     ansible_vars = host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"]
     ansible_vars.update(host.ansible("include_vars", common_defaults)["ansible_facts"]["common_defaults"])
@@ -18,8 +23,6 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", nginx_osfam_vars)["ansible_facts"]["nginx_osfam_vars"])
     ansible_vars.update(host.ansible("include_vars", nginx_dist_version_vars)["ansible_facts"]["nginx_dist_version_vars"])
     return ansible_vars
-
-test_host = os.environ.get('TEST_HOST')
 
 def test_selinux(host):
     """Check that the selinux config is valid"""

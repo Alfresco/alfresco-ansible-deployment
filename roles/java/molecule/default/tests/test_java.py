@@ -18,15 +18,19 @@ def get_ansible_vars(host):
     return ansible_vars
 
 def test_java_exists(host, get_ansible_vars):
-    "Check that java executable exists"
-    assert_that(host.file("/opt/openjdk-{}/bin/java".format(get_ansible_vars["dependencies_version"]["jdk"])).exists, get_ansible_vars["dependencies_version"]["jdk"])
+    """Check that java executable exists"""
+    java_version = get_ansible_vars["dependencies_version"]["jdk"]
+    java_bin = host.file("/opt/openjdk-{}/bin/java".format(java_version))
+    assert_that(java_bin.exists, True)
 
 def test_java_version(host, get_ansible_vars):
-    "Check that java version is correct"
-    cmd = host.run("/opt/openjdk-{}/bin/java -version".format(get_ansible_vars["dependencies_version"]["jdk"]))
+    """Check that java version is correct"""
+    java_version = get_ansible_vars["dependencies_version"]["jdk"]
+    cmd = host.run("/opt/openjdk-{}/bin/java -version".format(java_version))
     assert_that(cmd.stderr, contains_string(get_ansible_vars["dependencies_version"]["jdk"]))
 
 def test_java_home(host, get_ansible_vars):
-    "Check that JAVA_HOME is environment variable is set"
+    """Check that JAVA_HOME is environment variable is set"""
+    java_version = get_ansible_vars["dependencies_version"]["jdk"]
     cmd = host.run(". {}/setenv.sh && echo $JAVA_HOME".format(get_ansible_vars["config_folder"]))
-    assert_that(cmd.stdout, contains_string("/opt/openjdk-{}".format(get_ansible_vars["dependencies_version"]["jdk"])))
+    assert_that(cmd.stdout, contains_string("/opt/openjdk-{}".format(java_version)))

@@ -3,6 +3,9 @@ import os
 import pytest
 from hamcrest import contains_string, assert_that
 
+test_host = os.environ.get('TEST_HOST')
+
+
 # pylint: disable=redefined-outer-name
 @pytest.fixture(scope="module")
 def get_ansible_vars(host):
@@ -20,10 +23,8 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", search_services)["ansible_facts"]["search_services"])
     return ansible_vars
 
-test_host = os.environ.get('TEST_HOST')
-
 def test_solr_log_exists(host, get_ansible_vars):
-    "Check that solr log"
+    """Check that solr log"""
     assert_that(host.file("{}/solr.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
 
 @pytest.mark.parametrize("svc", ["alfresco-search"])

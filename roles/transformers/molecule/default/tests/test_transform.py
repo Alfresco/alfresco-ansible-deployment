@@ -3,6 +3,9 @@ import os
 import pytest
 from hamcrest import contains_string, assert_that
 
+test_host = os.environ.get('TEST_HOST')
+
+
 # pylint: disable=redefined-outer-name
 @pytest.fixture(scope="module")
 def get_ansible_vars(host):
@@ -20,14 +23,12 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", transform_services)["ansible_facts"]["transform_services"])
     return ansible_vars
 
-test_host = os.environ.get('TEST_HOST')
-
 def test_aio_log_exists(host, get_ansible_vars):
     """Check that Transform AIO log exists"""
     assert_that(host.file("{}/ats-ate-aio.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
 
 def test_aio_service(host, get_ansible_vars):
-    "Check that Transform AIO is enabled and running"
+    """Check that Transform AIO is enabled and running"""
     assert_that(host.service("alfresco-tengine-aio").is_running)
     assert_that(host.service("alfresco-tengine-aio").is_enabled)
 
