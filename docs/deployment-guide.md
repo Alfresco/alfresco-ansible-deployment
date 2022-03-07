@@ -476,7 +476,7 @@ For example:
 ```
 
 In some circumstances, you may want to have a repo node that's dedicated to a scheduled task (such as ingesting massive amount of documents). Depending on the nature of the task and the requirements of your organisation, it may be preferable to not make this node part of the ACS cluster.
-In that case, you can add the `cluster_keepoff` variable to one of the `repository` group nodes'. It will provision the node with teh repository and share services but make sure it not taking part in neither the share, nor the repository cluster realm.
+In that case, you can add the `cluster_keepoff` variable to one of the `repository` group nodes'. It will provision the node with the repository and share services but make sure it not taking part in neither the share, nor the repository cluster realm.
 
 > A typical use case is to have a dedicated Solr tracking node. The playbook will then prefer to use that dedicated node - if it finds one - for solr tracking and only use the other as backup server (no load balancing)
 
