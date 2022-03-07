@@ -15,7 +15,7 @@
         private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.key"
         cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
 
-    - name: cleanup cert
+    - name: Cleanup cert
       delegate_to: localhost
       file:
         path: "{{ item }}"
