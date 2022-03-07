@@ -91,7 +91,7 @@ all:
 It is important to note that all of the repository cluster members needs to be able to write to the whole directory structure of the contentstore. Depending on your underlying storage technology this can have different implications.
 In many cases POSIX permission model applies. However there are 2 things to take into account re garding how the playbook works:
 
-- Installed services are run as a specific user `alfresco`, part of a specific group `Àlfresco`.
+- Installed services are run as a specific user `alfresco`, part of a specific group `alfresco`.
 - In order to avoid conflicts, and stick to each distribution best pratice or preconfiguration, the playbook do not force any UID/GID for that dedicated user and group.
 
 Because POSIX model rely on UID/GID rather than user and group names, this can lead to situations where setting the right permissions for every hosts is closed to impossible.
