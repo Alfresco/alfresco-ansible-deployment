@@ -104,7 +104,7 @@ We'll describe bellow ways to fix or mitigate that problem.
 
 If all the targets repository hosts are built from the same OS image and strictly confugred the same way, there is no to very little chance for the UID/GID to get inconsistent accross nodes. This greatly limits the problem and most of the time if you stick to that principal you can use regular POSIX model approach
 
-If all the target repository hosts are bound to a centralized user/group directory, an option can be to manually created the `alfresco` user and `Alfresco` group within this directory so all nodes will for sure share the same UID/GID. Though you need to realize that it introduce a dependency on the platform to that directory system.
+If all the target repository hosts are bound to a centralized user/group directory, an option can be to manually created the `alfresco` user and `alfresco` group within this directory so all nodes will for sure share the same UID/GID. Though you need to realize that it introduce a dependency on the platform to that directory system.
 
 ### Properly configuring your storage system
 
