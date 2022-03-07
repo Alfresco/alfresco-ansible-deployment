@@ -112,7 +112,7 @@ Many storage technologies implement features to workaround this problem. Please 
 
 #### NFS
 
-This example takes advantage of the squashing mecanism NFS offers. this basically allows to map all NFS client requests to a single user (usually `nobody`) regardless of the UID/GID seen on the client.
+This example takes advantage of the squashing mechanism NFS offers. This basically allows to map all NFS client requests to a single user (usually `nobody`) regardless of the UID/GID seen on the client.
 Configuration of a Linux NFS server explained (`/etc/exports`):
 
 ````config
