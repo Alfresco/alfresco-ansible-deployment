@@ -115,7 +115,7 @@ Many storage technologies implement features to workaround this problem. Please 
 This example takes advantage of the squashing mechanism NFS offers. This basically allows to map all NFS client requests to a single user (usually `nobody`) regardless of the UID/GID seen on the client.
 Configuration of a Linux NFS server explained (`/etc/exports`):
 
-````config
+```config
 /nfs/contentstore 192.168.0.0/24(rw,async,no_subtree_check,all_squash,anonuid=65534,anongid=65534)
 ```
 
