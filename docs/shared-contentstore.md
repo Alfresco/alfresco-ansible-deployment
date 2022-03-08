@@ -131,7 +131,7 @@ Configuration of a Linux NFS server explained (`/etc/exports`):
 
 Permissions on the exported filesystem would look like that on the NFS server:
 
-````bash
+```bash
 drwxr-xr-x. 4 65534 65534 54 23 févr. 22:13 /nfs/contentstore
 ```
 
