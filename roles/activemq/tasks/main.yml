@@ -1,9 +1,9 @@
 ---
-# tasks file for roles/activemq
-
+- name: Print activemq vars
+  ansible.builtin.debug:
+    msg: "{{ activemq_host }}:{{ ports_cfg.activemq.openwire }}"
 - name: Download activemq tar
   become: true
-  become_user: root
   get_url:
     url: "{{ dependencies_url.activemq }}"
     checksum: sha512:{{ dependencies_url.activemq_sha512_checksum_url }}
@@ -18,7 +18,6 @@
 
 - name: Check on activemq download async task
   become: true
-  become_user: root
   async_status:
     jid: "{{ activemq_download.ansible_job_id }}"
   register: job_result
