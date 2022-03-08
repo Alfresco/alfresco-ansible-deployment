@@ -21,7 +21,7 @@ repo_hosts: |
       cluster_keepoff: cluster_keepoff
     }') 
   }}
-repo_host: "{{ repo_hosts[0].local_ip | default(repo_hosts[0].inventory_name) }}"
+repo_host: "{{ repo_hosts[0].local_addr | default(repo_hosts[0].inventory_name) }}"
 activemq_host: "{% if groups.activemq | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.activemq[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
 db_host: "{% if groups.database | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.database[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
 solr_host: "{% if groups.search | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.search[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"

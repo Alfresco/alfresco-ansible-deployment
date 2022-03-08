@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/share.war">
-  <Resources cacheMaxSize="20480">
+  <Resources cacheMaxSize="40960">
     <PostResources base="{{ content_folder }}/modules/acs-share"
                    className="org.apache.catalina.webresources.DirResourceSet"
                    webAppMount="/WEB-INF/lib"/>
