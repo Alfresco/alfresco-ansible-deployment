@@ -19,7 +19,7 @@ share_templates:
   - smartfolders-amp-actions-config.xml
 
 repository:
-  protocol: "{{ https if use_ssl | bool else http }}"
+  protocol: "{{ 'https' if use_ssl | bool else 'http' }}"
   host: "{{ nginx_host }}"
   port: "{{ ports_cfg.nginx.https if use_ssl | bool else ports_cfg.nginx.http }}"
 
