@@ -75,16 +75,6 @@
             - "{{ molecule_yml.platforms | selectattr('name', 'in', groups.repository) | first }}"
           register: contentstore
 
-        - name: Check for DNS propagation
-          vars:
-            efs_host: "{{ contentstore.results[0].efs.filesystem_address.split(':/')[0] }}"
-            dnscheck: "{{ lookup('community.general.dig', efs_host , qtype='ALL') }}"
-          ansible.builtin.debug:
-            msg: waiting for {{ efs_host }} to be resolvable
-          until: dnscheck != 'NXDOMAIN'
-          loop:
-            - "{{ molecule_yml.platforms | selectattr('name', 'in', groups.repository) | first }}"
-
         - name: Generate repo host_vars files
           blockinfile:
             state: present
@@ -105,6 +95,15 @@
               package:
                 state: present
                 name: nfs-utils
+            - name: check for DNS propagation
+              vars:
+                efs_host: "{{ contentstore.results[0].efs.filesystem_address.split(':/')[0] }}"
+                dnscheck: "{{ lookup('community.general.dig', efs_host , qtype='ALL') }}"
+              ansible.builtin.debug:
+                msg: waiting for {{ efs_host }} to be resolvable
+              until: dnscheck != 'NXDOMAIN'
+              retries: 9
+              delay: 3
             - name: mount the EFS volume
               ansible.posix.mount:
                 path: /mnt
