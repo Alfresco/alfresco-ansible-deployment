@@ -1,7 +1,4 @@
 ---
-- name: Print activemq vars
-  ansible.builtin.debug:
-    msg: "{{ activemq_host }}:{{ ports_cfg.activemq.openwire }}"
 - name: Download activemq tar
   become: true
   get_url:

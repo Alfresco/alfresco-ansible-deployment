@@ -222,19 +222,23 @@ By default the playbook will deploy and configure an ActiveMQ instance that is
 suitable for testing/evaluation only (single instance and default credentials).
 
 It's strongly suggested that you provide your own ActiveMQ instance by defining
-into the inventory file one host into to `activemq` group as follows:
+into the inventory file one host into to `external_activemq` group (nested
+inside the `external` group) as follows:
 
 ```yaml
-    activemq:
-      hosts:
-        activemq.example.com:
-          managed_host:
-          activemq_username: alfresco
-          activemq_password: alfresco
-          activemq_port: 61617
+all:
+  children:
+    external:
+      children:
+        external_activemq:
+          hosts:
+            whatever.mq.eu-west-1.amazonaws.com:
+              activemq_username: alfresco
+              activemq_password: alfresco
+              activemq_port: 61617
 ```
 
-The `managed_host` variable is used to prevent the playbook to manage that host.
+Every host under `external` group is skipped by the acs playbook.
 
 ### Custom Keystore
 
