@@ -457,6 +457,9 @@ Due to load or high availability needs, you might want to deploy a cluster of se
 * Giving the playbook the location of the shared storage used for the ACS contentstore (See [Shared storage documentation](shared-contentstore.md) for details).
 * Specifying several hosts within the repository hosts group
 
+> :warning: as mention in the [Alfresco official documentation](https://docs.alfresco.com/content-services/latest/admin/cluster/#scenarioredundancycluster), "All the servers in a cluster should have static IP addresses assigned to them".
+> Not meetign this pre-requisite won't prevent the playbook from working but the cluster might will most likely stop working in case one of the server in the architecture changes IP address.
+
 For example:
 
 ````yaml
