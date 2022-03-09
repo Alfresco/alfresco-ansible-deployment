@@ -218,12 +218,13 @@ Please refer to the [Configuring Databases](https://docs.alfresco.com/content-se
 
 ### External ActiveMQ
 
-By default the playbook will deploy and configure an ActiveMQ instance that is
-suitable for testing/evaluation only (single instance and default credentials).
+This playbook provides support for a single host declared inside the `activemq`
+group that will deploy and configure an ActiveMQ instance that is suitable for
+testing/evaluation only (no failover and default credentials).
 
 It's strongly suggested that you provide your own ActiveMQ instance by defining
-into the inventory file one host into to `external_activemq` group (nested
-inside the `external` group) as follows:
+into the inventory file exactly one host into to `external_activemq` group
+(nested inside the `external` group) as follows:
 
 ```yaml
 all:
@@ -238,7 +239,9 @@ all:
               activemq_port: 61617
 ```
 
-Every host under `external` group is skipped by the acs playbook.
+Every hosts under the `external` group is not directly managed by the acs
+playbook and is present in the inventory just for being referenced into the
+playbook.
 
 ### Custom Keystore
 
