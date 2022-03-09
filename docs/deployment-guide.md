@@ -223,25 +223,25 @@ group that will deploy and configure an ActiveMQ instance that is suitable for
 testing/evaluation only (no failover and default credentials).
 
 It's strongly suggested that you provide your own ActiveMQ instance by defining
-into the inventory file exactly one host into to `external_activemq` group
+in the inventory file, exactly one host as a member of the `external_activemq` group
 (nested inside the `external` group) as follows:
 
 ```yaml
 all:
   children:
+    external_activemq:
+      hosts:
+        whatever.mq.eu-west-1.amazonaws.com:
+          activemq_username: alfresco
+          activemq_password: alfresco
+          activemq_port: 61617
     external:
       children:
-        external_activemq:
-          hosts:
-            whatever.mq.eu-west-1.amazonaws.com:
-              activemq_username: alfresco
-              activemq_password: alfresco
-              activemq_port: 61617
+        external_activemq
 ```
 
 Every hosts under the `external` group is not directly managed by the acs
-playbook and is present in the inventory just for being referenced into the
-playbook.
+playbook and is required in the inventory just for the sake of architecture description.
 
 ### Custom Keystore
 
