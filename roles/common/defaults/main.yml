@@ -14,10 +14,10 @@ ats_home: "{{ binaries_folder }}/transform-service"
 nginx_host: "{% if groups.nginx | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.nginx[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
 repo_host: "{% if groups.repository | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.repository[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
 activemq_host: >-
-  {% if 'external_activemq' in groups %}
-  {{- groups['external_activemq'] | first -}}
+  {% if groups.external_activemq | default(False) %}
+  {{- groups.external_activemq | first -}}
   {% else %}
-  {{- groups['activemq'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | first -}}
+  {{- groups.activemq | map('extract', hostvars, ['ansible_default_ipv4','address']) | first -}}
   {% endif %}
 db_host: "{% if groups.database | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.database[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
 solr_host: "{% if groups.search | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.search[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
@@ -34,8 +34,8 @@ ports_cfg:
     https: "{{ ports.nginx.https | default(443) }}"
   activemq:
     openwire: >-
-      {% if 'external_activemq' in groups %}
-      {{- groups['external_activemq'][0].activemq_port | default(61616) -}}
+      {% if groups.external_activemq | default(False) %}
+      {{- groups.external_activemq[0].activemq_port | default(61616) -}}
       {% else %}
       {{- ports.activemq.openwire | default(61616) -}}
       {% endif %}
