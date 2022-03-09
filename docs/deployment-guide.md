@@ -237,7 +237,7 @@ all:
           activemq_port: 61617
     external:
       children:
-        external_activemq
+        external_activemq:
 ```
 
 Every hosts under the `external` group is not directly managed by the acs
