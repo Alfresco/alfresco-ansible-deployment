@@ -16,7 +16,6 @@
     name: alfresco-sync
     state: restarted
     daemon_reload: true
-  when: not go_signal.failed
   notify:
    - wait-alfresco-sync-ready
 
