@@ -24,6 +24,8 @@
     regexp: "^listen_addresses = '{{ postgres_listen_addresses }}'"
     insertafter: "^#listen_addresses = 'localhost'"
     line: "listen_addresses = '{{ postgres_listen_addresses }}'"
+  notify:
+    - restart-postgresql
 
 - name: Custom postgresql Configuration
   lineinfile:
@@ -33,6 +35,8 @@
     state: "{{ item['state'] | default(omit) }}"
     backup: true
   with_items: "{{ postgres_config }}"
+  notify:
+    - restart-postgresql
 
 - name: Configure postgresql client auth
   template:
@@ -41,11 +45,13 @@
     owner: postgres
     group: postgres
     mode: 'u=rw'
+  notify:
+    - restart-postgresql
 
 - name: Ensure postgresql service is started and enabled on boot
   systemd:
     name: "{{ postgresql_service }}"
-    state: restarted
+    state: started
     enabled: true
 
 - name: Configure Alfresco related Databases
@@ -70,6 +76,8 @@
         expires: infinity
         role_attr_flags: SUPERUSER
       no_log: true
+      tags:
+        - molecule-idempotence-notest
     
     - name: "Connect to {{ sync_db_name }} database and set user's password with no expire date"
       postgresql_user:
@@ -80,3 +88,5 @@
         expires: infinity
         role_attr_flags: SUPERUSER
       no_log: true
+      tags:
+        - molecule-idempotence-notest

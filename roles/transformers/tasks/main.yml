@@ -13,6 +13,8 @@
   register: libreoffice_download
   async: 3600
   poll: 0
+  tags:
+    - molecule-idempotence-notest
 
 - name: Download ImageMagick distribution
   vars:
@@ -40,6 +42,8 @@
   until: job_result.finished
   delay: 60
   retries: 59
+  tags:
+    - molecule-idempotence-notest
 
 - name: Extract libreoffice-dist-linux.gz
   become: true
