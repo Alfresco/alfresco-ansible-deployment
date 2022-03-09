@@ -9,7 +9,7 @@ upstream repo_lb {
         ip_hash;
 {% for repo in repo_hosts | unique %}
 {% if not repo.cluster_keepoff | default(false) %}
-        server {{ repo.local_addr | default(repo.inventory_name) }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s;
+        server {{ repo.local_addr | default(repo.inventory_name) }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=3 fail_timeout=120s;
 {% endif %}
 {% endfor %}
     }
@@ -24,7 +24,7 @@ upstream share_lb {
         ip_hash;
 {% for repo in repo_hosts | unique %}
 {% if not repo.cluster_keepoff | default(false) %}
-        server {{ repo.local_addr | default(repo.inventory_name) }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s;
+        server {{ repo.local_addr | default(repo.inventory_name) }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=3 fail_timeout=120s;
 {% endif %}
 {% endfor %}
     }
