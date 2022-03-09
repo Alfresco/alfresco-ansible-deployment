@@ -5,7 +5,6 @@
 
 - name: Ensure a list of packages installed
   become: true
-  become_user: root
   package:
     name: "{{ utils_repo }} + {{ utils_storage[cs_storage.type | default('tmpfs')] }}"
     state: present
@@ -45,21 +44,22 @@
     dest: "{{ download_location }}/{{ acs_zip_file }}"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
-    checksum: "sha1:{{ downloads.acs_zip_sha1_checksum }}"
+    checksum: sha1:{{ lookup('url', downloads.acs_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rw,g=r,o=r'
   register: distribution_download_result
   async: 900
   poll: 0
+  tags:
+    - molecule-idempotence-notest
 
 - name: Download AMPS
   become: true
-  become_user: root
   loop: "{{ amp_downloads }}"
   get_url:
     url: "{{ item.url }}"
-    checksum: sha1:{{ item.sha1_checksum }}
+    checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
     dest: "{{ item.dest }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
@@ -70,13 +70,14 @@
   async: 900
   no_log: true
   poll: 0
+  tags:
+    - molecule-idempotence-notest
 
 - name: Download postgresql jar
   become: true
-  become_user: root
   get_url:
     url: "{{ dependencies_url.postgresql_connector }}"
-    checksum: sha1:{{ dependencies_url.postgresql_connector_sha1_checksum }}
+    checksum: sha1:{{ lookup('url', dependencies_url.postgresql_connector_sha1_checksum_url) }}
     dest: "{{ tomcat_config_dir }}/lib/postgresql.jar"
     mode: 'u=rw,g=r,o=r'
     owner: "{{ username }}"
@@ -85,16 +86,16 @@
   when: repo_db_url == ""
   async: 900
   poll: 0
+  tags:
+    - molecule-idempotence-notest
 
 - name: Copy db_connector_repo to {{ tomcat_config_dir }}/lib/ folder
-  block:
-    - name: Copy db_connector_repo
-      copy:
-        src: "{{ inventory_dir }}/configuration_files/db_connector_repo/"
-        dest: "{{ tomcat_config_dir }}/lib/"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
+  copy:
+    src: "{{ inventory_dir }}/configuration_files/db_connector_repo/"
+    dest: "{{ tomcat_config_dir }}/lib/"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
   when: repo_db_url != ""
 
 - name: Add ACS home to setenv.sh
@@ -132,6 +133,8 @@
   delay: 30
   retries: 20
   register: job_result
+  tags:
+    - molecule-idempotence-notest
 
 - name: Add the configuration templates
   become: true
@@ -185,12 +188,10 @@
 
 - name: Download war files
   become: true
-  become_user: root
   loop: "{{ war_downloads }}"
-  changed_when: false
   get_url:
     url: "{{ item.url }}"
-    checksum: sha1:{{ item.sha1_checksum }}
+    checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
     dest: "{{ item.dest }}"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
@@ -201,6 +202,8 @@
   async: 900
   no_log: true
   poll: 0
+  tags:
+    - molecule-idempotence-notest
 
 - name: Copy user provided license file
   copy:
@@ -223,7 +226,7 @@
         dest: "{{ content_data_folder }}/keystore/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: 'u=rwx,g=rx,o=rx'
       when:
         - keystore.stat.exists
         - not use_custom_keystores
@@ -237,7 +240,7 @@
         dest: "{{ content_data_folder }}/keystore/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: 'u=rwx,g=rx,o=rx'
       when: use_custom_keystores
   when: acs.version is version('7.0.0', 'ge')
 
@@ -254,7 +257,7 @@
         dest: "{{ content_data_folder }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: 'u=rwx,g=rx,o=rx'
       when:
         - keystore.stat.exists
         - not use_custom_keystores
@@ -268,7 +271,7 @@
         dest: "{{ content_data_folder }}/keystore/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: 'u=rwx,g=rx,o=rx'
       when: use_custom_keystores
   when: acs.version is version('7.0.0', 'lt')
 
@@ -293,6 +296,7 @@
         state: absent
 
 - name: Create web application config files
+  become: true
   block:
     - name: Create config folders
       file:
@@ -318,7 +322,6 @@
       file:
         path: "{{ content_folder }}/web-server/conf"
         state: absent
-  become: true
 
 - name: Create alfresco-global.properties
   template:
@@ -327,6 +330,8 @@
     src: alfresco-global.properties
     dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
     mode: 'u=rwx,g=rwx,o=rx'
+  tags:
+    - molecule-idempotence-notest # see OPSEXP-1280
 
 - name: Check on amp download async task
   async_status:
@@ -336,6 +341,8 @@
   delay: 1
   retries: 300
   loop: "{{ amp_download_result.results }}"
+  tags:
+    - molecule-idempotence-notest
 
 - name: Create apply_amps.sh
   template:
@@ -349,10 +356,10 @@
   shell: '{{ content_folder }}/apply_amps.sh -nobackup -force'
   register: mmt_install
   changed_when: mmt_install.rc != 0
+  tags:
+    - molecule-idempotence-notest
 
 - name: Check on postgres download async task
-  become: true
-  become_user: root
   async_status:
     jid: "{{ postgresql_download.ansible_job_id }}"
   register: job_result
@@ -360,10 +367,10 @@
   delay: 1
   retries: 300
   when: repo_db_url == ""
+  tags:
+    - molecule-idempotence-notest
 
 - name: Check on war download async task
-  become: true
-  become_user: root
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: job_result
@@ -371,10 +378,11 @@
   delay: 2
   retries: 300
   loop: "{{ war_download_result.results }}"
+  tags:
+    - molecule-idempotence-notest
 
 - name: Setup common loader
   become: true
-  failed_when: false
   lineinfile:
     path: "{{ tomcat_config_dir }}/conf/catalina.properties"
     regexp: '^common.loader='
@@ -394,3 +402,5 @@
     - wait-for-db
     - set-go-signal
     - restart-alfresco-content
+  tags:
+    - molecule-idempotence-notest # see OPSEXP-1280

@@ -20,3 +20,13 @@
     state: restarted
     daemon_reload: true
   when: not go_signal.failed
+  notify:
+   - wait-alfresco-content-ready
+
+- name: wait-alfresco-content-ready
+  uri:
+    url: "http://127.0.0.1:{{ ports_cfg.repository.http }}/alfresco/api/-default-/public/alfresco/versions/1/probes/-ready-"
+  register: result
+  until: result.status == 200
+  retries: 60
+  delay: 10

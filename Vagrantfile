@@ -3,7 +3,7 @@ pass     = ENV['NEXUS_PASSWORD']
 
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
-  config.vm.network "private_network", ip: "172.100.100.100"
+  config.vm.network "private_network", ip: "192.168.56.100"
   config.vm.provider "virtualbox" do |v|
     v.memory = 10240
     v.cpus = 4

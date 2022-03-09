@@ -19,11 +19,11 @@ def get_ansible_vars(host):
     return ansible_vars
 
 def test_tomcat_exe_exists(host, get_ansible_vars):
-    "Check that Tomcat executable exists"
+    """Check that Tomcat executable exists"""
     assert_that(host.file("/opt/apache-tomcat-{}/bin/catalina.sh".format(get_ansible_vars["dependencies_version"]["tomcat"])).exists)
 
 def test_tomcat_version(host, get_ansible_vars):
-    "Check that Tomcat version is correct"
+    """Check that Tomcat version is correct"""
     cmd = host.run(". {}/setenv.sh && $TOMCAT_HOME/bin/catalina.sh version".format(get_ansible_vars["config_folder"]))
     assert_that(cmd.stdout, contains_string("Server version: Apache Tomcat/{}".format(get_ansible_vars["dependencies_version"]["tomcat"])))
 
@@ -43,6 +43,6 @@ def test_catalina_base(host, get_ansible_vars):
     assert_that(cmd.stderr, contains_string("{}/tomcat".format(get_ansible_vars["config_folder"])))
 
 def test_tomcat_service(host, get_ansible_vars):
-    "Check that Tomcat is enabled and running"
+    """Check that Tomcat is enabled and running"""
     assert_that(host.service("alfresco-content").is_running)
     assert_that(host.service("alfresco-content").is_enabled)

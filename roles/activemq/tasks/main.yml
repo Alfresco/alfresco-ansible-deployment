@@ -5,7 +5,7 @@
   become_user: root
   get_url:
     url: "{{ dependencies_url.activemq }}"
-    checksum: sha512:{{ dependencies_url.activemq_sha512_checksum }}
+    checksum: sha512:{{ dependencies_url.activemq_sha512_checksum_url }}
     dest: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
     mode: 'u=rwx,g=rwx,o=rx'
     owner: "{{ username }}"

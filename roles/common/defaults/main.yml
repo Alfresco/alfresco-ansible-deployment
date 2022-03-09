@@ -66,3 +66,6 @@ os_fallback:
   - ../vars/{{ ansible_system }}.yml
 
 ansible_installation_status_file: "{{ binaries_folder }}/.ansible_alfresco_components.status"
+
+nexus_user: "{{ lookup('env', 'NEXUS_USERNAME') | default(null) }}"
+nexus_password: "{{ lookup('env', 'NEXUS_PASSWORD') | default(null) }}"

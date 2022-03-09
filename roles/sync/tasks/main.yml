@@ -23,12 +23,12 @@
       get_url:
         url: "{{ downloads.sync_zip_url }}"
         dest: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
-        checksum: "sha1:{{ downloads.sync_zip_sha1_checksum }}"
+        checksum: sha1:{{ lookup('url', downloads.sync_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx'
         url_username: "{{ nexus_user }}"
-        url_password: "{{ nexus_password }}" # pragma: allowlist secret
+        url_password: "{{ nexus_password }}"
   become: true
     
 - name: Download postgresql jar
@@ -42,7 +42,7 @@
     - name: Download artefact
       get_url:
         url: "{{ dependencies_url.postgresql_connector }}"
-        checksum: sha1:{{ dependencies_url.postgresql_connector_sha1_checksum }}
+        checksum: sha1:{{ lookup('url', dependencies_url.postgresql_connector_sha1_checksum_url) }}
         dest: "{{ sync_home }}/service-sync/connectors/postgresql.jar"
         mode: 'u=rwx,g=rwx,o=rx'
         owner: "{{ username }}"
