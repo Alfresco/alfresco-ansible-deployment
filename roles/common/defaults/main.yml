@@ -17,7 +17,7 @@ activemq_host: >-
   {% if 'external_activemq' in groups %}
   {{- groups['external_activemq'] | first -}}
   {% else %}
-  {{- groups['activemq'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') -}}
+  {{- groups['activemq'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | first -}}
   {% endif %}
 db_host: "{% if groups.database | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.database[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
 solr_host: "{% if groups.search | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.search[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
