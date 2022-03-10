@@ -41,3 +41,8 @@ all:
     syncservice:
       hosts:
         sync.infra.local:
+    external_activemq:
+      hosts:
+    external:
+      children:
+        external_activemq:

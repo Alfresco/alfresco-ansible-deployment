@@ -27,3 +27,8 @@ all:
     syncservice:
       children:
         repository:
+    external_activemq:
+      hosts:
+    external:
+      children:
+        external_activemq:

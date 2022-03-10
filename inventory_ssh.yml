@@ -43,3 +43,8 @@ all:
       hosts:
         syncservice_1:
           ansible_host: targetIP
+    external_activemq:
+      hosts:
+    external:
+      children:
+        external_activemq:

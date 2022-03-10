@@ -1,0 +1,4 @@
+MOLECULE_IT_IMAGE_ID: ami-081ff4b9aa4e81a08
+MOLECULE_IT_EXTRA_VARS: tests/test-extra-vars.yml
+MOLECULE_IT_TEST_CONFIG: tests/test-config.json
+MOLECULE_IT_PLATFORM: ubuntu2004

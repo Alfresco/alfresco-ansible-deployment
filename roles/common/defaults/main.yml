@@ -13,7 +13,12 @@ ats_home: "{{ binaries_folder }}/transform-service"
 # Using default() filter for hostvars 1st level key requires ansible 2.10+
 nginx_host: "{% if groups.nginx | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.nginx[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
 repo_host: "{% if groups.repository | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.repository[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
-activemq_host: "{% if groups.activemq | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.activemq[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
+activemq_host: >-
+  {% if groups.external_activemq | default(False) %}
+  {{- groups.external_activemq | first -}}
+  {% else %}
+  {{- groups.activemq | map('extract', hostvars, ['ansible_default_ipv4','address']) | first -}}
+  {% endif %}
 db_host: "{% if groups.database | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.database[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
 solr_host: "{% if groups.search | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.search[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
 share_host: "{{ repo_host }}"
@@ -28,7 +33,12 @@ ports_cfg:
     http: "{{ ports.nginx.http | default(80) }}"
     https: "{{ ports.nginx.https | default(443) }}"
   activemq:
-    openwire: "{{ ports.activemq.openwire | default(61616) }}"
+    openwire: >-
+      {% if groups.external_activemq | default(False) %}
+      {{- groups.external_activemq[0].activemq_port | default(61616) -}}
+      {% else %}
+      {{- ports.activemq.openwire | default(61616) -}}
+      {% endif %}
   repository:
     http: "{{ ports.repository.http | default(8080) }}"
     https: "{{ ports.repository.https | default(8443) }}"
