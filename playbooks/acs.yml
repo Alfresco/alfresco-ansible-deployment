@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: all:!external
   gather_facts: false
   tasks:
     - name: Gather facts from all hosts

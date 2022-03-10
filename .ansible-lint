@@ -13,3 +13,4 @@ skip_list:
 
 kinds:
   - yaml: "**/molecule/**/vars*.yml"
+  - yaml: "**/molecule/**/hosts.yml"
