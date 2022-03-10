@@ -6,4 +6,4 @@ utils_storage:
 cluster_keepoff: false
 
 # Tomcat resource cache size (mainly for Share)
-tocmat_resource_cache_size: 20480
+tomcat_resource_cache_size: 20480
