@@ -350,6 +350,7 @@
     - molecule-idempotence-notest
 
 - name: Check on postgres download async task
+  become: true
   async_status:
     jid: "{{ postgresql_download.ansible_job_id }}"
   register: job_result
@@ -361,6 +362,7 @@
     - molecule-idempotence-notest
 
 - name: Check on war download async task
+  become: true
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: job_result
