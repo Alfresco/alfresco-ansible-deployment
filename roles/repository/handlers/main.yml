@@ -1,4 +1,4 @@
 ---
 # handlers file for repository
 - name: acs-monitored-restart
-  import_tasks: handlers/monitored-restart.yml
+  include_tasks: handlers/monitored-restart.yml
