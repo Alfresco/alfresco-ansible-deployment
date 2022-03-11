@@ -401,7 +401,7 @@
     insertafter: EOF
     block: "{{ lookup('file', role_path + '/../../configuration_files/alfresco-global.properties') }}"
   notify:
-    - restart-alfresco-content
+    - acs-monitored-restart
   tags:
     - molecule-idempotence-notest # see OPSEXP-1280
 

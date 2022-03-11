@@ -1,6 +1,6 @@
 ---
 # handlers file for repository
-- name: ACS monitored restart
+- name: acs-monitored-restart
   throttle: 1
   block:
     - name: restart-alfresco-content
