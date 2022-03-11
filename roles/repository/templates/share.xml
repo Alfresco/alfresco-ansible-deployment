@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<Context crossContext="true" cachingAllowed="true" cacheMaxSize="100000" docBase="{{ content_folder }}/web-server/webapps/share.war">
-  <Resources>
+<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/share.war">
+	<Resources cacheMaxSize="{{ tomcat_resource_cache_size }}">
     <PostResources base="{{ content_folder }}/modules/acs-share"
                    className="org.apache.catalina.webresources.DirResourceSet"
                    webAppMount="/WEB-INF/lib"/>

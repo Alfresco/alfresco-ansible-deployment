@@ -15,9 +15,9 @@ data.dir.root={{ data_dir }}
 # Properties loaded during alfresco tracking
 #
 
-alfresco.host={{ repo_host }}
-alfresco.port={{ ports_cfg.repository.http }}
-alfresco.port.ssl={{ ports_cfg.repository.https }}
+alfresco.host={{ nginx_host }}
+alfresco.port={{ ports_cfg.nginx.http }}
+alfresco.port.ssl={{ ports_cfg.nginx.https }}
 alfresco.baseUrl=/alfresco
 
 #alfresco.index.transformContent=false

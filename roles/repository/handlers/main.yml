@@ -1,32 +1,4 @@
 ---
 # handlers file for repository
-- name: wait-for-db
-  wait_for:
-    host: "{{ db_host }}"
-    port: "{{ ports_cfg.postgres.sql }}"
-  register: go_signal
-  when: repo_db_url == ""
-
-- name: set-go-signal
-  set_fact:
-    go_signal: {
-      'failed': false
-    }
-  when: repo_db_url != ""
-
-- name: restart-alfresco-content
-  service:
-    name: "alfresco-content"
-    state: restarted
-    daemon_reload: true
-  when: not go_signal.failed
-  notify:
-   - wait-alfresco-content-ready
-
-- name: wait-alfresco-content-ready
-  uri:
-    url: "http://127.0.0.1:{{ ports_cfg.repository.http }}/alfresco/api/-default-/public/alfresco/versions/1/probes/-ready-"
-  register: result
-  until: result.status == 200
-  retries: 60
-  delay: 10
+- name: acs-monitored-restart
+  include_tasks: handlers/monitored-restart.yml

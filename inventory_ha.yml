@@ -23,6 +23,8 @@ all:
       hosts:
         ecm1.infra.local:
         ecm2.infra.local:
+        ingester.infra.local:
+          cluster_keepoff: true
     activemq:
       hosts:
         mq.infra.local:

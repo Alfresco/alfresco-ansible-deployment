@@ -15,14 +15,13 @@ share_folders:
   - /alfresco-mmt
 
 share_templates:
-  - custom-slingshot-application-context.xml
   - share-config-custom.xml
   - smartfolders-amp-actions-config.xml
 
 repository:
-  protocol: http
-  host: "{{ repo_host }}"
-  port: "{{ ports_cfg.repository.http }}"
+  protocol: "{{ 'https' if use_ssl | bool else 'http' }}"
+  host: "{{ nginx_host }}"
+  port: "{{ ports_cfg.nginx.https if use_ssl | bool else ports_cfg.nginx.http }}"
 
 share_port: "{{ ports_cfg.repository.http }}"
 

@@ -129,8 +129,8 @@ server:
 
 repo:
     scheme: http
-    hostname: {{ repo_host }}
-    port: {{ ports_cfg.repository.http }}
+    hostname: {{ nginx_host }}
+    port: {{ ports_cfg.nginx.http }}
     syncconfig:
         url: ${repo.scheme}://${repo.hostname}:${repo.port}/alfresco/service/devicesync/config
         # maximum retries for connection with repo in case of unavailaible service

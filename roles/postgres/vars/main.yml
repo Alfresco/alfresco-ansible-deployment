@@ -1,31 +1,4 @@
 ---
-postgres_client_auth:
-  - type: local
-    database: "{{ repo_db_name }}"
-    user: "{{ repo_db_username }}"
-    address:
-    method: password
-  - type: local
-    database: "{{ sync_db_name }}"
-    user: "{{ sync_db_username }}"
-    address:
-    method: password
-  - type: host
-    database: all
-    user: all
-    address: 127.0.0.1/32
-    method: md5
-  - type: host
-    database: all
-    user: all
-    address: "{{ repo_host }}/32"
-    method: md5
-  - type: host
-    database: all
-    user: all
-    address: "{{ sync_host }}/32"
-    method: md5
-
 postgresql_rpm_repo: http://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm
 
 postgresql_service: postgresql-{{ dependencies_version.postgres_major_version }}

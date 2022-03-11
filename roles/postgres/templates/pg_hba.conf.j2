@@ -3,7 +3,10 @@
 # ===================================================
 #
 # See: https://www.postgresql.org/docs/current/static/auth-pg-hba-conf.html
-local   all             postgres                                peer
-{% for client in postgres_client_auth %}
-{{ client.type }} {{ client.database }} {{ client.user }} {{ client.address }}  {{ client.method }}
-{% endfor %}
+local all postgres peer
+host all all 127.0.0.1/32 md5
+{% for host in repo_hosts | map(attribute='local_addr') %}
+host {{ repo_db_name }} {{ repo_db_username }} {{ host }}/32 md5
+{%endfor %}
+host {{ sync_db_name }} {{ sync_db_username }} {{ sync_host }}/32 md5
+

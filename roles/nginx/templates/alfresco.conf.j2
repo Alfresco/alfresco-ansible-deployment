@@ -1,0 +1,45 @@
+map $remote_addr $solr_trackers {
+    default     0;
+{% for solr_tracker in [ solr_host ] | unique %}
+    {{ solr_tracker }}	   1;
+{% endfor %}
+}
+
+upstream repo_lb {
+        ip_hash;
+{% for repo in repo_hosts | unique %}
+{% if not repo.cluster_keepoff | default(false) %}
+        server {{ repo.local_addr | default(repo.inventory_name) }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=3 fail_timeout=120s;
+{% endif %}
+{% endfor %}
+    }
+
+upstream tracker_lb {
+{% for repo in repo_hosts | unique %}
+        server {{ repo.local_addr | default(repo.inventory_name) }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=2 fail_timeout=8s {% if not repo.cluster_keepoff | default(false) and repo_hosts | selectattr('cluster_keepoff', 'true') %}backup{% endif %}; 
+{% endfor %}
+    }
+
+upstream share_lb {
+        ip_hash;
+{% for repo in repo_hosts | unique %}
+{% if not repo.cluster_keepoff | default(false) %}
+        server {{ repo.local_addr | default(repo.inventory_name) }}:{{ ports_cfg.repository.http | default(8080) }} max_fails=3 fail_timeout=120s;
+{% endif %}
+{% endfor %}
+    }
+
+server {
+    access_log {{ logs_folder }}/nginx.alfresco.access.log;
+    error_log  {{ logs_folder }}/nginx.alfresco.error.log error;
+
+    listen {{ item.listen | default('80') }}{% if item.listen == '443' %} ssl{% endif %};
+{% if item.server_name is defined %}
+    server_name {{ item.server_name }};
+{% endif %}
+{% if item.listen == '443' %}
+    ssl_certificate /etc/nginx/{{ item.cert_crt }};
+    ssl_certificate_key /etc/nginx/{{ item.cert_key }};
+{% endif %}
+    include {{ nginx_vhost_path }}/alfresco_proxy.include;
+}

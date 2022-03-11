@@ -42,7 +42,31 @@ platforms:
       Department: Engineering
       Production: false
 
-  - name: repository_instance
+  - name: repository_electron
+    image: ${MOLECULE_IT_IMAGE_ID}
+    instance_type: t3.medium
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    groups:
+      - repository
+    tags:
+      Name: molecule_${MOLECULE_IT_PLATFORM}_repo_${BRANCH_NAME}_${BUILD_NUMBER}
+      Owner: Ops Readiness Team
+      Department: Engineering
+      Production: false
+
+  - name: repository_neutron
+    image: ${MOLECULE_IT_IMAGE_ID}
+    instance_type: t3.medium
+    vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    groups:
+      - repository
+    tags:
+      Name: molecule_${MOLECULE_IT_PLATFORM}_repo_${BRANCH_NAME}_${BUILD_NUMBER}
+      Owner: Ops Readiness Team
+      Department: Engineering
+      Production: false
+
+  - name: repository_proton
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
@@ -112,9 +136,9 @@ provisioner:
   inventory:
     links: 
       group_vars: ../../group_vars
+      host_vars: host_vars
   playbooks:
     create: ../default/create.yml
-    prepare: ../default/prepare.yml
     converge: ../../playbooks/acs.yml
     verify: ../default/verify.yml
     destroy: ../default/destroy.yml

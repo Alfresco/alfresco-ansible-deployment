@@ -34,16 +34,25 @@
   when: item.listen == '443'
   with_items: "{{ nginx_vhosts }}"
 
-- name: Add managed vhost config files.
-  template:
-    src: "{{ item.template|default(nginx_vhost_template) }}"
-    dest: "{{ nginx_vhost_path }}/{{ item.filename }}"
-    force: true
-    owner: root
-    group: "{{ root_group }}"
-    mode: 0644
-  when: item.state|default('present') != 'absent'
-  with_items: "{{ nginx_vhosts }}"
+- name: Vhosts config
+  block:
+    - name:  Add managed vhost config files.
+      template:
+        src: "{{ item.template|default(nginx_vhost_template) }}"
+        dest: "{{ nginx_vhost_path }}/{{ item.filename }}"
+        force: true
+        owner: root
+        group: "{{ root_group }}"
+        mode: 0644
+      with_items: "{{ nginx_vhosts }}"
+      when: item.state|default('present') != 'absent'
+    - name: Add required proxy config
+      template:
+        src: alfresco_proxy.j2
+        dest: "{{ nginx_vhost_path }}/alfresco_proxy.include"
+        owner: root
+        group: root
+        mode: 0644
   notify: reload-nginx
 
 - name: Remove legacy vhosts.conf file.

@@ -1,0 +1,122 @@
+---
+- name: Prepare Pre-requisites
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Make sure python3 is installed
+      package:
+        name: python3
+        state: present
+      become: true
+
+- name: Prepare Certificates
+  hosts: localhost
+  gather_facts: false
+  vars:
+    project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+  tasks:
+    - name: Gather EC2 facts
+      amazon.aws.ec2_metadata_facts:
+      delegate_to: "{{ item }}"
+      loop: "{{ groups.nginx }}"
+
+    - name: "Set variables"
+      set_fact:
+        certificate_domain: "{{ ansible_ec2_public_hostname }}"
+        private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.key"
+        cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
+
+    - name: Create private key (RSA, 4096 bits)
+      community.crypto.openssl_privatekey:
+        path: "{{ private_key_path }}"
+
+    - name: Create CSR for {{ certificate_domain }} self-signed certificate
+      community.crypto.openssl_csr_pipe:
+        privatekey_path: "{{ private_key_path }}"
+        common_name: "{{ certificate_domain }}"
+        organization_name: Hyland
+      register: csr
+
+    - name: Create self-signed certificate from CSR
+      community.crypto.x509_certificate:
+        path: "{{ cert_path }}"
+        csr_content: "{{ csr.csr }}"
+        privatekey_path: "{{ private_key_path }}"
+        provider: selfsigned
+
+    - name: Configure FQDN in extra vars file
+      ansible.builtin.replace:
+        path: "{{ project_dir }}/tests/test-ssl.yml"
+        regexp: 'TEST_FQDN'
+        replace: "{{ certificate_domain }}"
+
+    - name: Creating cluster contentstore
+      when: molecule_yml.platforms | selectattr('name', 'in', groups.repository) | length > 1
+      block:
+        - name: get EC2 instance info
+          amazon.aws.ec2_instance_info:
+            filters:
+              "tag:Name": molecule_{{ lookup('env', 'MOLECULE_IT_PLATFORM') }}_repo_{{ lookup('env', 'BRANCH_NAME') }}_{{ lookup('env', 'BUILD_NUMBER') }}
+          register: molecule_ec2
+    
+        - name: Create Shared contentstore
+          community.aws.efs:
+            state: present
+            name: molecule-{{ lookup('env', 'MOLECULE_SCENARIO_NAME') }}-{{ lookup('env', 'BRANCH_NAME') }}-{{ lookup('env', 'BUILD_NUMBER') }}
+            targets:
+              - subnet_id: "{{ molecule_yml.platforms | selectattr('name', 'in', groups.repository) | map(attribute='vpc_subnet_id') | first }}"
+                security_groups: "{{ molecule_ec2.instances | json_query('[].security_groups[].group_id') | unique }}"
+            tags:
+              Name: molecule-{{ lookup('env', 'MOLECULE_SCENARIO_NAME') }}-{{ lookup('env', 'BRANCH_NAME') }}-{{ lookup('env', 'BUILD_NUMBER') }}
+              Owner: Ops Readiness Team
+              Department: Engineering
+              Production: false
+          loop: 
+            - "{{ molecule_yml.platforms | selectattr('name', 'in', groups.repository) | first }}"
+          register: contentstore
+
+        - name: Generate repo host_vars files
+          blockinfile:
+            state: present
+            block: |
+              cs_storage:
+                type: nfs
+                device: {{ contentstore.results[0].efs.filesystem_address }}{{ lookup('env', 'BRANCH_NAME') }}-{{ lookup('env', 'BUILD_NUMBER') }}
+                options: _netdev,noatime,nodiratime,tcp,soft,intr
+            path: host_vars/{{ item }}.yml
+          loop: "{{ molecule_yml.platforms | selectattr('name', 'in', groups.repository) | map(attribute='name') }}"
+
+        - name: Prepare contentstore FS
+          when: molecule_yml.platforms | selectattr('name', 'in', groups.repository) | length > 1
+          become: true
+          delegate_to: "{{ groups.repository | first }}"
+          block:
+            - name: install required packages
+              package:
+                state: present
+                name: nfs-utils
+            # Wait up to ~10 min for DNS propagation
+            - name: check for DNS propagation
+              ansible.builtin.command:
+                cmd: getent hosts {{ contentstore.results[0].efs.filesystem_address.split(':/')[0] }}
+              until: resolvcheck.rc == 0
+              register: resolvcheck
+              retries: 9
+              delay: 60
+            - name: mount the EFS volume
+              ansible.posix.mount:
+                path: /mnt
+                src: "{{ hostvars.localhost.contentstore.results[0].efs.filesystem_address }}"
+                fstype: nfs
+                state: mounted
+            - name: create contentstore root folder
+              file:
+                state: directory
+                mode: 0777
+                path: /mnt/{{ lookup('env', 'BRANCH_NAME') }}-{{ lookup('env', 'BUILD_NUMBER') }}
+            - name: umount the EFS volume
+              ansible.posix.mount:
+                path: /mnt
+                src: "{{ hostvars.localhost.contentstore.results[0].efs.filesystem_address }}"
+                fstype: nfs
+                state: absent

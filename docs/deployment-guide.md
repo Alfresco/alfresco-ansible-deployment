@@ -477,6 +477,39 @@ Once ACS has initialized access the system using the following URLs with a brows
 * Repository: `http://<nginx-host-ip>/alfresco`
 * API Explorer: `http://<nginx-host-ip>/api-explorer`
 
+### ACS cluster
+
+Due to load or high availability needs, you might want to deploy a cluster of several repository nodes. This can be achieved rather simply by:
+
+* Giving the playbook the location of the shared storage used for the ACS contentstore (See [Shared storage documentation](shared-contentstore.md) for details).
+* Specifying several hosts within the repository hosts group
+
+> :warning: as mention in the [Alfresco official documentation](https://docs.alfresco.com/content-services/latest/admin/cluster/#scenarioredundancycluster), "All the servers in a cluster should have static IP addresses assigned to them".
+> Not meeting this pre-requisite won't prevent the playbook from working but the cluster might will most likely stop working in case one of the server in the architecture changes IP address.
+
+For example:
+
+````yaml
+...
+    repository:
+      vars:
+        cs_storage:
+          type: nfs
+          device: nas.infra.local:/exports/contentstore
+          options: _netdev,noatime,nodiratim
+      hosts:
+        ecm1.infra.local:
+        ecm2.infra.local:
+        ingester.infra.local:
+          cluster_keepoff: true
+...
+```
+
+In some circumstances, you may want to have a repo node that's dedicated to a scheduled task (such as ingesting massive amount of documents). Depending on the nature of the task and the requirements of your organisation, it may be preferable to not make this node part of the ACS cluster.
+In that case, you can add the `cluster_keepoff` variable to one of the `repository` group nodes'. It will provision the node with the repository and share services but make sure it not taking part in neither the share, nor the repository cluster realm.
+
+> A typical use case is to have a dedicated Solr tracking node. The playbook will then prefer to use that dedicated node - if it finds one - for solr tracking and only use the other as backup server (no load balancing)
+
 ## Cleanup
 
 What needs to be removed from a system will depend on your inventory configuration. The steps below presume a localhost or single machine deployment i.e. where all roles were run on the same machine.

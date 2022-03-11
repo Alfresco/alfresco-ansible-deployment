@@ -3,3 +3,7 @@
 utils_repo: []
 utils_storage:
   tmpfs: []
+cluster_keepoff: false
+
+# Tomcat resource cache size (mainly for Share)
+tomcat_resource_cache_size: 20480

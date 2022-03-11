@@ -24,13 +24,6 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", repository_role)["ansible_facts"]["repository_role"])
     return ansible_vars
 
-def test_newly_added_properties_are_set(host, get_ansible_vars):
-    """Check that extra props exists in global properties file"""
-    content = host.file("/etc/opt/alfresco/content-services/classpath/alfresco-global.properties").content
-    assert_that(b'index.recovery.mode=NONE' in content)
-    assert_that(b'index.subsystem.name=noindex' in content)
-    assert_that(host.socket("tcp://0.0.0.0:1121").is_listening)
-
 def test_repo_service_is_running_and_enabled(host, get_ansible_vars):
     """Check repository service"""
     repository = host.service("alfresco-content.service")
@@ -131,3 +124,10 @@ def test_mounting_storage(host):
     # Best effort options check: at least find one common option (options may not be returned as passed)
     if repovars["cs_storage"]["options"]:
         assert_that(set(host.mount_point(dir_root).options) & set(repovars["cs_storage"]["options"].split(',')))
+
+def test_newly_added_properties_are_set(host, get_ansible_vars):
+    "Check that extra props exists in global properties file"
+    content = host.file("/etc/opt/alfresco/content-services/classpath/alfresco-global.properties").content
+    assert_that(b'index.recovery.mode=NONE' in content)
+    assert_that(b'index.subsystem.name=noindex' in content)
+    assert_that(host.socket("tcp://0.0.0.0:1121").is_listening)
