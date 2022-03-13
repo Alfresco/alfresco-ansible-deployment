@@ -401,9 +401,38 @@
     insertafter: EOF
     block: "{{ lookup('file', role_path + '/../../configuration_files/alfresco-global.properties') }}"
   notify:
-    - acs-monitored-restart
+    - restart-alfresco-content
   tags:
     - molecule-idempotence-notest # see OPSEXP-1280
+
+- name: Create monitoring start up service
+  template:
+    src: alfresco-content-monitored-startup.sh.j2
+    dest: "{{ binaries_folder }}/alfresco-content-monitored-startup.sh"
+    mode: 0750
+  notify:
+    - systemd-reload
+
+- name: Create monitoring start up service
+  become: true
+  template:
+    src: alfresco-content-monitored-startup.service.j2
+    dest: /etc/systemd/system/alfresco-content-monitored-startup.service
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - systemd-reload
+
+- name: Amend alfresco-content unit
+  become: true
+  lineinfile:
+    line: BindsTo=alfresco-content-monitored-startup.service
+    insertafter: [Unit]
+    path: /etc/systemd/system/alfresco-content.service
+    firstmatch: yes
+  notify:
+    - systemd-reload
 
 - name: wait-for-db
   wait_for:

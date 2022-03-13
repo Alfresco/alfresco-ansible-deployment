@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# This script aims at providing a watcher for Alfresco Content Service
+# It ensure the web application has been fully deployed and is fully functionnal
+
+ready_probe() {
+  server_status=$(curl -o /dev/null -sw %{http_code} http://localhost:{{ ports_cfg.repository.http }}/alfresco/api/-default-/public/alfresco/versions/1/probes/-ready-)
+  [ ${server_status:-999} -eq 200 ] && return 0 || return 1
+}
+
+is_svc_up() {
+  sd_status=$(systemctl show --value -p ActiveState $1)
+  if [ "${sd_status}" == "active" ]
+  then return 0
+  else return 1
+  fi
+}
+
+set_svc_status() {
+  case $1 in
+    up)
+      systemd-notify --pid=$$ --ready --status="ACS is ready to process connections"
+    ;;
+    down)
+      systemd-notify --pid=$$ --status="Waiting for ACS to startup"
+    ;;
+  esac
+}
+
+echo "Starting to monitor Alfresco Content Service availability"
+
+while :
+  do if ready_probe && is_svc_up "$SVC"
+      then sleep 20
+    elif ready_probe
+      then set_svc_status up
+        echo "Notifying service startup" && sleep 20
+    elif is_svc_up "$SVC"
+      then set_svc_status down
+        echo "service activation in progress..." && sleep 20
+    else sleep 20
+    fi
+  done
