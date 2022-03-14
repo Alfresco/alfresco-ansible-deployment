@@ -32,11 +32,10 @@ def test_selinux(host):
         assert_that(cmd, contains_string("--> off"))
 
 def test_nginx_configuration(host, get_ansible_vars):
-    """Check that nginx file exist"""
+    """Check that nginx configuration exists and that is valid"""
     assert_that(host.file("/usr/sbin/nginx").exists)
     assert_that(host.file(get_ansible_vars["nginx_conf_file_path"]).exists)
 
-    """Check that the configuration is valid"""
     cmd = host.run("nginx -t")
     assert_that(cmd.stderr, contains_string("{} syntax is ok".format(get_ansible_vars["nginx_conf_file_path"])))
     assert_that(cmd.stderr, contains_string("{} test is successful".format(get_ansible_vars["nginx_conf_file_path"])))

@@ -204,9 +204,17 @@ jobs:
 
     - stage: Integration tests
       name: Molecule ACS 6.2.2 Enterprise on Centos 7
+      if: branch = master
       env:
         MOLECULE_IT_SCENARIO=default
         MOLECULE_IT_CONFIG=vars-centos7.yml
+
+    - stage: Integration tests
+      name: Molecule ACS 7.1.1 Enterprise on RHEL7
+      if: branch = master
+      env:
+        MOLECULE_IT_SCENARIO=default
+        MOLECULE_IT_CONFIG=vars-rhel7.yml
 
     - stage: Integration tests
       name: Molecule ACS 7.1.1 Enterprise on RHEL8
@@ -218,7 +226,14 @@ jobs:
       name: Molecule ACS 7.1.1 Enterprise on Ubuntu 20.04
       env:
         MOLECULE_IT_SCENARIO=default
-        MOLECULE_IT_CONFIG=vars-ubuntu2004.yml
+        MOLECULE_IT_CONFIG=vars-ubuntu20.yml
+
+    - stage: Integration tests
+      name: Molecule ACS 7.1.1 Enterprise on Ubuntu 18.04
+      if: branch = master
+      env:
+        MOLECULE_IT_SCENARIO=default
+        MOLECULE_IT_CONFIG=vars-ubuntu18.yml
 
     - stage: Integration tests
       name: Molecule ACS 7.1.1 Community on RHEL8
@@ -230,6 +245,7 @@ jobs:
 
     - stage: Integration tests
       name: Molecule ACS 7.1.1 Enterprise on multiple RHEL8
+      if: branch = master
       env:
         MOLECULE_IT_SCENARIO=multimachine
         MOLECULE_IT_CONFIG=vars.yml

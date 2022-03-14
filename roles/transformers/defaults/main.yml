@@ -1,16 +1,3 @@
 ---
 # defaults file for roles/transformers
-utils_transform:
-  - cairo
-  - cups-libs
-  - libSM
-  - unzip
-  - which
-  - fontconfig
-  - dejavu-fonts-common
-  - fontpackages-filesystem
-  - freetype
-  - libpng
-  - dejavu-sans-fonts
-
 pkg_format: "{% if ansible_pkg_mgr == 'apt' %}deb{% else %}rpm{% endif %}"

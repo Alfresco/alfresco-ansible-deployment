@@ -75,6 +75,9 @@ os_fallback:
   - ../vars/{{ ansible_os_family }}.yml
   - ../vars/{{ ansible_system }}.yml
 
+os_family_yml: "{{ ansible_os_family }}.yml"
+os_version_yml: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+
 ansible_installation_status_file: "{{ binaries_folder }}/.ansible_alfresco_components.status"
 
 nexus_user: "{{ lookup('env', 'NEXUS_USERNAME') | default(null) }}"
