@@ -49,7 +49,7 @@
     group: "{{ group_name }}"
     mode: 'u=rw,g=r,o=r'
   register: distribution_download_result
-  async: 900
+  async: 1800
   poll: 0
   tags:
     - molecule-idempotence-notest
@@ -130,8 +130,8 @@
   async_status:
     jid: "{{ distribution_download_result.ansible_job_id }}"
   until: job_result.finished
-  delay: 30
-  retries: 20
+  delay: 10
+  retries: 180
   register: job_result
   tags:
     - molecule-idempotence-notest
