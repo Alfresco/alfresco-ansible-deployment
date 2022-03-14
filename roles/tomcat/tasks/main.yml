@@ -174,3 +174,5 @@
   when: install_check.rc != 0 or dependencies_version.tomcat not in install_check.stderr
   notify:
     - enable-alfresco-content
+  tags:
+    - molecule-idempotence-notest # Files is dealt with outside this role
