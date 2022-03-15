@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
     ansible.become = true
     ansible.install_mode = "pip_args_only"
     ansible.pip_args = "-r /vagrant/requirements.txt"
-    ansible.pip_install_cmd = "sudo apt-get install -y python3 && curl -s https://bootstrap.pypa.io/get-pip.py | sudo python3"
+    ansible.pip_install_cmd = "sudo apt-get install -y python3-pip python-is-python3 haveged && sudo ln -s -f /usr/bin/pip3 /usr/bin/pip"
     ansible.galaxy_role_file = "requirements.yml"
   end
 end
