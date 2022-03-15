@@ -44,6 +44,7 @@
         owner: root
         group: "{{ root_group }}"
         mode: 0644
+      notify: reload-nginx
       with_items: "{{ nginx_vhosts }}"
       when: item.state|default('present') != 'absent'
     - name: Add required proxy config
@@ -53,7 +54,7 @@
         owner: root
         group: root
         mode: 0644
-  notify: reload-nginx
+      notify: reload-nginx
 
 - name: Remove legacy vhosts.conf file.
   file:
