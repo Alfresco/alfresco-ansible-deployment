@@ -1,5 +1,5 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "bento/ubuntu-20.04"
+  config.vm.box = "ubuntu/focal64"
   config.vm.network "private_network", ip: "192.168.56.100"
   config.vm.provider "virtualbox" do |v|
     v.memory = 10240
