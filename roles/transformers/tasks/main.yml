@@ -9,6 +9,7 @@
     file: "{{ os_version_yml }}"
 
 - name: Download libreoffice package archive
+  become: true
   get_url:
     url: "{{ libreoffice_archive_url }}"
     checksum: sha1:{{ libreoffice_archive_sha1_checksum_url }}
@@ -39,6 +40,7 @@
     state: present
 
 - name: Verifying if libreoffice finished downloading
+  become: true
   async_status:
     jid: "{{ libreoffice_download.ansible_job_id }}"
   register: job_result
