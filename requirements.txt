@@ -11,3 +11,4 @@ pytest-testinfra==6.6.0
 requests==2.27.1
 yamllint==1.26.3
 dnspython==2.2.1
+Jinja2==3.0.3
