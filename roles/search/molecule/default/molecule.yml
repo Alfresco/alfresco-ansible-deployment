@@ -15,11 +15,13 @@ platforms:
       - /tmp
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    groups:
+      - repository
+      - search
 provisioner:
-  name: ansible
   ansible_args:
-    - --inventory=../../inventory_local.yml
     - --limit=search
+  name: ansible
   inventory:
     links: 
       group_vars: ../../../../group_vars
