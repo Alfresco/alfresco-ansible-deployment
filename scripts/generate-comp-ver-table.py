@@ -10,8 +10,12 @@ import yaml
 def get_acs_extra_vars_files():
     """Return list of extra-vars files in repository."""
     var_files = glob.glob("*-extra-vars.yml")[::-1]
-    #move community to the end of list
+    # explicit sorting to avoid filesystem ordering issues
+    var_files.sort()
+    var_files.reverse()
+    # move community to the end of list
     var_files.append(var_files.pop(var_files.index('community-extra-vars.yml')))
+    # add latest version at the start
     var_files.insert(0, 'group_vars/all.yml')
     return var_files
 
