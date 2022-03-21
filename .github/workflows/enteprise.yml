@@ -1,19 +1,44 @@
-name: "molecule.tests"
+name: "enterprise"
 on:
   push:
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+          cache: "pip"
+
+      - run: pip install pre-commit
+
+      - name: Cache pre-commit envs
+        uses: actions/cache@v2
+        env:
+          cache-name: pre-commit
+        with:
+          path: ~/.cache/pre-commit
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+
+      - run: pre-commit run --all-files --show-diff-on-failure
+
   molecule:
+    needs: lint
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         molecule_distro:
-          - { "image":"centos:7" }
-          - { "image":"ubuntu:20.04" }
+          - { "image": "centos:7" }
+          - { "image": "ubuntu:20.04" }
         role:
           #- { "name": "activemq"}
           #- { "name": "adw"}
-          - { "name": "common"}
+          - { "name": "common" }
           #- { "name": "java"}
           #- { "name": "nginx"}
           #- { "name": "repository"}
@@ -32,8 +57,9 @@ jobs:
       - name: Set up Python 3.9
         uses: actions/setup-python@v3
         with:
-          python-version: '3.9'
-          cache: 'pip'
+          python-version: "3.9"
+          cache: "pip"
+
       - run: pip install -r requirements.txt
 
       - name: Cache ansible-galaxy collections
@@ -60,8 +86,8 @@ jobs:
       fail-fast: false
       matrix:
         molecule_scenario:
-          - { "name":"default", "vars": "vars-rhel8.yml" }
-          - { "name":"default", "vars": "vars-rhel8-community.yml" }
+          - { "name": "default", "vars": "vars-rhel8.yml" }
+          - { "name": "default", "vars": "vars-rhel8-community.yml" }
     env:
       PY_COLORS: 1
       BUILD_NUMBER: ${{ github.run_id }}
@@ -75,8 +101,9 @@ jobs:
       - name: Set up Python 3.9
         uses: actions/setup-python@v3
         with:
-          python-version: '3.9'
-          cache: 'pip'
+          python-version: "3.9"
+          cache: "pip"
+
       - run: pip install -r requirements.txt
 
       - name: Cache ansible-galaxy collections
