@@ -26,6 +26,15 @@ jobs:
           python-version: '3.9'
           cache: 'pip'
       - run: pip install -r requirements.txt
+
+      - name: Cache ansible-galaxy collections
+        uses: actions/cache@v2
+        env:
+          cache-name: collections
+        with:
+          path: ~/.ansible/collections
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+
       - run: ansible-galaxy install -r requirements.yml
 
       - name: Run tests
