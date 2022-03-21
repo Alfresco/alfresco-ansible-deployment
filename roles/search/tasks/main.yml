@@ -95,11 +95,11 @@
 - name: Add "{{ binaries_dir }}/solr.sh"
   become: true
   template:
-    src: solr.sh
+    src: solr.sh.j2
     dest: "{{ binaries_dir }}/solr.sh"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
+    mode: 0700
   notify:
     - restart-search
 
