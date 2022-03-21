@@ -8,7 +8,7 @@ jobs:
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         molecule_distro:
           - { "image":"centos:7" }
@@ -16,6 +16,16 @@ jobs:
         role:
           - { "name": "activemq"}
           - { "name": "adw"}
+          - { "name": "common"}
+          - { "name": "java"}
+          - { "name": "nginx"}
+          - { "name": "repository"}
+          - { "name": "search"}
+          - { "name": "sfs"}
+          - { "name": "sync"}
+          - { "name": "tomcat"}
+          - { "name": "transformers"}
+          - { "name": "trouter"}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
