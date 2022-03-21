@@ -11,18 +11,18 @@ jobs:
           - { "image":"centos:7" }
           - { "image":"ubuntu:20.04" }
         role:
-          - { "name": "activemq"}
-          - { "name": "adw"}
+          #- { "name": "activemq"}
+          #- { "name": "adw"}
           - { "name": "common"}
-          - { "name": "java"}
-          - { "name": "nginx"}
-          - { "name": "repository"}
-          - { "name": "search"}
-          - { "name": "sfs"}
-          - { "name": "sync"}
-          - { "name": "tomcat"}
-          - { "name": "transformers"}
-          - { "name": "trouter"}
+          #- { "name": "java"}
+          #- { "name": "nginx"}
+          #- { "name": "repository"}
+          #- { "name": "search"}
+          #- { "name": "sfs"}
+          #- { "name": "sync"}
+          #- { "name": "tomcat"}
+          #- { "name": "transformers"}
+          #- { "name": "trouter"}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
