@@ -14,7 +14,7 @@ jobs:
           - { "image":"centos:7" }
           - { "image":"ubuntu:20.04" }
         role:
-          - { "name": "activeq"}
+          - { "name": "activemq"}
           - { "name": "adw"}
     steps:
       - name: Checkout
@@ -38,7 +38,7 @@ jobs:
       - run: ansible-galaxy install -r requirements.yml
 
       - name: Run tests
-        run: |
-          cd roles/{{ matrix.role.name }}
-          MOLECULE_ROLE_IMAGE=${{ matrix.molecule_distro.image }}
-          molecule test
+        env:
+          MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
+        working-directory: roles/${{ matrix.role.name }}
+        run: molecule test
