@@ -64,7 +64,7 @@ jobs:
           cache-name: collections
         with:
           path: ~/.ansible/collections
-          key: ${{ runner.os }}-build-${{ env.cache-name }}
+          key: ${{ runner.os }}-community-${{ env.cache-name }}
 
       - run: ansible-galaxy install -r requirements.yml
 

@@ -79,8 +79,13 @@ jobs:
       fail-fast: false
       matrix:
         molecule_scenario:
+          - { "name": "default", "vars": "vars-centos7.yml" }
+          - { "name": "default", "vars": "vars-rhel7.yml" }
           - { "name": "default", "vars": "vars-rhel8.yml" }
+          - { "name": "default", "vars": "vars-ubuntu20.yml" }
+          - { "name": "default", "vars": "vars-ubuntu18.yml" }
           - { "name": "default", "vars": "vars-rhel8-community.yml" }
+          - { "name": "multimachine", "vars": "vars.yml" }
     env:
       PY_COLORS: 1
       BUILD_NUMBER: ${{ github.run_id }}
@@ -105,22 +110,15 @@ jobs:
           cache-name: collections
         with:
           path: ~/.ansible/collections
-          key: ${{ runner.os }}-build-${{ env.cache-name }}
+          key: ${{ runner.os }}-enterprise-${{ env.cache-name }}
 
       - run: ansible-galaxy install -r requirements.yml
 
       # https://stackoverflow.com/a/64210623/547195
-      - name: Get branch name (merge)
-        if: github.event_name != 'pull_request'
+      - name: Get branch name
         shell: bash
         run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
-
-      - name: Get branch name (pull request)
-        if: github.event_name == 'pull_request'
-        shell: bash
-        run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
-
-      - name: Debug
+      - name: Debug branch name
         run: echo ${{ env.BRANCH_NAME }}
 
       - name: Run tests
