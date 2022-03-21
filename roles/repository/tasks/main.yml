@@ -3,6 +3,13 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
+- name: Set java options for security
+  set_fact:
+    acs_secure_environment:
+      JAVA_TOOL_OPTIONS:
+        - -Dsolr.sharedSecret="{{ reposearch_shared_secret }}"
+  when:  acs.version is version('7.2.0', '>=')
+
 - name: Ensure a list of packages installed
   become: true
   package:
@@ -124,7 +131,7 @@
     line: export {{ item.key }}="{{ item.value }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-  loop: "{{ acs_environment | dict2items }}"
+  loop: "{{ acs_environment | combine(acs_secure_environment | default({}), list_merge='prepend') | dict2items }}"
 
 - name: Verifying if the distribution zip finished downloading
   async_status:
