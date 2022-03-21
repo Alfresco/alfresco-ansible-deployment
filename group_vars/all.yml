@@ -78,13 +78,6 @@ amp_downloads:
 # and change this flag to true. See the deployment guide for more details.
 use_custom_keystores: false
 
-acs_environment:
-  JAVA_OPTS: " -Xms512m -Xmx3g -XX:+DisableExplicitGC
-    -XX:+UseConcMarkSweepGC
-    -Djava.awt.headless=true
-    -XX:ReservedCodeCacheSize=128m
-    $JAVA_OPTS"
-
 activemq_environment:
   ACTIVEMQ_OPTS: "$ACTIVEMQ_OPTS -Xms128m -Xmx1g"
 
