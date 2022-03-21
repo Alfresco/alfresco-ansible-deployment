@@ -12,6 +12,8 @@ services:
   - docker
 
 branches:
+  except:
+    - OPSEXP-1222-gha
   only:
     - master
     - contribs
