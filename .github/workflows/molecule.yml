@@ -60,6 +60,11 @@ jobs:
         molecule_scenario:
           - { "name":"default", "vars": "vars-rhel8.yml" }
           - { "name":"default", "vars": "vars-rhel8-community.yml" }
+    env:
+      BUILD_NUMBER: ${{ github.run_number	}}
+      AWS_REGION: eu-west-1
+      MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
+      DTAS_VERSION: v1.1.1
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -80,6 +85,20 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}
 
       - run: ansible-galaxy install -r requirements.yml
+
+      # https://stackoverflow.com/a/64210623/547195
+      - name: Get branch name (merge)
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+
+      - name: Get branch name (pull request)
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
+
+      - name: Debug
+        run: echo ${{ env.BRANCH_NAME }}
 
       - name: Run tests
         env:
