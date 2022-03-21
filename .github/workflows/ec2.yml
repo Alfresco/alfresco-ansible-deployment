@@ -1,0 +1,57 @@
+name: "molecule.ec2"
+on:
+  workflow_run:
+    workflows: ["molecule.roles"]
+    types:
+      - completed
+jobs:
+  molecule:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        molecule_scenario:
+          - { "name":"default", "vars": "vars-rhel8.yml" }
+          - { "name":"default", "vars": "vars-rhel8-community.yml" }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+      - run: pip install -r requirements.txt
+
+      - name: Cache ansible-galaxy collections
+        uses: actions/cache@v2
+        env:
+          cache-name: collections
+        with:
+          path: ~/.ansible/collections
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+
+      - run: ansible-galaxy install -r requirements.yml
+
+      - name: Run tests
+        env:
+          MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
+          MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
+          NEXUS_USERNAME: ${{ secrets.nexus_username }}
+          NEXUS_PASSWORD: ${{ secrets.nexus_password }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+        run: ./tests/molecule_it/script.sh verify
+
+      - name: Cleanup tests
+        if: always()
+        env:
+          MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
+          MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
+          NEXUS_USERNAME: ${{ secrets.nexus_username }}
+          NEXUS_PASSWORD: ${{ secrets.nexus_password }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+        run: ./tests/molecule_it/script.sh destroy
