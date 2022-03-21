@@ -129,6 +129,7 @@ jobs:
           NEXUS_PASSWORD: ${{ secrets.nexus_password }}
           AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }} # to clone alfresco-deployment-test-automation-scripts
         run: ./tests/molecule_it/script.sh verify
 
       - name: Cleanup tests
