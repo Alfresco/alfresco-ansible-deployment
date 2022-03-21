@@ -81,9 +81,6 @@ use_custom_keystores: false
 activemq_environment:
   ACTIVEMQ_OPTS: "$ACTIVEMQ_OPTS -Xms128m -Xmx1g"
 
-search_environment: # This will add extra vars at the end of the solr.in.sh file
-  SOLR_JAVA_MEM: "-Xms1g -Xmx1g"
-
 sfs_environment:
   JAVA_OPTS: "$JAVA_OPTS -Xms128m -Xmx512m "
 
