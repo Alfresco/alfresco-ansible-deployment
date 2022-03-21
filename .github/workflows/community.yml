@@ -1,0 +1,146 @@
+name: "community"
+on:
+  push:
+  pull_request_target:
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+          cache: "pip"
+
+      - run: pip install pre-commit
+
+      - name: Cache pre-commit envs
+        uses: actions/cache@v2
+        env:
+          cache-name: pre-commit
+        with:
+          path: ~/.cache/pre-commit
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+
+      - run: pre-commit run --all-files --show-diff-on-failure
+
+  molecule:
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        molecule_distro:
+          - { "image": "centos:7" }
+          - { "image": "ubuntu:20.04" }
+        role:
+          - { "name": "activemq"}
+          - { "name": "adw"}
+          - { "name": "common" }
+          - { "name": "java"}
+          - { "name": "nginx"}
+          - { "name": "repository"}
+          - { "name": "search"}
+          - { "name": "sfs"}
+          - { "name": "sync"}
+          - { "name": "tomcat"}
+          - { "name": "transformers"}
+          - { "name": "trouter"}
+    env:
+      PY_COLORS: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+          cache: "pip"
+
+      - run: pip install -r requirements.txt
+
+      - name: Cache ansible-galaxy collections
+        uses: actions/cache@v2
+        env:
+          cache-name: collections
+        with:
+          path: ~/.ansible/collections
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+
+      - run: ansible-galaxy install -r requirements.yml
+
+      - name: Run tests
+        env:
+          MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
+        working-directory: roles/${{ matrix.role.name }}
+        run: molecule test
+  ec2:
+    needs: molecule
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        molecule_scenario:
+          - { "name": "default", "vars": "vars-rhel8-community.yml" }
+    env:
+      PY_COLORS: 1
+      BUILD_NUMBER: ${{ github.run_id }}
+      AWS_REGION: eu-west-1
+      MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
+      DTAS_VERSION: v1.1.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+          cache: "pip"
+
+      - run: pip install -r requirements.txt
+
+      - name: Cache ansible-galaxy collections
+        uses: actions/cache@v2
+        env:
+          cache-name: collections
+        with:
+          path: ~/.ansible/collections
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+
+      - run: ansible-galaxy install -r requirements.yml
+
+      # https://stackoverflow.com/a/64210623/547195
+      - name: Get branch name (merge)
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+
+      - name: Get branch name (pull request)
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
+
+      - name: Debug
+        run: echo ${{ env.BRANCH_NAME }}
+
+      - name: Run tests
+        env:
+          MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
+          MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+        run: ./tests/molecule_it/script.sh verify
+
+      - name: Cleanup tests
+        if: always()
+        env:
+          MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
+          MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+        run: ./tests/molecule_it/script.sh destroy
