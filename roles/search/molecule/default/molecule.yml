@@ -17,6 +17,7 @@ platforms:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
       - repository
+      - nginx
       - search
 provisioner:
   ansible_args:
