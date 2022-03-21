@@ -1,0 +1,44 @@
+name: "enterprise"
+on:
+  push:
+    tags:        
+      - v*
+jobs:
+  release-nexus:
+    runs-on: ubuntu-latest
+    # https://github.com/aws-actions/configure-aws-credentials#usage
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get tag name
+        shell: bash
+        run: echo "TAG_NAME=$(echo ${GITHUB_REF##*/v})" >> $GITHUB_ENV
+      - name: Debug tag name
+        run: echo ${{ env.TAG_NAME }}
+
+      - run: scripts/generate-zip.sh ${TAG_NAME}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.S3_STAGING_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.S3_STAGING_AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+      
+      - name: Publish to S3 staging bucket
+        run: |
+          aws s3 cp dist/alfresco-ansible-deployment-${TAG_NAME}.zip s3://alfresco-artefacts-staging/enterprise/alfresco-ansible-deployment/
+
+      - name: Publish on Nexus
+        env:
+          NEXUS_USERNAME: ${{ secrets.nexus_username }}
+          NEXUS_PASSWORD: ${{ secrets.nexus_password }}
+        run: >-
+          curl -F "r=releases" -F "g=org.alfresco" -F "a=alfresco-ansible-deployment"
+          -F "v=${TAG_NAME}" -F "p=zip" -F "file=@dist/alfresco-ansible-deployment-${TAG_NAME}.zip"
+          -u "$NEXUS_USERNAME:$NEXUS_PASSWORD"
+          https://artifacts.alfresco.com/nexus/service/local/artifact/maven/content
