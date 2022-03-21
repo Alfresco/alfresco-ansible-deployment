@@ -29,7 +29,7 @@ jobs:
       - run: ansible-galaxy install -r requirements.yml
 
       - name: Run tests
-        run: >-  
-          cd roles/{{ matrix.role }}
+        run: |
+          cd roles/{{ matrix.role.name }}
           MOLECULE_ROLE_IMAGE=${{ matrix.molecule_distro.image }}
           molecule test
