@@ -36,18 +36,11 @@ jobs:
           - { "image": "centos:7" }
           - { "image": "ubuntu:20.04" }
         role:
-          #- { "name": "activemq"}
-          #- { "name": "adw"}
-          - { "name": "common" }
-          #- { "name": "java"}
-          #- { "name": "nginx"}
-          #- { "name": "repository"}
-          #- { "name": "search"}
-          #- { "name": "sfs"}
-          #- { "name": "sync"}
-          #- { "name": "tomcat"}
-          #- { "name": "transformers"}
-          #- { "name": "trouter"}
+          - { "name": "adw"}
+          - { "name": "repository"}
+          - { "name": "sfs"}
+          - { "name": "sync"}
+          - { "name": "trouter"}
     env:
       PY_COLORS: 1
     steps:
