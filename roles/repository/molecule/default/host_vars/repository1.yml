@@ -51,6 +51,7 @@ acs_environment:
     - -Dencryption.keyAlgorithm=AES
     - -Dencryption.keystore.location=/var/opt/alfresco/content-services/keystore/keystest
     - -Dmetadata-keystore.password=mp6yc0UD9e
+    - -Dmetadata-keystore.aliases=metadata
     - -Dmetadata-keystore.metadata.password=mp6yc0UD9e
     - -Dmetadata-keystore.metadata.algorithm=AES
     - $JAVA_TOOL_OPTIONS
