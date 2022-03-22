@@ -44,9 +44,9 @@ So a generic example would be:
 ---
 all:
   children:
-    group1:
+    group_name1:
       hosts:
-        hostA
+        inventory_nameA:
 ```
 
 An inventory file can also be used to set variable within a specific scope. Variables can be specified at the host, groups or all levels, thus affecting the scope in which that variable is available.
@@ -413,19 +413,14 @@ To deploy to hosts other than the control node an SSH connection is required. Th
 
 The inventory file (`inventory_ssh.yml`) is used to specify the target IP addresses and the SSH connection details. You can specify one IP address for all the hosts to obtain a single-machine deployment, or different IP addresses for a multi-machine deployment.
 
-The example snippet below demonstrates how to deploy the repository to a host with an IP address of `50.6.51.7` and SSH key at `/path/to/ssh_key.pem`.
+The example snippet below demonstrates how to deploy the repository to a host with an IP address of `50.6.51.7` and SSH key at `/path/to/id_rsa`.
 
 ```yaml
 repository:
   hosts:
-    repository_1:
-    connection: ssh
-    ansible_host: 50.6.51.7
-    ansible_private_key_file: "/path/to/ssh_key.pem"
-    ansible_user: centos
-    ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o ControlMaster=auto
-      -o ControlPersist=60s -o ForwardX11=no -o LogLevel=ERROR
-      -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+    repository.acme.local:
+      ansible_host: 50.6.51.7
+      ansible_private_key_file: "/path/to/id_rsa"
 ```
 
 If you want to deploy everything to a single machine follow the steps in the [Single Machine Deployment](#single-machine-deployment) section, alternatively, to deploy to any number of separate machines follow the steps in the [Multi Machine Deployment](#multi-machine-deployment) section.
@@ -503,8 +498,6 @@ The diagram below shows the result of a multi machine deployment.
 
 Once you have prepared the target hosts (ensuring the [relevant ports](#tcp-port-configuration) are accessible) and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
-> **NOTE** at this stage ADW must be deployed on the same host (adw_1) as the NGinx reverse proxy (nginx_1)
-
 To check your inventory file is configured correctly and the control node is able to connect to the target hosts run the following command:
 
 ```bash
@@ -558,7 +551,17 @@ Once ACS has initialized access the system using the following URLs with a brows
 * Repository: `http://<nginx-host-ip>/alfresco`
 * API Explorer: `http://<nginx-host-ip>/api-explorer`
 
-### ACS cluster
+### Additionnal command switches for ansible-playbook
+
+There are some useful argument you can use with `ansible-playbook` command in many circumstances. Some are highlighted bellow but take a look at [The ansible-playbook documentation](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) for complete list of options.
+
+* `-k` : Prompt for SSH password. Usefull when no SSH keys have been deployed but needs to be th same on all hosts (prefer SSH whenever possible)
+* `-K` : Prompt for sudo password. Usefull when the user used to connect to the machine is not root
+* `-e` : Pass an extra variable or override an existing one.
+* `-l` : Limit the play to a subset of hosts (either groups or individuals hosts or a mix of both)
+* `-u user` : specify the username to use to cnnect to all targets (Prefer adding the ànsible_ssh_user` to the inventory file in the right scope, e.g. under the `all`group)
+
+## ACS cluster
 
 Due to load or high availability needs, you might want to deploy a cluster of several repository nodes. This can be achieved rather simply by:
 
