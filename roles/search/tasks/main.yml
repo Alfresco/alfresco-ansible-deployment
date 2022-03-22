@@ -114,14 +114,6 @@
   notify:
     - restart-search
 
-- name: Check Solr running
-  shell: "{{ binaries_dir }}/solr/bin/solr status"
-  register: search_started
-  environment:
-      JAVA_HOME: "{{ java_home }}"
-  failed_when: false
-  changed_when: search_started.rc != 0
-
 - name: Add alfresco-search.service
   become: true
   template:
@@ -133,4 +125,3 @@
   notify: 
     - enable-search
     - restart-search
-  when: search_started.failed or '"No Solr nodes are running." in search_started.stdout'
