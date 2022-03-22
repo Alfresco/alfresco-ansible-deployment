@@ -78,9 +78,6 @@ amp_downloads:
 # and change this flag to true. See the deployment guide for more details.
 use_custom_keystores: false
 
-activemq_environment:
-  ACTIVEMQ_OPTS: "$ACTIVEMQ_OPTS -Xms128m -Xmx1g"
-
 sfs_environment:
   JAVA_OPTS: "$JAVA_OPTS -Xms128m -Xmx512m "
 
