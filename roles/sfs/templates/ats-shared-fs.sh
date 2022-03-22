@@ -6,6 +6,6 @@ fi
 
 . {{ config_folder }}/setenv.sh
 {% for key, value in sfs_environment.items() %}
-export {{key}}="{{value}}"
+export {{ key }}="{{ value | join(' ') }}"
 {% endfor %}
 ${JAVA_HOME}/bin/java ${JAVA_OPTS} -jar ${ATS_HOME}/alfresco-shared-file-store-*.jar > {{ logs_folder }}/ats-shared-fs.log
