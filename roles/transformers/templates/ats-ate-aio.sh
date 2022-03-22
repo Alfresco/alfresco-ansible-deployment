@@ -14,6 +14,6 @@ export JAVA_OPTS="${JAVA_OPTS} -DFILE_STORE_URL=http://${ATS_SHARED_FS_HOST}:{{ 
 {% endif %}
 
 {% for key, value in tengine_environment.items() %}
-export {{key}}="{{value}}"
+export {{ key }}="{{ value | join(' ') }}"
 {% endfor %}
 ${JAVA_HOME}/bin/java ${JAVA_OPTS} -jar ${ATS_HOME}/alfresco-transform-core-aio-boot-*.jar > {{ logs_folder }}/ats-ate-aio.log
