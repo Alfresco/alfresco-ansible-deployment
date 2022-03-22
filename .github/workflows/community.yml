@@ -26,7 +26,7 @@ jobs:
 
       - run: pre-commit run --all-files --show-diff-on-failure
 
-  molecule:
+  docker:
     needs: lint
     runs-on: ubuntu-latest
     strategy:

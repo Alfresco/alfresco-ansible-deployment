@@ -26,7 +26,7 @@ jobs:
 
       - run: pre-commit run --all-files --show-diff-on-failure
 
-  molecule:
+  docker:
     needs: lint
     runs-on: ubuntu-latest
     strategy:
@@ -73,7 +73,7 @@ jobs:
         working-directory: roles/${{ matrix.role.name }}
         run: molecule test
   ec2:
-    #needs: molecule
+    needs: docker
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -96,6 +96,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
+          # avoid auth conflict when cloning DTAS during verify step
           persist-credentials: false
 
       - name: Set up Python 3.9
