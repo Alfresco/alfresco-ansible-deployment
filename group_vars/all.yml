@@ -81,9 +81,6 @@ use_custom_keystores: false
 sync_environment:
   JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx2g "
 
-trouter_environment:
-  JAVA_OPTS: "$JAVA_OPTS -Xms128m -Xmx512m "
-
 dependencies_version:
   postgresql_connector: 42.2.19
   postgres_major_version: 13

@@ -10,6 +10,6 @@ export JAVA_OPTS="${JAVA_OPTS} -DCORE_AIO_QUEUE=org.alfresco.transform.engine.ai
 export JAVA_OPTS="${JAVA_OPTS} -DACTIVEMQ_URL=failover:(tcp://{{ activemq_host }}:{{ ports_cfg.activemq.openwire }})?timeout=3000"
 export JAVA_OPTS="${JAVA_OPTS} -DFILE_STORE_URL=http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}/alfresco/api/-default-/private/sfs/versions/1/file"
 {% for key, value in trouter_environment.items() %}
-export {{key}}="{{value}}"
+export {{ key }}="{{ value | join(' ') }}"
 {% endfor %}
 ${JAVA_HOME}/bin/java ${JAVA_OPTS} -jar ${ATS_HOME}/alfresco-transform-router-*.jar > {{ logs_folder }}/ats-atr.log
