@@ -2,6 +2,7 @@
 import os
 import pytest
 from hamcrest import contains_string, assert_that
+from packaging import version
 
 test_host = os.environ.get('TEST_HOST')
 
@@ -36,8 +37,13 @@ def test_search_service_running_and_enabled(host, svc):
 
 def test_solr_stats_is_accesible(host, get_ansible_vars):
     """Check that SOLR creates the alfresco and archive cores"""
-    alfresco_core_command = host.run("curl -iL http://{}:8983/solr/#/~cores/alfresco".format(test_host))
-    archive_core_command = host.run("curl -iL http://{}:8983/solr/#/~cores/archive".format(test_host))
+    curl_opts = '-iL'
+    search_env = host.ansible.get_variables()
+    if version.parse(search_env['search']['version']) >= version.parse('2.0.3'):
+        curl_opts += ' -H "X-Alfresco-Search-Secret: ' + (search_env['reposearch_shared_secret']) + '"'
+    print("curl {} http://{}:8983/solr/#/~cores/alfresco".format(curl_opts, test_host))
+    alfresco_core_command = host.run("curl {} http://{}:8983/solr/#/~cores/alfresco".format(curl_opts, test_host))
+    archive_core_command = host.run("curl {} http://{}:8983/solr/#/~cores/archive".format(curl_opts, test_host))
     assert_that(alfresco_core_command.stdout, contains_string("HTTP/1.1 200"))
     assert_that(archive_core_command.stdout, contains_string("HTTP/1.1 200"))
 
