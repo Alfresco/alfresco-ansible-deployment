@@ -570,7 +570,7 @@ Due to load or high availability needs, you might want to deploy a cluster of se
 
 For example:
 
-````yaml
+```yaml
 ...
     repository:
       vars:
