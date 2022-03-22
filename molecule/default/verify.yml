@@ -14,7 +14,7 @@
 
     - name: Git checkout
       ansible.builtin.git:
-        repo: "https://{{ lookup('env', 'GITHUB_TOKEN') }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
+        repo: "https://{{ lookup('env', 'CLONE_GITHUB_TOKEN') }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
         dest: "{{ dta_dir }}"
         version: "{{ lookup('env', 'DTAS_VERSION') }}"
 
