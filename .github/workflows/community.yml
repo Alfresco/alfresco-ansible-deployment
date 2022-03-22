@@ -1,6 +1,5 @@
 name: "community"
 on:
-  #push:
   pull_request:
 jobs:
   lint:

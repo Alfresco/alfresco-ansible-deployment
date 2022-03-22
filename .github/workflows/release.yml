@@ -16,7 +16,7 @@ jobs:
 
       - name: Get tag name
         shell: bash
-       run: echo "TAG_NAME=${GITHUB_REF##*/v}" >> $GITHUB_ENV
+        run: echo "TAG_NAME=${GITHUB_REF##*/v}" >> $GITHUB_ENV
       - name: Debug tag name
         run: echo ${{ env.TAG_NAME }}
 
