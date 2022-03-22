@@ -128,7 +128,7 @@
   lineinfile:
     path: "{{ binaries_folder }}/tomcat.sh"
     insertafter: 'CATALINA_OPTS'
-    line: export {{ item.key }}="{{ item.value }}"
+    line: export {{ item.key }}="{{ item.value | join(' ') }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
   loop: "{{ acs_environment | combine(acs_secure_environment | default({}), list_merge='prepend') | dict2items }}"
