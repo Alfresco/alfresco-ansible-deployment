@@ -27,6 +27,7 @@ share.protocol={% if use_ssl | bool %}https{% else %}http{% endif %}
 
 index.subsystem.name=solr6
 solr.secureComms={% if acs.version is version('7.2.0', '>=') %}secret{% else %}none{%endif %}
+
 solr.port={{ ports_cfg.search.http }}
 solr.host={{ solr_host }}
 
