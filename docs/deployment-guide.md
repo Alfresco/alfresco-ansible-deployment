@@ -210,7 +210,7 @@ If you have a valid license place your `.lic` file in the `configuration_files/l
 ### Alfresco/Solr authentication
 
 As of ACS 7.2 and/or Search services 2.0.3, the repository <--> solr communication requires to be authenticated. The playbook will set up that authentication scheme using the new `secret` method.
-This methods needs to be paased a shared secret. In orderto do so use the varaible below:
+This methods needs to be passed a shared secret. In order to do so use the variable below:
 
 ```yaml
 reposearch_shared_secret: dummy
@@ -220,7 +220,7 @@ reposearch_shared_secret: dummy
 
 This secret should be placed in the inventory file, either under the `all` group scope.
 
-:warning: Should you forget to provide that shared secret, the playbook will generate a random one. While that may sound convenient keep in mind that doing so will break the idempotency of the playbook and the shared secret will be updated everytime you run the playbook.
+:warning: Should you forget to provide that shared secret, the playbook will generate a random one. While that may sound convenient keep in mind that doing so will break the idempotency of the playbook and the shared secret will be updated every time you run the playbook.
 
 ### Alfresco Global Properties
 
@@ -232,47 +232,41 @@ The properties defined in this file will be appended to the generated "alfresco-
 
 If you have a FQDN and a certificate you want to use place the certificate and the key in the `configuration_files/ssl_certificates` folder before running the playbook. Also replace the `fqdn_alfresco: "your_domain.com"` with your own domain in `group_vars/all.yml` along with setting `use_ssl: true`.
 
->NOTE: The certificate and the key should be named the same as the domain eg: `your_domain.com.key` and `your_domain.com.crt`
-
-### Override Playbook Variables
-
-Ansible provides a mechanism to [override variables](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#defining-variables-at-runtime) provided by the playbook at runtime.
-
-Whilst it's possible to override any variable defined by the playbook we have only tested changing the variables defined in `group_vars/all.yml`.
-
-Variables can be overridden using either the `--extra-vars` or `-e` command line option when running the playbook.
-
-If you have more than one variable to override we recommend using a separate file. The file name must be prefixed with "@", for example:
-
-```bash
-ansible-playbook ... --extra-vars "@my-vars.yml"
-```
+> NOTE: The certificate and the key should be named the same as the domain eg: `your_domain.com.key` and `your_domain.com.crt`
 
 ### AMPs
 
-Several AMP files are downloaded and applied during playbook execution, these are defined in a variable that can be overridden using the mechanism described in the previous section. Follow the steps below to apply your own AMPs
+Several AMP files are downloaded and applied during playbook execution, these are defined in a variable which is either in the `group_vars/all.yml` file or an extra-var file (in case of older ACS version).
+For that reason there is common way to override that variable. If you want to change the list of AMPs you'll need to directly change the variable from the file where it is defined.
 
-1. Open `group_vars/all.yml` and copy the whole `amp_downloads` variable definition
-2. Create a new file and paste the `amp_downloads` variable
-3. Add any additional AMPs you want to apply paying close attention to the `dest` property. If it's a repository AMP use the `amps_repo` folder, if it's a Share AMP use the `amps_share` folder
-4. Save the file and reference it via the `--extra-vars` option when running the playbook
+1. Open `group_vars/all.yml` or the `x.y.N-extra-vars.yml` file  and amend `amp_downloads` variable definition
+2. In the `group_vars/all.yml` file, Add any additional AMP you want to apply to the `amp_downloads` variable as well, paying close attention to the `dest` property. If it's a repository AMP use the `amps_repo` folder, if it's a Share AMP use the `amps_share` folder
+3. Save the file and run the playbook as normal.
 
->NOTE: This mechanism will be improved in a future release.
+> NOTE: This mechanism is sub-optimal and will be improved in a future release.
 
 ### JVM Options
 
 Each Java based service deployed by the playbook is configured with some default settings, including memory settings.
 
-The defaults are defined in group_vars/all.yml so they can be overridden using the mechanism described [above](#override-playbook-variables).
+The defaults are defined in the roles' specific default variables (see the [Ansible Overview paragraph in the README file](./README.md)) so they can be overridden in the inventory_file using the right scope.
 
-For example, to override the JAVA_OPTS environment variable for the All In One Transformer Engine place the following in your extra vars file:
+For example, to override the JAVA_OPTS environment variable for the All-In-One Transform Engine place the following in inventory file:
 
 ```yaml
-tengine_environment:
-  JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx1g"
+---
+all:
+  children:
+    transformers:
+      tengine_environment:
+        JAVA_OPTS:
+          - -Xms512m
+          - -Xmx1g
+          - $JAVA_OPTS
 ```
 
-The `*_environment` variable is defined as a dictionary, all keys are added to the relevant components start script thus allowing you to define any number of environment variables.
+All the `_environment` variables defined in roles are dictionaries, and all their keys are added to the relevant components start script thus allowing you to define any number of environment variables. Key values are a list of strings to allow for easier manipulation.
+When overriding the default env vars you should make sure you're not retiring important ones so always take a look at the ``roles/ROLE_NAME/defauls/main.yml` file first.
 
 ### External Databases
 
@@ -551,13 +545,13 @@ Once ACS has initialized access the system using the following URLs with a brows
 * Repository: `http://<nginx-host-ip>/alfresco`
 * API Explorer: `http://<nginx-host-ip>/api-explorer`
 
-### Additionnal command switches for ansible-playbook
+### Additional command switches for ansible-playbook
 
 There are some useful argument you can use with `ansible-playbook` command in many circumstances. Some are highlighted bellow but take a look at [The ansible-playbook documentation](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) for complete list of options.
 
 * `-k` : Prompt for SSH password. Usefull when no SSH keys have been deployed but needs to be th same on all hosts (prefer SSH whenever possible)
 * `-K` : Prompt for sudo password. Usefull when the user used to connect to the machine is not root
-* `-e` : Pass an extra variable or override an existing one.
+* `-e` : Pass an extra variable or override an existing one (read from file with `-e @file`).
 * `-l` : Limit the play to a subset of hosts (either groups or individuals hosts or a mix of both)
 * `-u user` : specify the username to use to cnnect to all targets (Prefer adding the ànsible_ssh_user` to the inventory file in the right scope, e.g. under the `all`group)
 
