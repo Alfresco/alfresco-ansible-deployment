@@ -1,4 +1,4 @@
-name: "enterprise"
+name: "release"
 on:
   push:
     tags:
