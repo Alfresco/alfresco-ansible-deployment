@@ -1,0 +1,44 @@
+name: "community"
+on:
+  pull_request:
+  push:
+    branches: [master]
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        molecule_distro:
+          - { "image": "centos:7" }
+          - { "image": "ubuntu:20.04" }
+        role:
+          - { "name": "activemq"}
+          - { "name": "common" }
+          - { "name": "java"}
+          - { "name": "nginx"}
+          - { "name": "search"}
+          - { "name": "tomcat"}
+          - { "name": "transformers"}
+    env:
+      PY_COLORS: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+          cache: "pip"
+
+      - run: pip install -r requirements.txt
+
+      - name: Install and cache ansible galaxy dependencies
+        uses: ./.github/actions/galaxy
+
+      - name: Run tests
+        env:
+          MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
+        working-directory: roles/${{ matrix.role.name }}
+        run: molecule test

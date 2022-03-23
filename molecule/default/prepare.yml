@@ -1,9 +1,7 @@
 ---
-- name: Prepare
-  hosts: nginx
+- name: Prepare remote hosts
+  hosts: all
   gather_facts: false
-  vars:
-    project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
   tasks:
     - name: Make sure python3 is installed
       package:
@@ -11,7 +9,16 @@
         state: present
       become: true
 
+- name: Prepare localhost
+  hosts: localhost
+  gather_facts: false
+  vars:
+    project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+    dtas_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
+  tasks:
+
     - name: Gather EC2 facts
+      delegate_to: "{{ groups['nginx'] | first }}"
       amazon.aws.ec2_metadata_facts:
 
     - name: "Set variables"
@@ -21,12 +28,10 @@
         cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
 
     - name: Create private key (RSA, 4096 bits)
-      delegate_to: localhost
       community.crypto.openssl_privatekey:
         path: "{{ private_key_path }}"
 
     - name: Create CSR for {{ certificate_domain }} self-signed certificate
-      delegate_to: localhost
       community.crypto.openssl_csr_pipe:
         privatekey_path: "{{ private_key_path }}"
         common_name: "{{ certificate_domain }}"
@@ -34,7 +39,6 @@
       register: csr
 
     - name: Create self-signed certificate from CSR
-      delegate_to: localhost
       community.crypto.x509_certificate:
         path: "{{ cert_path }}"
         csr_content: "{{ csr.csr }}"
@@ -42,8 +46,13 @@
         provider: selfsigned
 
     - name: Configure FQDN in extra vars file
-      delegate_to: localhost
       ansible.builtin.replace:
         path: "{{ project_dir }}/tests/test-ssl.yml"
         regexp: 'TEST_FQDN'
         replace: '{{ certificate_domain }}'
+
+    - name: Git checkout
+      ansible.builtin.git:
+        repo: "https://{{ lookup('env', 'CLONE_GITHUB_TOKEN') }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
+        dest: "{{ dtas_dir }}"
+        version: "{{ lookup('env', 'DTAS_VERSION') }}"

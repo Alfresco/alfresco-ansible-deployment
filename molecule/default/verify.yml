@@ -4,7 +4,7 @@
   gather_facts: false
   vars:
     project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
-    dta_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dta"
+    dtas_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
     test_config_file: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/{{ lookup('env', 'MOLECULE_IT_TEST_CONFIG') }}"
   tasks:
 
@@ -12,15 +12,9 @@
       delegate_to: "{{ groups['nginx'][0] }}"
       amazon.aws.ec2_metadata_facts:
 
-    - name: Git checkout
-      ansible.builtin.git:
-        repo: "https://{{ lookup('env', 'GITHUB_TOKEN') }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
-        dest: "{{ dta_dir }}"
-        version: "{{ lookup('env', 'DTAS_VERSION') }}"
-
     - name: Install pytest requirements
       pip:
-        chdir: "{{ dta_dir }}"
+        chdir: "{{ dtas_dir }}"
         requirements: requirements.txt
 
     - name: Configure deployment URL
@@ -36,7 +30,7 @@
           vars:
               selfsigned_cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
           ansible.builtin.shell:
-            chdir: "{{ dta_dir }}"
+            chdir: "{{ dtas_dir }}"
             cmd: |
               export REQUESTS_CA_BUNDLE={{ selfsigned_cert_path }}
               pytest --tb=line --configuration {{ test_config_file }} tests/ -s
