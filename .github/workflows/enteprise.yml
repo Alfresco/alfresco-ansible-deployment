@@ -73,6 +73,7 @@ jobs:
         working-directory: roles/${{ matrix.role.name }}
         run: molecule test
   ec2:
+    if: github.actor != 'dependabot[bot]'
     needs: docker
     runs-on: ubuntu-latest
     strategy:
