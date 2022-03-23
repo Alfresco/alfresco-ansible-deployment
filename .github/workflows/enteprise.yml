@@ -2,32 +2,7 @@ name: "enterprise"
 on:
   push:
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.9"
-          cache: "pip"
-
-      - run: pip install pre-commit
-
-      - name: Cache pre-commit envs
-        uses: actions/cache@v2
-        env:
-          cache-name: pre-commit
-        with:
-          path: ~/.cache/pre-commit
-          key: ${{ runner.os }}-build-${{ env.cache-name }}
-
-      - run: pre-commit run --all-files --show-diff-on-failure
-
   docker:
-    needs: lint
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
