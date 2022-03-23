@@ -14,7 +14,7 @@
   gather_facts: false
   vars:
     project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
-    dta_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dta"
+    dtas_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
   tasks:
 
     - name: Gather EC2 facts
@@ -55,7 +55,7 @@
     - name: Git checkout
       ansible.builtin.git:
         repo: "https://{{ lookup('env', 'CLONE_GITHUB_TOKEN') }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
-        dest: "{{ dta_dir }}"
+        dest: "{{ dtas_dir }}"
         version: "{{ lookup('env', 'DTAS_VERSION') }}"
 
     - name: Creating cluster contentstore
