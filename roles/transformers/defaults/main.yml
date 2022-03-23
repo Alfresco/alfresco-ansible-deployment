@@ -1,19 +1,8 @@
 ---
 # defaults file for roles/transformers
 pkg_format: "{% if ansible_pkg_mgr == 'apt' %}deb{% else %}rpm{% endif %}"
-
-sfs_environment:
-  JAVA_OPTS:
-    - -Xms128m
-    - -Xmx512m
-    - $JAVA_OPTS
 tengine_environment:
   JAVA_OPTS:
     - -Xms512m
     - -Xmx1536m
-    - $JAVA_OPTS
-trouter_environment:
-  JAVA_OPTS:
-    - -Xms128m
-    - -Xmx512m
     - $JAVA_OPTS
