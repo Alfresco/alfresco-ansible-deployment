@@ -54,7 +54,7 @@
     - name: Make sure Solr is running
       service:
         name: alfresco-search
-        status: started
+        state: started
 
     - name: update installation status file with  Search
       vars:
