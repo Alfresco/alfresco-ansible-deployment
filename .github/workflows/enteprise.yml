@@ -55,15 +55,10 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: Cache ansible-galaxy collections
-        uses: actions/cache@v2
-        env:
-          cache-name: collections
+      - name: Install and cache ansible galaxy dependencies
+        uses: ./.github/actions/galaxy
         with:
-          path: ~/.ansible/collections
-          key: ${{ runner.os }}-build-${{ env.cache-name }}
-
-      - run: ansible-galaxy install -r requirements.yml
+          cache-name: enterprise
 
       - name: Run tests
         env:
@@ -108,13 +103,10 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: Cache ansible-galaxy collections
-        uses: actions/cache@v2
-        env:
-          cache-name: collections
+      - name: Install and cache ansible galaxy dependencies
+        uses: ./.github/actions/galaxy
         with:
-          path: ~/.ansible/collections
-          key: ${{ runner.os }}-enterprise-${{ env.cache-name }}
+          cache-name: enterprise
 
       - run: ansible-galaxy install -r requirements.yml
 
