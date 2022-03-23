@@ -1,0 +1,115 @@
+name: "enterprise"
+on:
+  push:
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        molecule_distro:
+          - { "image": "centos:7" }
+          - { "image": "ubuntu:20.04" }
+        role:
+          - { "name": "adw"}
+          - { "name": "repository"}
+          - { "name": "sfs"}
+          - { "name": "sync"}
+          - { "name": "trouter"}
+    env:
+      PY_COLORS: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+          cache: "pip"
+
+      - run: pip install -r requirements.txt
+
+      - name: Install and cache ansible galaxy dependencies
+        uses: ./.github/actions/galaxy
+        with:
+          cache-name: enterprise
+
+      - name: Run tests
+        env:
+          MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
+          NEXUS_USERNAME: ${{ secrets.nexus_username }}
+          NEXUS_PASSWORD: ${{ secrets.nexus_password }}
+        working-directory: roles/${{ matrix.role.name }}
+        run: molecule test
+  ec2:
+    if: github.actor != 'dependabot[bot]'
+    needs: docker
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        molecule_scenario:
+          - { "name": "default", "vars": "vars-centos7.yml" }
+          - { "name": "default", "vars": "vars-rhel7.yml" }
+          - { "name": "default", "vars": "vars-rhel8.yml" }
+          - { "name": "default", "vars": "vars-ubuntu20.yml" }
+          - { "name": "default", "vars": "vars-ubuntu18.yml" }
+          - { "name": "default", "vars": "vars-rhel8-community.yml" }
+          - { "name": "multimachine", "vars": "vars.yml" }
+    env:
+      PY_COLORS: 1
+      BUILD_NUMBER: ${{ github.run_id }}
+      AWS_REGION: eu-west-1
+      MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
+      DTAS_VERSION: v1.1.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          # avoid auth conflict when cloning DTAS during verify step
+          persist-credentials: false
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+          cache: "pip"
+
+      - run: pip install -r requirements.txt
+
+      - name: Install and cache ansible galaxy dependencies
+        uses: ./.github/actions/galaxy
+        with:
+          cache-name: enterprise
+
+      - run: ansible-galaxy install -r requirements.yml
+
+      # https://stackoverflow.com/a/64210623/547195
+      - name: Get branch name
+        shell: bash
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+      - name: Debug branch name
+        run: echo ${{ env.BRANCH_NAME }}
+
+      - name: Run tests
+        env:
+          MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
+          MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
+          NEXUS_USERNAME: ${{ secrets.nexus_username }}
+          NEXUS_PASSWORD: ${{ secrets.nexus_password }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+          CLONE_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+        run: ./tests/molecule_it/script.sh verify
+
+      - name: Cleanup tests
+        if: always()
+        env:
+          MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
+          MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
+          NEXUS_USERNAME: ${{ secrets.nexus_username }}
+          NEXUS_PASSWORD: ${{ secrets.nexus_password }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+        run: ./tests/molecule_it/script.sh destroy

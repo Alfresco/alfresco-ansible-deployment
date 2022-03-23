@@ -9,7 +9,7 @@ mkdir -p "$SCRIPT_DIR/../dist"
 cd "$SCRIPT_DIR/../dist"
 
 # read version from file
-VERSION=`cat ../VERSION`
+VERSION=$1
 
 # create temporary folder with required files
 echo "Copying required files to temporary folder..."

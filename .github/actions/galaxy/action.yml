@@ -1,0 +1,20 @@
+name: 'Galaxy dependencies'
+description: 'Install and cache ansible galaxy dependencies'
+inputs:
+  cache-name:
+    description: 'A keyword to compose the cache final name'
+    required: true
+    default: 'collections'
+runs:
+  using: "composite"
+  steps:
+    - name: Cache ansible-galaxy collections
+      uses: actions/cache@v2
+      env:
+        cache-name: ${{ inputs.cache-name }}
+      with:
+        path: ~/.ansible/collections
+        key: ${{ runner.os }}-build-${{ env.cache-name }}
+
+    - run: ansible-galaxy install -r requirements.yml
+      shell: bash

@@ -12,12 +12,6 @@
       delegate_to: "{{ groups['nginx'][0] }}"
       amazon.aws.ec2_metadata_facts:
 
-    - name: Git checkout
-      ansible.builtin.git:
-        repo: "https://{{ lookup('env', 'GITHUB_TOKEN') }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
-        dest: "{{ dtas_dir }}"
-        version: "{{ lookup('env', 'DTAS_VERSION') }}"
-
     - name: Install pytest requirements
       pip:
         chdir: "{{ dtas_dir }}"
