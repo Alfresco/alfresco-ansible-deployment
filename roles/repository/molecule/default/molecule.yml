@@ -27,6 +27,9 @@ platforms:
       - transformers
 provisioner:
   name: ansible
+  ansible_args:
+    - -e
+    - reposearch_shared_secret=dummy
   config_options:
     defaults:
       pipelining: True

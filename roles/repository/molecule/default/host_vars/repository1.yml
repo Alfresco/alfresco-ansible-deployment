@@ -35,7 +35,6 @@ amp_downloads:
     sha1_checksum_url: "{{ nexus_repository.enterprise_releases }}/alfresco-governance-services-enterprise-share/{{ amps.ags_share.version }}/alfresco-governance-services-enterprise-share-{{ amps.ags_share.version }}.amp.sha1"
     dest: "{{ content_folder }}/amps_share/ags-share.amp"
 use_custom_keystores: true
-reposearch_shared_secret: dummy
 acs_environment:
   JAVA_OPTS:
     - -Xms350m

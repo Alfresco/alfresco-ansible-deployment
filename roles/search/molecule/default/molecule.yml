@@ -21,6 +21,8 @@ platforms:
       - search
 provisioner:
   ansible_args:
+    - -e
+    - reposearch_shared_secret=dummy
     - --limit=search
   name: ansible
   inventory:
