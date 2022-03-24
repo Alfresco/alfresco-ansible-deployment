@@ -6,13 +6,10 @@
 - name: Include OS specific variables
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
-
-- name: Set Repo/Solr shared secret
-  set_fact:
-    reposearch_shared_secret: "{{ reposearch_shared_secret | default(lookup('password', '/dev/null')) }}"
-  run_once: true
-  when: inventory_hostname in groups.repository + groups.search
-
+  
+- name: Handle secrets
+  import_tasks: secrets.yml
+  
 - name: Include nexus credentials for local testing
   include_vars: "nexus.yml"
   failed_when: false
