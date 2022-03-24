@@ -1,5 +1,7 @@
 # Alfresco Ansible Deployment
 
+[![community](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml) [![enterprise](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml)
+
 This project provides an [Ansible](https://www.ansible.com) playbook capable of deploying Alfresco Content Services (ACS).
 
 Ansible is an open-source software provisioning, configuration management and application-deployment tool enabling infrastructure as code.
