@@ -10,6 +10,7 @@
 - name: Set Repo/Solr shared secret
   set_fact:
     reposearch_shared_secret: "{{ reposearch_shared_secret | default(lookup('password', '/dev/null')) }}"
+  run_once: true
   when: inventory_hostname in groups.repository + groups.search
 
 - name: Include nexus credentials for local testing
