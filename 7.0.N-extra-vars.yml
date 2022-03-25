@@ -24,6 +24,16 @@ adw:
 sync:
   version: 3.4.0
 
+amps:
+  aos_module:
+    version: 1.4.0
+  device_sync:
+    version: 3.4.0
+  googledrive_repo:
+    version: 3.2.1
+  googledrive_share:
+    version: 3.2.1
+
 dependencies_version:
   postgresql_connector: 42.2.18
   postgres_major_version: 13
