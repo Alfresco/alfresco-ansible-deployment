@@ -1,0 +1,45 @@
+---
+acs:
+  version: 7.2.0
+  edition: Enterprise
+
+amps:
+  aos_module:
+    version: 1.4.0
+  device_sync:
+    version: 3.5.0
+  googledrive_repo:
+    version: 3.2.1
+  googledrive_share:
+    version: 3.2.1
+
+api_explorer:
+  version: 7.2.0
+
+search:
+  version: 2.0.3
+
+transform:
+  version: 2.5.6
+
+trouter:
+  version: 1.5.1
+
+sfs:
+  version: 0.16.1
+
+adw:
+  version: 2.6.0
+
+sync:
+  version: 3.5.0
+
+dependencies_version:
+  postgresql_connector: 42.2.19
+  postgres_major_version: 13
+  activemq: 5.16.1
+  jdk: 11.0.13
+  jdk_arch: 8
+  tomcat: 9.0.59
+  libreoffice: 7.0.6.2
+  pdf_renderer: 1.1

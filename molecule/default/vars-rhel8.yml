@@ -1,4 +1,4 @@
 MOLECULE_IT_IMAGE_ID: ami-0ec23856b3bad62d3
-MOLECULE_IT_EXTRA_VARS: tests/test-extra-vars.yml
-MOLECULE_IT_TEST_CONFIG: tests/test-config.json
+MOLECULE_IT_EXTRA_VARS: tests/test-7.1-vars.yml
+MOLECULE_IT_TEST_CONFIG: tests/test-config-7.1.json
 MOLECULE_IT_PLATFORM: rhel8
