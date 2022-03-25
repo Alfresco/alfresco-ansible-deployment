@@ -1,4 +1,4 @@
 MOLECULE_IT_IMAGE_ID: ami-07d8796a2b0f8d29c
-MOLECULE_IT_EXTRA_VARS: 7.0.N-extra-vars.yml
-MOLECULE_IT_TEST_CONFIG: tests/test-config-7.0.json
+MOLECULE_IT_EXTRA_VARS: 7.1.N-extra-vars.yml
+MOLECULE_IT_TEST_CONFIG: tests/test-config-7.1.json
 MOLECULE_IT_PLATFORM: ubuntu18

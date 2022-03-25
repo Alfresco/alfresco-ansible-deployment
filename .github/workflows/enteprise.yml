@@ -55,13 +55,13 @@ jobs:
             vars: vars-centos7.yml
             desc: ACS 6.2 Ec2 tests (Centos7)
           - name: default
-            vars": vars-rhel7.yml
+            vars: vars-rhel7.yml
             desc: ACS 7.0 Ec2 tests (RHEL7)
           - name: default
             vars: vars-ubuntu18.yml
-            desc: ACS 7.0 Ec2 tests (Ubuntu 18.04)
+            desc: ACS 7.1 Ec2 tests (Ubuntu 18.04)
           - name: default
-            vars": vars-rhel8.yml
+            vars: vars-rhel8.yml
             desc: ACS 7.1 Ec2 tests (RHEL8)
           - name: default
             vars: vars-ubuntu20-community.yml

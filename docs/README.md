@@ -76,14 +76,14 @@ The table below shows the version of the components deployed by the playbook for
 | OpenJDK             |        11.0.13 |        11.0.13 |        11.0.13 |        11.0.13 |   11.0.13 |
 | Apache Tomcat       |         9.0.59 |         9.0.59 |         8.5.76 |         9.0.59 |    9.0.59 |
 | PostgreSQL          |           13.x |           13.x |           13.x |           11.x |      13.x |
-| Apache ActiveMQ     |         5.16.1 |         5.16.1 |         5.16.1 |        5.15.14 |    5.16.1 |
-| Repository          |          7.2.0 |          7.1.1 |        7.0.1.4 |          6.2.2 |   7.1.1.2 |
-| Share               |          7.2.0 |          7.1.1 |        7.0.1.4 |          6.2.2 |   7.1.1.2 |
-| Search Services     |          2.0.3 |          2.0.2 |        2.0.1.1 |          1.4.3 |     2.0.2 |
-| All-In-One T-Engine |          2.5.6 |          2.5.6 |         2.3.10 |          2.5.6 |     2.5.6 |
-| AOS                 |          1.4.0 |          1.4.0 |          1.4.0 |          1.3.1 |           |
+| Apache ActiveMQ     |         5.16.4 |         5.16.4 |         5.16.4 |        5.15.14 |    5.16.4 |
+| Repository          |          7.2.0 |          7.1.1 |        7.0.1.4 |          6.2.2 |     7.2.0 |
+| Share               |          7.2.0 |          7.1.1 |        7.0.1.4 |          6.2.2 |     7.2.0 |
+| Search Services     |          2.0.3 |          2.0.2 |        2.0.1.1 |          1.4.3 |     2.0.3 |
+| All-In-One T-Engine |          2.5.7 |          2.5.6 |         2.3.10 |          2.5.6 |     2.5.7 |
+| AOS                 |          1.4.1 |          1.4.0 |          1.4.0 |          1.3.1 |           |
 | GoogleDocs          |          3.2.1 |          3.2.1 |          3.2.1 |          3.2.0 |           |
-| Digital Workspace   |          2.6.0 |          2.6.0 |          2.1.0 |          2.6.0 |       N/A |
-| Transform Router    |          1.5.1 |          1.5.1 |          1.3.2 |          1.5.1 |       N/A |
+| Digital Workspace   |          2.7.0 |          2.6.0 |          2.1.0 |          2.6.0 |       N/A |
+| Transform Router    |          1.5.2 |          1.5.1 |          1.3.2 |          1.5.1 |       N/A |
 | Shared File Store   |         0.16.1 |         0.16.1 |         0.13.0 |         0.16.1 |       N/A |
-| Sync Service        |          3.5.0 |          3.5.0 |          3.4.0 |        3.3.3.1 |       N/A |
+| Sync Service        |          3.6.0 |          3.5.0 |          3.4.0 |        3.3.3.1 |       N/A |
