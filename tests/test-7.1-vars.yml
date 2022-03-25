@@ -1,3 +1,6 @@
+acs:
+  version: 7.1.1
+  edition: Enterprise
 amps:
   aos_module:
     version: 1.4.0
