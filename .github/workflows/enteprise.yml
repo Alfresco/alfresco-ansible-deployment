@@ -8,14 +8,14 @@ jobs:
       fail-fast: true
       matrix:
         molecule_distro:
-          - { "image": "centos:7" }
-          - { "image": "ubuntu:20.04" }
+          - image: "centos:7"
+          - image: "ubuntu:20.04"
         role:
-          - { "name": "adw"}
-          - { "name": "repository"}
-          - { "name": "sfs"}
-          - { "name": "sync"}
-          - { "name": "trouter"}
+          - name: adw
+          - name: repository
+          - name: sfs
+          - name: sync
+          - name: trouter
     env:
       PY_COLORS: 1
     steps:
@@ -64,8 +64,8 @@ jobs:
             vars": vars-rhel8.yml
             desc: ACS 7.1 Ec2 tests (RHEL8)
           - name: default
-            vars: vars-rhel8-community.yml
-            desc: latest Community Ec2 tests (RHEL8)
+            vars: vars-ubuntu20-community.yml
+            desc: latest Community Ec2 tests (Ubuntu 20.04)
           - name: default
             vars: vars-ubuntu20.yml
             desc: latest Enterprise Ec2 tests (Ubuntu 20.04)
