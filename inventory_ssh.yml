@@ -1,14 +1,15 @@
 ---
 all:
   vars:
-    ## EACH OF THE VARIABLES BELLOW CAN BE MOVED TO A GROUPS (all.children.*.vars) OR
-    ## HOSTS (all.children.group.hosts.*) SEcTIONS IN CASE VARS NEED TO DIFFER FOR EACH.
-    ## PRECEDENCE; HOSTS_VARS > GROUPS_VARS > GLOBAL_VARS.
-    # More details: https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#define-variables-in-inventory
+    # Each ssh variables below can be moved to groups (all.children.*.vars) or
+    # hosts (all.children.group.hosts.*) sections if they are different for each
+    # host. precedence; hosts_vars > groups_vars > global_vars. more details:
+    # https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#adding-variables-to-inventory
     ansible_connection: ssh
-    # Comment if no SSH key is used and use `-k` on the command line instead (or `-K`in case sudo requires password)
-    ansible_private_key_file: "/path/ssh_key.dsa"
     ansible_user: root
+    # Comment if no SSH key is in use and add `-k` on the command line instead
+    # (or `-K`in case sudo requires a password)
+    ansible_private_key_file: "/path/to/ssh_key.rsa"
 
   children:
     database:
