@@ -1,42 +1,13 @@
 ---
-- name: Cleanup
+- name: Default cleanup
+  import_playbook: ../default/cleanup.yml
+
+- name: Multimachine cleanup
   hosts: localhost
   gather_facts: false
   vars:
     project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
   tasks:
-    - name: Gather EC2 facts
-      amazon.aws.ec2_metadata_facts:
-      delegate_to: "{{ groups['nginx'] | first }}"
-
-    - name: "Set variables"
-      set_fact:
-        certificate_domain: "{{ ansible_ec2_public_hostname }}"
-        private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.key"
-        cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
-
-    - name: cleanup cert
-      delegate_to: localhost
-      file:
-        path: "{{ item }}"
-        state: absent
-      loop:
-        - "{{ private_key_path }}"
-        - "{{ cert_path }}"
-
-    - name: Reset extra vars file
-      delegate_to: localhost
-      ansible.builtin.replace:
-        path: "{{ project_dir }}/tests/test-ssl.yml"
-        regexp: "{{ certificate_domain }}"
-        replace: TEST_FQDN
-
-    - name: Get EC2 instances info
-      amazon.aws.ec2_instance_info:
-        filters:
-          "tag:Name": molecule_{{ lookup('env', 'MOLECULE_IT_PLATFORM') }}_repo_{{ lookup('env', 'BRANCH_NAME') }}_{{ lookup('env', 'BUILD_NUMBER') }}
-      register: molecule_ec2
-
     - name: Destroy Shared contentstore
       community.aws.efs:
         state: absent
