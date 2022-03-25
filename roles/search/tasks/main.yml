@@ -95,11 +95,11 @@
 - name: Add "{{ binaries_dir }}/solr.sh"
   become: true
   template:
-    src: solr.sh
+    src: solr.sh.j2
     dest: "{{ binaries_dir }}/solr.sh"
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
+    mode: 0700
   notify:
     - restart-search
 
@@ -114,14 +114,6 @@
   notify:
     - restart-search
 
-- name: Check Solr running
-  shell: "{{ binaries_dir }}/solr/bin/solr status"
-  register: search_started
-  environment:
-      JAVA_HOME: "{{ java_home }}"
-  failed_when: false
-  changed_when: search_started.rc != 0
-
 - name: Add alfresco-search.service
   become: true
   template:
@@ -133,4 +125,3 @@
   notify: 
     - enable-search
     - restart-search
-  when: search_started.failed or '"No Solr nodes are running." in search_started.stdout'

@@ -14,6 +14,6 @@ export ACTIVEMQ_OPTS="-Djava.util.logging.config.file=logging.properties -Djava.
 export ACTIVEMQ_OPTS="${ACTIVEMQ_OPTS} -Djava.net.preferIPv4Stack=true"
 export ACTIVEMQ_OPTS="${ACTIVEMQ_OPTS} -Dactivemq.log={{ logs_folder }}"
 {% for key, value in activemq_environment.items() %}
-export {{key}}="{{value}}"
+export {{ key }}="{{ value | join(' ') }}"
 {% endfor %}
 ${ACTIVEMQ_HOME}/bin/activemq $*

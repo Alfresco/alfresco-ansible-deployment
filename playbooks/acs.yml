@@ -51,6 +51,11 @@
   roles:
     - role: '../roles/search'
   post_tasks:
+    - name: Make sure Solr is running
+      service:
+        name: alfresco-search
+        state: started
+
     - name: update installation status file with  Search
       vars:
         search_components:

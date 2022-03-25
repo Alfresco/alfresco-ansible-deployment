@@ -4,7 +4,7 @@ nexus_repository:
   enterprise_releases: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco"
 
 acs:
-  version: 7.1.1
+  version: 7.2.0
   edition: Enterprise
 
 amps:
@@ -18,10 +18,10 @@ amps:
     version: 3.2.1
 
 api_explorer:
-  version: 7.1.1
+  version: 7.2.0
 
 search:
-  version: 2.0.2
+  version: 2.0.3
 
 transform:
   version: 2.5.6
@@ -77,31 +77,6 @@ amp_downloads:
 # to replace this with a custom keystore place the keystore file in the "configuration_files/keystores" folder
 # and change this flag to true. See the deployment guide for more details.
 use_custom_keystores: false
-
-acs_environment:
-  JAVA_OPTS: " -Xms512m -Xmx3g -XX:+DisableExplicitGC
-    -XX:+UseConcMarkSweepGC
-    -Djava.awt.headless=true
-    -XX:ReservedCodeCacheSize=128m
-    $JAVA_OPTS"
-
-activemq_environment:
-  ACTIVEMQ_OPTS: "$ACTIVEMQ_OPTS -Xms128m -Xmx1g"
-
-search_environment: # This will add extra vars at the end of the solr.in.sh file
-  SOLR_JAVA_MEM: "-Xms1g -Xmx1g"
-
-sfs_environment:
-  JAVA_OPTS: "$JAVA_OPTS -Xms128m -Xmx512m "
-
-sync_environment:
-  JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx2g "
-
-tengine_environment:
-  JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx1536m "
-
-trouter_environment:
-  JAVA_OPTS: "$JAVA_OPTS -Xms128m -Xmx512m "
 
 dependencies_version:
   postgresql_connector: 42.2.19

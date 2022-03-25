@@ -7,4 +7,7 @@
         name: "sfs"
       vars:
         sfs_environment:
-          JAVA_OPTS: "$JAVA_OPTS -Xms128m -Xmx900m "
+          JAVA_OPTS:
+            - -Xms128m
+            - -Xmx900m
+            - $JAVA_OPTS

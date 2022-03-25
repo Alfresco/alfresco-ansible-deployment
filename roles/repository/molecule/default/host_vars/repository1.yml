@@ -36,16 +36,21 @@ amp_downloads:
     dest: "{{ content_folder }}/amps_share/ags-share.amp"
 use_custom_keystores: true
 acs_environment:
-  JAVA_OPTS: " -Xms350m -Xmx900m -XX:+DisableExplicitGC
-    -XX:+UseConcMarkSweepGC
-    -Djava.awt.headless=true
-    -XX:ReservedCodeCacheSize=128m
-    $JAVA_OPTS"
-  JAVA_TOOL_OPTIONS: " -Dencryption.keystore.type=pkcs12
-    -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding
-    -Dencryption.keyAlgorithm=AES
-    -Dencryption.keystore.location=/var/opt/alfresco/content-services/keystore/keystest
-    -Dmetadata-keystore.password=mp6yc0UD9e
-    -Dmetadata-keystore.aliases=metadata
-    -Dmetadata-keystore.metadata.password=mp6yc0UD9e
-    -Dmetadata-keystore.metadata.algorithm=AES"
+  JAVA_OPTS:
+    - -Xms350m
+    - -Xmx900m
+    - -XX:+DisableExplicitGC
+    - -XX:+UseConcMarkSweepGC
+    - -Djava.awt.headless=true
+    - -XX:ReservedCodeCacheSize=128m
+    - $JAVA_OPTS
+  JAVA_TOOL_OPTIONS:
+    - -Dencryption.keystore.type=pkcs12
+    - -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding
+    - -Dencryption.keyAlgorithm=AES
+    - -Dencryption.keystore.location=/var/opt/alfresco/content-services/keystore/keystest
+    - -Dmetadata-keystore.password=mp6yc0UD9e
+    - -Dmetadata-keystore.aliases=metadata
+    - -Dmetadata-keystore.metadata.password=mp6yc0UD9e
+    - -Dmetadata-keystore.metadata.algorithm=AES
+    - $JAVA_TOOL_OPTIONS

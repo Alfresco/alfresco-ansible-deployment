@@ -2,7 +2,7 @@ amps:
   aos_module:
     version: 1.4.0
   device_sync:
-    version: 3.4.1-M1
+    version: 3.5.0
   googledrive_repo:
     version: 3.2.1
   googledrive_share:

@@ -1,5 +1,18 @@
 ---
 # defaults file for roles/repository
+#
+acs_environment:
+  JAVA_OPTS:
+    - -Xms512m
+    - -Xmx3g
+    - -XX:+DisableExplicitGC
+    - -XX:+UseConcMarkSweepGC
+    - -Djava.awt.headless=true
+    - -XX:ReservedCodeCacheSize=128m
+    - $JAVA_OPTS
+  JAVA_TOOL_OPTIONS:
+    - $JAVA_TOOL_OPTIONS
+  
 utils_repo: []
 utils_storage:
   tmpfs: []

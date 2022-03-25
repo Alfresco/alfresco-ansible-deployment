@@ -6,7 +6,7 @@ The following is a set of guidelines for contributing to this library. Most of t
 
 Because this project forms a part of Alfresco Content Services, the guidelines are hosted in the [Alfresco Social Community](http://community.alfresco.com/community/ecm) where they can be referenced from multiple projects.
 
-Read an [overview on how this project is goverened](https://community.alfresco.com/docs/DOC-6385-project-overview-repository).
+Read an [overview on how this project is governed](https://community.alfresco.com/docs/DOC-6385-project-overview-repository).
 
 You can also perform the following:
 
@@ -21,12 +21,12 @@ available at [http://contributor-covenant.org/version/1/4][version]
 
 ## Contributing to this project
 
-In addition to following the rules above, we ask you that any PR submitted be against the `contribs` branch.
-We might close any PR that's requested against `master`on any other branch.
+We expect you to work on a well known github fork/PR model if you want to contribute to this project.
 
-This is to allow us run our tests before we merge to master.
+Opening you r PR against this repository should trigger the basics community tests and id they go green then we'll proceed with further review and tests.
+After these steps all passed your valuable contribution will e merged to the default branch.
 
-Thank you for your patience!
+Thank you for your openness!
 
 [homepage]: http://contributor-covenant.org
 [version]: http://contributor-covenant.org/version/1/4/

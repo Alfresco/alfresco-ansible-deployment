@@ -7,4 +7,7 @@
         name: "activemq"
       vars:
         activemq_environment:
-          ACTIVEMQ_OPTS: "$ACTIVEMQ_OPTS -Xms300m -Xmx900m"
+          ACTIVEMQ_OPTS:
+            - -Xms300m
+            - -Xmx900m
+            - $ACTIVEMQ_OPTS

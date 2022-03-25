@@ -7,7 +7,7 @@ fi
 . {{ config_folder }}/setenv.sh
 
 {% for key, value in sync_environment.items() %}
-{{key}}="{{value}}"
+{{ key }}="{{ value | join(' ') }}"
 {% endfor %}
 
 ### Fill in these bits:

@@ -12,4 +12,7 @@
         name: "transformers"
       vars:
         tengine_environment:
-          JAVA_OPTS: "$JAVA_OPTS -Xms512m -Xmx900m "
+          JAVA_OPTS:
+            - -Xms512m
+            - -Xmx900m
+            - $JAVA_OPTS

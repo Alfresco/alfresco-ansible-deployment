@@ -43,7 +43,7 @@ repos:
             "--baseline",
             ".secrets.baseline",
             "--exclude-secrets",
-            "(admin|mp6yc0UD9e|alfresco)",
+            "(dummy|admin|mp6yc0UD9e|alfresco)",
           ]
 
   - repo: https://github.com/awslabs/git-secrets
