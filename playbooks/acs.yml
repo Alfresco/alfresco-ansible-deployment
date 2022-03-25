@@ -20,6 +20,7 @@
   become: true
   roles:
     - role: '../roles/activemq'
+      when: not groups.external_activemq | default([])
   tags:
     - activemq
 
