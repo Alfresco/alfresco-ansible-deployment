@@ -17,11 +17,11 @@ all:
         db.infra.local:
     repository:
       vars:
+        # Every storage that can be enabled via `mount` on hosts is supported
         cs_storage:
           type: nfs
           device: nas.infra.local:/exports/contentstore
-          # as per the `mount` options
-          # https://man7.org/linux/man-pages/man8/mount.8.html#FILESYSTEM-INDEPENDENT_MOUNT_OPTIONS
+          # as in `mount -o` options
           options: _netdev,noatime,nodiratime
       hosts:
         ecm1.infra.local:
