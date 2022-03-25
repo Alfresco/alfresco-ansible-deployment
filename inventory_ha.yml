@@ -1,4 +1,5 @@
 ---
+# Run with ansible-playbook playbooks/acs.yml -i inventory_ha.yml
 all:
   vars:
     # Each ssh variable below can be moved to groups (all.children.*.vars) or
