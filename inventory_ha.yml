@@ -1,7 +1,7 @@
 ---
 all:
   vars:
-    # Each ssh variables below can be moved to groups (all.children.*.vars) or
+    # Each ssh variable below can be moved to groups (all.children.*.vars) or
     # hosts (all.children.group.hosts.*) sections if they are different for each
     # host. precedence; hosts_vars > groups_vars > global_vars. more details:
     # https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#adding-variables-to-inventory
