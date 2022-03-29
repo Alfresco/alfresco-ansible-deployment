@@ -1,5 +1,4 @@
-#!/bin/bash
-set -e
+#!/bin/bash -e
 
 # find location of the script
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -7,9 +6,6 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # create dist folder
 mkdir -p "$SCRIPT_DIR/../dist"
 cd "$SCRIPT_DIR/../dist"
-
-# read version from file
-VERSION=$1
 
 # create temporary folder with required files
 echo "Copying required files to temporary folder..."
