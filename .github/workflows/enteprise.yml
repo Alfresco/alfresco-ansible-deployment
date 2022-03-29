@@ -1,6 +1,7 @@
 name: "enterprise"
 on:
   push:
+    branches: ["*"]
 jobs:
   docker:
     runs-on: ubuntu-latest
