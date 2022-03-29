@@ -19,9 +19,9 @@ rsync -rvq --exclude molecule/ ../roles "$BUILD_FOLDER"
 cp ../inventory_* "$BUILD_FOLDER"
 cp ../*.md "$BUILD_FOLDER"
 cp ../LICENSE "$BUILD_FOLDER"
-cp ../VERSION "$BUILD_FOLDER"
 cp ../*-extra-vars.yml "$BUILD_FOLDER"
 cp -r ../configuration_files "$BUILD_FOLDER"
+cp ../Vagrantfile ../requirements.{txt,yml} "$BUILD_FOLDER"
 
 # generate ZIP
 echo "Generating ZIP file..."
