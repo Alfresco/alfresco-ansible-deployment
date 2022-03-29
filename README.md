@@ -54,3 +54,17 @@ To run an integration test you need execute molecule with `-e molecule/default/v
 ```bash
 molecule -e molecule/default/vars-rhel8.yml test
 ```
+
+## Release
+
+To start the release process, just create a tag and push it.
+
+If you have GPG setup, use `git tag -s` otherwise `git tag -a`.
+
+Tag name must have `v` prefix.
+
+Example:
+
+```bash
+git tag -s v2.0.0 -m v2.0.0
+```
