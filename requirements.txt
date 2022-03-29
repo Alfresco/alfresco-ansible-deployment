@@ -6,7 +6,7 @@ molecule-docker==1.1.0
 molecule-ec2==0.4
 boto3==1.21.22
 PyHamcrest==2.0.3
-pylint==2.12.2
+pylint==2.13.2
 pytest-testinfra==6.6.0
 requests==2.27.1
 yamllint==1.26.3
