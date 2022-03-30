@@ -1,4 +1,8 @@
 ---
+ci:
+  skip:
+    - ansible-lint # too slow
+
 repos:
   - repo: https://github.com/jackdewinter/pymarkdown
     rev: v0.9.5
@@ -23,7 +27,7 @@ repos:
       - id: ansible-lint
 
   - repo: https://github.com/thibaudcolas/curlylint
-    rev: 'v0.13.0'
+    rev: "v0.13.0"
     hooks:
       - id: curlylint
         name: curlylint
