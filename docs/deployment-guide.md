@@ -25,7 +25,8 @@ And optionally:
 
 An ACS inventory file has the following groups a host can belong to:
 
-* `repository`: the list of one or more hosts which will get an Alfresco repo deployed on (see [the deployment guide](./shared-contentstore.md) for details on repository clustering).
+* `repository`: the list of one or more hosts which will get an Alfresco repo deployed on (see [the deployment guide](#acs-cluster) for details on repository clustering).
+
 * `database`: a host on which the playbook will deploy PostgreSQL. See  [the deployment guide](./deployment-guide.md) for details on how to use another external RDBMS.
 * `activemq`: the host on which the playbook will deploy the message queue component required by ACS.
 * `external_activemq`: an alternative group to `activemq` in case you don't want to deploy ActiveMQ using our basic activemq role but instead use an ActiveMQ instance of yours which matched your hosting standards.
