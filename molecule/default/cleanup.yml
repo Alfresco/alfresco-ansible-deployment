@@ -8,6 +8,11 @@
     - name: Gather EC2 facts
       amazon.aws.ec2_metadata_facts:
       delegate_to: "{{ groups['nginx'] | first }}"
+      ignore_unreachable: yes
+
+    - name: End gracefully if EC2 is unavailable
+      meta: end_host
+      when: ansible_ec2_public_hostname is undefined
 
     - name: Set variables
       set_fact:

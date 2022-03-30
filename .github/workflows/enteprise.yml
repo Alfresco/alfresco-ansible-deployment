@@ -128,4 +128,9 @@ jobs:
           NEXUS_PASSWORD: ${{ secrets.nexus_password }}
           AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
-        run: ./tests/molecule_it/script.sh destroy
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          retry_wait_seconds: 30
+          command: ./tests/molecule_it/script.sh destroy

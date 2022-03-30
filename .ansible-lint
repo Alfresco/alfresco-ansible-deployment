@@ -10,6 +10,7 @@ skip_list:
   - 'no-handler'
   - 'no-tabs'
   - 'empty-string-compare'
+  - 'fqcn-builtins'
 
 kinds:
   - yaml: "**/molecule/**/vars*.yml"
