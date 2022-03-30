@@ -1,6 +1,8 @@
 # Alfresco Ansible Deployment
 
-[![community](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml) [![enterprise](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml)
+[![community](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml)
+[![enterprise](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Alfresco/alfresco-ansible-deployment/master.svg)](https://results.pre-commit.ci/latest/github/Alfresco/alfresco-ansible-deployment/master)
 
 This project provides an [Ansible](https://www.ansible.com) playbook capable of deploying Alfresco Content Services (ACS).
 
