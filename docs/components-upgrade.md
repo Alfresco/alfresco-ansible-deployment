@@ -18,7 +18,7 @@ Before proceeding to an upgrade, an administrator needs to:
 
 ## Supported Components
 
-Bellow is a description of the supported upgrade procedure for each supported component (at the time of wrinting it's only hotfix upgrades for ACS repository)
+Below is a description of the supported upgrade procedure for each supported component (at the time of writing it's only hotfix upgrades for ACS repository)
 
 ### Content service (repository)
 
@@ -41,37 +41,33 @@ In the example bellow we want to upgrade from the initial 7.0.1 installation to 
 
 Edit `7.0.N-extra-vars.yml` and changes the the bellow snippet:
 
-    ```yaml
-    ---           
-    acs:         
-      version: 7.0.1
-      edition: Enterprise 
-    ...
-    ```
+```yaml
+acs:
+  version: 7.0.1
+  edition: Enterprise
+```
 
 to:
 
-    ```yaml
-    ---           
-    acs:         
-      version: 7.0.1.4
-      edition: Enterprise 
-    ...
-    ```
+```yaml
+acs:
+  version: 7.0.1.4
+  edition: Enterprise
+```
 
 > IMPORTANT: make sure you do not set the version to a version number that's not a hotfix (version number needs to be 4 digits and the 3 first ones needs to match the ones of the initially deployed version)
 > This is because, as eplained earlier, "in-place" upgrades are only supported for hotfixes
 
 Once these changes are saved run the command bellow:
 
-    ```bash
-    ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.0.N-extra-vars.yml"
-    ```
+```bash
+ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.0.N-extra-vars.yml"
+```
 
 > Note: Use whatever inventory and config file that matches your use case
 > If you're applying a hotfix to the latest major release (7.1 as of writing) you don't need to specify an extra config file with "-e @file"
 
-After the playbook ran successfully your environment delivers the upgraded version of repo but the previous installation is still on the target machine. It is the admin responsability to make sure the new system works as expected and no rollback is needed. If all is OK, the old installation previous installation can be cleaned by removing the folder: `{{ binaries_folder }}/content-services-{{ acs.version }}` (by default points to: `/opt/alfresco/content-services-7.0.1`).
+After the playbook ran successfully your environment delivers the upgraded version of repo but the previous installation is still on the target machine. It is the admin responsibility to make sure the new system works as expected and no rollback is needed. If all is OK, the old installation previous installation can be cleaned by removing the folder: `{{ binaries_folder }}/content-services-{{ acs.version }}` (by default points to: `/opt/alfresco/content-services-7.0.1`).
 
 #### Rolling back a hotfix "in-place" upgrade
 
