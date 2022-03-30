@@ -6,7 +6,7 @@ Before continuing we need to introduce some more [Ansible concepts](https://docs
 
 ## The control node
 
-The machine the playbook is run from is known as the control node. Ansible has some prerequisites for this control node. The main one is that it needs to run on a POSIX compliant system ; meaning Linux or others Unix (Including MacOSX), but not windows.
+The machine the playbook is run from is known as the control node. Ansible has some prerequisites for this control node. The main one is that it needs to run on a POSIX compliant system, meaning Linux or others Unix (including MacOSX) but not Windows.
 On windows please make see the provided `Vagrantfile` in order to kick start a local Linux VM where to deploy the playbook.
 
 More info on [control node](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html#control-node)
@@ -25,7 +25,7 @@ And optionally:
 
 An ACS inventory file has the following groups a host can belong to:
 
-* `repository`: the list of one or more hosts which will get an Alfresco repo deployed on (see [the deployment guide](./deployment-guide.md) for details on repository clustering).
+* `repository`: the list of one or more hosts which will get an Alfresco repo deployed on (see [the deployment guide](./shared-contentstore.md) for details on repository clustering).
 * `database`: a host on which the playbook will deploy PostgreSQL. See  [the deployment guide](./deployment-guide.md) for details on how to use another external RDBMS.
 * `activemq`: the host on which the playbook will deploy the message queue component required by ACS.
 * `external_activemq`: an alternative group to `activemq` in case you don't want to deploy ActiveMQ using our basic activemq role but instead use an ActiveMQ instance of yours which matched your hosting standards.
@@ -142,10 +142,10 @@ The quickest way to get started and experiment with the playbook is by leveragin
 
 Once ACS has initialized access the system using the following URLs using a browser:
 
-* Digital Workspace: [http://172.100.100.100/workspace](http://172.100.100.100/workspace)
-* Share: [http://172.100.100.100/share](http://172.100.100.100/share)
-* Repository: [http://172.100.100.100/alfresco](http://172.100.100.100/alfresco)
-* API Explorer: [http://172.100.100.100/api-explorer](http://172.100.100.100/api-explorer)
+* Digital Workspace: `http://192.168.56.100/workspace`
+* Share: `http://192.168.56.100/share`
+* Repository: `http://192.168.56.100/alfresco`
+* API Explorer: `http://192.168.56.100/api-explorer`
 
 To access the machine vagrant created and ran the playbook on use `vagrant ssh`.
 
@@ -154,9 +154,9 @@ To access the machine vagrant created and ran the playbook on use `vagrant ssh`.
 As mentioned in the introduction a control node is required to run the playbook.
 **Required Ansible version is 2.12.**
 
-Not all distributions of Linux may have that specific version of Ansible. Below describes how to configure a control node for deployment with one of the many ways to set a python virtual environment, so you can install the exact same versions of ansible and its dependecies we use when testing (without impacting your system installtion of python). Doing so you're ensuring best chances of success.
+Not all distributions of Linux may have that specific version of Ansible. Below describes how to configure a control node for deployment with one of the many ways to set a python virtual environment, so you can install the exact same versions of ansible and its dependencies we use when testing (without impacting your system installation of python). Doing so you're ensuring best chances of success.
 
-1. If you're not working directly working on the control node, transfer the ZIP file to the control node together with the SSH private key required to login to the target machines, and SSH into the machine
+1. If you're not working directly working on the control node, transfer the ZIP file to the control node together with the SSH private key required to login to the target machines, and SSH into the machine:
 
     ```bash
     scp  alfresco-ansible-deployment-<version>.zip user@controlnode:
@@ -164,17 +164,17 @@ Not all distributions of Linux may have that specific version of Ansible. Below 
     ssh  user@controlnode
     ```
 
-    > You may want to generate an SSH key pair locally and use it later for deployment. Wether you generate one or you use one you copied over to the control node, it is your responsability to deploy it to the target machines so Ansible can use it.
-    > Using SSH keys is recommanded but not mandatory. If using password instead make sure to add the `-k`switch to the ansible command so it prompts you for a password.
+    > You may want to generate an SSH key pair locally and use it later for deployment. Wether you generate one or you use one you copied over to the control node, it is your responsibility to deploy it to the target machines so Ansible can use it.
+    > Using SSH keys is recommended but not mandatory. If using password instead make sure to add the `-k`switch to the ansible command so it prompts you for a password.
 
-2. Check prerequisites and install resuired tools
+2. Check prerequisites and install required tools:
 
     ```bash
     python --version # must be at least 3.8 in order to use Ansible 2.12
     sudo apt install virtualenvwrapper unzip # Use your distro's package manager instead of apt if it's not Debian based
     ```
 
-3. Install Ansible and required dependencies in python virtualenv
+3. Install Ansible and required dependencies in python virtualenv:
 
     ```bash
     unzip alfresco-ansible-deployment-<version>.zip
@@ -187,8 +187,8 @@ Not all distributions of Linux may have that specific version of Ansible. Below 
 4. If you intend to deploy an Enterprise system, create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
 
     ```bash
-     export NEXUS_USERNAME="<your-username>"
-     export NEXUS_PASSWORD="<your-password>"
+    export NEXUS_USERNAME="<your-username>"
+    export NEXUS_PASSWORD="<your-password>"
     ```
 
 Now you have the control node setup you can [configure](#configure-your-deployment) your deployment and decide what kind of deployment you would like.
@@ -266,11 +266,11 @@ all:
 ```
 
 All the `_environment` variables defined in roles are dictionaries, and all their keys are added to the relevant components start script thus allowing you to define any number of environment variables. Key values are a list of strings to allow for easier manipulation.
-When overriding the default env vars you should make sure you're not retiring important ones so always take a look at the ``roles/ROLE_NAME/defauls/main.yml` file first.
+When overriding the default env vars you should make sure you're not retiring important ones so always take a look at the ``roles/ROLE_NAME/defaults/main.yml` file first.
 
 ### External Databases
 
-By default the playbook will deploy and configure a Postgres server for you. If you'd prefer to use an external database server you can override the `repo_db_url` variable as described [previously](#override-playbook-variables).
+By default the playbook will deploy and configure a Postgres server for you. If you'd prefer to use an external database server you can override the `repo_db_url` variable.
 
 An example custom database url is shown below:
 
