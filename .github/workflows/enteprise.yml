@@ -4,6 +4,7 @@ on:
     branches: ["*"]
     paths-ignore:
       - 'docs/**'
+      - '*.md'
 jobs:
   docker:
     runs-on: ubuntu-latest
