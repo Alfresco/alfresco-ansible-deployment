@@ -13,7 +13,7 @@ repos:
           - scan
 
   - repo: https://github.com/PyCQA/prospector
-    rev: 1.7.5
+    rev: 1.7.7
     hooks:
       - id: prospector
 
@@ -29,7 +29,7 @@ repos:
         files: '\.(j2)$'
 
   - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.1.0
+    rev: v1.2.0
     hooks:
       - id: detect-secrets
         name: detect generic secrets
