@@ -1,6 +1,6 @@
 # Secrets
 
-This page describe how secrets are securely managed in our playbook. It also serves as a comprehensive list of credentials in case you want to populated them manually. 
+This page describe how secrets are securely managed in our playbook. It also serves as a comprehensive list of credentials in case you want to populated them manually.
 
 Links to the official documentation relevant for this subject:
 
