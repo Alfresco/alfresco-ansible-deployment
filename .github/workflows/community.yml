@@ -23,6 +23,7 @@ jobs:
           - { "name": "common" }
           - { "name": "java"}
           - { "name": "nginx"}
+          - { "name": "postgres"}
           - { "name": "search"}
           - { "name": "tomcat"}
           - { "name": "transformers"}
