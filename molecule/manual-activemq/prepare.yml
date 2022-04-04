@@ -1,0 +1,17 @@
+---
+- name: Default prepare
+  import_playbook: ../default/prepare.yml
+
+- name: Prepare activemq instance
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Gather EC2 facts
+      delegate_to: "{{ groups['activemq'][0] }}"
+      amazon.aws.ec2_metadata_facts:
+
+    - name: Configure activemq hostname
+      ansible.builtin.replace:
+        path: hosts.yml
+        regexp: 'external_activemq_hostname'
+        replace: "{{ ansible_ec2_public_hostname }}"
