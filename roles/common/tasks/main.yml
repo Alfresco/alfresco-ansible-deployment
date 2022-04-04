@@ -1,5 +1,8 @@
 ---
 # tasks file for common
+- name: Check prerequisites are satisfied
+  import_tasks: prerequisites.yml
+
 - name: Check for upgrades
   import_tasks: check_upgrades.yml
 

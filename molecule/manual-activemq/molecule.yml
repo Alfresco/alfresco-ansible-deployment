@@ -17,6 +17,7 @@ platforms:
       Production: false
     groups:
       - database
+      - activemq
       - transformers
       - search
       - repository

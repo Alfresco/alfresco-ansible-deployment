@@ -117,6 +117,9 @@ sync_db_name: "alfresco-sync"
 sync_db_username: "alfresco-sync"
 sync_db_password: "alfresco" # pragma: allowlist secret
 
+activemq_username: "admin"
+activemq_password: "admin" # pragma: allowlist secret
+
 use_ssl: false
 # Put your domain name here if any (e.g. ecm.alfresco.com). Needs to be empty if unused (don't use dummy values)
 fqdn_alfresco: ""
