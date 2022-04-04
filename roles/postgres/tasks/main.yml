@@ -88,3 +88,13 @@
         role_attr_flags: SUPERUSER
       tags:
         - molecule-idempotence-notest
+
+    - name: "Revoke {{ repo_db_username }} user to access {{ sync_db_name }} database due to OPSEXP-1373"
+      postgresql_user:
+        db: "{{ sync_db_name }}"
+        name: "{{ repo_db_username }}"
+        priv: "ALL"
+        state: absent
+        fail_on_user: false
+      tags:
+        - molecule-idempotence-notest
