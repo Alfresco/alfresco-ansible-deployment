@@ -1,6 +1,6 @@
 # Secrets
 
-This page describe which secrets and how they can be managed in our playbook.
+This page describe how secrets are securely managed in our playbook. It also serves as a comprehensive list of credentials in case you want to populated them manually. 
 
 Links to the official documentation relevant for this subject:
 
@@ -24,7 +24,7 @@ The password used to access the postgres database of Sync
 
 The secret used between Solr and Repository for communicating.
 
-## Secrets not yet properly handled
+## Secrets not yet handled
 
 The `acs_environment` ansible variable holds environment variables for the JVM
 that must be handled as secrets:
