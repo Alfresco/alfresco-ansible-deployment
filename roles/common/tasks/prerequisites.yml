@@ -1,8 +1,9 @@
-    - name: Fail if external and local activemq is in use
-      fail:
-        msg: Detected both external_activemq and activemq groups in use
-      when:
-        - groups.external_activemq is not empty
-        - groups.activemq is not empty
-      tags:
-        - molecule-notest
+---
+- name: Fail if external and local activemq are both in use
+  fail:
+    msg: Detected both external_activemq and activemq groups in use
+  when:
+    - groups.external_activemq is not empty
+    - groups.activemq is not empty
+  tags:
+    - molecule-notest
