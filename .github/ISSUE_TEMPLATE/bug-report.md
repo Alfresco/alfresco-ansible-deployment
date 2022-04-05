@@ -13,7 +13,7 @@ A clear and concise description of the problem you are facing and what you expec
 **Ansible error**
 Copy and paste the Ansible error message while running this playbook (inside below code fences):
 
-```
+```shell
 
 ```
 
