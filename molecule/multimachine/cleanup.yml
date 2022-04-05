@@ -11,7 +11,7 @@
     - name: Destroy Shared contentstore
       community.aws.efs:
         state: absent
-        name: molecule-{{ lookup('env', 'MOLECULE_SCENARIO_NAME') }}-{{ lookup('env', 'BRANCH_NAME') }}-{{ lookup('env', 'BUILD_NUMBER') }}
+        name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
       when: molecule_yml.platforms | selectattr('name', 'in', groups.repository) | length > 1
       register: contentstore
 
