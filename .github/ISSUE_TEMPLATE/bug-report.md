@@ -33,19 +33,19 @@ Copy and paste the Ansible error message while running this playbook (inside bel
 
 Paste the output of the following commands:
 
-* `ansible --version`
+##### ansible --version
 
 ```shell
 
 ```
 
-* `ansible-config dump --only-changed`
+##### ansible-config dump --only-changed
 
 ```shell
 
 ```
 
-* `ansible-inventory -i your_inventory_file --graph`
+##### ansible-inventory -i your_inventory_file --graph
 
 ```shell
 
