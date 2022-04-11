@@ -67,7 +67,7 @@
         - "{{ repo_db_name }}"
         - "{{ sync_db_name }}"
     
-    - name: "Give {{ repo_db_username }} user to access {{ repo_db_name }} database with password"
+    - name: "Give {{ repo_db_username }} user access to {{ repo_db_name }} database with password"
       postgresql_user:
         db: "{{ repo_db_name }}"
         name: "{{ repo_db_username }}"
@@ -78,7 +78,7 @@
       tags:
         - molecule-idempotence-notest
     
-    - name: "Give {{ sync_db_username }} user to access {{ sync_db_name }} database with password"
+    - name: "Give {{ sync_db_username }} user access to {{ sync_db_name }} database with password"
       postgresql_user:
         db: "{{ sync_db_name }}"
         name: "{{ sync_db_username }}"
@@ -89,7 +89,7 @@
       tags:
         - molecule-idempotence-notest
 
-    - name: "Revoke {{ repo_db_username }} user to access {{ sync_db_name }} database due to OPSEXP-1373"
+    - name: "Revoke {{ repo_db_username }} user access to {{ sync_db_name }} database due to previous bug"
       postgresql_user:
         db: "{{ sync_db_name }}"
         name: "{{ repo_db_username }}"

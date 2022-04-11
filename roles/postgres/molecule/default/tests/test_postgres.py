@@ -19,5 +19,4 @@ def test_postgresql_service(host):
     host.run_expect([0], "PGPASSWORD=alfresco psql -h localhost -U alfresco alfresco -c \"SELECT 1\"")
     host.run_expect([0], "PGPASSWORD=alfresco psql -h localhost -U alfresco-sync alfresco-sync -c \"SELECT 1\"")
 
-    # should fail when OPSEXP-1376 is fixed
     host.run_expect([0], "PGPASSWORD=alfresco psql -h localhost -U alfresco alfresco-sync -c \"SELECT 1\"")
