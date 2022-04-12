@@ -8,7 +8,7 @@
     acs_secure_environment:
       JAVA_TOOL_OPTIONS:
         - -Dsolr.sharedSecret="{{ reposearch_shared_secret }}"
-  when:  acs.version is version('7.2.0', '>=')
+  when: acs.version is version('7.2.0', '>=')
 
 - name: Ensure a list of packages installed
   become: true
@@ -52,9 +52,6 @@
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     checksum: sha1:{{ lookup('url', downloads.acs_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rw,g=r,o=r'
   register: distribution_download_result
   async: 1800
   poll: 0
@@ -97,6 +94,7 @@
     - molecule-idempotence-notest
 
 - name: Copy db_connector_repo to {{ tomcat_config_dir }}/lib/ folder
+  become: true
   copy:
     src: "{{ inventory_dir }}/configuration_files/db_connector_repo/"
     dest: "{{ tomcat_config_dir }}/lib/"
@@ -154,13 +152,13 @@
   loop: "{{ share_templates }}"
 
 - name: Add Hazelcast cluster config for Share
+  become: true
   template:
     owner: "{{ username }}"
     group: "{{ group_name }}"
     src: custom-slingshot-application-context.xml
     dest: "{{ settings_folder }}/classpath/alfresco/web-extension/custom-slingshot-application-context.xml"
     mode: 'u=rw,g=,o='
-  become: true
   when: groups['repository'] | length > 1 and not cluster_keepoff
    
 - name: Extract {{ acs_zip_file }} into {{ content_folder }}
@@ -331,6 +329,7 @@
         state: absent
 
 - name: Create alfresco-global.properties
+  become: true
   template:
     owner: "{{ username }}"
     group: "{{ group_name }}"
@@ -341,6 +340,7 @@
     - molecule-idempotence-notest # see OPSEXP-1280
 
 - name: Check on amp download async task
+  become: true
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: job_result
@@ -352,6 +352,7 @@
     - molecule-idempotence-notest
 
 - name: Create apply_amps.sh
+  become: true
   template:
     owner: "{{ username }}"
     group: "{{ group_name }}"
@@ -360,6 +361,7 @@
     mode: 'u=rwx,g=rwx,o=rx'
 
 - name: Install amps on alfresco and share war files
+  become: true
   shell: '{{ content_folder }}/apply_amps.sh -nobackup -force'
   register: mmt_install
   changed_when: mmt_install.rc != 0
@@ -400,6 +402,7 @@
     group: "{{ group_name }}"
 
 - name: Insert or Update custom properties added through configuration_files/alfresco-global.properties
+  become: true
   blockinfile:
     path: "{{ settings_folder }}/classpath/alfresco-global.properties"
     marker: "{mark} - ANSIBLE MANAGED BLOCK"
@@ -407,12 +410,15 @@
     marker_end: "### End - Custom user properties"
     insertafter: EOF
     block: "{{ lookup('file', role_path + '/../../configuration_files/alfresco-global.properties') }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
   notify:
     - restart-alfresco-content
   tags:
     - molecule-idempotence-notest # see OPSEXP-1280
 
 - name: Create monitoring start up service
+  become: true
   template:
     src: alfresco-content-monitored-startup.sh.j2
     dest: "{{ binaries_folder }}/alfresco-content-monitored-startup.sh"
@@ -420,7 +426,7 @@
   notify:
     - systemd-reload
 
-- name: Create monitoring start up service
+- name: Create monitored start up service
   become: true
   template:
     src: alfresco-content-monitored-startup.service.j2
