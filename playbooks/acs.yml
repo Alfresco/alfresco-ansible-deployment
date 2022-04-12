@@ -8,7 +8,6 @@
 - name: Database Role
   hosts: database
   gather_facts: false
-  become: true
   roles:
     - role: '../roles/postgres'
       when: repo_db_url == "" or sync_db_url == ""

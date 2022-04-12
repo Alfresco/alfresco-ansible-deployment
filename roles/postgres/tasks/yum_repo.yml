@@ -1,7 +1,5 @@
 ---
 - name: Install rpm repository
-  become: true
-  become_user: root
   yum:
     name: "{{ postgresql_rpm_repo }}"
     state: present
