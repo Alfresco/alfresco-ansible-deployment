@@ -1,14 +1,14 @@
 name: "community"
 on:
   pull_request:
-      paths-ignore:
-      - 'docs/**'
-      - '*.md'
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
   push:
     branches: [master]
     paths-ignore:
-      - 'docs/**'
-      - '*.md'
+      - "docs/**"
+      - "*.md"
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -16,16 +16,17 @@ jobs:
       fail-fast: true
       matrix:
         molecule_distro:
-          - { "image": "centos:7" }
-          - { "image": "ubuntu:20.04" }
+          - image: centos:7
+          - image: ubuntu:20.04
         role:
-          - { "name": "activemq"}
-          - { "name": "common" }
-          - { "name": "java"}
-          - { "name": "nginx"}
-          - { "name": "search"}
-          - { "name": "tomcat"}
-          - { "name": "transformers"}
+          - name: activemq
+          - name: common
+          - name: java
+          - name: nginx
+          - name: postgres
+          - name: search
+          - name: tomcat
+          - name: transformers
     env:
       PY_COLORS: 1
     steps:
