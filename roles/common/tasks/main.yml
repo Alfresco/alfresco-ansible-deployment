@@ -45,14 +45,14 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "{{ item.mode }}"
-      with_items:
+      loop:
         - folder: "{{ binaries_folder }}"
-          mode: 0755
+          mode: "0755"
         - folder: "{{ data_folder }}"
-          mode: 0750
+          mode: "0750"
         - folder: "{{ config_folder }}"
-          mode: 0750
+          mode: "0750"
         - folder: "{{ logs_folder }}"
-          mode: 0750
+          mode: "0750"
         - folder: "{{ download_location }}"
-          mode: 0777
+          mode: "0777"
