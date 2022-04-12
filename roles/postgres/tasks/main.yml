@@ -29,9 +29,6 @@
 
 - name: Configure PostgreSQL RDBMS
   become: true
-  become_user: postgres
-  vars:
-    ansible_ssh_pipelining: yes
   block:
     - name: Configure postgresql to listen on all IP interfaces
       lineinfile:
@@ -39,8 +36,6 @@
         regexp: "^listen_addresses = '{{ postgres_listen_addresses }}'"
         insertafter: "^#listen_addresses = 'localhost'"
         line: "listen_addresses = '{{ postgres_listen_addresses }}'"
-      notify:
-        - restart-postgresql
 
     - name: Custom postgresql Configuration
       lineinfile:
@@ -50,8 +45,6 @@
         state: "{{ item['state'] | default(omit) }}"
         backup: true
       with_items: "{{ postgres_config }}"
-      notify:
-        - restart-postgresql
 
     - name: Configure postgresql client auth
       template:
@@ -60,9 +53,13 @@
         owner: postgres
         group: postgres
         mode: 'u=rw'
-      notify:
-        - restart-postgresql
+  notify:
+    - restart-postgresql
 
+- name: Configure PostgreSQL RDBMS
+  become: true
+  become_user: postgres
+  block:
     - name: "Create a new database with name {{ item }}"
       postgresql_db:
         name: "{{ item }}"
@@ -78,7 +75,6 @@
         priv: "ALL"
         expires: infinity
         role_attr_flags: SUPERUSER
-      no_log: true
       tags:
         - molecule-idempotence-notest
 
@@ -90,6 +86,5 @@
         priv: "ALL"
         expires: infinity
         role_attr_flags: SUPERUSER
-      no_log: true
       tags:
         - molecule-idempotence-notest
