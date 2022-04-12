@@ -17,7 +17,6 @@
 - name: Activemq Role
   hosts: activemq
   gather_facts: false
-  become: true
   roles:
     - role: '../roles/activemq'
       when: not groups.external_activemq | default([])

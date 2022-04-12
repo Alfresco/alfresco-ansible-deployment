@@ -40,14 +40,19 @@
 
 - name: Create binaries, configuration, data, logs and download folders 
   file:
-    path: "{{ item }}"
+    path: "{{ item.folder }}"
     state: directory
     owner: "{{ username }}"
     group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o-rwx'
+    mode: "{{ item.mode }}"
   with_items:
-    - "{{ binaries_folder }}"
-    - "{{ data_folder }}"
-    - "{{ config_folder }}"
-    - "{{ logs_folder }}"
-    - "{{ download_location }}"
+    - folder: "{{ binaries_folder }}"
+      mode: 0755
+    - folder: "{{ data_folder }}"
+      mode: 0750
+    - folder: "{{ config_folder }}"
+      mode: 0750
+    - folder: "{{ logs_folder }}"
+      mode: 0750
+    - folder: "{{ download_location }}"
+      mode: 0777

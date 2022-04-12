@@ -1,6 +1,7 @@
 ---
 # handlers file for activemq
 - name: enable-activemq
+  become: true
   service:
     name: activemq
     enabled: true
@@ -8,6 +9,7 @@
     daemon_reload: true
     
 - name: restart-activemq
+  become: true
   service:
     name: activemq
     state: restarted
