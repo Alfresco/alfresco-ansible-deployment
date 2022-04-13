@@ -16,6 +16,8 @@
         dest: "{{ tomcat_home | dirname }}"
         remote_src: true
         creates: "{{ tomcat_home }}"
+        group: "{{ group_name }}"
+        owner: "{{ username }}"
 
     - name: Add {{ binaries_folder }}/tomcat.sh
       template:
@@ -62,7 +64,7 @@
               Please reinstall from scratch :(
           when: tcat_dest_dirs.results | map(attribute='stat.exists') | difference([True])
 
-    - name: Remove old files {{ tomcat_home }}/conf
+    - name: Remove old files from {{ tomcat_home }}
       file:
         path: "{{ tomcat_home }}/{{ item }}"
         state: absent
@@ -80,7 +82,7 @@
         group: "{{ group_name }}"
         owner: "{{ username }}"
         mode: "0640"
-    
+
     - name: Create a symbolic link {{ tomcat_config_dir }}/logs
       file:
         src: "{{ item.src }}"
@@ -94,14 +96,14 @@
           dest: "{{ tomcat_config_dir }}/logs"
         - src: "{{ tomcat_working }}/work"
           dest: "{{ tomcat_config_dir }}/work"
-    
+ 
     - name: Add TOMCAT_HOME to setenv script
       lineinfile:
         path: "{{ config_folder }}/setenv.sh"
         line: "export TOMCAT_HOME={{ tomcat_home }}"
         group: "{{ group_name }}"
         owner: "{{ username }}"
-    
+
     - name: Add alfresco-content.service
       template:
           src: alfresco-content.service
