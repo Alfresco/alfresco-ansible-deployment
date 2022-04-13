@@ -7,36 +7,27 @@
     checksum: "md5:{{ dependencies_url.jdk_md5_checksum }}"
     timeout: 570
 
-- name: Unarchive jdk tar.gz
-  unarchive:
-    src: "{{ download_location }}/{{ jdk_tar_file }}"
-    dest: "{{ download_location }}"
-    remote_src: true
-    mode: 'u=rwx,g=rx,o=rx'
-    creates: "{{ download_location }}/{{ jdk_folder }}/"
-
-- name: Copy Java
+- name: Install Java JRE {{ dependencies_version.jdk }}
   become: true
-  become_user: root
-  copy:
-    src: "{{ download_location }}/{{ jdk_folder }}/"
-    dest: "{{ java_home }}"
-    remote_src: true
-    owner: root
-    group: root
-    mode: 'u=rwx,g=rx,o=rx'
+  block:
+    - name: Unarchive jdk tar.gz
+      unarchive:
+        src: "{{ download_location }}/{{ jdk_tar_file }}"
+        dest: "{{ java_home | dirname }}"
+        remote_src: true
+        creates: "{{ java_home }}"
+        owner: root
+        group: root
+        extra_opts:
+          - -s
+          - /openjdk-{{ dependencies_version.jdk }}_{{ dependencies_version.jdk_arch }}/openjdk-{{ dependencies_version.jdk }}/
 
-- name: Check if setenv file exists
-  stat:
-    path: "{{ config_folder }}/setenv.sh"
-  register: setenv_exists
-
-- name: Add setenv bash file
-  become: true
-  template:
-    src: setenv.sh
-    dest: "{{ config_folder }}/setenv.sh"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rx,o=rx'
-  when: not setenv_exists.stat.exists
+    - name: Add setenv bash file
+      template:
+        src: setenv.sh
+        dest: "{{ config_folder }}/setenv.sh"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0755"
+      tags:
+        - molecule-idempotence-notest
