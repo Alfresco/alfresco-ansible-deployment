@@ -4,9 +4,6 @@
     url: "{{ dependencies_url.activemq }}"
     checksum: sha512:{{ dependencies_url.activemq_sha512_checksum_url }}
     dest: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
-    mode: 'u=rwx,g=rwx,o=rx'
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
   register: activemq_download
   async: 900
   poll: 0
@@ -23,10 +20,10 @@
 - name: Install ActiveMQ
   become: true
   block:
-    - name: Extract apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz into
+    - name: Extract apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz
       unarchive:
         src: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
-        dest: "/opt"
+        dest: "{{ activemq_home | dirname }}"
         remote_src: true
         owner: "{{ username }}"
         group: "{{ group_name }}"
