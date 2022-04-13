@@ -176,7 +176,7 @@
             dest: "{{ item.dest }}"
             owner: "{{ username }}"
             group: "{{ group_name }}"
-            mode: "0644"
+            mode: "u+rw,g+r,o="
           loop:
             - src: "{{ content_folder }}/amps/alfresco-share-services.amp"
               dest: "{{ content_folder }}/amps_repo"
@@ -295,7 +295,7 @@
         group: "{{ group_name }}"
         src: alfresco-global.properties.j2
         dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: "0640"
       tags:
         - molecule-idempotence-notest # see OPSEXP-1280
 
