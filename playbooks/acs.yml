@@ -11,6 +11,11 @@
   roles:
     - role: '../roles/postgres'
       when: repo_db_url == "" or sync_db_url == ""
+  post_tasks:
+    - name: make sure PostgreSQL is running
+      service:
+        name: "{{ postgresql_service }}"
+        state: started
   tags:
     - database
 
@@ -51,11 +56,10 @@
   roles:
     - role: '../roles/search'
   post_tasks:
-    - name: Make sure Solr is running
+    - name: make sure Solr is running
       service:
         name: alfresco-search
         state: started
-
     - name: update installation status file with  Search
       vars:
         search_components:
