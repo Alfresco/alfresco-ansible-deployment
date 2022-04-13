@@ -19,8 +19,8 @@
         owner: root
         group: root
         extra_opts:
-          - -s
-          - /openjdk-{{ dependencies_version.jdk }}_{{ dependencies_version.jdk_arch }}/openjdk-{{ dependencies_version.jdk }}/
+          - --one-top-level=openjdk-{{ dependencies_version.jdk }}
+          - --strip-components=1
 
     - name: Add setenv bash file
       template:
