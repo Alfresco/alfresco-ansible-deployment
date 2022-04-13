@@ -1,3 +1,4 @@
-postgres_listen_addresses: localhost
-postgres_config: []
-postgres_client_config: []
+postgres_listen_addresses: "*"
+postgres_config:
+  - line: max_connections = 300
+  - line: shared_buffers = 2GB
