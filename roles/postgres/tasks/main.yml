@@ -49,6 +49,7 @@
   notify:
     - restart-postgresql
 
+# This meta must always follow previous block
 - name: flush Handlers
   meta: flush_handlers
 
