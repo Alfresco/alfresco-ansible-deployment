@@ -1,67 +1,40 @@
 ---
 # tasks file for base-tomcat  
-- name: "Check if \"{{ binaries_folder }}/tomcat.sh\" file is exists"
-  stat:
-    path: "{{ binaries_folder }}/tomcat.sh"
-  register: wrapper
-
-- name: "Add {{ binaries_folder }}/tomcat.sh"
-  template:
-      src: tomcat.sh
-      dest: "{{ binaries_folder }}/tomcat.sh"
-      group: "{{ group_name }}"
-      owner: "{{ username }}"
-      mode: 'u=rwx,g=rwx,o=rx'
-  register: wrapper_created
-  when: not wrapper.stat.exists
-
-- name: Check Tomcat version is installed
-  become: true
-  command: "{{ binaries_folder }}/tomcat.sh configtest"
-  register: install_check
-  environment:
-      JAVA_HOME: "{{ java_home }}"
-  failed_when: false
-  changed_when: install_check.rc != 0
-  when: wrapper.stat.exists or wrapper_created
-
-- name: "Create {{ tomcat_config_dir }}/conf and {{ tomcat_working }}/webapps folders"
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rx,o=rx'
-  with_items:
-    - "{{ tomcat_config_dir }}/conf"
-    - "{{ tomcat_working }}/webapps"
-
 - name: Download Tomcat
   get_url:
     url: "{{ dependencies_url.tomcat }}"
     checksum: sha512:{{ dependencies_url.tomcat_sha512_checksum_url }}
     dest: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
-    timeout: 570
-  become: true
-  become_user: root
+    timeout: 600
 
-- name: Unarchive a file with extra options
-  unarchive:
-    src: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
-    dest: "/opt/"
-    remote_src: true
-    creates: "{{ tomcat_home }}/"
+- name: Install Tomcat {{ dependencies_version.tomcat }}
   become: true
-  become_user: root
+  block:
+    - name: Unarchive a file with extra options
+      unarchive:
+        src: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
+        dest: "{{ tomcat_home | dirname }}"
+        remote_src: true
+        creates: "{{ tomcat_home }}"
 
-- name: Recursively change ownership of "{{ tomcat_home }}/"
-  file:
-    path: "{{ tomcat_home }}/"
-    state: directory
-    recurse: true
-    group: "{{ group_name }}"
-    owner: "{{ username }}"
-    mode: 'o=r,g=rwx'
+    - name: "Add {{ binaries_folder }}/tomcat.sh"
+      template:
+        src: tomcat.sh
+        dest: "{{ binaries_folder }}/tomcat.sh"
+        group: "{{ group_name }}"
+        owner: "{{ username }}"
+        mode: "0755"
+
+    - name: "Create {{ tomcat_config_dir }}/conf and {{ tomcat_working }}/webapps folders"
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rx,o=rx'
+      with_items:
+        - "{{ tomcat_config_dir }}/conf"
+        - "{{ tomcat_working }}/webapps"
 
 - name: check if "{{ tomcat_home }}/conf" dir exists
   stat:
@@ -130,7 +103,6 @@
       dest: "{{ tomcat_config_dir }}/conf/server.xml"
       group: "{{ group_name }}"
       owner: "{{ username }}"
-  when: install_check.rc != 0 or dependencies_version.tomcat not in install_check.stderr
 
 - name: Create a symbolic link {{ tomcat_config_dir }}/logs
   file:
@@ -171,7 +143,6 @@
       dest: /etc/systemd/system/alfresco-content.service
       owner: "{{ username }}"
       group: "{{ group_name }}"
-  when: install_check.rc != 0 or dependencies_version.tomcat not in install_check.stderr
   notify:
     - enable-alfresco-content
   tags:
