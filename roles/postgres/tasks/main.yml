@@ -8,7 +8,7 @@
   block:
     - name: Prepare package manager
       include_tasks: "{{ ansible_pkg_mgr }}_repo.yml"
-    
+
     - name: Install packages
       package:
         name: "{{ postgresql_packages }}"
@@ -20,12 +20,6 @@
         cmd: "{{ postgresql_setup_path }} initdb"
         creates: "{{ postgresql_data_path }}/PG_VERSION"
       when: ansible_os_family == 'RedHat'
-
-    - name: Ensure postgresql service is started and enabled on boot
-      systemd:
-        name: "{{ postgresql_service }}"
-        state: started
-        enabled: true
 
 - name: Configure PostgreSQL RDBMS
   become: true
@@ -56,18 +50,21 @@
   notify:
     - restart-postgresql
 
+- name: flush Handlers
+  meta: flush_handlers
+
 - name: Configure PostgreSQL RDBMS
   become: true
   become_user: postgres
   block:
-    - name: "Create a new database with name {{ item }}"
+    - name: Create a new databases
       postgresql_db:
         name: "{{ item }}"
       loop:
         - "{{ repo_db_name }}"
         - "{{ sync_db_name }}"
 
-    - name: "Connect to {{ repo_db_name }} database and set user's password with no expire date"
+    - name: Connect to {{ repo_db_name }} database and set user's password with no expire date
       postgresql_user:
         db: "{{ repo_db_name }}"
         name: "{{ repo_db_username }}"
@@ -78,7 +75,7 @@
       tags:
         - molecule-idempotence-notest
 
-    - name: "Connect to {{ sync_db_name }} database and set user's password with no expire date"
+    - name: Connect to {{ sync_db_name }} database and set user's password with no expire date
       postgresql_user:
         db: "{{ sync_db_name }}"
         name: "{{ sync_db_username }}"
