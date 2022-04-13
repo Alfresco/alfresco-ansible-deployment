@@ -31,7 +31,6 @@
      - "{{ content_folder }}/amps_share"
      - "{{ content_folder }}/alf_data"
      - "{{ content_folder }}/alfresco-mmt"
-     - "{{ content_folder }}/webapps/alfresco"
      - "{{ content_folder }}/web-server/lib"
      - "{{ content_folder }}/web-server/webapps"
      - "{{ settings_folder }}/classpath/alfresco/extension/transform/pipelines"
@@ -44,6 +43,25 @@
 
 - name: Proceed with Shared contentstore tasks
   include_tasks: sharedcs.yml
+
+- name: Download war files
+  become: true
+  loop: "{{ war_downloads }}"
+  get_url:
+    url: "{{ item.url }}"
+    checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+    dest: "{{ item.dest }}"
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: "0644"
+  register: war_download_result
+  async: 900
+  no_log: true
+  poll: 0
+  tags:
+    - molecule-idempotence-notest
 
 - name: "Download {{ acs_zip_file }}"
   get_url:
@@ -93,44 +111,6 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Copy db_connector_repo to {{ tomcat_config_dir }}/lib/ folder
-  become: true
-  copy:
-    src: "{{ inventory_dir }}/configuration_files/db_connector_repo/"
-    dest: "{{ tomcat_config_dir }}/lib/"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-  when: repo_db_url != ""
-
-- name: Add ACS home to setenv.sh
-  become: true
-  lineinfile:
-    path: "{{ config_folder }}/setenv.sh"
-    insertafter: EOF
-    line: "export ACS_HOME={{ binaries_folder }}/content-services-{{ acs.version }}"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-
-- name: Add ACS home to tomcat.sh
-  become: true
-  lineinfile:
-    path: "{{ binaries_folder }}/tomcat.sh"
-    insertafter: 'CATALINA_OPTS'
-    line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME} -Dats-tengine-aio.host={{ ats_tengine_aio_host }} -Dats-shared-fs.host={{ sfs_host }}"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-
-- name: Add additional env vars to tomcat.sh
-  become: true
-  lineinfile:
-    path: "{{ binaries_folder }}/tomcat.sh"
-    insertafter: 'CATALINA_OPTS'
-    line: export {{ item.key }}="{{ item.value | join(' ') }}"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-  loop: "{{ acs_environment | combine(acs_secure_environment | default({}), list_merge='prepend') | dict2items }}"
-
 - name: Verifying if the distribution zip finished downloading
   async_status:
     jid: "{{ distribution_download_result.ansible_job_id }}"
@@ -141,26 +121,6 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Add the configuration templates
-  become: true
-  template:
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    src: "{{ item }}"
-    dest: "{{ settings_folder }}/classpath/alfresco/web-extension/{{ item }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-  loop: "{{ share_templates }}"
-
-- name: Add Hazelcast cluster config for Share
-  become: true
-  template:
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    src: custom-slingshot-application-context.xml
-    dest: "{{ settings_folder }}/classpath/alfresco/web-extension/custom-slingshot-application-context.xml"
-    mode: 'u=rw,g=,o='
-  when: groups['repository'] | length > 1 and not cluster_keepoff
-   
 - name: Extract {{ acs_zip_file }} into {{ content_folder }}
   become: true
   unarchive:
@@ -171,138 +131,137 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
 
-- name: Move alfresco-share-services.amp to {{ content_folder }}/amps_repo folder
-  block:
-    - name: Check if alfresco-share-services.amp file exists
-      stat:
-        path: "{{ content_folder }}/amps/alfresco-share-services.amp"
-      register: share_amp_exists
-    - name: Copy alfresco-share-services.amp
-      copy:
-        remote_src: true
-        src: "{{ content_folder }}/amps/alfresco-share-services.amp"
-        dest: "{{ content_folder }}/amps_repo/alfresco-share-services.amp"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
-      when: share_amp_exists.stat.exists
-    - name: Remove amps folder
-      file:
-        path: "{{ content_folder }}/amps"
-        state: absent
-
-- name: Download war files
+- name: Prepare ACS directorey structure
   become: true
-  loop: "{{ war_downloads }}"
-  get_url:
-    url: "{{ item.url }}"
-    checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
-    dest: "{{ item.dest }}"
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-  register: war_download_result
-  async: 900
-  no_log: true
-  poll: 0
-  tags:
-    - molecule-idempotence-notest
-
-- name: Copy user provided license file
-  copy:
-    src: "{{ role_path }}/../../configuration_files/licenses/"
-    dest: "{{ settings_folder }}/licenses/"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-
-- name: Move keystore folders for ACS7
   block:
-    - name: Check if source keystore folder exists
-      stat:
-        path: "{{ content_folder }}/keystore"
-      register: keystore
-    - name: Copy keystore folder {{ content_data_folder }}
-      copy:
-        remote_src: true
-        src: "{{ content_folder }}/keystore/metadata-keystore/"
-        dest: "{{ content_data_folder }}/keystore/"
+    - name: Add ACS home to setenv.sh
+      lineinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        insertafter: EOF
+        line: "export ACS_HOME={{ binaries_folder }}/content-services-{{ acs.version }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rx,o=rx'
-      when:
-        - keystore.stat.exists
-        - not use_custom_keystores
-    - name: Remove keystore folder
-      file:
-        path: "{{ content_folder }}/keystore"
-        state: absent
-    - name: copy custom keystore files
-      copy:
-        src: "{{ role_path }}/../../configuration_files/keystores/"
-        dest: "{{ content_data_folder }}/keystore/"
+    
+    - name: Add ACS home to tomcat.sh
+      lineinfile:
+        path: "{{ binaries_folder }}/tomcat.sh"
+        insertafter: 'CATALINA_OPTS'
+        line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME} -Dats-tengine-aio.host={{ ats_tengine_aio_host }} -Dats-shared-fs.host={{ sfs_host }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rx,o=rx'
-      when: use_custom_keystores
-  when: acs.version is version('7.0.0', 'ge')
+    
+    - name: Add additional env vars to tomcat.sh
+      lineinfile:
+        path: "{{ binaries_folder }}/tomcat.sh"
+        insertafter: 'CATALINA_OPTS'
+        line: export {{ item.key }}="{{ item.value | join(' ') }}"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+      loop: "{{ acs_environment | combine(acs_secure_environment | default({}), list_merge='prepend') | dict2items }}"
 
-- name: Move keystore folders for ACS6
-  block:
-    - name: Check if source keystore folder exists
-      stat:
-        path: "{{ content_folder }}/alf_data/keystore"
-      register: keystore
-    - name: Copy keystore folder {{ content_data_folder }}
-      copy:
-        remote_src: true
-        src: "{{ content_folder }}/alf_data/keystore"
-        dest: "{{ content_data_folder }}"
+    - name: Create apply_amps.sh
+      template:
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rx,o=rx'
-      when:
-        - keystore.stat.exists
-        - not use_custom_keystores
-    - name: Remove keystore folder
+        src: apply_amps.sh
+        dest: "{{ content_folder }}"
+        mode: "0755"
+
+    - name: Install ACS data files to Linux FHS destinations
+      block:
+        - name: Copy Alfresco data files
+          copy:
+            remote_src: true
+            src: "{{ item.src }}"
+            dest: "{{ item.dest }}"
+            owner: "{{ username }}"
+            group: "{{ group_name }}"
+            mode: "0644"
+          loop:
+            - src: "{{ content_folder }}/amps/alfresco-share-services.amp"
+              dest: "{{ content_folder }}/amps_repo"
+            - src: "{{ keystore_src }}"
+              dest: "{{ content_data_folder }}/keystore/"
+            - src: "{{ content_folder }}/web-server/shared/classes/"
+              dest: "{{ settings_folder }}/classpath/"
+      rescue:
+        - name: Check Unix FHS dirs
+          stat:
+            path: "{{ item }}"
+          register: alf_dest_dirs
+          loop:
+            - "{{ content_folder }}/amps_repo/alfresco-share-services.amp"
+            - "{{ content_data_folder }}/keystore/"
+            - "{{ settings_folder }}/classpath/"
+        - name: Handle missing sources
+          ansible.builtin.debug:
+            msg: Looks like the FHS directory structure is already in place
+          when: not alf_dest_dirs.results | map(attribute='stat.exists') | difference([True])
+        - name: Fail on unexcepted FHS inconsistency
+          ansible.builtin.fail:
+            msg: >
+              Oh oh that should not happen...
+              Looks like the FHS directory structure is broken and can't be re-created.
+              Please reinstall from scratch :(
+          when: alf_dest_dirs.results | map(attribute='stat.exists') | difference([True])
+    
+    - name: Remove Alfresco data source files
       file:
-        path: "{{ content_folder }}/alf_data/keystore"
+        path: "{{ item }}"
         state: absent
+      loop:
+        - "{{ content_folder }}/amps"
+        - "{{ keystore_src }}"
+        - "{{ content_folder }}/web-server/shared/classes/"
+
+- name: Configure ACS
+  become: true
+  block:
+    - name: Add the configuration templates
+      template:
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        src: "{{ item }}"
+        dest: "{{ settings_folder }}/classpath/alfresco/web-extension/{{ item }}"
+        mode: "0644"
+      loop: "{{ share_templates }}"
+
+    - name: Add Hazelcast cluster config for Share
+      become: true
+      template:
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        src: custom-slingshot-application-context.xml
+        dest: "{{ settings_folder }}/classpath/alfresco/web-extension/custom-slingshot-application-context.xml"
+        mode: 'u=rw,g=,o='
+      when: groups['repository'] | length > 1 and not cluster_keepoff
+
+    - name: Copy db_connector_repo to {{ tomcat_config_dir }}/lib/ folder
+      copy:
+        src: "{{ inventory_dir }}/configuration_files/db_connector_repo/"
+        dest: "{{ tomcat_config_dir }}/lib/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0640"
+      when: repo_db_url != ""
+
+    - name: Copy user provided license file
+      copy:
+        src: "{{ role_path }}/../../configuration_files/licenses/"
+        dest: "{{ settings_folder }}/licenses/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0640"
+
     - name: copy custom keystore file
       copy:
         src: "{{ role_path }}/../../configuration_files/keystores/"
         dest: "{{ content_data_folder }}/keystore/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rx,o=rx'
+        mode: "0640"
       when: use_custom_keystores
-  when: acs.version is version('7.0.0', 'lt')
 
-- name: Move classes folder
-  block:
-    - name: Check if classes files exists
-      stat:
-        path: "{{ settings_folder }}/classpath"
-      register: classes
-    - name: Copy classes
-      become: true
-      copy:
-        remote_src: true
-        src: "{{ content_folder }}/shared/classes/"
-        dest: "{{ settings_folder }}/classpath/"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-      when: not classes.stat.exists
-    - name: Remove classes files
-      file:
-        path: "{{ content_folder }}/shared/classes/"
-        state: absent
-
-- name: Create web application config files
-  become: true
-  block:
     - name: Create config folders
       file:
         state: directory
@@ -310,6 +269,7 @@
         mode: 0755
         owner: "{{ username }}"
         group: "{{ group_name }}"
+
     - name: Create config files
       template:
         src: "{{ item }}.xml"
@@ -328,16 +288,39 @@
         path: "{{ content_folder }}/web-server/conf"
         state: absent
 
-- name: Create alfresco-global.properties
-  become: true
-  template:
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    src: alfresco-global.properties.j2
-    dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
-    mode: 'u=rwx,g=rwx,o=rx'
-  tags:
-    - molecule-idempotence-notest # see OPSEXP-1280
+    - name: Create alfresco-global.properties
+      become: true
+      template:
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        src: alfresco-global.properties.j2
+        dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
+        mode: 'u=rwx,g=rwx,o=rx'
+      tags:
+        - molecule-idempotence-notest # see OPSEXP-1280
+
+    - name: Setup common loader
+      lineinfile:
+        path: "{{ tomcat_config_dir }}/conf/catalina.properties"
+        regexp: ^\s*common.loader\s*=
+        line: "common.loader=\"{{ config_folder }}/content-services/classpath\",\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\""
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+
+    - name: Insert or Update custom properties added through configuration_files/alfresco-global.properties
+      blockinfile:
+        path: "{{ settings_folder }}/classpath/alfresco-global.properties"
+        marker: "{mark} - ANSIBLE MANAGED BLOCK"
+        marker_begin: "### Begin - Custom user properties"
+        marker_end: "### End - Custom user properties"
+        insertafter: EOF
+        block: "{{ lookup('file', role_path + '/../../configuration_files/alfresco-global.properties') }}"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+      notify:
+        - restart-alfresco-content
+      tags:
+        - molecule-idempotence-notest # see OPSEXP-1280
 
 - name: Check on amp download async task
   become: true
@@ -350,15 +333,6 @@
   loop: "{{ amp_download_result.results }}"
   tags:
     - molecule-idempotence-notest
-
-- name: Create apply_amps.sh
-  become: true
-  template:
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    src: apply_amps.sh
-    dest: "{{ content_folder }}/apply_amps.sh"
-    mode: 'u=rwx,g=rwx,o=rx'
 
 - name: Install amps on alfresco and share war files
   become: true
@@ -392,62 +366,36 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Setup common loader
+- name: Setup ACS service
   become: true
-  lineinfile:
-    path: "{{ tomcat_config_dir }}/conf/catalina.properties"
-    regexp: '^common.loader='
-    line: "common.loader=\"{{ config_folder }}/content-services/classpath\",\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\""
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
+  block:
+    - name: Create monitoring start up service
+      become: true
+      template:
+        src: alfresco-content-monitored-startup.sh.j2
+        dest: "{{ binaries_folder }}/alfresco-content-monitored-startup.sh"
+        mode: 0750
 
-- name: Insert or Update custom properties added through configuration_files/alfresco-global.properties
-  become: true
-  blockinfile:
-    path: "{{ settings_folder }}/classpath/alfresco-global.properties"
-    marker: "{mark} - ANSIBLE MANAGED BLOCK"
-    marker_begin: "### Begin - Custom user properties"
-    marker_end: "### End - Custom user properties"
-    insertafter: EOF
-    block: "{{ lookup('file', role_path + '/../../configuration_files/alfresco-global.properties') }}"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-  notify:
-    - restart-alfresco-content
-  tags:
-    - molecule-idempotence-notest # see OPSEXP-1280
+    - name: Create monitored start up service
+      become: true
+      template:
+        src: alfresco-content-monitored-startup.service.j2
+        dest: /etc/systemd/system/alfresco-content-monitored-startup.service
+        mode: 0644
+        owner: root
+        group: root
 
-- name: Create monitoring start up service
-  become: true
-  template:
-    src: alfresco-content-monitored-startup.sh.j2
-    dest: "{{ binaries_folder }}/alfresco-content-monitored-startup.sh"
-    mode: 0750
+    - name: Amend alfresco-content unit
+      become: true
+      lineinfile:
+        line: BindsTo=alfresco-content-monitored-startup.service
+        insertafter: [Unit]
+        path: /etc/systemd/system/alfresco-content.service
+        firstmatch: yes
+      tags:
+        - molecule-idempotence-notest # Files is dealt with outside this role
   notify:
     - systemd-reload
-
-- name: Create monitored start up service
-  become: true
-  template:
-    src: alfresco-content-monitored-startup.service.j2
-    dest: /etc/systemd/system/alfresco-content-monitored-startup.service
-    mode: 0644
-    owner: root
-    group: root
-  notify:
-    - systemd-reload
-
-- name: Amend alfresco-content unit
-  become: true
-  lineinfile:
-    line: BindsTo=alfresco-content-monitored-startup.service
-    insertafter: [Unit]
-    path: /etc/systemd/system/alfresco-content.service
-    firstmatch: yes
-  notify:
-    - systemd-reload
-  tags:
-    - molecule-idempotence-notest # Files is dealt with outside this role
 
 - name: wait-for-db
   wait_for:
