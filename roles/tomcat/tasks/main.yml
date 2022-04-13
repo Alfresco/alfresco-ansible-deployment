@@ -17,7 +17,7 @@
         remote_src: true
         creates: "{{ tomcat_home }}"
 
-    - name: "Add {{ binaries_folder }}/tomcat.sh"
+    - name: Add {{ binaries_folder }}/tomcat.sh
       template:
         src: tomcat.sh
         dest: "{{ binaries_folder }}/tomcat.sh"
@@ -25,125 +25,90 @@
         owner: "{{ username }}"
         mode: "0755"
 
-    - name: "Create {{ tomcat_config_dir }}/conf and {{ tomcat_working }}/webapps folders"
+    - name: Prepare Tomcat config
+      block:
+        - name: Copy files from "{{ tomcat_home }} to {{ tomcat_config_dir }}"
+          copy:
+            remote_src: true
+            src: "{{ tomcat_home }}/{{ item.src }}"
+            dest: "{{ item.dest }}"
+            group: "{{ group_name }}"
+            owner: "{{ username }}"
+          loop:
+            - src: conf
+              dest: "{{ tomcat_config_dir }}"
+            - src: temp
+              dest: "{{ tomcat_working }}"
+            - src: work
+              dest: "{{ tomcat_working }}"
+      rescue:
+        - name: Check Unix FHS dirs
+          stat:
+            path: "{{ item }}"
+          register: tcat_dest_dirs
+          loop:
+            - "{{ tomcat_config_dir }}/conf"
+            - "{{ tomcat_working }}/temp"
+            - "{{ tomcat_working }}/work"
+        - name: Handle missing sources
+          ansible.builtin.debug:
+            msg: Looks like the FHS directory structure is already in place
+          when: not tcat_dest_dirs.results | map(attribute='stat.exists') | difference([True])
+        - name: Fail on unexcepted FHS inconsistency
+          ansible.builtin.fail:
+            msg: >
+              Oh oh that should not happen...
+              Looks like the FHS directory structure is broken and can't be re-created.
+              Please reinstall from scratch :(
+          when: tcat_dest_dirs.results | map(attribute='stat.exists') | difference([True])
+
+    - name: Remove old files {{ tomcat_home }}/conf
       file:
-        path: "{{ item }}"
-        state: directory
-        owner: "{{ username }}"
+        path: "{{ tomcat_home }}/{{ item }}"
+        state: absent
+      loop:
+        - conf
+        - temp
+        - work
+        - logs
+        - webapps
+
+    - name: Add "{{ tomcat_config_dir }}/conf/server.xml"
+      template:
+        src: server.xml
+        dest: "{{ tomcat_config_dir }}/conf/server.xml"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rx,o=rx'
-      with_items:
-        - "{{ tomcat_config_dir }}/conf"
-        - "{{ tomcat_working }}/webapps"
-
-- name: check if "{{ tomcat_home }}/conf" dir exists
-  stat:
-    path: "{{ tomcat_home }}/conf"
-  register: conf_dir_exists
-
-- name: Copy files from "{{ tomcat_home }}/conf to {{ tomcat_config_dir }}"
-  copy:
-    remote_src: true
-    src: "{{ tomcat_home }}/conf"
-    dest: "{{ tomcat_config_dir }}"
-    group: "{{ group_name }}"
-    owner: "{{ username }}"
-  when: conf_dir_exists.stat.exists
-  changed_when: False
-
-- name: Remove old files {{ tomcat_home }}/conf
-  file:
-    path: "{{ tomcat_home }}/conf"
-    state: absent
-  changed_when: False
-
-- name: check if "{{ tomcat_home }}/temp" dir exists
-  stat:
-    path: "{{ tomcat_home }}/temp"
-  register: temp_dir_exists
-
-- name: Copy files from "{{ tomcat_home }}/temp to {{ tomcat_working }}"
-  copy:
-    remote_src: true
-    src: "{{ tomcat_home }}/temp"
-    dest: "{{ tomcat_working }}"
-    group: "{{ group_name }}"
-    owner: "{{ username }}"
-  when: temp_dir_exists.stat.exists
-
-- name: check if "{{ tomcat_home }}/work" dir exists
-  stat:
-    path: "{{ tomcat_home }}/work"
-  register: work_dir_exists
-
-- name: Copy files from "{{ tomcat_home }}/work to {{ tomcat_working }}"
-  copy:
-    remote_src: true
-    src: "{{ tomcat_home }}/work"
-    dest: "{{ tomcat_working }}/work"
-    group: "{{ group_name }}"
-    owner: "{{ username }}"
-  when: work_dir_exists.stat.exists
-
-- name: Remove old files "{{ tomcat_home }}/logs"
-  file:
-    path: "{{ tomcat_home }}/logs"
-    state: absent
-  changed_when: False
-
-- name: Remove old files "{{ tomcat_home }}/webapps"
-  file:
-    path: "{{ tomcat_home }}/webapps"
-    state: absent
-  changed_when: False
-
-- name: Add "{{ tomcat_config_dir }}/conf/server.xml"
-  template:
-      src: server.xml
-      dest: "{{ tomcat_config_dir }}/conf/server.xml"
-      group: "{{ group_name }}"
-      owner: "{{ username }}"
-
-- name: Create a symbolic link {{ tomcat_config_dir }}/logs
-  file:
-    src: "{{ logs_folder }}"
-    dest: "{{ tomcat_config_dir }}/logs"
-    group: "{{ group_name }}"
-    owner: "{{ username }}"
-    state: link
-    force: true
-
-- name: Create a symbolic link "{{ tomcat_config_dir }}"/work
-  file:
-    src: "{{ tomcat_working }}/work"
-    dest: "{{ tomcat_config_dir }}/work"
-    group: "{{ group_name }}"
-    owner: "{{ username }}"
-    state: link
-    force: true
-
-- name: checking for TOMCAT_HOME
-  shell: cat {{ config_folder }}/setenv.sh | grep TOMCAT_HOME
-  register: test_tomcat_home
-  failed_when: false
-  changed_when: test_tomcat_home.rc != 0
-
-- name: Add TOMCAT_HOME to setenv script
-  become: true
-  lineinfile:
-    path: "{{ config_folder }}/setenv.sh"
-    line: "export TOMCAT_HOME={{ tomcat_home }}"
-    group: "{{ group_name }}"
-    owner: "{{ username }}"
-  when: test_tomcat_home.stdout != 0
-
-- name: Add alfresco-content.service
-  template:
-      src: alfresco-content.service
-      dest: /etc/systemd/system/alfresco-content.service
-      owner: "{{ username }}"
-      group: "{{ group_name }}"
-  notify:
-    - enable-alfresco-content
-  tags:
-    - molecule-idempotence-notest # Files is dealt with outside this role
+        owner: "{{ username }}"
+        mode: "0640"
+    
+    - name: Create a symbolic link {{ tomcat_config_dir }}/logs
+      file:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        group: "{{ group_name }}"
+        owner: "{{ username }}"
+        state: link
+        force: true
+      loop:
+        - src: "{{ logs_folder }}"
+          dest: "{{ tomcat_config_dir }}/logs"
+        - src: "{{ tomcat_working }}/work"
+          dest: "{{ tomcat_config_dir }}/work"
+    
+    - name: Add TOMCAT_HOME to setenv script
+      lineinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        line: "export TOMCAT_HOME={{ tomcat_home }}"
+        group: "{{ group_name }}"
+        owner: "{{ username }}"
+    
+    - name: Add alfresco-content.service
+      template:
+          src: alfresco-content.service
+          dest: /etc/systemd/system/alfresco-content.service
+          owner: "{{ username }}"
+          group: "{{ group_name }}"
+      notify:
+        - enable-alfresco-content
+      tags:
+        - molecule-idempotence-notest # Files is dealt with outside this role
