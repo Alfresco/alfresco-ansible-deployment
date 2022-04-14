@@ -56,16 +56,14 @@
           ansible.builtin.debug:
             msg: Looks like the FHS directory structure is already in place
           when: not amq_dest_dirs.results | map(attribute='stat.exists') | difference([True])
-      always:
-        - name: Remove configuration folder from binaries folder
-          file:
-            path: "{{ activemq_home }}/conf"
-            state: absent
 
-        - name: Remove data folder from binaries folder
-          file:
-            path: "{{ activemq_home }}/data"
-            state: absent
+    - name: Remove data & configuration folder from binaries folder
+      file:
+        path: "{{ activemq_home }}/{{ item }}"
+        state: absent
+      loop:
+        - conf
+        - data
 
     - name: Allow external connections to webconsole
       replace:
