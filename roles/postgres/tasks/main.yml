@@ -14,6 +14,8 @@
         name: "{{ postgresql_packages }}"
         state: present
         update_cache: yes
+      notify:
+        - enable-postgresql
 
     - name: Initialize the system database
       command:
