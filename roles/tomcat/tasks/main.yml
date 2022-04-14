@@ -26,6 +26,8 @@
         group: "{{ group_name }}"
         owner: "{{ username }}"
         mode: "0755"
+      tags:
+        - molecule-idempotence-notest # Files is dealt with outside this role
 
     - name: Prepare Tomcat config
       block:
