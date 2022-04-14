@@ -7,7 +7,7 @@
         name: "tomcat"
 
     - name: Ensure tomcat service is started and enabled on boot
+      become: true
       service:
         name: alfresco-content.service
         state: started
-      changed_when: false
