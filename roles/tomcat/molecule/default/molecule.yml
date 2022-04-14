@@ -17,6 +17,9 @@ platforms:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      pipelining: True
   ansible_args:
     - --inventory=../../inventory_local.yml
     - --limit=tomcat

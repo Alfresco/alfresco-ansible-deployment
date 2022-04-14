@@ -28,6 +28,9 @@ platforms:
       - activemq
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      pipelining: True
   inventory:
     links:
       host_vars: host_vars

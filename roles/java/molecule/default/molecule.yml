@@ -20,6 +20,9 @@ provisioner:
   ansible_args:
     - --inventory=../../inventory_local.yml
     - --limit=java
+  config_options:
+    defaults:
+      pipelining: True
   inventory:
     links: 
       group_vars: ../../../../group_vars
