@@ -21,11 +21,10 @@ RUN if [ $(command -v apt-get) ]; then export DEBIAN_FRONTEND=noninteractive && 
     elif [ $(command -v apk) ]; then apk update && apk add --no-cache python3 sudo bash ca-certificates; \
     elif [ $(command -v xbps-install) ]; then xbps-install -Syu && xbps-install -y python3 sudo bash ca-certificates iproute2 && xbps-remove -O; fi
 
-ENV ANSIBLE_USER=ansible SUDO_GROUP=sudo DEPLOY_GROUP=deployer
 RUN set -xe \
-  && groupadd -r ${ANSIBLE_USER} \
+  && DEPLOY_USER=ansible DEPLOY_GROUP=deployer \
+  && [ -f /etc/debian_version ] && SUDO_GROUP=sudo || SUDO_GROUP=wheel \
   && groupadd -r ${DEPLOY_GROUP} \
-  && useradd -m -g ${ANSIBLE_USER} ${ANSIBLE_USER} \
-  && usermod -aG ${SUDO_GROUP} ${ANSIBLE_USER} \
-  && usermod -aG ${DEPLOY_GROUP} ${ANSIBLE_USER} \
+  && useradd -m -g ${DEPLOY_GROUP} ${DEPLOY_USER} \
+  && usermod -aG ${SUDO_GROUP} ${DEPLOY_USER} \
   && sed -i "/^%${SUDO_GROUP}/s/ALL\$/NOPASSWD:ALL/g" /etc/sudoers
