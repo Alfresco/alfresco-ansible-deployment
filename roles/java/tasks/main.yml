@@ -19,8 +19,7 @@
         owner: root
         group: root
         extra_opts:
-          - --one-top-level=openjdk-{{ dependencies_version.jdk }}
-          - --strip-components=1
+          - --xform=s|[^/]*|{{ java_home | basename }}|
 
     - name: Add setenv bash file
       template:
