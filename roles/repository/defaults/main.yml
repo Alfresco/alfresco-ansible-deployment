@@ -21,9 +21,10 @@ cluster_keepoff: false
 # Tomcat resource cache size (mainly for Share)
 tomcat_resource_cache_size: 20480
 
+# make sure to only ever copy contents not dir
 keystore_src: >-
   {% if acs.version is version('7.0.0', 'ge') -%}
     {{ content_folder }}/keystore/metadata-keystore/
   {%- else -%}
-    {{ content_folder }}/alf_data/keystore
+    {{ content_folder }}/alf_data/keystore/
   {%- endif %}

@@ -37,7 +37,6 @@
      - "{{ settings_folder }}/classpath/alfresco/extension/transform/renditions"
      - "{{ settings_folder }}/classpath/alfresco/extension/mimetypes"
      - "{{ settings_folder }}/classpath/alfresco/web-extension"
-     - "{{ content_data_folder }}/keystore"
      - "{{ tomcat_config_dir }}/lib"
      - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
 
