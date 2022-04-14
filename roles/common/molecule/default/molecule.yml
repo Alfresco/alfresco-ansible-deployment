@@ -4,9 +4,9 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: common
+  - name: common-instance
     image: ${MOLECULE_ROLE_IMAGE:-centos:7}
-    dockerfile: ../../../../tests/molecule/Dockerfile.j2
+    dockerfile: ../../../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
     privileged: true
     tmpfs:
@@ -15,14 +15,17 @@ platforms:
       - /tmp
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    groups:
+      - search
 provisioner:
   name: ansible
-  ansible_args:
-    - --inventory=../../inventory_local.yml
-    - --limit=common
+  config_options:
+    defaults:
+      pipelining: True
   inventory:
     links: 
       group_vars: ../../../../group_vars
+      host_vars: host_vars
 verifier:
   name: testinfra
   env:
