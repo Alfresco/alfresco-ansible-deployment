@@ -32,5 +32,6 @@ def test_java_version(host, get_ansible_vars):
 def test_java_home(host, get_ansible_vars):
     """Check that JAVA_HOME is environment variable is set"""
     java_version = get_ansible_vars["dependencies_version"]["jdk"]
-    cmd = host.run(". {}/setenv.sh && echo $JAVA_HOME".format(get_ansible_vars["config_folder"]))
+    with host.sudo():
+        cmd = host.run(". {}/setenv.sh && echo $JAVA_HOME".format(get_ansible_vars["config_folder"]))
     assert_that(cmd.stdout, contains_string("/opt/openjdk-{}".format(java_version)))
