@@ -1,0 +1,36 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: postgres-instance
+    image: ${MOLECULE_ROLE_IMAGE:-centos:7}
+    dockerfile: ../../../../tests/molecule/Dockerfile.j2
+    command: "/lib/systemd/systemd"
+    privileged: true
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+    volume_mounts:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    groups:
+      - repository
+      - activemq
+      - database
+      - syncservice
+      - sfs
+      - search
+      - nginx
+      - adw
+      - transformers
+provisioner:
+  name: ansible
+  inventory:
+    links:
+      group_vars: ../../../../group_vars
+verifier:
+  name: testinfra
+  env:
+    TEST_IMAGE: ${MOLECULE_ROLE_IMAGE:-centos:7}

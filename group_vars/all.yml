@@ -114,7 +114,7 @@ repo_db_password: "alfresco" # pragma: allowlist secret
 sync_db_url: ""
 sync_db_driver: org.postgresql.Driver
 sync_db_name: "alfresco-sync"
-sync_db_username: "alfresco"
+sync_db_username: "alfresco-sync"
 sync_db_password: "alfresco" # pragma: allowlist secret
 
 use_ssl: false
