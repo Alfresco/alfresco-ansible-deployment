@@ -5,6 +5,7 @@
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
 - name: Download alfresco-transform-router.jar
+  become: true
   get_url:
     url: "{{ downloads.trouter_jar_url }}"
     dest: "{{ ats_home }}/alfresco-transform-router-{{ trouter.version }}.jar"
