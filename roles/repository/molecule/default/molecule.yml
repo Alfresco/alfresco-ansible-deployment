@@ -4,9 +4,9 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: repository1
+  - name: repository-instance
     image: ${MOLECULE_ROLE_IMAGE:-centos:7}
-    dockerfile: ../../../../tests/molecule/Dockerfile.j2
+    dockerfile: ../../../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
     privileged: true
     tmpfs:

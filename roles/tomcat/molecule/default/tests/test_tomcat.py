@@ -20,26 +20,31 @@ def get_ansible_vars(host):
 
 def test_tomcat_exe_exists(host, get_ansible_vars):
     """Check that Tomcat executable exists"""
-    assert_that(host.file("/opt/apache-tomcat-{}/bin/catalina.sh".format(get_ansible_vars["dependencies_version"]["tomcat"])).exists)
+    with host.sudo():
+        assert_that(host.file("/opt/apache-tomcat-{}/bin/catalina.sh".format(get_ansible_vars["dependencies_version"]["tomcat"])).exists)
 
 def test_tomcat_version(host, get_ansible_vars):
     """Check that Tomcat version is correct"""
-    cmd = host.run(". {}/setenv.sh && $TOMCAT_HOME/bin/catalina.sh version".format(get_ansible_vars["config_folder"]))
+    with host.sudo():
+        cmd = host.run(". {}/setenv.sh && $TOMCAT_HOME/bin/catalina.sh version".format(get_ansible_vars["config_folder"]))
     assert_that(cmd.stdout, contains_string("Server version: Apache Tomcat/{}".format(get_ansible_vars["dependencies_version"]["tomcat"])))
 
 def test_tomcat_home(host, get_ansible_vars):
     "Check that TOMCAT_HOME variable is set"
-    cmd = host.run(". {}/setenv.sh && echo $TOMCAT_HOME".format(get_ansible_vars["config_folder"]))
+    with host.sudo():
+        cmd = host.run(". {}/setenv.sh && echo $TOMCAT_HOME".format(get_ansible_vars["config_folder"]))
     assert_that(cmd.stdout, contains_string("/opt/apache-tomcat-{}".format(get_ansible_vars["dependencies_version"]["tomcat"])))
 
 def test_catalina_home(host, get_ansible_vars):
     "Check that CATALINA_HOME variable is set"
-    cmd = host.run("sudo -u alfresco {}/tomcat.sh configtest".format(get_ansible_vars["binaries_folder"]))
+    with host.sudo(get_ansible_vars['username']):
+        cmd = host.run("{}/tomcat.sh configtest".format(get_ansible_vars["binaries_folder"]))
     assert_that(cmd.stderr, contains_string("/opt/apache-tomcat-{}".format(get_ansible_vars["dependencies_version"]["tomcat"])))
 
 def test_catalina_base(host, get_ansible_vars):
     "Check that CATALINA_BASE variable is set"
-    cmd = host.run("sudo -u alfresco {}/tomcat.sh configtest".format(get_ansible_vars["binaries_folder"]))
+    with host.sudo(get_ansible_vars['username']):
+        cmd = host.run("{}/tomcat.sh configtest".format(get_ansible_vars["binaries_folder"]))
     assert_that(cmd.stderr, contains_string("{}/tomcat".format(get_ansible_vars["config_folder"])))
 
 def test_tomcat_service(host, get_ansible_vars):

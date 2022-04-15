@@ -34,12 +34,14 @@ def test_activemq_exe_exists(host, get_ansible_vars):
 
 def test_activemq_version(host, get_ansible_vars):
     """Check that ActiveMQ version is correct"""
-    cmd = host.run(". {}/setenv.sh && $ACTIVEMQ_HOME/bin/activemq --version".format(get_ansible_vars["config_folder"]))
+    with host.sudo():
+        cmd = host.run(". {}/setenv.sh && $ACTIVEMQ_HOME/bin/activemq --version".format(get_ansible_vars["config_folder"]))
     assert_that(cmd.stdout, contains_string("ActiveMQ {}".format(get_ansible_vars["dependencies_version"]["activemq"])))
 
 def test_activemq_home(host, get_ansible_vars):
     """Check that ActiveMQ home is set correctly"""
-    cmd = host.run(". {}/setenv.sh && echo $ACTIVEMQ_HOME".format(get_ansible_vars["config_folder"]))
+    with host.sudo():
+        cmd = host.run(". {}/setenv.sh && echo $ACTIVEMQ_HOME".format(get_ansible_vars["config_folder"]))
     assert_that(cmd.stdout, contains_string("/opt/apache-activemq-{}".format(get_ansible_vars["dependencies_version"]["activemq"])))
 
 def test_activemq_service(host, get_ansible_vars):
@@ -55,6 +57,7 @@ def test_activemq_web_console(host, get_ansible_vars):
 
 def test_environment_jvm_opts(host, get_ansible_vars):
     "Check that overwritten JVM_OPTS are taken into consideration"
-    pid = host.run("/opt/openjdk*/bin/jps -lV | grep activemq | awk '{print $1}'")
-    process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
+    with host.sudo():
+        pid = host.run("/opt/openjdk*/bin/jps -lV | grep activemq | awk '{print $1}'")
+        process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
     assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))

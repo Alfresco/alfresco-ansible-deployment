@@ -32,22 +32,26 @@ def test_repo_service_is_running_and_enabled(host, get_ansible_vars):
 
 def test_alfresco_log_exists(host, get_ansible_vars):
     "Check that alfresco.log exists in /var/log/alfresco"
-    assert_that(host.file("/var/log/alfresco/alfresco.log").exists)
+    with host.sudo():
+        assert_that(host.file("/var/log/alfresco/alfresco.log").exists)
 
 def test_alfresco_context_200(host, get_ansible_vars):
     "Check that /alfresco context is available and returns a HTTP 200 status code"
-    cmd = host.run("curl -iL --user admin:admin --connect-timeout 5 http://{}:8080/alfresco".format(test_host))
+    with host.sudo():
+        cmd = host.run("curl -iL --user admin:admin --connect-timeout 5 http://{}:8080/alfresco".format(test_host))
     assert_that(cmd.stdout, contains_string("Welcome to Alfresco"), test_host)
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
 
 def test_alfresco_api(host, get_ansible_vars):
     "Check the repository is installed correctly by calling the discovery API (/alfresco/api/discovery)"
-    cmd = host.run("curl -iL --user admin:admin --connect-timeout 5 http://{}:8080/alfresco/api/discovery".format(test_host))
+    with host.sudo():
+        cmd = host.run("curl -iL --user admin:admin --connect-timeout 5 http://{}:8080/alfresco/api/discovery".format(test_host))
     assert_that(cmd.stdout, contains_string('.'.join(get_ansible_vars["acs"]["version"].split('.')[:3])))
 
 def test_share_log_exists(host, get_ansible_vars):
     "Check that share.log exists in /var/log/alfresco"
-    assert_that(host.file("/var/log/alfresco/share.log").exists)
+    with host.sudo():
+        assert_that(host.file("/var/log/alfresco/share.log").exists)
 
 def test_share_context_200(host, get_ansible_vars):
     "Check that /share context is available and returns a HTTP 200 status code"
@@ -77,40 +81,44 @@ def test_api_explorer_context_200(host, get_ansible_vars):
 
 def test_keytest_keystore_exists(host, get_ansible_vars):
     "Check that the custom keystore exists in /var/opt/alfresco/content-services/keystore/keystest"
-    assert_that(host.file("/var/opt/alfresco/content-services/keystore/keystest").exists)
+    with host.sudo():
+        assert_that(host.file("/var/opt/alfresco/content-services/keystore/keystest").exists)
 
 def test_ags_repo_is_installed_and_loaded(host, get_ansible_vars):
     """Check if rm amp is installed in repo war and loaded at startup"""
     java_version = get_ansible_vars["dependencies_version"]["jdk"]
     acs_version = get_ansible_vars["acs"]["version"]
-    cmd = host.run(
-        "/opt/openjdk-" + java_version +
-        "/bin/java -jar /opt/alfresco/content-services-" + acs_version +
-        "/bin/alfresco-mmt.jar list /opt/alfresco/content-services-" + acs_version +
-        "/web-server/webapps/alfresco.war"
-    )
+    with host.sudo():
+        cmd = host.run(
+                "/opt/openjdk-" + java_version +
+                "/bin/java -jar /opt/alfresco/content-services-" + acs_version +
+                "/bin/alfresco-mmt.jar list /opt/alfresco/content-services-" + acs_version +
+                "/web-server/webapps/alfresco.war"
+                )
+        getlog = host.file("/var/log/alfresco/alfresco.log")
+        assert_that(getlog.contains("Installing module 'alfresco-rm-enterprise-repo' version 3.5.0"))
     assert_that(cmd.stdout, contains_string("AGS Repo\n   -    Version:      3.5.0"))
-    getlog = host.run("cat /var/log/alfresco/alfresco.log")
-    assert_that(getlog.stdout, contains_string("Installing module 'alfresco-rm-enterprise-repo' version 3.5.0"))
 
 def test_ags_share_is_installed_and_loaded(host, get_ansible_vars):
     """Check if rm amp is installed in share war and loaded at startup"""
     java_version = get_ansible_vars["dependencies_version"]["jdk"]
     acs_version = get_ansible_vars["acs"]["version"]
-    cmd = host.run(
-        "/opt/openjdk-" + java_version +
-        "/bin/java -jar /opt/alfresco/content-services-" + acs_version +
-        "/bin/alfresco-mmt.jar list /opt/alfresco/content-services-" + acs_version +
-        "/web-server/webapps/share.war"
-    )
+    with host.sudo():
+        cmd = host.run(
+                "/opt/openjdk-" + java_version +
+                "/bin/java -jar /opt/alfresco/content-services-" + acs_version +
+                "/bin/alfresco-mmt.jar list /opt/alfresco/content-services-" + acs_version +
+                "/web-server/webapps/share.war"
+                )
+        getlog = host.file("/var/log/alfresco/share.log")
+        assert_that(getlog.contains("AGS Enterprise Share, 3.5.0, Alfresco Governance Services Enterprise Share Extension"))
     assert_that(cmd.stdout, contains_string("AGS Enterprise Share\n   -    Version:      3.5.0" ))
-    getlog = host.run("cat /var/log/alfresco/share.log")
-    assert_that(getlog.stdout, contains_string("AGS Enterprise Share, 3.5.0, Alfresco Governance Services Enterprise Share Extension"))
 
 def test_environment_jvm_opts(host, get_ansible_vars):
     "Check that overwritten JVM_OPTS are taken into consideration"
-    pid = host.run("/opt/openjdk*/bin/jps -lV | grep org.apache.catalina.startup.Bootstrap | awk '{print $1}'")
-    process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
+    with host.sudo():
+        pid = host.run("/opt/openjdk*/bin/jps -lV | grep org.apache.catalina.startup.Bootstrap | awk '{print $1}'")
+        process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
     assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
 
 def test_mounting_storage(host):
@@ -118,7 +126,6 @@ def test_mounting_storage(host):
     dir_root='/var/opt/alfresco/content-services/content'
     repovars = host.ansible.get_variables()
     assert_that(host.mount_point(dir_root).exists == isinstance(repovars["cs_storage"]["device"], str))
-    print(host.mount_point(dir_root).options)
     if repovars["cs_storage"]["type"]:
         assert_that(host.mount_point(dir_root).filesystem == repovars["cs_storage"]["type"])
     # Best effort options check: at least find one common option (options may not be returned as passed)
@@ -127,7 +134,8 @@ def test_mounting_storage(host):
 
 def test_newly_added_properties_are_set(host, get_ansible_vars):
     "Check that extra props exists in global properties file"
-    content = host.file("/etc/opt/alfresco/content-services/classpath/alfresco-global.properties").content
+    with host.sudo():
+        content = host.file("/etc/opt/alfresco/content-services/classpath/alfresco-global.properties").content
     assert_that(b'index.recovery.mode=NONE' in content)
     assert_that(b'index.subsystem.name=noindex' in content)
     assert_that(host.socket("tcp://0.0.0.0:1121").is_listening)

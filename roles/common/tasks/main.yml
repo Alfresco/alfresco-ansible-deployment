@@ -6,15 +6,12 @@
 - name: Include OS specific variables
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
-  
+
 - name: Handle secrets
   import_tasks: secrets.yml
-  
-- name: Include nexus credentials for local testing
-  include_vars: "nexus.yml"
-  failed_when: false
 
 - name: Ensure apt indices are up-to-date
+  become: true
   apt:
     update_cache: yes
     cache_valid_time: 3600 # 1 hour
@@ -26,28 +23,36 @@
     name: "{{ utils }}"
     state: present
 
-- name: "Create {{ group_name }} group"
-  group:
-      name: "{{ group_name }}"
-      system: true
+- name: Prepare Alfresco platform installation
+  become: true
+  block:
+    - name: Create {{ group_name }} group
+      group:
+          name: "{{ group_name }}"
+          system: true
 
-- name: "Create {{ username }} user"
-  user:
-    name: "{{ username }}"
-    comment: "{{ username }} user"
-    system: true
-    group: "{{ group_name }}"
+    - name: Create {{ username }} user
+      user:
+        name: "{{ username }}"
+        comment: "{{ username }} user"
+        system: true
+        group: "{{ group_name }}"
 
-- name: Create binaries, configuration, data, logs and download folders 
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o-rwx'
-  with_items:
-    - "{{ binaries_folder }}"
-    - "{{ data_folder }}"
-    - "{{ config_folder }}"
-    - "{{ logs_folder }}"
-    - "{{ download_location }}"
+    - name: Create folder hierarchy
+      file:
+        path: "{{ item.folder }}"
+        state: directory
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "{{ item.mode }}"
+      loop:
+        - folder: "{{ binaries_folder }}"
+          mode: "0755"
+        - folder: "{{ data_folder }}"
+          mode: "0750"
+        - folder: "{{ config_folder }}"
+          mode: "0750"
+        - folder: "{{ logs_folder }}"
+          mode: "0750"
+        - folder: "{{ download_location }}"
+          mode: "0777"

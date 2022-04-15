@@ -271,7 +271,11 @@ When overriding the default env vars you should make sure you're not retiring im
 
 ### External Databases
 
-By default the playbook will deploy and configure a Postgres server for you. If you'd prefer to use an external database server you can override the `repo_db_url` variable.
+By default the playbook will deploy and configure a Postgres server for you. That server is a basic PostgreSQL setup with no specific optimization or features. For example, it doesn't provide any high availability mechanism.
+
+> This server also requires to NOT have a sudo configuration with `requirestty` set.
+
+If you'd prefer to use an external database server you can override the `repo_db_url` variable.
 
 An example custom database url is shown below:
 

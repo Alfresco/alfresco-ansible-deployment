@@ -1,20 +1,15 @@
 ---
 - name: Download activemq tar
-  become: true
   get_url:
     url: "{{ dependencies_url.activemq }}"
     checksum: sha512:{{ dependencies_url.activemq_sha512_checksum_url }}
     dest: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
-    mode: 'u=rwx,g=rwx,o=rx'
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
   register: activemq_download
   async: 900
   poll: 0
   changed_when: false
 
 - name: Check on activemq download async task
-  become: true
   async_status:
     jid: "{{ activemq_download.ansible_job_id }}"
   register: job_result
@@ -22,117 +17,96 @@
   delay: 5
   retries: 300
 
-- name: Extract apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz into /opt
+- name: Install ActiveMQ
   become: true
-  unarchive:
-    src: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
-    dest: "/opt"
-    remote_src: true
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    creates: "{{ activemq_home }}/bin/activemq"
-  when: job_result is succeeded
-
-- name: Move configuration files
   block:
-    - name: Check for conf folder
-      stat:
-        path: "{{ activemq_conf }}"
-      register: conf_existence
-    - name: "Copy configuration files to {{ config_folder }}/activemq"
-      copy:
-       remote_src: true
-       src: "{{ activemq_home }}/conf"
-       dest: "{{ config_folder }}/activemq"
-       owner: "{{ username }}"
-       group: "{{ group_name }}"
-       mode: 'u=rwx,g=rwx,o=rx'
-      when: not conf_existence.stat.exists
-    - name: Remove configuration folder from binaries folder
+    - name: Extract apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz
+      unarchive:
+        src: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
+        dest: "{{ activemq_home | dirname }}"
+        remote_src: true
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        creates: "{{ activemq_home }}/bin/activemq"
+
+    - name: Install ActiveMQ in Unix Filesystem Hierarchy Standard structure
+      block:
+        - name: Copy data & config files to Unix FHS dirs
+          copy:
+            remote_src: true
+            src: "{{ item.src }}"
+            dest: "{{ item.dest }}"
+            owner: "{{ username }}"
+            group: "{{ group_name }}"
+            mode: 0755
+          loop:
+            - src: "{{ activemq_home }}/conf"
+              dest: "{{ config_folder }}/activemq"
+            - src: "{{ activemq_home }}/data"
+              dest: "{{ data_folder }}/activemq"
+      rescue:
+        - name: Check Unix FHS dirs
+          stat:
+            path: "{{ item }}"
+          register: amq_dest_dirs
+          loop:
+            - "{{ config_folder }}/activemq"
+            - "{{ data_folder }}/activemq"
+        - name: Handle missing sources
+          ansible.builtin.debug:
+            msg: Looks like the FHS directory structure is already in place
+          when: not amq_dest_dirs.results | map(attribute='stat.exists') | difference([True])
+
+    - name: Remove data & configuration folder from binaries folder
       file:
-        path: "{{ activemq_home }}/conf"
+        path: "{{ activemq_home }}/{{ item }}"
         state: absent
+      loop:
+        - conf
+        - data
 
-- name: "Move data files to {{ data_folder }}/activemq"
-  block:
-    - name: Check for data folder
-      stat:
-        path: "{{ activemq_data }}"
-      register: data_existence
-    - name: "Copy data files to {{ data_folder }}/activemq"
-      copy:
-       remote_src: true
-       src: "{{ activemq_home }}/data"
-       dest: "{{ data_folder }}/activemq"
-       owner: "{{ username }}"
-       group: "{{ group_name }}"
-       mode: 'u=rwx,g=rwx,o=rx'
-      when: not data_existence.stat.exists
-    - name: Remove data folder from binaries folder
-      file:
-        path: "{{ activemq_home }}/data"
-        state: absent
+    - name: Allow external connections to webconsole
+      replace:
+        path: "{{ activemq_conf }}/jetty.xml"
+        regexp: "127.0.0.1"
+        replace: "0.0.0.0"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
 
-- name: Allow external connections to webconsole
-  become: true
-  replace:
-    path: "{{ activemq_conf }}/jetty.xml"
-    regexp: "127.0.0.1"
-    replace: "0.0.0.0"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
+    - name: Change location of ActiveMQ logs
+      replace:
+        path: "{{ activemq_conf }}/log4j.properties"
+        regexp: "activemq.data"
+        replace: "activemq.log"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
 
-- name: Change location of ActiveMQ logs
-  become: true
-  replace:
-    path: "{{ activemq_conf }}/log4j.properties"
-    regexp: "activemq.data"
-    replace: "activemq.log"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
+    - name: Add activemq_home and host to setenv script
+      blockinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        marker: "# {mark} ACTIVEMQ ENV VARS"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        block: |
+          export ACTIVEMQ_HOME={{ activemq_home }}
+          export ACTIVEMQ_HOST={{ activemq_host }}
 
-- name: Add activemq_home and host to setenv script
-  become: true
-  blockinfile:
-    path: "{{ config_folder }}/setenv.sh"
-    marker: "# {mark} ACTIVEMQ ENV VARS"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    block: |
-      export ACTIVEMQ_HOME={{ activemq_home }}
-      export ACTIVEMQ_HOST={{ activemq_host }}
+    - name: Add activemq wrapper script
+      become: true
+      template:
+        src: "activemq.sh"
+        dest: "{{ binaries_folder }}"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,go=rx'
+      notify:
+        - restart-activemq
 
-- name: Create log file with correct permissions
-  become: true
-  file:
-    path: "{{ item }}"
-    state: touch
-    mode: u=rwx,g=rw,o-rwx
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-  with_items:
-    - "{{ logs_folder }}/activemq.log"
-    - "{{ logs_folder }}/audit.log"
-  changed_when: false
-
-- name: Add activemq wrapper script
-  become: true
-  template:
-    src: "activemq.sh"
-    dest: "{{ binaries_folder }}"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,go=rx'
-  notify:
-    - restart-activemq
-
-- name: Add activemq.service
-  template:
-    src: activemq.service
-    dest: /etc/systemd/system/activemq.service
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-  notify:
-    - enable-activemq
-    - restart-activemq
+    - name: Add activemq.service
+      template:
+        src: activemq.service
+        dest: /etc/systemd/system/activemq.service
+        mode: 0644
+      notify:
+        - enable-activemq
+        - restart-activemq
