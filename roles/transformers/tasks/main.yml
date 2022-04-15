@@ -44,7 +44,7 @@
       file:
         path: "{{ ats_home }}"
         state: directory
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: "0755"
         owner: "{{ username }}"
         group: "{{ group_name }}"
 
@@ -67,12 +67,6 @@
         group: "{{ group_name }}"
         creates: "{{ ats_home }}/alfresco-pdf-renderer"
 
-    - name: Remove alfresco-pdf-renderer-linux.tgz
-      block:
-      - name: Remove from content services
-        file:
-          path: "{{ binaries_folder }}/content-services-{{ acs.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
-          state: absent
 
     - name: Download alfresco-transform-core-aio-boot-{{ transform.version }}.jar
       get_url:
