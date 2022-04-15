@@ -90,8 +90,6 @@
         block: |
           export ACTIVEMQ_HOME={{ activemq_home }}
           export ACTIVEMQ_HOST={{ activemq_host }}
-      tags:
-        - molecule-idempotence-notest
 
     - name: Add activemq wrapper script
       become: true

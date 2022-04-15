@@ -130,7 +130,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
 
-- name: Prepare ACS directorey structure
+- name: Prepare ACS directory structure
   become: true
   block:
     - name: Add ACS home to setenv.sh
