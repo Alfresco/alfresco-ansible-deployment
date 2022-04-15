@@ -28,7 +28,8 @@ def test_trouter_service_is_running_and_enabled(host, get_ansible_vars):
 
 def test_trouter_log_exists(host, get_ansible_vars):
     "Check that ats-atr.log exists in /var/log/alfresco"
-    assert_that(host.file("/var/log/alfresco/ats-atr.log").exists)
+    with host.sudo(get_ansible_vars['username']):
+        assert_that(host.file("/var/log/alfresco/ats-atr.log").exists)
 
 def test_trouter_response(host, get_ansible_vars):
     "Check that trouter context is available and returns a HTTP 200 status code"
@@ -45,6 +46,7 @@ def test_trouter_response(host, get_ansible_vars):
 
 def test_environment_jvm_opts(host, get_ansible_vars):
     "Check that overwritten JVM_OPTS are taken into consideration"
-    pid = host.run("/opt/openjdk*/bin/jps -lV | grep transform-router | awk '{print $1}'")
-    process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
+    with host.sudo():
+        pid = host.run("/opt/openjdk*/bin/jps -lV | awk '/transform-router/{print $1}'")
+        process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
     assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
