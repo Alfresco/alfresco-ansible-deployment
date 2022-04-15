@@ -1,21 +1,21 @@
 ---
 # tasks file for sfs
-- name: Ensure a list of packages installed
+- name: Install SFS
   become: true
-  become_user: root
-  package:
-    name: "{{ utils_sfs }}"
-    state: present
-
-- name: Download alfresco-shared-file-store-controller-{{ sfs.version }}.jar
   block:
+    - name: Ensure a list of packages installed
+      package:
+        name: "{{ utils_sfs }}"
+        state: present
+
     - name: Create transform services folder
-      become: true
       file:
         path: "{{ ats_home }}"
         state: directory
         owner: "{{ username }}"
         group: "{{ group_name }}"
+        mode: "0755"
+
     - name: Download alfresco-shared-file-store-controller.jar
       get_url:
         url: "{{ downloads.sfs_jar_url }}"
@@ -23,56 +23,40 @@
         checksum: sha1:{{ lookup('url', downloads.sfs_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: "0644"
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
         timeout: 570
 
-- name: Add sfs startup script
-  become: true
-  template:
-    src: ats-shared-fs.sh
-    dest: "{{ binaries_folder }}/ats-shared-fs.sh"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-    force: true
-  notify:
-    - restart-sfs
+    - name: Add sfs startup script
+      template:
+        src: ats-shared-fs.sh
+        dest: "{{ binaries_folder }}/ats-shared-fs.sh"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0755"
+      notify:
+        - restart-sfs
 
+    - name: Add paths to setenv file
+      blockinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        marker: "# {mark} ATS COMMON ENV VARS"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        block: |
+          export ATS_HOME={{ binaries_folder }}/transform-service
+          export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
+          export ATS_SHARED_FS_HOST={{ sfs_host }}
+        insertafter: EOF
 
-- name: Add paths to setenv file
-  become: true
-  blockinfile:
-    path: "{{ config_folder }}/setenv.sh"
-    marker: "# {mark} ATS COMMON ENV VARS"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    block: |
-      export ATS_HOME={{ binaries_folder }}/transform-service
-      export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
-      export ATS_SHARED_FS_HOST={{ sfs_host }}
-    insertafter: EOF
-
-- name: Create log file with correct permissions
-  become: true
-  file:
-    path: "{{ logs_folder }}/ats-shared-fs.log"
-    state: touch
-    mode: u=rwx,g=rw,o-rwx
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-  changed_when: false
-
-- name: Add alfresco-shared-fs service
-  become: true
-  template:
-    src: alfresco-shared-fs.service
-    dest: "/etc/systemd/system/alfresco-shared-fs.service"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-    force: true
-  notify:
-    - enable-sfs
-    - restart-sfs
+    - name: Add alfresco-shared-fs service
+      template:
+        src: alfresco-shared-fs.service
+        dest: "/etc/systemd/system/alfresco-shared-fs.service"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0644"
+      notify:
+        - enable-sfs
+        - restart-sfs
