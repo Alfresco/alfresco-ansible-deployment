@@ -4,18 +4,17 @@
   wait_for:
     host: "{{ ats_tengine_aio_host }}"
     port: "{{ ports_cfg.transformers.tengine }}"
-  register: go_signal
 
 - name: enable-trouter
+  become: true
   service:
     name: alfresco-transform-router
     enabled: true
     daemon_reload: true
-  when: not go_signal.failed
 
 - name: restart-trouter
+  become: true
   service:
     name: alfresco-transform-router
     state: restarted
     daemon_reload: true
-  when: not go_signal.failed
