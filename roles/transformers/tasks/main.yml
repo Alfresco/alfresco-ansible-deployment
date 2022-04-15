@@ -80,33 +80,31 @@
         url_password: "{{ nexus_password }}"
         timeout: 570
 
-    - name: Add paths to setenv file
-      block:
-      - name: Add ats common vars to setenv file
-        blockinfile:
-          path: "{{ config_folder }}/setenv.sh"
-          marker: "# {mark} ATS COMMON ENV VARS"
-          owner: "{{ username }}"
-          group: "{{ group_name }}"
-          block: |
-            export ATS_HOME={{ binaries_folder }}/transform-service
-            export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
-            export ATS_SHARED_FS_HOST={{ sfs_host }}
-          insertafter: EOF
-      - name: Add ats dependencies vars to setenv file
-        blockinfile:
-          path: "{{ config_folder }}/setenv.sh"
-          marker: "# {mark} ATS DEPENDENCIES ENV VARS"
-          owner: "{{ username }}"
-          group: "{{ group_name }}"
-          block: |
-            export LIBREOFFICE_HOME={{ libreoffice_home }}
-            export IMAGEMAGICK_HOME={{ imagemagick_home }}
-            export IMAGEMAGICK_DYN={% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/lib/x86_64-linux-gnu{% else %}/usr/lib64{% endif %}/
-            export IMAGEMAGICK_CONFIG={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/config-Q16HDRI
-            export IMAGEMAGICK_CODERS={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/modules-Q16HDRI/coders
-            export IMAGEMAGICK_EXE="{% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/bin/{% endif %}convert"
-          insertafter: EOF
+    - name: Add ats common vars to setenv file
+      blockinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        marker: "# {mark} ATS COMMON ENV VARS"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        block: |
+          export ATS_HOME={{ binaries_folder }}/transform-service
+          export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
+          export ATS_SHARED_FS_HOST={{ sfs_host }}
+        insertafter: EOF
+    - name: Add ats dependencies vars to setenv file
+      blockinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        marker: "# {mark} ATS DEPENDENCIES ENV VARS"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        block: |
+          export LIBREOFFICE_HOME={{ libreoffice_home }}
+          export IMAGEMAGICK_HOME={{ imagemagick_home }}
+          export IMAGEMAGICK_DYN={% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/lib/x86_64-linux-gnu{% else %}/usr/lib64{% endif %}/
+          export IMAGEMAGICK_CONFIG={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/config-Q16HDRI
+          export IMAGEMAGICK_CODERS={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/modules-Q16HDRI/coders
+          export IMAGEMAGICK_EXE="{% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/bin/{% endif %}convert"
+        insertafter: EOF
 
     - name: Create log file with correct permissions
       file:
