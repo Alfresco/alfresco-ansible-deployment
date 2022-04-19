@@ -52,11 +52,11 @@
 - name: Alfresco Search Role
   hosts: search
   gather_facts: false
-  become: true
   roles:
     - role: '../roles/search'
   post_tasks:
     - name: make sure Solr is running
+      become: true
       service:
         name: alfresco-search
         state: started
