@@ -1,1 +1,2 @@
+ansible_user: ansible
 reposearch_shared_secret: dummy
