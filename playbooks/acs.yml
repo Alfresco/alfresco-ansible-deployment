@@ -148,6 +148,7 @@
     - { role: '../roles/adw', when: acs.edition == "Enterprise" }
   post_tasks:
     - name: update installation status file with ADW
+      become: true
       vars:
         adw_components:
           adw:
