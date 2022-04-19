@@ -1,4 +1,4 @@
 ---
 # defaults file for adw
 nginx_package_name: "nginx"
-request_uri: "workspace"
+adw_context: "workspace"
