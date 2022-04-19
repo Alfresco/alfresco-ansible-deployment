@@ -25,7 +25,7 @@
         src: "{{ nginx_conf_template }}"
         dest: "{{ nginx_conf_file_path }}"
         owner: root
-        group: "{{ root_group }}"
+        group: root
         mode: "0644"
       notify: reload-nginx
 

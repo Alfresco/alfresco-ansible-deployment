@@ -41,7 +41,7 @@
         dest: "{{ nginx_vhost_path }}/{{ item.filename }}"
         force: true
         owner: root
-        group: "{{ root_group }}"
+        group: root
         mode: 0644
       with_items: "{{ nginx_vhosts }}"
       when: item.state|default('present') != 'absent'
