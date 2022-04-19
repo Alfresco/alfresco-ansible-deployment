@@ -28,7 +28,8 @@ def test_sfs_service_is_running_and_enabled(host, get_ansible_vars):
 
 def test_sfs_log_exists(host, get_ansible_vars):
     "Check that ats-shared-fs.log exists in /var/log/alfresco"
-    assert_that(host.file("/var/log/alfresco/ats-shared-fs.log").exists)
+    with host.sudo(get_ansible_vars['username']):
+        assert_that(host.file("/var/log/alfresco/ats-shared-fs.log").exists)
 
 def test_sfs_response(host, get_ansible_vars):
     "Check that sfs context is available and returns a HTTP 200 status code"
@@ -39,6 +40,7 @@ def test_sfs_response(host, get_ansible_vars):
 
 def test_environment_jvm_opts(host, get_ansible_vars):
     "Check that overwritten JVM_OPTS are taken into consideration"
-    pid = host.run("/opt/openjdk*/bin/jps -lV | grep shared-file-store | awk '{print $1}'")
-    process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
+    with host.sudo():
+        pid = host.run("/opt/openjdk*/bin/jps -lV | awk '/shared-file-store/{print $1}'")
+        process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
     assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))

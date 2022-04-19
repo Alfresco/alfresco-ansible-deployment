@@ -4,17 +4,17 @@
   wait_for:
     host: "{{ activemq_host }}"
     port: "{{ ports_cfg.activemq.openwire }}"
-  register: go_signal
 
 - name: enable-aio
+  become: true
   service:
     name: alfresco-tengine-aio
     enabled: true
     daemon_reload: true
 
 - name: restart-aio
+  become: true
   service:
     name: alfresco-tengine-aio
     state: restarted
     daemon_reload: true
-  when: not go_signal.failed

@@ -6,7 +6,7 @@ driver:
 platforms:
   - name: trouter-instance
     image: ${MOLECULE_ROLE_IMAGE:-centos:7}
-    dockerfile: ../../../../tests/molecule/Dockerfile.j2
+    dockerfile: ../../../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
     privileged: true
     tmpfs:
@@ -28,8 +28,12 @@ platforms:
       - activemq
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      pipelining: True
   inventory:
     links: 
+      host_vars: host_vars
       group_vars: ../../../../group_vars
 verifier:
   name: testinfra

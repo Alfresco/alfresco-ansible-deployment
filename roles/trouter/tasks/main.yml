@@ -4,78 +4,65 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
-- name: Ensure a list of packages installed
+- name: Download alfresco-transform-router.jar
   become: true
-  become_user: root
-  package:
-    name: "{{ utils_trouter }}"
-    state: present
+  get_url:
+    url: "{{ downloads.trouter_jar_url }}"
+    dest: "{{ ats_home }}/alfresco-transform-router-{{ trouter.version }}.jar"
+    checksum: sha1:{{ lookup('url', downloads.trouter_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+    timeout: 570
 
-- name: Download alfresco-transform-router-{{ trouter.version }}.jar
+- name: Install T-Router
+  become: true
   block:
+    - name: Ensure a list of packages installed
+      package:
+        name: "{{ utils_trouter }}"
+        state: present
+
     - name: Create transform services folder
       file:
         path: "{{ ats_home }}"
         state: directory
         owner: "{{ username }}"
         group: "{{ group_name }}"
-    - name: Download alfresco-transform-router.jar
-      get_url:
-        url: "{{ downloads.trouter_jar_url }}"
-        dest: "{{ ats_home }}/alfresco-transform-router-{{ trouter.version }}.jar"
-        checksum: sha1:{{ lookup('url', downloads.trouter_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+        mode: "0755"
+
+    - name: Add T-Router startup script
+      template:
+        src: ats-atr.sh
+        dest: "{{ binaries_folder }}/ats-atr.sh"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
-        url_username: "{{ nexus_user }}"
-        url_password: "{{ nexus_password }}"
-        timeout: 570
+        mode: "0755"
+      notify:
+        - restart-trouter
 
-- name: Add t-router startup script
-  become: true
-  template:
-    src: ats-atr.sh
-    dest: "{{ binaries_folder }}/ats-atr.sh"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-    force: true
-  notify:
-    - restart-trouter
+    - name: Add paths to setenv file
+      blockinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        marker: "# {mark} ATS COMMON ENV VARS"
+        block: |
+          export ATS_HOME={{ binaries_folder }}/transform-service
+          export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
+          export ATS_SHARED_FS_HOST={{ sfs_host }}
+        insertafter: EOF
 
-- name: Add paths to setenv file
-  become: true
-  blockinfile:
-    path: "{{ config_folder }}/setenv.sh"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    marker: "# {mark} ATS COMMON ENV VARS"
-    block: |
-      export ATS_HOME={{ binaries_folder }}/transform-service
-      export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
-      export ATS_SHARED_FS_HOST={{ sfs_host }}
-    insertafter: EOF
-
-- name: Create log file with correct permissions
-  become: true
-  file:
-    path: "{{ logs_folder }}/ats-atr.log"
-    state: touch
-    mode: u=rwx,g=rw,o-rwx
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-  changed_when: false
-
-- name: Add alfresco-transform-router service
-  become: true
-  template:
-    src: alfresco-transform-router.service
-    dest: "/etc/systemd/system/alfresco-transform-router.service"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-    force: true
-  notify:
-    - wait-for-aio
-    - enable-trouter
-    - restart-trouter
+    - name: Add alfresco-transform-router service
+      template:
+        src: alfresco-transform-router.service
+        dest: "/etc/systemd/system/alfresco-transform-router.service"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0644"
+      notify:
+        - wait-for-aio
+        - enable-trouter
+        - restart-trouter

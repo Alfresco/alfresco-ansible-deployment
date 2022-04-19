@@ -31,11 +31,11 @@
 - name: Transformers Role
   hosts: transformers
   gather_facts: false
-  become: true
   roles:
     - role: '../roles/transformers'
   post_tasks:
     - name: update installation status file with Transformers
+      become: true
       vars:
         transform_components:
           transform:
@@ -77,11 +77,11 @@
 - name: Alfresco Repository Role
   hosts: repository
   gather_facts: false
-  become: true
   roles:
     - role: '../roles/repository'
   post_tasks:
     - name: update installation status file with ACS
+      become: true
       vars:
         acs_components:
           acs:
@@ -102,11 +102,11 @@
 - name: T-Router Role
   hosts: transformers
   gather_facts: false
-  become: true
   roles:
     - { role: '../roles/trouter', when: acs.edition == "Enterprise" }
   post_tasks:
     - name: update installation status file with Trouter
+      become: true
       vars:
         trouter_components:
           trouter:
@@ -123,11 +123,11 @@
 - name: Shared File Store Role
   hosts: transformers
   gather_facts: false
-  become: true
   roles:
     - { role: '../roles/sfs', when: acs.edition == "Enterprise" }
   post_tasks:
     - name: update installation status file with SFS
+      become: true
       vars:
         sfs_components:
          sfs:

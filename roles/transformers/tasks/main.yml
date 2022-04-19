@@ -9,7 +9,6 @@
     file: "{{ os_version_yml }}"
 
 - name: Download libreoffice package archive
-  become: true
   get_url:
     url: "{{ libreoffice_archive_url }}"
     checksum: sha1:{{ libreoffice_archive_sha1_checksum_url }}
@@ -29,18 +28,119 @@
     url: "{{ pkg_url }}"
     checksum: "sha1:{{ lookup('url', pkg_url + '.sha1') }}"
     dest: "{{ download_location }}/{{ pkg_name }}"
-    mode: 0444
+    mode: "0644"
     timeout: 570
   loop: "{{  imagemagick_packages }}"
 
-- name: Ensure a list of packages installed
+- name: ATS installation
   become: true
-  package:
-    name: "{{ utils_transform }}"
-    state: present
+  block:
+    - name: Ensure a list of packages installed
+      package:
+        name: "{{ utils_transform }}"
+        state: present
+
+    - name: Create transform-services folder
+      file:
+        path: "{{ ats_home }}"
+        state: directory
+        mode: "0755"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+
+    - name: Download alfresco-pdf-renderer-linux.tgz
+      get_url:
+        url: "{{ alfresco_pdf_renderer }}"
+        checksum: sha1:{{ lookup('url', alfresco_pdf_renderer_sha1_checksum_url) }}
+        dest: "{{ download_location }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0644"
+        timeout: 570
+
+    - name: Extract alfresco-pdf-renderer-linux.tgz
+      unarchive:
+        src: "{{ download_location }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
+        dest: "{{ ats_home }}"
+        remote_src: true
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        creates: "{{ ats_home }}/alfresco-pdf-renderer"
+
+
+    - name: Download alfresco-transform-core-aio-boot-{{ transform.version }}.jar
+      get_url:
+        url: "{{ downloads.transform_jar_url }}"
+        dest: "{{ binaries_folder }}/transform-service/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
+        checksum: sha1:{{ lookup('url', downloads.transform_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+        url_username: "{{ nexus_user }}"
+        url_password: "{{ nexus_password }}"
+        timeout: 570
+
+    - name: Add ats common vars to setenv file
+      blockinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        marker: "# {mark} ATS COMMON ENV VARS"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        block: |
+          export ATS_HOME={{ binaries_folder }}/transform-service
+          export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
+          export ATS_SHARED_FS_HOST={{ sfs_host }}
+        insertafter: EOF
+    - name: Add ats dependencies vars to setenv file
+      blockinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        marker: "# {mark} ATS DEPENDENCIES ENV VARS"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        block: |
+          export LIBREOFFICE_HOME={{ libreoffice_home }}
+          export IMAGEMAGICK_HOME={{ imagemagick_home }}
+          export IMAGEMAGICK_DYN={% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/lib/x86_64-linux-gnu{% else %}/usr/lib64{% endif %}/
+          export IMAGEMAGICK_CONFIG={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/config-Q16HDRI
+          export IMAGEMAGICK_CODERS={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/modules-Q16HDRI/coders
+          export IMAGEMAGICK_EXE="{% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/bin/{% endif %}convert"
+        insertafter: EOF
+
+    - name: Create log file with correct permissions
+      file:
+        path: "{{ logs_folder }}/ats-ate-aio.log"
+        state: touch
+        mode: u=rwx,g=rw,o-rwx
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+      changed_when: false
+
+    - name: Add AIO startup script
+      template:
+        src: ats-ate-aio.sh
+        dest: "{{ binaries_folder }}/ats-ate-aio.sh"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx,o=rx'
+        force: true
+      notify:
+        - wait-for-activemq
+        - restart-aio
+
+    - name: Add alfresco-tengine-aio service
+      template:
+        src: alfresco-tengine-aio.service
+        dest: "/etc/systemd/system/alfresco-tengine-aio.service"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rw,g=rw,o=r'
+        force: true
+      notify:
+        - wait-for-activemq
+        - enable-aio
+        - restart-aio
 
 - name: Verifying if libreoffice finished downloading
-  become: true
   async_status:
     jid: "{{ libreoffice_download.ansible_job_id }}"
   register: job_result
@@ -60,117 +160,3 @@
 
 - name: Install LibreOffice & imageMagick
   include_tasks: "{{ pkg_format }}-packages.yml"
-
-- name: Create transform-services folder
-  file:
-    path: "{{ ats_home }}"
-    state: directory
-    mode: 'u=rwx,g=rwx,o=rx'
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-
-- name: Download alfresco-pdf-renderer-linux.tgz
-  become: true
-  get_url:
-    url: "{{ alfresco_pdf_renderer }}"
-    checksum: sha1:{{ lookup('url', alfresco_pdf_renderer_sha1_checksum_url) }}
-    dest: "{{ download_location }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-    timeout: 570
-
-- name: Extract alfresco-pdf-renderer-linux.tgz
-  become: true
-  unarchive:
-    src: "{{ download_location }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
-    dest: "{{ ats_home }}"
-    remote_src: true
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    creates: "{{ ats_home }}/alfresco-pdf-renderer"
-
-- name: Remove alfresco-pdf-renderer-linux.tgz
-  block:
-  - name: Remove from content services
-    file:
-      path: "{{ binaries_folder }}/content-services-{{ acs.version }}/alfresco-pdf-renderer/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
-      state: absent
-
-- name: Download alfresco-transform-core-aio-boot-{{ transform.version }}.jar
-  get_url:
-    url: "{{ downloads.transform_jar_url }}"
-    dest: "{{ binaries_folder }}/transform-service/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
-    checksum: sha1:{{ lookup('url', downloads.transform_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    timeout: 570
-
-- name: Add paths to setenv file
-  become: true
-  block:
-  - name: Add ats common vars to setenv file
-    blockinfile:
-      path: "{{ config_folder }}/setenv.sh"
-      marker: "# {mark} ATS COMMON ENV VARS"
-      owner: "{{ username }}"
-      group: "{{ group_name }}"
-      block: |
-        export ATS_HOME={{ binaries_folder }}/transform-service
-        export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
-        export ATS_SHARED_FS_HOST={{ sfs_host }}
-      insertafter: EOF
-  - name: Add ats dependencies vars to setenv file
-    blockinfile:
-      path: "{{ config_folder }}/setenv.sh"
-      marker: "# {mark} ATS DEPENDENCIES ENV VARS"
-      owner: "{{ username }}"
-      group: "{{ group_name }}"
-      block: |
-        export LIBREOFFICE_HOME={{ libreoffice_home }}
-        export IMAGEMAGICK_HOME={{ imagemagick_home }}
-        export IMAGEMAGICK_DYN={% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/lib/x86_64-linux-gnu{% else %}/usr/lib64{% endif %}/
-        export IMAGEMAGICK_CONFIG={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/config-Q16HDRI
-        export IMAGEMAGICK_CODERS={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/modules-Q16HDRI/coders
-        export IMAGEMAGICK_EXE="{% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/bin/{% endif %}convert"
-      insertafter: EOF
-
-- name: Create log file with correct permissions
-  become: true
-  file:
-    path: "{{ logs_folder }}/ats-ate-aio.log"
-    state: touch
-    mode: u=rwx,g=rw,o-rwx
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-  changed_when: false
-
-- name: Add AIO startup script
-  become: true
-  template:
-    src: ats-ate-aio.sh
-    dest: "{{ binaries_folder }}/ats-ate-aio.sh"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-    force: true
-  notify:
-    - wait-for-activemq
-    - restart-aio
-
-- name: Add alfresco-tengine-aio service
-  become: true
-  template:
-    src: alfresco-tengine-aio.service
-    dest: "/etc/systemd/system/alfresco-tengine-aio.service"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rw,g=rw,o=r'
-    force: true
-  notify:
-    - wait-for-activemq
-    - enable-aio
-    - restart-aio

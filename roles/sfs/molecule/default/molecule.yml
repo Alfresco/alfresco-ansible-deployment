@@ -4,9 +4,9 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: sfs
+  - name: sfs-instance
     image: ${MOLECULE_ROLE_IMAGE:-centos:7}
-    dockerfile: ../../../../tests/molecule/Dockerfile.j2
+    dockerfile: ../../../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
     privileged: true
     tmpfs:
@@ -15,13 +15,16 @@ platforms:
       - /tmp
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    groups:
+      - transformers
 provisioner:
   name: ansible
-  ansible_args:
-    - --inventory=../../inventory_local.yml
-    - --limit=sfs
+  config_options:
+    defaults:
+      pipelining: True
   inventory:
-    links: 
+    links:
+      host_vars: host_vars
       group_vars: ../../../../group_vars
 verifier:
   name: testinfra
