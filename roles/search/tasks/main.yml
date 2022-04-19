@@ -55,7 +55,7 @@
           loop:
             - src: alfresco-search-services/
               dest: "{{ binaries_dir }}/"
-            - src: "{{ binaries_dir }}/solrhome"
+            - src: "solrhome"
               dest: "{{ config_dir }}/"
       rescue:
         - name: Check Unix FHS dirs
