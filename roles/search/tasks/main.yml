@@ -69,6 +69,13 @@
           ansible.builtin.debug:
             msg: Looks like the FHS directory structure is already in place
           when: not search_dest_dirs.results | map(attribute='stat.exists') | difference([True])
+        - name: Fail on unexcepted FHS inconsistency
+          ansible.builtin.fail:
+            msg: >
+              Oh oh that should not happen...
+              Looks like the FHS directory structure is broken and can't be re-created.
+              Please reinstall from scratch :(
+          when: search_dest_dirs.results | map(attribute='stat.exists') | difference([True])
 
     - name: Remove old files {{ binaries_dir }}/alfresco-search-services
       file: 
