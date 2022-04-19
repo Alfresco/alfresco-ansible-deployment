@@ -5,6 +5,7 @@
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
 - name: Create "{{ nginx_folder }}/{{ adw_context }}/" dir
+  become: true
   file:
     path: "{{ nginx_folder }}/{{ adw_context }}/"
     state: directory
