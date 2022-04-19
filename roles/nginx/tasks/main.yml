@@ -19,6 +19,7 @@
       package:
         name: "{{ nginx_package_name }}"
         state: present
+      notify: enable-nginx
 
     - name: Copy nginx configuration in place.
       template:
@@ -27,7 +28,7 @@
         owner: root
         group: root
         mode: "0644"
-      notify: reload-nginx
+      notify: restart-nginx
 
     - name: Set httpd_can_network_connect flag on and keep it persistent across reboots
       seboolean:
@@ -36,12 +37,5 @@
         persistent: true
       when: ansible_selinux.status == "enabled"
 
-# Vhost configuration.
-- import_tasks: vhosts.yml
-
-- name: Ensure nginx service is running as configured.
-  service:
-    name: nginx
-    state: "{{ nginx_service_state }}"
-    enabled: "{{ nginx_service_enabled }}"
-  notify: reload-nginx
+- name: Vhosts configuration
+  import_tasks: vhosts.yml
