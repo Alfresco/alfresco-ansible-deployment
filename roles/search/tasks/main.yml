@@ -48,7 +48,7 @@
         - name: "Copy files from {{ binaries_dir }}/alfresco-search-services to {{ binaries_dir }}/"
           copy:
             remote_src: true
-            src: "{{ binaries_dir }}/{{ item.src }}/"
+            src: "{{ binaries_dir }}/{{ item.src }}"
             dest: "{{ item.dest }}"
             owner: "{{ username }}"
             group: "{{ group_name }}"
@@ -63,7 +63,7 @@
             path: "{{ item }}"
           register: search_dest_dirs
           loop:
-            - "{{ binaries_dir }}alfresco-search-services"
+            - "{{ binaries_dir }}/README.MD"
             - "{{ config_dir }}/solrhome"
         - name: Handle missing sources
           ansible.builtin.debug:
@@ -79,13 +79,16 @@
 
     - name: Remove old files {{ binaries_dir }}/alfresco-search-services
       file: 
-        path: "{{ binaries_dir }}/alfresco-search-services" 
+        path: "{{ binaries_dir }}/{{ item }}" 
         state: absent
+      loop:
+        - alfresco-search-services
+        - solrhome
 
     - name: Add solrcore.properties to solr templates
       template:
         src: solrcore.properties.j2
-        dest: "{{ binaries_dir }}/solrhome/templates/{{ item }}/conf/solrcore.properties"
+        dest: "{{ config_dir }}/solrhome/templates/{{ item }}/conf/solrcore.properties"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0644"
