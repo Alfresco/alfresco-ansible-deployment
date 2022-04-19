@@ -4,11 +4,12 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
-- name: Create "{{ nginx_folder }}/{{ request_uri }}/" dir
+- name: Create "{{ nginx_folder }}/{{ adw_context }}/" dir
+  become: true
   file:
-    path: "{{ nginx_folder }}/{{ request_uri }}/"
+    path: "{{ nginx_folder }}/{{ adw_context }}/"
     state: directory
-    mode: 'u=rwx,g=rx,o=rx'
+    mode: "0755"
 
 - name: Download alfresco-digital-workspace-{{ adw.version }}.zip
   get_url:
@@ -24,8 +25,8 @@
   become: true
   unarchive:
     src: "{{ download_location }}/alfresco-digital-workspace-{{ adw.version }}.zip"
-    dest: "{{ nginx_folder }}/{{ request_uri }}/"
+    dest: "{{ nginx_folder }}/{{ adw_context }}/"
     remote_src: true
-    creates: "{{ nginx_folder }}/{{ request_uri }}/app.config.json"
+    creates: "{{ nginx_folder }}/{{ adw_context }}/app.config.json"
 
 - include_tasks: nginx.yml
