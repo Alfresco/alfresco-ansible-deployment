@@ -1,3 +1,2 @@
 ---
-nginx_package_name: "nginx"
-request_uri: "workspace"
+# vars file for adw
