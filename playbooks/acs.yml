@@ -144,7 +144,6 @@
 - name: Alfresco Digital Workspace Role
   hosts: adw
   gather_facts: false
-  become: true
   roles:
     - { role: '../roles/adw', when: acs.edition == "Enterprise" }
   post_tasks:
@@ -165,9 +164,14 @@
 - name: Nginx Role
   hosts: nginx
   gather_facts: false
-  become: true
   roles:
     - role: '../roles/nginx'
+  post_tasks:
+    - name: make sure NGINX is running
+      become: true
+      service:
+        name: nginx
+        state: started
   tags:
     - nginx
 
