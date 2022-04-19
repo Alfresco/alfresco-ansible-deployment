@@ -61,6 +61,7 @@
         name: alfresco-search
         state: started
     - name: update installation status file with  Search
+      become: true
       vars:
         search_components:
           search:
