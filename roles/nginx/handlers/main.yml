@@ -1,6 +1,6 @@
 ---
 # handlers file for nginx
-- name: restart-nginx
+- name: enable-nginx
   become: true
   service: 
     name: nginx
