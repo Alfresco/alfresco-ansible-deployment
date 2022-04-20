@@ -5,8 +5,6 @@
 - name: External activemq cleanup
   hosts: localhost
   gather_facts: false
-  vars:
-    project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
   tasks:
 
     - name: Grab activemq broker id

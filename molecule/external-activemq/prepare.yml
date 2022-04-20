@@ -15,14 +15,14 @@
           --engine-version 5.15.15 \
           --users Password=alfrescoalfresco,Username=alfresco \
           --publicly-accessible \
-          --no-auto-minor-version-upgrade | jq -r .BrokerId
+          --no-auto-minor-version-upgrade
 
     - name: Wait for creation
       ansible.builtin.shell: |
         aws mq describe-broker --broker-id molecule-{{ lookup('env', 'BUILD_NUMBER') }} | jq -r .BrokerState
       register: describe_broker_output
       until: describe_broker_output.stdout.find("RUNNING") != -1
-      retries: 15
+      retries: 20
       delay: 60
 
     - name: Grab activemq hostname
