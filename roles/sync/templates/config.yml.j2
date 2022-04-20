@@ -3,8 +3,8 @@ version: {{ sync.version }}
 
 # ActiveMQ config
 messaging:
-    username: {{ activemq_username }}
-    password: {{ activemq_password }}
+    username: {{ activemq_username | default('admin') }}
+    password: {{ activemq_password | default('admin') }}
     dataFormat: defaultDataFormatDef
     txnManager: syncRequiredTxn
     nodeEvents:

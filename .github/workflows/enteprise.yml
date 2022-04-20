@@ -76,7 +76,7 @@ jobs:
           - name: multimachine
             vars: vars.yml
             desc: latest Cluster Ec2 tests (RHEL8)
-          - name: manual-activemq
+          - name: external-activemq
             vars: vars.yml
             desc: latest External ActiveMQ Ec2 tests (Ubuntu 20.04)
     env:

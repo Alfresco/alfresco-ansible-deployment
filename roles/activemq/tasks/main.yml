@@ -94,8 +94,8 @@
     - name: Add activemq wrapper script
       become: true
       template:
-        src: "activemq.sh.j2"
-        dest: "{{ binaries_folder }}"
+        src: activemq.sh.j2
+        dest: "{{ binaries_folder }}/activemq.sh"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,go=rx'
