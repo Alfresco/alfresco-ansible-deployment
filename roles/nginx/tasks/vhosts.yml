@@ -13,27 +13,27 @@
         path: "{{ nginx_vhost_path }}"
         state: directory
 
-    - name: Prepare HTTPS vhosts
-      block:
-        - name: Include ssl vhost if enabled
-          include_vars: "ssl.yml"
-
-        - name: Add ssl key
-          template:
-            src: "{{ role_path }}/../../configuration_files/ssl_certificates/{{ item.cert_key }}"
-            dest: "/etc/nginx/{{ item.cert_key }}"
-            force: true
-            owner: root
-          with_items: "{{ nginx_vhosts }}"
-
-        - name: Add ssl cert
-          template:
-            src: "{{ role_path }}/../../configuration_files/ssl_certificates/{{ item.cert_crt }}"
-            dest: "/etc/nginx/{{ item.cert_crt }}"
-            force: true
-            owner: root
-          with_items: "{{ nginx_vhosts }}"
+    - name: Include ssl vhost if enabled
+      include_vars: "ssl.yml"
       when: use_ssl
+
+    - name: Add ssl key
+      template:
+        src: "{{ role_path }}/../../configuration_files/ssl_certificates/{{ item.cert_key }}"
+        dest: "/etc/nginx/{{ item.cert_key }}"
+        force: true
+        owner: root
+      with_items: "{{ nginx_vhosts }}"
+      when: item.listen == '443'
+
+    - name: Add ssl cert
+      template:
+        src: "{{ role_path }}/../../configuration_files/ssl_certificates/{{ item.cert_crt }}"
+        dest: "/etc/nginx/{{ item.cert_crt }}"
+        force: true
+        owner: root
+      with_items: "{{ nginx_vhosts }}"
+      when: item.listen == '443'
 
     - name:  Add managed vhost config files.
       template:
