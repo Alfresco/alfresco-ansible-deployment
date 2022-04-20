@@ -1,0 +1,19 @@
+---
+- name: Default cleanup
+  import_playbook: ../default/cleanup.yml
+
+- name: External activemq cleanup
+  hosts: localhost
+  gather_facts: false
+  vars:
+    project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+  tasks:
+
+    - name: Grab activemq broker id
+      ansible.builtin.shell: |
+        aws mq describe-broker --broker-id molecule-{{ lookup('env', 'BUILD_NUMBER') }} | jq -r .BrokerId
+      register: describe_broker_output
+
+    - name: Destroy mq broker
+      ansible.builtin.shell: |
+        aws mq delete-broker --broker-id {{ describe_broker_output.stdout }}

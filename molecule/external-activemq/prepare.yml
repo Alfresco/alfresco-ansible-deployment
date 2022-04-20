@@ -6,12 +6,32 @@
   hosts: localhost
   gather_facts: false
   tasks:
-    - name: Gather EC2 facts
-      delegate_to: "{{ groups['activemq'][0] }}"
-      amazon.aws.ec2_metadata_facts:
+    - name: Create mq broker
+      ansible.builtin.shell: |
+        aws mq create-broker --broker-name molecule-{{ lookup('env', 'BUILD_NUMBER') }} \
+          --deployment-mode SINGLE_INSTANCE \
+          --engine-type ACTIVEMQ \
+          --host-instance-type mq.t3.micro \
+          --engine-version 5.15.15 \
+          --users Password=alfrescoalfresco,Username=alfresco \
+          --publicly-accessible \
+          --no-auto-minor-version-upgrade | jq -r .BrokerId
+
+    - name: Wait for creation
+      ansible.builtin.shell: |
+        aws mq describe-broker --broker-id molecule-{{ lookup('env', 'BUILD_NUMBER') }} | jq -r .BrokerState
+      register: describe_broker_output
+      until: describe_broker_output.stdout.find("RUNNING") != -1
+      retries: 15
+      delay: 60
+
+    - name: Grab activemq hostname
+      ansible.builtin.shell: |
+        aws mq describe-broker --broker-id molecule-{{ lookup('env', 'BUILD_NUMBER') }} | jq -r '.BrokerInstances[0].IpAddress'
+      register: activemq_hostname
 
     - name: Configure activemq hostname
       ansible.builtin.replace:
         path: hosts.yml
         regexp: 'external_activemq_hostname'
-        replace: "{{ ansible_ec2_public_hostname }}"
+        replace: "{{ activemq_hostname.stdout }}"
