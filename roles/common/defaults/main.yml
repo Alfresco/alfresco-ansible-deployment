@@ -43,7 +43,7 @@ ports_cfg:
   activemq:
     openwire: >-
       {% if groups.external_activemq | default(False) %}
-      {{- groups.external_activemq[0].activemq_port | default(61616) -}}
+      {{- groups.external_activemq | map('extract', hostvars, ['activemq_port']) | first | default(61616) -}}
       {% else %}
       {{- ports.activemq.openwire | default(61616) -}}
       {% endif %}
