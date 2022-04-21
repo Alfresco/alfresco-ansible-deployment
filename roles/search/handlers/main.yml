@@ -1,12 +1,14 @@
 ---
 # handlers file for search-services
 - name: enable-search
+  become: true
   service:
     name: alfresco-search
     enabled: true
     daemon_reload: true
 
 - name: restart-search
+  become: true
   service:
     name: alfresco-search
     state: restarted

@@ -6,7 +6,7 @@ driver:
 platforms:
   - name: search-instance
     image: ${MOLECULE_ROLE_IMAGE:-centos:7}
-    dockerfile: ../../../../tests/molecule/Dockerfile.j2
+    dockerfile: ../../../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
     privileged: true
     tmpfs:
@@ -23,7 +23,6 @@ provisioner:
   ansible_args:
     - -e
     - reposearch_shared_secret=dummy
-    - --limit=search
   name: ansible
   inventory:
     links: 

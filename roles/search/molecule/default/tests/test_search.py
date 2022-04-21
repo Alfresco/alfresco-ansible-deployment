@@ -26,7 +26,8 @@ def get_ansible_vars(host):
 
 def test_solr_log_exists(host, get_ansible_vars):
     """Check that solr log"""
-    assert_that(host.file("{}/solr.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
+    with host.sudo():
+        assert_that(host.file("{}/solr.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
 
 @pytest.mark.parametrize("svc", ["alfresco-search"])
 def test_search_service_running_and_enabled(host, svc):
@@ -49,6 +50,7 @@ def test_solr_stats_is_accesible(host, get_ansible_vars):
 
 def test_environment_jvm_opts(host, get_ansible_vars):
     "Check that overwritten JVM_OPTS are taken into consideration"
-    pid = host.run("/opt/openjdk*/bin/jps -lV | grep start.jar | awk '{print $1}'")
-    process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
+    with host.sudo():
+        pid = host.run("/opt/openjdk*/bin/jps -lV | grep start.jar | awk '{print $1}'")
+        process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
     assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))

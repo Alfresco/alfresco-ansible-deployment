@@ -4,124 +4,133 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
-- name: Ensure a list of packages installed
-  become: true
-  become_user: root
-  package:
-    name: "{{ utils_search }}"
-    state: present
-
-- name: Create search binaries, config and data directories
-  become: true
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rx,o=rx'
-  with_items:
-    - "{{ binaries_dir }}"
-    - "{{ config_dir }}"
-    - "{{ data_dir }}"
-
 - name: "Download alfresco-search-services-{{ search.version }}.zip"
   get_url:
     url: "{{ downloads.search_zip_url }}"
     dest: "{{ download_location }}/alfresco-search-services-{{ search.version }}.zip"
     checksum: sha1:{{ lookup('url', downloads.search_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
-    mode: 'u=r,g=r,o=r'
+    mode: "0644"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
 
-- name: Extract alfresco-search-services-{{ search.version }}.zip into {{ binaries_dir }}
+- name: Install & configure Search services
   become: true
-  unarchive:
-    src: "{{ download_location }}/alfresco-search-services-{{ search.version }}.zip"
-    dest: "{{ binaries_dir }}"
-    remote_src: true
-    creates: "{{ binaries_dir }}/README.MD"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-
-- name: "Move files from {{ binaries_dir }}/alfresco-search-services to {{ binaries_dir }}/"
   block:
-    - name: "Check if {{ binaries_dir }}/alfresco-search-services exists"
-      stat: 
-        path: "{{ binaries_dir }}/alfresco-search-services"
-      register: search_services_exists
-    - name: "Copy files from {{ binaries_dir }}/alfresco-search-services to {{ binaries_dir }}/"
-      copy:
-        remote_src: true
-        src: "{{ binaries_dir }}/alfresco-search-services/"
-        dest: "{{ binaries_dir }}/"
+    - name: Ensure a list of packages installed
+      package:
+        name: "{{ utils_search }}"
+        state: present
+    
+    - name: Create search binaries, config and data directories
+      file:
+        path: "{{ item }}"
+        state: directory
         owner: "{{ username }}"
         group: "{{ group_name }}"
-      when: search_services_exists.stat.exists
+        mode: "0755"
+      loop:
+        - "{{ binaries_dir }}"
+        - "{{ config_dir }}"
+        - "{{ data_dir }}"
+    
+    - name: Extract Search services into {{ binaries_dir }}
+      unarchive:
+        src: "{{ download_location }}/alfresco-search-services-{{ search.version }}.zip"
+        dest: "{{ binaries_dir }}"
+        remote_src: true
+        creates: "{{ binaries_dir }}/README.MD"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+    
+    - name: Install Search services in Unix Filesystem Hierarchy Standard structure
+      block:
+        - name: "Copy files from {{ binaries_dir }}/alfresco-search-services to {{ binaries_dir }}/"
+          copy:
+            remote_src: true
+            src: "{{ binaries_dir }}/{{ item.src }}"
+            dest: "{{ item.dest }}"
+            owner: "{{ username }}"
+            group: "{{ group_name }}"
+          loop:
+            - src: alfresco-search-services/
+              dest: "{{ binaries_dir }}/"
+            - src: "solrhome"
+              dest: "{{ config_dir }}/"
+      rescue:
+        - name: Check Unix FHS dirs
+          stat:
+            path: "{{ item }}"
+          register: search_dest_dirs
+          loop:
+            - "{{ binaries_dir }}/README.MD"
+            - "{{ config_dir }}/solrhome"
+        - name: Handle missing sources
+          ansible.builtin.debug:
+            msg: Looks like the FHS directory structure is already in place
+          when: not search_dest_dirs.results | map(attribute='stat.exists') | difference([True])
+        - name: Fail on unexcepted FHS inconsistency
+          ansible.builtin.fail:
+            msg: >
+              Oh oh that should not happen...
+              Looks like the FHS directory structure is broken and can't be re-created.
+              Please reinstall from scratch :(
+          when: search_dest_dirs.results | map(attribute='stat.exists') | difference([True])
+
     - name: Remove old files {{ binaries_dir }}/alfresco-search-services
       file: 
-        path: "{{ binaries_dir }}/alfresco-search-services" 
+        path: "{{ binaries_dir }}/{{ item }}" 
         state: absent
+      loop:
+        - alfresco-search-services
+        - solrhome
 
-- name: Add solrcore.properties to solr templates
-  become: true
-  template:
-    src: solrcore.properties.j2
-    dest: "{{ binaries_dir }}/solrhome/templates/{{ item }}/conf/solrcore.properties"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rw,g=rw,o=r'
-  loop:
-    - rerank
-    - noRerank
-
-- name: Copy files from "{{ binaries_dir }}/solrhome to {{ config_dir }}/"
-  copy:
-    remote_src: true
-    src: "{{ binaries_dir }}/solrhome"
-    dest: "{{ config_dir }}/"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-
-- name: add solr home to setenv.sh
-  become: true
-  lineinfile:
-    path: "{{ config_folder }}/setenv.sh"
-    insertafter: EOF
-    line: "export SOLR_HOME={{ binaries_dir }}"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-
-- name: Add "{{ binaries_dir }}/solr.sh"
-  become: true
-  template:
-    src: solr.sh.j2
-    dest: "{{ binaries_dir }}/solr.sh"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 0700
-  notify:
-    - restart-search
-
-- name: Add "{{ config_dir }}/solr.in.sh"
-  become: true
-  template:
-    src: solr.in.sh
-    dest: "{{ config_dir }}/solr.in.sh"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-  notify:
-    - restart-search
-
-- name: Add alfresco-search.service
-  become: true
-  template:
-      src: alfresco-search.service
-      dest:  /etc/systemd/system/alfresco-search.service
-      owner: "{{ username }}"
-      group: "{{ group_name }}"
-      mode: 'u=rw,g=rw,o=r'
-  notify: 
-    - enable-search
-    - restart-search
+    - name: Add solrcore.properties to solr templates
+      template:
+        src: solrcore.properties.j2
+        dest: "{{ config_dir }}/solrhome/templates/{{ item }}/conf/solrcore.properties"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0644"
+      loop:
+        - rerank
+        - noRerank
+    
+    - name: add solr home to setenv.sh
+      lineinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        insertafter: EOF
+        line: "export SOLR_HOME={{ binaries_dir }}"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+    
+    - name: Add "{{ binaries_dir }}/solr.sh"
+      template:
+        src: solr.sh.j2
+        dest: "{{ binaries_dir }}/solr.sh"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 0700
+      notify:
+        - restart-search
+    
+    - name: Add "{{ config_dir }}/solr.in.sh"
+      template:
+        src: solr.in.sh
+        dest: "{{ config_dir }}/solr.in.sh"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0755"
+      notify:
+        - restart-search
+    
+    - name: Add alfresco-search.service
+      template:
+          src: alfresco-search.service
+          dest:  /etc/systemd/system/alfresco-search.service
+          owner: "{{ username }}"
+          group: "{{ group_name }}"
+          mode: "0644"
+      notify: 
+        - enable-search
+        - restart-search
