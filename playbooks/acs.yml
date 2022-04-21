@@ -104,7 +104,8 @@
   hosts: transformers
   gather_facts: false
   roles:
-    - { role: '../roles/trouter', when: acs.edition == "Enterprise" }
+    - role: '../roles/trouter'
+      when: acs.edition == "Enterprise"
   post_tasks:
     - name: update installation status file with Trouter
       become: true
@@ -125,7 +126,8 @@
   hosts: transformers
   gather_facts: false
   roles:
-    - { role: '../roles/sfs', when: acs.edition == "Enterprise" }
+    - role: '../roles/sfs'
+      when: acs.edition == "Enterprise"
   post_tasks:
     - name: update installation status file with SFS
       become: true
@@ -146,7 +148,8 @@
   hosts: adw
   gather_facts: false
   roles:
-    - { role: '../roles/adw', when: acs.edition == "Enterprise" }
+    - role: '../roles/adw'
+      when: acs.edition == "Enterprise"
   post_tasks:
     - name: update installation status file with ADW
       become: true
@@ -180,11 +183,12 @@
 - name: Sync Service Role
   hosts: syncservice
   gather_facts: false
-  become: true
   roles:
-    - { role: '../roles/sync', when: acs.edition == "Enterprise" }
+    - role: '../roles/sync'
+      when: acs.edition == "Enterprise"
   post_tasks:
     - name: update installation status file with Sync
+      become: true
       vars:
         sync_components:
          sync:
