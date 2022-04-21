@@ -15,3 +15,9 @@
     - name: Destroy mq broker
       ansible.builtin.shell: |
         aws mq delete-broker --broker-id {{ describe_broker_output.stdout }}
+      when: describe_broker_output.stdout | length > 0
+
+    - name: Delete EC2 security group for mq broker
+      amazon.aws.ec2_group:
+        name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
+        state: absent

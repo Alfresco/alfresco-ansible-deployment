@@ -6,6 +6,17 @@
   hosts: localhost
   gather_facts: false
   tasks:
+    - name: Create EC2 security group for mq broker
+      amazon.aws.ec2_group:
+        name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
+        description: Molecule external activemq EC2 test
+        rules:
+          - proto: tcp
+            from_port: 61617
+            to_port: 61617
+            cidr_ip: 0.0.0.0/0
+      register: ec2_group
+
     - name: Create mq broker
       ansible.builtin.shell: |
         aws mq create-broker --broker-name molecule-{{ lookup('env', 'BUILD_NUMBER') }} \
@@ -14,6 +25,7 @@
           --host-instance-type mq.t3.micro \
           --engine-version 5.15.15 \
           --users Password=alfrescoalfresco,Username=alfresco \
+          --security-groups {{ ec2_group.group_id }} \
           --publicly-accessible \
           --no-auto-minor-version-upgrade
 
