@@ -3,44 +3,39 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
-- name: Enable EPEL repository
-  yum_repository:
-    name: epel
-    description: EPEL YUM repo
-    metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch&infra=$infra&content=$contentdir
-    gpgcheck: yes
-    gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
-  when: ansible_distribution in [ 'RedHat', 'CentOS' ] and ansible_distribution_major_version == '7'
-
-- name: Ensure nginx is installed.
-  package:
-    name: "{{ nginx_pack }}"
-    state: present
-
-# Vhost configuration.
-- import_tasks: vhosts.yml
-
-# Nginx setup.
-- name: Copy nginx configuration in place.
-  template:
-    src: "{{ nginx_conf_template }}"
-    dest: "{{ nginx_conf_file_path }}"
-    owner: root
-    group: "{{ root_group }}"
-    mode: 'u=rw,g=r,o=r'
-  notify: reload-nginx
-
-- name: Set httpd_can_network_connect flag on and keep it persistent across reboots
+- name: Install & configure NGINX reverse proxy
   become: true
-  seboolean:
-    name: httpd_can_network_connect
-    state: true
-    persistent: true
-  when: ansible_selinux.status == "enabled"
+  block:
+    - name: Enable EPEL repository
+      yum_repository:
+        name: epel
+        description: EPEL YUM repo
+        metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch&infra=$infra&content=$contentdir
+        gpgcheck: yes
+        gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+      when: ansible_distribution in [ 'RedHat', 'CentOS' ] and ansible_distribution_major_version == '7'
 
-- name: Ensure nginx service is running as configured.
-  service:
-    name: nginx
-    state: "{{ nginx_service_state }}"
-    enabled: "{{ nginx_service_enabled }}"
-  notify: reload-nginx
+    - name: Ensure nginx is installed.
+      package:
+        name: "{{ nginx_package_name }}"
+        state: present
+      notify: enable-nginx
+
+    - name: Copy nginx configuration in place.
+      template:
+        src: "{{ nginx_conf_template }}"
+        dest: "{{ nginx_conf_file_path }}"
+        owner: root
+        group: root
+        mode: "0644"
+      notify: restart-nginx
+
+    - name: Set httpd_can_network_connect flag on and keep it persistent across reboots
+      seboolean:
+        name: httpd_can_network_connect
+        state: true
+        persistent: true
+      when: ansible_selinux.status == "enabled"
+
+- name: Vhosts configuration
+  import_tasks: vhosts.yml
