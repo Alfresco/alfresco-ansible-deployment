@@ -115,6 +115,7 @@ jobs:
         run: echo ${{ env.BRANCH_NAME }}
 
       - name: Run tests
+        timeout-minutes: 120
         env:
           MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
           MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
@@ -127,6 +128,7 @@ jobs:
 
       - name: Cleanup tests
         if: always()
+        timeout-minutes: 35
         env:
           MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
           MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
