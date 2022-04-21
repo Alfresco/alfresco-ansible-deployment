@@ -6,7 +6,6 @@ data_folder: /var/opt/alfresco
 logs_folder: /var/log/alfresco
 
 # Default home for components
-sync_home: "{{ binaries_folder }}/sync-service"
 ats_home: "{{ binaries_folder }}/transform-service"
 
 # Due to https://github.com/ansible/ansible/issues/64957

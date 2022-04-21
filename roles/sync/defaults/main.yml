@@ -1,4 +1,5 @@
 ---
+sync_home: "{{ binaries_folder }}/sync-service"
 utils_sync: []
 sync_environment:
   JAVA_OPTS:
