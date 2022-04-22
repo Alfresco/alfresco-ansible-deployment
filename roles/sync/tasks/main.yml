@@ -97,7 +97,6 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx'
-        force: no
       notify:
         - wait-for-repo
         - restart-sync
@@ -109,7 +108,6 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx'
-        force: yes
       notify:
       - wait-for-repo
       - enable-sync
