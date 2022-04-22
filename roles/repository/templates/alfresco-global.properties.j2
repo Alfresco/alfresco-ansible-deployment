@@ -65,3 +65,7 @@ messaging.broker.url=failover:(tcp://{{ activemq_host }}:{{ ports_cfg.activemq.o
 dsync.service.uris={% if use_ssl | bool %}https{% else %}http{% endif %}://{% if fqdn_alfresco %}{{ fqdn_alfresco }}{% else %}{{ nginx_host }}{% endif %}:{% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_cfg.nginx.http }}{% endif %}/alfresco
 
 aos.baseUrlOverwrite={% if use_ssl | bool %}https{% else %}http{% endif %}://{% if fqdn_alfresco %}{{ fqdn_alfresco }}{% else %}{{ nginx_host }}{% endif %}:{% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_cfg.nginx.http }}{% endif %}/alfresco/aos
+
+{% for prop in lookup('ansible.utils.to_paths', merged_repository_properties) | dict2items %}
+  {{- prop.key }}={{ prop.value }}
+{% endfor %}

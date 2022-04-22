@@ -12,7 +12,19 @@ acs_environment:
     - $JAVA_OPTS
   JAVA_TOOL_OPTIONS:
     - $JAVA_TOOL_OPTIONS
-  
+
+# properties to be added to the alfresco-global.properties file
+# e.g: alfresco.authentication.allowGuestLogin is disabled by default
+default_repository_properties:
+  authentication:
+    protection:
+      enabled: "true"
+      limit: 5
+      periodSeconds: 60
+  alfresco:
+    authentication:
+      allowGuestLogin: "false"
+
 utils_repo: []
 utils_storage:
   tmpfs: []
