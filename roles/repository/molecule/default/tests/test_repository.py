@@ -1,5 +1,9 @@
 """Repo Tests"""
 import os
+import time
+import string
+import random
+import json
 import pytest
 from hamcrest import assert_that, contains_string
 
@@ -7,6 +11,25 @@ test_host = os.environ.get('TEST_HOST')
 
 
 # pylint: disable=redefined-outer-name
+@pytest.fixture(scope="module")
+def brute_lock_user(host):
+    """
+    Force locking user after N auth failures
+    """
+    login_api_endpoint = '/alfresco/api/-default-/public/authentication/versions/1/tickets'
+    api_headers = 'Content-Type: application/json'
+    repovars = host.ansible.get_variables()
+    iternum = int(repovars['repository_properties']['authentication']['protection']['limit'])
+    for _ in range(iternum):
+        login_payload = '{"userId":"admin","password":"' + ''.join(random.choice(string.ascii_lowercase) for i in range(3)) + '"}'
+        host.run("curl http://{}:8080{} -H '{}' -d '{}'".format(
+            test_host,
+            login_api_endpoint,
+            api_headers,
+            login_payload
+            )
+        )
+
 @pytest.fixture(scope="module")
 def get_ansible_vars(host):
     """Define get_ansible_vars"""
@@ -23,6 +46,20 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", tomcat_role)["ansible_facts"]["tomcat_role"])
     ansible_vars.update(host.ansible("include_vars", repository_role)["ansible_facts"]["repository_role"])
     return ansible_vars
+
+def test_bruteforce_mitigation(host,brute_lock_user):
+    """
+    Check wether bruteforce protection is properly configured
+    """
+    login_api_endpoint = '/alfresco/api/-default-/public/authentication/versions/1/tickets'
+    api_headers = 'Content-Type: application/json'
+    login_payload ='{"userId":"admin","password": "admin"}'
+    repovars = host.ansible.get_variables()
+    cmd=host.run("curl http://{}:8080{} -H '{}' -d '{}'".format(test_host,login_api_endpoint,api_headers,login_payload))
+    assert_that(json.loads(cmd.stdout)['error']['errorKey'] == 'Login failed')
+    time.sleep(repovars['repository_properties']['authentication']['protection']['periodSeconds'])
+    cmd=host.run("curl http://{}:8080{} -H '{}' -d '{}'".format(test_host,login_api_endpoint,api_headers,login_payload))
+    assert_that(json.loads(cmd.stdout)['entry']['userId'] == 'admin')
 
 def test_repo_service_is_running_and_enabled(host, get_ansible_vars):
     """Check repository service"""

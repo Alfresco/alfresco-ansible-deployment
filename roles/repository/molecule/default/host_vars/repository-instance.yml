@@ -55,3 +55,8 @@ acs_environment:
     - -Dmetadata-keystore.metadata.password=mp6yc0UD9e
     - -Dmetadata-keystore.metadata.algorithm=AES
     - $JAVA_TOOL_OPTIONS
+repository_properties:
+  authentication:
+    protection:
+      limit: 5
+      periodSeconds: 60
