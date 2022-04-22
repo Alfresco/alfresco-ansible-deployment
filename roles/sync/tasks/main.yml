@@ -4,99 +4,70 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
-- name: Ensure a list of packages installed
-  become: true
-  become_user: root
-  package:
-    name: "{{ utils_sync }}"
-    state: present
+- name: Download Sync service artefact
+  get_url:
+    url: "{{ downloads.sync_zip_url }}"
+    dest: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
+    checksum: sha1:{{ lookup('url', downloads.sync_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
 
-- name: Download sync services {{ sync.version }}
-  block:
-    - name: Create sync services folder
-      file:
-        path: "{{ sync_home }}"
-        state: directory
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-    - name: Download artefact
-      get_url:
-        url: "{{ downloads.sync_zip_url }}"
-        dest: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
-        checksum: sha1:{{ lookup('url', downloads.sync_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx'
-        url_username: "{{ nexus_user }}"
-        url_password: "{{ nexus_password }}"
+- name: Extract Sync service to {{ sync_home }}
+  unarchive:
+    src: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
+    dest: "{{ download_location }}"
+    remote_src: true
+    creates: "{{ download_location }}/sync/service-sync/service-sync-{{ sync.version }}.jar"
+
+- name: Install Sync service
   become: true
-    
-- name: Download postgresql jar
   block:
-    - name: Create connectors folder
+    - name: Ensure a list of packages installed
+      package:
+        name: "{{ utils_sync }}"
+        state: present
+
+    - name: Copy files to {{ sync_home }}
+      copy:
+        remote_src: true
+        src: "{{ download_location }}/sync/"
+        dest: "{{ sync_home }}/"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+
+    - name: Create Sync service configuration folder
       file:
-        path: "{{ sync_home }}/service-sync/connectors"
+        path: "{{ item.path }}"
         state: directory
         owner: "{{ username }}"
         group: "{{ group_name }}"
-    - name: Download artefact
+        mode: "{{ item.mode }}"
+      loop:
+        - path: "{{ sync_home }}/service-sync/connectors"
+          mode: "0755"
+        - path: "{{ config_folder }}/sync-service"
+          mode: "0750"
+
+    - name: Download postgresql JDBC driver
       get_url:
         url: "{{ dependencies_url.postgresql_connector }}"
         checksum: sha1:{{ lookup('url', dependencies_url.postgresql_connector_sha1_checksum_url) }}
         dest: "{{ sync_home }}/service-sync/connectors/postgresql.jar"
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: "0644"
         owner: "{{ username }}"
         group: "{{ group_name }}"
       when: sync_db_url == ""
+
     - name: Copy db_connector to {{ sync_home }}/service-sync/connectors folder
       copy:
         src: "{{ inventory_dir }}/configuration_files/db_connector_sync/"
         dest: "{{ sync_home }}/service-sync/connectors/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
+        mode: "0644"
       when: sync_db_url != ""
-  become: true
 
-- name: Extract sync service to {{ sync_home }}
-  become: true
-  unarchive:
-    src: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
-    dest: "{{ sync_home }}"
-    remote_src: true
-    creates: "{{ sync_home }}/service-sync/service-sync-{{ sync.version }}.jar"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-
-- name: Move sync service files to {{ sync_home }}
-  block:
-    - name: Check if sync folder exists
-      stat:
-        path: "{{ sync_home }}/sync"
-      register: sync_folder
-    - name: Copy files from sync to to {{ sync_home }}
-      copy:
-        src: "{{ sync_home }}/sync/"
-        dest: "{{ sync_home }}"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        remote_src: true
-      when: sync_folder.stat.exists
-    - name: Remove old sync folder
-      file:
-        path: "{{ sync_home }}/sync"
-        state: absent
-
-- name: Add config.yml file to {{ config_folder }}
-  block:
-    - name: Create sync-service in {{ config_folder }}
-      become: true
-      file:
-        path: "{{ config_folder }}/sync-service"
-        state: directory
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-    - name: Add config.yml template
+    - name: Add config.yml file to {{ config_folder }}
       template:
         src: "config.yml.j2"
         dest: "{{ config_folder }}/sync-service/config.yml"
@@ -108,58 +79,36 @@
         - wait-for-repo 
         - restart-sync
 
-- name: Check for SYNC_HOME in "{{ config_folder }}/setenv.sh"
-  shell: cat {{ config_folder }}/setenv.sh | grep SYNC_HOME
-  register: test_sync_home
-  failed_when: false
-  changed_when: test_sync_home.rc != 0
+    - name: Add paths to setenv file
+      blockinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        marker: "# {mark} SYNC ENV VARS"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        block: |
+          export SYNC_VERSION={{ sync.version }}
+          export SYNC_HOME={{ sync_home }}
+        insertafter: EOF
 
-- name: Add paths to setenv file
-  become: true
-  blockinfile:
-    path: "{{ config_folder }}/setenv.sh"
-    marker: "# {mark} SYNC ENV VARS"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    block: |
-      export SYNC_VERSION={{ sync.version }}
-      export SYNC_HOME={{ sync_home }}
-    insertafter: EOF
-  when: test_sync_home.rc != 0
+    - name: Add sync service startup script
+      template:
+        src: syncservice.sh
+        dest: "{{ binaries_folder }}/syncservice.sh"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx'
+      notify:
+        - wait-for-repo
+        - restart-sync
 
-- name: Create log file with correct permissions
-  become: true
-  file:
-    path: "{{ logs_folder }}/sync-service.log"
-    state: touch
-    mode: u=rwx,g=rw,o-rwx
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-  changed_when: false
-
-- name: Add sync service startup script
-  become: true
-  template:
-    src: syncservice.sh
-    dest: "{{ binaries_folder }}/syncservice.sh"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx'
-    force: no
-  notify:
-    - wait-for-repo
-    - restart-sync
-
-- name: Add alfresco-sync.service service
-  become: true
-  template:
-    src: alfresco-sync.service
-    dest: "/etc/systemd/system/alfresco-sync.service"
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx'
-    force: yes
-  notify:
-  - wait-for-repo
-  - enable-sync
-  - restart-sync
+    - name: Add alfresco-sync.service service
+      template:
+        src: alfresco-sync.service
+        dest: "/etc/systemd/system/alfresco-sync.service"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 'u=rwx,g=rwx'
+      notify:
+      - wait-for-repo
+      - enable-sync
+      - restart-sync
