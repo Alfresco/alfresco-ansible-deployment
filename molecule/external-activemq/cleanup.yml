@@ -5,17 +5,29 @@
 - name: External activemq cleanup
   hosts: localhost
   gather_facts: false
+  vars:
+    broker_name: molecule-{{ lookup('env', 'BRANCH_NAME') }}-{{ lookup('env', 'BUILD_NUMBER') }}
   tasks:
 
     - name: Grab activemq broker id
       ansible.builtin.shell: |
-        aws mq describe-broker --broker-id molecule-{{ lookup('env', 'BUILD_NUMBER') }} | jq -r .BrokerId
+        aws mq describe-broker --broker-id {{ broker_name }} | jq -r .BrokerId
       register: describe_broker_output
 
     - name: Destroy mq broker
       ansible.builtin.shell: |
         aws mq delete-broker --broker-id {{ describe_broker_output.stdout }}
       when: describe_broker_output.stdout | length > 0
+
+    - name: Wait for destroy mq broker
+      ansible.builtin.shell: |
+        aws mq describe-broker --broker-id {{ describe_broker_output.stdout }}
+      when: describe_broker_output.stdout | length > 0
+      register: wait_describe_broker_output
+      until: wait_describe_broker_output.stderr.find("NotFoundException") != -1
+      ignore_errors: yes
+      retries: 20
+      delay: 30
 
     - name: Delete EC2 security group for mq broker
       amazon.aws.ec2_group:

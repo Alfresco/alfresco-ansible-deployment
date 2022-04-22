@@ -35,7 +35,7 @@
 
     - name: Add T-Router startup script
       template:
-        src: ats-atr.sh
+        src: ats-atr.sh.j2
         dest: "{{ binaries_folder }}/ats-atr.sh"
         owner: "{{ username }}"
         group: "{{ group_name }}"
