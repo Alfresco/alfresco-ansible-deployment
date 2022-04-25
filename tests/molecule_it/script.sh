@@ -13,6 +13,8 @@ if [ -n "$MOLECULE_IT_SCENARIO" ]; then
         # shellcheck disable=SC2086
         molecule $EXTRA_CONFIG converge -s "$MOLECULE_IT_SCENARIO" || exit 1
         # shellcheck disable=SC2086
+        molecule $EXTRA_CONFIG side_effect -s "$MOLECULE_IT_SCENARIO"
+        # shellcheck disable=SC2086
         molecule $EXTRA_CONFIG verify -s "$MOLECULE_IT_SCENARIO"
     else
         echo "$1: invalid command"
