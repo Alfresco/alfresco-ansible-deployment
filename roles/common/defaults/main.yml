@@ -30,9 +30,7 @@ activemq_host: >-
 activemq_protocol: >-
   {% if groups.external_activemq | default(False) %}
   {{- groups.external_activemq | map('extract', hostvars, ['activemq_protocol']) | first | default('tcp') -}}
-  {% else %}
-  tcp
-  {% endif %}
+  {% else %}tcp{% endif %}
 db_host: "{% if groups.database | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.database[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
 solr_host: "{% if groups.search | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.search[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
 share_host: "{{ repo_host }}"
