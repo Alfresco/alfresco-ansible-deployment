@@ -156,7 +156,7 @@
         line: export {{ item.key }}="{{ item.value | join(' ') }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-      loop: "{{ acs_environment | combine(acs_secure_environment | default({}), list_merge='prepend') | dict2items }}"
+      loop: "{{ acs_environment | combine(acs_secure_environment | default(None), list_merge='prepend') | dict2items }}"
 
     - name: Create apply_amps.sh
       template:
@@ -288,7 +288,8 @@
         state: absent
 
     - name: Create alfresco-global.properties
-      become: true
+      vars:
+        merged_repository_properties: "{{ default_repository_properties | combine(repository_properties | default(None)) }}"
       template:
         owner: "{{ username }}"
         group: "{{ group_name }}"
