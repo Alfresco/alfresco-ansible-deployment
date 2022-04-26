@@ -22,11 +22,15 @@
           - --xform=s|[^/]*|{{ java_home | basename }}|
 
     - name: Add setenv bash file
-      template:
-        src: setenv.sh
-        dest: "{{ config_folder }}/setenv.sh"
+      blockinfile:
+        path: "{{ config_folder }}/setenv.sh"
+        marker: "# {mark} JAVA ENV VARS"
+        create: yes
+        block: |
+          #!/bin/sh
+          #
+          export JAVA_HOME="{{ java_home }}"
+          export PATH="${JAVA_HOME}/bin:${PATH}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0755"
-      tags:
-        - molecule-idempotence-notest

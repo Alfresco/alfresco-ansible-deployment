@@ -25,7 +25,7 @@
         dest: "{{ binaries_folder }}/tomcat.sh"
         group: "{{ group_name }}"
         owner: "{{ username }}"
-        mode: "0755"
+        mode: "0750"
       tags:
         - molecule-idempotence-notest # Files is dealt with outside this role
 

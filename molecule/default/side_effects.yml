@@ -1,0 +1,3 @@
+---
+- name: Restart all services in order
+  import_playbook: ../../playbooks/platform-restart.yml

@@ -1,0 +1,186 @@
+---
+- hosts: adw
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Stop Alfresco Digital Workspace
+      service:
+        name: nginx
+        state: stopped
+      tags:
+        - alfresco
+        - stop
+
+- hosts: nginx
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Stop Reverse Proxy
+      service:
+        name: nginx
+        state: stopped
+      tags:
+        - infrastructure
+        - stop
+
+- hosts: syncservice
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Stop Alfresco Sync services
+      service:
+        name: alfresco-sync
+        state: stopped
+      tags:
+        - alfresco
+        - stop
+
+- hosts: search
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Stop Alfresco Search services
+      service:
+        name: alfresco-search
+        state: stopped
+      tags:
+        - alfresco
+        - stop
+
+- hosts: repository
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Stop Alfresco Content services
+      service:
+        name: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
+        state: stopped
+      tags:
+        - alfresco
+        - stop
+
+- hosts: transformers
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Stop Alfresco Transformation services
+      service:
+        name: "{{ item }}"
+        state: stopped
+      loop:
+        - alfresco-shared-fs
+        - alfresco-transform-router
+        - alfresco-tengine-aio
+      tags:
+        - alfresco
+        - stop
+
+- hosts: database
+  become: true
+  tasks:
+    - name: Stop PostgreSQL
+      service:
+        name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
+        state: stopped
+      tags:
+        - infrastructure
+        - stop
+
+- hosts: activemq
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Stop ActiveMQ
+      service:
+        name: activemq
+        state: stopped
+      tags:
+        - infrastructure
+        - stop
+
+- hosts: activemq
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Start ActiveMQ
+      service:
+        name: activemq
+        state: started
+      tags:
+        - infrastructure
+        - start
+
+- hosts: database
+  become: true
+  tasks:
+    - name: Start PostgreSQL
+      service:
+        name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
+        state: started
+      tags:
+        - infrastructure
+        - start
+
+- hosts: transformers
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Start Alfresco Transformation services
+      service:
+        name: "{{ item }}"
+        state: started
+      loop:
+        - alfresco-shared-fs
+        - alfresco-transform-router
+        - alfresco-tengine-aio
+      tags:
+        - alfresco
+        - start
+
+- hosts: repository
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Start Alfresco Content services
+      service:
+        name: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
+        state: started
+      tags:
+        - alfresco
+        - start
+
+- hosts: search
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Start Alfresco Search services
+      service:
+        name: alfresco-search
+        state: started
+      tags:
+        - alfresco
+        - start
+
+- hosts: syncservice
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Start Alfresco Sync services
+      service:
+        name: alfresco-sync
+        state: started
+      tags:
+        - alfresco
+        - start
+
+- hosts: nginx
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Start Reverse Proxy
+      service:
+        name: nginx
+        state: started
+      tags:
+        - infrastructure
+        - start
