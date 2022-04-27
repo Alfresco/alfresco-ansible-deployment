@@ -36,12 +36,12 @@ def test_search_service_running_and_enabled(host, svc):
     assert_that(alfresco_search.is_running)
     assert_that(alfresco_search.is_enabled)
 
-def test_solr_stats_is_accesible(host, get_ansible_vars):
+def test_solr_stats_is_accessible(host, get_ansible_vars):
     """Check that SOLR creates the alfresco and archive cores"""
     curl_opts = '-iL'
     search_env = host.ansible.get_variables()
     if version.parse(search_env['search']['version']) >= version.parse('2.0.3'):
-        curl_opts += ' -H "X-Alfresco-Search-Secret: ' + (search_env['reposearch_shared_secret']) + '"'
+        curl_opts += ' -H "X-Alfresco-Search-Secret: alfresco"'
     print("curl {} http://{}:8983/solr/#/~cores/alfresco".format(curl_opts, test_host))
     alfresco_core_command = host.run("curl {} http://{}:8983/solr/#/~cores/alfresco".format(curl_opts, test_host))
     archive_core_command = host.run("curl {} http://{}:8983/solr/#/~cores/archive".format(curl_opts, test_host))

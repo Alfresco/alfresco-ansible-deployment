@@ -16,17 +16,14 @@ platforms:
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
-      - repository
-      - activemq
       - database
+      - repository
       - syncservice
-      - sfs
-      - search
-      - nginx
-      - adw
-      - transformers
 provisioner:
   name: ansible
+  ansible_args:
+    - -e
+    - "@../../tests/molecule/secrets.yml"
   config_options:
     defaults:
       pipelining: True
