@@ -1,9 +1,12 @@
 ---
 # handlers file for roles/transformers
-- name: wait-for-activemq
+- name: Wait for activemq on {{ activemq_host }}:{{ ports_cfg.activemq.openwire }}
+  listen: wait-for-activemq
   wait_for:
     host: "{{ activemq_host }}"
     port: "{{ ports_cfg.activemq.openwire }}"
+    timeout: 300
+    connect_timeout: 5
 
 - name: enable-aio
   become: true
