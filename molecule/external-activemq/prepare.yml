@@ -8,7 +8,7 @@
   vars:
     broker_name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
   tasks:
-    - name: Create EC2 security group for mq broker
+    - name: Create EC2 security group to access mq broker from EC2 instance
       amazon.aws.ec2_group:
         name: "{{ broker_name }}"
         description: Molecule external activemq EC2 test
@@ -20,7 +20,7 @@
       register: ec2_group
 
     - name: Create mq broker
-      ansible.builtin.shell: |
+      ansible.builtin.command: |
         aws mq create-broker --broker-name {{ broker_name }} \
           --deployment-mode SINGLE_INSTANCE \
           --engine-type ACTIVEMQ \
@@ -32,24 +32,19 @@
           --no-auto-minor-version-upgrade
 
     - name: Wait for creation
-      ansible.builtin.shell: |
-        aws mq describe-broker --broker-id {{ broker_name }} | \
-          jq -r .BrokerState
+      ansible.builtin.command: |
+        aws mq describe-broker --broker-id {{ broker_name }}
       register: describe_broker_output
-      until: describe_broker_output.stdout.find("RUNNING") != -1
+      until: ((describe_broker_output.stdout | from_json).BrokerState) == 'RUNNING'
       retries: 20
       delay: 60
 
     - name: Grab activemq hostname
-      ansible.builtin.shell: |
-        aws mq describe-broker --broker-id {{ broker_name }} | \
-          jq -r '.BrokerInstances[0].Endpoints[0]' | \
-          awk -F/ '{print $3}' | \
-          sed 's/:61617//'
-      register: activemq_hostname
+      set_fact:
+        activemq_hostname: "{{ (describe_broker_output.stdout | from_json).BrokerInstances[0].Endpoints[0] | urlsplit('hostname') }}"
 
-    - name: Configure activemq hostname
+    - name: Configure activemq hostname as {{ activemq_hostname }}
       ansible.builtin.replace:
         path: hosts.yml
         regexp: 'external_activemq_hostname'
-        replace: "{{ activemq_hostname.stdout }}"
+        replace: "{{ activemq_hostname }}"

@@ -10,22 +10,26 @@
   tasks:
 
     - name: Grab activemq broker id
-      ansible.builtin.shell: |
-        aws mq describe-broker --broker-id {{ broker_name }} | jq -r .BrokerId
+      ansible.builtin.command: |
+        aws mq describe-broker --broker-id {{ broker_name }}
       register: describe_broker_output
 
-    - name: Destroy mq broker
-      ansible.builtin.shell: |
-        aws mq delete-broker --broker-id {{ describe_broker_output.stdout }}
+    - name: Set broker-id
+      set_fact:
+        broker_id: "{{ (describe_broker_output.stdout | from_json).BrokerId }}"
       when: describe_broker_output.stdout | length > 0
+
+    - name: Destroy mq broker
+      ansible.builtin.command: |
+        aws mq delete-broker --broker-id {{ broker_id }}
+      when: broker_id is defined
 
     - name: Wait for destroy mq broker
       ansible.builtin.shell: |
-        aws mq describe-broker --broker-id {{ describe_broker_output.stdout }}
-      when: describe_broker_output.stdout | length > 0
+        aws mq describe-broker --broker-id {{ broker_id }} || true
+      when: broker_id is defined
       register: wait_describe_broker_output
       until: wait_describe_broker_output.stderr.find("NotFoundException") != -1
-      ignore_errors: yes
       retries: 20
       delay: 30
 
