@@ -92,7 +92,7 @@
 
     - name: Add sync service startup script
       template:
-        src: syncservice.sh
+        src: syncservice.sh.j2
         dest: "{{ binaries_folder }}/syncservice.sh"
         owner: "{{ username }}"
         group: "{{ group_name }}"
