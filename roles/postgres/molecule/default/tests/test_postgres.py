@@ -29,4 +29,3 @@ def test_postgresql_service(host):
     # and cannot create object inside it
     fail_create_table_output = host.run("PGPASSWORD=alfresco psql -h 127.0.0.1 -U alfresco alfresco-sync -c \"CREATE TABLE public.films (code char(5));\"")
     assert 'permission denied for schema public' in fail_create_table_output.stderr
-
