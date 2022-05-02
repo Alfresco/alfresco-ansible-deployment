@@ -47,5 +47,9 @@ jobs:
       - name: Run tests
         env:
           MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
-        working-directory: roles/${{ matrix.role.name }}
-        run: molecule test
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 60
+          max_attempts: 3
+          retry_wait_seconds: 10
+          command: cd roles/${{ matrix.role.name }} && molecule test
