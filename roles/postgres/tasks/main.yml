@@ -80,6 +80,8 @@
       loop:
         - "{{ repo_db_name }}"
         - "{{ sync_db_name }}"
+      tags:
+        - molecule-idempotence-notest
 
     - name: Create deprivileged users
       community.postgresql.postgresql_user:
