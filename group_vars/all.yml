@@ -78,6 +78,8 @@ amp_downloads:
 # and change this flag to true. See the deployment guide for more details.
 use_custom_keystores: false
 
+# common dependencies should be updated also in *-extra-vars.yml as well thanks
+# to default ansible merging behaviour
 dependencies_version:
   postgresql_connector: 42.2.19
   postgres_major_version: 13

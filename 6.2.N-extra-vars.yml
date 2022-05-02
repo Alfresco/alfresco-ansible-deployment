@@ -22,6 +22,7 @@ search:
 sync:
   version: 3.3.3.1
 
+# this overwrites (and not merge) the same structure in group_vars/all.yml
 dependencies_version:
   postgresql_connector: 42.2.13
   postgres_major_version: 11
