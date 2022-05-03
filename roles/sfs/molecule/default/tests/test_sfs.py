@@ -41,5 +41,5 @@ def test_sfs_response(host):
 def test_environment_jvm_opts(host):
     "Check that overwritten JVM_OPTS are taken into consideration"
     java_process = host.process.get(user="alfresco", comm="java")
-    assert '-Xmx900m' in java_process.args
-    assert '-Xms128m' in java_process.args
+    assert_that(java_process.args, contains_string('-Xmx900m'))
+    assert_that(java_process.args, contains_string('-Xms128m'))
