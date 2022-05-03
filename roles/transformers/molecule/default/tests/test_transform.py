@@ -28,12 +28,12 @@ def test_aio_log_exists(host, get_ansible_vars):
     with host.sudo(get_ansible_vars['username']):
         assert_that(host.file("{}/ats-ate-aio.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
 
-def test_aio_service(host, get_ansible_vars):
+def test_aio_service(host):
     """Check that Transform AIO is enabled and running"""
     assert_that(host.service("alfresco-tengine-aio").is_running)
     assert_that(host.service("alfresco-tengine-aio").is_enabled)
 
-def test_aio_config_api(host, get_ansible_vars):
+def test_aio_config_api(host):
     """Check that Transform AIO transform/config api works"""
     cmd = host.run("curl -iL http://{}:8090/transform/config".format(test_host))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
@@ -45,13 +45,13 @@ def test_aio_config_api(host, get_ansible_vars):
     assert_that(cmd.stdout, contains_string("textToPdfOptions"))
     assert_that(cmd.stdout, contains_string("stringOptions"))
 
-def test_aio_root_api(host, get_ansible_vars):
+def test_aio_root_api(host):
     """Check that Transform AIO root api works"""
     cmd = host.run("curl -iL http://{}:8090".format(test_host))
-    assert_that(cmd.stdout, contains_string("All in One Transformer Test Transformation"), cmd.stdout)
+    assert_that(cmd.stdout, contains_string("All in One Transformer Test Transformation"))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
 
-def test_environment_jvm_opts(host, get_ansible_vars):
+def test_environment_jvm_opts(host):
     "Check that overwritten JVM_OPTS are taken into consideration"
     with host.sudo():
         pid = host.run("/opt/openjdk*/bin/jps -lV | awk '/transform-core-aio/{print $1}'")
