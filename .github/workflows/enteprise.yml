@@ -76,6 +76,9 @@ jobs:
           - name: multimachine
             vars: vars.yml
             desc: latest Cluster Ec2 tests (RHEL8)
+          - name: external-activemq
+            vars: vars.yml
+            desc: latest External ActiveMQ Ec2 tests (Ubuntu 20.04)
     env:
       PY_COLORS: 1
       BUILD_NUMBER: ${{ github.run_id }}
@@ -112,6 +115,7 @@ jobs:
         run: echo ${{ env.BRANCH_NAME }}
 
       - name: Run tests
+        timeout-minutes: 120
         env:
           MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
           MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
@@ -124,6 +128,7 @@ jobs:
 
       - name: Cleanup tests
         if: always()
+        timeout-minutes: 35
         env:
           MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
           MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}

@@ -70,7 +70,7 @@
         - name: Create Shared contentstore
           community.aws.efs:
             state: present
-            name: molecule-{{ lookup('env', 'MOLECULE_SCENARIO_NAME') }}-{{ lookup('env', 'BRANCH_NAME') }}-{{ lookup('env', 'BUILD_NUMBER') }}
+            name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
             targets:
               - subnet_id: "{{ molecule_yml.platforms | selectattr('name', 'in', groups.repository) | map(attribute='vpc_subnet_id') | first }}"
                 security_groups: "{{ molecule_ec2.instances | json_query('[].security_groups[].group_id') | unique }}"

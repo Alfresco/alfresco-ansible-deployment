@@ -94,8 +94,8 @@
     - name: Add activemq wrapper script
       become: true
       template:
-        src: "activemq.sh"
-        dest: "{{ binaries_folder }}"
+        src: activemq.sh.j2
+        dest: "{{ binaries_folder }}/activemq.sh"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,go=rx'
@@ -104,7 +104,7 @@
 
     - name: Add activemq.service
       template:
-        src: activemq.service
+        src: activemq.service.j2
         dest: /etc/systemd/system/activemq.service
         mode: 0644
       notify:

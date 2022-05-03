@@ -117,7 +117,7 @@
 
     - name: Add AIO startup script
       template:
-        src: ats-ate-aio.sh
+        src: ats-ate-aio.sh.j2
         dest: "{{ binaries_folder }}/ats-ate-aio.sh"
         owner: "{{ username }}"
         group: "{{ group_name }}"
