@@ -1,7 +1,7 @@
 """Transform Tests"""
 import os
 import pytest
-from hamcrest import contains_string, assert_that
+from hamcrest import contains_string, assert_that, has_length
 
 test_host = os.environ.get('TEST_HOST')
 
@@ -54,6 +54,7 @@ def test_aio_root_api(host):
 def test_environment_jvm_opts(host):
     "Check that overwritten JVM_OPTS are taken into consideration"
     java_processes = host.process.filter(user="alfresco", comm="java")
+    assert_that(java_processes, has_length(2))
     for java_process in java_processes:
         if 'imagemagick' in java_process.args:
             assert_that(java_process.args, contains_string('-Xmx900m'))

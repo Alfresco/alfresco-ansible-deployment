@@ -20,7 +20,7 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", common_defaults)["ansible_facts"]["common_defaults"])
     return ansible_vars
 
-def test_trouter_service_is_running_and_enabled(host, get_ansible_vars):
+def test_trouter_service_is_running_and_enabled(host):
     """Check trouter service"""
     trouter = host.service("alfresco-transform-router")
     assert_that(trouter.is_running)
@@ -31,7 +31,7 @@ def test_trouter_log_exists(host, get_ansible_vars):
     with host.sudo(get_ansible_vars['username']):
         assert_that(host.file("/var/log/alfresco/ats-atr.log").exists)
 
-def test_trouter_response(host, get_ansible_vars):
+def test_trouter_response(host):
     "Check that trouter context is available and returns a HTTP 200 status code"
     cmd = host.run("curl -iL http://{}:8095/transform/config".format(test_host))
     http_response = host.run("curl -sL -w '%{http_code}' http://" + test_host + ":8095/transform/config -o /dev/null")
@@ -44,9 +44,8 @@ def test_trouter_response(host, get_ansible_vars):
     assert_that(cmd.stdout, contains_string("textToPdfOptions"))
     assert_that(cmd.stdout, contains_string("stringOptions"))
 
-def test_environment_jvm_opts(host, get_ansible_vars):
+def test_environment_jvm_opts(host):
     "Check that overwritten JVM_OPTS are taken into consideration"
-    with host.sudo():
-        pid = host.run("/opt/openjdk*/bin/jps -lV | awk '/transform-router/{print $1}'")
-        process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
-    assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
+    java_process = host.process.get(user="alfresco", comm="java")
+    assert_that(java_process.args, contains_string('-Xmx900m'))
+    assert_that(java_process.args, contains_string('-Xms300m'))

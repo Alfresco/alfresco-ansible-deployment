@@ -5,7 +5,7 @@ import string
 import random
 import json
 import pytest
-from hamcrest import assert_that, contains_string
+from hamcrest import assert_that, contains_string, has_length
 
 test_host = os.environ.get('TEST_HOST')
 
@@ -153,10 +153,12 @@ def test_ags_share_is_installed_and_loaded(host, get_ansible_vars):
 
 def test_environment_jvm_opts(host):
     "Check that overwritten JVM_OPTS are taken into consideration"
-    with host.sudo():
-        pid = host.run("/opt/openjdk*/bin/jps -lV | grep org.apache.catalina.startup.Bootstrap | awk '{print $1}'")
-        process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
-    assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
+    java_processes = host.process.filter(user="alfresco", comm="java")
+    assert_that(java_processes, has_length(2))
+    for java_process in java_processes:
+        if 'org.apache.catalina.startup.Bootstrap' in java_process.args:
+            assert_that(java_process.args, contains_string('-Xmx900m'))
+            assert_that(java_process.args, contains_string('-Xms512m'))
 
 def test_mounting_storage(host):
     """Check wether Content Store has been properly mounted as per config."""
