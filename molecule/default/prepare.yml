@@ -48,8 +48,8 @@
     - name: Configure FQDN in extra vars file
       ansible.builtin.replace:
         path: "{{ project_dir }}/tests/test-ssl.yml"
-        regexp: 'TEST_FQDN'
-        replace: '{{ certificate_domain }}'
+        regexp: "TEST_FQDN"
+        replace: "{{ certificate_domain }}"
 
     - name: Git checkout
       ansible.builtin.git:

@@ -81,9 +81,6 @@ jobs:
           - name: multimachine
             vars: vars.yml
             desc: latest Cluster Ec2 tests (RHEL8)
-          - name: external-activemq
-            vars: vars.yml
-            desc: latest External ActiveMQ Ec2 tests (Ubuntu 20.04)
     env:
       PY_COLORS: 1
       BUILD_NUMBER: ${{ github.run_id }}

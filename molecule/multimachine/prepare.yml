@@ -1,13 +1,6 @@
 ---
-- name: Prepare remote hosts
-  hosts: all
-  gather_facts: false
-  tasks:
-    - name: Make sure python3 is installed
-      package:
-        name: python3
-        state: present
-      become: true
+- name: Default prepare
+  import_playbook: ../default/prepare.yml
 
 - name: Prepare localhost
   hosts: localhost
@@ -16,48 +9,6 @@
     project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
     dtas_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
   tasks:
-
-    - name: Gather EC2 facts
-      amazon.aws.ec2_metadata_facts:
-      delegate_to: "{{ item }}"
-      loop: "{{ groups.nginx }}"
-
-    - name: "Set variables"
-      set_fact:
-        certificate_domain: "{{ ansible_ec2_public_hostname }}"
-        private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.key"
-        cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
-
-    - name: Create private key (RSA, 4096 bits)
-      community.crypto.openssl_privatekey:
-        path: "{{ private_key_path }}"
-
-    - name: Create CSR for {{ certificate_domain }} self-signed certificate
-      community.crypto.openssl_csr_pipe:
-        privatekey_path: "{{ private_key_path }}"
-        common_name: "{{ certificate_domain }}"
-        organization_name: Hyland
-      register: csr
-
-    - name: Create self-signed certificate from CSR
-      community.crypto.x509_certificate:
-        path: "{{ cert_path }}"
-        csr_content: "{{ csr.csr }}"
-        privatekey_path: "{{ private_key_path }}"
-        provider: selfsigned
-
-    - name: Configure FQDN in extra vars file
-      ansible.builtin.replace:
-        path: "{{ project_dir }}/tests/test-ssl.yml"
-        regexp: 'TEST_FQDN'
-        replace: "{{ certificate_domain }}"
-
-    - name: Git checkout
-      ansible.builtin.git:
-        repo: "https://{{ lookup('env', 'CLONE_GITHUB_TOKEN') }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
-        dest: "{{ dtas_dir }}"
-        version: "{{ lookup('env', 'DTAS_VERSION') }}"
-
     - name: Creating cluster contentstore
       when: molecule_yml.platforms | selectattr('name', 'in', groups.repository) | length > 1
       block:
@@ -128,3 +79,45 @@
                 src: "{{ hostvars.localhost.contentstore.results[0].efs.filesystem_address }}"
                 fstype: nfs
                 state: absent
+
+- name: Prepare external activemq
+  hosts: localhost
+  gather_facts: false
+  vars:
+    broker_name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
+  tasks:
+    - name: Lookup existing ec2 group
+      amazon.aws.ec2_group_info:
+        filters:
+          group-name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
+      register: ec2_groups_lookup
+
+    - name: Create mq broker
+      ansible.builtin.command: |
+        aws mq create-broker --broker-name {{ broker_name }} \
+          --deployment-mode SINGLE_INSTANCE \
+          --engine-type ACTIVEMQ \
+          --host-instance-type mq.t3.micro \
+          --engine-version 5.15.15 \
+          --users Password=alfrescoalfresco,Username=alfresco \
+          --security-groups {{ ec2_groups_lookup.security_groups[0].group_id }} \
+          --publicly-accessible \
+          --no-auto-minor-version-upgrade
+
+    - name: Wait for creation
+      ansible.builtin.command: |
+        aws mq describe-broker --broker-id {{ broker_name }}
+      register: describe_broker_output
+      until: ((describe_broker_output.stdout | from_json).BrokerState) == 'RUNNING'
+      retries: 20
+      delay: 60
+
+    - name: Grab activemq hostname
+      set_fact:
+        activemq_hostname: "{{ (describe_broker_output.stdout | from_json).BrokerInstances[0].Endpoints[0] | urlsplit('hostname') }}"
+
+    - name: Configure activemq hostname as {{ activemq_hostname }}
+      ansible.builtin.replace:
+        path: hosts.yml
+        regexp: 'external_activemq_hostname'
+        replace: "{{ activemq_hostname }}"

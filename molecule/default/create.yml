@@ -10,7 +10,7 @@
     - community.crypto
   vars:
     # Run config handling
-    default_run_id: "{{ lookup('password', '/dev/null chars=ascii_lowercase length=5') }}"
+    default_run_id: "{{ lookup('env', 'BUILD_NUMBER') }}"
     default_run_config:
       run_id: "{{ default_run_id }}"
 
@@ -209,6 +209,7 @@
         index_var: index
         label: "{{ item.name }}"
       when: item.security_groups | length == 0
+      register: ec2_instances_group
 
     - name: Create ephemeral EC2 instance(s)
       amazon.aws.ec2_instance:
