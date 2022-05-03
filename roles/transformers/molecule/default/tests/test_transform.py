@@ -53,10 +53,11 @@ def test_aio_root_api(host):
 
 def test_environment_jvm_opts(host):
     "Check that overwritten JVM_OPTS are taken into consideration"
-    with host.sudo():
-        pid = host.run("/opt/openjdk*/bin/jps -lV | awk '/transform-core-aio/{print $1}'")
-        process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
-    assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
+    java_processes = host.process.filter(user="alfresco", comm="java")
+    for java_process in java_processes:
+        if 'imagemagick' in java_process.args:
+            assert_that(java_process.args, contains_string('-Xmx900m'))
+            assert_that(java_process.args, contains_string('-Xms512m'))
 
 def test_libreoffice_install(host):
     """Check that libreoffice binary doesn't miss any dependencies"""
