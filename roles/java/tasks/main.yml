@@ -1,16 +1,16 @@
 ---
 # tasks file for roles/java
-- name: Download file with check (md5)
+- name: Download openjdk archive
   get_url:
     url: "{{ dependencies_url.java }}"
     dest: "{{ download_location }}/{{ java_tar_file }}"
     checksum: "md5:{{ dependencies_url.java_md5_checksum }}"
     timeout: 570
 
-- name: Install Java JRE {{ dependencies_version.java }}
+- name: Install OpenJDK v{{ dependencies_version.java }}
   become: true
   block:
-    - name: Unarchive java tar.gz
+    - name: Unarchive tar.gz
       unarchive:
         src: "{{ download_location }}/{{ java_tar_file }}"
         dest: "{{ java_home | dirname }}"
