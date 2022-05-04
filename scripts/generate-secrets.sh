@@ -1,5 +1,5 @@
 #!/bin/bash -e
-SECRET_KEYS=(repo_db_password sync_db_password reposearch_shared_secret)
+SECRET_KEYS=(repo_db_password sync_db_password reposearch_shared_secret activemq_password)
 
 for SECRET_KEY in "${SECRET_KEYS[@]}"; do
     RANDOM_STRING=$(openssl rand -base64 33)

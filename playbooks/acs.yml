@@ -28,6 +28,7 @@
           - repo_db_password is defined and repo_db_password | length > 0
           - sync_db_password is defined and sync_db_password | length > 0
           - reposearch_shared_secret is defined and reposearch_shared_secret | length > 0
+          - activemq_password is defined and activemq_password | length > 0
         msg: "Secrets must be provided in vars/secrets.yml before running the playbook"
         quiet: true
 
