@@ -68,8 +68,7 @@
         - "{{ repo_db_name }}"
         - "{{ sync_db_name }}"
 
-    # https://dba.stackexchange.com/a/35317/5179
-    - name: Revoke public access to databases
+    - name: Revoke default access to public schema
       community.postgresql.postgresql_privs:
         db: "{{ item }}"
         privs: ALL
@@ -83,7 +82,7 @@
       tags:
         - molecule-idempotence-notest
 
-    - name: Create deprivileged users
+    - name: Create unprivileged users
       community.postgresql.postgresql_user:
         db: "{{ item.db }}"
         name: "{{ item.user }}"

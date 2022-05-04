@@ -275,6 +275,10 @@ By default the playbook will deploy and configure a Postgres server for you. Tha
 
 > This server also requires to NOT have a sudo configuration with `requirestty` set.
 
+Please be aware that a change in Postgres configuration (e.g. pg_hba) can
+trigger a service restart and application downtime. For this reason you may want
+to run the playbook only during a scheduled maintenance window.
+
 If you'd prefer to use an external database server you can override the `repo_db_url` variable.
 
 An example custom database url is shown below:
@@ -286,7 +290,7 @@ repo_db_driver: com.mysql.jdbc.Driver
 
 Along with the url the database driver binaries need to be provided for one or both services in the `configuration_files/db_connector_repo` and/or `configuration_files/db_connector_sync` folders.
 
-The default database username (`repo_db_username` and/or `sync_db_username`) and password (`repo_db_password` and/or `sync_db_password`) in the configuration file `group_vars/all.yml` can also be overidden with your custom values.
+The default database username (`repo_db_username` and/or `sync_db_username`) and password (`repo_db_password` and/or `sync_db_password`) in the configuration file `group_vars/all.yml` can also be overridden with your custom values.
 
 Please refer to the [Configuring Databases](https://docs.alfresco.com/content-services/latest/config/databases/) documentation for more detailed information.
 
