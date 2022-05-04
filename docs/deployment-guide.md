@@ -98,6 +98,11 @@ The following systemd services are deployed and can be used to stop and start Al
 | ```alfresco-tengine-aio.service``` | Alfresco AIO Transform Core Engine |
 | ```alfresco-transform-router.service``` | Alfresco Transformation Router Service |
 
+Please be aware that some configuration changes (e.g. postgres pg_hba,
+properties files, ...) can trigger a service restart and a consequent
+application downtime. For this reason you may want to run the playbook only
+during a scheduled maintenance window.
+
 ## TCP Port Configuration
 
 Several roles setup services that listen on TCP ports and several roles wait for TCP ports to be listening before continuing execution (indicated by `Yes` in the "Required For Deployment" column). The table below shows the communication paths and port numbers used.
@@ -286,7 +291,7 @@ repo_db_driver: com.mysql.jdbc.Driver
 
 Along with the url the database driver binaries need to be provided for one or both services in the `configuration_files/db_connector_repo` and/or `configuration_files/db_connector_sync` folders.
 
-The default database username (`repo_db_username` and/or `sync_db_username`) and password (`repo_db_password` and/or `sync_db_password`) in the configuration file `group_vars/all.yml` can also be overidden with your custom values.
+The default database username (`repo_db_username` and/or `sync_db_username`) and password (`repo_db_password` and/or `sync_db_password`) in the configuration file `group_vars/all.yml` can also be overridden with your custom values.
 
 Please refer to the [Configuring Databases](https://docs.alfresco.com/content-services/latest/config/databases/) documentation for more detailed information.
 
