@@ -2,6 +2,9 @@
 - name: Default prepare
   import_playbook: ../default/prepare.yml
 
+- name: Handle secrets
+  ansible.builtin.import_playbook: ../../playbooks/secrets.yml
+
 - name: Prepare activemq instance
   hosts: localhost
   gather_facts: false
@@ -26,7 +29,7 @@
           --engine-type ACTIVEMQ \
           --host-instance-type mq.t3.micro \
           --engine-version 5.15.15 \
-          --users Password=alfrescoalfresco,Username=alfresco \
+          --users Password={{ activemq_password }},Username=alfresco \
           --security-groups {{ ec2_group.group_id }} \
           --publicly-accessible \
           --no-auto-minor-version-upgrade
