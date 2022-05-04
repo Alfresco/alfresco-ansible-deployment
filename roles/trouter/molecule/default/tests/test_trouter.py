@@ -1,7 +1,7 @@
 """TRouter Tests"""
 import os
 import pytest
-from hamcrest import assert_that, contains_string
+from hamcrest import assert_that, contains_string, has_length
 
 test_host = os.environ.get('TEST_HOST')
 
@@ -46,6 +46,9 @@ def test_trouter_response(host):
 
 def test_environment_jvm_opts(host):
     "Check that overwritten JVM_OPTS are taken into consideration"
-    java_process = host.process.get(user="alfresco", comm="java")
-    assert_that(java_process.args, contains_string('-Xmx900m'))
-    assert_that(java_process.args, contains_string('-Xms300m'))
+    java_processes = host.process.filter(user="alfresco", comm="java")
+    assert_that(java_processes, has_length(3))
+    for java_process in java_processes:
+        if 'alfresco-transform-router' in java_process.args:
+            assert_that(java_process.args, contains_string('-Xmx900m'))
+            assert_that(java_process.args, contains_string('-Xms800m'))
