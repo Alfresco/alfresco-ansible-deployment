@@ -240,6 +240,12 @@ The steps required to enable **Ansible Vault** support are:
   export ANSIBLE_VAULT_PASSWORD_FILE=~/.vault_pass.txt
   ```
 
+Otherwise you can provide the password before each playbook invocation with:
+
+```bash
+ansible-playbook --ask-vault-pass ...
+```
+
 Now you are ready to start using Ansible Vault.
 
 #### Populate secrets with Ansible Vault
@@ -368,8 +374,8 @@ all:
       hosts:
         whatever.mq.eu-west-1.amazonaws.com:
           activemq_username: alfresco
-          activemq_password: alfresco
           activemq_port: 61617
+          activemq_protocol: tcp # or ssl
     external:
       children:
         external_activemq:
