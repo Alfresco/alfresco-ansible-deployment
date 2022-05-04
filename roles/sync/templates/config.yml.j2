@@ -4,7 +4,7 @@ version: {{ sync.version }}
 # ActiveMQ config
 messaging:
     username: {{ activemq_username }}
-    password: {{ activemq_password }}
+    password: "{{ activemq_password }}"
     dataFormat: defaultDataFormatDef
     txnManager: syncRequiredTxn
     nodeEvents:
@@ -63,7 +63,7 @@ sql:
 {% endif %}
         driver: {{ sync_db_driver }}
         username: {{ sync_db_username }}
-        password: {{ sync_db_password }}
+        password: "{{ sync_db_password }}"
 
         pool:
             initial: 50
