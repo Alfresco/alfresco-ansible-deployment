@@ -98,6 +98,11 @@ The following systemd services are deployed and can be used to stop and start Al
 | ```alfresco-tengine-aio.service``` | Alfresco AIO Transform Core Engine |
 | ```alfresco-transform-router.service``` | Alfresco Transformation Router Service |
 
+Please be aware that some configuration changes (e.g. postgres pg_hba,
+properties files, ...) can trigger a service restart and a consequent
+application downtime. For this reason you may want to run the playbook only
+during a scheduled maintenance window.
+
 ## TCP Port Configuration
 
 Several roles setup services that listen on TCP ports and several roles wait for TCP ports to be listening before continuing execution (indicated by `Yes` in the "Required For Deployment" column). The table below shows the communication paths and port numbers used.
@@ -274,10 +279,6 @@ When overriding the default env vars you should make sure you're not retiring im
 By default the playbook will deploy and configure a Postgres server for you. That server is a basic PostgreSQL setup with no specific optimization or features. For example, it doesn't provide any high availability mechanism.
 
 > This server also requires to NOT have a sudo configuration with `requirestty` set.
-
-Please be aware that a change in Postgres configuration (e.g. pg_hba) can
-trigger a service restart and application downtime. For this reason you may want
-to run the playbook only during a scheduled maintenance window.
 
 If you'd prefer to use an external database server you can override the `repo_db_url` variable.
 
