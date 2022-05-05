@@ -234,7 +234,7 @@ The steps required to enable **Ansible Vault** support are:
     ```
 
 * Export the path to the vault password file as `ANSIBLE_VAULT_PASSWORD_FILE` so
-  that can automatically picked-up when running Ansile:
+  that can automatically picked-up when running Ansible:
 
   ```bash
   export ANSIBLE_VAULT_PASSWORD_FILE=~/.vault_pass.txt
@@ -259,36 +259,38 @@ In the previous links you can read both advantages and disadvantages of the two 
 
 We provide a script to automatically autogenerate secure secrets (`openssl` is required).
 
-If you prefer **Encrypted variables** run:
+If you prefer **Encrypted variables**, the playbook will handle first time generation of
+secrets and automatically add new secrets that may be introduced in future
+versions of the playbook.
+
+If you prefer **Encrypted files**, the first time you need to run the playbook with:
 
 ```bash
-./scripts/generate-secrets.sh > vars/secrets.yml
+ansible-playbook -e vault_file_initialize=true playbooks/secrets.yml
 ```
 
-or if you prefer **Encrypted files** run:
+After the first run, you can access the vault with:
 
 ```bash
-./scripts/generate-secrets.sh plaintext > vars/secrets.yml
-ansible-vault encrypt vars/secrets.yml
+ansible-vault view vars/secrets.yml
 ```
 
-Now mandatory secrets are ready to use by the playbook.
+or to add/edit secrets with:
+
+```bash
+ansible-vault edit vars/secrets.yml
+```
 
 Please refer to the [official documentation](https://docs.ansible.com/ansible/latest/user_guide/vault.html) to learn how to interact with existing encrypted variables or files.
 
 #### Populate secrets with third-party solutions
 
-Variables defined in `vars/secrets.yml` can also be populated dynamically using third-parties lookup plugins:
+Variables defined in `vars/secrets.yml` can also reference remote values using
+third-parties lookup plugins:
 
 * [HashiCorp Vault](https://docs.ansible.com/ansible/latest/collections/community/hashi_vault/hashi_vault_lookup.html)
 * [AWS Secrets](https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_secret_lookup.html)
 * [1Password](https://docs.ansible.com/ansible/latest/collections/community/general/onepassword_lookup.html)
-
-### Alfresco/Solr authentication
-
-Starting with ACS 7.2 and/or Search services 2.0.3, the communication between Repository and Solr requires to be authenticated. The playbook supports that authentication scheme using the new `secret` method.
-
-This authentication method requires a shared secret. In order to correctly configure it, the variable `reposearch_shared_secret` needs to be set in `vars/secrets.yml` or passed as an extra variable (it needs to be available to the localhost's hostvars array of variables).
 
 ### Alfresco Global Properties
 
