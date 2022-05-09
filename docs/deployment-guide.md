@@ -224,27 +224,29 @@ generate those secrets but they will be saved as plaintext.
 
 #### Enable Ansible Vault support
 
-The steps required to enable **Ansible Vault** support are:
+To enable basic **Ansible Vault** integration working, a passphrase needs to be provided to Ansible process to make encryption/decryption working.
 
-* Configure a vault password in a file (e.g. `~/.vault_pass.txt`)
-  * Optionally you can autogenerate a strong password with:
+The most two basic options are:
+
+1. Provide manually a password on each ansible-playbook run with:
+
+  ```bash
+  ansible-playbook --ask-vault-pass ...
+  ```
+
+1. Configure a vault password in a file (e.g. `~/.vault_pass.txt`)
+  Optionally you can autogenerate a strong password with:
 
     ```bash
     openssl rand -base64 21 > ~/.vault_pass.txt
     ```
 
-* Export the path to the vault password file as `ANSIBLE_VAULT_PASSWORD_FILE` so
+  Then set the path to the vault password file as `ANSIBLE_VAULT_PASSWORD_FILE` so
   that can automatically picked-up when running Ansible:
 
   ```bash
   export ANSIBLE_VAULT_PASSWORD_FILE=~/.vault_pass.txt
   ```
-
-Otherwise you can provide the password before each playbook invocation with:
-
-```bash
-ansible-playbook --ask-vault-pass ...
-```
 
 Now you are ready to start using Ansible Vault.
 
@@ -257,13 +259,16 @@ Ansible Vault provides two alternative ways to protect secrets:
 
 In the previous links you can read both advantages and disadvantages of the two approaches.
 
-We provide a script to automatically autogenerate secure secrets (`openssl` is required).
+We are supporting a script to automatically autogenerate secure secrets
+(`openssl` is required) during the playbook run.
 
 If you prefer **Encrypted variables**, the playbook will handle first time generation of
 secrets and automatically add new secrets that may be introduced in future
 versions of the playbook.
 
-If you prefer **Encrypted files**, the first time you need to run the playbook with:
+If you prefer **Encrypted files**, please note that in this way the playbook
+can't automatically add new secrets that may be introduced in future version of
+the playbook. To enable it, the first time you need to run the playbook with:
 
 ```bash
 ansible-playbook -e vault_file_initialize=true playbooks/secrets.yml
@@ -291,6 +296,7 @@ third-parties lookup plugins:
 * [HashiCorp Vault](https://docs.ansible.com/ansible/latest/collections/community/hashi_vault/hashi_vault_lookup.html)
 * [AWS Secrets](https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_secret_lookup.html)
 * [1Password](https://docs.ansible.com/ansible/latest/collections/community/general/onepassword_lookup.html)
+* [CyberArk](https://docs.ansible.com/ansible/latest/collections/community/general/cyberarkpassword_lookup.html)
 
 ### Alfresco Global Properties
 
