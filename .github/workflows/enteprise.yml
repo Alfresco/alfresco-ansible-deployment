@@ -67,8 +67,9 @@ jobs:
       - name: Get branch name
         shell: bash
         run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
-      - name: Debug branch name
-        run: echo ${{ env.BRANCH_NAME }}
+
+      - name: Generate unique id
+        run: echo "MOLECULE_IT_ID=$(date +%s%4N)" >> $GITHUB_ENV
 
       - name: Run tests
         timeout-minutes: 120
