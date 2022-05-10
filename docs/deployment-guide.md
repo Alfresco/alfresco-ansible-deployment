@@ -223,23 +223,24 @@ Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html) encryption
 or use [third-party plugins](#third-party-lookup-plugins) to avoid keeping
 secrets in plaintext on the control node file-system.
 
-The main `acs` playbook will enforce the user to provide secrets in the dedicated
-file. We also provide a `secrets-init.yml` playbook to automatically generate
-secure secrets and encrypt them with Ansible Vault.
+The main `acs` playbook will enforce the user to provide secrets in the
+dedicated `vars/secrets.yml` file. We also provide a `secrets-init.yml` playbook
+to automatically generate secure secrets and encrypt them with Ansible Vault.
 
 #### Enable Ansible Vault support
 
-To enable basic **Ansible Vault** integration working, a passphrase needs to be provided to Ansible process to make encryption/decryption working.
+To enable basic **Ansible Vault** integration working, a passphrase needs to be
+provided to Ansible process to make encryption/decryption working.
 
 The most two basic options are:
 
-1. Input manually a password on each ansible-playbook run with:
+1. Input manually a password on each ansible-playbook run with `--ask-vault-pass`:
 
     ```bash
     ansible-playbook --ask-vault-pass playbooks/acs.yml
     ```
 
-2. Configure a password in a file (e.g. `~/.vault_pass.txt`)
+2. Configure a password in a file (e.g. `~/.vault_pass.txt`) and set an env var with that location.
     Optionally you can autogenerate a strong password with:
 
     ```bash
@@ -264,7 +265,12 @@ Ansible Vault provides two alternative ways to protect secrets:
 
 In the previous links you can read both advantages and disadvantages of the two approaches.
 
-With **Encrypted variables**, you can use the `secrets-init.yml` playbook to
+> If you are upgrading from previous versions of the playbook, you may want to
+> read [upgrade notes](playbook-upgrade.md#secrets-management).
+
+##### Encrypted variables
+
+With Encrypted variables you can use the `secrets-init.yml` playbook to
 handle the first-time generation of secrets and also to automatically add new
 secrets that may be introduced in future versions of the playbook.
 
@@ -274,12 +280,11 @@ To automatically setup/update secrets, run:
 ansible-playbook [--ask-vault-pass] -e vault_init=encrypted_variables playbooks/secrets-init.yml
 ```
 
-With **Encrypted files**, you can use the `secrets-init.yml` playbook to handle
+##### Encrypted files
+
+With Encrypted files you can use the `secrets-init.yml` playbook to handle
 the first-time generation of secrets but for updates you have to provide them as
 described below. However you can provide your own passwords.
-
-> If you are upgrading from previous versions of the playbook, you may want to
-> read [upgrade notes](playbook-upgrade.md#secrets-management).
 
 ```bash
 ansible-playbook -e vault_init=plaintext playbooks/secrets-init.yml
