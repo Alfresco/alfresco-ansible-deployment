@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 usage() {
-    echo "Usage: $0 -s SECRET_KEY [ -m plaintext ]" 1>&2
+    echo "Usage: $0 -s SECRET_KEY -m (plaintext|plugin|encrypt_string)" 1>&2
 }
 exit_abnormal() {
     usage
@@ -22,8 +22,13 @@ if [ -z "${SECRET_KEY}" ]; then
 fi
 
 RANDOM_STRING=$(openssl rand -base64 33)
-if [ -z "${ANSIBLE_VAULT_PASSWORD_FILE}" ] || [ "$MODE" == 'plaintext' ]; then
+if [ "$MODE" == 'plaintext' ]; then
     echo "${SECRET_KEY}: \"$RANDOM_STRING\""
-else
+elif [ "$MODE" == 'plugin' ]; then
+    echo "${SECRET_KEY}: \"{{ lookup('') }}\""
+elif [ "$MODE" == 'encrypt_string' ]; then
     ansible-vault encrypt_string "$RANDOM_STRING" --name "${SECRET_KEY}" | grep -v 'Encryption successful'
+else
+    echo MODE "$MODE" is not supported
+    exit_abnormal
 fi
