@@ -120,3 +120,5 @@ sync_db_username: "alfresco-sync"
 use_ssl: false
 # Put your domain name here if any (e.g. ecm.alfresco.com). Needs to be empty if unused (don't use dummy values)
 fqdn_alfresco: ""
+
+test_environment: false

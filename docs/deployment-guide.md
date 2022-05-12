@@ -201,6 +201,11 @@ Now you have the control node setup you can [configure](#configure-your-deployme
 
 To deploy everything on the control node follow the steps in the [Locahost Deployment](#localhost-deployment) section or to deploy to one or more other machines follow the steps in the [SSH Deployment](#ssh-deployment) section.
 
+If you are going to do a production deployment, please take a look at the
+mandatory [Secrets management](#secrets-management) section, otherwise you can
+set `test_environment` in `groups_var/all.yml` to just autogenerate secrets
+before running the playbook.
+
 ## Configure Your Deployment
 
 By default, without any configuration applied, the playbook will deploy a limited trial of the Enterprise version of Alfresco Content Services 7.x that goes into read-only mode after 2 days. If you'd like to try Alfresco Content Services for a longer period, request the 30-day [Download Trial](https://www.alfresco.com/platform/content-services-ecm/trial/download).
@@ -215,7 +220,7 @@ If you have a valid license place your `.lic` file in the `configuration_files/l
 
 ### Secrets management
 
-This playbook expects that security-relevant variables are configured within the
+This playbook expects that security-relevant secrets are configured within the
 `vars/secrets.yml` file.
 
 It is strongly recommended to enable [Ansible
