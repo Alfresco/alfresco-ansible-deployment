@@ -234,30 +234,35 @@ to automatically generate secure secrets and encrypt them with Ansible Vault.
 
 #### Enable Ansible Vault support
 
-To enable basic **Ansible Vault** integration working, a passphrase needs to be
-provided to Ansible process to make encryption/decryption working.
+To start using **Ansible Vault** integration, a passphrase needs to be provided
+to Ansible to make encryption/decryption working during the play.
 
+There are different ways to configure Ansible Vault, from providing the password
+manually on each ansible-playbook run using the `--ask-vault-pass` flag (example
+below), to more advanced scenarios.
 
-There are different ways to configure the vault, from providing the password manually on each ansible-playbook run using the `--ask-vault-pass` flag (example below), to more advanced scenarios.
-    ```bash
-    ansible-playbook --ask-vault-pass playbooks/acs.yml
-    ```
+```bash
+ansible-playbook --ask-vault-pass playbooks/acs.yml
+```
 
-While we recommend to refer to the official Ansible documentation to properly configure Ansible vault (@gionn add the link); below a basic configuration that will help you in quickly installing Alfresco.
+While we recommend to refer to the official Ansible documentation to properly configure
+[Ansible vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html#managing-vault-passwords),
+below a basic configuration that will help you in quickly installing Alfresco.
 
-- Configure a password in a file (e.g. `~/.vault_pass.txt`) and set an env var with that location.
+Configure a password in a file (e.g. `~/.vault_pass.txt`) and set an env var with that location.
 
-    Optionally you can autogenerate a strong password with:
+Optionally you can autogenerate a strong password with:
 
-    ```bash
-    openssl rand -base64 21 > ~/.vault_pass.txt
-    ```
+```bash
+openssl rand -base64 21 > ~/.vault_pass.txt
+```
 
-  Then set the path to the vault password file as `ANSIBLE_VAULT_PASSWORD_FILE` so
-  that can automatically picked-up when running Ansible:
+Then set the path to the vault password file as `ANSIBLE_VAULT_PASSWORD_FILE` so
+that can automatically picked-up when running Ansible:
 
-  ```bash
-  export ANSIBLE_VAULT_PASSWORD_FILE=~/.vault_pass.txt
+```bash
+export ANSIBLE_VAULT_PASSWORD_FILE=~/.vault_pass.txt
+```
 
 Now you are ready to start using Ansible Vault.
 
