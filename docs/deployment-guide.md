@@ -228,7 +228,7 @@ Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html) encryption
 or use [third-party plugins](#third-party-lookup-plugins) to avoid keeping
 secrets in plaintext on the control node file-system.
 
-The main `acs` playbook will enforce the user to provide secrets in the
+The main `acs` playbook will expect the user to provide secrets in the
 dedicated `vars/secrets.yml` file. We also provide a `secrets-init.yml` playbook
 to automatically generate secure secrets and encrypt them with Ansible Vault.
 
@@ -237,15 +237,16 @@ to automatically generate secure secrets and encrypt them with Ansible Vault.
 To enable basic **Ansible Vault** integration working, a passphrase needs to be
 provided to Ansible process to make encryption/decryption working.
 
-The most two basic options are:
 
-1. Input manually a password on each ansible-playbook run with `--ask-vault-pass`:
-
+There are different ways to configure the vault, from providing the password manually on each ansible-playbook run using the `--ask-vault-pass` flag (example below), to more advanced scenarios.
     ```bash
     ansible-playbook --ask-vault-pass playbooks/acs.yml
     ```
 
-2. Configure a password in a file (e.g. `~/.vault_pass.txt`) and set an env var with that location.
+While we recommend to refer to the official Ansible documentation to properly configure Ansible vault (@gionn add the link); below a basic configuration that will help you in quickly installing Alfresco.
+
+- Configure a password in a file (e.g. `~/.vault_pass.txt`) and set an env var with that location.
+
     Optionally you can autogenerate a strong password with:
 
     ```bash
@@ -257,7 +258,6 @@ The most two basic options are:
 
   ```bash
   export ANSIBLE_VAULT_PASSWORD_FILE=~/.vault_pass.txt
-  ```
 
 Now you are ready to start using Ansible Vault.
 
@@ -282,7 +282,7 @@ secrets that may be introduced in future versions of the playbook.
 To automatically setup/update secrets, run:
 
 ```bash
-ansible-playbook [--ask-vault-pass] -e vault_init=encrypted_variables playbooks/secrets-init.yml
+ansible-playbook -e vault_init=encrypted_variables playbooks/secrets-init.yml
 ```
 
 ##### Encrypted files
@@ -301,7 +301,7 @@ To enable file encryption and automatically autogenerate any missing secrets,
 run:
 
 ```bash
-ansible-playbook [--ask-vault-pass] -e vault_init=encrypted_file playbooks/secrets-init.yml
+ansible-playbook  -e vault_init=encrypted_file playbooks/secrets-init.yml
 ```
 
 After the first run, you can access the encrypted file vault with:
