@@ -203,7 +203,7 @@ To deploy everything on the control node follow the steps in the [Locahost Deplo
 
 If you are going to do a production deployment, please take a look at the
 mandatory [Secrets management](#secrets-management) section, otherwise you can
-set `test_environment` in `groups_var/all.yml` to just autogenerate secrets
+set `autogen_unsecure_secrets: true` in `groups_var/all.yml` to just autogenerate secrets
 before running the playbook.
 
 ## Configure Your Deployment
@@ -228,18 +228,17 @@ Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html) encryption
 or use [third-party plugins](#third-party-lookup-plugins) to avoid keeping
 secrets in plaintext on the control node file-system.
 
-The main `acs` playbook will expect the user to provide secrets in the
-dedicated `vars/secrets.yml` file. We also provide a `secrets-init.yml` playbook
-to automatically generate secure secrets and encrypt them with Ansible Vault.
+We provide a `secrets-init.yml` playbook to automatically generate secure
+secrets and encrypt them with Ansible Vault.
 
 #### Enable Ansible Vault support
 
-To start using **Ansible Vault** integration, a passphrase needs to be provided
-to Ansible to make encryption/decryption working during the play.
+To start using **Ansible Vault** integration, a password needs to be provided to
+Ansible to make encryption/decryption working during the play.
 
-There are different ways to configure Ansible Vault, from providing the password
-manually on each ansible-playbook run using the `--ask-vault-pass` flag (example
-below), to more advanced scenarios.
+There are different ways to provide that password Ansible Vault, from manually
+via user input on each ansible-playbook run using the `--ask-vault-pass` flag
+(example below), to more advanced scenarios.
 
 ```bash
 ansible-playbook --ask-vault-pass playbooks/acs.yml
@@ -247,18 +246,18 @@ ansible-playbook --ask-vault-pass playbooks/acs.yml
 
 While we recommend to refer to the official Ansible documentation to properly configure
 [Ansible vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html#managing-vault-passwords),
-below a basic configuration that will help you in quickly installing Alfresco.
+below a basic configuration that will help you in quickly installing Alfresco
+without to having to input the Vault password everytime.
 
-Configure a password in a file (e.g. `~/.vault_pass.txt`) and set an env var with that location.
-
-Optionally you can autogenerate a strong password with:
+Configure a password in a file (e.g. `~/.vault_pass.txt`), optionally
+autogenerating it with:
 
 ```bash
 openssl rand -base64 21 > ~/.vault_pass.txt
 ```
 
-Then set the path to the vault password file as `ANSIBLE_VAULT_PASSWORD_FILE` so
-that can automatically picked-up when running Ansible:
+Set `ANSIBLE_VAULT_PASSWORD_FILE` to that file location so that can
+automatically picked-up when running Ansible:
 
 ```bash
 export ANSIBLE_VAULT_PASSWORD_FILE=~/.vault_pass.txt
@@ -294,7 +293,7 @@ ansible-playbook -e vault_init=encrypted_variables playbooks/secrets-init.yml
 
 With Encrypted files you can use the `secrets-init.yml` playbook to handle
 the first-time generation of secrets but for updates you have to provide them as
-described below. However you can provide your own passwords.
+described below. However you can provide your own passwords too.
 
 ```bash
 ansible-playbook -e vault_init=plaintext playbooks/secrets-init.yml
