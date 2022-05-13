@@ -11,10 +11,10 @@ To be able to run the playbook with the new version, all the secrets needs to be
 moved inside the `vars/secrets.yml` with a set of known keys:
 
 ```yml
-repo_db_password: "your_secret_password"
-sync_db_password: "your_secret_password"
-reposearch_shared_secret: "your_secret_password"
-activemq_password: "your_secret_password"
+repo_db_password: ""
+sync_db_password: ""
+reposearch_shared_secret: ""
+activemq_password: ""
 ```
 
 If you are managing a test environment and don't want to bother manually
