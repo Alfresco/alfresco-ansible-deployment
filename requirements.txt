@@ -4,7 +4,7 @@ jmespath==1.0.0
 molecule==3.6.1
 molecule-docker==1.1.0
 molecule-ec2==0.4
-boto3==1.22.0
+boto3==1.23.1
 PyHamcrest==2.0.3
 pylint==2.13.8
 pytest-testinfra==6.7.0
