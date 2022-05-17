@@ -17,7 +17,8 @@ Vagrant.configure("2") do |config|
     ansible.galaxy_role_file = "requirements.yml"
     ansible.extra_vars = {
       nexus_user: ENV['NEXUS_USERNAME'],
-      nexus_password: ENV['NEXUS_PASSWORD']
+      nexus_password: ENV['NEXUS_PASSWORD'],
+      autogen_unsecure_secrets: true
     }
   end
 end

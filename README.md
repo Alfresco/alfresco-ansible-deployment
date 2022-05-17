@@ -18,6 +18,8 @@ A user runs a playbook that deploys to any number of hosts as shown in the diagr
 
 Please refer to the [Documentation](./docs/README.md) for an overview of the project and the playbook or go directly to the [deployment guide](./docs/deployment-guide.md) to learn how to run the playbook.
 
+Users upgrading from previous versions of the playbook may want to take a look to [Upgrade Notes](docs/playbook-upgrade.md).
+
 ## License
 
 The code in this repository is released under the Apache License, see the [LICENSE](./LICENSE) file for details.

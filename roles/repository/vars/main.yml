@@ -7,7 +7,6 @@ content_data_folder: "{{ data_folder }}/content-services"
 
 cert_name: "\"CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB\""
 cert_validity: 36525
-keystore_password: mp6yc0UD9e
 
 share_folders:
   - /shared/classes/alfresco/web-extension

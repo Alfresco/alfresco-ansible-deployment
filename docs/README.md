@@ -10,7 +10,7 @@ It doesn't use any agents nor additional custom security infrastructure, so it's
 
 An Ansible playbook contains one or more roles. A role is an independent component which allows reuse of common configuration steps. It consists of a set of tasks used to configure a host to serve a certain purpose, for example, configuring a service. This is depicted in the diagram below.
 
-![Playbook Ovewview](./resources/playbook-overview.png)
+![Playbook Overview](./resources/playbook-overview.png)
 
 Roles are defined using YAML files with a predefined directory structure.
 

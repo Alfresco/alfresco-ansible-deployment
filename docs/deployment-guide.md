@@ -201,6 +201,11 @@ Now you have the control node setup you can [configure](#configure-your-deployme
 
 To deploy everything on the control node follow the steps in the [Locahost Deployment](#localhost-deployment) section or to deploy to one or more other machines follow the steps in the [SSH Deployment](#ssh-deployment) section.
 
+If you are going to do a production deployment, please take a look at the
+mandatory [Secrets management](#secrets-management) section, otherwise you can
+set `autogen_unsecure_secrets: true` in `groups_var/all.yml` to just autogenerate secrets
+before running the playbook.
+
 ## Configure Your Deployment
 
 By default, without any configuration applied, the playbook will deploy a limited trial of the Enterprise version of Alfresco Content Services 7.x that goes into read-only mode after 2 days. If you'd like to try Alfresco Content Services for a longer period, request the 30-day [Download Trial](https://www.alfresco.com/platform/content-services-ecm/trial/download).
@@ -213,20 +218,127 @@ If you have a valid license place your `.lic` file in the `configuration_files/l
 
 > NOTE: You can also [upload a license](https://docs.alfresco.com/content-services/latest/admin/license/) via the Admin Console once the system is running.
 
-### Alfresco/Solr authentication
+### Secrets management
 
-As of ACS 7.2 and/or Search services 2.0.3, the repository <--> solr communication requires to be authenticated. The playbook will set up that authentication scheme using the new `secret` method.
-This methods needs to be passed a shared secret. In order to do so use the variable below:
+This playbook expects that security-relevant secrets are configured within the
+`vars/secrets.yml` file.
 
-```yaml
-reposearch_shared_secret: dummy
+It is strongly recommended to enable [Ansible
+Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html) encryption
+or use [third-party plugins](#third-party-lookup-plugins) to avoid keeping
+secrets in plaintext on the control node file-system.
+
+We provide a `secrets-init.yml` playbook to automatically generate secure
+secrets and encrypt them with Ansible Vault.
+
+#### Enable Ansible Vault support
+
+To start using **Ansible Vault** integration, a password needs to be provided to
+Ansible to make encryption/decryption working during the play.
+
+There are different ways to provide that password Ansible Vault, from manually
+via user input on each ansible-playbook run using the `--ask-vault-pass` flag
+(example below), to more advanced scenarios.
+
+```bash
+ansible-playbook --ask-vault-pass playbooks/acs.yml
 ```
 
-> Of course do not use dummy as shown above, but use a stronger secret
+While we recommend to refer to the official Ansible documentation to properly configure
+[Ansible vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html#managing-vault-passwords),
+below a basic configuration that will help you in quickly installing Alfresco
+without to having to input the Vault password everytime.
 
-This secret should be placed either in the inventory file under the `all` group scope, or passed as an extra variable (it needs to be available to the localhost's hostvars array of variables)
+Configure a password in a file (e.g. `~/.vault_pass.txt`), optionally
+autogenerating it with:
 
-:warning: Should you forget to provide that shared secret, the playbook will generate a random one. While that may sound convenient keep in mind that doing so will break the idempotency of the playbook and the shared secret will be updated every time you run the playbook.
+```bash
+openssl rand -base64 21 > ~/.vault_pass.txt
+```
+
+Set `ANSIBLE_VAULT_PASSWORD_FILE` to that file location so that can
+automatically picked-up when running Ansible:
+
+```bash
+export ANSIBLE_VAULT_PASSWORD_FILE=~/.vault_pass.txt
+```
+
+Now you are ready to start using Ansible Vault.
+
+#### Populate secrets with Ansible Vault
+
+Ansible Vault provides two alternative ways to protect secrets:
+
+* [Encrypted variables](https://docs.ansible.com/ansible/latest/user_guide/vault.html#encrypting-individual-variables-with-ansible-vault)
+* [Encrypted files](https://docs.ansible.com/ansible/latest/user_guide/vault.html#encrypting-files-with-ansible-vault)
+
+In the previous links you can read both advantages and disadvantages of the two approaches.
+
+> If you are upgrading from previous versions of the playbook, you may want to
+> read [upgrade notes](playbook-upgrade.md#secrets-management).
+
+##### Encrypted variables
+
+With Encrypted variables you can use the `secrets-init.yml` playbook to
+handle the first-time generation of secrets and also to automatically add new
+secrets that may be introduced in future versions of the playbook.
+
+To automatically setup/update secrets, run:
+
+```bash
+ansible-playbook -e vault_init=encrypted_variables playbooks/secrets-init.yml
+```
+
+##### Encrypted files
+
+With Encrypted files you can use the `secrets-init.yml` playbook to handle
+the first-time generation of secrets but for updates you have to provide them as
+described below. However you can provide your own passwords too.
+
+```bash
+ansible-playbook -e vault_init=plaintext playbooks/secrets-init.yml
+```
+
+and then replace the autogenerated passwords with your own.
+
+To enable file encryption and automatically autogenerate any missing secrets,
+run:
+
+```bash
+ansible-playbook  -e vault_init=encrypted_file playbooks/secrets-init.yml
+```
+
+After the first run, you can access the encrypted file vault with:
+
+```bash
+ansible-vault view vars/secrets.yml
+```
+
+or to add/edit secrets with:
+
+```bash
+ansible-vault edit vars/secrets.yml
+```
+
+Please refer to the [official documentation](https://docs.ansible.com/ansible/latest/user_guide/vault.html) to learn how to interact with existing encrypted variables or files.
+
+#### Third-party lookup plugins
+
+Variables defined in `vars/secrets.yml` can also reference remote values using
+third-parties lookup plugins instead of using Ansible Vault.
+
+To generate a stub secrets file, run:
+
+```bash
+ansible-playbook -e vault_init=plugin playbooks/secrets-init.yml
+```
+
+And then edit `vars/secrets.yml` to fill all the required arguments for the plugin you want to use as described in the plugin documentation pages:
+
+* [HashiCorp Vault](https://docs.ansible.com/ansible/latest/collections/community/hashi_vault/hashi_vault_lookup.html)
+* [AWS Secrets](https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_secret_lookup.html)
+* [1Password](https://docs.ansible.com/ansible/latest/collections/community/general/onepassword_lookup.html)
+* [CyberArk](https://docs.ansible.com/ansible/latest/collections/community/general/cyberarkpassword_lookup.html)
 
 ### Alfresco Global Properties
 
@@ -312,8 +424,8 @@ all:
       hosts:
         whatever.mq.eu-west-1.amazonaws.com:
           activemq_username: alfresco
-          activemq_password: alfresco
           activemq_port: 61617
+          activemq_protocol: tcp # or ssl
     external:
       children:
         external_activemq:

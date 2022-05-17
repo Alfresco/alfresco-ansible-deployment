@@ -1,4 +1,7 @@
 ---
+- name: Handle secrets
+  ansible.builtin.import_playbook: secrets.yml
+
 - hosts: all:!external
   gather_facts: false
   tasks:
@@ -9,7 +12,7 @@
   hosts: database
   gather_facts: false
   roles:
-    - role: '../roles/postgres'
+    - role: "../roles/postgres"
       when: repo_db_url == "" or sync_db_url == ""
   post_tasks:
     - name: make sure PostgreSQL is running
@@ -23,7 +26,7 @@
   hosts: activemq
   gather_facts: false
   roles:
-    - role: '../roles/activemq'
+    - role: "../roles/activemq"
       when: not groups.external_activemq | default([])
   tags:
     - activemq
@@ -32,14 +35,13 @@
   hosts: transformers
   gather_facts: false
   roles:
-    - role: '../roles/transformers'
+    - role: "../roles/transformers"
   post_tasks:
     - name: update installation status file with Transformers
       become: true
       vars:
         transform_components:
-          transform:
-            "{{ transform }}"
+          transform: "{{ transform }}"
       blockinfile:
         block: "{{ transform_components | to_nice_yaml(indent=2) }}"
         create: yes
@@ -53,7 +55,7 @@
   hosts: search
   gather_facts: false
   roles:
-    - role: '../roles/search'
+    - role: "../roles/search"
   post_tasks:
     - name: make sure Solr is running
       become: true
@@ -64,8 +66,7 @@
       become: true
       vars:
         search_components:
-          search:
-            "{{ search }}"
+          search: "{{ search }}"
       blockinfile:
         block: "{{ search_components | to_nice_yaml(indent=2) }}"
         create: yes
@@ -79,18 +80,15 @@
   hosts: repository
   gather_facts: false
   roles:
-    - role: '../roles/repository'
+    - role: "../roles/repository"
   post_tasks:
     - name: update installation status file with ACS
       become: true
       vars:
         acs_components:
-          acs:
-            "{{ acs }}"
-          amps:
-            "{{ amps }}"
-          api_explorer: 
-            "{{ api_explorer }}"
+          acs: "{{ acs }}"
+          amps: "{{ amps }}"
+          api_explorer: "{{ api_explorer }}"
       blockinfile:
         block: "{{ acs_components | to_nice_yaml(indent=2) }}"
         create: yes
@@ -104,15 +102,14 @@
   hosts: transformers
   gather_facts: false
   roles:
-    - role: '../roles/trouter'
+    - role: "../roles/trouter"
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: update installation status file with Trouter
       become: true
       vars:
         trouter_components:
-          trouter:
-            "{{ trouter }}"
+          trouter: "{{ trouter }}"
       blockinfile:
         block: "{{ trouter_components | to_nice_yaml(indent=2) }}"
         create: yes
@@ -126,15 +123,14 @@
   hosts: transformers
   gather_facts: false
   roles:
-    - role: '../roles/sfs'
+    - role: "../roles/sfs"
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: update installation status file with SFS
       become: true
       vars:
         sfs_components:
-         sfs:
-            "{{ sfs }}"
+          sfs: "{{ sfs }}"
       blockinfile:
         block: "{{ sfs_components | to_nice_yaml(indent=2) }}"
         create: yes
@@ -148,15 +144,14 @@
   hosts: adw
   gather_facts: false
   roles:
-    - role: '../roles/adw'
+    - role: "../roles/adw"
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: update installation status file with ADW
       become: true
       vars:
         adw_components:
-          adw:
-            "{{ adw }}"
+          adw: "{{ adw }}"
       blockinfile:
         block: "{{ adw_components | to_nice_yaml(indent=2) }}"
         create: yes
@@ -170,7 +165,7 @@
   hosts: nginx
   gather_facts: false
   roles:
-    - role: '../roles/nginx'
+    - role: "../roles/nginx"
   post_tasks:
     - name: make sure NGINX is running
       become: true
@@ -184,15 +179,14 @@
   hosts: syncservice
   gather_facts: false
   roles:
-    - role: '../roles/sync'
+    - role: "../roles/sync"
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: update installation status file with Sync
       become: true
       vars:
         sync_components:
-         sync:
-            "{{ sync }}"
+          sync: "{{ sync }}"
       blockinfile:
         block: "{{ sync_components | to_nice_yaml(indent=2) }}"
         create: yes
