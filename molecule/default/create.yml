@@ -209,7 +209,6 @@
         index_var: index
         label: "{{ item.name }}"
       when: item.security_groups | length == 0
-      register: ec2_instances_group
 
     - name: Create ephemeral EC2 instance(s)
       amazon.aws.ec2_instance:

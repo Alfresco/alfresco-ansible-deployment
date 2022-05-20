@@ -89,7 +89,7 @@
     - name: Lookup existing ec2 group
       amazon.aws.ec2_group_info:
         filters:
-          group-name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
+          group-name: molecule-{{ lookup('env', 'MOLECULE_IT_ID') }}
       register: ec2_groups_lookup
 
     - name: Create mq broker
