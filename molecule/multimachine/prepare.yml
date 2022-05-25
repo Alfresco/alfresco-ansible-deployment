@@ -92,6 +92,10 @@
           group-name: molecule-{{ lookup('env', 'MOLECULE_IT_ID') }}
       register: ec2_groups_lookup
 
+    - name: Load secrets as localhost hostvars
+      include_vars:
+        file: ../../vars/secrets.yml
+
     - name: Create mq broker
       ansible.builtin.command: |
         aws mq create-broker --broker-name {{ broker_name }} \
@@ -99,7 +103,7 @@
           --engine-type ACTIVEMQ \
           --host-instance-type mq.t3.micro \
           --engine-version 5.15.15 \
-          --users Password=alfrescoalfresco,Username=alfresco \
+          --users Password={{ activemq_password }},Username=alfresco \
           --security-groups {{ ec2_groups_lookup.security_groups[0].group_id }} \
           --publicly-accessible \
           --no-auto-minor-version-upgrade
