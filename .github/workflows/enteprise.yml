@@ -81,9 +81,6 @@ jobs:
           - name: multimachine
             vars: vars.yml
             desc: latest Cluster Ec2 tests (RHEL8)
-          - name: external-activemq
-            vars: vars.yml
-            desc: latest External ActiveMQ Ec2 tests (Ubuntu 20.04)
     env:
       PY_COLORS: 1
       BUILD_NUMBER: ${{ github.run_id }}
@@ -116,8 +113,9 @@ jobs:
       - name: Get branch name
         shell: bash
         run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
-      - name: Debug branch name
-        run: echo ${{ env.BRANCH_NAME }}
+
+      - name: Generate unique id
+        run: echo "MOLECULE_IT_ID=$(date +%s%4N)" >> $GITHUB_ENV
 
       - name: Run tests
         timeout-minutes: 120
@@ -133,7 +131,7 @@ jobs:
 
       - name: Cleanup tests
         if: always()
-        timeout-minutes: 35
+        timeout-minutes: 65
         env:
           MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
           MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
@@ -143,7 +141,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
         uses: nick-fields/retry@v2
         with:
-          timeout_minutes: 10
+          timeout_minutes: 20
           max_attempts: 3
-          retry_wait_seconds: 30
+          retry_wait_seconds: 60
           command: ./tests/molecule_it/script.sh destroy
