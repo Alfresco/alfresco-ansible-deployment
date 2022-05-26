@@ -131,7 +131,7 @@ jobs:
 
       - name: Cleanup tests
         if: always()
-        timeout-minutes: 35
+        timeout-minutes: 65
         env:
           MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
           MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
@@ -141,7 +141,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
         uses: nick-fields/retry@v2
         with:
-          timeout_minutes: 10
+          timeout_minutes: 20
           max_attempts: 3
-          retry_wait_seconds: 30
+          retry_wait_seconds: 60
           command: ./tests/molecule_it/script.sh destroy
