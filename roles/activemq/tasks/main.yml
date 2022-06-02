@@ -83,6 +83,20 @@
           s: http://www.springframework.org/schema/beans
           a: http://activemq.apache.org/schema/core
 
+    - name: configure ActiveMQ users
+      ansible.builtin.lineinfile:
+        path: "{{ activemq_conf }}/{{ item.file }}.properties"
+        line: "{{ item.line }}"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+      loop:
+        - file: users
+          line: "{{ activemq_username }}={{ activemq_password }}"
+        - file: groups
+          line: admins={{ activemq_username }}
+        - file: jetty-realm
+          line: "{{ activemq_username }}: {{ activemq_password }}, admin"
+
     - name: Change location of ActiveMQ logs
       replace:
         path: "{{ activemq_conf }}/log4j.properties"
