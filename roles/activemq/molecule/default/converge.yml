@@ -1,4 +1,8 @@
 ---
+- name: Handle secrets
+  vars:
+    autogen_unsecure_secrets: True
+  ansible.builtin.import_playbook: ../../../../playbooks/secrets.yml
 - name: Converge
   hosts: all
   tasks:

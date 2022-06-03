@@ -4,6 +4,7 @@ utils:
   - unzip
   - tar
   - xz-utils
+  - python3-lxml
   - python3-selinux
   - python3-semanage
   - gpg

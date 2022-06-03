@@ -3,6 +3,7 @@ utils:
   - sudo
   - unzip
   - tar
+  - python-lxml
   - libselinux-python
   - libsemanage-python
   - gpg

@@ -66,12 +66,37 @@
         - data
 
     - name: Allow external connections to webconsole
-      replace:
+      community.general.xml:
+        xpath: /s:beans/s:bean[@id="jettyPort"]/s:property[@name="host"]
+        attribute: value
+        value: 0.0.0.0
+        namespaces:
+          s: http://www.springframework.org/schema/beans
         path: "{{ activemq_conf }}/jetty.xml"
-        regexp: "127.0.0.1"
-        replace: "0.0.0.0"
+
+    - name: Configure ActiveMQ authentication
+      community.general.xml:
+        pretty_print: yes
+        path: "{{ activemq_conf }}/activemq.xml"
+        xpath: /s:beans/a:broker/a:plugins/a:jaasAuthenticationPlugin[@configuration="activemq"]
+        namespaces:
+          s: http://www.springframework.org/schema/beans
+          a: http://activemq.apache.org/schema/core
+
+    - name: configure ActiveMQ users
+      ansible.builtin.lineinfile:
+        path: "{{ activemq_conf }}/{{ item.file }}.properties"
+        line: "{{ item.line }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
+      loop:
+        - file: users
+          line: "{{ activemq_username }}={{ activemq_password }}"
+        - file: groups
+          line: admins={{ activemq_username }}
+        - file: jetty-realm
+          line: "{{ activemq_username }}: {{ activemq_password }}, admin"
+      no_log: True
 
     - name: Change location of ActiveMQ logs
       replace:

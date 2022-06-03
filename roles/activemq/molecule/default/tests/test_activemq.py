@@ -14,15 +14,14 @@ def get_ansible_vars(host):
     activemq_role = "file=./vars/main.yml name=activemq_role"
     common_vars = "file=../common/vars/main.yml name=common_vars"
     common_defaults = "file=../common/defaults/main.yml name=common_defaults"
-    common_hosts = "file=../common/vars/hosts.yml name=common_hosts"
     group_vars = "file=../../group_vars/all.yml name=group_vars"
+    secrets_vars = "file=../../vars/secrets.yml name=secrets_vars" # pragma: allowlist secret
     ansible_vars = host.ansible("include_vars", java_role)["ansible_facts"]["java_role"]
-    ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
-    ansible_vars.update(host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"])
-    ansible_vars.update(host.ansible("include_vars", common_hosts)["ansible_facts"]["common_hosts"])
     ansible_vars.update(host.ansible("include_vars", common_defaults)["ansible_facts"]["common_defaults"])
+    ansible_vars.update(host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"])
     ansible_vars.update(host.ansible("include_vars", activemq_role)["ansible_facts"]["activemq_role"])
     ansible_vars.update(host.ansible("include_vars", group_vars)["ansible_facts"]["group_vars"])
+    ansible_vars.update(host.ansible("include_vars", secrets_vars)["ansible_facts"]["secrets_vars"])
     return ansible_vars
 
 def test_activemq_exe_exists(host, get_ansible_vars):
@@ -51,7 +50,7 @@ def test_activemq_service(host, get_ansible_vars):
 
 def test_activemq_web_console(host, get_ansible_vars):
     "Check that ActiveMQ web console is available and returns a HTTP 200 for the home page"
-    cmd = host.run("curl -iL --user admin:admin http://{}:8161".format(test_host))
+    cmd = host.run("curl -iL --user admin:{} http://{}:8161".format(get_ansible_vars["activemq_password"], test_host))
     assert_that(cmd.stdout, contains_string("Welcome to the Apache ActiveMQ!"))
     assert_that(cmd.stdout, contains_string("200 OK"))
 
