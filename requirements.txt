@@ -1,5 +1,5 @@
 ansible-core==2.12.5
-ansible-lint==6.2.1
+ansible-lint==6.2.2
 jmespath==1.0.0
 molecule==3.6.1
 molecule-docker==1.1.0
