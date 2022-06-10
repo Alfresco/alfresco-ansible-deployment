@@ -47,7 +47,7 @@ def test_catalina_base(host, get_ansible_vars):
         cmd = host.run("{}/tomcat.sh configtest".format(get_ansible_vars["binaries_folder"]))
     assert_that(cmd.stderr, contains_string("{}/tomcat".format(get_ansible_vars["config_folder"])))
 
-def test_tomcat_service(host, get_ansible_vars):
+def test_tomcat_service(host):
     """Check that Tomcat is enabled and running"""
     assert_that(host.service("alfresco-content").is_running)
     assert_that(host.service("alfresco-content").is_enabled)

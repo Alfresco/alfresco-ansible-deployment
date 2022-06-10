@@ -84,8 +84,8 @@ dependencies_version:
   postgresql_connector: 42.2.19
   postgres_major_version: 13
   activemq: 5.16.4
-  jdk: 11.0.15
-  jdk_arch: 10
+  java: 11.0.15
+  java_build: 10
   tomcat: 9.0.59
   libreoffice: 7.0.6.2
   pdf_renderer: 1.1
@@ -101,8 +101,8 @@ dependencies_url:
   activemq: "{{ activemq_archive_url }}/{{ dependencies_version.activemq }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
   activemq_sha512_checksum_url: "{{ activemq_archive_url }}/{{ dependencies_version.activemq }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz.sha512"
 
-  jdk: "https://github.com/AdoptOpenJDK/openjdk11-upstream-binaries/releases/download/jdk-{{ dependencies_version.jdk }}%2B{{ dependencies_version.jdk_arch }}/OpenJDK11U-jdk_x64_linux_{{ dependencies_version.jdk }}_{{ dependencies_version.jdk_arch }}.tar.gz"
-  jdk_md5_checksum: "51f07e93bc4890bbc16fba1780133d68" # pragma: allowlist secret
+  java: "https://github.com/AdoptOpenJDK/openjdk11-upstream-binaries/releases/download/jdk-{{ dependencies_version.java }}%2B{{ dependencies_version.java_build }}/OpenJDK11U-jdk_x64_linux_{{ dependencies_version.java }}_{{ dependencies_version.java_build }}.tar.gz"
+  java_md5_checksum: "51f07e93bc4890bbc16fba1780133d68" # pragma: allowlist secret
 
   tomcat: "{{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
   tomcat_sha512_checksum_url: "{{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz.sha512"

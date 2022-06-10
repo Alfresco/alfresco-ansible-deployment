@@ -36,7 +36,7 @@ def test_search_service_running_and_enabled(host, svc):
     assert_that(alfresco_search.is_running)
     assert_that(alfresco_search.is_enabled)
 
-def test_solr_stats_is_accessible(host, get_ansible_vars):
+def test_solr_stats_is_accessible(host):
     """Check that SOLR creates the alfresco and archive cores"""
     curl_opts = '-iL'
     search_env = host.ansible.get_variables()
@@ -48,9 +48,8 @@ def test_solr_stats_is_accessible(host, get_ansible_vars):
     assert_that(alfresco_core_command.stdout, contains_string("HTTP/1.1 200"))
     assert_that(archive_core_command.stdout, contains_string("HTTP/1.1 200"))
 
-def test_environment_jvm_opts(host, get_ansible_vars):
+def test_environment_jvm_opts(host):
     "Check that overwritten JVM_OPTS are taken into consideration"
-    with host.sudo():
-        pid = host.run("/opt/openjdk*/bin/jps -lV | grep start.jar | awk '{print $1}'")
-        process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
-    assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
+    java_process = host.process.get(user="alfresco", comm="java")
+    assert_that(java_process.args, contains_string('-Xmx900m'))
+    assert_that(java_process.args, contains_string('-Xms700m'))
