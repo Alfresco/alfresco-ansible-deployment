@@ -1,2 +1,4 @@
 ---
-# defaults file for roles/java
+java_tar_file: "OpenJDK11U-jdk_x64_linux_{{ dependencies_version.java }}_{{ dependencies_version.java_build }}.tar.gz"
+java_folder: "openjdk-{{ dependencies_version.java }}_{{ dependencies_version.java_build }}"
+java_home: "/opt/openjdk-{{ dependencies_version.java }}"

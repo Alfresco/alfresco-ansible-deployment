@@ -28,7 +28,7 @@ _filters = [
     }
 ]
 
-def lambda_handler(event, context):
+def lambda_handler(_event, _context):
     """ Lambda Handler """
 
     response = _ec2.describe_instances(Filters=_filters)
