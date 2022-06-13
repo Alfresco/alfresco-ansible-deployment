@@ -19,9 +19,9 @@
         temp_array: '{{ temp_array }} + [
           ''-Dmetadata-keystore.password="{{ repo_custom_keystore_password }}"'',
           ''-Dmetadata-keystore.aliases=metadata'',
-          ''-Dmetadata-keystore.metadata.password="{{ repo_custom_keystore_password }}"'',
+          ''-Dmetadata-keystore.metadata.password="{{ repo_custom_keystore_metadata_password }}"'',
           ]'
-      when: repo_custom_keystore_password is defined
+      when: repo_custom_keystore_password is defined and repo_custom_keystore_metadata_password
 
     - name: Combine secure acs environment
       set_fact:

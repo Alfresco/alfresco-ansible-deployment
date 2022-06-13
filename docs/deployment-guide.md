@@ -443,6 +443,7 @@ There are three steps required to use a custom keystore:
 1. Place your generated keystore file in the `configuration_files/keystores` folder (these get copied to /var/opt/alfresco/content-services/keystore)
 2. Override the `use_custom_keystores` variable defined in your inventory as a `repository` group variable.
 3. Override the `acs_environment` variable and define your custom JAVA_TOOL_OPTIONS configuration
+4. Add `repo_custom_keystore_password` and `repo_custom_keystore_metadata_password` in `vars/secrets.yml`
 
 An example snippet of inventory file is shown below:
 
@@ -464,9 +465,6 @@ repository:
         - -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding
         - -Dencryption.keyAlgorithm=AES
         - -Dencryption.keystore.location=/var/opt/alfresco/content-services/keystore/<your-keystore-file>
-        - -Dmetadata-keystore.password=<your-keystore-password>
-        - -Dmetadata-keystore.aliases=metadata
-        - -Dmetadata-keystore.metadata.password=<your-keystore-password>
         - -Dmetadata-keystore.metadata.algorithm=AES"
 ```
 
