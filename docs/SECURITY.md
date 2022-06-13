@@ -5,7 +5,7 @@ This pages focuses on providing information on making the platform deployed with
 ## Specify trustworthy applications
 
 Nowadays several security features rely on the fact the server tells the browser which are the applications that can be trusted.
-This is largely due ti the expanding usage of single pages applications and setups where such an application is hosted on a domain name which do not match the backend server.
+This is largely due to the expanding usage of single pages applications and setups where such an application is hosted on a domain name which do not match the backend server.
 
 In such circumstances, you can tell the playbook which are these application by using adding the client application to your inventory file as shown below:
 
