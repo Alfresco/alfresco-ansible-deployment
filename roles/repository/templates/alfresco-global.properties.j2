@@ -68,6 +68,31 @@ dsync.service.uris={% if use_ssl | bool %}https{% else %}http{% endif %}://{% if
 
 aos.baseUrlOverwrite={% if use_ssl | bool %}https{% else %}http{% endif %}://{% if fqdn_alfresco %}{{ fqdn_alfresco }}{% else %}{{ nginx_host }}{% endif %}:{% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_cfg.nginx.http }}{% endif %}/alfresco/aos
 
+# CSRF filter overrides
+csrf.filter.enabled={% if csrf.enabled %}true
+{% if csrf.urls -%}
+  csrf.filter.referer={{ csrf.urls | select() | join('|') -}}
+{% endif %}
+{% set origins = namespace(list=[]) %}
+{% for url in csrf.urls %}
+{% set url_scheme = url | regex_replace('^(https?://)?(.*?)(:([0-9]+))?(/(.*))?$','\\1') %}
+{% set url_domain = url | regex_replace('^(https?://)?(.*?)(:([0-9]+))?(/(.*))?$','\\2') %}
+{% set url_port = url | regex_replace('^(https?://)?(.*?)(:([0-9]+))?(/(.*))?$','\\3') %}
+{{ origins.list.append(url_scheme | default('') + url_domain + (':' + url_port if url_port else '')) }}
+{% endfor %}
+csrf.filter.origin={{ origins.list | select() | join('|') }}
+csrf.filter.referer.always={% if 'origin' in csrf.force_headers | lower %}true
+{% else -%}
+  false
+{% endif -%}
+csrf.filter.origin.always={% if 'referer' in csrf.force_headers | lower %}true
+{% else -%}
+  false
+{% endif -%}
+{% else -%}
+  false
+{% endif %}
+
 {% for prop in lookup('ansible.utils.to_paths', merged_repository_properties) | dict2items %}
   {{- prop.key }}={{ prop.value }}
 {% endfor %}
