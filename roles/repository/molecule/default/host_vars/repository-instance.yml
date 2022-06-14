@@ -60,3 +60,12 @@ repository_properties:
     protection:
       limit: 5
       periodSeconds: 60
+
+csrf:
+  enabled: true
+  force_headers:
+    - referer
+  urls:
+    - http://localhost/legit/.*
+    - localhost:8080/legit/.*
+    - http://repository-instance/legit/.*

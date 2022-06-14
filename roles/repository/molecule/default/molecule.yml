@@ -25,6 +25,7 @@ platforms:
       - nginx
       - adw
       - transformers
+      - trusted_resource_consumers
 provisioner:
   name: ansible
   ansible_args:
