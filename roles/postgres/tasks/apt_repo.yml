@@ -9,7 +9,7 @@
     group: root
     mode: 0644
 
-- name: Install repositoriy's GPG key
+- name: Install repository's GPG key
   apt_key:
     url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
     state: present
