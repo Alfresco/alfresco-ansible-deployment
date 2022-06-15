@@ -43,7 +43,7 @@ def test_activemq_home(host, get_ansible_vars):
         cmd = host.run(". {}/setenv.sh && echo $ACTIVEMQ_HOME".format(get_ansible_vars["config_folder"]))
     assert_that(cmd.stdout, contains_string("/opt/apache-activemq-{}".format(get_ansible_vars["dependencies_version"]["activemq"])))
 
-def test_activemq_service(host, get_ansible_vars):
+def test_activemq_service(host):
     """Check that ActiveMQ is enabled and running"""
     assert_that(host.service("activemq").is_running)
     assert_that(host.service("activemq").is_enabled)
@@ -54,9 +54,8 @@ def test_activemq_web_console(host, get_ansible_vars):
     assert_that(cmd.stdout, contains_string("Welcome to the Apache ActiveMQ!"))
     assert_that(cmd.stdout, contains_string("200 OK"))
 
-def test_environment_jvm_opts(host, get_ansible_vars):
+def test_environment_jvm_opts(host):
     "Check that overwritten JVM_OPTS are taken into consideration"
-    with host.sudo():
-        pid = host.run("/opt/openjdk*/bin/jps -lV | grep activemq | awk '{print $1}'")
-        process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
-    assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
+    java_process = host.process.get(user="alfresco", comm="java")
+    assert_that(java_process.args, contains_string('-Xmx900m'))
+    assert_that(java_process.args, contains_string('-Xms300m'))

@@ -27,8 +27,17 @@ all:
     syncservice:
       children:
         repository:
+    3rd_party_repo_client:
+      hosts:
     external_activemq:
       hosts:
     external:
       children:
         external_activemq:
+        3rd_party_repo_client:
+    trusted_resource_consumers:
+      children:
+        repository:
+        nginx:
+        adw:
+        3rd_party_repo_client:

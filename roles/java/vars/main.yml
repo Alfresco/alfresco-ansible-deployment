@@ -1,5 +1,1 @@
 ---
-# vars file for roles/java
-jdk_tar_file: "OpenJDK11U-jdk_x64_linux_{{ dependencies_version.jdk }}_{{ dependencies_version.jdk_arch }}.tar.gz"
-jdk_folder: "openjdk-{{ dependencies_version.jdk }}_{{ dependencies_version.jdk_arch }}"
-java_home: "/opt/openjdk-{{ dependencies_version.jdk }}"

@@ -1,7 +1,7 @@
 """Transform Tests"""
 import os
 import pytest
-from hamcrest import contains_string, assert_that
+from hamcrest import contains_string, assert_that, has_length
 
 test_host = os.environ.get('TEST_HOST')
 
@@ -28,12 +28,12 @@ def test_aio_log_exists(host, get_ansible_vars):
     with host.sudo(get_ansible_vars['username']):
         assert_that(host.file("{}/ats-ate-aio.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
 
-def test_aio_service(host, get_ansible_vars):
+def test_aio_service(host):
     """Check that Transform AIO is enabled and running"""
     assert_that(host.service("alfresco-tengine-aio").is_running)
     assert_that(host.service("alfresco-tengine-aio").is_enabled)
 
-def test_aio_config_api(host, get_ansible_vars):
+def test_aio_config_api(host):
     """Check that Transform AIO transform/config api works"""
     cmd = host.run("curl -iL http://{}:8090/transform/config".format(test_host))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
@@ -45,18 +45,20 @@ def test_aio_config_api(host, get_ansible_vars):
     assert_that(cmd.stdout, contains_string("textToPdfOptions"))
     assert_that(cmd.stdout, contains_string("stringOptions"))
 
-def test_aio_root_api(host, get_ansible_vars):
+def test_aio_root_api(host):
     """Check that Transform AIO root api works"""
     cmd = host.run("curl -iL http://{}:8090".format(test_host))
-    assert_that(cmd.stdout, contains_string("All in One Transformer Test Transformation"), cmd.stdout)
+    assert_that(cmd.stdout, contains_string("All in One Transformer Test Transformation"))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
 
-def test_environment_jvm_opts(host, get_ansible_vars):
+def test_environment_jvm_opts(host):
     "Check that overwritten JVM_OPTS are taken into consideration"
-    with host.sudo():
-        pid = host.run("/opt/openjdk*/bin/jps -lV | awk '/transform-core-aio/{print $1}'")
-        process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
-    assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
+    java_processes = host.process.filter(user="alfresco", comm="java")
+    assert_that(java_processes, has_length(2))
+    for java_process in java_processes:
+        if 'imagemagick' in java_process.args:
+            assert_that(java_process.args, contains_string('-Xmx900m'))
+            assert_that(java_process.args, contains_string('-Xms512m'))
 
 def test_libreoffice_install(host):
     """Check that libreoffice binary doesn't miss any dependencies"""

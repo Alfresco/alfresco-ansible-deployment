@@ -1,7 +1,7 @@
 """SyncService Tests"""
 import os
 import pytest
-from hamcrest import contains_string, assert_that
+from hamcrest import contains_string, assert_that, has_length
 
 test_host = os.environ.get('TEST_HOST')
 
@@ -28,12 +28,12 @@ def test_sync_log_exists(host, get_ansible_vars):
     with host.sudo():
         assert_that(host.file("{}/sync-service.log".format(get_ansible_vars["logs_folder"])).exists, get_ansible_vars["logs_folder"])
 
-def test_sync_service(host, get_ansible_vars):
+def test_sync_service(host):
     """Check that Sync Service is enabled and running"""
     assert_that(host.service("alfresco-sync").is_running)
     assert_that(host.service("alfresco-sync").is_enabled)
 
-def test_sync_health(host, get_ansible_vars):
+def test_sync_health(host):
     """Check Sync Service health"""
     cmd = host.run("curl -iL http://{}:9090/alfresco/healthcheck".format(test_host))
     assert_that(cmd.stdout, contains_string("ActiveMQ connection Ok"))
@@ -41,9 +41,11 @@ def test_sync_health(host, get_ansible_vars):
     assert_that(cmd.stdout, contains_string("Repository connection Ok"))
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
 
-def test_environment_jvm_opts(host, get_ansible_vars):
+def test_environment_jvm_opts(host):
     "Check that overwritten JVM_OPTS are taken into consideration"
-    with host.sudo():
-        pid = host.run("/opt/openjdk*/bin/jps -lV | awk '/SyncService/{print $1}'")
-        process_map = host.run("/opt/openjdk*/bin/jhsdb jmap --heap --pid {}".format(pid.stdout))
-    assert_that(process_map.stdout, contains_string("MaxHeapSize              = 943718400 (900.0MB)"))
+    java_processes = host.process.filter(user="alfresco", comm="java")
+    assert_that(java_processes, has_length(3))
+    for java_process in java_processes:
+        if 'SyncService server' in java_process.args:
+            assert_that(java_process.args, contains_string('-Xmx900m'))
+            assert_that(java_process.args, contains_string('-Xms512m'))
