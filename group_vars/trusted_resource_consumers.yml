@@ -1,0 +1,1 @@
+trusted_urls: "{{ groups['trusted_resource_consumers'] | map('extract', hostvars) | map(attribute='known_urls', default=[]) | flatten }}"
