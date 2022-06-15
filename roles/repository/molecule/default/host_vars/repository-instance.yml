@@ -63,9 +63,6 @@ repository_properties:
 
 csrf:
   enabled: true
-  force_headers:
-    - referer
+  force_headers: []
   urls:
-    - http://localhost/legit/.*
-    - localhost:8080/legit/.*
-    - http://repository-instance/legit/.*
+    - http://localhost:8080/.*
