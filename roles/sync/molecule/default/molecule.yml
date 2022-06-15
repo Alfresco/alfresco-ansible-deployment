@@ -17,6 +17,7 @@ platforms:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
       - repository
+      - trusted_resource_consumers
       - nginx
       - syncservice
       - database
