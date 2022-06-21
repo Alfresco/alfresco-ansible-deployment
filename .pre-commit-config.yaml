@@ -4,9 +4,6 @@ repos:
     rev: v1.2.0
     hooks:
       - id: djlint-jinja
-        args:
-          - -i
-          - H017,H020,H026
   - repo: https://github.com/jackdewinter/pymarkdown
     rev: v0.9.6
     hooks:
