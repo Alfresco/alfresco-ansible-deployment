@@ -89,7 +89,6 @@ STOP_CMD="cd $JAR_LOCATION;$JAVA_HOME/bin/java $JMX_SECURITY_CONF $JAVA_OPTS -cp
 
 CUR_USER=$(whoami)
 
-
 #Extract the PID of the JAVA process running Sync service. 
 #The JAVA process may be spawned from the process executing the 'sh' command, which also matches the filter. 
 #Hence we just want the newest process in the chain, using the -n flag.

@@ -9,7 +9,7 @@
   {% endfor -%}
   {% if type == 'origin' -%}
     {{ Origins.list | select() | join('|') -}}
-  {% elif  type == 'referer' -%}
+  {% elif type == 'referer' -%}
     {{ urls | select() | join('|') -}}
   {% endif -%}
 {% endmacro %}
