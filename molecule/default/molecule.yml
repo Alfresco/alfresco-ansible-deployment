@@ -21,6 +21,7 @@ platforms:
       - transformers
       - search
       - repository
+      - trusted_resource_consumers
       - syncservice
       - adw
       - nginx

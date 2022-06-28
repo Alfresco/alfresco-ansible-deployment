@@ -86,12 +86,6 @@ sql:
                 #
                 # note: for 'db.pool.evict.num.tests' see http://commons.apache.org/dbcp/configuration.html (numTestsPerEvictionRun)
                 #       and also following extract from "org.apache.commons.pool.impl.GenericKeyedObjectPool" (1.5.5)
-                #
-                #       * The number of objects to examine during each run of the idle object evictor thread (if any).
-                #       * When a negative value is supplied, <code>ceil({@link #getNumIdle})/abs({@link #getNumTestsPerEvictionRun})</code>
-                #       * tests will be run.  I.e., when the value is <code>-n</code>, roughly one <code>n</code>th of the
-                #       * idle objects will be tested per run.
-                #
                 num:
                     tests: 1
                 validate: false
@@ -220,7 +214,6 @@ sync:
                 # port of graphite carbon receiver
                 port: 2003 
                 prefix: org.alfresco.sync
-
 
 logging:
   level: INFO

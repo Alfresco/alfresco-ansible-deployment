@@ -36,7 +36,6 @@
       </web-framework>
    </config>
 
-
    <!--
       CSRF filter config to mitigate CSRF/Seasurfing/XSRF attacks
       To disable the CSRF filter override the <filter> to not contain any values, see share-config-custom.xml for
@@ -76,13 +75,15 @@
             does not rewrite the Referer header.
          -->
 
-         <referer></referer>
+	 {# Compute referers & origins -#}
+         {% import 'csrf_macros.j2' as _csrf %}
+	 <referer>{{ _csrf.compute('referer', csrf.urls)}}</referer>
 
          <!--
             Override and set this property with a regexp that if you have placed Share behind a proxy that
             does not rewrite the Origin header.
          -->
-         <origin></origin>
+	 <origin>{{ _csrf.compute('origin', csrf.urls)}}</origin>
       </properties>
 
       <!--
@@ -265,7 +266,6 @@
 
    </config>
 
-
    <!--
       Remove the default wildcard setting and use instead a strict whitelist of the only domains that shall be allowed
       to be used inside iframes (i.e. in the WebView dashlet on the dashboards)
@@ -445,7 +445,6 @@
          <adobe-flash-enabled>true</adobe-flash-enabled>
       </file-upload>
    </config>
-
 
    <!-- Custom DocLibActions config section -->
    <config evaluator="string-compare" condition="DocLibActions">

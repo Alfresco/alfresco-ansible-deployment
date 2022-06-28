@@ -7,6 +7,6 @@ local all postgres peer
 host all all 127.0.0.1/32 md5
 {% for host in repo_hosts | map(attribute='local_addr') %}
 host {{ repo_db_name }} {{ repo_db_username }} {{ host }}/32 md5
-{%endfor %}
+{% endfor %}
 host {{ sync_db_name }} {{ sync_db_username }} {{ sync_host }}/32 md5
 

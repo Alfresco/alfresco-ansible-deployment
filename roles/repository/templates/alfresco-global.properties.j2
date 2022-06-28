@@ -26,7 +26,7 @@ share.port={% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_
 share.protocol={% if use_ssl | bool %}https{% else %}http{% endif %}
 
 index.subsystem.name=solr6
-solr.secureComms={% if acs.version is version('7.2.0', '>=') %}secret{% else %}none{%endif %}
+solr.secureComms={% if acs.version is version('7.2.0', '>=') %}secret{% else %}none{% endif %}
 
 solr.port={{ ports_cfg.search.http }}
 solr.host={{ solr_host }}
@@ -58,7 +58,7 @@ jodconverter.url=${localTransform.core-aio.url}
 img.url=${localTransform.core-aio.url}
 tika.url=${localTransform.core-aio.url}
 transform.misc.url=${localTransform.core-aio.url}
-sfs.url=http://{{sfs_host}}:{{ ports_cfg.sfs.http }}/
+sfs.url=http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}/
 
 messaging.broker.url=failover:({{ activemq_protocol }}://{{ activemq_host }}:{{ ports_cfg.activemq.openwire }})?timeout=3000
 messaging.broker.username={{ activemq_username }}
@@ -68,6 +68,19 @@ dsync.service.uris={% if use_ssl | bool %}https{% else %}http{% endif %}://{% if
 
 aos.baseUrlOverwrite={% if use_ssl | bool %}https{% else %}http{% endif %}://{% if fqdn_alfresco %}{{ fqdn_alfresco }}{% else %}{{ nginx_host }}{% endif %}:{% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_cfg.nginx.http }}{% endif %}/alfresco/aos
 
+# CSRF filter overrides
+{% import 'csrf_macros.j2' as _csrf %}
+csrf.filter.enabled={% if csrf.enabled %}true
+{% if csrf.urls -%}
+  csrf.filter.referer={{ _csrf.compute('referer', csrf.urls) }}
+  csrf.filter.origin={{ _csrf.compute('origin', csrf.urls) }}
+{% endif %}
+csrf.filter.referer.always={{ 'true' if 'origin' in csrf.force_headers | lower else 'false' }}
+csrf.filter.origin.always={{ 'true' if 'referer' in csrf.force_headers | lower else 'false' }}
+{% else -%}
+  false
+{% endif %}
+
 {% for prop in lookup('ansible.utils.to_paths', merged_repository_properties) | dict2items %}
-  {{- prop.key }}={{ prop.value }}
+{{ prop.key }}={{ prop.value }}
 {% endfor %}

@@ -60,3 +60,9 @@ repository_properties:
     protection:
       limit: 5
       periodSeconds: 60
+
+csrf:
+  enabled: true
+  force_headers: []
+  urls:
+    - http://localhost:8080/.*

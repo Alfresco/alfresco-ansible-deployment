@@ -6,6 +6,6 @@ fi
 . {{ config_folder }}/setenv.sh
 {% if acs.version is version('7.2.0', '>=') -%}
 export JAVA_TOOL_OPTIONS="-Dalfresco.secureComms.secret={{ reposearch_shared_secret }}"
-{%endif %}
+{% endif %}
 export SOLR_INCLUDE={{ config_dir }}/solr.in.sh
 {{ binaries_dir }}/solr/bin/solr $*

@@ -1,0 +1,15 @@
+{% macro compute(type, urls) -%}
+  {% set Urlns = namespace() -%}
+  {% set Origins = namespace(list=[]) -%}
+  {% for url in urls -%}
+    {% set Urlns.scheme = url | regex_replace('^(https?://)?(.*?)(:([0-9]+))?(/(.*))?$','\\1') -%}
+    {% set Urlns.domain = url | regex_replace('^(https?://)?(.*?)(:([0-9]+))?(/(.*))?$','\\2') -%}
+    {% set Urlns.port = url | regex_replace('^(https?://)?(.*?)(:([0-9]+))?(/(.*))?$','\\3') -%}
+    {{ Origins.list.append(Urlns.scheme | default('') + Urlns.domain + Urlns.port | default('')) -}}
+  {% endfor -%}
+  {% if type == 'origin' -%}
+    {{ Origins.list | select() | join('|') -}}
+  {% elif type == 'referer' -%}
+    {{ urls | select() | join('|') -}}
+  {% endif -%}
+{% endmacro %}

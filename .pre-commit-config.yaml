@@ -1,5 +1,9 @@
 ---
 repos:
+  - repo: https://github.com/Riverside-Healthcare/djLint
+    rev: v1.2.0
+    hooks:
+      - id: djlint-jinja
   - repo: https://github.com/jackdewinter/pymarkdown
     rev: v0.9.6
     hooks:
@@ -19,24 +23,16 @@ repos:
     hooks:
       - id: ansible-lint
 
-  - repo: https://github.com/thibaudcolas/curlylint
-    rev: 'v0.13.1'
-    hooks:
-      - id: curlylint
-        files: '\.(j2)$'
-
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.1.0
     hooks:
       - id: detect-secrets
         name: detect generic secrets
         args:
-          [
-            "--baseline",
-            ".secrets.baseline",
-            "--exclude-secrets",
-            "(dummy|admin|mp6yc0UD9e|alfresco)",
-          ]
+          - --baseline
+          - .secrets.baseline
+          - --exclude-secrets
+          - (dummy|admin|mp6yc0UD9e|alfresco)
 
   - repo: https://github.com/awslabs/git-secrets
     rev: b9e96b3
@@ -49,14 +45,12 @@ repos:
     hooks:
       - id: giticket
         args:
-          [
-            "--regex",
-            '[A-Z]+-\d+[0-9]',
-            "--format",
-            "{ticket}: {commit_msg}",
-            "--mode",
-            "regex_match",
-          ]
+          - --regex
+          - '[A-Z]+-\d+[0-9]'
+          - --format
+          - "{ticket}: {commit_msg}"
+          - --mode
+          - regex_match
 
   - repo: local
     hooks:

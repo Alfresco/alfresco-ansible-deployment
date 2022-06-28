@@ -239,7 +239,7 @@
       template:
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        src: "{{ item }}"
+        src: "{{ item }}.j2"
         dest: "{{ settings_folder }}/classpath/alfresco/web-extension/{{ item }}"
         mode: "0644"
       loop: "{{ share_templates }}"
