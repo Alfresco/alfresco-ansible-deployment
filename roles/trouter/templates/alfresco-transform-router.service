@@ -4,7 +4,7 @@ After=syslog.socket network.target
 
 [Service]
 Type=simple
-User=alfresco
+User={{ username }}
 ExecStart={{ binaries_folder }}/ats-atr.sh
 
 [Install]
