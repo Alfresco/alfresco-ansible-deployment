@@ -155,7 +155,9 @@
     src: "{{ download_location }}/libreoffice.tar.gz"
     dest: "{{ download_location }}/"
     remote_src: true
-    creates: "{{ download_location }}/LibreOffice_{{ dependencies_version.libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | replace('_','-') }}_{{ pkg_format }}/{{ pkg_format | upper }}/"
+    creates: >-
+      {{ download_location }}/LibreOffice_{{ dependencies_version.libreoffice }}_{{ ansible_system }}_
+      {{- ansible_architecture | replace('_','-') }}_{{ pkg_format }}/{{ pkg_format | upper }}S/
 
 - name: Install LibreOffice & imageMagick
   include_tasks: "{{ pkg_format }}-packages.yml"
