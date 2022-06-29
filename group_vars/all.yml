@@ -14,14 +14,14 @@ nexus_repository:
   enterprise_releases: "{{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.enterprise.repository }}/{{ artifacts_repositories.enterprise.group_id }}"
 
 acs:
-  version: 7.2.0
+  version: 7.3.0-M1
   edition: Enterprise
 
 amps:
   aos_module:
     version: 1.4.1
   device_sync:
-    version: 3.6.0
+    version: 4.0.0-M2
   googledrive_repo:
     version: 3.2.1
   googledrive_share:
@@ -31,22 +31,22 @@ api_explorer:
   version: 7.2.0
 
 search:
-  version: 2.0.3
+  version: 2.0.3.5
 
 transform:
-  version: 2.5.7
+  version: 2.6.0
 
 trouter:
-  version: 1.5.2
+  version: 1.5.3
 
 sfs:
-  version: 0.16.1
+  version: 1.5.3
 
 adw:
-  version: 2.7.0
+  version: 2.9.0
 
 sync:
-  version: 3.6.0
+  version: 4.0.0-M1
 
 downloads:
   acs_zip_url: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
@@ -92,7 +92,7 @@ use_custom_keystores: false
 # to default ansible merging behaviour
 dependencies_version:
   postgresql_connector: 42.2.19
-  postgres_major_version: 13
+  postgres_major_version: 14
   activemq: 5.16.4
   java: 11.0.15
   java_build: 10
