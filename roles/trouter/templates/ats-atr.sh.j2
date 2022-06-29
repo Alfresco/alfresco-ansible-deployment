@@ -11,6 +11,9 @@ export JAVA_OPTS="${JAVA_OPTS} -DACTIVEMQ_URL=failover:({{ activemq_protocol }}:
 export JAVA_OPTS="${JAVA_OPTS} -DACTIVEMQ_USER={{ activemq_username }}"
 export JAVA_OPTS="${JAVA_OPTS} -DACTIVEMQ_PASSWORD={{ activemq_password }}"
 export JAVA_OPTS="${JAVA_OPTS} -DFILE_STORE_URL=http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}/alfresco/api/-default-/private/sfs/versions/1/file"
+{% if bssrf_enabled %}
+export TRANSFORMER_ROUTES_ADDITIONAL_HTML_VIA_TXT="{{ ats_home }}/pipelines/0200-html-via-txt.json"
+{% endif %}
 {% for key, value in trouter_environment.items() %}
 export {{ key }}="{{ value | join(' ') }}"
 {% endfor %}

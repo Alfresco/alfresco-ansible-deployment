@@ -4,19 +4,6 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
-- name: Download alfresco-transform-router.jar
-  become: true
-  get_url:
-    url: "{{ downloads.trouter_jar_url }}"
-    dest: "{{ ats_home }}/alfresco-transform-router-{{ trouter.version }}.jar"
-    checksum: sha1:{{ lookup('url', downloads.trouter_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
-    owner: "{{ username }}"
-    group: "{{ group_name }}"
-    mode: 'u=rwx,g=rwx,o=rx'
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    timeout: 570
-
 - name: Install T-Router
   become: true
   block:
@@ -27,7 +14,7 @@
 
     - name: Create transform services folder
       file:
-        path: "{{ ats_home }}"
+        path: "{{ ats_home }}/pipelines"
         state: directory
         owner: "{{ username }}"
         group: "{{ group_name }}"
@@ -40,6 +27,17 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0755"
+      notify:
+        - restart-trouter
+
+    - name: copy BSSRF enabled pipeline transformers
+      copy:
+        content: "{{ bssrf_pipelines | to_nice_json }}"
+        dest: "{{ ats_home }}/pipelines/0200-html-via-txt.json"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0640"
+      when: bssrf_enabled
       notify:
         - restart-trouter
 
@@ -66,3 +64,16 @@
         - wait-for-aio
         - enable-trouter
         - restart-trouter
+
+- name: Download alfresco-transform-router.jar
+  become: true
+  get_url:
+    url: "{{ downloads.trouter_jar_url }}"
+    dest: "{{ ats_home }}/alfresco-transform-router-{{ trouter.version }}.jar"
+    checksum: sha1:{{ lookup('url', downloads.trouter_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: 'u=rwx,g=rwx,o=rx'
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+    timeout: 570
