@@ -81,6 +81,17 @@ csrf.filter.origin.always={{ 'true' if 'referer' in csrf.force_headers | lower 
   false
 {% endif %}
 
+# CORS filter overrides
+cors.enabled={{ cors.enabled }}
+{% if cors.urls -%}
+  cors.allowed.origins={{ _csrf.compute('origin', cors.urls) }}
+{% endif %}
+cors.allowed.methods={{ cors.allowed_methods | default([]) | join(',') }}
+cors.allowed.headers={{ cors.allowed_headers | default([]) | join(',') }}
+cors.exposed.headers={{ cors.exposed_headers | default([]) | join(',') }}
+cors.support.credentials={{ cors.support_credentials | default('true') }}
+cors.preflight.maxage={{ cors.preflight_maxage | default('10') }}
+
 {% for prop in lookup('ansible.utils.to_paths', merged_repository_properties) | dict2items %}
 {{ prop.key }}={{ prop.value }}
 {% endfor %}

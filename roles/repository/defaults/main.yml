@@ -13,12 +13,38 @@ acs_environment:
   JAVA_TOOL_OPTIONS:
     - $JAVA_TOOL_OPTIONS
 
-# CSRF config:
+# CSRF config
 csrf:
   enabled: true
   force_headers: []
   urls: "{{ trusted_urls }}"
 
+# CORS config
+cors:
+  enabled: true
+  urls: "{{ trusted_urls }}"
+  allowed_methods:
+    - DELETE
+    - GET
+    - HEAD
+    - OPTIONS
+    - POST
+    - PUT
+  allowed_headers:
+    - Accept
+    - Access-Control-Request-Headers
+    - Access-Control-Request-Method
+    - Authorization
+    - Cache-Control
+    - Content-Type
+    - Origin
+    - X-CSRF-Token
+    - X-Requested-With
+  exposed_headers:
+    - Access-Control-Allow-Origin
+    - Access-Control-Allow-Credentials
+  support.credentials: true
+  preflight_maxage: 10
 
 # default_repository_properties: properties to be added to the alfresco-global.properties file
 # e.g: alfresco.authentication.allowGuestLogin is disabled by default
