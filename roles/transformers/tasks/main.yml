@@ -151,7 +151,6 @@
     - molecule-idempotence-notest
 
 - name: Extract libreoffice-dist-linux.gz
-  become: true
   unarchive:
     src: "{{ download_location }}/libreoffice.tar.gz"
     dest: "{{ download_location }}/"
