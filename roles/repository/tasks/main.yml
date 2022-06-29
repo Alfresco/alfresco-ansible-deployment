@@ -164,7 +164,7 @@
       lineinfile:
         path: "{{ binaries_folder }}/tomcat.sh"
         insertafter: 'CATALINA_OPTS'
-        line: >
+        line: >-
           export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}
           -Dats-tengine-aio.host={{ ats_tengine_aio_host }} -Dats-shared-fs.host={{ sfs_host }}"
         owner: "{{ username }}"
