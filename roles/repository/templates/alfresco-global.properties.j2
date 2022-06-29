@@ -70,7 +70,7 @@ aos.baseUrlOverwrite={% if use_ssl | bool %}https{% else %}http{% endif %}://{% 
 
 # CSRF filter overrides
 {% import 'csrf_macros.j2' as _csrf %}
-csrf.filter.enabled={% if csrf.enabled %}true
+csrf.filter.enabled={% if csrf.enabled | bool %}true
 {% if csrf.urls -%}
   csrf.filter.referer={{ _csrf.compute('referer', csrf.urls) }}
   csrf.filter.origin={{ _csrf.compute('origin', csrf.urls) }}
@@ -82,7 +82,7 @@ csrf.filter.origin.always={{ 'true' if 'referer' in csrf.force_headers | lower 
 {% endif %}
 
 # CORS filter overrides
-cors.enabled={{ cors.enabled }}
+cors.enabled={% if cors.enabled | bool %}true
 {% if cors.urls -%}
   cors.allowed.origins={{ _csrf.compute('origin', cors.urls) }}
 {% endif %}
@@ -91,6 +91,9 @@ cors.allowed.headers={{ cors.allowed_headers | default([]) | join(',') }}
 cors.exposed.headers={{ cors.exposed_headers | default([]) | join(',') }}
 cors.support.credentials={{ cors.support_credentials | default('true') }}
 cors.preflight.maxage={{ cors.preflight_maxage | default('10') }}
+{% else -%}
+  false
+{% endif %}
 
 {% for prop in lookup('ansible.utils.to_paths', merged_repository_properties) | dict2items %}
 {{ prop.key }}={{ prop.value }}
