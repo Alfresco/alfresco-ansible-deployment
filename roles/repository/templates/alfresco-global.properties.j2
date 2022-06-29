@@ -69,11 +69,11 @@ dsync.service.uris={% if use_ssl | bool %}https{% else %}http{% endif %}://{% if
 aos.baseUrlOverwrite={% if use_ssl | bool %}https{% else %}http{% endif %}://{% if fqdn_alfresco %}{{ fqdn_alfresco }}{% else %}{{ nginx_host }}{% endif %}:{% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_cfg.nginx.http }}{% endif %}/alfresco/aos
 
 # CSRF filter overrides
-{% import 'csrf_macros.j2' as _csrf %}
+{% import 'xorigins_macros.j2' as _xorigins_protection %}
 csrf.filter.enabled={% if csrf.enabled | bool %}true
 {% if csrf.urls -%}
-  csrf.filter.referer={{ _csrf.compute('referer', csrf.urls) }}
-  csrf.filter.origin={{ _csrf.compute('origin', csrf.urls) }}
+  csrf.filter.referer={{ _xorigins_protection.compute('referer', csrf.urls) }}
+  csrf.filter.origin={{ _xorigins_protection.compute('origin', csrf.urls) }}
 {% endif %}
 csrf.filter.referer.always={{ 'true' if 'origin' in csrf.force_headers | lower else 'false' }}
 csrf.filter.origin.always={{ 'true' if 'referer' in csrf.force_headers | lower else 'false' }}
@@ -84,7 +84,7 @@ csrf.filter.origin.always={{ 'true' if 'referer' in csrf.force_headers | lower 
 # CORS filter overrides
 cors.enabled={% if cors.enabled | bool %}true
 {% if cors.urls -%}
-  cors.allowed.origins={{ _csrf.compute('origin', cors.urls) }}
+  cors.allowed.origins={{ _xorigins_protection.compute('origin', cors.urls) }}
 {% endif %}
 cors.allowed.methods={{ cors.allowed_methods | default([]) | join(',') }}
 cors.allowed.headers={{ cors.allowed_headers | default([]) | join(',') }}
