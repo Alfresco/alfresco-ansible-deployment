@@ -15,10 +15,10 @@ repo_hosts: |
   {{ groups['repository'] | map('extract', hostvars)
   | json_query('[].
     {
-      inventory_name: inventory_hostname , 
-      local_addr: ansible_default_ipv4.address, 
+      inventory_name: inventory_hostname ,
+      local_addr: ansible_default_ipv4.address,
       cluster_keepoff: cluster_keepoff
-    }') 
+    }')
   }}
 repo_host: "{{ repo_hosts[0].local_addr | default(repo_hosts[0].inventory_name) }}"
 activemq_host: >-
@@ -67,7 +67,7 @@ ports_cfg:
   sync:
     http: "{{ ports.sync.http | default('9090') }}"
     admin: "{{ ports.sync.admin | default('9093') }}"
-    
+
 # Default download location of necessary artefacts
 download_location: /tmp/ansible_artefacts
 
