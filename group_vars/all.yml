@@ -1,4 +1,3 @@
----
 artifacts_repositories:
   enterprise:
     base_url: "https://artifacts.alfresco.com/nexus/content"
@@ -8,30 +7,27 @@ artifacts_repositories:
     base_url: "https://artifacts.alfresco.com/nexus/content"
     repository: "groups/public"
     group_id: "org/alfresco"
-
 nexus_repository:
   releases: "{{ artifacts_repositories.community.base_url }}/{{ artifacts_repositories.community.repository }}/{{ artifacts_repositories.community.group_id }}"
   enterprise_releases: "{{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.enterprise.repository }}/{{ artifacts_repositories.enterprise.group_id }}"
-
 acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 7.2.1
-
+  version: 7.3.0-M2
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
     version: 1.4.1
   device_sync:
     repository: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo"
-    version: 3.6.0
+    version: 4.0.0-M3
   googledrive_repo:
     repository: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise"
-    version: 3.2.2
+    version: 3.2.3-A3
   googledrive_share:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share"
-    version: 3.2.2
+    version: 3.2.3-A3
 api_explorer:
   artifact_name: api-explorer
   repository: "{{ nexus_repository.releases }}"
@@ -62,8 +58,7 @@ adw:
   version: 2.9.0
 sync:
   repository: "{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x"
-  version: 3.6.0
-
+  version: 4.0.0-M3
 supported_os:
   RHEL:
     versions:
@@ -79,7 +74,6 @@ supported_os:
     versions:
       - 20.04
       - 18.04
-
 downloads:
   acs_zip_url: "{{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip"
   acs_zip_sha1_checksum_url: "{{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip.sha1"
@@ -97,7 +91,6 @@ downloads:
   transform_jar_sha1_checksum_url: "{{ transform.repository }}/{{ transform.artifact_name }}/{{ transform.version }}/{{ transform.artifact_name }}-{{ transform.version }}.jar.sha1"
   sync_zip_url: "{{ sync.repository }}/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"
   sync_zip_sha1_checksum_url: "{{ sync.repository }}/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip.sha1"
-
 war_downloads:
   - url: "{{ api_explorer.repository }}/{{ api_explorer.artifact_name }}/{{ api_explorer.version }}/{{ api_explorer.artifact_name }}-{{ api_explorer.version }}.war"
     dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
@@ -116,17 +109,15 @@ amp_downloads:
   - url: "{{ amps.aos_module.repository }}/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     sha1_checksum_url: "{{ amps.aos_module.repository }}/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp.sha1"
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
-
 # A default keystore is stored in /var/opt/alfresco/content-services/keystore,
 # to replace this with a custom keystore place the keystore file in the "configuration_files/keystores" folder
 # and change this flag to true. See the deployment guide for more details.
 use_custom_keystores: false
-
 # common dependencies should be updated also in *-extra-vars.yml as well thanks
 # to default ansible merging behaviour
 dependencies_version:
   postgresql_connector: 42.2.19
-  postgres_major_version: 13
+  postgres_major_version: 14
   activemq: 5.16.4
   java: 11.0.15
   java_build: 10
@@ -138,32 +129,24 @@ dependencies_version:
 apache_archive_url: https://archive.apache.org
 tomcat_archive_url: "{{ apache_archive_url }}/dist/tomcat"
 activemq_archive_url: "{{ apache_archive_url }}/dist/activemq"
-
 dependencies_url:
   postgresql_connector: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependencies_version.postgresql_connector }}/postgresql-{{ dependencies_version.postgresql_connector }}.jar"
   postgresql_connector_sha1_checksum_url: "{{ maven_repository.org }}/postgresql/postgresql/{{ dependencies_version.postgresql_connector }}/postgresql-{{ dependencies_version.postgresql_connector }}.jar.sha1"
-
   activemq: "{{ activemq_archive_url }}/{{ dependencies_version.activemq }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
   activemq_sha512_checksum_url: "{{ activemq_archive_url }}/{{ dependencies_version.activemq }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz.sha512"
-
   java: "https://github.com/AdoptOpenJDK/openjdk11-upstream-binaries/releases/download/jdk-{{ dependencies_version.java }}%2B{{ dependencies_version.java_build }}/OpenJDK11U-jdk_x64_linux_{{ dependencies_version.java }}_{{ dependencies_version.java_build }}.tar.gz"
   java_md5_checksum: "51f07e93bc4890bbc16fba1780133d68" # pragma: allowlist secret
-
   tomcat: "{{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
   tomcat_sha512_checksum_url: "{{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz.sha512"
-
 repo_db_url: ""
 repo_db_driver: org.postgresql.Driver
 repo_db_name: "alfresco"
 repo_db_username: "alfresco"
-
 sync_db_url: ""
 sync_db_driver: org.postgresql.Driver
 sync_db_name: "alfresco-sync"
 sync_db_username: "alfresco-sync"
-
 use_ssl: false
 # Put your domain name here if any (e.g. ecm.alfresco.com). Needs to be empty if unused (don't use dummy values)
 fqdn_alfresco: ""
-
 autogen_unsecure_secrets: false
