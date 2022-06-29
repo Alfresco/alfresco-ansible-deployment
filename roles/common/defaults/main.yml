@@ -85,3 +85,5 @@ ansible_installation_status_file: "{{ binaries_folder }}/.ansible_alfresco_compo
 
 nexus_user: "{{ lookup('env', 'NEXUS_USERNAME') | default(null) }}"
 nexus_password: "{{ lookup('env', 'NEXUS_PASSWORD') | default(null) }}"
+
+bssrf_enabled: false

@@ -9,7 +9,6 @@ maven_repository:
   org: "https://repo.maven.apache.org/maven2/org"
 
 # BSSRF protection (disabled by default to ensure better renditions)
-bssrf_enabled: false
 bssrf_pipelines:
   transformers:
     - transformerName: htmlToPdfViaTXT
