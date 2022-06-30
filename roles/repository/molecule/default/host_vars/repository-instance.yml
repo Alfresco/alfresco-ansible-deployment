@@ -1,5 +1,5 @@
 ansible_user: ansible
-bssrf_enabled: true
+bssrf_protection_enabled: true
 cs_storage:
   type: tmpfs
   device: none

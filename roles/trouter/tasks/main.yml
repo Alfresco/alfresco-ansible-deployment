@@ -37,7 +37,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0640"
-      when: bssrf_enabled
+      when: bssrf_protection_enabled
       notify:
         - restart-trouter
 
