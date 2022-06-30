@@ -20,7 +20,7 @@ all:
             - https://app.domain.local/legit
 ```
 
-Note the `known_urls` variable. It needs to be defined as a list of URLs where the client application is hosted
+Note the `known_urls` variable. It needs to be defined as a list of URLs where the client application is hosted.
 
 ## Configure CSRF
 
