@@ -7,3 +7,4 @@ utils:
   - python3-libselinux
   - python3-libsemanage
   - gpg
+  - curl
