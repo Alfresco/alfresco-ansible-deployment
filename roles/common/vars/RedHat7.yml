@@ -6,3 +6,4 @@ utils:
   - libselinux-python
   - libsemanage-python
   - gpg
+  - curl

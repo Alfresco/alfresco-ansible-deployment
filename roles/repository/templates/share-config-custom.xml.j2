@@ -76,14 +76,14 @@
          -->
 
 	 {# Compute referers & origins -#}
-         {% import 'csrf_macros.j2' as _csrf %}
-	 <referer>{{ _csrf.compute('referer', csrf.urls)}}</referer>
+         {% import 'xorigins_macros.j2' as _xorigins_protection %}
+	 <referer>{{ _xorigins_protection.compute('referer', csrf.urls)}}</referer>
 
          <!--
             Override and set this property with a regexp that if you have placed Share behind a proxy that
             does not rewrite the Origin header.
          -->
-	 <origin>{{ _csrf.compute('origin', csrf.urls)}}</origin>
+	 <origin>{{ _xorigins_protection.compute('origin', csrf.urls)}}</origin>
       </properties>
 
       <!--

@@ -8,3 +8,4 @@ utils:
   - python3-selinux
   - python3-semanage
   - gpg
+  - curl
