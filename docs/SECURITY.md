@@ -53,7 +53,7 @@ TODO as part of OPSEXP-1309
 ## Transformations security
 
 Renditions using the LibreOffice transformer to render HTML are subject to the BSSRF attacks. In order to mitigate this risk, you may decide to disable the optimal renditions
-and instead generate lower quality renditions (where basically images would not be rendered as part of the HTML.
+and instead generate lower quality renditions (where basically images would not be rendered as part of the HTML).
 That is achieved by the variable bellow:
 
 ```yaml
