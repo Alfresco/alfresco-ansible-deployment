@@ -1,0 +1,205 @@
+# manifest.yaml
+title: ACS update example
+
+scms:
+  acsRepo:
+    kind: git
+    spec:
+        url: https://github.com/Alfresco/acs-packaging.git
+        branch: master
+        directory: '/tmp/updatecli/acs'
+  aosAmpRepo:
+    kind: git
+    spec:
+      url: git@github.com:Alfresco/alfresco-aos-module.git
+      branch: master
+      directory: '/tmp/updatecli/aos-amp'
+  googleDriveAmpRepo:
+    kind: git
+    spec:
+      url: git@github.com:Alfresco/googledrive.git
+      branch: master
+      directory: '/tmp/updatecli/googledrive'
+  apiExplorerRepo:
+    kind: git
+    spec:
+        url: https://github.com/Alfresco/rest-api-explorer.git
+        branch: master
+        directory: '/tmp/updatecli/api-explorer'
+  dsyncRepo:
+    kind: git
+    spec:
+      url: git@github.com:Alfresco/dsync-services.git
+      branch: master
+      directory: '/tmp/updatecli/dsync'
+  searchRepo:
+    kind: git
+    spec:
+      url: git@github.com:Alfresco/InsightEngine.git
+      branch: master
+      directory: '/tmp/updatecli/search'
+  transformRepo:
+    kind: git
+    spec:
+      url: git@github.com:Alfresco/alfresco-transform-core.git
+      branch: master
+      directory: '/tmp/updatecli/transform'
+  trouterRepo:
+    kind: git
+    spec:
+      url: git@github.com:Alfresco/alfresco-transform-service.git
+      branch: master
+      directory: '/tmp/updatecli/trouter'
+
+sources:
+  acs:
+    name: ACS {{ .acs.version }}.x
+    kind: gittag
+    scmid: acsRepo
+    spec:
+      versionFilter:
+        kind: regex
+        pattern: '{{ .acs.version }}.(\d+)(-M\d*)?$'
+  aosAmp:
+    name: AOS AMP
+    kind: gittag
+    scmid: aosAmpRepo
+  googleDriveAmp:
+    name: Google Drive AMP
+    kind: gittag
+    scmid: googleDriveAmpRepo
+  apiExplorer:
+    name: Api explorer {{ .acs.version }}.x
+    kind: gittag
+    scmid: apiExplorerRepo
+    spec:
+      versionFilter:
+        kind: regex
+        pattern: '{{ if .apiExplorer.version }}{{ .apiExplorer.version }}{{ else }}{{ .acs.version }}{{ end }}.(\d+)$'
+  dsync:
+    name: Desktop Sync {{ .dsync.version }}
+    kind: gittag
+    scmid: dsyncRepo
+    spec:
+      versionFilter:
+        kind: regex
+        pattern: '{{ .dsync.version }}.(\d+)(-M\d*)?$'
+  search:
+    name: InsightEngine {{ .search.version }}.x
+    kind: gittag
+    scmid: searchRepo
+    spec:
+      versionFilter:
+        kind: regex
+        pattern: "{{ .search.version }}.*"
+  transform:
+    name: Transform Core {{ .transform.version }}.x
+    kind: gittag
+    scmid: transformRepo
+    spec:
+      versionFilter:
+        kind: regex
+        pattern: '{{ .transform.version }}.(\d+)$'
+  trouter:
+    name: ATS Transform Service {{ .trouter.version }}.x
+    kind: gittag
+    scmid: trouterRepo
+    spec:
+      versionFilter:
+        kind: regex
+        pattern: '{{ .trouter.version }}.(\d+)$'
+  # adw:
+  #   name: adw
+  #   kind: maven
+  #   spec:
+  #     url: '{{ requiredEnv "NEXUS_USERNAME" }}:{{ requiredEnv "NEXUS_PASSWORD" }}@nexus.alfresco.com/nexus/content/repositories'
+  #     repository: enterprise-releases
+  #     groupID: org.alfresco
+  #     artifactID:  alfresco-digital-workspace
+
+
+targets:
+  acs:
+    name: Bump acs
+    kind: yaml
+    sourceid: acs
+    spec:
+      key: acs.version
+      file: group_vars/all.yml
+  aosAmp:
+    name: Bump AOS AMP
+    kind: yaml
+    sourceid: aosAmp
+    spec:
+      key: amps.aos_module.version
+      file: group_vars/all.yml
+  dsyncAmp:
+    name: Bump Device Sync AMP
+    kind: yaml
+    sourceid: dsync
+    spec:
+      key: amps.device_sync.version
+      file: group_vars/all.yml
+  googleDriveRepoAmp:
+    name: Bump Google Drive Repo AMP
+    kind: yaml
+    sourceid: googleDriveAmp
+    spec:
+      key: amps.googledrive_repo.version
+      file: group_vars/all.yml
+  googleDriveShareAmp:
+    name: Bump Google Drive Share AMP
+    kind: yaml
+    sourceid: googleDriveAmp
+    spec:
+      key: amps.googledrive_share.version
+      file: group_vars/all.yml
+  apiExplorer:
+    name: Bump api-explorer
+    kind: yaml
+    sourceid: apiExplorer
+    spec:
+      key: api_explorer.version
+      file: group_vars/all.yml
+  dsync:
+    name: Bump sync
+    kind: yaml
+    sourceid: dsync
+    spec:
+      key: sync.version
+      file: group_vars/all.yml
+  search:
+    name: Bump InsightEngine
+    kind: yaml
+    sourceid: search
+    spec:
+      key: search.version
+      file: group_vars/all.yml
+  transform:
+    name: Bump Transform Core
+    kind: yaml
+    sourceid: transform
+    spec:
+      key: transform.version
+      file: group_vars/all.yml
+  trouter:
+    name: Bump ATS Transform Service
+    kind: yaml
+    sourceid: trouter
+    spec:
+      key: trouter.version
+      file: group_vars/all.yml
+  sfs:
+    name: Bump Shared File Store
+    kind: yaml
+    sourceid: trouter
+    spec:
+      key: sfs.version
+      file: group_vars/all.yml
+  # adw:
+  #   name: Bump adw
+  #   kind: yaml
+  #   sourceid: adw
+  #   spec:
+  #     key: adw.version
+  #     file: group_vars/all.yml

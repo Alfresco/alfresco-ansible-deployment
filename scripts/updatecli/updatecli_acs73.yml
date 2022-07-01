@@ -1,0 +1,17 @@
+acs:
+  version: "7.3"
+
+apiExplorer:
+  version: "7.2"
+
+search:
+  version: "2.0"
+
+transform:
+  version: "2.5"
+
+trouter:
+  version: "1.5"
+
+dsync:
+  version: "4.0"
