@@ -44,20 +44,20 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rx,o=rx'
   loop:
-     - "{{ content_folder }}/modules/acs-platform"
-     - "{{ content_folder }}/modules/acs-share"
-     - "{{ content_folder }}/amps_repo"
-     - "{{ content_folder }}/amps_share"
-     - "{{ content_folder }}/alf_data"
-     - "{{ content_folder }}/alfresco-mmt"
-     - "{{ content_folder }}/web-server/lib"
-     - "{{ content_folder }}/web-server/webapps"
-     - "{{ settings_folder }}/classpath/alfresco/extension/transform/pipelines"
-     - "{{ settings_folder }}/classpath/alfresco/extension/transform/renditions"
-     - "{{ settings_folder }}/classpath/alfresco/extension/mimetypes"
-     - "{{ settings_folder }}/classpath/alfresco/web-extension"
-     - "{{ tomcat_config_dir }}/lib"
-     - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
+    - "{{ content_folder }}/modules/acs-platform"
+    - "{{ content_folder }}/modules/acs-share"
+    - "{{ content_folder }}/amps_repo"
+    - "{{ content_folder }}/amps_share"
+    - "{{ content_folder }}/alf_data"
+    - "{{ content_folder }}/alfresco-mmt"
+    - "{{ content_folder }}/web-server/lib"
+    - "{{ content_folder }}/web-server/webapps"
+    - "{{ settings_folder }}/classpath/alfresco/extension/transform/pipelines"
+    - "{{ settings_folder }}/classpath/alfresco/extension/transform/renditions"
+    - "{{ settings_folder }}/classpath/alfresco/extension/mimetypes"
+    - "{{ settings_folder }}/classpath/alfresco/web-extension"
+    - "{{ tomcat_config_dir }}/lib"
+    - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
 
 - name: Proceed with Shared contentstore tasks
   include_tasks: sharedcs.yml
@@ -159,15 +159,17 @@
         line: "export ACS_HOME={{ binaries_folder }}/content-services-{{ acs.version }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-    
+
     - name: Add ACS home to tomcat.sh
       lineinfile:
         path: "{{ binaries_folder }}/tomcat.sh"
         insertafter: 'CATALINA_OPTS'
-        line: export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME} -Dats-tengine-aio.host={{ ats_tengine_aio_host }} -Dats-shared-fs.host={{ sfs_host }}"
+        line: >-
+          export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}
+          -Dats-tengine-aio.host={{ ats_tengine_aio_host }} -Dats-shared-fs.host={{ sfs_host }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-    
+
     - name: Add additional env vars to tomcat.sh
       lineinfile:
         path: "{{ binaries_folder }}/tomcat.sh"
@@ -222,7 +224,7 @@
               Looks like the FHS directory structure is broken and can't be re-created.
               Please reinstall from scratch :(
           when: alf_dest_dirs.results | map(attribute='stat.exists') | difference([True])
-    
+
     - name: Remove Alfresco data source files
       file:
         path: "{{ item }}"
@@ -234,6 +236,8 @@
 
 - name: Configure ACS
   become: true
+  notify:
+    - restart-alfresco-content
   block:
     - name: Add the configuration templates
       template:
@@ -271,6 +275,15 @@
         group: "{{ group_name }}"
         mode: "0640"
 
+    - name: copy BSSRF enabled pipaline transformers
+      copy:
+        content: "{{ bssrf_pipelines | to_nice_json }}"
+        dest: "{{ settings_folder }}/classpath/alfresco/extension/transform/pipelines/0200-html-via-txt.json"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0640"
+      when: bssrf_protection_enabled
+
     - name: copy custom keystore file
       copy:
         src: "{{ role_path }}/../../configuration_files/keystores/"
@@ -305,6 +318,7 @@
       file:
         path: "{{ content_folder }}/web-server/conf"
         state: absent
+      notify: []
 
     - name: Create alfresco-global.properties
       vars:
@@ -322,7 +336,10 @@
       lineinfile:
         path: "{{ tomcat_config_dir }}/conf/catalina.properties"
         regexp: ^\s*common.loader\s*=
-        line: "common.loader=\"{{ config_folder }}/content-services/classpath\",\"${catalina.base}/lib\",\"${catalina.base}/lib/*.jar\",\"{{ content_folder }}/web-server/lib\",\"{{ content_folder }}/web-server/lib/*.jar\",\"${catalina.home}/lib\",\"${catalina.home}/lib/*.jar\""
+        line: >
+          common.loader="{{ config_folder }}/content-services/classpath","${catalina.base}/lib",
+          "${catalina.base}/lib/*.jar","{{ content_folder }}/web-server/lib",
+          "{{ content_folder }}/web-server/lib/*.jar","${catalina.home}/lib","${catalina.home}/lib/*.jar"
         owner: "{{ username }}"
         group: "{{ group_name }}"
 
@@ -336,8 +353,6 @@
         block: "{{ lookup('file', role_path + '/../../configuration_files/alfresco-global.properties') }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-      notify:
-        - restart-alfresco-content
       tags:
         - molecule-idempotence-notest # see OPSEXP-1280
 
