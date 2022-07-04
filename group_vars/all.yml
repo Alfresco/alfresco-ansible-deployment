@@ -1,7 +1,17 @@
 ---
+artifacts_repositories:
+  enterprise:
+    base_url: "https://artifacts.alfresco.com/nexus/content"
+    repository: "groups/private"
+    group_id: "org/alfresco"
+  community:
+    base_url: "https://artifacts.alfresco.com/nexus/content"
+    repository: "groups/public"
+    group_id: "org/alfresco"
+
 nexus_repository:
-  releases: "https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco"
-  enterprise_releases: "https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco"
+  releases: "{{ artifacts_repositories.community.base_url }}/{{ artifacts_repositories.community.repository }}/{{ artifacts_repositories.community.group_id }}"
+  enterprise_releases: "{{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.enterprise.repository }}/{{ artifacts_repositories.enterprise.group_id }}"
 
 acs:
   version: 7.2.0
