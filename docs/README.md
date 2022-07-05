@@ -60,7 +60,6 @@ While ACS supports a wide range of OS, the playbook is only known to work and is
 | RHEL 8.2            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |                  - | :heavy_check_mark: |
 | RHEL 7.7            |                  - | :heavy_check_mark: | :heavy_check_mark: |                  - | :heavy_check_mark: |
 | RHEL 7.6            |                  - | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| CentOS 8 x64        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |                  - | :heavy_check_mark: |
 | CentOS 7 x64        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | Ubuntu 20.04        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |                  - | :heavy_check_mark: |
 | Ubuntu 18.04        |                  : | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
