@@ -2,7 +2,7 @@
 artifacts_repositories:
   enterprise:
     base_url: "https://artifacts.alfresco.com/nexus/content"
-    repository: "groups/private"
+    repository: "groups/internal"
     group_id: "org/alfresco"
   community:
     base_url: "https://artifacts.alfresco.com/nexus/content"
