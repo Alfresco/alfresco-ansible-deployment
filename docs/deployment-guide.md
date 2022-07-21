@@ -708,11 +708,21 @@ In that case, you can add the `cluster_keepoff` variable to one of the `reposito
 
 > A typical use case is to have a dedicated Solr tracking node. The playbook will then prefer to use that dedicated node - if it finds one - for solr tracking and only use the other as backup server (no load balancing)
 
-## Cleanup
+## Cleanup & Uninstallation of ACS 
 
-What needs to be removed from a system will depend on your inventory configuration. The steps below presume a localhost or single machine deployment i.e. where all roles were run on the same machine.
+What needs to be removed from a system will depend on your inventory configuration. The steps below presume a cleanup and uninstallation of Alfresco content service after deployment of ansible artifacts by using platform-cleanup.yml playbook and platform-uninstall.yml playbook respectively. 
 
-1. Stop and remove the following systemd services:
+# Cleanup
+
+This playbook will remove the temporary artifacts which are stored on the hosts.In order to cleanup the system post deployment run the following command:
+
+ansible-playbook playbooks/platform-cleanup.yml -i inventory_ssh.yml
+
+# Uninstallation
+
+This playbook will uninstall the sevices belongs to the specific hosts. Below are the services, packages & folders we are removing as the uninstalltions 
+
+1. Stoping and removing the following services:
    * alfresco-transform-router.service
    * alfresco-shared-fs.service
    * alfresco-tengine-aio.service
@@ -722,11 +732,13 @@ What needs to be removed from a system will depend on your inventory configurati
    * nginx.service
    * activemq.service
    * postgresql-`version`.service (where `version` is 11 for ACS 6.2.N and 13 for ACS 7.x)
-2. Remove the following yum packages:
+   
+2. Remove the following packages:
    * ImageMagick
    * libreoffice
    * nginx
    * postgresql
+   
 3. Remove the following folders:
    * /opt/apache-activemq-`version`
    * /opt/apache-tomcat-`version`
@@ -739,7 +751,9 @@ What needs to be removed from a system will depend on your inventory configurati
    * /tmp/ansible_artefacts
    * /tmp/Alfresco
 
-> NOTE: An additional "uninstall" playbook may be provided in the future.
+In order to uninstall this from the hosts run the following command:
+
+ansible-playbook playbooks/platform-uninstall.yml -i inventory_ssh.yml
 
 ## Known Issues
 
