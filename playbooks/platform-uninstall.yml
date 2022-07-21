@@ -1,0 +1,123 @@
+---
+#### This playbook will uninstall ACS
+
+ - hosts: database
+   tasks:
+     - name: Stopping the database
+       ansible.builtin.service:
+         name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
+         state: stopped
+         enabled: no
+
+     - name: Removing the Packages   
+       ansible.builtin.package:
+         name: postgresql
+         state: absent
+ 
+ - hosts: activemq
+   tasks:
+     - name: Stopping the activemq
+       ansible.builtin.service:
+         name: activemq.service 
+         state: stopped
+         enabled: no
+    
+     - name: Removing activemq folders
+       ansible.builtin.file: 
+         path: "{{ item }}" 
+         state: absent
+       with_items:
+        - "{{ activemq_home | default('/opt/apache-activemq-{{ dependencies_version.activemq }}') }}"
+        - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
+  
+ - hosts: transformers
+   tasks:
+     - name: Stopping transform
+       ansible.builtin.service:
+         name: "{{ item }}" 
+         state: stopped
+         enabled: no
+       with_items:
+        - 'alfresco-transform-router.service'
+        - 'alfresco-tengine-aio.service'
+        - 'alfresco-shared-fs.service'
+
+     - name: Removing the Packages   
+       ansible.builtin.package:
+         name: "{{ item }}"
+         state: absent
+       with_items:
+        - ImageMagick
+        - libreoffice
+
+     - name: Removing activemq folders
+       ansible.builtin.file: 
+         path: "{{ item }}" 
+         state: absent
+       with_items:
+        - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
+
+ - hosts: search
+   tasks:
+     - name: Stopping Search
+       ansible.builtin.service:
+         name: alfresco-search.service 
+         state: stopped
+         enabled: no
+
+     - name: Removing activemq folders
+       ansible.builtin.file: 
+         path: "{{ item }}" 
+         state: absent
+       with_items:
+        - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
+
+ - hosts: syncservice
+   tasks:
+     - name: Stopping Sync
+       ansible.builtin.service:
+         name: alfresco-sync.service
+         state: stopped
+         enabled: no
+
+     - name: Removing activemq folders
+       ansible.builtin.file: 
+         path: "{{ item }}" 
+         state: absent
+       with_items:
+        - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
+ 
+ - hosts: nginx
+   tasks:
+     - name: Stopping nginx
+       ansible.builtin.service:
+         name: nginx.service
+         state: stopped
+         enabled: no
+
+     - name: Removing the Packages   
+       ansible.builtin.package:
+         name: nginx
+         state: absent
+
+ - hosts: repository
+   tasks:
+     - name: stopping content services
+       ansible.builtin.service:
+         name: alfresco-content.service
+         state: stopped
+         enabled: no
+
+     - name: Removing the folders
+       ansible.builtin.file: 
+         path: "{{ item }}" 
+         state: absent
+       with_items:
+        - "{{ tomcat_home_prefix | default('/opt/apache-tomcat') }}"
+        - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
+        - "{{ binaries_folder | default('/opt/alfresco') }}"
+        - "{{ config_folder | default('/etc/opt/alfresco') }}"
+        - "{{ data_folder | default('/var/opt/alfresco') }}"
+        - "{{ logs_folder | default('/var/log/alfresco') }}"
+        - "{{ download_location | default('/tmp/ansible_artefacts') }}"
+        - "/tmp/Alfresco"
