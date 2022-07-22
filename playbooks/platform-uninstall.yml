@@ -20,7 +20,6 @@
        ansible.builtin.file: 
          path: "{{ item }}" 
          state: absent
-         autoremove: yes
        with_items:
         - "/etc/systemd/system/activemq.service" 
         - "{{ activemq_home | default('/opt/apache-activemq-{{ dependencies_version.activemq }}') }}"
