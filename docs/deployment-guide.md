@@ -718,9 +718,11 @@ This playbook will remove the temporary artifacts which are stored on the hosts.
 
 ansible-playbook playbooks/platform-cleanup.yml -i inventory_ssh.yml
 
+Note: Running this playbook will break [installation playbook](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/playbooks/acs.yml) idempotency.
+
 # Uninstallation
 
-This playbook will uninstall the sevices belongs to the specific hosts. Below are the services, packages & folders we are removing as the uninstalltions 
+This playbook will uninstall the sevices which belong to the specific hosts. Below are the services, packages & folders we are removing when uninstalling
 
 1. Stoping and removing the following services:
    * alfresco-transform-router.service
