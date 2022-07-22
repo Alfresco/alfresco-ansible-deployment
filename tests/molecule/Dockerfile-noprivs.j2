@@ -28,3 +28,6 @@ RUN set -xe \
   && useradd -m -g ${DEPLOY_GROUP} ${DEPLOY_USER} \
   && usermod -aG ${SUDO_GROUP} ${DEPLOY_USER} \
   && sed -i "/^%${SUDO_GROUP}/s/ALL\$/NOPASSWD:ALL/g" /etc/sudoers
+  
+RUN yum update && yum -y install procps-ng
+
