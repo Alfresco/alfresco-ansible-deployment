@@ -718,7 +718,7 @@ This playbook will remove the temporary artifacts which are stored on the hosts.
 
 ansible-playbook playbooks/platform-cleanup.yml -i inventory_ssh.yml
 
-Note: Running this playbook will break [installation playbook](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/playbooks/acs.yml) idempotency.
+Note: Running this playbook can break the idempotency i.e if you run the cleanup playbook between the first and the second play, then artifacts which were not present anymore and will be downloaded again. In order to remove them again you will need to run the platform-cleanup playbook.
 
 # Uninstallation
 
