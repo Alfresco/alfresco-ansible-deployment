@@ -39,6 +39,9 @@ jobs:
         with:
           cache-name: enterprise
 
+      - name: Setup workspace
+        uses: ./.github/actions/setup-workspace
+
       - name: Run tests
         env:
           MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
@@ -113,6 +116,9 @@ jobs:
       - name: Get branch name
         shell: bash
         run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+
+      - name: Setup workspace
+        uses: ./.github/actions/setup-workspace
 
       - name: Generate unique id
         run: echo "MOLECULE_IT_ID=$(date +%s%4N)" >> $GITHUB_ENV

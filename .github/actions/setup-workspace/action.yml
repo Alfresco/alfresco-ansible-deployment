@@ -1,0 +1,11 @@
+name: 'Setup workspace'
+description: 'Do some clever stuff on the workspace before running tests'
+runs:
+  using: "composite"
+  steps:
+    - name: Use internal nexus repository when branch is a future release
+      if: startsWith(github.ref_name, 'next/') || startsWith(github.head_ref, 'next/')
+      run: |
+        yq -i '.artifacts_repositories.enterprise.repository = "groups/internal"' group_vars/all.yml
+        echo "Looks like this is a release branch so we are overriding nexus enterprise repository to groups/internal"
+      shell: bash
