@@ -28,7 +28,7 @@
         - "{{ data_folder | default('/var/opt/alfresco') }}"
         - "{{ logs_folder | default('/var/log/alfresco')  }}"
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
-       notify: Reload daemon
+       notify: Reload systemd
   
  - hosts: transformers
    tasks:
