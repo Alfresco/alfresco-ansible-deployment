@@ -708,9 +708,9 @@ In that case, you can add the `cluster_keepoff` variable to one of the `reposito
 
 > A typical use case is to have a dedicated Solr tracking node. The playbook will then prefer to use that dedicated node - if it finds one - for solr tracking and only use the other as backup server (no load balancing)
 
-## Cleanup & Uninstallation of ACS 
+## Cleanup & Uninstallation of ACS
 
-What needs to be removed from a system will depend on your inventory configuration. The steps below presume a cleanup and uninstallation of Alfresco content service after deployment of ansible artifacts by using platform-cleanup.yml playbook and platform-uninstall.yml playbook respectively. 
+What needs to be removed from a system will depend on your inventory configuration. The steps below presume a cleanup and uninstallation of Alfresco content service after deployment of ansible artifacts by using platform-cleanup.yml playbook and platform-uninstall.yml playbook respectively.
 
 ### Cleanup
 
@@ -736,13 +736,13 @@ This playbook will uninstall the sevices which belong to the specific hosts. Bel
    * nginx.service
    * activemq.service
    * postgresql-`version`.service (where `version` is 11 for ACS 6.2.N and 13 for ACS 7.x)
-   
+
 2. Remove the following packages:
    * ImageMagick
    * libreoffice
    * nginx
    * postgresql
-   
+
 3. Remove the following folders:
    * /opt/apache-activemq-`version`
    * /opt/apache-tomcat-`version`
