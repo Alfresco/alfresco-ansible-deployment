@@ -9,7 +9,8 @@ def test_postgresql_service(host):
     if os.environ['TEST_IMAGE'].startswith('ubuntu'):
         service_name = 'postgresql'
     else:
-        service_name = 'postgresql-13'
+        postgres_version = host.ansible.get_variables()['dependencies_version']['postgres_major_version']
+        service_name = 'postgresql-{}'.format(postgres_version)
 
     assert_that(host.service(service_name).is_running)
     assert_that(host.service(service_name).is_enabled)
