@@ -720,7 +720,7 @@ This playbook will remove the temporary artifacts which are stored on the hosts.
 ansible-playbook playbooks/platform-cleanup.yml -i inventory_ssh.yml
 ```
 
-Note: This playbook can break the idempotency i.e Downloaded artifacts again needs to removed by running cleanup playbook.
+> Note: This playbook can break the idempotency i.e Downloaded artifacts again needs to removed by running cleanup playbook.
 
 ### Uninstallation
 
