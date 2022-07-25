@@ -28,13 +28,8 @@
         - "{{ data_folder | default('/var/opt/alfresco') }}"
         - "{{ logs_folder | default('/var/log/alfresco')  }}"
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
-       notify: Reload systemd
-
-   handlers:
-     - name: Reload systemd
-       ansible.builtin.systemd: 
-         daemon_reload: yes
-
+       notify: Reload daemon
+  
  - hosts: transformers
    tasks:
      - name: Stopping transform
@@ -71,11 +66,6 @@
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
        notify: Reload systemd
 
-   handlers:
-     - name: Reload systemd
-       ansible.builtin.systemd: 
-         daemon_reload: yes
-
  - hosts: search
    tasks:
      - name: Stopping Search
@@ -97,11 +87,6 @@
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
        notify: Reload systemd
 
-   handlers:
-     - name: Reload systemd 
-       ansible.builtin.systemd: 
-         daemon_reload: yes
-
  - hosts: syncservice
    tasks:
      - name: Stopping Sync
@@ -122,11 +107,6 @@
         - "{{ logs_folder | default('/var/log/alfresco')  }}"
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
        notify: Reload systemd
-
-   handlers:
-     - name: Reload systemd
-       ansible.builtin.systemd: 
-         daemon_reload: yes
 
  - hosts: nginx
    tasks:
@@ -158,8 +138,3 @@
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
         - "/tmp/Alfresco"
        notify: Reload systemd
-
-   handlers:
-     - name: Reload systemd
-       ansible.builtin.systemd:
-         daemon_reload: yes   

@@ -712,15 +712,17 @@ In that case, you can add the `cluster_keepoff` variable to one of the `reposito
 
 What needs to be removed from a system will depend on your inventory configuration. The steps below presume a cleanup and uninstallation of Alfresco content service after deployment of ansible artifacts by using platform-cleanup.yml playbook and platform-uninstall.yml playbook respectively. 
 
-# Cleanup
+### Cleanup
 
 This playbook will remove the temporary artifacts which are stored on the hosts.In order to cleanup the system post deployment run the following command:
 
+```bash
 ansible-playbook playbooks/platform-cleanup.yml -i inventory_ssh.yml
+```
 
 Note: This playbook can break the idempotency i.e Downloaded artifacts again needs to removed by running cleanup playbook.
 
-# Uninstallation
+### Uninstallation
 
 This playbook will uninstall the sevices which belong to the specific hosts. Below are the services, packages & folders we are removing when uninstalling
 
@@ -755,7 +757,9 @@ This playbook will uninstall the sevices which belong to the specific hosts. Bel
 
 In order to uninstall this from the hosts run the following command:
 
+```bash
 ansible-playbook playbooks/platform-uninstall.yml -i inventory_ssh.yml
+```
 
 ## Known Issues
 
