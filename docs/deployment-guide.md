@@ -180,13 +180,14 @@ Not all distributions of Linux may have that specific version of Ansible. Below 
     sudo apt install virtualenvwrapper unzip # Use your distro's package manager instead of apt if it's not Debian based
     ```
 
-3. Install Ansible and required dependencies in python virtualenv:
+3. Install Ansible and required dependencies while also creating virtual environment:
 
     ```bash
     unzip alfresco-ansible-deployment-<version>.zip
     cd alfresco-ansible-deployment
     mkvirtualenv alfresco-ansible
-    pip install -r requirements.txt
+    pip install --user pipenv
+    pipenv install Pipfile
     ansible-galaxy install -r requirements.yml
     ```
 
