@@ -2,7 +2,7 @@ ansible-core==2.12.7
 ansible-lint==6.3.0
 jmespath==1.0.1
 molecule==4.0.1
-molecule-docker==1.1.0
+molecule-docker==2.0.0
 molecule-ec2==0.4
 boto3==1.24.3
 PyHamcrest==2.0.3
