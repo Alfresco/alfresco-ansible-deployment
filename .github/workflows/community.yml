@@ -44,6 +44,9 @@ jobs:
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
 
+      - name: Setup workspace
+        uses: ./.github/actions/setup-workspace
+
       - name: Run tests
         env:
           MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
