@@ -38,7 +38,7 @@ trouter:
 sfs:
   version: 1.5.3
 adw:
-  version: 2.7.0
+  version: 2.9.0
 
 sync:
   version: 3.6.0
