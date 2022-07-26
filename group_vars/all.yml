@@ -14,7 +14,7 @@ nexus_repository:
   enterprise_releases: "{{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.enterprise.repository }}/{{ artifacts_repositories.enterprise.group_id }}"
 
 acs:
-  version: 7.2.0
+  version: 7.2.1
   edition: Enterprise
 
 amps:
@@ -23,25 +23,20 @@ amps:
   device_sync:
     version: 3.6.0
   googledrive_repo:
-    version: 3.2.1
+    version: 3.2.2
   googledrive_share:
-    version: 3.2.1
-
+    version: 3.2.2
 api_explorer:
-  version: 7.2.0
-
+  version: 7.2.1
 search:
-  version: 2.0.3
-
+  version: 2.0.4
 transform:
   version: 2.5.7
 
 trouter:
-  version: 1.5.2
-
+  version: 1.5.3
 sfs:
-  version: 0.16.1
-
+  version: 1.5.3
 adw:
   version: 2.7.0
 
