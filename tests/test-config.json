@@ -7,12 +7,12 @@
     "assertions": {
       "acs": {
         "edition": "Enterprise",
-        "version": "7.2.0",
+        "version": "7.2.1",
         "identity": false,
         "modules": [
           {
             "id": "org.alfresco.integrations.google.docs",
-            "version": "3.2.1",
+            "version": "3.2.2",
             "installed": true
           },
           {
@@ -28,7 +28,7 @@
         ]
       },
       "adw": {
-        "version": "2.7.0"
+        "version": "2.9.0"
       }
     }
   }
