@@ -77,4 +77,4 @@ Then push the tag with:
 git push origin v2.x.x
 ```
 
-Check that the triggered workflow go green.
+Check that the triggered [Release workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml) go green.
