@@ -1,4 +1,7 @@
 ---
+- name: Uninstall playbook
+  import_playbook: "../../playbooks/platform-uninstall.yml"
+
 - name: Cleanup
   hosts: localhost
   gather_facts: false
