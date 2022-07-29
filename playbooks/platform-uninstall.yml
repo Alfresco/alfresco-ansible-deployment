@@ -1,6 +1,7 @@
 ---
 #### This playbook will uninstall ACS
  - hosts: database
+   become: true
    tasks:
      - name: Removing the Packages
        ansible.builtin.package:
@@ -9,6 +10,7 @@
          autoremove: yes
       
  - hosts: activemq
+   become: true
    handlers:
      - import_tasks: "handlers/uninstall-handlers.yml"
    tasks:
@@ -33,6 +35,7 @@
        notify: Reload systemd
   
  - hosts: transformers
+   become: true
    handlers:
      - import_tasks: "handlers/uninstall-handlers.yml"
    tasks:
@@ -71,6 +74,7 @@
        notify: Reload systemd
 
  - hosts: search
+   become: true
    handlers:
      - import_tasks: "handlers/uninstall-handlers.yml"
    tasks:
@@ -94,6 +98,7 @@
        notify: Reload systemd
 
  - hosts: syncservice
+   become: true
    handlers:
      - import_tasks: "handlers/uninstall-handlers.yml"
    tasks:
@@ -117,6 +122,7 @@
        notify: Reload systemd
 
  - hosts: nginx
+   become: true
    tasks:
      - name: Removing the Packages   
        ansible.builtin.package:
@@ -125,6 +131,7 @@
          autoremove: yes
          
  - hosts: repository
+   become: true
    handlers:
      - import_tasks: "handlers/uninstall-handlers.yml"
    tasks:
