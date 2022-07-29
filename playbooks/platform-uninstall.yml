@@ -16,7 +16,7 @@
    tasks:
      - name: Stopping the activemq
        ansible.builtin.service:
-         name: activemq.service
+         name: activemq
          state: stopped
          enabled: no
     
@@ -45,9 +45,9 @@
          state: stopped
          enabled: no
        with_items:
-        - 'alfresco-transform-router.service'
-        - 'alfresco-tengine-aio.service'
-        - 'alfresco-shared-fs.service'
+        - 'alfresco-transform-router'
+        - 'alfresco-tengine-aio'
+        - 'alfresco-shared-fs'
 
      - name: Removing the Packages
        ansible.builtin.package:
@@ -80,7 +80,7 @@
    tasks:
      - name: Stopping Search
        ansible.builtin.service:
-         name: alfresco-search.service
+         name: alfresco-search
          state: stopped
          enabled: no
 
@@ -104,7 +104,7 @@
    tasks:
      - name: Stopping Sync
        ansible.builtin.service:
-         name: alfresco-sync.service
+         name: alfresco-sync
          state: stopped
          enabled: no
 
@@ -137,7 +137,7 @@
    tasks:
      - name: stopping content services
        ansible.builtin.service:
-         name: alfresco-content.service
+         name: alfresco-content
          state: stopped
          enabled: no
 
