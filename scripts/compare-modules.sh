@@ -24,4 +24,4 @@ while read -r LINE; do
     echo "Unsupported $PIP_MODULE_NAME version. Upgrade to at least $REQ_MODULE_VERSION_FULL to avoid errors during deployment"
     exit 2
   fi
-done < requirements.txt
+done < ../requirements.txt
