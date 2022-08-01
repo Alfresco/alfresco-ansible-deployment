@@ -2,17 +2,11 @@
 - name: Check requirements
   hosts: localhost
   tasks:
-    - name: Check Ansible version
-      debug:
-        msg: "Anisible version is {{ ansible_version.full }}"
     - name: Check pip module versions
       shell: |
         ../scripts/compare-modules.sh
         echo $?
       register: echo
-    - name: Print debug
-      debug: 
-        msg: "{{ echo }}"
     - name: Exit playbook if modules do not match
       fail:
         msg: "{{ echo['stdout_lines'][0] }}"
