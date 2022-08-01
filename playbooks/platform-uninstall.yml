@@ -1,30 +1,31 @@
 ---
 #### This playbook will uninstall ACS
- - hosts: database
-   become: true
-   tasks:
-     - name: Removing the Packages
-       ansible.builtin.package:
-         name: postgresql
-         state: absent
-         autoremove: yes
-      
- - hosts: activemq
-   become: true
-   handlers:
-     - import_tasks: "handlers/uninstall-handlers.yml"
-   tasks:
-     - name: Stopping the activemq
-       ansible.builtin.service:
-         name: activemq
-         state: stopped
-         enabled: no
-    
-     - name: Removing the folders
-       ansible.builtin.file:
-         path: "{{ item }}"
-         state: absent
-       with_items:
+- hosts: database
+  become: true
+  tasks:
+    - name: Removing the Packages
+      ansible.builtin.package:
+        name: postgresql
+        state: absent
+        autoremove: yes
+
+- hosts: activemq
+  become: true
+  handlers:
+    - import_tasks: "handlers/uninstall-handlers.yml"
+  tasks:
+    - name: Stopping activemq service
+      ignore_errors: true
+      ansible.builtin.service:
+        name: activemq
+        state: stopped
+        enabled: no
+
+    - name: Removing the folders
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
         - "/etc/systemd/system/activemq.service"
         - "{{ activemq_home | default('/opt/apache-activemq-{{ dependencies_version.activemq }}') }}"
         - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
@@ -32,37 +33,38 @@
         - "{{ data_folder | default('/var/opt/alfresco') }}"
         - "{{ logs_folder | default('/var/log/alfresco')  }}"
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
-       notify: Reload systemd
-  
- - hosts: transformers
-   become: true
-   handlers:
-     - import_tasks: "handlers/uninstall-handlers.yml"
-   tasks:
-     - name: Stopping transform
-       ansible.builtin.service:
-         name: "{{ item }}"
-         state: stopped
-         enabled: no
-       with_items:
-        - 'alfresco-transform-router'
-        - 'alfresco-tengine-aio'
-        - 'alfresco-shared-fs'
+      notify: Reload systemd
 
-     - name: Removing the Packages
-       ansible.builtin.package:
-         name: "{{ item }}"
-         state: absent
-         autoremove: yes
-       with_items:
+- hosts: transformers
+  become: true
+  handlers:
+    - import_tasks: "handlers/uninstall-handlers.yml"
+  tasks:
+    - name: Stopping transform
+      ignore_errors: true
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: stopped
+        enabled: no
+      with_items:
+        - "alfresco-transform-router"
+        - "alfresco-tengine-aio"
+        - "alfresco-shared-fs"
+
+    - name: Removing the Packages
+      ansible.builtin.package:
+        name: "{{ item }}"
+        state: absent
+        autoremove: yes
+      with_items:
         - ImageMagick
         - libreoffice
 
-     - name: Removing the folders
-       ansible.builtin.file:
-         path: "{{ item }}"
-         state: absent
-       with_items:
+    - name: Removing the folders
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
         - "/etc/systemd/system/alfresco-transform-router.service"
         - "/etc/systemd/system/alfresco-tengine-aio.service"
         - "/etc/systemd/system/alfresco-shared-fs.service"
@@ -71,81 +73,84 @@
         - "{{ data_folder | default('/var/opt/alfresco') }}"
         - "{{ logs_folder | default('/var/log/alfresco')  }}"
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
-       notify: Reload systemd
+      notify: Reload systemd
 
- - hosts: search
-   become: true
-   handlers:
-     - import_tasks: "handlers/uninstall-handlers.yml"
-   tasks:
-     - name: Stopping Search
-       ansible.builtin.service:
-         name: alfresco-search
-         state: stopped
-         enabled: no
+- hosts: search
+  become: true
+  handlers:
+    - import_tasks: "handlers/uninstall-handlers.yml"
+  tasks:
+    - name: Stopping Search
+      ignore_errors: true
+      ansible.builtin.service:
+        name: alfresco-search
+        state: stopped
+        enabled: no
 
-     - name: Removing the folders
-       ansible.builtin.file:
-         path: "{{ item }}"
-         state: absent
-       with_items:
+    - name: Removing the folders
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
         - "/etc/systemd/system/alfresco-search.service"
         - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
         - "{{ binaries_folder | default('/opt/alfresco') }}"
         - "{{ data_folder | default('/var/opt/alfresco') }}"
         - "{{ logs_folder | default('/var/log/alfresco')  }}"
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
-       notify: Reload systemd
+      notify: Reload systemd
 
- - hosts: syncservice
-   become: true
-   handlers:
-     - import_tasks: "handlers/uninstall-handlers.yml"
-   tasks:
-     - name: Stopping Sync
-       ansible.builtin.service:
-         name: alfresco-sync
-         state: stopped
-         enabled: no
+- hosts: syncservice
+  become: true
+  handlers:
+    - import_tasks: "handlers/uninstall-handlers.yml"
+  tasks:
+    - name: Stopping Sync
+      ignore_errors: true
+      ansible.builtin.service:
+        name: alfresco-sync
+        state: stopped
+        enabled: no
 
-     - name: Removing the folders
-       ansible.builtin.file:
-         path: "{{ item }}"
-         state: absent
-       with_items:
+    - name: Removing the folders
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
         - "/etc/systemd/system/alfresco-sync.service"
         - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
         - "{{ binaries_folder | default('/opt/alfresco') }}"
         - "{{ data_folder | default('/var/opt/alfresco') }}"
         - "{{ logs_folder | default('/var/log/alfresco')  }}"
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
-       notify: Reload systemd
+      notify: Reload systemd
 
- - hosts: nginx
-   become: true
-   tasks:
-     - name: Removing the Packages   
-       ansible.builtin.package:
-         name: nginx
-         state: absent
-         autoremove: yes
-         
- - hosts: repository
-   become: true
-   handlers:
-     - import_tasks: "handlers/uninstall-handlers.yml"
-   tasks:
-     - name: stopping content services
-       ansible.builtin.service:
-         name: alfresco-content
-         state: stopped
-         enabled: no
+- hosts: nginx
+  become: true
+  tasks:
+    - name: Removing the Packages
+      ansible.builtin.package:
+        name: nginx
+        state: absent
+        autoremove: yes
 
-     - name: Removing the folders
-       ansible.builtin.file: 
-         path: "{{ item }}" 
-         state: absent
-       with_items:
+- hosts: repository
+  become: true
+  handlers:
+    - import_tasks: "handlers/uninstall-handlers.yml"
+  tasks:
+    - name: stopping content services
+      ignore_errors: true
+      ansible.builtin.service:
+        name: alfresco-content
+        state: stopped
+        enabled: no
+
+    - name: Removing the folders
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
         - "/etc/systemd/system/alfresco-content.service"
         - "{{ tomcat_home_prefix | default('/opt/apache-tomcat') }}"
         - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
@@ -154,4 +159,4 @@
         - "{{ logs_folder | default('/var/log/alfresco') }}"
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
         - "/tmp/Alfresco"
-       notify: Reload systemd
+      notify: Reload systemd
