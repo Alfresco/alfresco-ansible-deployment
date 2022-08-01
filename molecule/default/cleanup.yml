@@ -1,7 +1,4 @@
 ---
-- name: Uninstall playbook
-  import_playbook: "../../playbooks/platform-uninstall.yml"
-
 - name: Cleanup
   hosts: localhost
   gather_facts: false
@@ -14,7 +11,7 @@
       ignore_unreachable: yes
 
     - name: End gracefully if EC2 is unavailable
-      meta: end_host
+      meta: end_play
       when: ansible_ec2_public_hostname is undefined
 
     - name: Set variables
@@ -38,3 +35,6 @@
         path: "{{ project_dir }}/tests/test-ssl.yml"
         regexp: "{{ certificate_domain }}"
         replace: TEST_FQDN
+
+- name: Uninstall playbook
+  import_playbook: "../../playbooks/platform-uninstall.yml"
