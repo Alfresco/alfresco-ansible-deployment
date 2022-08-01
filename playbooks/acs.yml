@@ -10,9 +10,11 @@
         ../scripts/compare-modules.sh
         echo $?
       register: echo
-    - debug: 
+    - name: Print debug
+      debug: 
         msg: "{{ echo }}"
-    - fail:
+    - name: Exit playbook if modules do not match
+      fail:
         msg: "{{ echo['stdout_lines'][0] }}"
       when: echo['stdout_lines'][0] != "0"
 
