@@ -5,13 +5,18 @@
     - name: Check Ansible version
       debug:
         msg: "Anisible version is {{ ansible_version.full }}"
-    - name: check module versions
+    - name: Check pip module versions
       shell: |
-        echo $(pip3 freeze)
+        ../scripts/compare-modules.sh
+        echo $?
       register: echo
     - debug: 
-        msg: "{{ echo['stdout'] }}"
-        
+        msg: "{{ echo }}"
+    - name: Post check
+      debug:
+        msg: "{{ echo['stdout_lines'][0] }}"
+      when: echo['stdout_lines'][0] != "0"
+
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
 
