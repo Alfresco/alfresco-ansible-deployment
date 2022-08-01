@@ -1,6 +1,6 @@
 ---
 - name: Check module requirements
-  ansible.builtin.import_playbook: check-requirements.yml
+  ansible.builtin.import_playbook: check-modules.yml
 
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
