@@ -2,17 +2,14 @@
 
 PIP_MODULES=$(pip3 freeze)
 
-declare -A module_versions
+declare -a module_names=( "ansible-core" "Jinja2" )
+declare -a module_versions=( "2.12.7" "3.1.2" )
 
-module_versions=(
-  ["ansible-core"]="2.12.7"
-  ["Jinja2"]="3.1.2"
-)
 
-for key in "${!module_versions[@]}"; do
-  
-  REQ_MODULE_NAME="$key"
-  REQ_MODULE_VERSION_FULL="${module_versions[$key]}"
+for index in "${!module_names[@]}"; do
+
+  REQ_MODULE_NAME="${module_names[$index]}"
+  REQ_MODULE_VERSION_FULL="${module_versions[$index]}"
   IFS='.' read -ra REQ_MODULE_VERSION <<< "$REQ_MODULE_VERSION_FULL"
 
   PIP_MODULE=$(echo "$PIP_MODULES" | grep "${REQ_MODULE_NAME}"==)
