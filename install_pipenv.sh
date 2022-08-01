@@ -7,6 +7,4 @@ pip3 install --user pipenv
 echo -e 'export PATH="$PATH:/Library/Frameworks/Python.framework/Versions/3.9/bin"' >> $HOME/.bash_profile
 export PATH="$HOME/.local/bin:$PATH"
 cat Pipfile
-pwd
 pipenv install Pipfile
-echo test4
