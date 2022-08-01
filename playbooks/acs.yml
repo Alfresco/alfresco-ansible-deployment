@@ -12,8 +12,7 @@
       register: echo
     - debug: 
         msg: "{{ echo }}"
-    - name: Post check
-      debug:
+    - fail:
         msg: "{{ echo['stdout_lines'][0] }}"
       when: echo['stdout_lines'][0] != "0"
 
