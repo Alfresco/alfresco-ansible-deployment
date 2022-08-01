@@ -1,5 +1,5 @@
 Vagrant.configure("2") do |config|
-  config.vm.provision "file", source: "~/Pipfile", destination: "$HOME/vagrant"
+  config.vm.provision "file", source: "./Pipfile", destination: "$HOME/"
   config.vm.provision "shell", path: "install_pipenv.sh"
   config.vm.box = "ubuntu/focal64"
   config.vm.network "private_network", ip: "192.168.56.100"
