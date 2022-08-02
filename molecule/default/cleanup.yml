@@ -35,6 +35,3 @@
         path: "{{ project_dir }}/tests/test-ssl.yml"
         regexp: "{{ certificate_domain }}"
         replace: TEST_FQDN
-
-- name: Uninstall playbook
-  import_playbook: "../../playbooks/platform-uninstall.yml"
