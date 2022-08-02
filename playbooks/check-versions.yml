@@ -18,5 +18,4 @@
         msg: 
           - "Installed Jinja2 major version is too old. Upgrade to at least version 3."
           - "Please refer to https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/deployment-guide.md#setup-a-control-node for detailed instructions."
-      when: (jinja2_version.stdout.split('.')[0] | int < 3)
-      
+      when: (jinja2_version.stdout.split('.')[0] | int < 3)  
