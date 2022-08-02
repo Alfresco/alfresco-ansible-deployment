@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Fail if Ansible version is too old
+      fail:
+        msg: 
+          - "Installed Ansible version is too old. Upgrade to at least 2.12."
+          - "Please refer to https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/deployment-guide.md#setup-a-control-node for detailed instructions."
+      when: (ansible_version.major < 2) or
+            (ansible_version.major == 2 and ansible_version.minor < 12)
+    - name: Check Jinja2 version
+      shell: | 
+        JINJA_VERSION=$(pip3 freeze | grep Jinja2 | sed 's/Jinja2==//g')
+        echo $JINJA_VERSION
+      register: jinja2_version
+    - name: Fail if Jinja2 version is too old
+      fail:
+        msg: 
+          - "Installed Jinja2 major version is too old. Upgrade to at least version 3."
+          - "Please refer to https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/deployment-guide.md#setup-a-control-node for detailed instructions."
+      when: (jinja2_version.stdout.split('.')[0] | int < 3)  
