@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Fail if Ansible version is too old
+      fail:
+        msg: "Installed Ansible version is too old. Upgrade to at least 2.12.7"
+      when: (ansible_version.major < 2) or
+            (ansible_version.major == 2 and ansible_version.minor < 12) or
+            (ansible_version.major == 2 and ansible_version.minor == 12 and ansible_version.revision < 7)
+    - name: Check Jinja2 version
+      shell: | 
+        JINJA_VERSION=$(pip3 freeze | grep Jinja2 | sed 's/Jinja2==//g')
+        echo $JINJA_VERSION | tr '.' '\n'
+      register: version
+    - name: Fail if Jinja2 version is too old
+      fail:
+        msg: "Installed Jinja2 version is too old. Upgrade to at least 3.1.2"
+      when: (version.stdout_lines[0] | int < 3) or
+            (version.stdout_lines[0] | int == 3 and version.stdout_lines[1] | int < 1) or
+            (version.stdout_lines[0] | int == 3 and version.stdout_lines[1] | int == 1 and version.stdout_lines[2] | int < 2)
+      
