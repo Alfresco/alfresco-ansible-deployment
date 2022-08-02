@@ -41,3 +41,4 @@ provisioner:
       group_vars: ../../group_vars
   playbooks:
     converge: ../../playbooks/acs.yml
+    cleanup: cleanup-uninstall.yml

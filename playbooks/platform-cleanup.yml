@@ -1,0 +1,15 @@
+---
+# Playbook to clean artefacts post deployment
+ - hosts: all
+   vars:
+    artifacts_path: "{{ download_location | default('/tmp/ansible_artefacts') }}"
+   become: false
+   tasks:
+     - name: To display warning 
+       debug:
+         msg: '[WARNING]: This will remove the downloaded artifacts from your system'
+
+     - name: Removing "{{ artifacts_path }}"
+       ansible.builtin.file:
+        path: "{{ artifacts_path }}"
+        state: "absent"
