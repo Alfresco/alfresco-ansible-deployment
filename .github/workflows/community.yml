@@ -36,13 +36,10 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-         python-version-file: '.python-version'
-         cache: "pip"
+          python-version-file: '.python-version'
+          cache: "pip"
 
-      - run: |
-       pip install --user pipenv
-       pipenv install
-       pipenv run molecule
+      - run: pip install -r requirements.txt
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
