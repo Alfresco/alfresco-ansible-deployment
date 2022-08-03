@@ -34,7 +34,7 @@ jobs:
 
       - run: pip install --user pipenv
       - run: pipenv install Pipfile
-      - run: pipenv shell
+      - run: pipenv run molecule
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
         with:
