@@ -32,7 +32,7 @@ jobs:
           python-version-file: '.python-version'
           cache: "pip"
 
-      - run: pip install -r requirements.txt
+      - run: pip install --user pipenv
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
