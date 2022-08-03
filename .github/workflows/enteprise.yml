@@ -32,8 +32,10 @@ jobs:
           python-version-file: '.python-version'
           cache: "pip"
 
-      - run: pip install --user pipenv
-      - run: pipenv install Pipfile
+      - run: |
+      pip install --user pipenv
+      pipenv install 
+      pipenv run molecule
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
         with:
@@ -43,7 +45,6 @@ jobs:
         uses: ./.github/actions/setup-workspace
 
       - name: Run tests
-      - run: pipenv run molecule
         env:
           MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
           NEXUS_USERNAME: ${{ secrets.nexus_username }}
