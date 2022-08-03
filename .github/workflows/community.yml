@@ -41,6 +41,7 @@ jobs:
 
       - run: pip install --user pipenv
       - run: pipenv install Pipfile
+      - run: pipenv shell
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
 
