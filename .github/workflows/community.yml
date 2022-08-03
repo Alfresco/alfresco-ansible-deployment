@@ -41,7 +41,6 @@ jobs:
 
       - run: pip install --user pipenv
       - run: pipenv install Pipfile
-      - run: pipenv run molecule
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
 
@@ -49,6 +48,7 @@ jobs:
         uses: ./.github/actions/setup-workspace
 
       - name: Run tests
+      - run: pipenv run molecule
         env:
           MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
         uses: nick-fields/retry@v2
