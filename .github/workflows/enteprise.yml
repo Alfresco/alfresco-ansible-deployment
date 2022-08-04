@@ -33,6 +33,7 @@ jobs:
           cache: "pip"
 
       - run: pip install --user pipenv
+      - run: pipenv install
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
@@ -103,7 +104,8 @@ jobs:
           python-version-file: '.python-version'
           cache: "pip"
 
-      - run: pip install -r requirements.txt
+      - run: pip install --user pipenv
+      - run: pipenv install
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
@@ -125,6 +127,7 @@ jobs:
 
       - name: Run tests
         timeout-minutes: 120
+        run: pipenv run molecule test
         env:
           MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
           MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
