@@ -65,8 +65,16 @@ If you have GPG setup, use `git tag -s` otherwise `git tag -a`.
 
 Tag name must have `v` prefix.
 
-Example:
+Example with GPG sign enabled:
 
 ```bash
-git tag -s v2.0.0 -m v2.0.0
+git tag -s v2.x.x -m v2.x.x
 ```
+
+Then push the tag with:
+
+```bash
+git push origin v2.x.x
+```
+
+Check that the triggered [Release workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml) go green.

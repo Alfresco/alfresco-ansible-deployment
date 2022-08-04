@@ -4,9 +4,9 @@ amps:
   device_sync:
     version: 3.6.0
   googledrive_repo:
-    version: 3.2.1
+    version: 3.2.2
   googledrive_share:
-    version: 3.2.1
+    version: 3.2.2
   ags_repo:
     version: 3.5.0
   ags_share:
