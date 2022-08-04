@@ -127,7 +127,6 @@ jobs:
 
       - name: Run tests
         timeout-minutes: 120
-        run: pipenv run molecule test
         env:
           MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
           MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
@@ -136,7 +135,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
           CLONE_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
-        run: ./tests/molecule_it/script.sh verify
+        run: pipenv run molecule && ./tests/molecule_it/script.sh verify
 
       - name: Cleanup tests
         if: always()
