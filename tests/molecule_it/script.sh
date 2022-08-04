@@ -21,14 +21,14 @@ if [ -n "$MOLECULE_IT_SCENARIO" ]; then
     fi
     if [ "$1" == 'destroy' ]; then
         # shellcheck disable=SC2086
-        molecule $EXTRA_CONFIG destroy -s "$MOLECULE_IT_SCENARIO"
+       pipenv run molecule && molecule $EXTRA_CONFIG destroy -s "$MOLECULE_IT_SCENARIO"
     elif [ "$1" == 'verify' ]; then
         # shellcheck disable=SC2086
-        molecule $EXTRA_CONFIG converge -s "$MOLECULE_IT_SCENARIO"
+       pipenv run molecule && molecule $EXTRA_CONFIG converge -s "$MOLECULE_IT_SCENARIO"
         # shellcheck disable=SC2086
-        molecule $EXTRA_CONFIG side-effect -s "$MOLECULE_IT_SCENARIO"
+        pipenv run molecule && molecule $EXTRA_CONFIG side-effect -s "$MOLECULE_IT_SCENARIO"
         # shellcheck disable=SC2086
-        molecule $EXTRA_CONFIG verify -s "$MOLECULE_IT_SCENARIO"
+       pipenv run molecule && molecule $EXTRA_CONFIG verify -s "$MOLECULE_IT_SCENARIO"
     else
         echo "$1: invalid command"
         exit 1
