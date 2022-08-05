@@ -33,7 +33,7 @@ jobs:
           cache: "pip"
 
       - run: pip install --user pipenv
-      - run: pipenv install --deploy
+      - run: pipenv install
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
@@ -105,7 +105,7 @@ jobs:
           cache: "pip"
 
       - run: pip install --user pipenv
-      - run: pipenv install --deploy
+      - run: pipenv install
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
@@ -155,3 +155,4 @@ jobs:
           max_attempts: 3
           retry_wait_seconds: 60
           command: ./tests/molecule_it/script.sh destroy
+          
