@@ -53,7 +53,7 @@ jobs:
           timeout_minutes: 60
           max_attempts: 3
           retry_wait_seconds: 10
-          command: cd roles/${{ matrix.role.name }} && molecule test
+          command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
 
   ec2:
     if: github.actor != 'dependabot[bot]'
