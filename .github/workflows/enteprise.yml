@@ -155,4 +155,3 @@ jobs:
           max_attempts: 3
           retry_wait_seconds: 60
           command: ./tests/molecule_it/script.sh destroy
-          
