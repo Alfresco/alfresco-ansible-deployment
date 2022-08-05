@@ -33,7 +33,7 @@ jobs:
           cache: "pip"
 
       - run: pip install --user pipenv
-      - run: pipenv install
+      - run: pipenv install --deploy
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
@@ -105,7 +105,7 @@ jobs:
           cache: "pip"
 
       - run: pip install --user pipenv
-      - run: pipenv install
+      - run: pipenv install --deploy
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
@@ -135,9 +135,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
           CLONE_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
-        run: |
-         pipenv run molecule
-         ./tests/molecule_it/script.sh verify
+        run: ./tests/molecule_it/script.sh verify
 
       - name: Cleanup tests
         if: always()

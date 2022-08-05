@@ -187,7 +187,7 @@ Not all distributions of Linux may have that specific version of Ansible. Below 
     cd alfresco-ansible-deployment
     mkvirtualenv alfresco-ansible
     pip install --user pipenv
-    pipenv install Pipfile
+    pipenv install
     ansible-galaxy install -r requirements.yml
     ```
 
