@@ -16,6 +16,14 @@
         state: present
         disable_gpg_check: true
       loop: "{{  imagemagick_packages }}"
+      when: ansible_distribution != 'Rocky'
+
+    - name: Install imagemagick for RockyLinux 8
+      yum:
+        name: "{{ download_location }}/{{ item }}-{{ imagemagick_version }}.{{ ansible_architecture }}.{{ pkg_format }}"
+        state: present
+      loop: "{{  imagemagick_packages }}"
+      when: ansible_distribution == 'Rocky'
 
     - name: Install LibreOffice RPMs
       shell:
