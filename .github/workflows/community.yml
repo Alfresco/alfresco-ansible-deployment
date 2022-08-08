@@ -27,7 +27,7 @@ jobs:
           - name: postgres
           - name: search
           - name: tomcat
-#          - name: transformers
+          - name: transformers
     env:
       PY_COLORS: 1
     steps:

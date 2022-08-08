@@ -20,7 +20,7 @@ jobs:
           - name: repository
           - name: sfs
           - name: sync
-#         - name: trouter
+          - name: trouter
     env:
       PY_COLORS: 1
     steps:
