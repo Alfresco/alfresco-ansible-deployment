@@ -19,6 +19,18 @@
   tags:
     - molecule-idempotence-notest
 
+- name: Download ImageMagick distribution
+  vars:
+    pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}.{{ pkg_format }}"
+    pkg_url: "{{ nexus_repository.releases }}/../imagemagick/imagemagick-distribution/{{ imagemagick_version }}/{{ pkg_name }}"
+  get_url:
+    url: "{{ pkg_url }}"
+    checksum: "sha1:{{ lookup('url', pkg_url + '.sha1') }}"
+    dest: "{{ download_location }}/{{ pkg_name }}"
+    mode: "0644"
+  loop: "{{  imagemagick_packages }}"
+  when: ansible_distribution != 'Rocky'
+
 - name: ATS installation
   become: true
   block:
