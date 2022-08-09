@@ -7,16 +7,5 @@ Vagrant.configure("2") do |config|
     v.memory = 10240
     v.cpus = 4
   end
-  config.vm.provision :ansible_local do |ansible|
-    ansible.playbook = "playbooks/acs.yml"
-    ansible.inventory_path = "inventory_local.yml"
-    ansible.limit = "all"
-    ansible.become = true
-    ansible.galaxy_role_file = "requirements.yml"
-    ansible.extra_vars = {
-      nexus_user: ENV['NEXUS_USERNAME'],
-      nexus_password: ENV['NEXUS_PASSWORD'],
-      autogen_unsecure_secrets: true
-    }
-  end
+  
 end
