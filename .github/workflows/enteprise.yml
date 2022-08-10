@@ -67,25 +67,28 @@ jobs:
         molecule_scenario:
           - name: default
             vars: vars-centos7.yml
-            desc: ACS 6.2 Ec2 tests (Centos7)
+            desc: ACS 6.2 (Centos7)
           - name: default
             vars: vars-rhel7.yml
-            desc: ACS 7.0 Ec2 tests (RHEL7)
+            desc: ACS 7.0 (RHEL7)
           - name: default
             vars: vars-ubuntu18.yml
-            desc: ACS 7.1 Ec2 tests (Ubuntu 18.04)
+            desc: ACS 7.1 (Ubuntu 18.04)
           - name: default
             vars: vars-rhel8.yml
-            desc: ACS 7.1 Ec2 tests (RHEL8)
+            desc: ACS 7.1 (RHEL8)
           - name: default
             vars: vars-ubuntu20-community.yml
-            desc: latest Community Ec2 tests (Ubuntu 20.04)
+            desc: ACS 7.2 Community (Ubuntu 20.04)
           - name: default
             vars: vars-ubuntu20.yml
-            desc: latest Enterprise Ec2 tests (Ubuntu 20.04)
+            desc: ACS 7.2 (Ubuntu 20.04)
+          - name: default
+            vars: vars-rocky8.yml
+            desc: ACS 7.2 (Rocky Linux 8)
           - name: multimachine
             vars: vars.yml
-            desc: latest Cluster Ec2 tests (RHEL8)
+            desc: ACS 7.2 clustered (RHEL8)
     env:
       PY_COLORS: 1
       BUILD_NUMBER: ${{ github.run_id }}
