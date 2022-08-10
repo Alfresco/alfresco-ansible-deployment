@@ -92,7 +92,7 @@ dependencies_version:
   java: 11.0.15
   java_build: 10
   tomcat: 9.0.59
-  libreoffice: 7.2.5
+  libreoffice: 7.2.5.2
   pdf_renderer: 1.1
 
 apache_archive_url: https://archive.apache.org
