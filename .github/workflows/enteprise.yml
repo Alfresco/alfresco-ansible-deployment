@@ -135,9 +135,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
           CLONE_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
-        run: |
-         pipenv run molecule
-         ./tests/molecule_it/script.sh verify
+        run: molecule ./tests/molecule_it/script.sh verify
 
       - name: Cleanup tests
         if: always()
@@ -155,3 +153,4 @@ jobs:
           max_attempts: 3
           retry_wait_seconds: 60
           command: ./tests/molecule_it/script.sh destroy
+          

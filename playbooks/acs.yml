@@ -1,20 +1,4 @@
 ---
-- name: Install pipenv
-  hosts: 127.0.0.1
-  connection: local
-
-  tasks: 
-    - name: Upgrade python
-      shell:  | 
-        sudo su
-        add-apt-repository ppa:deadsnakes/ppa
-        apt-get update
-        apt-get install python3.9 -y
-        apt-get install python3-pip -y
-        pip3 install -U urllib3 requests
-        python3.9 -m pip install pipenv
-        pipenv install
-        
 - name: Check required dependencies
   ansible.builtin.import_playbook: check-versions.yml
 
