@@ -7,4 +7,4 @@ python3.9 -m pip install pipenv
 cd /vagrant
 python3.9 -m pipenv install --deploy
 python3.9 -m pipenv run ansible-galaxy install -r requirements.yml
-python3.9 -m pipenv run ansible-playbook -i inventory_local.yml playbooks/acs.yml
+python3.9 -m pipenv run ansible-playbook -i inventory_local.yml -e "autogen_unsecure_secrets=true" playbooks/acs.yml
