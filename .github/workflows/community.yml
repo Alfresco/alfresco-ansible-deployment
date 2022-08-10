@@ -28,6 +28,27 @@ jobs:
           - name: search
           - name: tomcat
           - name: transformers
+        exclude: # saves some build time building common roles that get tested anyway
+          - molecule_distro:
+              image: rockylinux:8
+            role:
+              name: common
+          - molecule_distro:
+              image: rockylinux:8
+            role:
+              name: java
+          - molecule_distro:
+              image: rockylinux:8
+            role:
+              name: nginx
+          - molecule_distro:
+              image: rockylinux:8
+            role:
+              name: postgres
+          - molecule_distro:
+              image: rockylinux:8
+            role:
+              name: tomcat
     env:
       PY_COLORS: 1
     steps:
