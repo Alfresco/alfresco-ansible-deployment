@@ -157,46 +157,76 @@ To access the machine vagrant created and ran the playbook on use `vagrant ssh`.
 
 ## Setup A Control Node
 
-As mentioned in the introduction a control node is required to run the playbook.
-**Required Ansible version is 2.12.**
+As mentioned in the introduction, a control node is required to run the playbook.
 
-Not all distributions of Linux may have that specific version of Ansible. Below describes how to configure a control node for deployment with one of the many ways to set a python virtual environment, so you can install the exact same versions of ansible and its dependencies we use when testing (without impacting your system installation of python). Doing so you're ensuring best chances of success.
+### Download playbook
 
-1. If you're not working directly working on the control node, transfer the ZIP file to the control node together with the SSH private key required to login to the target machines, and SSH into the machine:
+If you're not working directly working on the control node, transfer the ZIP
+file to the control node together with the SSH private key required to login to
+the target machines, and SSH into the machine:
 
-    ```bash
-    scp  alfresco-ansible-deployment-<version>.zip user@controlnode:
-    scp  ~/.ssh/ansible_rsa user@controlnode:.ssh
-    ssh  user@controlnode
-    ```
+```bash
+scp  alfresco-ansible-deployment-<version>.zip user@controlnode:
+scp  ~/.ssh/ansible_rsa user@controlnode:.ssh
+ssh  user@controlnode
+unzip alfresco-ansible-deployment-<version>.zip
+cd alfresco-ansible-deployment
+```
 
-    > You may want to generate an SSH key pair locally and use it later for deployment. Wether you generate one or you use one you copied over to the control node, it is your responsibility to deploy it to the target machines so Ansible can use it.
-    > Using SSH keys is recommended but not mandatory. If using password instead make sure to add the `-k`switch to the ansible command so it prompts you for a password.
+You can also use GIT to fetch latest sources (or a specific release for example by adding `-b v2.1.0`) on the control node with:
 
-2. Check prerequisites and install required tools:
+```bash
+git clone https://github.com/Alfresco/alfresco-ansible-deployment.git
+cd alfresco-ansible-deployment
+```
 
-    ```bash
-    python --version # must be at least 3.8 in order to use Ansible 2.12
-    sudo apt install virtualenvwrapper unzip # Use your distro's package manager instead of apt if it's not Debian based
-    ```
+> You may want to generate an SSH key pair locally and use it later for
+> deployment. Wether you generate one or you use one you copied over to the
+> control node, it is your responsibility to deploy it to the target machines so
+> Ansible can use it. Using SSH keys is recommended but not mandatory. If using
+> password instead make sure to add the `-k`switch to the ansible command so it
+> prompts you for a password.
 
-3. Install Ansible and required dependencies while also creating virtual environment:
+### Setup runtime environment
 
-    ```bash
-    unzip alfresco-ansible-deployment-<version>.zip
-    cd alfresco-ansible-deployment
-    mkvirtualenv alfresco-ansible
-    pip install --user pipenv
-    pipenv install --deploy
-    ansible-galaxy install -r requirements.yml
-    ```
+Check prerequisites and install required tools (the usage of pipenv is mandatory
+to setup tested python dependencies):
 
-4. If you intend to deploy an Enterprise system, create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
+```bash
+python --version # must be at least 3.8 in order to use Ansible 2.12
+pip install --user pipenv
+```
 
-    ```bash
-    export NEXUS_USERNAME="<your-username>"
-    export NEXUS_PASSWORD="<your-password>"
-    ```
+If `pip` is not available, you can try with the [pipenv full
+bootstrap](https://pipenv.pypa.io/en/latest/install/#crude-installation-of-pipenv):
+
+```bash
+curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+```
+
+Now you can install Ansible and required runtime dependencies in a dedicated
+virtual environment managed by pipenv:
+
+```bash
+pipenv install --deploy
+pipenv run ansible-galaxy install -r requirements.yml
+```
+
+> When using `pipenv`, it is sufficient to prefix any ansible command with
+> `pipenv run`. We always provide command snippets in this documentation with
+> that prefix for your copy-pasting convenience. Keep in mind that you can also
+> run `pipenv shell` that will spawn a new shell that automatically assume that
+> every command is related to the current pipenv virtualenv. You can exit from
+> that shell just by using `exit` or `Ctrl+D`.
+
+If you intend to deploy an Enterprise system, create the mandatory environment
+variables that hold your Nexus credentials as shown below (replacing the values
+appropriately):
+
+```bash
+export NEXUS_USERNAME="<your-username>"
+export NEXUS_PASSWORD="<your-password>"
+```
 
 Now you have the control node setup you can [configure](#configure-your-deployment) your deployment and decide what kind of deployment you would like.
 
@@ -242,7 +272,7 @@ via user input on each ansible-playbook run using the `--ask-vault-pass` flag
 (example below), to more advanced scenarios.
 
 ```bash
-ansible-playbook --ask-vault-pass playbooks/acs.yml
+pipenv run ansible-playbook --ask-vault-pass playbooks/acs.yml
 ```
 
 While we recommend to refer to the official Ansible documentation to properly configure
@@ -287,7 +317,7 @@ secrets that may be introduced in future versions of the playbook.
 To automatically setup/update secrets, run:
 
 ```bash
-ansible-playbook -e vault_init=encrypted_variables playbooks/secrets-init.yml
+pipenv run ansible-playbook -e vault_init=encrypted_variables playbooks/secrets-init.yml
 ```
 
 ##### Encrypted files
@@ -297,7 +327,7 @@ the first-time generation of secrets but for updates you have to provide them as
 described below. However you can provide your own passwords too.
 
 ```bash
-ansible-playbook -e vault_init=plaintext playbooks/secrets-init.yml
+pipenv run ansible-playbook -e vault_init=plaintext playbooks/secrets-init.yml
 ```
 
 and then replace the autogenerated passwords with your own.
@@ -306,7 +336,7 @@ To enable file encryption and automatically autogenerate any missing secrets,
 run:
 
 ```bash
-ansible-playbook  -e vault_init=encrypted_file playbooks/secrets-init.yml
+pipenv run ansible-playbook  -e vault_init=encrypted_file playbooks/secrets-init.yml
 ```
 
 After the first run, you can access the encrypted file vault with:
@@ -331,7 +361,7 @@ third-parties lookup plugins instead of using Ansible Vault.
 To generate a stub secrets file, run:
 
 ```bash
-ansible-playbook -e vault_init=plugin playbooks/secrets-init.yml
+pipenv run ansible-playbook -e vault_init=plugin playbooks/secrets-init.yml
 ```
 
 And then edit `vars/secrets.yml` to fill all the required arguments for the plugin you want to use as described in the plugin documentation pages:
@@ -478,25 +508,25 @@ The diagram below shows the result of a localhost deployment.
 To deploy ACS 7.1 Enterprise on the local machine navigate to the folder you extracted the ZIP to and execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
 
 ```bash
-ansible-playbook playbooks/acs.yml -i inventory_local.yml
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml
 ```
 
 Alternatively, to deploy an ACS Enterprise 7.0 system use the following command:
 
 ```bash
-ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@7.0.N-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@7.0.N-extra-vars.yml"
 ```
 
 Alternatively, to deploy an ACS Enterprise 6.2.N system use the following command:
 
 ```bash
-ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@6.2.N-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@6.2.N-extra-vars.yml"
 ```
 
 Or to deploy ACS Community use the following command:
 
 ```bash
-ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@community-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@community-extra-vars.yml"
 ```
 
 > NOTE: The playbook takes around 30 minutes to complete.
@@ -553,31 +583,31 @@ Once you have prepared the target host and configured the inventory_ssh.yaml fil
 To check your inventory file is configured correctly and the control node is able to connect to the target host navigate to the folder you extracted the ZIP to and run the following command:
 
 ```bash
-ansible all -m ping -i inventory_ssh.yml
+pipenv run ansible all -m ping -i inventory_ssh.yml
 ```
 
 To deploy ACS 7.1 Enterprise on the target host execute the playbook as the current user using the following command:
 
 ```bash
-ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
 ```
 
 Alternatively, to deploy an ACS 7.0 Enterprise system use the following command:
 
 ```bash
-ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.0.N-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.0.N-extra-vars.yml"
 ```
 
 Alternatively, to deploy an ACS 6.2.N Enterprise system use the following command:
 
 ```bash
-ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@6.2.N-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@6.2.N-extra-vars.yml"
 ```
 
 Or to deploy ACS Community use the following command:
 
 ```bash
-ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@community-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@community-extra-vars.yml"
 ```
 
 > NOTE: The playbook takes around 30 minutes to complete.
@@ -622,25 +652,25 @@ ansible all -m ping -i inventory_ssh.yml
 **Optional** To check if the required ports for the deployment are available on the target machine and we also have connectivity between nodes (ex. repository connecting to the db on 5432) please run the prerequisite_checks playbook before you deploy ACS. If there are any firewalls blocking connectivity this playbook will discover them.
 
 ```bash
-ansible-playbook playbooks/prerequisite_checks.yml -i inventory_ssh.yml
+pipenv run ansible-playbook playbooks/prerequisite_checks.yml -i inventory_ssh.yml
 ```
 
 To deploy ACS 7 Enterprise on the target hosts execute the playbook as the current user using the following command:
 
 ```bash
-ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
 ```
 
 Alternatively, to deploy an ACS 6.2.N Enterprise system use the following command:
 
 ```bash
-ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@6.2.N-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@6.2.N-extra-vars.yml"
 ```
 
 Or to deploy ACS Community use the following command:
 
 ```bash
-ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@community-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@community-extra-vars.yml"
 ```
 
 > NOTE: The playbook takes around 30 minutes to complete.
@@ -718,7 +748,7 @@ What needs to be removed from a system will depend on your inventory configurati
 This playbook will remove the temporary artifacts which are stored on the hosts.In order to cleanup the system post deployment run the following command:
 
 ```bash
-ansible-playbook playbooks/platform-cleanup.yml -i inventory_ssh.yml
+pipenv run ansible-playbook playbooks/platform-cleanup.yml -i inventory_ssh.yml
 ```
 
 > Note: This playbook can break the idempotency i.e Downloaded artifacts again needs to removed by running cleanup playbook.
@@ -759,7 +789,7 @@ This playbook will uninstall the sevices which belong to the specific hosts. Bel
 In order to uninstall this from the hosts run the following command:
 
 ```bash
-ansible-playbook playbooks/platform-uninstall.yml -i inventory_ssh.yml
+pipenv run ansible-playbook playbooks/platform-uninstall.yml -i inventory_ssh.yml
 ```
 
 ## Known Issues
