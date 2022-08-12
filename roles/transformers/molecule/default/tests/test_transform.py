@@ -63,4 +63,4 @@ def test_environment_jvm_opts(host):
 def test_libreoffice_install(host):
     """Check that libreoffice binary doesn't miss any dependencies"""
     p = host.run("/opt/libreoffice7.0/program/soffice.bin --version")
-    assert_that(p.stdout, contains_string("LibreOffice 7.0.6.2 144abb84a525d8e30c9dbbefa69cbbf2d8d4ae3b"))
+    assert_that(p.stdout, contains_string("LibreOffice 7.2.5.1 144abb84a525d8e30c9dbbefa69cbbf2d8d4ae3b"))
