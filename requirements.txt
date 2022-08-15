@@ -1,4 +1,4 @@
-ansible-core==2.12.7
+ansible-core==2.12.8
 ansible-lint==6.4.0
 jmespath==1.0.1
 molecule==4.0.1
