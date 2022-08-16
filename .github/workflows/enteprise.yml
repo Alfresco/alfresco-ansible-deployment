@@ -149,7 +149,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
         uses: nick-fields/retry@v2
         with:
-          timeout_minutes: 20
+          timeout_minutes: 30
           max_attempts: 3
           retry_wait_seconds: 60
           command: ./tests/molecule_it/script.sh destroy
