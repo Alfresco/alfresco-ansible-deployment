@@ -30,9 +30,10 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version-file: '.python-version'
-          cache: "pip"
+          cache: pipenv
 
-      - run: pip install -r requirements.txt
+      - run: pip install --user pipenv
+      - run: pipenv install --deploy --dev
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
@@ -52,7 +53,7 @@ jobs:
           timeout_minutes: 60
           max_attempts: 3
           retry_wait_seconds: 10
-          command: cd roles/${{ matrix.role.name }} && molecule test
+          command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
 
   ec2:
     if: github.actor != 'dependabot[bot]'
@@ -101,9 +102,10 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version-file: '.python-version'
-          cache: "pip"
+          cache: pipenv
 
-      - run: pip install -r requirements.txt
+      - run: pip install --user pipenv
+      - run: pipenv install --deploy --dev
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
