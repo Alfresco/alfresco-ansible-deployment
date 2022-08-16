@@ -4,5 +4,6 @@ jobs:
   install_python_packages:
     steps:
     - name: Install pipenv and its packages in virtual environment
-      run: pip install --user pipenv
-      run: pipenv install
+      run: |
+        pip install --user pipenv
+        pipenv install
