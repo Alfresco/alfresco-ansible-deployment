@@ -32,8 +32,8 @@ jobs:
           python-version-file: '.python-version'
           cache: pipenv
 
-      - run: pip install --user pipenv
-      - run: pipenv install --deploy --dev
+      - name: Install python packages
+      - uses: ./.github/actions/pipenv
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
