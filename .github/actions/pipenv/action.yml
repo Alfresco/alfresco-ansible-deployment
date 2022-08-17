@@ -1,11 +1,12 @@
-name: install_python_packages
-description: 'Install python packages and create pipenv'
+name: pipenv
+description: 'Install python packages with pipenv'
 
 runs:
   using: "composite"
   steps: 
-  - name: Install pipenv and Pipfile
+  - name: Install pipenv
     shell: bash
-    run: |
-      pip install --user pipenv
-      pipenv install --deploy --dev
+    run: pip install --user pipenv
+  - name: Install packages from Pipfile
+    shell: bash
+    run: pipenv install --deploy --dev
