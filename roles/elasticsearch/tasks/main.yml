@@ -1,0 +1,72 @@
+---
+- name: Create elasticsearch data directory
+  ansible.builtin.file:
+    path: /usr/share/elasticsearch/data
+    state: directory
+    mode: '0700'
+    owner: 1000
+    group: 0
+
+- name: Run elasticsearch as a Docker container
+  community.docker.docker_container:
+    name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    env:
+      discovery.type: single-node
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - /usr/share/elasticsearch/data:/usr/share/elasticsearch/data
+
+- name: Log into private quay.io
+  community.docker.docker_login:
+    registry_url: quay.io
+    username: "{{ lookup('ansible.builtin.env', 'QUAY_USERNAME') }}"
+    password: "{{ lookup('ansible.builtin.env', 'QUAY_PASSWORD') }}"
+
+- name: Run Enterprise Search mediation as a Docker container
+  community.docker.docker_container:
+    name: mediation
+    image: quay.io/alfresco/alfresco-elasticsearch-live-indexing-mediation:3.1.1
+    ports:
+      - "8100:8080"
+    env:
+      SPRING_ELASTICSEARCH_REST_URIS: "http://elasticsearch:9200"
+      SPRING_ACTIVEMQ_BROKERURL: failover:(nio://172.18.0.1:61616)?timeout=3000&jms.useCompression=true
+      ELASTICSEARCH_INDEXNAME: alfresco
+
+- name: Run Enterprise Search content as a Docker container
+  community.docker.docker_container:
+    name: content
+    image: quay.io/alfresco/alfresco-elasticsearch-live-indexing-content:3.1.1
+    ports:
+      - "8101:8080"
+    env:
+      SPRING_ELASTICSEARCH_REST_URIS: "http://elasticsearch:9200"
+      SPRING_ACTIVEMQ_BROKERURL: failover:(nio://172.18.0.1:61616)?timeout=3000&jms.useCompression=true
+      ELASTICSEARCH_INDEXNAME: alfresco
+
+
+- name: Run Enterprise Search metadata as a Docker container
+  community.docker.docker_container:
+    name: metadata
+    image: quay.io/alfresco/alfresco-elasticsearch-live-indexing-metadata:3.1.1
+    ports:
+      - "8102:8080"
+    env:
+      SPRING_ELASTICSEARCH_REST_URIS: "http://elasticsearch:9200"
+      SPRING_ACTIVEMQ_BROKERURL: failover:(nio://172.18.0.1:61616)?timeout=3000&jms.useCompression=true
+      ELASTICSEARCH_INDEXNAME: alfresco
+
+- name: Run Enterprise Search path as a Docker container
+  community.docker.docker_container:
+    name: path
+    image: quay.io/alfresco/alfresco-elasticsearch-live-indexing-path:3.1.1
+    ports:
+      - "8103:8080"
+    env:
+      SPRING_ELASTICSEARCH_REST_URIS: "http://elasticsearch:9200"
+      SPRING_ACTIVEMQ_BROKERURL: failover:(nio://172.18.0.1:61616)?timeout=3000&jms.useCompression=true
+      ELASTICSEARCH_INDEXNAME: alfresco

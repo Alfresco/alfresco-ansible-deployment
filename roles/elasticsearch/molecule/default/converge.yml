@@ -1,0 +1,10 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include activemq"
+      include_role:
+        name: "activemq"
+    - name: "Include elasticsearch role"
+      include_role:
+        name: "elasticsearch"
