@@ -6,3 +6,6 @@ sync_environment:
     - -Xms512m
     - -Xmx2g
     - $JAVA_OPTS
+jmx_config_remote_enabled: false
+jmx_config_remote_port: 50800
+jmx_config_remote_rmi_port: 50801
