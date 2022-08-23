@@ -1,2 +1,5 @@
 ---
 # vars file for sync
+jmx_config_remote_enabled: false
+jmx_config_remote_port: 50800
+jmx_config_remote_rmi_port: 50801
