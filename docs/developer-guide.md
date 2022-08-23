@@ -5,8 +5,7 @@ This page describes how to use pipenv library and pipenv commands when you are d
 ## Basic pipenv knowledge
 
 The general purpose of pipenv is similar to that of Package installer for Python (PIP) and built-in venv.
-This is external python library, which handles package installing from either commandline
-(with special pipenv prefix in shell, similar to pip install), requirements.txt or Pipfile.
+This is external python library, which handles package installing from either commandline (with special pipenv prefix in shell, similar to pip install), requirements.txt or Pipfile.
 Whether we install one package or dependencies from requirements.txt, pipenv creates Pipfile, a special file for itself,
 and then installs packages we specified inside virtual environment, NOT globally.
 While specifyng new package, pipenv adds that package name to Pipfile, installs it (while also generating hashcodes for .lock file)
@@ -57,25 +56,13 @@ Which uses molecule package installed in virtual environment to execute test
 > You need to always be sure you are using pipenv run command inside directory where you have previously executed
 > pipenv install command.
 
-## ACS deployment with Pipenv
-
-To deploy ACS 7.1 Enterprise on the local machine navigate to the folder you extracted the ZIP to and execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
-
-```bash
-pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml
-```
-
-To deploy ACS Community use the following command:
-
-```bash
-pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@community-extra-vars.yml"
-```
-
 ## Development
 
 The roles developed for this playbook are tested with [Molecule](https://molecule.readthedocs.io/en/latest/).
 
 ### Roles tests
+
+> NOTE: REMEMBER THESE COMMANDS NEED TO BE USED INSIDE VIRTUAL ENVIRONMENT, IF NOT YOU NEED TO ADD PREFIX PIPENV RUN
 
 You can run test for each role by entering the role folder and running `molecule test`:
 
@@ -99,25 +86,3 @@ To run an integration test you need execute molecule with `-e molecule/default/v
 ```bash
 molecule -e molecule/default/vars-rhel8.yml test
 ```
-
-## Release
-
-To start the release process, just create a tag and push it.
-
-If you have GPG setup, use `git tag -s` otherwise `git tag -a`.
-
-Tag name must have `v` prefix.
-
-Example with GPG sign enabled:
-
-```bash
-git tag -s v2.x.x -m v2.x.x
-```
-
-Then push the tag with:
-
-```bash
-git push origin v2.x.x
-```
-
-Check that the triggered [Release workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml) go green.
