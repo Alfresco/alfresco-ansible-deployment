@@ -57,7 +57,7 @@ Which uses molecule package installed in virtual environment to execute test
 > You need to always be sure you are using pipenv run command inside directory where you have previously executed
 > pipenv install command.
 
-## Deploying ACS
+## ACS deployment with Pipenv
 
 To deploy ACS 7.1 Enterprise on the local machine navigate to the folder you extracted the ZIP to and execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
 
@@ -70,3 +70,54 @@ To deploy ACS Community use the following command:
 ```bash
 pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@community-extra-vars.yml"
 ```
+
+## Development
+
+The roles developed for this playbook are tested with [Molecule](https://molecule.readthedocs.io/en/latest/).
+
+### Roles tests
+
+You can run test for each role by entering the role folder and running `molecule test`:
+
+```bash
+cd roles/activemq
+molecule test
+```
+
+### Integration tests
+
+On the root folder there is a molecule scenario to run the entire playbook on EC2 instances with different operating systems.
+
+Some environment variables are required to execute integration tests locally, please take a look at the [.envrc](.envrc) file.
+
+To have environment variables automatically loaded when entering the project folder on your machine, you may want to install [direnv](https://direnv.net/).
+
+Scenario-specific variables are defined in the `vars-scenario.yml` files inside the `molecule/default` folder.
+
+To run an integration test you need execute molecule with `-e molecule/default/vars-scenario.yml` parameter:
+
+```bash
+molecule -e molecule/default/vars-rhel8.yml test
+```
+
+## Release
+
+To start the release process, just create a tag and push it.
+
+If you have GPG setup, use `git tag -s` otherwise `git tag -a`.
+
+Tag name must have `v` prefix.
+
+Example with GPG sign enabled:
+
+```bash
+git tag -s v2.x.x -m v2.x.x
+```
+
+Then push the tag with:
+
+```bash
+git push origin v2.x.x
+```
+
+Check that the triggered [Release workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml) go green.
