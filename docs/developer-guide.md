@@ -61,11 +61,39 @@ The roles developed for this playbook are tested with [Molecule](https://molecul
 
 > NOTE: REMEMBER THESE COMMANDS NEED TO BE USED INSIDE VIRTUAL ENVIRONMENT, IF NOT YOU NEED TO ADD PREFIX PIPENV RUN
 
-You can run test for each role by entering the role folder and running `molecule test`:
+You can run Molecule tests on your machine if you have a Docker Engine installed locally.
 
-```bash
+Enter the role folder and run `molecule <action>` (see [official docs]\(<https://molecule.readthedocs.io/en/latest/getting-started>.html#run-test-sequence-commands)).
+
+ To provision the `activemq` role run:
+
+```sh
 cd roles/activemq
-molecule test
+molecule converge
+```
+
+ To execute tests after converge run successfully:
+
+```sh
+molecule verify
+```
+
+ To enter the container and inspect manually the state:
+
+```sh
+molecule login
+```
+
+ To destroy the container and release resources at the end:
+
+```sh
+molecule destroy
+```
+
+ If you want to test a different operating system, set the `MOLECULE_ROLE_IMAGE` to a different docker base image before converging:
+
+```sh
+MOLECULE_ROLE_IMAGE=ubuntu:20.04 molecule converge
 ```
 
 ### Integration tests
