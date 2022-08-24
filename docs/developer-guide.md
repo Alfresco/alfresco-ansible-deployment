@@ -39,7 +39,7 @@ Otherwise, if you are not planning to use virtual environment and need to just s
 you can use these commands which will execute them inside pipenv's virtual environment:
 
 ```bash
-pipenv run package_name
+pipenv run command
 ```
 
 Which runs said package in project's virtual environment, for example:
