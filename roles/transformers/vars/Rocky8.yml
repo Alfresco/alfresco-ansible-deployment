@@ -1,5 +1,5 @@
 ---
-imagemagick_version: 7.1.0-16-gha
+imagemagick_version: 7.1.0-16-ci
 imagemagick_packages:
   - imagemagick-distribution-rocky8-libs
   - imagemagick-distribution-rocky8
