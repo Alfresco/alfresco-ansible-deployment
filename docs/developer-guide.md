@@ -17,20 +17,19 @@ The default virtual environment is created in our working directory.
 ## Basic pipenv commands and usage for developers
 
 Pipenv comes with bunch of commands, but the most important are highlighted below:
+The command with flag --dev installs packages from Pipfile needed for developing purposes.
 
 ```bash
 pipenv install --dev
 ```
 
-The command with flag --dev installs packages from Pipfile needed for developing purposes.
+This command below is opening the virtual environment, that pipenv created while installing all packages.
+Once we are inside this environment, we can use all the packages which we specified in install command.
+This is the environment where it is highly recommended to develop python.
 
 ```bash
 pipenv shell
 ```
-
-This command is opening the virtual environment, that pipenv created while installing all packages.
-Once we are inside this environment, we can use all the packages which we specified in install command.
-This is the environment where it is highly recommended to develop python.
 
 > NOTE: We suggest for developers to run command pipenv shell and then use commands normally, within virtual environment
 > for example: molecule test
