@@ -1,6 +1,6 @@
 # Developers' guide
 
-This page describes how to use pipenv library and pipenv commands when you are developing on this repository.
+This page is a developer's guide to popular commands used in the process of setting up environment and testing.
 
 ## Basic pipenv knowledge
 
