@@ -20,7 +20,6 @@ RUN if [ $(command -v apt-get) ]; then export DEBIAN_FRONTEND=noninteractive && 
     elif [ $(command -v zypper) ]; then zypper refresh && zypper install -y python3 sudo bash iproute2 && zypper clean -a; \
     elif [ $(command -v apk) ]; then apk update && apk add --no-cache python3 sudo bash ca-certificates; \
     elif [ $(command -v xbps-install) ]; then xbps-install -Syu && xbps-install -y python3 sudo bash ca-certificates iproute2 && xbps-remove -O; fi
-  
 
 RUN set -xe \
   && DEPLOY_USER=ansible DEPLOY_GROUP=deployer \
@@ -29,4 +28,3 @@ RUN set -xe \
   && useradd -m -g ${DEPLOY_GROUP} ${DEPLOY_USER} \
   && usermod -aG ${SUDO_GROUP} ${DEPLOY_USER} \
   && sed -i "/^%${SUDO_GROUP}/s/ALL\$/NOPASSWD:ALL/g" /etc/sudoers
-  
