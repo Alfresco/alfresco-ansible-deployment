@@ -1,4 +1,4 @@
-# Pipenv developers' guide
+# Developers' guide
 
 This page describes how to use pipenv library and pipenv commands when you are developing on this repository.
 
