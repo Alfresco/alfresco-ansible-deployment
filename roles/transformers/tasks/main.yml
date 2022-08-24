@@ -29,7 +29,6 @@
     dest: "{{ download_location }}/{{ pkg_name }}"
     mode: "0644"
   loop: "{{  imagemagick_packages }}"
-  when: ansible_distribution != 'Rocky'
 
 - name: ATS installation
   become: true
