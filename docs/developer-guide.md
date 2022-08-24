@@ -10,7 +10,7 @@ Whether we install one package or dependencies from requirements.txt, pipenv cre
 and then installs packages we specified inside virtual environment, NOT globally.
 While specifyng new package, pipenv adds that package name to Pipfile, installs it (while also generating hashcodes for .lock file)
 and installs it inside virtual environment. Then we can also use this package we have installed.
-The default virtual environment is created in our working directory.
+The default virtual environment is created in our working directory. You may want to visit: <https://pipenv.pypa.io/en/latest/>
 
 > NOTE: Pipenv does not install packages globally but to virtual environment
 
