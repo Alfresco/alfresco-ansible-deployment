@@ -12,7 +12,7 @@ A user runs a playbook that deploys to any number of hosts as shown in the diagr
 
 ## Prerequisites
 
-* Nexus credentials for [https://artifacts.alfresco.com](https://artifacts.alfresco.com)
+* If you want to install the Enterprise version, Nexus credentials for [https://artifacts.alfresco.com](https://artifacts.alfresco.com)
 
 ## Documentation
 

@@ -23,13 +23,13 @@ NAME="alfresco-syncservice"
 
 ### Start of JMX config ###
 ### true | false
-ENABLE_JMX_REMOTE=true
-JMX_REMOTE_PORT=50800
+ENABLE_JMX_REMOTE={{ jmx_config_remote_enabled }}
+JMX_REMOTE_PORT={{ jmx_config_remote_port }}
 ### Remote JMX administration requires changing the following to the IP address of the Sync Service machine:
 #Specify a value only if intended to connect from a different network than the one Sync service is in.
 #Specify localhost or 127.0.0.1 if intended to be accessed only from localhost.
 JMX_RMI_HOSTNAME=
-JMX_REMOTE_RMI_PORT=50801
+JMX_REMOTE_RMI_PORT={{ jmx_config_remote_rmi_port }}
 
 ### true | false
 ENABLE_JMX_REMOTE_AUTHENTICATION=false

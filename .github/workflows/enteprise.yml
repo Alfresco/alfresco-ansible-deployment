@@ -30,9 +30,10 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version-file: '.python-version'
-          cache: "pip"
+          cache: pipenv
 
-      - run: pip install -r requirements.txt
+      - name: Install python packages
+        uses: ./.github/actions/pipenv
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
@@ -52,7 +53,7 @@ jobs:
           timeout_minutes: 60
           max_attempts: 3
           retry_wait_seconds: 10
-          command: cd roles/${{ matrix.role.name }} && molecule test
+          command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
 
   ec2:
     if: github.actor != 'dependabot[bot]'
@@ -101,9 +102,10 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version-file: '.python-version'
-          cache: "pip"
+          cache: pipenv
 
-      - run: pip install -r requirements.txt
+      - name: Install python packages
+        uses: ./.github/actions/pipenv
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
@@ -147,7 +149,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
         uses: nick-fields/retry@v2
         with:
-          timeout_minutes: 20
+          timeout_minutes: 30
           max_attempts: 3
           retry_wait_seconds: 60
           command: ./tests/molecule_it/script.sh destroy
