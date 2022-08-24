@@ -23,8 +23,6 @@ pipenv install --dev
 ```
 
 The command with flag --dev installs packages from Pipfile needed for developing purposes.
-If you are not inside the directory where the Pipfile exists, it will create blank Pipfile and not install any package.
-If you plan to work in another directory with the provided packages in Pipfile, you will have to copy that Pipfile to target directory.
 
 ```bash
 pipenv shell
