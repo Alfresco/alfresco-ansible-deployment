@@ -20,6 +20,10 @@ Please refer to the [Documentation](./docs/README.md) for an overview of the pro
 
 Users upgrading from previous versions of the playbook may want to take a look to [Upgrade Notes](docs/playbook-upgrade.md).
 
+## Development
+
+Developer's guide is available here [Developer's guide](docs/developer-guide.md).
+
 ## License
 
 The code in this repository is released under the Apache License, see the [LICENSE](./LICENSE) file for details.
