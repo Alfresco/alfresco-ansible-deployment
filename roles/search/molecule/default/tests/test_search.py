@@ -41,7 +41,7 @@ def test_solr_stats_is_accessible(host):
     curl_opts = '-iL'
     search_env = host.ansible.get_variables()
     if version.parse(search_env['search']['version']) >= version.parse('2.0.3'):
-        curl_opts += ' -H "X-Alfresco-Search-Secret: alfresco"'
+        curl_opts += ' -H "X-Alfresco-Search-Secret: alfresco with space"'
     print("curl {} http://{}:8983/solr/#/~cores/alfresco".format(curl_opts, test_host))
     alfresco_core_command = host.run("curl {} http://{}:8983/solr/#/~cores/alfresco".format(curl_opts, test_host))
     archive_core_command = host.run("curl {} http://{}:8983/solr/#/~cores/archive".format(curl_opts, test_host))
