@@ -11,17 +11,17 @@
 
     - name: Set solr.sharedSecret property
       set_fact:
-        temp_array: '{{ temp_array }} + [ ''-Dsolr.sharedSecret="{{ reposearch_shared_secret }}"'' ]'
+        temp_array: "{{ temp_array + [ '-Dsolr.sharedSecret=' ~ reposearch_shared_secret ] }}"
       when: acs.version is version('7.2.0', '>=')
 
     - name: Set metadata-keystore.password and related properties
       set_fact:
-        temp_array: '{{ temp_array }} + [
-          ''-Dmetadata-keystore.password="{{ repo_custom_keystore_password }}"'',
-          ''-Dmetadata-keystore.aliases=metadata'',
-          ''-Dmetadata-keystore.metadata.password="{{ repo_custom_keystore_metadata_password }}"'',
-          ]'
-      when: repo_custom_keystore_password is defined and repo_custom_keystore_metadata_password
+        temp_array: "{{ temp_array + [
+          '-Dmetadata-keystore.password=' ~ repo_custom_keystore_password,
+          '-Dmetadata-keystore.aliases=metadata',
+          '-Dmetadata-keystore.metadata.password=' ~ repo_custom_keystore_metadata_password
+          ] }}"
+      when: repo_custom_keystore_password is defined and repo_custom_keystore_metadata_password is defined
 
     - name: Combine secure acs environment
       set_fact:
