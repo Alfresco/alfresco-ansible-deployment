@@ -31,9 +31,6 @@ This is the environment where it is highly recommended to develop python.
 pipenv shell
 ```
 
-> NOTE: We suggest for developers to run command pipenv shell and then use commands normally, within virtual environment
-> for example: molecule test
-
 Otherwise, if you are not planning to use virtual environment and need to just simply use molecule (or any other package),
 you can use these commands which will execute them inside pipenv's virtual environment:
 
