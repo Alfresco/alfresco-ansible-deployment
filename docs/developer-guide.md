@@ -27,6 +27,9 @@ This command below is opening the virtual environment, that pipenv created while
 Once we are inside this environment, we can use all the packages which we specified in install command.
 This is the environment where it is highly recommended to develop python.
 
+> NOTE: Right now it is not supported by pipenv to have two virtual environments in the same directory, so if you
+> try work with two differents environments within same directory, you will overwrite the previously created virtual environment
+
 ```bash
 pipenv shell
 ```
