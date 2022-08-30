@@ -47,7 +47,7 @@
 
         - name: Prepare contentstore FS
           when: molecule_yml.platforms | selectattr('name', 'in', groups.repository) | length > 1
-          become: true
+          become: yes
           delegate_to: "{{ groups.repository | first }}"
           block:
             - name: install required packages

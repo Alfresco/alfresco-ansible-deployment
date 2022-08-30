@@ -1,7 +1,7 @@
 ---
 # handlers file for tomcat (alfresco-content)
 - name: enable-alfresco-content
-  become: true
+  become: yes
   service:
     name: "alfresco-content"
     enabled: true

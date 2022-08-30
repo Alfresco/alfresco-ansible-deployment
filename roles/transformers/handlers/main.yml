@@ -9,14 +9,14 @@
     connect_timeout: 5
 
 - name: enable-aio
-  become: true
+  become: yes
   service:
     name: alfresco-tengine-aio
     enabled: true
     daemon_reload: true
 
 - name: restart-aio
-  become: true
+  become: yes
   service:
     name: alfresco-tengine-aio
     state: restarted

@@ -33,7 +33,7 @@
   loop: "{{  imagemagick_packages }}"
 
 - name: ATS installation
-  become: true
+  become: yes
   block:
     - name: Ensure a list of packages installed
       package:

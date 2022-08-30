@@ -5,7 +5,7 @@
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
 - name: Install T-Router
-  become: true
+  become: yes
   block:
     - name: Ensure a list of packages installed
       package:
@@ -66,7 +66,7 @@
         - restart-trouter
 
 - name: Download alfresco-transform-router.jar
-  become: true
+  become: yes
   get_url:
     url: "{{ downloads.trouter_jar_url }}"
     dest: "{{ ats_home }}/alfresco-transform-router-{{ trouter.version }}.jar"

@@ -4,7 +4,7 @@
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
 - name: Install & configure NGINX reverse proxy
-  become: true
+  become: yes
   block:
     - name: Enable EPEL repository
       yum_repository:

@@ -6,14 +6,14 @@
     port: "{{ ports_cfg.nginx.http }}"
 
 - name: enable-sync
-  become: true
+  become: yes
   service:
     name: alfresco-sync
     enabled: true
     daemon_reload: true
 
 - name: restart-sync
-  become: true
+  become: yes
   service:
     name: alfresco-sync
     state: restarted

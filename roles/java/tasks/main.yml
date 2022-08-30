@@ -8,7 +8,7 @@
     timeout: 570
 
 - name: Install OpenJDK v{{ dependencies_version.java }}
-  become: true
+  become: yes
   block:
     - name: Unarchive tar.gz
       unarchive:

@@ -1,7 +1,7 @@
 ---
 # tasks file for sfs
 - name: Install SFS
-  become: true
+  become: yes
   block:
     - name: Ensure a list of packages installed
       package:

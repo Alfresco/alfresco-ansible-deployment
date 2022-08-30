@@ -1,7 +1,7 @@
 ---
 - hosts: adw
   gather_facts: no
-  become: true
+  become: yes
   tasks:
     - name: Stop Alfresco Digital Workspace
       service:
@@ -13,7 +13,7 @@
 
 - hosts: nginx
   gather_facts: no
-  become: true
+  become: yes
   tasks:
     - name: Stop Reverse Proxy
       service:
@@ -25,7 +25,7 @@
 
 - hosts: syncservice
   gather_facts: no
-  become: true
+  become: yes
   tasks:
     - name: Stop Alfresco Sync services
       service:
@@ -37,7 +37,7 @@
 
 - hosts: search
   gather_facts: no
-  become: true
+  become: yes
   tasks:
     - name: Stop Alfresco Search services
       service:
@@ -49,7 +49,7 @@
 
 - hosts: repository
   gather_facts: no
-  become: true
+  become: yes
   tasks:
     - name: Stop Alfresco Content services
       service:
@@ -61,7 +61,7 @@
 
 - hosts: transformers
   gather_facts: no
-  become: true
+  become: yes
   tasks:
     - name: Stop Alfresco Transformation services
       service:
@@ -76,7 +76,7 @@
         - stop
 
 - hosts: database
-  become: true
+  become: yes
   tasks:
     - name: Stop PostgreSQL
       service:
@@ -88,7 +88,7 @@
 
 - hosts: activemq
   gather_facts: no
-  become: true
+  become: yes
   tasks:
     - name: Stop ActiveMQ
       service:
@@ -100,7 +100,7 @@
 
 - hosts: activemq
   gather_facts: no
-  become: true
+  become: yes
   tasks:
     - name: Start ActiveMQ
       service:
@@ -111,7 +111,7 @@
         - start
 
 - hosts: database
-  become: true
+  become: yes
   tasks:
     - name: Start PostgreSQL
       service:
@@ -123,7 +123,7 @@
 
 - hosts: transformers
   gather_facts: no
-  become: true
+  become: yes
   tasks:
     - name: Start Alfresco Transformation services
       service:
@@ -139,7 +139,7 @@
 
 - hosts: repository
   gather_facts: no
-  become: true
+  become: yes
   tasks:
     - name: Start Alfresco Content services
       service:
@@ -151,7 +151,7 @@
 
 - hosts: search
   gather_facts: no
-  become: true
+  become: yes
   tasks:
     - name: Start Alfresco Search services
       service:
@@ -163,7 +163,7 @@
 
 - hosts: syncservice
   gather_facts: no
-  become: true
+  become: yes
   tasks:
     - name: Start Alfresco Sync services
       service:
@@ -175,7 +175,7 @@
 
 - hosts: nginx
   gather_facts: no
-  become: true
+  become: yes
   tasks:
     - name: Start Reverse Proxy
       service:

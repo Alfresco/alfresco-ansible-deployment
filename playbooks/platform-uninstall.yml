@@ -1,7 +1,7 @@
 ---
 #### This playbook will uninstall ACS
 - hosts: database
-  become: true
+  become: yes
   ignore_unreachable: true
   tasks:
     - name: Removing the Packages
@@ -11,7 +11,7 @@
         autoremove: yes
 
 - hosts: activemq
-  become: true
+  become: yes
   ignore_unreachable: true
   handlers:
     - import_tasks: "handlers/uninstall-handlers.yml"
@@ -38,7 +38,7 @@
       notify: Reload systemd
 
 - hosts: transformers
-  become: true
+  become: yes
   ignore_unreachable: true
   handlers:
     - import_tasks: "handlers/uninstall-handlers.yml"
@@ -79,7 +79,7 @@
       notify: Reload systemd
 
 - hosts: search
-  become: true
+  become: yes
   ignore_unreachable: true
   handlers:
     - import_tasks: "handlers/uninstall-handlers.yml"
@@ -105,7 +105,7 @@
       notify: Reload systemd
 
 - hosts: syncservice
-  become: true
+  become: yes
   ignore_unreachable: true
   handlers:
     - import_tasks: "handlers/uninstall-handlers.yml"
@@ -131,7 +131,7 @@
       notify: Reload systemd
 
 - hosts: nginx
-  become: true
+  become: yes
   ignore_unreachable: true
   tasks:
     - name: Removing the Packages
@@ -141,7 +141,7 @@
         autoremove: yes
 
 - hosts: repository
-  become: true
+  become: yes
   ignore_unreachable: true
   handlers:
     - import_tasks: "handlers/uninstall-handlers.yml"

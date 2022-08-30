@@ -20,7 +20,7 @@
     creates: "{{ download_location }}/sync/service-sync/service-sync-{{ sync.version }}.jar"
 
 - name: Install Sync service
-  become: true
+  become: yes
   block:
     - name: Ensure a list of packages installed
       package:

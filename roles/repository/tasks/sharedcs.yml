@@ -1,6 +1,6 @@
 ---
 - name: Shared contentstore preparation
-  become: true
+  become: yes
   when: cs_storage.device is defined
   block:
     - name: Create contentstore folders

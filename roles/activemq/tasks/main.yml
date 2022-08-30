@@ -18,7 +18,7 @@
   retries: 300
 
 - name: Install ActiveMQ
-  become: true
+  become: yes
   block:
     - name: Extract apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz
       unarchive:
@@ -117,7 +117,7 @@
           export ACTIVEMQ_HOST={{ activemq_host }}
 
     - name: Add activemq wrapper script
-      become: true
+      become: yes
       template:
         src: activemq.sh.j2
         dest: "{{ binaries_folder }}/activemq.sh"

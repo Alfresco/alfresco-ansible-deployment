@@ -4,7 +4,7 @@
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
 - name: Install PostgreSQL RDBMS
-  become: true
+  become: yes
   block:
     - name: Prepare package manager
       include_tasks: "{{ ansible_pkg_mgr }}_repo.yml"
@@ -24,7 +24,7 @@
       when: ansible_os_family == 'RedHat'
 
 - name: Configure PostgreSQL RDBMS
-  become: true
+  become: yes
   block:
     - name: Configure postgresql to listen on all IP interfaces
       lineinfile:
@@ -56,7 +56,7 @@
   meta: flush_handlers
 
 - name: Configure PostgreSQL RDBMS
-  become: true
+  become: yes
   become_user: postgres
   vars:
     ansible_ssh_pipelining: yes

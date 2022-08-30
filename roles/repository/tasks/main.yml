@@ -30,13 +30,13 @@
       when: temp_array|length > 0
 
 - name: Ensure a list of packages installed
-  become: true
+  become: yes
   ansible.builtin.package:
     name: "{{ utils_repo + utils_storage[cs_storage.type | default('tmpfs')] }}"
     state: present
 
 - name: Create folders
-  become: true
+  become: yes
   file:
     path: "{{ item }}"
     state: directory
@@ -63,7 +63,7 @@
   include_tasks: sharedcs.yml
 
 - name: Download war files
-  become: true
+  become: yes
   loop: "{{ war_downloads }}"
   get_url:
     url: "{{ item.url }}"
@@ -95,7 +95,7 @@
     - molecule-idempotence-notest
 
 - name: Download AMPS
-  become: true
+  become: yes
   loop: "{{ amp_downloads }}"
   get_url:
     url: "{{ item.url }}"
@@ -114,7 +114,7 @@
     - molecule-idempotence-notest
 
 - name: Download postgresql jar
-  become: true
+  become: yes
   get_url:
     url: "{{ dependencies_url.postgresql_connector }}"
     checksum: sha1:{{ lookup('url', dependencies_url.postgresql_connector_sha1_checksum_url) }}
@@ -140,7 +140,7 @@
     - molecule-idempotence-notest
 
 - name: Extract {{ acs_zip_file }} into {{ content_folder }}
-  become: true
+  become: yes
   unarchive:
     src: "{{ download_location }}/{{ acs_zip_file }}"
     dest: "{{ content_folder }}"
@@ -150,7 +150,7 @@
     group: "{{ group_name }}"
 
 - name: Prepare ACS directory structure
-  become: true
+  become: yes
   block:
     - name: Add ACS home to setenv.sh
       lineinfile:
@@ -235,7 +235,7 @@
         - "{{ content_folder }}/web-server/shared/classes/"
 
 - name: Configure ACS
-  become: true
+  become: yes
   notify:
     - restart-alfresco-content
   block:
@@ -249,7 +249,7 @@
       loop: "{{ share_templates }}"
 
     - name: Add Hazelcast cluster config for Share
-      become: true
+      become: yes
       template:
         owner: "{{ username }}"
         group: "{{ group_name }}"
@@ -357,7 +357,7 @@
         - molecule-idempotence-notest # see OPSEXP-1280
 
 - name: Check on amp download async task
-  become: true
+  become: yes
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: job_result
@@ -369,7 +369,7 @@
     - molecule-idempotence-notest
 
 - name: Install amps on alfresco and share war files
-  become: true
+  become: yes
   shell: '{{ content_folder }}/apply_amps.sh -nobackup -force'
   register: mmt_install
   changed_when: mmt_install.rc != 0
@@ -377,7 +377,7 @@
     - molecule-idempotence-notest
 
 - name: Check on postgres download async task
-  become: true
+  become: yes
   async_status:
     jid: "{{ postgresql_download.ansible_job_id }}"
   register: job_result
@@ -389,7 +389,7 @@
     - molecule-idempotence-notest
 
 - name: Check on war download async task
-  become: true
+  become: yes
   async_status:
     jid: "{{ item.ansible_job_id }}"
   register: job_result
@@ -401,17 +401,17 @@
     - molecule-idempotence-notest
 
 - name: Setup ACS service
-  become: true
+  become: yes
   block:
     - name: Create monitoring start up service
-      become: true
+      become: yes
       template:
         src: alfresco-content-monitored-startup.sh.j2
         dest: "{{ binaries_folder }}/alfresco-content-monitored-startup.sh"
         mode: 0750
 
     - name: Create monitored start up service
-      become: true
+      become: yes
       template:
         src: alfresco-content-monitored-startup.service.j2
         dest: /etc/systemd/system/alfresco-content-monitored-startup.service
@@ -420,7 +420,7 @@
         group: root
 
     - name: Amend alfresco-content unit
-      become: true
+      become: yes
       lineinfile:
         line: BindsTo=alfresco-content-monitored-startup.service
         insertafter: [Unit]

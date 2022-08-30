@@ -6,14 +6,14 @@
     port: "{{ ports_cfg.transformers.tengine }}"
 
 - name: enable-trouter
-  become: true
+  become: yes
   service:
     name: alfresco-transform-router
     enabled: true
     daemon_reload: true
 
 - name: restart-trouter
-  become: true
+  become: yes
   service:
     name: alfresco-transform-router
     state: restarted

@@ -8,7 +8,7 @@
     timeout: 600
 
 - name: Install Tomcat {{ dependencies_version.tomcat }}
-  become: true
+  become: yes
   block:
     - name: Unarchive a file with extra options
       unarchive:

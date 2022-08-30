@@ -1,7 +1,7 @@
 ---
 # handlers file for repository
 - name: systemd-reload
-  become: true
+  become: yes
   service:
     daemon_reload: true
 
@@ -9,7 +9,7 @@
   vars:
     svc: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
   throttle: 1
-  become: true
+  become: yes
   service:
     name: "{{ svc }}"
     state: restarted

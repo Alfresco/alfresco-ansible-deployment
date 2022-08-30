@@ -7,7 +7,7 @@
       package:
         name: python3
         state: present
-      become: true
+      become: yes
 
 - name: Prepare localhost
   hosts: localhost

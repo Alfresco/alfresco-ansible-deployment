@@ -12,4 +12,4 @@
      - name: Removing "{{ artifacts_path }}"
        ansible.builtin.file:
         path: "{{ artifacts_path }}"
-        state: "absent"
+        state: absent

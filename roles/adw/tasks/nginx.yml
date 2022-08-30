@@ -1,6 +1,6 @@
 ---
 - name: Install & configure NGINX web server
-  become: true
+  become: yes
   block:
     - name: Enable EPEL repository
       yum_repository:

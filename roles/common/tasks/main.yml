@@ -8,20 +8,20 @@
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
 - name: Ensure apt indices are up-to-date
-  become: true
+  become: yes
   apt:
     update_cache: yes
     cache_valid_time: 3600 # 1 hour
   when: ansible_pkg_mgr == 'apt'
 
 - name: Ensure a list of packages installed
-  become: true
+  become: yes
   package:
     name: "{{ utils }}"
     state: present
 
 - name: Prepare Alfresco platform installation
-  become: true
+  become: yes
   block:
     - name: Create {{ group_name }} group
       group:

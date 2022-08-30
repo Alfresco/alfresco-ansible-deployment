@@ -1,6 +1,6 @@
 ---
 - name: Install Dependencies packages
-  become: true
+  become: yes
   block:
     - name: Enable EPEL repository
       yum_repository:

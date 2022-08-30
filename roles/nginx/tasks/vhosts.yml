@@ -1,6 +1,6 @@
 ---
 - name: Configure web virtual hosts
-  become: true
+  become: yes
   block:
     - name: Remove default nginx vhost config file (if configured).
       file:

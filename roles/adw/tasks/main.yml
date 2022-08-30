@@ -5,7 +5,7 @@
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
 - name: Create "{{ nginx_folder }}/{{ adw_context }}/" dir
-  become: true
+  become: yes
   file:
     path: "{{ nginx_folder }}/{{ adw_context }}/"
     state: directory
@@ -22,7 +22,7 @@
     timeout: 570
 
 - name: Extract alfresco-digital-workspace-{{ adw.version }}.zip
-  become: true
+  become: yes
   unarchive:
     src: "{{ download_location }}/alfresco-digital-workspace-{{ adw.version }}.zip"
     dest: "{{ nginx_folder }}/{{ adw_context }}/"
