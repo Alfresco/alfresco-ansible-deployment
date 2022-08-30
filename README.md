@@ -22,7 +22,7 @@ Users upgrading from previous versions of the playbook may want to take a look t
 
 ## Development
 
-Developer's guide is available here [Developer's guide](docs/developer-guide.md).
+Developer's guide is available [here](docs/developer-guide.md).
 
 ## License
 
