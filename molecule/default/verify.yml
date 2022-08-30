@@ -1,7 +1,7 @@
 ---
 - name: Verify
   hosts: localhost
-  gather_facts: false
+  gather_facts: no
   vars:
     project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
     dtas_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"

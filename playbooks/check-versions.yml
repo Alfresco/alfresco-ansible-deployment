@@ -9,7 +9,7 @@
       when: (ansible_version.major < 2) or
             (ansible_version.major == 2 and ansible_version.minor < 12)
     - name: Check Jinja2 version
-      shell: | 
+      ansible.builtin.shell: | 
         JINJA_VERSION=$(pip3 freeze | grep Jinja2 | sed 's/Jinja2==//g')
         echo $JINJA_VERSION
       register: jinja2_version

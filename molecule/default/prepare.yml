@@ -1,7 +1,7 @@
 ---
 - name: Prepare remote hosts
   hosts: all:!external
-  gather_facts: false
+  gather_facts: no
   tasks:
     - name: Make sure python3 is installed
       package:
@@ -11,7 +11,7 @@
 
 - name: Prepare localhost
   hosts: localhost
-  gather_facts: false
+  gather_facts: no
   vars:
     project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
     dtas_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
