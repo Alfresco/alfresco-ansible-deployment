@@ -4,7 +4,7 @@
 
 - name: Prepare localhost
   hosts: localhost
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   vars:
     project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
     dtas_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
@@ -82,7 +82,7 @@
 
 - name: Prepare external activemq
   hosts: localhost
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   vars:
     broker_name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
   tasks:

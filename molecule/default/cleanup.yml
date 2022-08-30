@@ -1,7 +1,7 @@
 ---
 - name: Cleanup
   hosts: localhost
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   vars:
     project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
   tasks:

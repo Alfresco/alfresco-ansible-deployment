@@ -1,6 +1,6 @@
 ---
 - hosts: adw
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   become: yes
   tasks:
     - name: Stop Alfresco Digital Workspace
@@ -12,7 +12,7 @@
         - stop
 
 - hosts: nginx
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   become: yes
   tasks:
     - name: Stop Reverse Proxy
@@ -24,7 +24,7 @@
         - stop
 
 - hosts: syncservice
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   become: yes
   tasks:
     - name: Stop Alfresco Sync services
@@ -36,7 +36,7 @@
         - stop
 
 - hosts: search
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   become: yes
   tasks:
     - name: Stop Alfresco Search services
@@ -48,7 +48,7 @@
         - stop
 
 - hosts: repository
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   become: yes
   tasks:
     - name: Stop Alfresco Content services
@@ -60,7 +60,7 @@
         - stop
 
 - hosts: transformers
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   become: yes
   tasks:
     - name: Stop Alfresco Transformation services
@@ -87,7 +87,7 @@
         - stop
 
 - hosts: activemq
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   become: yes
   tasks:
     - name: Stop ActiveMQ
@@ -99,7 +99,7 @@
         - stop
 
 - hosts: activemq
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   become: yes
   tasks:
     - name: Start ActiveMQ
@@ -122,7 +122,7 @@
         - start
 
 - hosts: transformers
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   become: yes
   tasks:
     - name: Start Alfresco Transformation services
@@ -138,7 +138,7 @@
         - start
 
 - hosts: repository
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   become: yes
   tasks:
     - name: Start Alfresco Content services
@@ -150,7 +150,7 @@
         - start
 
 - hosts: search
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   become: yes
   tasks:
     - name: Start Alfresco Search services
@@ -162,7 +162,7 @@
         - start
 
 - hosts: syncservice
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   become: yes
   tasks:
     - name: Start Alfresco Sync services
@@ -174,7 +174,7 @@
         - start
 
 - hosts: nginx
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   become: yes
   tasks:
     - name: Start Reverse Proxy

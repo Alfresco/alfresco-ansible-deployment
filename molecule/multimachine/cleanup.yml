@@ -4,7 +4,7 @@
 
 - name: Multimachine cleanup
   hosts: localhost
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   vars:
     project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
   tasks:
@@ -28,7 +28,7 @@
 
 - name: Cleanup external activemq
   hosts: localhost
-  gather_facts: no
+  ansible.builtin.gather_facts: no
   vars:
     broker_name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
   tasks:
