@@ -20,6 +20,10 @@ Please refer to the [Documentation](./docs/README.md) for an overview of the pro
 
 Users upgrading from previous versions of the playbook may want to take a look to [Upgrade Notes](docs/playbook-upgrade.md).
 
+## Development
+
+Developer's guide is available [here](docs/developer-guide.md).
+
 ## License
 
 The code in this repository is released under the Apache License, see the [LICENSE](./LICENSE) file for details.
@@ -27,35 +31,6 @@ The code in this repository is released under the Apache License, see the [LICEN
 ## Contribution
 
 Please use [this guide](CONTRIBUTING.md) to make a contribution to the project and information to report any issues.
-
-## Development
-
-The roles developed for this playbook are tested with [Molecule](https://molecule.readthedocs.io/en/latest/).
-
-### Roles tests
-
-You can run test for each role by entering the role folder and running `molecule test`:
-
-```bash
-cd roles/activemq
-molecule test
-```
-
-### Integration tests
-
-On the root folder there is a molecule scenario to run the entire playbook on EC2 instances with different operating systems.
-
-Some environment variables are required to execute integration tests locally, please take a look at the [.envrc](.envrc) file.
-
-To have environment variables automatically loaded when entering the project folder on your machine, you may want to install [direnv](https://direnv.net/).
-
-Scenario-specific variables are defined in the `vars-scenario.yml` files inside the `molecule/default` folder.
-
-To run an integration test you need execute molecule with `-e molecule/default/vars-scenario.yml` parameter:
-
-```bash
-molecule -e molecule/default/vars-rhel8.yml test
-```
 
 ## Release
 
