@@ -55,7 +55,7 @@ jobs:
           retry_wait_seconds: 10
           command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
 
-ec2:
+  ec2:
     if: github.actor != 'dependabot[bot]'
     needs: docker
     name: ${{ matrix.molecule_scenario.desc }}
