@@ -2,7 +2,7 @@
 - hosts: localhost
   tasks:
     - name: Fail if Ansible version is too old
-      fail:
+      ansible.builtin.fail:
         msg: 
           - "Installed Ansible version is too old. Upgrade to at least 2.12."
           - "Please refer to https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/deployment-guide.md#setup-a-control-node for detailed instructions."
@@ -14,7 +14,7 @@
         echo $JINJA_VERSION
       register: jinja2_version
     - name: Fail if Jinja2 version is too old
-      fail:
+      ansible.builtin.fail:
         msg: 
           - "Installed Jinja2 major version is too old. Upgrade to at least version 3."
           - "Please refer to https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/deployment-guide.md#setup-a-control-node for detailed instructions."
