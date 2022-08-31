@@ -1,0 +1,10 @@
+---
+utils:
+  - sudo
+  - unzip
+  - tar
+  - python3-lxml
+  - python3-libselinux
+  - python3-libsemanage
+  - gpg
+  - curl
