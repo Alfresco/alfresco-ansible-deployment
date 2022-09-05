@@ -1,8 +1,8 @@
 ---
 #### This playbook will uninstall ACS
 - hosts: database
-  become: true
-  ignore_unreachable: true
+  become: yes
+  ignore_unreachable: yes
   tasks:
     - name: Removing the Packages
       ansible.builtin.package:
@@ -11,13 +11,13 @@
         autoremove: yes
 
 - hosts: activemq
-  become: true
-  ignore_unreachable: true
+  become: yes
+  ignore_unreachable: yes
   handlers:
-    - import_tasks: "handlers/uninstall-handlers.yml"
+    - ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: Stopping activemq service
-      ignore_errors: true
+      ignore_errors: yes
       ansible.builtin.service:
         name: activemq
         state: stopped
@@ -38,13 +38,13 @@
       notify: Reload systemd
 
 - hosts: transformers
-  become: true
-  ignore_unreachable: true
+  become: yes
+  ignore_unreachable: yes
   handlers:
-    - import_tasks: "handlers/uninstall-handlers.yml"
+    - ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: Stopping transform
-      ignore_errors: true
+      ignore_errors: yes
       ansible.builtin.service:
         name: "{{ item }}"
         state: stopped
@@ -79,13 +79,13 @@
       notify: Reload systemd
 
 - hosts: search
-  become: true
-  ignore_unreachable: true
+  become: yes
+  ignore_unreachable: yes
   handlers:
-    - import_tasks: "handlers/uninstall-handlers.yml"
+    - ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: Stopping Search
-      ignore_errors: true
+      ignore_errors: yes
       ansible.builtin.service:
         name: alfresco-search
         state: stopped
@@ -105,13 +105,13 @@
       notify: Reload systemd
 
 - hosts: syncservice
-  become: true
-  ignore_unreachable: true
+  become: yes
+  ignore_unreachable: yes
   handlers:
-    - import_tasks: "handlers/uninstall-handlers.yml"
+    - ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: Stopping Sync
-      ignore_errors: true
+      ignore_errors: yes
       ansible.builtin.service:
         name: alfresco-sync
         state: stopped
@@ -131,8 +131,8 @@
       notify: Reload systemd
 
 - hosts: nginx
-  become: true
-  ignore_unreachable: true
+  become: yes
+  ignore_unreachable: yes
   tasks:
     - name: Removing the Packages
       ansible.builtin.package:
@@ -141,13 +141,13 @@
         autoremove: yes
 
 - hosts: repository
-  become: true
-  ignore_unreachable: true
+  become: yes
+  ignore_unreachable: yes
   handlers:
-    - import_tasks: "handlers/uninstall-handlers.yml"
+    - ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: stopping content services
-      ignore_errors: true
+      ignore_errors: yes
       ansible.builtin.service:
         name: alfresco-content
         state: stopped
