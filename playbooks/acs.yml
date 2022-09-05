@@ -6,14 +6,14 @@
   ansible.builtin.import_playbook: secrets.yml
 
 - hosts: all:!external
-  ansible.builtin.gather_facts: no
+  gather_facts: no
   tasks:
     - name: Gather facts from all hosts
       ansible.builtin.setup:
 
 - name: Database Role
   hosts: database
-  ansible.builtin.gather_facts: no
+  gather_facts: no
   roles:
     - role: "../roles/postgres"
       when: repo_db_url == "" or sync_db_url == ""
@@ -27,7 +27,7 @@
 
 - name: Activemq Role
   hosts: activemq
-  ansible.builtin.gather_facts: no
+  gather_facts: no
   roles:
     - role: "../roles/activemq"
       when: not groups.external_activemq | default([])
@@ -36,7 +36,7 @@
 
 - name: Transformers Role
   hosts: transformers
-  ansible.builtin.gather_facts: no
+  gather_facts: no
   roles:
     - role: "../roles/transformers"
   post_tasks:
@@ -56,7 +56,7 @@
 
 - name: Alfresco Search Role
   hosts: search
-  ansible.builtin.gather_facts: no
+  gather_facts: no
   roles:
     - role: "../roles/search"
   post_tasks:
@@ -81,7 +81,7 @@
 
 - name: Alfresco Repository Role
   hosts: repository
-  ansible.builtin.gather_facts: no
+  gather_facts: no
   roles:
     - role: "../roles/repository"
   post_tasks:
@@ -103,7 +103,7 @@
 
 - name: T-Router Role
   hosts: transformers
-  ansible.builtin.gather_facts: no
+  gather_facts: no
   roles:
     - role: "../roles/trouter"
       when: acs.edition == "Enterprise"
@@ -124,7 +124,7 @@
 
 - name: Shared File Store Role
   hosts: transformers
-  ansible.builtin.gather_facts: no
+  gather_facts: no
   roles:
     - role: "../roles/sfs"
       when: acs.edition == "Enterprise"
@@ -145,7 +145,7 @@
 
 - name: Alfresco Digital Workspace Role
   hosts: adw
-  ansible.builtin.gather_facts: no
+  gather_facts: no
   roles:
     - role: "../roles/adw"
       when: acs.edition == "Enterprise"
@@ -166,7 +166,7 @@
 
 - name: Nginx Role
   hosts: nginx
-  ansible.builtin.gather_facts: no
+  gather_facts: no
   roles:
     - role: "../roles/nginx"
   post_tasks:
@@ -180,7 +180,7 @@
 
 - name: Sync Service Role
   hosts: syncservice
-  ansible.builtin.gather_facts: no
+  gather_facts: no
   roles:
     - role: "../roles/sync"
       when: acs.edition == "Enterprise"
