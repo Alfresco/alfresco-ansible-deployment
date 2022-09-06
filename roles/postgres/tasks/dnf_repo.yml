@@ -6,8 +6,6 @@
     disable_gpg_check: true
 
 - name: Disable the built-in PostgreSQL module
-  command: dnf -qy module disable postgresql
-  args:
-    warn: false  # set warn=false to prevent warning
+  command: dnf -y module disable postgresql
   register: disable_dnf_module
   changed_when: "'Nothing to do.' not in disable_dnf_module.stdout"
