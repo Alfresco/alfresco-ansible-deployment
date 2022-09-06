@@ -3,7 +3,7 @@
  - hosts: all
    vars:
     artifacts_path: "{{ download_location | default('/tmp/ansible_artefacts') }}"
-   become: false
+   become: no
    tasks:
      - name: To display warning 
        debug:

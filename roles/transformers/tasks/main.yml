@@ -13,7 +13,6 @@
     url: "{{ libreoffice_archive_url }}"
     checksum: sha1:{{ libreoffice_archive_sha1_checksum_url }}
     dest: "{{ download_location }}/libreoffice.tar.gz"
-    timeout: 3600
   register: libreoffice_download
   async: 3600
   poll: 0
@@ -29,7 +28,6 @@
     checksum: "sha1:{{ lookup('url', pkg_url + '.sha1') }}"
     dest: "{{ download_location }}/{{ pkg_name }}"
     mode: "0644"
-    timeout: 570
   loop: "{{  imagemagick_packages }}"
 
 - name: ATS installation
@@ -56,7 +54,6 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0644"
-        timeout: 570
 
     - name: Extract alfresco-pdf-renderer-linux.tgz
       unarchive:
@@ -78,7 +75,6 @@
         mode: 'u=rwx,g=rwx,o=rx'
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
-        timeout: 570
 
     - name: Add ats common vars to setenv file
       blockinfile:
@@ -160,4 +156,4 @@
       {{- ansible_architecture | replace('_','-') }}_{{ pkg_format }}/{{ pkg_format | upper }}S/
 
 - name: Install LibreOffice & imageMagick
-  include_tasks: "{{ pkg_format }}-packages.yml"
+  include_tasks: "dependencies-{{ pkg_format }}.yml"
