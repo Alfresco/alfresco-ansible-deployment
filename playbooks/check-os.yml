@@ -1,0 +1,6 @@
+---
+- name: Run python script
+  hosts: localhost
+  tasks:
+    - name: Check OS version
+      ansible.builtin.shell: python3 ~/scripts/check-os.py
