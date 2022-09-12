@@ -24,4 +24,3 @@ if distro in supported_distribution:
             print("You are on not supported Ubuntu version")
 else: 
     print("You are on not supported OS distribution!")
-
