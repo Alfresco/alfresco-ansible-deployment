@@ -22,5 +22,5 @@ if distro in supported_distribution:
     elif temp == 2:
         if version[0:6] not in supported_versions_ubuntu:
             print("You are on not supported Ubuntu version")
-else: 
+else:
     print("You are on not supported OS distribution!")
