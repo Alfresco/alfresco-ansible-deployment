@@ -5,6 +5,9 @@
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
 
+- name: Check OS distribution
+  script: ~/scripts/check-os.py
+
 - hosts: all:!external
   gather_facts: no
   tasks:
