@@ -13,11 +13,11 @@ if distro in supported_distribution:
         if version[0:3] not in supported_versions_rhel:
             print("You are on not supported RHEL version")
         else:
-            pass 
+            pass
     elif temp == 1:
         if version[0:5] not in supported_versions_centos:
             print("You are on not supported CentOS version")
-        else: 
+        else:
             pass
     elif temp == 2:
         if version[0:6] not in supported_versions_ubuntu:
