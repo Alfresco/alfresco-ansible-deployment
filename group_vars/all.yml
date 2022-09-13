@@ -72,9 +72,9 @@ downloads:
   sync_zip_sha1_checksum_url: "{{ sync.repository }}/services/sync/sync-dist-6.x/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip.sha1"
 
 war_downloads:
-  - url: "{{ api_explorer.version }}/api-explorer/{{ api_explorer.version }}/api-explorer-{{ api_explorer.version }}.war"
+  - url: "{{ api_explorer.repository }}/api-explorer/{{ api_explorer.version }}/api-explorer-{{ api_explorer.version }}.war"
     dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
-    sha1_checksum_url: "{{ api_explorer.version }}/api-explorer/{{ api_explorer.version }}/api-explorer-{{ api_explorer.version }}.war.sha1"
+    sha1_checksum_url: "{{ api_explorer.repository }}/api-explorer/{{ api_explorer.version }}/api-explorer-{{ api_explorer.version }}.war.sha1"
 
 amp_downloads:
   - url: "{{ amps.googledrive_repo.repository }}/integrations/alfresco-googledrive-repo-enterprise/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp"
