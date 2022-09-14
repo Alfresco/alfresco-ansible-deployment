@@ -1,38 +1,51 @@
 ---
 acs:
+  repository: "{{ nexus_repository.enterprise_releases }}"
   version: 7.0.1.4
   edition: Enterprise
 
+amps:
+  aos_module:
+    repository: "{{ nexus_repository.releases }}"
+    version: 1.4.0
+  device_sync:
+    repository: "{{ nexus_repository.enterprise_releases }}"
+    version: 3.4.0
+  googledrive_repo:
+    repository: "{{ nexus_repository.enterprise_releases }}"
+    version: 3.2.1
+  googledrive_share:
+    repository: "{{ nexus_repository.releases }}"
+    version: 3.2.1
+
 api_explorer:
+  repository: "{{ nexus_repository.releases }}"
   version: 7.0.0
 
 search:
+  repository: "{{ nexus_repository.releases }}"
   version: 2.0.1.1
 
 transform:
+  repository: "{{ nexus_repository.releases }}"
   version: 2.3.10
 
 trouter:
+  repository: "{{ nexus_repository.enterprise_releases }}"
   version: 1.3.2
 
 sfs:
+  repository: "{{ nexus_repository.enterprise_releases }}"
   version: 0.13.0
 
 adw:
+  repository: "{{ nexus_repository.enterprise_releases }}"
   version: 2.1.0
 
 sync:
+  repository: "{{ nexus_repository.enterprise_releases }}"
   version: 3.4.0
 
-amps:
-  aos_module:
-    version: 1.4.0
-  device_sync:
-    version: 3.4.0
-  googledrive_repo:
-    version: 3.2.1
-  googledrive_share:
-    version: 3.2.1
 
 # this overwrites (and not merge) the same structure in group_vars/all.yml
 dependencies_version:
