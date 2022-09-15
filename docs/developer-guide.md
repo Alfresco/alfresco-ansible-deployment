@@ -98,15 +98,26 @@ MOLECULE_ROLE_IMAGE=ubuntu:20.04 molecule converge
 
 ### Integration tests
 
-On the root folder there is a molecule scenario to run the entire playbook on EC2 instances with different operating systems.
+On the root folder there are two different molecule scenarios to run the entire
+playbook on EC2 instances with different operating systems (single node or
+multimachine/clustered).
 
-Some environment variables are required to execute integration tests locally, please take a look at the [.envrc](.envrc) file.
+Some environment variables are required to execute integration tests locally,
+please take a look at the [.envrc](/.envrc) file as a reference.
 
-To have environment variables automatically loaded when entering the project folder on your machine, you may want to install [direnv](https://direnv.net/).
+To have those environment variables automatically loaded when entering the
+project folder on your dev machine, you may want to install
+[direnv](https://direnv.net/), otherwise you can also configure them as you prefer.
 
-Scenario-specific variables are defined in the `vars-scenario.yml` files inside the `molecule/default` folder.
+When using direnv, you must add your secrets in the `.env.credentials` in the
+root folder, following the standard export convention of bash. Direnv will
+automatically suggest you to do that.
 
-To run an integration test you need execute molecule with `-e molecule/default/vars-scenario.yml` parameter:
+Scenario-specific variables are defined in the `vars-scenario.yml` files inside
+the `molecule/default` folder.
+
+To run an integration test you need execute molecule with `-e
+molecule/default/vars-scenario.yml` parameter:
 
 ```bash
 molecule -e molecule/default/vars-rhel8.yml test
