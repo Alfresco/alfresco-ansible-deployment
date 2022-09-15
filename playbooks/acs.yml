@@ -5,12 +5,6 @@
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
 
-- name: Check OS distribution
-  hosts: localhost
-  tasks:
-    - name: run external script
-      command: python ~/scripts/check-os.py
-
 - hosts: all:!external
   gather_facts: no
   tasks:
