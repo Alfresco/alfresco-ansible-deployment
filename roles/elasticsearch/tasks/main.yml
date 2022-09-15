@@ -1,0 +1,20 @@
+---
+# tasks file for elasticsearch
+- name: Create alternative tmp directory for elasticsearch
+  ansible.builtin.file:
+    path: /usr/share/elasticsearch/tmp
+    state: directory
+    mode: '0777'
+- name: Create override directory for elasticsearch.service
+  ansible.builtin.file:
+    path: /etc/systemd/system/elasticsearch.service.d/
+    state: directory
+    mode: '0755'
+- name: Set tmpdir override for elasticsearch.service
+  ansible.builtin.copy:
+    content: |
+      [Service]
+      Environment="ES_TMPDIR=/usr/share/elasticsearch/tmp"
+    dest: /etc/systemd/system/elasticsearch.service.d/tmpdir.conf
+- ansible.builtin.include_role:
+    name: buluma.elasticsearch
