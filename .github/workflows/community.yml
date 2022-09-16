@@ -22,6 +22,7 @@ jobs:
         role:
           - name: activemq
           - name: common
+          - name: elasticsearch
           - name: java
           - name: nginx
           - name: postgres
