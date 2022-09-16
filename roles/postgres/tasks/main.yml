@@ -89,7 +89,7 @@
         password: "{{ item.pwd }}"
         expires: infinity
         role_attr_flags: NOSUPERUSER
-      no_log: true
+      no_log: false
       loop:
         - db: "{{ repo_db_name }}"
           user: "{{ repo_db_username }}"
