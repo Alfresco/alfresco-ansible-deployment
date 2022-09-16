@@ -1,0 +1,20 @@
+---
+#matrix of supported OS distributions with MINOR.MAJOR versions
+supported-os:
+  RHEL:
+    versions:
+      - 8.4
+      - 8.2
+      - 7.7
+      - 7.6
+  CentOS: 
+    versions:
+      - 7
+  Ubuntu: 
+    versions:
+      - 20.04
+      - 18.04
+  SUSE:
+    versions:
+      - 15.0
+      - 12.0
