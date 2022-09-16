@@ -16,5 +16,6 @@
       [Service]
       Environment="ES_TMPDIR=/usr/share/elasticsearch/tmp"
     dest: /etc/systemd/system/elasticsearch.service.d/tmpdir.conf
-- ansible.builtin.include_role:
+- name: Install elasticsearch
+  ansible.builtin.include_role:
     name: buluma.elasticsearch
