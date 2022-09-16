@@ -15,6 +15,7 @@ amps:
     repository: "{{ nexus_repository.enterprise_releases }}"
     version: 3.2.0
   googledrive_share:
+    repository: "{{ nexus_repository.releases }}"
     version: 3.2.0
 
 api_explorer:
