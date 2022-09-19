@@ -1,49 +1,49 @@
 ---
 acs:
-  repository: "{{ nexus_repository.enterprise_releases }}"
+  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution"
   version: 7.0.1.4
   edition: Enterprise
 
 amps:
   aos_module:
-    repository: "{{ nexus_repository.releases }}"
+    repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
     version: 1.4.0
   device_sync:
-    repository: "{{ nexus_repository.enterprise_releases }}"
+    repository: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo"
     version: 3.4.0
   googledrive_repo:
-    repository: "{{ nexus_repository.enterprise_releases }}"
+    repository: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise"
     version: 3.2.1
   googledrive_share:
-    repository: "{{ nexus_repository.releases }}"
+    repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share"
     version: 3.2.1
 
 api_explorer:
-  repository: "{{ nexus_repository.releases }}"
+  repository: "{{ nexus_repository.releases }}/api-explorer"
   version: 7.0.0
 
 search:
-  repository: "{{ nexus_repository.releases }}"
+  repository: "{{ nexus_repository.releases }}/alfresco-search-services"
   version: 2.0.1.1
 
 transform:
-  repository: "{{ nexus_repository.releases }}"
+  repository: "{{ nexus_repository.releases }}/alfresco-transform-core-aio-boot"
   version: 2.3.10
 
 trouter:
-  repository: "{{ nexus_repository.enterprise_releases }}"
+  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-transform-router"
   version: 1.3.2
 
 sfs:
-  repository: "{{ nexus_repository.enterprise_releases }}"
+  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-shared-file-store-controller"
   version: 0.13.0
 
 adw:
-  repository: "{{ nexus_repository.enterprise_releases }}"
+  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-digital-workspace"
   version: 2.1.0
 
 sync:
-  repository: "{{ nexus_repository.enterprise_releases }}"
+  repository: "{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x"
   version: 3.4.0
 
 
