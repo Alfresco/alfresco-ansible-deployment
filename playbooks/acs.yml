@@ -1,4 +1,13 @@
 ---
+- name: Check if OS distribution is supported
+  hosts: localhost
+  gather_facts: yes
+  tasks:
+    - name: import supported OS matrix
+      ansible.builtin.include_vars:
+        file: ~/group_vars/check-os.yml
+        name: os-matrix
+  
 - name: Check required dependencies
   ansible.builtin.import_playbook: check-versions.yml
 
