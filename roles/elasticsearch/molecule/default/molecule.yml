@@ -23,8 +23,4 @@ provisioner:
     links:
       group_vars: ../../../../group_vars
 verifier:
-  name: testinfra
-  env:
-    TEST_HOST: "localhost"
-  options:
-    verbose: true
+  name: ansible

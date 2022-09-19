@@ -1,2 +1,4 @@
 ---
 # defaults file for elasticsearch
+elasticsearch_tmp_path: /usr/share/elasticsearch/tmp
+elasticsearch_systemd_service_path: /etc/systemd/system/elasticsearch.service.d/
