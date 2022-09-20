@@ -50,10 +50,10 @@ supported-os:
       - 8.2
       - 7.7
       - 7.6
-  CentOS: 
+  CentOS:
     versions:
       - 7
-  Ubuntu: 
+  Ubuntu:
     versions:
       - 20.04
       - 18.04
@@ -61,7 +61,7 @@ supported-os:
     versions:
       - 15.0
       - 12.0
-      
+
 downloads:
   acs_zip_url: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
   acs_zip_sha1_checksum_url: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip.sha1"

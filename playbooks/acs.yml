@@ -3,15 +3,20 @@
   hosts: all:!external
   gather_facts: yes
   tasks:
-    - name: compare host OS with supported matrix
-      loop: "{{ lookup('ansible.builtin.dict', supported-os) }}"
-      ansible.builtin.fail:
-        ansible.builtin.debug:
-          msg: 
-          - 'You are on not supported OS distribution'
-      when: (ansible_facts['os_family'] not in supported-os.key and ansible_facts['distribution_major_version'] in supported-os.value) or
-            (ansible_facts['os_family'] in supported-os.key and ansible_facts['distribution_major_version'] not in supported-os.value) or
-            (ansible_facts['os_family]) not in supported-os.key
+  - name: import supported OS matrix
+    ansible.builtin.include_vars:
+      dir: group_vars
+      file_matching: all.yml
+
+  - name: compare host OS with supported matrix
+    loop: "{{ lookup('ansible.builtin.dict', supported-os) }}"
+    ansible.builtin.fail:
+      ansible.builtin.debug:
+        msg:
+        - 'You are on not supported OS distribution'
+    when: (ansible_facts['os_family'] not in supported-os.key and ansible_facts['distribution_major_version'] in supported-os.value) or
+          (ansible_facts['os_family'] in supported-os.key and ansible_facts['distribution_major_version'] not in supported-os.value) or
+          (ansible_facts['os_family]) not in supported-os.key
 
 - name: Check required dependencies
   ansible.builtin.import_playbook: check-versions.yml
