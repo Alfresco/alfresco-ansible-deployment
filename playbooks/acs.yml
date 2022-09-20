@@ -4,7 +4,7 @@
   gather_facts: yes
   tasks:
     - name: compare host OS with supported matrix
-      loop: "{{ lookup('ansible.builtin.dict' supported-os) }}"
+      loop: "{{ lookup('ansible.builtin.dict', supported-os) }}"
       ansible.builtin.fail:
         ansible.builtin.debug:
           msg: 
