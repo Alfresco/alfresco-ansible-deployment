@@ -43,6 +43,7 @@ Edit `7.0.N-extra-vars.yml` and changes the the bellow snippet:
 
 ```yaml
 acs:
+  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution"
   version: 7.0.1
   edition: Enterprise
 ```
@@ -51,6 +52,7 @@ to:
 
 ```yaml
 acs:
+  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution"
   version: 7.0.1.4
   edition: Enterprise
 ```
@@ -82,3 +84,61 @@ If something goes wrong with the upgrade, or if tests are not successful after u
 ### Hotfix "in-place" upgrades
 
 This process will restart tomcat on all the repository nodes and there is no guarantee one node is stopped only after the others have restarted. As a consequence a short service outage needs to be scheduled
+
+## Specifing a different component repository
+
+In case you want to use a different server/repository for a specific artifact to further customize your deployment, you can override the default URL in two ways:
+
+You can change the value of `component.repository` key for the selected component, provided that the path to your custom artifact follows the convention of the default `artifacts.alfresco.com` repository. For example to change the repository of ACS artifact you would:
+
+Edit `7.0.N-extra-vars.yml`:
+
+```yaml
+acs:
+  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution"
+  version: 7.0.1
+  edition: Enterprise
+```
+
+to
+
+```yaml
+acs:
+  repository: "https://your.repo.com/path/to/your/artifacts"
+  version: 7.0.1
+  edition: Enterprise
+```
+
+> This assumes that the full URL to your custom artifact looks like `https://your.repo.com/path/to/your/artifacts/7.0.1/alfresco-content-services-distribution-7.0.1.zip` and will only work in this case, but allows you to quickly change the artifact version.
+
+The other way is to override the URL completely:
+
+To `7.0.N-extra-vars.yml` you would need to add :
+
+```yaml
+downloads:
+  acs_zip_url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-content-services-community-distribution.zip"
+  acs_zip_sha1_checksum_url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-content-services-community-distribution.zip.sha1"
+```
+
+Or:
+
+```yaml
+war_downloads:
+  - url: "https://your.repo.com/path/to/your/artifacts/your-api-explorer.war"
+    sha1_checksum_url: "https://your.repo.com/path/to/your/artifacts/your-api-explorer.war.sha1"
+    dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
+```
+
+Or:
+
+```yaml
+amp_downloads:
+  - url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-aos-module.amp"
+    sha1_checksum_url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-aos-module.amp.sha1"
+    dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
+```
+
+> Be sure to check in [all.yml](../group_vars/all.yml) under which section out of `downloads`, `war_downloads` and `amp_downloads` is the specific artifact you are overriding placed
+
+> Be careful not to override the value for `dest` key, but you must include it in the file
