@@ -76,7 +76,7 @@
     mode: "0644"
   register: war_download_result
   async: 900
-  no_log: false
+  no_log: true
   poll: 0
   tags:
     - molecule-idempotence-notest
@@ -108,7 +108,7 @@
     url_password: "{{ nexus_password }}"
   register: amp_download_result
   async: 900
-  no_log: false
+  no_log: true
   poll: 0
   tags:
     - molecule-idempotence-notest

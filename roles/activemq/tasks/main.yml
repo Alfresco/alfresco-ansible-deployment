@@ -96,7 +96,7 @@
           line: admins={{ activemq_username }}
         - file: jetty-realm
           line: "{{ activemq_username }}: {{ activemq_password }}, admin"
-      no_log: false
+      no_log: True
 
     - name: Change location of ActiveMQ logs
       replace:
