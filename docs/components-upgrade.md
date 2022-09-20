@@ -139,6 +139,6 @@ amp_downloads:
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
 ```
 
-> Be sure to check in [all.yml](../group_vars/all.yml) under which section out of `downloads`, `war_downloads` and `amp_downloads` is the specific artifact you are overriding placed
+You need to check in [all.yml](../group_vars/all.yml) under which section out of `downloads`, `war_downloads` and `amp_downloads` is the specific artifact you are overriding placed.
 
 > Be careful not to override the value for `dest` key, but you must include it in the file
