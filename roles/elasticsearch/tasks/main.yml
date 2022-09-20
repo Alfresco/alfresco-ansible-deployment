@@ -1,5 +1,6 @@
 ---
 # tasks file for elasticsearch
+# https://github.com/buluma/ansible-role-elasticsearch/issues/25
 - name: Create alternative tmp directory for elasticsearch
   ansible.builtin.file:
     path: "{{ elasticsearch_tmp_path }}"
