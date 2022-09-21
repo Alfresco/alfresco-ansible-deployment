@@ -1,0 +1,24 @@
+[Unit]
+Description=Alfresco Enterprise Search - All in one Service
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=simple
+
+User={{ username }}
+
+Environment=SPRING_ACTIVEMQ_BROKERURL=failover:({{ activemq_protocol }}://{{ activemq_host }}:{{ ports_cfg.activemq.openwire }})
+Environment=SPRING_ACTIVEMQ_USER={{ activemq_username }}
+Environment=SPRING_ACTIVEMQ_PASSWORD={{ activemq_password }}
+Environment=ALFRESCO_SHAREDFILESTORE_BASEURL=http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}/alfresco/api/-default-/private/sfs/versions/1/file"
+Environment=ALFRESCO_ACCEPTED_CONTENT_MEDIA_TYPES_CACHE_BASE_URL=http://{{ ats_tengine_aio_host }}:{{ ports_cfg.transformers.tengine }}/transform/config
+
+ExecStart={{ java_home }}/bin/java -jar {{ binaries_dir }}/alfresco-elasticsearch-live-indexing-3.1.1-app.jar
+ExecStop=/bin/kill -15 $MAINPID
+
+Restart=on-failure
+RestartSec=60
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

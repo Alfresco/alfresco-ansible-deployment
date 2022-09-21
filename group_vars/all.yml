@@ -34,6 +34,8 @@ amps:
 api_explorer:
   repository: "{{ nexus_repository.releases }}/api-explorer"
   version: 7.2.1
+search_ent:
+  version: 3.1.1
 search:
   repository: "{{ nexus_repository.releases }}/alfresco-search-services"
   version: 2.0.4
@@ -76,6 +78,8 @@ downloads:
   acs_zip_sha1_checksum_url: "{{ acs.repository }}/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip.sha1"
   adw_zip_url: "{{ adw.repository }}/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
   adw_zip_sha1_checksum_url: "{{ adw.repository }}/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip.sha1"
+  search_ent_zip_url: "{{ nexus_repository.enterprise_releases }}/alfresco-elasticsearch-connector-distribution/{{ search_ent.version }}/alfresco-elasticsearch-connector-distribution-{{ search_ent.version }}.zip"
+  search_ent_zip_sha1_url: "{{ nexus_repository.enterprise_releases }}/alfresco-elasticsearch-connector-distribution/{{ search_ent.version }}/alfresco-elasticsearch-connector-distribution-{{ search_ent.version }}.zip.sha1"
   search_zip_url: "{{ search.repository }}/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip"
   search_zip_sha1_checksum_url: "{{ search.repository }}/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip.sha1"
   sfs_jar_url: "{{ sfs.repository }}/{{ sfs.version }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar"

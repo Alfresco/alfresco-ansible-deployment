@@ -1,0 +1,46 @@
+---
+# tasks file for enterprise_search
+- name: Download elasticsearch connector distribution {{ search_ent.version }}
+  get_url:
+    url: "{{ downloads.search_ent_zip_url }}"
+    dest: "{{ download_location }}/alfresco-elasticsearch-connector-distribution-{{ search_ent.version }}.zip"
+    checksum: sha1:{{ lookup('url', downloads.search_ent_zip_sha1_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+    mode: "0644"
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+    timeout: 2
+
+- name: Install & configure Search services
+  become: true
+  block:
+    - name: Create search binaries, config and data directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0755"
+      loop:
+        - "{{ binaries_dir }}"
+        - "{{ config_dir }}"
+        - "{{ data_dir }}"
+
+    - name: Extract distribution zip in binaries
+      unarchive:
+        src: "{{ download_location }}/alfresco-elasticsearch-connector-distribution-{{ search_ent.version }}.zip"
+        dest: "{{ binaries_dir }}"
+        remote_src: true
+        creates: "{{ binaries_dir }}/README.md"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+
+    - name: Add elasticsearch-connector service
+      template:
+        src: elasticsearch-connector.service.j2
+        dest: /etc/systemd/system/elasticsearch-connector.service
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0644"
+      notify:
+        - enable elasticsearch-connector service
+        - restart elasticsearch-connector service

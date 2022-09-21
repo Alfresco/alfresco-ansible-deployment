@@ -17,6 +17,7 @@ jobs:
           - image: rockylinux:8
         role:
           - name: adw
+          - name: enterprise_search
           - name: repository
           - name: sfs
           - name: sync
