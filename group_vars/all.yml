@@ -43,7 +43,7 @@ adw:
 sync:
   version: 3.6.0
 
-supported-os:
+supported_os:
   RHEL:
     versions:
       - 8.4
