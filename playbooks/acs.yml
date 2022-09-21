@@ -14,9 +14,9 @@
       ansible.builtin.debug:
         msg:
         - 'You are on not supported OS distribution'
-    when: (ansible_facts['os_family'] not in supported-os.key and ansible_facts['distribution_major_version'] in supported-os.value) or
-          (ansible_facts['os_family'] in supported-os.key and ansible_facts['distribution_major_version'] not in supported-os.value) or
-          (ansible_facts['os_family]) not in supported-os.key
+    when: (ansible_facts['os_family'] not in item.key and ansible_facts['distribution_major_version'] in item.value) or
+          (ansible_facts['os_family'] in item.key and ansible_facts['distribution_major_version'] not in item.value) or
+          (ansible_facts['os_family]) not in item.key
 
 - name: Check required dependencies
   ansible.builtin.import_playbook: check-versions.yml
