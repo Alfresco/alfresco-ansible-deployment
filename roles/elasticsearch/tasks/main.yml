@@ -1,22 +1,25 @@
 ---
 # tasks file for elasticsearch
-# https://github.com/buluma/ansible-role-elasticsearch/issues/25
-- name: Create alternative tmp directory for elasticsearch
-  ansible.builtin.file:
-    path: "{{ elasticsearch_tmp_path }}"
-    state: directory
-    mode: '0777'
-- name: Create override directory for elasticsearch.service
-  ansible.builtin.file:
-    path: "{{ elasticsearch_systemd_service_path }}"
-    state: directory
-    mode: '0755'
-- name: Set tmpdir override for elasticsearch.service
-  ansible.builtin.copy:
-    content: |
-      [Service]
-      Environment="ES_TMPDIR={{ elasticsearch_tmp_path }}"
-    dest: "{{ elasticsearch_systemd_service_path }}/tmpdir.conf"
 - name: Install elasticsearch
-  ansible.builtin.include_role:
-    name: buluma.elasticsearch
+  become: true
+  block:
+    # https://github.com/buluma/ansible-role-elasticsearch/issues/25
+    - name: Create alternative tmp directory for elasticsearch
+      ansible.builtin.file:
+        path: "{{ elasticsearch_tmp_path }}"
+        state: directory
+        mode: "0777"
+    - name: Create override directory for elasticsearch.service
+      ansible.builtin.file:
+        path: "{{ elasticsearch_systemd_service_path }}"
+        state: directory
+        mode: "0755"
+    - name: Set tmpdir override for elasticsearch.service
+      ansible.builtin.copy:
+        content: |
+          [Service]
+          Environment="ES_TMPDIR={{ elasticsearch_tmp_path }}"
+        dest: "{{ elasticsearch_systemd_service_path }}/tmpdir.conf"
+    - name: Install elasticsearch
+      ansible.builtin.include_role:
+        name: buluma.elasticsearch
