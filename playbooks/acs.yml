@@ -5,7 +5,7 @@
   tasks:
   - name: import supported OS matrix
     ansible.builtin.include_vars:
-      dir: group_vars
+      dir: ../group_vars
       files_matching: all.yml
 
   - name: compare host OS with supported matrix
