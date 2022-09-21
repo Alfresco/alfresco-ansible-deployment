@@ -7,6 +7,7 @@
     ansible.builtin.include_vars:
       dir: ../group_vars
       files_matching: all.yml
+      name: supported-os
 
   - name: compare host OS with supported matrix
     loop: "{{ lookup('ansible.builtin.dict', supported-os) }}"
