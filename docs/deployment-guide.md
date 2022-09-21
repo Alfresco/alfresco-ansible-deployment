@@ -503,14 +503,14 @@ repository:
 
 In case you want to use a different server/repository for a specific artifact to further customize your deployment, you can override the default URL in two ways:
 
-You can change the value of `component.repository` key for the selected component, provided that the path to your custom artifact follows the convention of the default `artifacts.alfresco.com` repository. For example to change the repository of ACS artifact you would:
+You can change the value of `component.repository` key for the selected component, provided that the path to your custom artifact follows the conventional [Maven2 Repository Layout](https://maven.apache.org/repository/layout.html). For example to change the repository of ACS artifact you would:
 
-Edit `7.0.N-extra-vars.yml`:
+Edit `group_vars/all.yml`:
 
 ```yaml
 acs:
+  version: 7.2.1
   repository: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution"
-  version: 7.0.1
   edition: Enterprise
 ```
 
@@ -518,16 +518,18 @@ to
 
 ```yaml
 acs:
+  version: 7.2.1
   repository: "https://your.repo.com/path/to/your/artifacts"
-  version: 7.0.1
   edition: Enterprise
 ```
 
-> This assumes that the full URL to your custom artifact looks like `https://your.repo.com/path/to/your/artifacts/7.0.1/alfresco-content-services-distribution-7.0.1.zip` and will only work in this case, but allows you to quickly change the artifact version.
+> This assumes that the full URL to your custom artifact looks like `https://your.repo.com/path/to/your/artifacts/7.2.1/alfresco-content-services-distribution-7.2.1.zip`
+
+In case you want to install a different (not latest) ACS version, you should make similar changes to the respective `*-extra-vars.yml` file.
 
 The other way is to override the URL completely:
 
-To `7.0.N-extra-vars.yml` you would need to add :
+In `group_vars/all.yml` you need to find the section under which the default download URL for the specific artifact is defined out of `downloads`, `war_downloads` and `amp_downloads` and override it, for example:
 
 ```yaml
 downloads:
@@ -553,9 +555,7 @@ amp_downloads:
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
 ```
 
-You need to check in [all.yml](../group_vars/all.yml) under which section out of `downloads`, `war_downloads` and `amp_downloads` is the specific artifact you are overriding placed.
-
-> Be careful not to override the value for `dest` key, but you must include it in the file
+> Be careful not to override the value for `dest` key
 
 ## Localhost Deployment
 
