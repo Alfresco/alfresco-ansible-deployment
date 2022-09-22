@@ -46,21 +46,19 @@ sync:
 supported_os:
   RHEL:
     versions:
-      - 8.4
-      - 8.2
-      - 7.7
-      - 7.6
+      - 8
+      - 7
   CentOS:
     versions:
       - 7
   Ubuntu:
     versions:
-      - 20.04
-      - 18.04
+      - 20
+      - 18
   SUSE:
     versions:
-      - 15.0
-      - 12.0
+      - 15
+      - 12
 
 downloads:
   acs_zip_url: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
