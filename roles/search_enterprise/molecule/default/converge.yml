@@ -15,6 +15,6 @@
     - name: "Include sfs"
       include_role:
         name: "sfs"
-    - name: "Include enterprise_search"
+    - name: "Include search_enterprise"
       include_role:
-        name: "enterprise_search"
+        name: "search_enterprise"

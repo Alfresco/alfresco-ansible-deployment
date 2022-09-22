@@ -4,9 +4,9 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: search-ent-instance
+  - name: search-enteprise-integration-instance
     image: ${MOLECULE_ROLE_IMAGE:-ubuntu:18.04}
-    dockerfile: ../../../../tests/molecule/Dockerfile-noprivs.j2
+    dockerfile: ../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
     privileged: true
     tmpfs:
@@ -19,12 +19,13 @@ platforms:
       - activemq
       - sfs
       - transformers
+      - elasticsearch
       - search_enterprise
 provisioner:
   name: ansible
   inventory:
     links:
-      group_vars: ../../../../group_vars
+      group_vars: ../../group_vars
       host_vars: host_vars
 verifier:
   name: ansible

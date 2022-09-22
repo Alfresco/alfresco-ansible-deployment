@@ -1,5 +1,5 @@
 ---
-# handlers file for enterprise_search
+# handlers file for search_enterprise
 - name: enable elasticsearch-connector service
   become: true
   service:

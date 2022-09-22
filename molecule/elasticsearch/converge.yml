@@ -1,20 +1,5 @@
 ---
-- name: Handle secrets
+- name: Run the playbook
   vars:
     autogen_unsecure_secrets: True
-  ansible.builtin.import_playbook: ../../../../playbooks/secrets.yml
-- name: Converge
-  hosts: all
-  tasks:
-    - name: "Include activemq"
-      include_role:
-        name: "activemq"
-    - name: "Include transformers"
-      include_role:
-        name: "transformers"
-    - name: "Include sfs"
-      include_role:
-        name: "sfs"
-    - name: "Include enterprise_search"
-      include_role:
-        name: "enterprise_search"
+  ansible.builtin.import_playbook: ../../playbooks/acs.yml
