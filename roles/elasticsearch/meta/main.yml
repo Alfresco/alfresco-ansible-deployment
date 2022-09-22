@@ -1,0 +1,26 @@
+galaxy_info:
+  author: alfresco
+  namespace: alfresco
+  description: Install elasticsearch required by Search Enteprise
+  company: Hyland Software
+
+  license: Apache-2.0
+
+  min_ansible_version: "2.12"
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - focal
+        - bionic
+    - name: EL
+      versions:
+        - "7"
+        - "8"
+
+  galaxy_tags: []
+
+dependencies:
+  - role: common
+  - role: buluma.elastic_repo
+    become: true

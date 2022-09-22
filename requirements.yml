@@ -18,3 +18,8 @@ collections:
   # molecule roles tests
   - name: community.docker
     version: 2.1.1
+roles:
+  - name: buluma.elastic_repo
+    version: v0.1.2
+  - name: buluma.elasticsearch
+    version: 1.0.2
