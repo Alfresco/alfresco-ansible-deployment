@@ -1,7 +1,7 @@
 map $remote_addr $solr_trackers {
     default     0;
 {% for solr_tracker in [ solr_host ] | unique %}
-    {{ solr_tracker }}	   1;
+    {{ solr_tracker }}	   1;
 {% endfor %}
 }
 

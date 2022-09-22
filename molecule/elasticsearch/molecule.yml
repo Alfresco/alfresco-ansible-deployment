@@ -8,6 +8,9 @@ platforms:
     image: ${MOLECULE_ROLE_IMAGE:-ubuntu:18.04}
     dockerfile: ../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
+    published_ports:
+      - 80/tcp
+      - 0.0.0.0:443:443/tcp
     privileged: true
     tmpfs:
       - /run
@@ -17,15 +20,22 @@ platforms:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
       - activemq
+      - database
+      - elasticsearch
+      - nginx
+      - repository
+      - search_enterprise
       - sfs
       - transformers
-      - elasticsearch
-      - search_enterprise
+      - trusted_resource_consumers
 provisioner:
   name: ansible
   inventory:
     links:
       group_vars: ../../group_vars
       host_vars: host_vars
+  playbooks:
+    prepare: ../default/prepare.yml
+    verify: ../default/verify.yml
 verifier:
   name: ansible

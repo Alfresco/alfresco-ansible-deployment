@@ -11,6 +11,7 @@
     - name: Gather EC2 facts
       delegate_to: "{{ groups['nginx'][0] }}"
       amazon.aws.ec2_metadata_facts:
+      ignore_errors: yes
 
     - name: Install pytest requirements
       pip:
@@ -21,14 +22,14 @@
       ansible.builtin.replace:
         path: "{{ test_config_file }}"
         regexp: 'TEST_URL'
-        replace: 'https://{{ ansible_ec2_public_hostname }}'
+        replace: "https://{{ ansible_ec2_public_hostname | default('localhost') }}"
 
     - name: Run tests
       block:
         - name: Run pytest
           delegate_to: localhost
           vars:
-              selfsigned_cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
+              selfsigned_cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname | default('localhost') }}.crt"
           ansible.builtin.shell:
             chdir: "{{ dtas_dir }}"
             cmd: |
