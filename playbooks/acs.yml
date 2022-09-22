@@ -4,11 +4,9 @@
   gather_facts: yes
   tasks:
   - name: compare host OS with supported matrix
-    loop: "{{ lookup('ansible.builtin.dict', supported_os) }}"
     ansible.builtin.fail:
       msg: 'You are on not supported OS distribution'
-    when: (ansible_facts['os_family'] in item.key and ansible_facts['distribution_major_version'] in item.value) or
-          (ansible_facts['os_family'] not in item.key)
+    when: ansible_facts['os_family'] not in supported_os.key
 
 - name: Check required dependencies
   ansible.builtin.import_playbook: check-versions.yml
