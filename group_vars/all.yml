@@ -43,22 +43,22 @@ adw:
 sync:
   version: 3.6.0
 
-supported_os:
-  RHEL:
+supported_os: {
+  os_family: 'RHEL'
     versions:
       - 8
       - 7
-  CentOS:
-    versions:
-      - 7
-  Ubuntu:
+  os_family: 'CentOS'
+    versions: 7
+  os_family: 'Ubuntu'
     versions:
       - 20
       - 18
-  SUSE:
+  os_family: 'SUSE'
     versions:
       - 15
       - 12
+}
 
 downloads:
   acs_zip_url: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
