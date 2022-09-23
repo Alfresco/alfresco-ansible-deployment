@@ -30,6 +30,7 @@
     - name: Fail on unsupported AMPS upgrades
       fail:
       when: |
+          installed_components.amps is defined and
           amps[item].version != installed_components.amps[item].version
       loop: "{{ installed_components.amps | list }}"
 
