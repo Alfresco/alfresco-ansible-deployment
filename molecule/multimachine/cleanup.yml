@@ -30,7 +30,7 @@
   hosts: localhost
   gather_facts: false
   vars:
-    broker_name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
+    broker_name: molecule-{{ lookup('env', 'BRANCH_NAME') }}-{{ lookup('env', 'BUILD_NUMBER') }}
   tasks:
 
     - name: Grab activemq broker id
