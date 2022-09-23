@@ -46,13 +46,14 @@ sync:
 supported_os:
   RHEL:
     versions:
+      - 8.5
       - 8.4
       - 8.2
       - 7.7
       - 7.6
   CentOS:
     versions:
-      - 7
+      - 7.9
   Ubuntu:
     versions:
       - 20.04

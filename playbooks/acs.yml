@@ -1,5 +1,5 @@
 ---
-- name: Check if OS distribution is supported
+- name: Check if {{ ansible_distribution }} {{ ansible_version }} is supported
   hosts: all:!external
   gather_facts: yes
   tasks:
@@ -7,8 +7,10 @@
     vars:
       os_versions: "{{ supported_os[ansible_distribution].versions | default([]) }}"
     ansible.builtin.fail:
-      msg: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported OS"
-    when: skip_os_test | default(false) and ansible_distribution_major_version | int not in os_versions
+      msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not supported OS"
+    when: 
+    - skip_os_test | default(false) | bool
+    - ansible_distribution_version | int not in os_versions
 - name: Check required dependencies
   ansible.builtin.import_playbook: check-versions.yml
 
