@@ -96,6 +96,7 @@ jobs:
           MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
           NEXUS_USERNAME: ${{ secrets.nexus_username }}
           NEXUS_PASSWORD: ${{ secrets.nexus_password }}
+          CLONE_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
         uses: nick-fields/retry@v2
         with:
           timeout_minutes: 60
