@@ -84,7 +84,7 @@
   hosts: localhost
   gather_facts: false
   vars:
-    broker_name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
+    broker_name: molecule-{{ lookup('env', 'BRANCH_NAME') }}-{{ lookup('env', 'BUILD_NUMBER') }}
   tasks:
     - name: Lookup existing ec2 group
       amazon.aws.ec2_group_info:
@@ -121,7 +121,12 @@
         activemq_hostname: "{{ (describe_broker_output.stdout | from_json).BrokerInstances[0].Endpoints[0] | urlsplit('hostname') }}"
 
     - name: Configure activemq hostname as {{ activemq_hostname }}
-      ansible.builtin.replace:
-        path: hosts.yml
-        regexp: 'external_activemq_hostname'
-        replace: "{{ activemq_hostname }}"
+      vars:
+        mqhost: "{{ activemq_hostname }}"
+        mqattrs:
+          activemq_username: alfresco
+          activemq_port: 61617
+          activemq_protocol: ssl
+      ansible.builtin.template:
+        src: hosts.yml.j2
+        dest: hosts.yml
