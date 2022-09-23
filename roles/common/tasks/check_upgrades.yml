@@ -24,12 +24,14 @@
           acs.edition != installed_components.acs.edition or
           acs.version.split('.')[:3] | join('.') != installed_components.acs.version.split('.')[:3] | join('.') or
           acs.version is version(installed_components.acs.version, 'lt') or
-          amps.aos_module.version != installed_components.amps.aos_module.version or
-          amps.device_sync.version != installed_components.amps.device_sync.version or
-          amps.googledrive_repo.version != installed_components.amps.googledrive_repo.version or
-          amps.googledrive_share.version != installed_components.amps.googledrive_share.version or
           api_explorer.version != installed_components.api_explorer.version
         )
+
+    - name: Fail on unsupported AMPS upgrades
+      fail:
+      when: |
+          amps[item].version != installed_components.amps[item].version
+      loop: "{{ installed_components.amps | list }}"
 
     - name: Fail on unsupported ADW upgrades
       fail:
