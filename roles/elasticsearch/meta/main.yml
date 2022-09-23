@@ -1,5 +1,5 @@
 galaxy_info:
-  author: alfresco
+  author: Alfresco
   namespace: alfresco
   description: Install elasticsearch required by Search Enteprise
   company: Hyland Software

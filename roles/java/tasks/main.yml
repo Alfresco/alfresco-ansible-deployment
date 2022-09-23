@@ -7,10 +7,10 @@
     checksum: "md5:{{ dependencies_url.java_md5_checksum }}"
     timeout: 570
 
-- name: Install OpenJDK v{{ dependencies_version.java }}
+- name: Install OpenJDK {{ dependencies_version.java }}
   become: true
   block:
-    - name: Unarchive tar.gz
+    - name: Extract OpenJDK archive
       unarchive:
         src: "{{ download_location }}/{{ java_tar_file }}"
         dest: "{{ java_home | dirname }}"
@@ -19,7 +19,7 @@
         owner: root
         group: root
         extra_opts:
-          - --xform=s|[^/]*|{{ java_home | basename }}|
+          - --xform=s,[^/]*,{{ java_home | basename }},
 
     - name: Add setenv bash file
       blockinfile:

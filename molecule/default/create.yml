@@ -257,7 +257,8 @@
       async: 7200
       poll: 0
 
-    - block:
+    - name: Create, boot and inventory instances
+      block:
         - name: Wait for instance creation to complete
           async_status:
             jid: "{{ item.ansible_job_id }}"
