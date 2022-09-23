@@ -13,8 +13,10 @@
   hosts: localhost
   gather_facts: false
   vars:
-    project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
-    dtas_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
+    project_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+    dtas_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
+    dtas_version: "{{ lookup('env', 'DTAS_VERSION') }}"
+    clone_github_token: "{{ lookup('ansible.builtin.env', 'CLONE_GITHUB_TOKEN') }}"
   tasks:
 
     - name: Gather EC2 facts
@@ -52,8 +54,11 @@
         regexp: "TEST_FQDN"
         replace: "{{ certificate_domain }}"
 
+    - name: Ensure that clone_github_token is correctly set
+      ansible.builtin.assert:
+        that:
+          - clone_github_token is defined
+          - clone_github_token.startswith('ghp_')
+
     - name: Git checkout
-      ansible.builtin.git:
-        repo: "https://{{ lookup('env', 'CLONE_GITHUB_TOKEN') }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
-        dest: "{{ dtas_dir }}"
-        version: "{{ lookup('env', 'DTAS_VERSION') }}"
+      ansible.builtin.command: "git clone --depth 1 --branch {{ dtas_version }} https://{{ clone_github_token }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git {{ dtas_dir }}"
