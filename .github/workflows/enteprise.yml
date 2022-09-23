@@ -1,10 +1,17 @@
 name: "enterprise"
+
 on:
   push:
     branches: ["*"]
     paths-ignore:
       - 'docs/**'
       - '*.md'
+
+env:
+  DTAS_VERSION: v1.1.1
+  BUILD_NUMBER: ${{ github.run_id }}
+  PY_COLORS: 1
+
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -22,8 +29,6 @@ jobs:
           - name: sfs
           - name: sync
           - name: trouter
-    env:
-      PY_COLORS: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -68,8 +73,6 @@ jobs:
           - image: rockylinux:8
         scenario:
           - name: elasticsearch
-    env:
-      PY_COLORS: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -140,11 +143,8 @@ jobs:
             vars: vars.yml
             desc: EC2 ACS 7.2 clustered (RHEL8)
     env:
-      PY_COLORS: 1
-      BUILD_NUMBER: ${{ github.run_id }}
       AWS_REGION: eu-west-1
       MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
-      DTAS_VERSION: v1.1.1
     steps:
       - name: Checkout
         uses: actions/checkout@v3
