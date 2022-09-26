@@ -18,7 +18,7 @@
         chdir: "{{ dtas_dir }}"
         requirements: requirements.txt
 
-    - name: Configure deployment URL
+    - name: Configure deployment URL in {{ test_config_file }}
       ansible.builtin.replace:
         path: "{{ test_config_file }}"
         regexp: 'TEST_URL'
