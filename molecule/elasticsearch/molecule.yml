@@ -20,12 +20,14 @@ platforms:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
       - activemq
+      - adw
       - database
       - elasticsearch
       - nginx
       - repository
       - search_enterprise
       - sfs
+      - syncservice
       - transformers
       - trusted_resource_consumers
 provisioner:
