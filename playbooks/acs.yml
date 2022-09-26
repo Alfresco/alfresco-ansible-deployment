@@ -8,7 +8,6 @@
       os_versions: "{{ supported_os[ansible_distribution].versions | default([]) }}"
     ansible.builtin.fail:
       msg:
-        - "{{ os_version }}" 
         - "{{ ansible_distribution }} {{ ansible_distribution_version }} is not supported OS"
     when:
       - not skip_os_test | default(true) | bool
