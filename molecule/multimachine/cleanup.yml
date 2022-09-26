@@ -6,12 +6,12 @@
   hosts: localhost
   gather_facts: false
   vars:
-    project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+    project_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}"
   tasks:
     - name: Destroy Shared contentstore
       community.aws.efs:
         state: absent
-        name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
+        name: molecule-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
       when: molecule_yml.platforms | selectattr('name', 'in', groups.repository) | length > 1
       register: contentstore
 
@@ -30,7 +30,7 @@
   hosts: localhost
   gather_facts: false
   vars:
-    broker_name: molecule-{{ lookup('env', 'BRANCH_NAME')[:42] }}-{{ lookup('env', 'BUILD_NUMBER') }}
+    broker_name: molecule-{{ lookup('ansible.builtin.env', 'BRANCH_NAME')[:42] }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
   tasks:
 
     - name: Grab activemq broker id
