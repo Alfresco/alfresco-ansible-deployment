@@ -21,16 +21,16 @@
         group: "{{ group_name }}"
         mode: "0755"
       loop:
-        - "{{ binaries_dir }}"
-        - "{{ config_dir }}"
-        - "{{ data_dir }}"
+        - "{{ search_enterprise_binaries_dir }}"
+        - "{{ search_enterprise_config_dir }}"
+        - "{{ search_enterprise_data_dir }}"
 
     - name: Extract distribution zip in binaries
       unarchive:
         src: "{{ download_location }}/alfresco-elasticsearch-connector-distribution-{{ search_enterprise.version }}.zip"
-        dest: "{{ binaries_dir }}"
+        dest: "{{ search_enterprise_binaries_dir }}"
         remote_src: true
-        creates: "{{ binaries_dir }}/README.md"
+        creates: "{{ search_enterprise_binaries_dir }}/README.md"
         owner: "{{ username }}"
         group: "{{ group_name }}"
 

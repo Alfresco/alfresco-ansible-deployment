@@ -7,13 +7,14 @@ Type=simple
 
 User={{ username }}
 
+Environment=SERVER_PORT={{ search_enterprise_port }}
 Environment=SPRING_ACTIVEMQ_BROKERURL=failover:({{ activemq_protocol }}://{{ activemq_host }}:{{ ports_cfg.activemq.openwire }})
 Environment=SPRING_ACTIVEMQ_USER={{ activemq_username }}
 Environment=SPRING_ACTIVEMQ_PASSWORD={{ activemq_password }}
 Environment=ALFRESCO_SHAREDFILESTORE_BASEURL=http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}/alfresco/api/-default-/private/sfs/versions/1/file
 Environment=ALFRESCO_ACCEPTED_CONTENT_MEDIA_TYPES_CACHE_BASE_URL=http://{{ ats_tengine_aio_host }}:{{ ports_cfg.transformers.tengine }}/transform/config
 
-ExecStart={{ java_home }}/bin/java -jar {{ binaries_dir }}/alfresco-elasticsearch-live-indexing-3.1.1-app.jar
+ExecStart={{ java_home }}/bin/java -jar {{ search_enterprise_binaries_dir }}/alfresco-elasticsearch-live-indexing-{{ search_enterprise.version }}-app.jar
 ExecStop=/bin/kill -15 $MAINPID
 
 Restart=on-failure

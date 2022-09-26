@@ -1,5 +1,5 @@
 ---
 # vars file for search_enterprise
-binaries_dir: "{{ binaries_folder }}/enterprise-search-{{ search_enterprise.version }}"
-config_dir: "{{ config_folder }}/enterprise-search"
-data_dir: "{{ data_folder }}/enterprise-search"
+search_enterprise_binaries_dir: "{{ binaries_folder }}/enterprise-search-{{ search_enterprise.version }}"
+search_enterprise_config_dir: "{{ config_folder }}/enterprise-search"
+search_enterprise_data_dir: "{{ data_folder }}/enterprise-search"
