@@ -58,10 +58,6 @@ supported_os:
     versions:
       - 20.04
       - 18.04
-  SUSE:
-    versions:
-      - 15.0
-      - 12.0
 
 downloads:
   acs_zip_url: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
