@@ -5,6 +5,7 @@ dtas
 .env.credentials
 .vault_pass.txt
 vars/secrets.yml
+molecule/multimachine/hosts.yml
 
 # # Byte-compiled / optimized / DLL files
 __pycache__/
