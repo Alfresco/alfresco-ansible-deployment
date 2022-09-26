@@ -36,6 +36,7 @@ solr.secureComms={% if acs.version is version('7.2.0', '>=') %}secret{% else %}n
 solr.port={{ ports_cfg.search.http }}
 solr.host={{ solr_host }}
 {% endif %}
+solr.secureComms={% if acs.version is version('7.2.0', '>=') %}secret{% else %}none{% endif %}
 
 dir.root={{ content_data_folder }}/content
 {% if acs.version is version('7.0.0', '<') %}
