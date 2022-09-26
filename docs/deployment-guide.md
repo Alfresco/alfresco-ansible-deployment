@@ -530,7 +530,7 @@ pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@commun
 ```
 
 By default, the ACS playbook will now also check compatibility of OS if it is  fully supported.
-You can add flag -e skip_os_test = true if you want to deploy on not supported OS distribution.
+You can add flag '-e skip_os_test=true' if you want to deploy on not supported OS distribution.
 
 > NOTE: The playbook takes around 30 minutes to complete.
 

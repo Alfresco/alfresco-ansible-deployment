@@ -9,7 +9,7 @@
     ansible.builtin.fail:
       msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not supported OS"
     when: 
-    - skip_os_test | default(false) | bool
+    - not skip_os_test | default(false) | bool
     - ansible_distribution_version | int not in os_versions
 - name: Check required dependencies
   ansible.builtin.import_playbook: check-versions.yml
