@@ -30,8 +30,8 @@
       fail:
       when: |
           installed_components is defined and
-          item in amps and
           installed_components.amps is defined and
+          item in amps and
           amps[item].version != installed_components.amps[item].version
       loop: "{{ installed_components.amps | list }}"
 
