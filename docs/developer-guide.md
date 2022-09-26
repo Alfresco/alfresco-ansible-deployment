@@ -20,7 +20,7 @@ Pipenv comes with bunch of commands, but the most important are highlighted belo
 The command with flag --dev installs packages from Pipfile needed for developing purposes.
 
 ```bash
-pipenv install --dev
+pipenv install --dev --python $(cat .python-version)
 ```
 
 This command below is opening the virtual environment, that pipenv created while installing all packages.

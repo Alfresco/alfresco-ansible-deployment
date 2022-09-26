@@ -208,7 +208,7 @@ Now you can install Ansible and required runtime dependencies in a dedicated
 virtual environment managed by pipenv:
 
 ```bash
-pipenv install --deploy
+pipenv install --deploy --python $(cat .python-version)
 pipenv run ansible-galaxy install -r requirements.yml
 ```
 
