@@ -15,7 +15,7 @@
   vars:
     project_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}"
     dtas_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
-    dtas_version: "{{ lookup('env', 'DTAS_VERSION') }}"
+    dtas_version: "{{ lookup('ansible.builtin.env', 'DTAS_VERSION') }}"
     clone_github_token: "{{ lookup('ansible.builtin.env', 'CLONE_GITHUB_TOKEN') }}"
   tasks:
 
