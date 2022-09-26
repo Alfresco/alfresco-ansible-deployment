@@ -24,11 +24,15 @@
       amazon.aws.ec2_metadata_facts:
       ignore_errors: yes
 
+    - name: Set hostname fact from EC2 or localhost
+      ansible.builtin.set_fact:
+        node_hostname: "{{ ansible_ec2_public_hostname | default('localhost') }}"
+
     - name: "Set variables"
-      set_fact:
-        certificate_domain: "{{ ansible_ec2_public_hostname | default('localhost') }}"
-        private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname | default('localhost') }}.key"
-        cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname | default('localhost') }}.crt"
+      ansible.builtin.set_fact:
+        certificate_domain: "{{  }}"
+        private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.key"
+        cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.crt"
 
     - name: Create private key (RSA, 4096 bits)
       community.crypto.openssl_privatekey:

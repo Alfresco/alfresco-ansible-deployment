@@ -13,6 +13,10 @@
       amazon.aws.ec2_metadata_facts:
       ignore_errors: yes
 
+    - name: Set hostname fact from EC2 or localhost
+      ansible.builtin.set_fact:
+        node_hostname: "{{ ansible_ec2_public_hostname | default('localhost') }}"
+
     - name: Install pytest requirements
       pip:
         chdir: "{{ dtas_dir }}"
@@ -22,14 +26,14 @@
       ansible.builtin.replace:
         path: "{{ test_config_file }}"
         regexp: 'TEST_URL'
-        replace: "https://{{ ansible_ec2_public_hostname | default('localhost') }}"
+        replace: "https://{{ node_hostname }}"
 
     - name: Run tests
       block:
         - name: Run pytest
           delegate_to: localhost
           vars:
-              selfsigned_cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname | default('localhost') }}.crt"
+              selfsigned_cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.crt"
           ansible.builtin.shell:
             chdir: "{{ dtas_dir }}"
             cmd: |
