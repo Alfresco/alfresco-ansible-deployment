@@ -139,7 +139,7 @@ The quickest way to get started and experiment with the playbook is by leveragin
     ```
 
 8. Run the following command:
-  
+
     ```bash
     vagrant up
     ```
@@ -483,7 +483,7 @@ repository:
   vars:
     use_custom_keystores: true
     acs_environment:
-      JAVA_OPTS: 
+      JAVA_OPTS:
         - -Xms512m
         - -Xmx3g
         - -XX:+DisableExplicitGC
@@ -491,13 +491,71 @@ repository:
         - -Djava.awt.headless=true
         - -XX:ReservedCodeCacheSize=128m
         - $JAVA_OPTS"
-      JAVA_TOOL_OPTIONS: 
+      JAVA_TOOL_OPTIONS:
         - -Dencryption.keystore.type=pkcs12
         - -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding
         - -Dencryption.keyAlgorithm=AES
         - -Dencryption.keystore.location=/var/opt/alfresco/content-services/keystore/<your-keystore-file>
         - -Dmetadata-keystore.metadata.algorithm=AES"
 ```
+
+### Specifing a different component repository
+
+In case you want to use a different server/repository for a specific artifact to further customize your deployment, you can override the default URL in two ways:
+
+You can change the value of `component.repository` key for the selected component, provided that the path to your custom artifact follows the conventional [Maven2 Repository Layout](https://maven.apache.org/repository/layout.html). For example to change the repository of ACS artifact you would:
+
+Edit `group_vars/all.yml`:
+
+```yaml
+acs:
+  version: 7.2.1
+  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution"
+  edition: Enterprise
+```
+
+to
+
+```yaml
+acs:
+  version: 7.2.1
+  repository: "https://your.repo.com/path/to/your/artifacts"
+  edition: Enterprise
+```
+
+> This assumes that the full URL to your custom artifact looks like `https://your.repo.com/path/to/your/artifacts/7.2.1/alfresco-content-services-distribution-7.2.1.zip`
+
+In case you want to install a different (not latest) ACS version, you should make similar changes to the respective `*-extra-vars.yml` file.
+
+The other way is to override the URL completely:
+
+In `group_vars/all.yml` you need to find the section under which the default download URL for the specific artifact is defined out of `downloads`, `war_downloads` and `amp_downloads` and override it, for example:
+
+```yaml
+downloads:
+  acs_zip_url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-content-services-community-distribution.zip"
+  acs_zip_sha1_checksum_url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-content-services-community-distribution.zip.sha1"
+```
+
+Or:
+
+```yaml
+war_downloads:
+  - url: "https://your.repo.com/path/to/your/artifacts/your-api-explorer.war"
+    sha1_checksum_url: "https://your.repo.com/path/to/your/artifacts/your-api-explorer.war.sha1"
+    dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
+```
+
+Or:
+
+```yaml
+amp_downloads:
+  - url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-aos-module.amp"
+    sha1_checksum_url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-aos-module.amp.sha1"
+    dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
+```
+
+> Be careful not to override the value for `dest` key
 
 ## Localhost Deployment
 
@@ -614,7 +672,7 @@ pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@communit
 
 Once the playbook is complete Ansible will display a play recap to let you know that everything is done, similar to the block below:
 
-```bash  
+```bash
 PLAY RECAP *******************************************************************************************************
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
 adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
@@ -677,7 +735,7 @@ pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@communit
 
 Once the playbook is complete Ansible will display a play recap to let you know that everything is done, similar to the block below:
 
-```bash  
+```bash
 PLAY RECAP *******************************************************************************************************
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
 adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
@@ -823,7 +881,7 @@ If everything is configured correctly you should see the following at the end of
 ```bash
 Saving to: ‘alfresco-content-services-distribution-6.2.2.pom’
 
-alfresco-content-services-distribution-6.2.2.pom      100%[=============================================>]   8.53K  --.-KB/s    in 0.003s  
+alfresco-content-services-distribution-6.2.2.pom      100%[=============================================>]   8.53K  --.-KB/s    in 0.003s
 
 2021-02-18 13:50:44 (2.54 MB/s) - ‘alfresco-content-services-distribution-6.2.2.pom’ saved [8739/8739]
 ```

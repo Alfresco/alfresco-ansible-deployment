@@ -43,6 +43,7 @@ Edit `7.0.N-extra-vars.yml` and changes the the bellow snippet:
 
 ```yaml
 acs:
+  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution"
   version: 7.0.1
   edition: Enterprise
 ```
@@ -51,6 +52,7 @@ to:
 
 ```yaml
 acs:
+  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution"
   version: 7.0.1.4
   edition: Enterprise
 ```
