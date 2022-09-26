@@ -18,7 +18,6 @@
       fail:
       when: |
         installed_components.acs is defined and
-        installed_components.amps is defined and
         installed_components.api_explorer is defined and
         (
           acs.edition != installed_components.acs.edition or
