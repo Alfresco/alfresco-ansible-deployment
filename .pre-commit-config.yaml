@@ -19,7 +19,7 @@ repos:
       - id: prospector
 
   - repo: https://github.com/ansible/ansible-lint
-    rev: v6.0.2
+    rev: v6.4.0
     hooks:
       - id: ansible-lint
 

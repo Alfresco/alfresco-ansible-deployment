@@ -1,0 +1,8 @@
+all:
+  children:
+    external:
+      children:
+        external_activemq:
+          hosts:
+            {{ mqhost }}:
+              {{ mqattrs | to_yaml }}

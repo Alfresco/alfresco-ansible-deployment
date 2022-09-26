@@ -6,8 +6,8 @@
   hosts: localhost
   gather_facts: false
   vars:
-    project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
-    dtas_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
+    project_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+    dtas_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
   tasks:
     - name: Creating cluster contentstore
       when: molecule_yml.platforms | selectattr('name', 'in', groups.repository) | length > 1
@@ -15,18 +15,18 @@
         - name: get EC2 instance info
           amazon.aws.ec2_instance_info:
             filters:
-              "tag:Name": molecule_{{ lookup('env', 'MOLECULE_IT_PLATFORM') }}_repo_{{ lookup('env', 'BRANCH_NAME') }}_{{ lookup('env', 'BUILD_NUMBER') }}
+              "tag:Name": molecule_{{ lookup('ansible.builtin.env', 'MOLECULE_IT_PLATFORM') }}_repo_{{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}_{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
           register: molecule_ec2
     
         - name: Create Shared contentstore
           community.aws.efs:
             state: present
-            name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
+            name: molecule-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
             targets:
               - subnet_id: "{{ molecule_yml.platforms | selectattr('name', 'in', groups.repository) | map(attribute='vpc_subnet_id') | first }}"
                 security_groups: "{{ molecule_ec2.instances | json_query('[].security_groups[].group_id') | unique }}"
             tags:
-              Name: molecule-{{ lookup('env', 'MOLECULE_SCENARIO_NAME') }}-{{ lookup('env', 'BRANCH_NAME') }}-{{ lookup('env', 'BUILD_NUMBER') }}
+              Name: molecule-{{ lookup('ansible.builtin.env', 'MOLECULE_SCENARIO_NAME') }}-{{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
               Owner: Ops Readiness Team
               Department: Engineering
               Production: false
@@ -40,7 +40,7 @@
             block: |
               cs_storage:
                 type: nfs
-                device: {{ contentstore.results[0].efs.filesystem_address }}{{ lookup('env', 'BRANCH_NAME') }}-{{ lookup('env', 'BUILD_NUMBER') }}
+                device: {{ contentstore.results[0].efs.filesystem_address }}{{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
                 options: _netdev,noatime,nodiratime,tcp,soft,intr
             path: host_vars/{{ item }}.yml
           loop: "{{ molecule_yml.platforms | selectattr('name', 'in', groups.repository) | map(attribute='name') }}"
@@ -72,7 +72,7 @@
               file:
                 state: directory
                 mode: 0777
-                path: /mnt/{{ lookup('env', 'BRANCH_NAME') }}-{{ lookup('env', 'BUILD_NUMBER') }}
+                path: /mnt/{{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
             - name: umount the EFS volume
               ansible.posix.mount:
                 path: /mnt
@@ -84,12 +84,12 @@
   hosts: localhost
   gather_facts: false
   vars:
-    broker_name: molecule-{{ lookup('env', 'BUILD_NUMBER') }}
+    broker_name: molecule-{{ lookup('ansible.builtin.env', 'BRANCH_NAME')[:42] }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
   tasks:
     - name: Lookup existing ec2 group
       amazon.aws.ec2_group_info:
         filters:
-          group-name: molecule-{{ lookup('env', 'MOLECULE_IT_ID') }}
+          group-name: molecule-{{ lookup('ansible.builtin.env', 'MOLECULE_IT_ID') }}
       register: ec2_groups_lookup
 
     - name: Load secrets as localhost hostvars
@@ -121,7 +121,12 @@
         activemq_hostname: "{{ (describe_broker_output.stdout | from_json).BrokerInstances[0].Endpoints[0] | urlsplit('hostname') }}"
 
     - name: Configure activemq hostname as {{ activemq_hostname }}
-      ansible.builtin.replace:
-        path: hosts.yml
-        regexp: 'external_activemq_hostname'
-        replace: "{{ activemq_hostname }}"
+      vars:
+        mqhost: "{{ activemq_hostname }}"
+        mqattrs:
+          activemq_username: alfresco
+          activemq_port: 61617
+          activemq_protocol: ssl
+      ansible.builtin.template:
+        src: hosts.yml.j2
+        dest: hosts.yml

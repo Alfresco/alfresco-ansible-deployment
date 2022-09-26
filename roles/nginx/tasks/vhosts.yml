@@ -14,7 +14,7 @@
         state: directory
 
     - name: Include ssl vhost if enabled
-      include_vars: "ssl.yml"
+      include_vars: ssl.yml
       when: use_ssl
 
     - name: Add ssl key
@@ -37,7 +37,7 @@
 
     - name:  Add managed vhost config files.
       template:
-        src: "{{ item.template|default(nginx_vhost_template) }}"
+        src: "{{ item.template | default(nginx_vhost_template) }}"
         dest: "{{ nginx_vhost_path }}/{{ item.filename }}"
         force: true
         owner: root
