@@ -64,6 +64,8 @@ jobs:
 
   docker_integration:
     runs-on: ubuntu-latest
+    env:
+      MOLECULE_IT_TEST_CONFIG: tests/test-config.json
     strategy:
       fail-fast: true
       matrix:
