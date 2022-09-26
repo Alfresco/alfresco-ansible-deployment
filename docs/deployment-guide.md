@@ -587,6 +587,9 @@ Or to deploy ACS Community use the following command:
 pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@community-extra-vars.yml"
 ```
 
+By default, the ACS playbook will now also check compatibility of OS if it is  fully supported.
+You can add flag '-e skip_os_test=true' if you want to deploy on not supported OS distribution.
+
 > NOTE: The playbook takes around 30 minutes to complete.
 
 Once the playbook is complete Ansible will display a play recap to let you know that everything is done, similar to the block below:
