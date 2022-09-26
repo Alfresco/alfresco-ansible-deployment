@@ -30,7 +30,7 @@
 
     - name: "Set variables"
       ansible.builtin.set_fact:
-        certificate_domain: "{{  }}"
+        certificate_domain: "{{ node_hostname }}"
         private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.key"
         cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.crt"
 
