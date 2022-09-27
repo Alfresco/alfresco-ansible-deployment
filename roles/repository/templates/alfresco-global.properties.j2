@@ -28,8 +28,9 @@ share.protocol={% if use_ssl | bool %}https{% else %}http{% endif %}
 {% if groups.search_enterprise | default(False) %}
 index.subsystem.name=elasticsearch
 elasticsearch.createIndexIfNotExists=true
-elasticsearch.host=elasticsearch
-elasticsearch.port=9200
+elasticsearch.indexName=alfresco
+elasticsearch.host={{ elasticsearch_host }}
+elasticsearch.port={{ ports_cfg.elasticsearch.http }}
 {% else %}
 index.subsystem.name=solr6
 solr.secureComms={% if acs.version is version('7.2.0', '>=') %}secret{% else %}none{% endif %}

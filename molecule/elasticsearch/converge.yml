@@ -2,4 +2,6 @@
 - name: Run the playbook
   vars:
     autogen_unsecure_secrets: True
+    elasticsearch_cluster_initial_master_nodes:
+      - search-enteprise-integration-instance
   ansible.builtin.import_playbook: ../../playbooks/acs.yml

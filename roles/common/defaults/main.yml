@@ -39,6 +39,7 @@ sfs_host: "{% if 'transformers' not in groups %}127.0.0.1{% else %}{{ hostvars[g
 trouter_host: "{% if 'transformers' not in groups %}127.0.0.1{% else %}{{ hostvars[groups.transformers[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
 adw_host: "{% if 'adw' not in groups %}127.0.0.1{% else %}{{ hostvars[groups.adw[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
 sync_host: "{% if 'syncservice' not in groups %}127.0.0.1{% else %}{{ hostvars[groups.syncservice[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
+elasticsearch_host: "{% if 'elasticsearch' not in groups %}127.0.0.1{% else %}{{ hostvars[groups.elasticsearch[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
 
 ports_cfg:
   nginx:
@@ -67,6 +68,8 @@ ports_cfg:
   sync:
     http: 9090
     admin: 9093
+  elasticsearch:
+    http: 9200
 
 # Default download location of necessary artefacts
 download_location: /tmp/ansible_artefacts
