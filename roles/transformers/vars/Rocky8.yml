@@ -1,8 +1,8 @@
 ---
 imagemagick_version: 7.1.0-16-ci
 imagemagick_packages:
-  - imagemagick-distribution-el8-libs
-  - imagemagick-distribution-el8
+  - imagemagick-distribution-rocky8-libs
+  - imagemagick-distribution-rocky8
 
 utils_transform:
   - libX11-xcb
