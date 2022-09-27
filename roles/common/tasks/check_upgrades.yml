@@ -1,12 +1,13 @@
 ---
-- name: Get Alfresco Ansible status file
-  fetch:
+- name: Fetch status file with installed versions
+  ansible.builtin.fetch:
     src: "{{ ansible_installation_status_file }}"
     fail_on_missing: no
     dest: /tmp/
   register: ansible_components_status
+  changed_when: false
 
-- name: read installed versions
+- name: Read installed versions from status file when available
   include_vars:
     file: /tmp/{{ inventory_hostname }}/{{ ansible_installation_status_file }}
     name: installed_components
