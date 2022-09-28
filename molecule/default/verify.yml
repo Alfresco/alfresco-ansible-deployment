@@ -7,7 +7,6 @@
     dtas_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
     test_config_file: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/{{ lookup('ansible.builtin.env', 'MOLECULE_IT_TEST_CONFIG', default='tests/test-config.json') }}"
   tasks:
-
     - name: Gather EC2 facts
       delegate_to: "{{ groups['nginx'][0] }}"
       amazon.aws.ec2_metadata_facts:
