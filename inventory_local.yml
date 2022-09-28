@@ -15,6 +15,13 @@ all:
     search:
       children:
         repository:
+    # Enterprise Search section start
+    # alternative to `search` group
+    search_enterprise:
+      children:
+    elasticsearch:
+      children:
+    # Enterprise Search section end
     nginx:
       children:
         repository:
