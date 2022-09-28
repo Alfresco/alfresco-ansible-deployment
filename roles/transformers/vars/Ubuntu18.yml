@@ -1,2 +1,4 @@
 ---
-imagemagick_version: 7.0.10-11
+imagemagick_version: 7.1.0-16-ci
+imagemagick_packages:
+  - imagemagick-distribution-ubuntu-18.04
