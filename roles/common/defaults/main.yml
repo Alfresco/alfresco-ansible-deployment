@@ -31,15 +31,15 @@ activemq_protocol: >-
   {% if groups.external_activemq | default(False) %}
   {{- groups.external_activemq | map('extract', hostvars, ['activemq_protocol']) | first | default('tcp') -}}
   {% else %}tcp{% endif %}
-db_host: "{% if 'database' not in groups %}127.0.0.1{% else %}{{ hostvars[groups.database[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
-solr_host: "{% if 'search' not in groups %}127.0.0.1{% else %}{{ hostvars[groups.search[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
+db_host: "{% if groups.database | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.database[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
+solr_host: "{% if 'search' not in groups or groups.search | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.search[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
 share_host: "{{ repo_host }}"
-ats_tengine_aio_host: "{% if 'transformers' not in groups %}127.0.0.1{% else %}{{ hostvars[groups.transformers[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
-sfs_host: "{% if 'transformers' not in groups %}127.0.0.1{% else %}{{ hostvars[groups.transformers[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
-trouter_host: "{% if 'transformers' not in groups %}127.0.0.1{% else %}{{ hostvars[groups.transformers[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
-adw_host: "{% if 'adw' not in groups %}127.0.0.1{% else %}{{ hostvars[groups.adw[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
-sync_host: "{% if 'syncservice' not in groups %}127.0.0.1{% else %}{{ hostvars[groups.syncservice[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
-elasticsearch_host: "{% if 'elasticsearch' not in groups %}127.0.0.1{% else %}{{ hostvars[groups.elasticsearch[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
+ats_tengine_aio_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.transformers[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
+sfs_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.transformers[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
+trouter_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.transformers[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
+adw_host: "{% if groups.adw | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.adw[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
+sync_host: "{% if groups.syncservice | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.syncservice[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
+elasticsearch_host: "{% if 'elasticsearch' not in groups or groups.elasticsearch | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.elasticsearch[0]].ansible_default_ipv4.address | default('127.0.0.1') }}{% endif %}"
 
 ports_cfg:
   nginx:
