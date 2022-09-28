@@ -10,7 +10,7 @@ ats_home: "{{ binaries_folder }}/transform-service"
 
 # Due to https://github.com/ansible/ansible/issues/64957
 # Using default() filter for hostvars 1st level key requires ansible 2.10+
-nginx_host: "{{ groups['nginx'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
+nginx_host: "{{ groups['nginx'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
 repo_hosts: |
   {{ groups['repository'] | map('extract', hostvars)
   | json_query('[].
@@ -31,14 +31,14 @@ activemq_protocol: >-
   {% if groups.external_activemq | default(False) %}
   {{- groups.external_activemq | map('extract', hostvars, ['activemq_protocol']) | first | default('tcp') -}}
   {% else %}tcp{% endif %}
-db_host: "{{ groups['database'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
-solr_host: "{{ groups['search'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
-ats_tengine_aio_host: "{{ groups['transformers'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
-sfs_host: "{{ groups['transformers'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
-trouter_host: "{{ groups['transformers'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
-adw_host: "{{ groups['adw'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
-sync_host: "{{ groups['syncservice'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
-elasticsearch_host: "{{ groups['elasticsearch'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
+db_host: "{{ groups['database'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
+solr_host: "{{ groups['search'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
+ats_tengine_aio_host: "{{ groups['transformers'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
+sfs_host: "{{ groups['transformers'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
+trouter_host: "{{ groups['transformers'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
+adw_host: "{{ groups['adw'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
+sync_host: "{{ groups['syncservice'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
+elasticsearch_host: "{{ groups['elasticsearch'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
 
 ports_cfg:
   nginx:
