@@ -22,7 +22,7 @@
     - name: Gather EC2 facts
       delegate_to: "{{ groups['nginx'] | first }}"
       amazon.aws.ec2_metadata_facts:
-      ignore_errors: yes
+      failed_when: false
 
     - name: Set hostname fact from EC2 or localhost
       ansible.builtin.set_fact:
@@ -38,7 +38,7 @@
       community.crypto.openssl_privatekey:
         path: "{{ private_key_path }}"
 
-    - name: Create CSR for {{ certificate_domain }} self-signed certificate
+    - name: "Create CSR self-signed certificate for {{ certificate_domain }}"
       community.crypto.openssl_csr_pipe:
         privatekey_path: "{{ private_key_path }}"
         common_name: "{{ certificate_domain }}"

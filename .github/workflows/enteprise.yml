@@ -63,9 +63,8 @@ jobs:
           command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
 
   docker_integration:
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
-    env:
-      MOLECULE_IT_TEST_CONFIG: tests/test-config.json
     strategy:
       fail-fast: true
       matrix:
