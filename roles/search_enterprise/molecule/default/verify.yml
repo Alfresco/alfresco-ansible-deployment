@@ -1,10 +1,24 @@
 ---
-# This is an example playbook to execute Ansible tests.
-
 - name: Verify
   hosts: all
   gather_facts: false
   tasks:
-  - name: Example assertion
-    ansible.builtin.assert:
-      that: true
+    - name: Populate service facts
+      ansible.builtin.service_facts:
+
+    - name: Check that Elasticsearch Connector service is up and running
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['elasticsearch-connector.service'] is defined
+          - ansible_facts.services['elasticsearch-connector.service'].state == 'running'
+
+    - name: Get errors in the journal of Elasticsearch Connector service
+      ansible.builtin.command: journalctl -u elasticsearch-connector.service -g ERROR -q
+      register: error_log
+
+    - name: Assert no errors are present in the log
+      ansible.builtin.assert:
+        that:
+          - error_log.msg | length == 0
+          - error_log.stdout_lines | length == 0
+          - error_log.stderr_lines | length == 0
