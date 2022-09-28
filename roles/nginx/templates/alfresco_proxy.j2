@@ -73,7 +73,7 @@
         proxy_pass_header Set-Cookie;
         proxy_pass_header Set-Cookie;
     }
-    
+
 {% if acs.edition == "Enterprise" %}
     location /syncservice/ {
         proxy_pass http://{{ sync_host }}:{{ ports_cfg.sync.http }}/alfresco/;

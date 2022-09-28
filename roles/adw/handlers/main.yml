@@ -9,7 +9,7 @@
 
 - name: restart-nginx
   become: true
-  service: 
-    name: nginx 
+  service:
+    name: nginx
     state: restarted
     daemon_reload: true

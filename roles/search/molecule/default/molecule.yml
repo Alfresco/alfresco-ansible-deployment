@@ -25,7 +25,7 @@ provisioner:
     - -e
     - "@../../tests/molecule/secrets.yml"
   inventory:
-    links: 
+    links:
       group_vars: ../../../../group_vars
       host_vars: host_vars
 verifier:

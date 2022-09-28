@@ -6,7 +6,7 @@
                 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
                 http://www.hazelcast.com/schema/spring
                 https://hazelcast.com/schema/spring/hazelcast-spring-2.4.xsd">
-   
+
    <!--
         Hazelcast distributed messaging configuration - Share web-tier cluster config
         - see http://www.hazelcast.com/docs.jsp
@@ -36,7 +36,7 @@
          </hz:network>
       </hz:config>
    </hz:hazelcast>
-   
+
    <bean id="webframework.cluster.clusterservice" class="org.alfresco.web.site.ClusterTopicService" init-method="init">
       <property name="hazelcastInstance" ref="webframework.cluster.slingshot" />
       <property name="hazelcastTopicName"><value>slingshot-topic</value></property>

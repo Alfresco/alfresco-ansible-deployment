@@ -23,7 +23,7 @@ provisioner:
     defaults:
       pipelining: True
   inventory:
-    links: 
+    links:
       group_vars: ../../../../group_vars
       host_vars: host_vars
 verifier:

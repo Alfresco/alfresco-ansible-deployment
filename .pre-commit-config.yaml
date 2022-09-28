@@ -1,9 +1,24 @@
 ---
 repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.2.0
+    hooks:
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-json
+      - id: check-xml
+      - id: check-merge-conflict
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
   - repo: https://github.com/Riverside-Healthcare/djLint
     rev: v1.18.0
     hooks:
       - id: djlint-jinja
+
   - repo: https://github.com/jackdewinter/pymarkdown
     rev: v0.9.6
     hooks:

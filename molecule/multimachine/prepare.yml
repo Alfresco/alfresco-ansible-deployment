@@ -17,7 +17,7 @@
             filters:
               "tag:Name": molecule_{{ lookup('ansible.builtin.env', 'MOLECULE_IT_PLATFORM') }}_repo_{{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}_{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
           register: molecule_ec2
-    
+
         - name: Create Shared contentstore
           community.aws.efs:
             state: present
@@ -30,7 +30,7 @@
               Owner: Ops Readiness Team
               Department: Engineering
               Production: false
-          loop: 
+          loop:
             - "{{ molecule_yml.platforms | selectattr('name', 'in', groups.repository) | first }}"
           register: contentstore
 

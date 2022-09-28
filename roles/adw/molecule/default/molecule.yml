@@ -18,7 +18,7 @@ platforms:
 provisioner:
   name: ansible
   inventory:
-    links: 
+    links:
       host_vars: host_vars
       group_vars: ../../../../group_vars
 verifier:

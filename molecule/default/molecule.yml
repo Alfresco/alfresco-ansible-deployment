@@ -37,7 +37,7 @@ provisioner:
     - -e
     - "@tests/test-ssl.yml"
   inventory:
-    links: 
+    links:
       group_vars: ../../group_vars
   playbooks:
     converge: ../../playbooks/acs.yml

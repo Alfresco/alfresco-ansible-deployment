@@ -7,7 +7,7 @@
     enabled: true
     state: started
     daemon_reload: true
-    
+
 - name: restart-activemq
   become: true
   service:
