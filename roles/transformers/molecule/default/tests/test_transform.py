@@ -64,3 +64,7 @@ def test_libreoffice_install(host):
     """Check that libreoffice binary doesn't miss any dependencies"""
     p = host.run("/opt/libreoffice7.2/program/soffice.bin --version")
     assert_that(p.stdout, contains_string("LibreOffice 7.2.5.1 6d497ff5e83a906a307eb25cce314d40c0b8624f"))
+
+def test_no_ghostscript(host):
+    p = host.run_expect([1], "command -v gs")
+    p = host.run_expect([1], "command -v ghostscript")

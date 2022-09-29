@@ -52,3 +52,7 @@ def test_environment_jvm_opts(host):
         if 'alfresco-transform-router' in java_process.args:
             assert_that(java_process.args, contains_string('-Xmx900m'))
             assert_that(java_process.args, contains_string('-Xms800m'))
+
+def test_no_ghostscript(host):
+    p = host.run_expect([1], "command -v gs")
+    p = host.run_expect([1], "command -v ghostscript")
