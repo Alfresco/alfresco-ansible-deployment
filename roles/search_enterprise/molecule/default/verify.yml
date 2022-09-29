@@ -14,7 +14,7 @@
 
     - name: Get errors in the journal of Elasticsearch Connector service
       become: true
-      ansible.builtin.command: "journalctl -u elasticsearch-connector.service -g (ERROR|WARN) -q"
+      ansible.builtin.shell: "journalctl -u elasticsearch-connector.service -q | grep -E '(ERROR|WARN)'"
       failed_when: error_log.rc not in [0,1]
       register: error_log
 
@@ -23,4 +23,4 @@
         that:
           - error_log.stdout | length == 0
           - error_log.stderr | length == 0
-        msg: "{{ error_log.stdout }}"
+        msg: "{{ error_log.stdout }} {{ error_log.stderr }}"
