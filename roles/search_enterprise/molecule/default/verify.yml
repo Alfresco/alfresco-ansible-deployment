@@ -13,12 +13,14 @@
           - ansible_facts.services['elasticsearch-connector.service'].state == 'running'
 
     - name: Get errors in the journal of Elasticsearch Connector service
-      ansible.builtin.command: journalctl -u elasticsearch-connector.service -g ERROR -q
+      become: true
+      ansible.builtin.command: "journalctl -u elasticsearch-connector.service -g (ERROR|WARN) -q"
+      failed_when: error_log.rc not in [0,1]
       register: error_log
 
-    - name: Assert no errors are present in the log
+    - name: Assert no errors or warnings are present in the service log
       ansible.builtin.assert:
         that:
-          - error_log.msg | length == 0
-          - error_log.stdout_lines | length == 0
-          - error_log.stderr_lines | length == 0
+          - error_log.stdout | length == 0
+          - error_log.stderr | length == 0
+        msg: "{{ error_log.stdout }}"
