@@ -42,7 +42,7 @@ sync_host: "{% if groups.syncservice | length == 0 %}127.0.0.1{% else %}{{ hostv
 
 ports_cfg:
   nginx:
-    http: 80 
+    http: 80
     https: 443
   activemq:
     openwire: >-
@@ -53,7 +53,7 @@ ports_cfg:
       {% endif %}
   repository:
     http: 8080
-    https: 8443 
+    https: 8443
     shutdown: 8005
   postgres:
     sql: 5432
