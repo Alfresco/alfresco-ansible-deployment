@@ -4,7 +4,7 @@ This page describes how to generate one or more target hosts and an inventory fi
 
 Until we have a more convenient mechanism to create test machines i.e. Terraform or CloudFormation we can use `molecule`, a tool designed for testing Ansible playbooks.
 
-Molecule provides support for testing with multiple instances, operating systems and distributions, virtualization providers, test frameworks and testing scenarios. It also provides a way to create and destroy AWS EC2 instances that can be used as target hosts, we use this as part of our internal testing pipeline.
+Molecule provides support for testing with multiple instances, operating systems and distributions, virtualisation providers, test frameworks and testing scenarios. It also provides a way to create and destroy AWS EC2 instances that can be used as target hosts, we use this as part of our internal testing pipeline.
 
 ## Prerequisites
 

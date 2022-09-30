@@ -5,7 +5,7 @@ This page is a developer's guide to popular commands used in the process of sett
 ## Basic pipenv knowledge
 
 The general purpose of pipenv is similar to that of Package installer for Python (PIP) and built-in venv.
-This is external python library, which handles package installing from either commandline (with special pipenv prefix in shell, similar to pip install), requirements.txt or Pipfile.
+This is external python library, which handles package installing from either command line (with special pipenv prefix in shell, similar to pip install), requirements.txt or Pipfile.
 Whether we install one package or dependencies from requirements.txt, pipenv creates Pipfile, a special file for itself,
 and then installs packages we specified inside virtual environment, NOT globally.
 While specifyng new package, pipenv adds that package name to Pipfile, installs it (while also generating hashcodes for .lock file)
@@ -28,7 +28,7 @@ Once we are inside this environment, we can use all the packages which we specif
 This is the environment where it is highly recommended to develop python.
 
 > NOTE: Right now it is not supported by pipenv to have two virtual environments in the same directory, so if you
-> try work with two differents environments within same directory, you will overwrite the previously created virtual environment
+> try work with two different environments within same directory, you will overwrite the previously created virtual environment
 
 ```bash
 pipenv shell

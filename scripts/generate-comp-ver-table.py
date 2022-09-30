@@ -10,7 +10,7 @@ import yaml
 def get_acs_extra_vars_files():
     """Return list of extra-vars files in repository."""
     var_files = glob.glob("*-extra-vars.yml")[::-1]
-    # explicit sorting to avoid filesystem ordering issues
+    # explicit sorting to avoid file-system ordering issues
     var_files.sort()
     var_files.reverse()
     # move community to the end of list
