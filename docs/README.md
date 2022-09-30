@@ -28,7 +28,7 @@ A role directory structure contains directories: defaults, vars, tasks, files, t
 
 The project contains a playbook and multiple roles.
 
-The ACS playbook can be found in the _playbooks_ directory. Because the project makes use of ansible role structure, the playbook contains only definitions of the roles, and all the logic is perfomed by them, thus making the project both granular and easy to maintain.
+The ACS playbook can be found in the _playbooks_ directory. Because the project makes use of Ansible role structure, the playbook contains only definitions of the roles, and all the logic is performed by them, thus making the project both granular and easy to maintain.
 
 The playbook uses the following roles:
 
