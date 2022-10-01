@@ -42,8 +42,8 @@ sync_host: "{% if groups.syncservice | length == 0 %}127.0.0.1{% else %}{{ hostv
 
 ports_cfg:
   nginx:
-    http: "{{ ports.nginx.http | default(80) }}"
-    https: "{{ ports.nginx.https | default(443) }}"
+    http: 80
+    https: 443
   activemq:
     openwire: >-
       {% if groups.external_activemq | default(False) %}
@@ -52,21 +52,21 @@ ports_cfg:
       {{- ports.activemq.openwire | default(61616) -}}
       {% endif %}
   repository:
-    http: "{{ ports.repository.http | default(8080) }}"
-    https: "{{ ports.repository.https | default(8443) }}"
-    shutdown: "{{ ports.repository.shutdown | default(8005) }}"
+    http: 8080
+    https: 8443
+    shutdown: 8005
   postgres:
-    sql: "{{ ports.postgres.sql | default(5432) }}"
+    sql: 5432
   transformers:
-    tengine: "{{ ports.transformers.tengine | default('8090') }}"
-    trouter: "{{ ports.transformers.trouter | default('8095') }}"
+    tengine: 8090
+    trouter: 8095
   sfs:
-    http: "{{ ports.sfs.http | default('8099') }}"
+    http: 8099
   search:
-    http: "{{ ports.search.http | default('8983') }}"
+    http: 8983
   sync:
-    http: "{{ ports.sync.http | default('9090') }}"
-    admin: "{{ ports.sync.admin | default('9093') }}"
+    http: 9090
+    admin: 9093
 
 # Default download location of necessary artefacts
 download_location: /tmp/ansible_artefacts
