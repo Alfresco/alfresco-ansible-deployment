@@ -85,6 +85,10 @@
     - role: ../roles/search
       search_flavor: >-
         {{ 'alfresco-insight-engine' if 'insight-engine' in search.artifact_name else 'alfresco-search-services' }}
+      alfresco:
+        host: "{{ nginx_host }}"
+        port: "{{ ports_cfg.nginx.http }}"
+        port_ssl: "{{ ports_cfg.nginx.https }}"
   post_tasks:
     - name: Make sure Solr is running
       become: yes
