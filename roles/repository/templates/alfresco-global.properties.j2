@@ -25,12 +25,12 @@ share.port={% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_
 
 share.protocol={% if use_ssl | bool %}https{% else %}http{% endif %}
 
-{% if 'search' in groups and groups.search | length >= 1 %}
+{% if groups['search'] | default([]) | length >= 1 %}
 index.subsystem.name=solr6
 solr.secureComms={% if acs.version is version('7.2.0', '>=') %}secret{% else %}none{% endif +%}
 solr.port={{ ports_cfg.search.http }}
 solr.host={{ solr_host }}
-{% elif 'elasticsearch' in groups and groups.elasticsearch | length >= 1 %}
+{% elif groups['search_enterprise'] | default([]) | length >= 1 %}
 index.subsystem.name=elasticsearch
 elasticsearch.createIndexIfNotExists=true
 elasticsearch.indexName=alfresco
