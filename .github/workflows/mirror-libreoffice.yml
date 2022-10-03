@@ -1,10 +1,34 @@
-name: mirror-libreoffice
+name: Mirror libreoffice
 
 on:
   workflow_dispatch:
+    inputs:
+      libreoffice_version:
+        description: The libreoffice version to mirror
+        required: true
 
 jobs:
   mirror:
+    strategy:
+      fail-fast: true
+      matrix:
+        package_type:
+          - deb
+          - rpm
     runs-on: ubuntu-latest
     steps:
-      - run: echo for testing purposes
+      - name: Download libreoffice ${{ inputs.libreoffice_version }} ${{ matrix.package_type }}
+        run: wget https://downloadarchive.documentfoundation.org/libreoffice/old/${{ inputs.libreoffice_version }}/${{ matrix.package_type }}/x86_64/LibreOffice_${{ inputs.libreoffice_version }}_Linux_x86-64_${{ matrix.package_type }}.tar.gz
+
+      - name: Deploy to nexus
+        uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@a23992ea03f16181e23cf7e934b7c0d2f9f4a291
+        with:
+          group-id: org.libreoffice
+          artifact-id: libreoffice-dist-test
+          repository-url: https://nexus.alfresco.com/nexus/content/repositories/thirdparty/
+          version: ${{ inputs.libreoffice_version }}
+          generate-pom: false
+          file: LibreOffice_${{ inputs.libreoffice_version }}_Linux_x86-64_${{ matrix.package_type }}.tar.gz
+          classifier: ${{ matrix.package_type }}
+          maven-username: ${{ secrets.NEXUS_USERNAME }}
+          maven-password: ${{ secrets.NEXUS_PASSWORD }}
