@@ -9,3 +9,7 @@ alfresco:
   host: localhost
   port: 80
   port_ssl: 443
+solr:
+  port: 8983
+  host: localhost
+  scheme: http
