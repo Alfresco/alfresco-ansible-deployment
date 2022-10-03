@@ -1,0 +1,50 @@
+---
+argument_specs:
+  main:
+    short_description: deploys Alfresco Search Service
+    description: |
+      This role deploys Alfresco Search Service, or Search & Insight Engine,
+      The Solr based component which provides Full Text Search capabilities
+      to Alfresco repository.
+    author: Alfresco
+    options:
+      reposearch_shared_secret:
+        description: |
+          The shared secret Alfresco repository and Solr
+          use to authenticate to each other.
+        required: true
+        type: int
+      data_dir_root:
+        description: |
+          This property specifies the top level directory path for the indexes
+          managed by Solr, for example /alfresco-search-services/solrhome.
+        required: false
+        type: str
+        default: /opt/alfresco/search-services
+      alfresco:
+        description: |
+          A dictionnary to define Alfresco repository configuration.
+        required: false
+        type: dict
+        options:
+          host:
+            description: |
+              This property specifies the host name for the instance that Solr
+              should track and index.
+            required: false
+            type: str
+            default: localhost
+          port:
+            description: |
+              This property specifies the HTTP port for the instance that Solr
+              should track and index.
+            required: false
+            type: str
+            default: 80
+          port_ssl:
+            description: |
+              This property specifies the HTTPS port for the instance that Solr
+              should track and index.
+            required: false
+            type: str
+            default: 443
