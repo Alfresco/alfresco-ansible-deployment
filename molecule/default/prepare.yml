@@ -65,6 +65,7 @@
           - clone_github_token.startswith('ghp_')
 
     - name: Git checkout
-      ansible.builtin.command:
-        cmd: "git clone --depth 1 --branch {{ dtas_version }} https://{{ clone_github_token }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git {{ dtas_dir }}"
-        creates: "{{ dtas_dir }}"
+      ansible.builtin.git:
+        repo: "https://{{ clone_github_token }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
+        dest: "{{ dtas_dir }}"
+        version: "{{ dtas_version }}"
