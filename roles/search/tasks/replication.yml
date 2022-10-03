@@ -1,0 +1,60 @@
+---
+- name: Make sure host do not assume a previous role
+  become: true
+  vars:
+    replication_norole: >-
+      {% if inventory_hostname==groups.search[0] %}slave
+      {%- else %}master
+      {%- endif %}
+  community.general.xml:
+    path: "{{ config_dir }}/solrhome/templates/{{ item }}/conf/solrconfig.xml"
+    xpath: /config/requestHandler[@name="/replication"]/lst[@name="{{ replication_norole }}"]
+    state: absent
+  loop:
+    - rerank
+    - noRerank
+
+- name: Configure solrconfig.xml for Solr Replication
+  become: true
+  vars:
+    master_xml: |
+      <lst name="master">
+        <str name="ReplicateAfter">commit</str>
+        <str name="ReplicateAfter">startup</str>
+        <str name="confFiles">"schema.xml,stopwords.txt"</str>
+      </lst>
+    slave_xml: |
+      <lst name="slave">
+        <str name="masterUrl">{{ solr.scheme }}://{{ solr.host }}:{{ solr.port }}/solr/alfresco</str>
+        <str name="PollInterval">00:00:15</str>
+      </lst>
+    replication_xml: >-
+      {% if inventory_hostname==groups.search[0] %}{{ master_xml }}
+      {%- else %}{{ slave_xml }}
+      {%- endif %}
+  xml:
+    input_type: xml
+    pretty_print: yes
+    path: "{{ config_dir }}/solrhome/templates/{{ item }}/conf/solrconfig.xml"
+    xpath: /config/requestHandler[@name="/replication"]
+    set_children:
+      - "{{ replication_xml }}"
+  loop:
+    - rerank
+    - noRerank
+
+- name: Tweak slaves config
+  become: true
+  vars:
+    replication_norole: >-
+      {% if inventory_hostname==groups.search[0] %}slave
+      {%- else %}master
+      {%- endif %}
+  community.general.xml:
+    path: "{{ config_dir }}/solrhome/templates/{{ item }}/conf/solrconfig.xml"
+    xpath: /config/indexConfig/nrtMode
+    value: "false"
+  loop:
+    - rerank
+    - noRerank
+  when: inventory_hostname != groups.search[0]

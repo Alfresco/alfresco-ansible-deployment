@@ -92,6 +92,7 @@
       solr:
         host: "{{ solr_host }}"
         port: "{{ ports_cfg.search.http }}"
+        scheme: http
   post_tasks:
     - name: Make sure Solr is running
       become: yes

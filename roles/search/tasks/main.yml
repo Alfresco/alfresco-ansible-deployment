@@ -99,6 +99,10 @@
         - rerank
         - noRerank
 
+    - name: Set Replication in Solr templates
+      import_tasks: replication.yml
+      when: groups.search | length > 1
+
     - name: add solr home to setenv.sh
       lineinfile:
         path: "{{ config_folder }}/setenv.sh"
