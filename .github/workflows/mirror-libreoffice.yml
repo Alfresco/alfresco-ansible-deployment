@@ -1,0 +1,10 @@
+name: mirror-libreoffice
+
+on:
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo for testing purposes
