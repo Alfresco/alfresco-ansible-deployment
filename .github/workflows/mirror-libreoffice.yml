@@ -1,6 +1,7 @@
 name: Mirror libreoffice
 
 on:
+  push:
   workflow_dispatch:
     inputs:
       libreoffice_version:
@@ -22,6 +23,7 @@ jobs:
 
       - name: Deploy to nexus
         uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@a23992ea03f16181e23cf7e934b7c0d2f9f4a291
+        if: github.event_name == 'workflow_dispatch'
         with:
           group-id: org.libreoffice
           artifact-id: libreoffice-dist-test
