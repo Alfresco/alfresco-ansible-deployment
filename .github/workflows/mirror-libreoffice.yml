@@ -22,7 +22,7 @@ jobs:
       - name: Download libreoffice ${{ inputs.libreoffice_version }} ${{ matrix.package_type }}
         run: wget https://downloadarchive.documentfoundation.org/libreoffice/old/${{ inputs.libreoffice_version }}/${{ matrix.package_type }}/x86_64/$FILENAME
 
-      - name: Calculate checksum
+      - name: Calculate checksum (just for reference)
         run: |
           sha1sum ${FILENAME} > ${FILENAME}.sha1
           cat ${FILENAME}.sha1
@@ -35,7 +35,7 @@ jobs:
           repository-url: https://nexus.alfresco.com/nexus/content/repositories/thirdparty/
           version: ${{ inputs.libreoffice_version }}
           generate-pom: false
-          file: LibreOffice_${{ inputs.libreoffice_version }}_Linux_x86-64_${{ matrix.package_type }}.tar.gz
+          file: ${{ env.FILENAME }}
           classifier: ${{ matrix.package_type }}
           maven-username: ${{ secrets.NEXUS_USERNAME }}
           maven-password: ${{ secrets.NEXUS_PASSWORD }}
