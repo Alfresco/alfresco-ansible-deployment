@@ -31,7 +31,7 @@ jobs:
         uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@deploy-file-fix
         with:
           group-id: org.libreoffice
-          artifact-id: libreoffice-dist-test
+          artifact-id: libreoffice-dist
           repository-url: https://nexus.alfresco.com/nexus/content/repositories/thirdparty/
           version: ${{ inputs.libreoffice_version }}
           generate-pom: false
