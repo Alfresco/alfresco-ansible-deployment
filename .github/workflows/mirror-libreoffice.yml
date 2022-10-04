@@ -20,15 +20,26 @@ jobs:
       FILENAME: LibreOffice_${{ inputs.libreoffice_version }}_Linux_x86-64_${{ matrix.package_type }}.tar.gz
     steps:
       - name: Download libreoffice ${{ inputs.libreoffice_version }} ${{ matrix.package_type }}
-        run: wget https://downloadarchive.documentfoundation.org/libreoffice/old/${{ inputs.libreoffice_version }}/${{ matrix.package_type }}/x86_64/$FILENAME
+        run: wget https://downloadarchive.documentfoundation.org/libreoffice/old/${{ inputs.libreoffice_version }}/${{ matrix.package_type }}/x86_64/${FILENAME}
 
-      - name: Calculate checksum (just for reference)
-        run: |
-          sha1sum ${FILENAME} > ${FILENAME}.sha1
-          cat ${FILENAME}.sha1
+      - name: Download the signature
+        run: wget https://downloadarchive.documentfoundation.org/libreoffice/old/${{ inputs.libreoffice_version }}/${{ matrix.package_type }}/x86_64/${FILENAME}.asc
+
+      - name: Print checksum
+        run: sha1sum ${FILENAME}
+
+      # https://keyserver.ubuntu.com/pks/lookup?search=LibreOffice+Build+Team&fingerprint=on&op=index
+      - name: Import gpg key for LibreOffice Build Team
+        run: gpg --keyserver keyserver.ubuntu.com --recv-keys C2839ECAD9408FBE9531C3E9F434A1EFAFEEAEA3
+
+      # trusted signature warning is not a problem
+      # https://serverfault.com/questions/569911/how-to-verify-an-imported-gpg-key/569923#569923
+      - name: Verify signature of the package
+        run: gpg --verify ${FILENAME}.asc
 
       - name: Deploy to nexus
         uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@4c2dac47950d36319cb4d03cef769766a0b90e74
+        if: false
         with:
           group-id: org.libreoffice
           artifact-id: libreoffice-dist
