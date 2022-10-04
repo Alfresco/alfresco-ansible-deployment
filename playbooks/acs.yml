@@ -91,8 +91,8 @@
         port_ssl: "{{ ports_cfg.nginx.https }}"
       topology: >-
         {% if groups.search | length > 1 %}replication
-        {% else %}standalone
-        {% endif %}
+        {%- else %}standalone
+        {%- endif %}
   post_tasks:
     - name: Make sure Solr is running
       become: yes

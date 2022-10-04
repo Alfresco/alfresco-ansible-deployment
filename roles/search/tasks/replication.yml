@@ -32,7 +32,7 @@
       {% if inventory_hostname==solr.master %}{{ master_xml }}
       {%- else %}{{ slave_xml }}
       {%- endif %}
-  xml:
+  community.general.xml:
     input_type: xml
     pretty_print: yes
     path: "{{ config_dir }}/solrhome/templates/{{ item }}/conf/solrconfig.xml"
@@ -45,11 +45,6 @@
 
 - name: Tweak slaves config
   become: true
-  vars:
-    replication_norole: >-
-      {% if inventory_hostname==solr.master %}slave
-      {%- else %}master
-      {%- endif %}
   community.general.xml:
     path: "{{ config_dir }}/solrhome/templates/{{ item }}/conf/solrconfig.xml"
     xpath: /config/indexConfig/nrtMode

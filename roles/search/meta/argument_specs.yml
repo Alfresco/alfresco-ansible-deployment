@@ -13,7 +13,7 @@ argument_specs:
           The shared secret Alfresco repository and Solr
           use to authenticate to each other.
         required: true
-        type: int
+        type: str
       data_dir_root:
         description: |
           This property specifies the top level directory path for the indexes
@@ -39,14 +39,14 @@ argument_specs:
               This property specifies the HTTP port for the instance that Solr
               should track and index.
             required: false
-            type: str
+            type: int
             default: 80
           port_ssl:
             description: |
               This property specifies the HTTPS port for the instance that Solr
               should track and index.
             required: false
-            type: str
+            type: int
             default: 443
       topology:
         description: |
@@ -73,7 +73,7 @@ argument_specs:
             description: |
               The port Solr uses to serve search requests.
             required: false
-            type: str
+            type: int
             default: 8983
           scheme:
             description: |
