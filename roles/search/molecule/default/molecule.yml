@@ -16,8 +16,6 @@ platforms:
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
-      - repository
-      - nginx
       - search
 provisioner:
   name: ansible
