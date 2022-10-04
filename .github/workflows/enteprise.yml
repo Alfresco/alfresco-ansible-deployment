@@ -77,6 +77,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          # avoid auth conflict when cloning DTAS during verify step
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -94,12 +97,6 @@ jobs:
 
       - name: Setup workspace
         uses: ./.github/actions/setup-workspace
-
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        with:
-          # provide access to SSH user that triggered the build
-          limit-access-to-actor: true
 
       - name: Run tests
         env:

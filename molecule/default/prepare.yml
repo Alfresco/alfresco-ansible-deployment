@@ -65,8 +65,6 @@
           - clone_github_token.startswith('ghp_')
 
     - name: Git checkout
-      environment:
-        TMPDIR: /var/tmp
       ansible.builtin.git:
         repo: "https://{{ clone_github_token }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
         dest: "{{ dtas_dir }}"
