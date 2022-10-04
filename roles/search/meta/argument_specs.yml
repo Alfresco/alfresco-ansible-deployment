@@ -48,3 +48,36 @@ argument_specs:
             required: false
             type: str
             default: 443
+      topology:
+        description: |
+          The setup type for multiple Solr hosts.
+        required: true
+        type: str
+        choices:
+          - standalone
+          - replication
+      master:
+        description: |
+          The hostname of the Solr master node (when replication is enabled).
+          Defaults to the first host of the play hosts.
+        required: false
+        type: str
+        default: "{{ ansible_play_hosts_all | first }}"
+      solr:
+        description: |
+          A dictionnary to describe Solr setup
+        required: false
+        type: dict
+        options:
+          port:
+            description: |
+              The port Solr uses to serve search requests.
+            required: false
+            type: str
+            default: 8983
+          scheme:
+            description: |
+              The protocol Solr uses to serve search requests.
+            required: false
+            type: str
+            default: http
