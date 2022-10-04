@@ -9,12 +9,13 @@ runs:
   using: "composite"
   steps:
     - name: Cache ansible-galaxy collections
+      id: collections-cache
       uses: actions/cache@v2
-      env:
-        cache-name: ${{ inputs.cache-name }}
       with:
         path: ~/.ansible/collections
-        key: ${{ runner.os }}-build-${{ env.cache-name }}
+        key: ${{ runner.os }}-collections-${{ inputs.cache-name }}-${{ hashFiles('requirements.yml') }}
 
-    - run: ansible-galaxy install -r requirements.yml
+    - name: Fetch dependencies from Ansible Galaxy
+      run: ansible-galaxy install -r requirements.yml
+      if: steps.collections-cache.outputs.cache-hit != 'true'
       shell: bash
