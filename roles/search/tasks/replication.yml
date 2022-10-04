@@ -3,7 +3,7 @@
   become: true
   vars:
     replication_norole: >-
-      {% if inventory_hostname==groups.search[0] %}slave
+      {% if inventory_hostname==solr.master %}slave
       {%- else %}master
       {%- endif %}
   community.general.xml:
@@ -25,11 +25,11 @@
       </lst>
     slave_xml: |
       <lst name="slave">
-        <str name="masterUrl">{{ solr.scheme }}://{{ solr.host }}:{{ solr.port }}/solr/alfresco</str>
+        <str name="masterUrl">{{ solr.scheme }}://{{ solr.master }}:{{ solr.port }}/solr/alfresco</str>
         <str name="PollInterval">00:00:15</str>
       </lst>
     replication_xml: >-
-      {% if inventory_hostname==groups.search[0] %}{{ master_xml }}
+      {% if inventory_hostname==solr.master %}{{ master_xml }}
       {%- else %}{{ slave_xml }}
       {%- endif %}
   xml:
@@ -47,7 +47,7 @@
   become: true
   vars:
     replication_norole: >-
-      {% if inventory_hostname==groups.search[0] %}slave
+      {% if inventory_hostname==solr.master %}slave
       {%- else %}master
       {%- endif %}
   community.general.xml:
@@ -57,4 +57,4 @@
   loop:
     - rerank
     - noRerank
-  when: inventory_hostname != groups.search[0]
+  when: inventory_hostname != solr.master

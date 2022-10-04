@@ -11,5 +11,5 @@ alfresco:
   port_ssl: 443
 solr:
   port: 8983
-  host: localhost
+  master: "{{ ansible_play_hosts_all | first }}"
   scheme: http
