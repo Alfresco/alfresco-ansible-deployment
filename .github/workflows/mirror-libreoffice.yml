@@ -28,7 +28,7 @@ jobs:
           cat ${FILENAME}.sha1
 
       - name: Deploy to nexus
-        uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@deploy-file-fix
+        uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@4c2dac47950d36319cb4d03cef769766a0b90e74
         with:
           group-id: org.libreoffice
           artifact-id: libreoffice-dist
