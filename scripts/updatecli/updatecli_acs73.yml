@@ -7,6 +7,9 @@ apiExplorer:
 search:
   version: "2.0"
 
+searchEnterprise:
+  version: "3.2"
+
 transform:
   version: "2.5"
 

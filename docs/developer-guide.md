@@ -1,6 +1,6 @@
-# Developers' guide
+# Developers guide
 
-This page is a developer's guide to popular commands used in the process of setting up environment and testing.
+This page is a developers guide for to popular commands used in the process of setting up environment for development and testing.
 
 ## Basic pipenv knowledge
 
@@ -131,3 +131,21 @@ and possibly added in separate task files.
 
 The OS support table in `docs/README.md` must be updates and so does the
 `supported_os` variable in the `group_vars/all.yml` file.
+
+### Bumping ACS version via updatecli
+
+This repo provide experimental support for keeping ACS components versions
+defined in `groups_vars/all.yml` in sync the the ACS releases.
+
+The `updatecli_config.yml` file provides the main pipeline definition and there
+are multiple values files depending on which acs major version we want to check
+for any new minor release.
+
+Run updatecli with:
+
+```bash
+updatecli apply --config scripts/updatecli/updatecli_config.yml --values scripts/updatecli/updatecli_acs73.yml
+```
+
+When the command completes succesfully you will find the `groups_vars/all.yml`
+automatically modified with the latest available versions as requested.

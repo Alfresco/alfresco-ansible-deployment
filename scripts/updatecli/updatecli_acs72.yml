@@ -1,14 +1,20 @@
 acs:
-  version: 7.2
+  version: "7.2"
+
+apiExplorer:
+  version: "7.2"
 
 search:
-  version: 2.0
+  version: "2.0"
+
+searchEnterprise:
+  version: "3.1"
 
 transform:
-  version: 2.5
+  version: "2.5"
 
 trouter:
-  version: 1.5
+  version: "1.5"
 
 dsync:
-  version: 3.6
+  version: "3.6"

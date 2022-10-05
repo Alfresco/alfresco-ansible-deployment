@@ -1,5 +1,4 @@
-# manifest.yaml
-title: ACS update example
+title: ACS update pipeline
 
 scms:
   acsRepo:
@@ -38,6 +37,12 @@ scms:
       url: git@github.com:Alfresco/InsightEngine.git
       branch: master
       directory: '/tmp/updatecli/search'
+  searchEnterpriseRepo:
+    kind: git
+    spec:
+      url: git@github.com:Alfresco/alfresco-elasticsearch-connector.git
+      branch: master
+      directory: '/tmp/updatecli/search_enterprise'
   transformRepo:
     kind: git
     spec:
@@ -92,6 +97,14 @@ sources:
       versionFilter:
         kind: regex
         pattern: "{{ .search.version }}.*"
+  searchEnterprise:
+    name: Search Enterprise {{ .searchEnterprise.version }}.x
+    kind: gittag
+    scmid: searchEnterpriseRepo
+    spec:
+      versionFilter:
+        kind: regex
+        pattern: '{{ .searchEnterprise.version }}.(\d+)(-M\d*)?$'
   transform:
     name: Transform Core {{ .transform.version }}.x
     kind: gittag
@@ -174,6 +187,13 @@ targets:
     sourceid: search
     spec:
       key: search.version
+      file: group_vars/all.yml
+  searchEnterprise:
+    name: Bump Search Enterprise
+    kind: yaml
+    sourceid: searchEnterprise
+    spec:
+      key: search_enterprise.version
       file: group_vars/all.yml
   transform:
     name: Bump Transform Core
