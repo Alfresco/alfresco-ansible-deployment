@@ -4,16 +4,22 @@ inputs:
   cache-name:
     description: 'A keyword to compose the cache final name'
     required: true
-    default: 'collections'
+    default: 'default'
+  cache-version:
+    description: 'Increase to force recreating the cache'
+    required: true
+    default: "1"
 runs:
   using: "composite"
   steps:
-    - name: Cache ansible-galaxy collections
+    - name: Cache Ansible collections and roles
       id: collections-cache
       uses: actions/cache@v2
       with:
-        path: ~/.ansible/collections
-        key: ${{ runner.os }}-collections-${{ inputs.cache-name }}-${{ hashFiles('requirements.yml') }}
+        path: |
+          ~/.ansible/collections
+          ~/.ansible/roles
+        key: ${{ runner.os }}-ansible-v${{ inputs.cache-version }}-${{ inputs.cache-name }}-${{ hashFiles('requirements.yml') }}
 
     - name: Fetch dependencies from Ansible Galaxy
       run: ansible-galaxy install -r requirements.yml
