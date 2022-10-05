@@ -12,18 +12,19 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Cache ansible-galaxy collections
+    - name: Cache Ansible collections and roles
       id: collections-cache
       uses: actions/cache@v2
       with:
-        path: ~/.ansible/collections
-        key: ${{ runner.os }}-collections-v${{ inputs.cache-version }}-${{ inputs.cache-name }}-${{ hashFiles('requirements.yml') }}
+        path: |
+          ~/.ansible/collections
+          ~/.ansible/roles
+        key: ${{ runner.os }}-ansible-v${{ inputs.cache-version }}-${{ inputs.cache-name }}-${{ hashFiles('requirements.yml') }}
 
     - name: Fetch dependencies from Ansible Galaxy
       run: |
         ansible-galaxy install -r requirements.yml
-        echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n${GITHUB_JOB}" > ~/.ansible/collections/cache.txt
-        cp requirements.yml ~/.ansible/collections/
+        echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" > ~/.ansible/collections/cache.txt
       if: steps.collections-cache.outputs.cache-hit != 'true'
       shell: bash
 
@@ -32,5 +33,4 @@ runs:
         ls -l ~/.ansible/collections/ansible_collections
         cat ~/.ansible/collections/ansible_collections/*.info/GALAXY.yml
         cat ~/.ansible/collections/cache.txt || true
-        cat ~/.ansible/collections/requirements.yml || true
       shell: bash
