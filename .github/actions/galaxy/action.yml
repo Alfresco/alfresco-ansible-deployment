@@ -23,6 +23,7 @@ runs:
       run: |
         ansible-galaxy install -r requirements.yml
         echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n${GITHUB_JOB}" > ~/.ansible/collections/cache.txt
+        cp requirements.yml ~/.ansible/collections/
       if: steps.collections-cache.outputs.cache-hit != 'true'
       shell: bash
 
@@ -31,4 +32,5 @@ runs:
         ls -l ~/.ansible/collections/ansible_collections
         cat ~/.ansible/collections/ansible_collections/*.info/GALAXY.yml
         cat ~/.ansible/collections/cache.txt || true
+        cat ~/.ansible/collections/requirements.yml || true
       shell: bash
