@@ -1,8 +1,8 @@
 ---
 # vars file for transformers
-libreoffice_repo: "http://downloadarchive.documentfoundation.org/libreoffice/old"
-libreoffice_repo_path: "{{ dependencies_version.libreoffice }}/{{ pkg_format }}/{{ ansible_architecture }}"
-libreoffice_archive_name: /LibreOffice_{{ dependencies_version.libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | regex_replace('_','-') }}_{{ pkg_format }}.tar.gz
+libreoffice_repo: "{{ artifacts_repositories.community.base_url }}/repositories/thirdparty/org/libreoffice/libreoffice-dist"
+libreoffice_repo_path: "{{ dependencies_version.libreoffice }}"
+libreoffice_archive_name: "libreoffice-dist-{{ dependencies_version.libreoffice }}-{{ pkg_format }}.gz"
 libreoffice_archive_url: "{{ libreoffice_repo }}/{{ libreoffice_repo_path }}/{{ libreoffice_archive_name }}"
 libreoffice_archive_sha1_checksum_url: "{{ libreoffice_archive_url }}.sha1"
 libreoffice_home: "/opt/libreoffice{{ dependencies_version.libreoffice[0:3] }}/"
