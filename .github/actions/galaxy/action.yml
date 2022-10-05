@@ -4,7 +4,7 @@ inputs:
   cache-name:
     description: 'A keyword to compose the cache final name'
     required: true
-    default: 'collections'
+    default: 'default'
 runs:
   using: "composite"
   steps:
