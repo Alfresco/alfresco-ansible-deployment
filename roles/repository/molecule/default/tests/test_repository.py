@@ -187,5 +187,5 @@ def test_newly_added_properties_are_set(host):
     assert_that(host.socket("tcp://0.0.0.0:1121").is_listening)
 
 def test_no_ghostscript(host):
-    host.run_expect([1], "command -v gs")
-    host.run_expect([1], "command -v ghostscript")
+    host.run_expect([127], "gs")
+    host.run_expect([127], "ghostscript")
