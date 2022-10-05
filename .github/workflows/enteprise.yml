@@ -1,10 +1,17 @@
 name: "enterprise"
+
 on:
   push:
     branches: ["*"]
     paths-ignore:
       - 'docs/**'
       - '*.md'
+
+env:
+  DTAS_VERSION: v1.1.1
+  BUILD_NUMBER: ${{ github.run_id }}
+  PY_COLORS: 1
+
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -17,12 +24,11 @@ jobs:
           - image: rockylinux:8
         role:
           - name: adw
+          - name: search_enterprise
           - name: repository
           - name: sfs
           - name: sync
           - name: trouter
-    env:
-      PY_COLORS: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -56,9 +62,55 @@ jobs:
           retry_wait_seconds: 10
           command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
 
+  docker_integration:
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        molecule_distro:
+          - image: centos:7
+          - image: ubuntu:20.04
+          - image: rockylinux:8
+        scenario:
+          - name: elasticsearch
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          # avoid auth conflict when cloning DTAS during verify step
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version-file: '.python-version'
+          cache: pipenv
+
+      - name: Install python packages
+        uses: ./.github/actions/pipenv
+
+      - name: Install and cache ansible galaxy dependencies
+        uses: ./.github/actions/galaxy
+        with:
+          cache-name: enterprise
+
+      - name: Setup workspace
+        uses: ./.github/actions/setup-workspace
+
+      - name: Run tests
+        env:
+          MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
+          NEXUS_USERNAME: ${{ secrets.nexus_username }}
+          NEXUS_PASSWORD: ${{ secrets.nexus_password }}
+          CLONE_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+        run: pipenv run molecule test -s ${{ matrix.scenario.name }}
+
   ec2:
     if: github.actor != 'dependabot[bot]'
-    needs: docker
+    needs:
+      - docker
+      - docker_integration
     name: ${{ matrix.molecule_scenario.desc }}
     runs-on: ubuntu-latest
     strategy:
@@ -90,11 +142,8 @@ jobs:
             vars: vars.yml
             desc: EC2 ACS 7.2 clustered (RHEL8)
     env:
-      PY_COLORS: 1
-      BUILD_NUMBER: ${{ github.run_id }}
       AWS_REGION: eu-west-1
       MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
-      DTAS_VERSION: v1.1.1
     steps:
       - name: Checkout
         uses: actions/checkout@v3

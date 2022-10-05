@@ -3,32 +3,36 @@
   hosts: localhost
   gather_facts: false
   vars:
-    project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
-    dtas_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
-    test_config_file: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/{{ lookup('env', 'MOLECULE_IT_TEST_CONFIG') }}"
+    project_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+    dtas_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
+    test_config_file: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/{{ lookup('ansible.builtin.env', 'MOLECULE_IT_TEST_CONFIG') | default('tests/test-config.json', True) }}"
   tasks:
-
     - name: Gather EC2 facts
       delegate_to: "{{ groups['nginx'][0] }}"
       amazon.aws.ec2_metadata_facts:
+      failed_when: false
+
+    - name: Set hostname fact from EC2 or localhost
+      ansible.builtin.set_fact:
+        node_hostname: "{{ ansible_ec2_public_hostname | default('localhost') }}"
 
     - name: Install pytest requirements
       pip:
         chdir: "{{ dtas_dir }}"
         requirements: requirements.txt
 
-    - name: Configure deployment URL
+    - name: Configure deployment URL in {{ test_config_file }}
       ansible.builtin.replace:
         path: "{{ test_config_file }}"
         regexp: 'TEST_URL'
-        replace: 'https://{{ ansible_ec2_public_hostname }}'
+        replace: "https://{{ node_hostname }}"
 
     - name: Run tests
       block:
         - name: Run pytest
           delegate_to: localhost
           vars:
-              selfsigned_cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
+              selfsigned_cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.crt"
           ansible.builtin.shell:
             chdir: "{{ dtas_dir }}"
             cmd: |

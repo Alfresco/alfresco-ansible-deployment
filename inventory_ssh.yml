@@ -28,6 +28,13 @@ all:
       hosts:
         search_1:
           ansible_host: targetIP
+    # Enterprise Search section start
+    # alternative to `search` group
+    search_enterprise:
+      hosts:
+    elasticsearch:
+      hosts:
+    # Enterprise Search section end
     nginx:
       hosts:
         nginx_1:

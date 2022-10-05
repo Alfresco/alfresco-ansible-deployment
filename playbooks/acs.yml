@@ -1,27 +1,29 @@
 ---
-- name: Check if {{ ansible_distribution }} {{ ansible_version }} is supported
+- name: Check if current OS version is in the supported matrix
   hosts: all:!external
   gather_facts: yes
   tasks:
-  - name: compare host OS with supported matrix
+  - name: Compare host OS with supported matrix
     vars:
       os_versions: "{{ supported_os[ansible_distribution].versions | default([]) }}"
     ansible.builtin.fail:
       msg:
-        - "{{ ansible_distribution }} {{ ansible_distribution_version }} is not supported OS"
+        - "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS"
     when:
       - not skip_os_test | default(true) | bool
       - ansible_distribution_version | int not in os_versions
+
 - name: Check required dependencies
   ansible.builtin.import_playbook: check-versions.yml
 
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
 
-- hosts: all:!external
+- name: Gather facts from all hosts
+  hosts: all:!external
   gather_facts: no
   tasks:
-    - name: Gather facts from all hosts
+    - name: Setup
       ansible.builtin.setup:
 
 - name: Database Role
@@ -31,7 +33,7 @@
     - role: "../roles/postgres"
       when: repo_db_url == "" or sync_db_url == ""
   post_tasks:
-    - name: make sure PostgreSQL is running
+    - name: Make sure PostgreSQL is running
       service:
         name: "{{ postgresql_service }}"
         state: started
@@ -53,7 +55,7 @@
   roles:
     - role: "../roles/transformers"
   post_tasks:
-    - name: update installation status file with Transformers
+    - name: Update installation status file with Transformers
       become: yes
       vars:
         transform_components:
@@ -73,12 +75,12 @@
   roles:
     - role: "../roles/search"
   post_tasks:
-    - name: make sure Solr is running
+    - name: Make sure Solr is running
       become: yes
       service:
         name: alfresco-search
         state: started
-    - name: update installation status file with  Search
+    - name: Update installation status file with  Search
       become: yes
       vars:
         search_components:
@@ -98,7 +100,7 @@
   roles:
     - role: "../roles/repository"
   post_tasks:
-    - name: update installation status file with ACS
+    - name: Update installation status file with ACS
       become: yes
       vars:
         acs_components:
@@ -121,7 +123,7 @@
     - role: "../roles/trouter"
       when: acs.edition == "Enterprise"
   post_tasks:
-    - name: update installation status file with Trouter
+    - name: Update installation status file with Trouter
       become: yes
       vars:
         trouter_components:
@@ -142,7 +144,7 @@
     - role: "../roles/sfs"
       when: acs.edition == "Enterprise"
   post_tasks:
-    - name: update installation status file with SFS
+    - name: Update installation status file with SFS
       become: yes
       vars:
         sfs_components:
@@ -156,6 +158,36 @@
   tags:
     - sfs
 
+- name: Elasticsearch Role
+  hosts: elasticsearch
+  gather_facts: no
+  roles:
+    - role: "../roles/elasticsearch"
+      when: acs.edition == "Enterprise"
+  tags:
+    - elasticsearch
+
+- name: Enterprise Search Role
+  hosts: search_enterprise
+  gather_facts: no
+  roles:
+    - role: "../roles/search_enterprise"
+      when: acs.edition == "Enterprise"
+  post_tasks:
+    - name: Update installation status file with Enterprise Search
+      become: yes
+      vars:
+        search_enterprise_components:
+          search_enterprise: "{{ search_enterprise }}"
+      ansible.builtin.blockinfile:
+        block: "{{ search_enterprise_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: SEARCH_ENTERPRISE_BEGIN
+        marker_end: SEARCH_ENTERPRISE_END
+  tags:
+    - sfs
+
 - name: Alfresco Digital Workspace Role
   hosts: adw
   gather_facts: no
@@ -163,7 +195,7 @@
     - role: "../roles/adw"
       when: acs.edition == "Enterprise"
   post_tasks:
-    - name: update installation status file with ADW
+    - name: Update installation status file with ADW
       become: yes
       vars:
         adw_components:
@@ -183,7 +215,7 @@
   roles:
     - role: "../roles/nginx"
   post_tasks:
-    - name: make sure NGINX is running
+    - name: Make sure NGINX is running
       become: yes
       service:
         name: nginx
@@ -198,7 +230,7 @@
     - role: "../roles/sync"
       when: acs.edition == "Enterprise"
   post_tasks:
-    - name: update installation status file with Sync
+    - name: Update installation status file with Sync
       become: yes
       vars:
         sync_components:

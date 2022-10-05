@@ -13,25 +13,32 @@
   hosts: localhost
   gather_facts: false
   vars:
-    project_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
-    dtas_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
+    project_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+    dtas_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
+    dtas_version: "{{ lookup('ansible.builtin.env', 'DTAS_VERSION') }}"
+    clone_github_token: "{{ lookup('ansible.builtin.env', 'CLONE_GITHUB_TOKEN') }}"
   tasks:
 
     - name: Gather EC2 facts
       delegate_to: "{{ groups['nginx'] | first }}"
       amazon.aws.ec2_metadata_facts:
+      failed_when: false
+
+    - name: Set hostname fact from EC2 or localhost
+      ansible.builtin.set_fact:
+        node_hostname: "{{ ansible_ec2_public_hostname | default('localhost') }}"
 
     - name: "Set variables"
-      set_fact:
-        certificate_domain: "{{ ansible_ec2_public_hostname }}"
-        private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.key"
-        cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
+      ansible.builtin.set_fact:
+        certificate_domain: "{{ node_hostname }}"
+        private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.key"
+        cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.crt"
 
     - name: Create private key (RSA, 4096 bits)
       community.crypto.openssl_privatekey:
         path: "{{ private_key_path }}"
 
-    - name: Create CSR for {{ certificate_domain }} self-signed certificate
+    - name: "Create CSR self-signed certificate for {{ certificate_domain }}"
       community.crypto.openssl_csr_pipe:
         privatekey_path: "{{ private_key_path }}"
         common_name: "{{ certificate_domain }}"
@@ -51,8 +58,14 @@
         regexp: "TEST_FQDN"
         replace: "{{ certificate_domain }}"
 
+    - name: Ensure that clone_github_token is correctly set
+      ansible.builtin.assert:
+        that:
+          - clone_github_token is defined
+          - clone_github_token.startswith('ghp_')
+
     - name: Git checkout
       ansible.builtin.git:
-        repo: "https://{{ lookup('env', 'CLONE_GITHUB_TOKEN') }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
+        repo: "https://{{ clone_github_token }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
         dest: "{{ dtas_dir }}"
-        version: "{{ lookup('env', 'DTAS_VERSION') }}"
+        version: "{{ dtas_version }}"

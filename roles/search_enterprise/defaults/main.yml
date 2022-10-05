@@ -1,0 +1,3 @@
+---
+# defaults file for search_enterprise
+search_enterprise_port: 8081

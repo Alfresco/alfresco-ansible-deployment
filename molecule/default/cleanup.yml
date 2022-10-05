@@ -8,17 +8,17 @@
     - name: Gather EC2 facts
       amazon.aws.ec2_metadata_facts:
       delegate_to: "{{ groups['nginx'] | first }}"
-      ignore_unreachable: yes
+      failed_when: false
 
-    - name: End gracefully if EC2 is unavailable
-      meta: end_play
-      when: ansible_ec2_public_hostname is undefined
+    - name: Set hostname fact from EC2 or localhost
+      ansible.builtin.set_fact:
+        node_hostname: "{{ ansible_ec2_public_hostname | default('localhost') }}"
 
     - name: Set variables
-      set_fact:
-        certificate_domain: "{{ ansible_ec2_public_hostname }}"
-        private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.key"
-        cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ ansible_ec2_public_hostname }}.crt"
+      ansible.builtin.set_fact:
+        certificate_domain: "{{ node_hostname }}"
+        private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.key"
+        cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.crt"
 
     - name: Cleanup cert
       delegate_to: localhost

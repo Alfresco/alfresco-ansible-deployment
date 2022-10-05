@@ -1,0 +1,48 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: search-enteprise-integration-instance
+    image: ${MOLECULE_ROLE_IMAGE:-ubuntu:18.04}
+    dockerfile: ../../tests/molecule/Dockerfile-noprivs.j2
+    command: "/lib/systemd/systemd"
+    published_ports:
+      - 80/tcp
+      - 0.0.0.0:443:443/tcp
+    privileged: true
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+    volume_mounts:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    groups:
+      - activemq
+      - adw
+      - database
+      - elasticsearch
+      - nginx
+      - repository
+      - search_enterprise
+      - sfs
+      - syncservice
+      - transformers
+      - trusted_resource_consumers
+provisioner:
+  name: ansible
+  ansible_args:
+    - -e
+    - "@tests/test-extra-vars.yml"
+    - -e
+    - "@tests/test-ssl.yml"
+  inventory:
+    links:
+      group_vars: ../../group_vars
+      host_vars: host_vars
+  playbooks:
+    prepare: ../default/prepare.yml
+    verify: ../default/verify.yml
+verifier:
+  name: ansible

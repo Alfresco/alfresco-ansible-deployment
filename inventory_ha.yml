@@ -35,6 +35,13 @@ all:
     search:
       hosts:
         fts.infra.local:
+    # Enterprise Search section start
+    # alternative to `search` group
+    search_enterprise:
+      hosts:
+    elasticsearch:
+      hosts:
+    # Enterprise Search section end
     nginx:
       hosts:
         proxy.infra.local:

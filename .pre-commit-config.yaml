@@ -1,7 +1,7 @@
 ---
 repos:
   - repo: https://github.com/Riverside-Healthcare/djLint
-    rev: v1.2.0
+    rev: v1.18.0
     hooks:
       - id: djlint-jinja
   - repo: https://github.com/jackdewinter/pymarkdown
