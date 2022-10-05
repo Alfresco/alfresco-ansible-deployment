@@ -22,15 +22,6 @@ runs:
         key: ${{ runner.os }}-ansible-v${{ inputs.cache-version }}-${{ inputs.cache-name }}-${{ hashFiles('requirements.yml') }}
 
     - name: Fetch dependencies from Ansible Galaxy
-      run: |
-        ansible-galaxy install -r requirements.yml
-        echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" > ~/.ansible/collections/cache.txt
+      run: ansible-galaxy install -r requirements.yml
       if: steps.collections-cache.outputs.cache-hit != 'true'
-      shell: bash
-
-    - name: List current cache status
-      run: |
-        ls -l ~/.ansible/collections/ansible_collections
-        cat ~/.ansible/collections/ansible_collections/*.info/GALAXY.yml
-        cat ~/.ansible/collections/cache.txt || true
       shell: bash
