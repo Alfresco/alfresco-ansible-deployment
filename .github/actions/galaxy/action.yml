@@ -16,7 +16,9 @@ runs:
         key: ${{ runner.os }}-collections-${{ inputs.cache-name }}-${{ hashFiles('requirements.yml') }}
 
     - name: Fetch dependencies from Ansible Galaxy
-      run: ansible-galaxy install -r requirements.yml
+      run: |
+        ansible-galaxy install -r requirements.yml
+        echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n${GITHUB_JOB}" > ~/.ansible/collections/cache.txt
       if: steps.collections-cache.outputs.cache-hit != 'true'
       shell: bash
 
@@ -24,4 +26,5 @@ runs:
       run: |
         ls -l ~/.ansible/collections/ansible_collections
         cat ~/.ansible/collections/ansible_collections/*.info/GALAXY.yml
+        cat ~/.ansible/collections/cache.txt || true
       shell: bash
