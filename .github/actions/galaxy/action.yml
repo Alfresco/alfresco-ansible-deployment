@@ -5,6 +5,10 @@ inputs:
     description: 'A keyword to compose the cache final name'
     required: true
     default: 'default'
+  cache-version:
+    description: 'Increase to force recreating the cache'
+    required: true
+    default: "1"
 runs:
   using: "composite"
   steps:
@@ -13,7 +17,7 @@ runs:
       uses: actions/cache@v2
       with:
         path: ~/.ansible/collections
-        key: ${{ runner.os }}-collections-${{ inputs.cache-name }}-${{ hashFiles('requirements.yml') }}
+        key: ${{ runner.os }}-collections-v${{ inputs.cache-version }}-${{ inputs.cache-name }}-${{ hashFiles('requirements.yml') }}
 
     - name: Fetch dependencies from Ansible Galaxy
       run: |
