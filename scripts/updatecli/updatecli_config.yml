@@ -64,7 +64,7 @@ sources:
     spec:
       versionFilter:
         kind: regex
-        pattern: '{{ .acs.version }}.(\d+)(-M\d*)?$'
+        pattern: '{{ .acs.version }}.(\d+){{ .version_pattern }}'
   aosAmp:
     name: AOS AMP
     kind: gittag
@@ -74,13 +74,13 @@ sources:
     kind: gittag
     scmid: googleDriveAmpRepo
   apiExplorer:
-    name: Api explorer {{ .acs.version }}.x
+    name: Api explorer {{ .apiExplorer.version }}.x
     kind: gittag
     scmid: apiExplorerRepo
     spec:
       versionFilter:
         kind: regex
-        pattern: '{{ if .apiExplorer.version }}{{ .apiExplorer.version }}{{ else }}{{ .acs.version }}{{ end }}.(\d+)$'
+        pattern: '{{ .apiExplorer.version }}.(\d+){{ .version_pattern }}'
   dsync:
     name: Desktop Sync {{ .dsync.version }}
     kind: gittag
@@ -88,7 +88,7 @@ sources:
     spec:
       versionFilter:
         kind: regex
-        pattern: '{{ .dsync.version }}.(\d+)(-M\d*)?$'
+        pattern: '{{ .dsync.version }}.(\d+){{ .version_pattern }}'
   search:
     name: InsightEngine {{ .search.version }}.x
     kind: gittag
@@ -96,7 +96,7 @@ sources:
     spec:
       versionFilter:
         kind: regex
-        pattern: "{{ .search.version }}.*"
+        pattern: '{{ .search.version }}.(\d+){{ .version_pattern }}'
   searchEnterprise:
     name: Search Enterprise {{ .searchEnterprise.version }}.x
     kind: gittag
@@ -104,7 +104,7 @@ sources:
     spec:
       versionFilter:
         kind: regex
-        pattern: '{{ .searchEnterprise.version }}.(\d+)(-M\d*)?$'
+        pattern: '{{ .searchEnterprise.version }}.(\d+){{ .version_pattern }}'
   transform:
     name: Transform Core {{ .transform.version }}.x
     kind: gittag
@@ -112,7 +112,7 @@ sources:
     spec:
       versionFilter:
         kind: regex
-        pattern: '{{ .transform.version }}.(\d+)$'
+        pattern: '{{ .transform.version }}.(\d+){{ .version_pattern }}'
   trouter:
     name: ATS Transform Service {{ .trouter.version }}.x
     kind: gittag
@@ -120,7 +120,7 @@ sources:
     spec:
       versionFilter:
         kind: regex
-        pattern: '{{ .trouter.version }}.(\d+)$'
+        pattern: '{{ .trouter.version }}.(\d+){{ .version_pattern }}'
   # adw:
   #   name: adw
   #   kind: maven

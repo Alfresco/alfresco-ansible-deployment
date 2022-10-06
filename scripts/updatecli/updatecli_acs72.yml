@@ -18,3 +18,5 @@ trouter:
 
 dsync:
   version: "3.6"
+
+version_pattern: '(-M\d*)?$'
