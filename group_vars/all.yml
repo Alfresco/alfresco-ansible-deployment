@@ -31,27 +31,27 @@ amps:
 api_explorer:
   artifact_name: api-explorer
   repository: "{{ nexus_repository.releases }}"
-  version: 7.2.1
+  version: 7.3.0-A1
 search_enterprise:
   artifact_name: alfresco-elasticsearch-connector-distribution
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 3.1.1
+  version: 3.2.0-M1
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
   version: 2.0.4
 transform:
-  artifact_name: alfresco-transform-core-aio-boot
+  artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
-  version: 2.5.7
+  version: 3.0.0-A2
 trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 1.5.3
+  version: 2.0.0-A2
 sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 1.5.3
+  version: 2.0.0-A2
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
