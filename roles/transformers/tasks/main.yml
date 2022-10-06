@@ -65,10 +65,10 @@
         creates: "{{ ats_home }}/alfresco-pdf-renderer"
 
 
-    - name: Download alfresco-transform-core-aio-boot-{{ transform.version }}.jar
+    - name: Download {{ transform.artifact_name }}-{{ transform.version }}.jar
       get_url:
         url: "{{ downloads.transform_jar_url }}"
-        dest: "{{ binaries_folder }}/transform-service/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
+        dest: "{{ binaries_folder }}/transform-service/{{ transform.artifact_name }}-{{ transform.version }}.jar"
         checksum: sha1:{{ lookup('url', downloads.transform_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
         owner: "{{ username }}"
         group: "{{ group_name }}"

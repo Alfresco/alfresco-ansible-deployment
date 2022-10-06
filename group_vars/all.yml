@@ -41,7 +41,8 @@ search:
   repository: "{{ nexus_repository.releases }}/alfresco-search-services"
   version: 2.0.4
 transform:
-  repository: "{{ nexus_repository.releases }}/alfresco-transform-core-aio-boot"
+  artifact_name: alfresco-transform-core-aio-boot
+  repository: "{{ nexus_repository.releases }}"
   version: 2.5.7
 
 trouter:
@@ -87,8 +88,8 @@ downloads:
   sfs_jar_sha1_checksum_url: "{{ sfs.repository }}/{{ sfs.version }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar.sha1"
   trouter_jar_url: "{{ trouter.repository }}/{{ trouter.version }}/alfresco-transform-router-{{ trouter.version }}.jar"
   trouter_jar_sha1_checksum_url: "{{ trouter.repository }}/{{ trouter.version }}/alfresco-transform-router-{{ trouter.version }}.jar.sha1"
-  transform_jar_url: "{{ transform.repository }}/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
-  transform_jar_sha1_checksum_url: "{{ transform.repository }}/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar.sha1"
+  transform_jar_url: "{{ transform.repository }}/{{ transform.artifact_name }}/{{ transform.version }}/{{ transform.artifact_name }}-{{ transform.version }}.jar"
+  transform_jar_sha1_checksum_url: "{{ transform.repository }}/{{ transform.artifact_name }}/{{ transform.version }}/{{ transform.artifact_name }}-{{ transform.version }}.jar.sha1"
   sync_zip_url: "{{ sync.repository }}/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"
   sync_zip_sha1_checksum_url: "{{ sync.repository }}/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip.sha1"
 
