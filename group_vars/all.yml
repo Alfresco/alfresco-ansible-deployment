@@ -7,9 +7,14 @@ artifacts_repositories:
     base_url: "https://artifacts.alfresco.com/nexus/content"
     repository: "groups/public"
     group_id: "org/alfresco"
+  development:
+    repository: "groups/internal"
+# empty space
 nexus_repository:
   releases: "{{ artifacts_repositories.community.base_url }}/{{ artifacts_repositories.community.repository }}/{{ artifacts_repositories.community.group_id }}"
   enterprise_releases: "{{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.enterprise.repository }}/{{ artifacts_repositories.enterprise.group_id }}"
+  development_releases: "{{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.development.repository }}/{{ artifacts_repositories.enterprise.group_id }}"
+# empty space
 acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
@@ -28,37 +33,46 @@ amps:
   googledrive_share:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share"
     version: 3.2.3-A3
+# empty space
 api_explorer:
   artifact_name: api-explorer
   repository: "{{ nexus_repository.releases }}"
   version: 7.3.0-A1
+# empty space
 search_enterprise:
   artifact_name: alfresco-elasticsearch-connector-distribution
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 3.2.0-M1
+# empty space
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
   version: 2.0.4
+# empty space
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
   version: 3.0.0-A2
+# empty space
 trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 2.0.0-A2
+# empty space
 sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 2.0.0-A2
+# empty space
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 3.0.1
+# empty space
 sync:
   repository: "{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x"
   version: 4.0.0-M3
+# empty space
 supported_os:
   RHEL:
     versions:
@@ -74,6 +88,7 @@ supported_os:
     versions:
       - 20.04
       - 18.04
+# empty space
 downloads:
   acs_zip_url: "{{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip"
   acs_zip_sha1_checksum_url: "{{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip.sha1"
@@ -91,11 +106,12 @@ downloads:
   transform_jar_sha1_checksum_url: "{{ transform.repository }}/{{ transform.artifact_name }}/{{ transform.version }}/{{ transform.artifact_name }}-{{ transform.version }}.jar.sha1"
   sync_zip_url: "{{ sync.repository }}/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"
   sync_zip_sha1_checksum_url: "{{ sync.repository }}/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip.sha1"
+# empty space
 war_downloads:
   - url: "{{ api_explorer.repository }}/{{ api_explorer.artifact_name }}/{{ api_explorer.version }}/{{ api_explorer.artifact_name }}-{{ api_explorer.version }}.war"
     dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
     sha1_checksum_url: "{{ api_explorer.repository }}/{{ api_explorer.artifact_name }}/{{ api_explorer.version }}/{{ api_explorer.artifact_name }}-{{ api_explorer.version }}.war.sha1"
-
+# empty space
 amp_downloads:
   - url: "{{ amps.googledrive_repo.repository }}/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp"
     sha1_checksum_url: "{{ amps.googledrive_repo.repository }}/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp.sha1"
