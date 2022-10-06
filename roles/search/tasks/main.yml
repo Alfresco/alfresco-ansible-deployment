@@ -4,10 +4,10 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
-- name: "Download alfresco-search-services-{{ search.version }}.zip"
+- name: "Download {{ search.artifact_name }}-{{ search.version }}.zip"
   get_url:
     url: "{{ downloads.search_zip_url }}"
-    dest: "{{ download_location }}/alfresco-search-services-{{ search.version }}.zip"
+    dest: "{{ download_location }}/{{ search.artifact_name }}-{{ search.version }}.zip"
     checksum: sha1:{{ lookup('url', downloads.search_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
     mode: "0644"
     url_username: "{{ nexus_user }}"
@@ -36,7 +36,7 @@
     
     - name: Extract Search services into {{ binaries_dir }}
       unarchive:
-        src: "{{ download_location }}/alfresco-search-services-{{ search.version }}.zip"
+        src: "{{ download_location }}/{{ search.artifact_name }}-{{ search.version }}.zip"
         dest: "{{ binaries_dir }}"
         remote_src: true
         creates: "{{ binaries_dir }}/README.MD"

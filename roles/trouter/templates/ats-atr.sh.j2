@@ -17,4 +17,4 @@ export TRANSFORMER_ROUTES_ADDITIONAL_HTML_VIA_TXT="{{ ats_home }}/pipelines/0200
 {% for key, value in trouter_environment.items() %}
 export {{ key }}="{{ value | join(' ') }}"
 {% endfor %}
-exec ${JAVA_HOME}/bin/java ${JAVA_OPTS} -jar ${ATS_HOME}/alfresco-transform-router-*.jar > {{ logs_folder }}/ats-atr.log
+exec ${JAVA_HOME}/bin/java ${JAVA_OPTS} -jar ${ATS_HOME}/{{ trouter.artifact_name }}-{{ trouter.version }}.jar > {{ logs_folder }}/ats-atr.log
