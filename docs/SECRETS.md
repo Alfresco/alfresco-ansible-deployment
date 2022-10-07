@@ -31,7 +31,7 @@ that must be handled as secrets:
 
 ```yml
 acs_environment:
-  JAVA_TOOL_OPTIONS: 
+  JAVA_TOOL_OPTIONS:
     - -Dmetadata-keystore.password=<your-keystore-password>
     - -Dmetadata-keystore.metadata.password=<your-keystore-password>
 ```

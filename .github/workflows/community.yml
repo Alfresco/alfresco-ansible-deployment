@@ -80,4 +80,3 @@ jobs:
           max_attempts: 3
           retry_wait_seconds: 10
           command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
-          

@@ -63,7 +63,7 @@ JMX_CONF="-Dcom.sun.management.jmxremote=$ENABLE_JMX_REMOTE"
 JMX_SECURITY_CONF=""
 if [ $ENABLE_JMX_REMOTE = true ]; then
 	JMX_CONF="$JMX_CONF -Dcom.sun.management.jmxremote.port=$JMX_REMOTE_PORT -Dcom.sun.management.jmxremote.rmi.port=$JMX_REMOTE_RMI_PORT -Dcom.sun.management.jmxremote.authenticate=$ENABLE_JMX_REMOTE_AUTHENTICATION -Dcom.sun.management.jmxremote.ssl=$ENABLE_JMX_REMOTE_SSL"
-	
+
 	if [ ! -z $JMX_RMI_HOSTNAME ]; then
 		JMX_CONF="$JMX_CONF -Djava.rmi.server.hostname=$JMX_RMI_HOSTNAME"
 	fi
@@ -89,8 +89,8 @@ STOP_CMD="cd $JAR_LOCATION;$JAVA_HOME/bin/java $JMX_SECURITY_CONF $JAVA_OPTS -cp
 
 CUR_USER=$(whoami)
 
-#Extract the PID of the JAVA process running Sync service. 
-#The JAVA process may be spawned from the process executing the 'sh' command, which also matches the filter. 
+#Extract the PID of the JAVA process running Sync service.
+#The JAVA process may be spawned from the process executing the 'sh' command, which also matches the filter.
 #Hence we just want the newest process in the chain, using the -n flag.
 PID_GREP_CMD="\$(pgrep -u \$USER -f \${PGREP_STRING} -n)"
 
@@ -125,13 +125,13 @@ start_script() {
 		log_success_msg "$NAME with pid '$PID' is already running."
 		exit 0
 	fi
-	
+
     #Make $USER the owner of the jxm password file
 	if [ $ENABLE_JMX_REMOTE_AUTHENTICATION = true ]; then
 		chown $USER: $JMX_PASSWORD_FILE
 		chmod 600 $JMX_PASSWORD_FILE
 	fi
-	
+
 	#Make $USER the owner of the log file
 	SYNC_LOG_FILE=$SYNC_LOG_LOCATION/sync-service.log
 	if [ -f $SYNC_LOG_FILE ]; then
@@ -160,7 +160,7 @@ stop_script() {
 	# fi
 
 	eval PID="$PID_GREP_CMD"
-	
+
 	check_proc
 	if [ $? -eq 0 ]; then
 		echo "Invoking Sync service stop method."

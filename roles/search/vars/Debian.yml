@@ -1,6 +1,6 @@
 ---
 utils_search:
-  - lsof 
+  - lsof
   - wget
   - openssl
   - libssl-dev

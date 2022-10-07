@@ -191,7 +191,7 @@ sync:
             alfresco:
                 monitoring: activemq:topic:alfresco.monitoring
     cluster:
-        # This specifies a particular network interface to use for clustering. 
+        # This specifies a particular network interface to use for clustering.
         # It might be a wildcard value, such as 10.256.*.*, which means an attempt is made to bind with an interface having an IP address beginning with 10.256.
         # If left empty Hazelcast will bind by default to a non-loopback IP e.g: 192.168.0.10
         interface:
@@ -212,7 +212,7 @@ sync:
                 # in seconds
                 pollingInterval: 60
                 # port of graphite carbon receiver
-                port: 2003 
+                port: 2003
                 prefix: org.alfresco.sync
 
 logging:
@@ -226,7 +226,7 @@ logging:
     "org.alfresco.service.synchronization.impl.resolver.v1.DefaultResolver" : INFO
     "org.alfresco.service.sync.dropwizard.resources.SyncResource" : INFO
     "org.alfresco.service.cluster.cache.ClusterAwareCacheFactory" : INFO
-    "org.alfresco.service.cache.NonClusteredCacheFactory" : INFO  
+    "org.alfresco.service.cache.NonClusteredCacheFactory" : INFO
   appenders:
     - type: console
       threshold: ALL

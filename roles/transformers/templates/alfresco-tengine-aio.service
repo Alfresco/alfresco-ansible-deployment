@@ -1,6 +1,6 @@
 [Unit]
 Description=Alfresco Transform Service - AIO Transform Engine
-After=syslog.socket network.target 
+After=syslog.socket network.target
 
 [Service]
 Type=simple

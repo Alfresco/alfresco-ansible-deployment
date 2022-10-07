@@ -21,7 +21,7 @@
       package:
         name: "{{ utils_search }}"
         state: present
-    
+
     - name: Create search binaries, config and data directories
       file:
         path: "{{ item }}"
@@ -33,7 +33,7 @@
         - "{{ binaries_dir }}"
         - "{{ config_dir }}"
         - "{{ data_dir }}"
-    
+
     - name: Extract Search services into {{ binaries_dir }}
       unarchive:
         src: "{{ download_location }}/alfresco-search-services-{{ search.version }}.zip"
@@ -42,7 +42,7 @@
         creates: "{{ binaries_dir }}/README.MD"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-    
+
     - name: Install Search services in Unix Filesystem Hierarchy Standard structure
       block:
         - name: "Copy files from {{ binaries_dir }}/alfresco-search-services to {{ binaries_dir }}/"
@@ -78,8 +78,8 @@
           when: search_dest_dirs.results | map(attribute='stat.exists') | difference([True])
 
     - name: Remove old files {{ binaries_dir }}/alfresco-search-services
-      file: 
-        path: "{{ binaries_dir }}/{{ item }}" 
+      file:
+        path: "{{ binaries_dir }}/{{ item }}"
         state: absent
       loop:
         - alfresco-search-services
@@ -95,7 +95,7 @@
       loop:
         - rerank
         - noRerank
-    
+
     - name: add solr home to setenv.sh
       lineinfile:
         path: "{{ config_folder }}/setenv.sh"
@@ -103,7 +103,7 @@
         line: "export SOLR_HOME={{ binaries_dir }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-    
+
     - name: Add "{{ binaries_dir }}/solr.sh"
       template:
         src: solr.sh.j2
@@ -113,7 +113,7 @@
         mode: 0700
       notify:
         - restart-search
-    
+
     - name: Add "{{ config_dir }}/solr.in.sh"
       template:
         src: solr.in.sh
@@ -123,7 +123,7 @@
         mode: "0755"
       notify:
         - restart-search
-    
+
     - name: Add alfresco-search.service
       template:
           src: alfresco-search.service
@@ -131,6 +131,6 @@
           owner: "{{ username }}"
           group: "{{ group_name }}"
           mode: "0644"
-      notify: 
+      notify:
         - enable-search
         - restart-search
