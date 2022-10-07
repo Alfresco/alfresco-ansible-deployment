@@ -10,7 +10,7 @@ Resources:
       Handler: cleanup.lambda_handler
       Runtime: python3.8
       MemorySize: 256
-      Timeout: 30 
+      Timeout: 30
       Description: Scheduled Lambda removes dangling molecule ec2 images from builds
       Policies:
         - Version: "2012-10-17"

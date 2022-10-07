@@ -76,7 +76,7 @@
         mode: 'u=rwx,g=rwx'
         force: yes
       notify:
-        - wait-for-repo 
+        - wait-for-repo
         - restart-sync
 
     - name: Add paths to setenv file

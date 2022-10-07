@@ -1,5 +1,5 @@
 ---
-# tasks file for base-tomcat  
+# tasks file for base-tomcat
 - name: Download Tomcat
   get_url:
     url: "{{ dependencies_url.tomcat }}"
@@ -98,7 +98,7 @@
           dest: "{{ tomcat_config_dir }}/logs"
         - src: "{{ tomcat_working }}/work"
           dest: "{{ tomcat_config_dir }}/work"
- 
+
     - name: Add TOMCAT_HOME to setenv script
       lineinfile:
         path: "{{ config_folder }}/setenv.sh"

@@ -41,4 +41,3 @@ def test_logs_folder_exists(host, get_ansible_vars):
     """Check that logs folder exists"""
     assert_that(host.file(get_ansible_vars["logs_folder"]).exists)
     assert_that(host.file(get_ansible_vars["logs_folder"]).user, equal_to(get_ansible_vars["username"]))
-    

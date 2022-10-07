@@ -2,18 +2,18 @@
 # handlers file for nginx
 - name: enable-nginx
   become: true
-  service: 
+  service:
     name: nginx
     enabled: true
 
 - name: restart-nginx
   become: true
-  service: 
+  service:
     name: nginx
     state: restarted
 
 - name: reload-nginx
   become: true
-  service: 
+  service:
     name: nginx
     state: reloaded

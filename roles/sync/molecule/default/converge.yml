@@ -19,7 +19,7 @@
     - name: "Include sync"
       include_role:
         name: "sync"
-      vars:   
+      vars:
         sync_environment:
           JAVA_OPTS:
             - -Xms512m

@@ -58,7 +58,7 @@ if [[ $REPLICATION_TYPE == "slave" ]]; then
       REPLICATION_POLL_INTERVAL=00:00:30
    fi
 
-   sed -i 's/<requestHandler name="\/replication" class="org\.alfresco\.solr\.handler\.AlfrescoReplicationHandler">/<requestHandler name="\/replication" 
+   sed -i 's/<requestHandler name="\/replication" class="org\.alfresco\.solr\.handler\.AlfrescoReplicationHandler">/<requestHandler name="\/replication"
 class="org\.alfresco\.solr\.handler\.AlfrescoReplicationHandler">\
       <lst name="slave">\
          <str name="masterUrl">'$REPLICATION_MASTER_PROTOCOL':\/\/'$REPLICATION_MASTER_HOST':'$REPLICATION_MASTER_PORT'\/solr\/${solr.core.name}<\/str>\
