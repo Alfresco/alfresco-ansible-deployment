@@ -34,35 +34,23 @@
     
   tasks:
 
-    - name: Print Env Variables
-      vars:
-        msg: |
-          {{ environment | to_nice_json }}
-        debug:
-          msg: "{{ msg.split('\n')}}"
-
     - name: Grab activemq broker id
       ansible.builtin.shell: |
         aws mq describe-broker --broker-id {{ broker_name }} || true
       register: describe_broker_output
 
-    - debug: var=describe_broker_output
 
     - name: Set broker-id
       set_fact:
         broker_id: "{{ (describe_broker_output.stdout | from_json).BrokerId }}"
       when: describe_broker_output.stdout | length > 0
-      register: amq
-
-    - debug: var=amq
+ 
 
     - name: Request mq broker destroy
       ansible.builtin.command: |
         aws mq delete-broker --broker-id {{ broker_id }}
       when: broker_id is defined
-      register: mq
 
-    - debug: var=mq
 
     - name: Wait for destroy mq broker
       ansible.builtin.shell: |
