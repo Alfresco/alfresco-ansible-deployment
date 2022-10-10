@@ -31,7 +31,15 @@
   gather_facts: false
   vars:
     broker_name: molecule-{{ lookup('ansible.builtin.env', 'BRANCH_NAME')[:42] }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
+    
   tasks:
+
+    - name: Print Env Variables
+      vars:
+        msg: |
+          {{ environment | to_nice_json }}
+        debug:
+          msg: "{{ msg.split('\n')}}"
 
     - name: Grab activemq broker id
       ansible.builtin.shell: |
