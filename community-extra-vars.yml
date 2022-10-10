@@ -1,6 +1,7 @@
 ---
 acs:
-  repository: "{{ nexus_repository.releases }}/alfresco-content-services-community-distribution"
+  artifact_name: alfresco-content-services-community-distribution
+  repository: "{{ nexus_repository.releases }}"
   version: 7.2.1
   edition: Community
 
@@ -19,12 +20,12 @@ amps:
     version: 3.2.2
 
 downloads:
-  acs_zip_url: "{{ acs.repository }}/{{ acs.version }}/alfresco-content-services-community-distribution-{{ acs.version }}.zip"
-  acs_zip_sha1_checksum_url: "{{ acs.repository }}/{{ acs.version }}/alfresco-content-services-community-distribution-{{ acs.version }}.zip.sha1"
-  search_zip_url: "{{ search.repository }}/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip"
-  search_zip_sha1_checksum_url: "{{ search.repository }}/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip.sha1"
-  transform_jar_url: "{{ transform.repository }}/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
-  transform_jar_sha1_checksum_url: "{{ transform.repository }}/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar.sha1"
+  acs_zip_url: "{{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip"
+  acs_zip_sha1_checksum_url: "{{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip.sha1"
+  search_zip_url: "{{ search.repository }}/{{ search.artifact_name }}/{{ search.version }}/{{ search.artifact_name }}-{{ search.version }}.zip"
+  search_zip_sha1_checksum_url: "{{ search.repository }}/{{ search.artifact_name }}/{{ search.version }}/{{ search.artifact_name }}-{{ search.version }}.zip.sha1"
+  transform_jar_url: "{{ transform.repository }}/{{ transform.artifact_name }}/{{ transform.version }}/{{ transform.artifact_name }}-{{ transform.version }}.jar"
+  transform_jar_sha1_checksum_url: "{{ transform.repository }}/{{ transform.artifact_name }}/{{ transform.version }}/{{ transform.artifact_name }}-{{ transform.version }}.jar.sha1"
 
 amp_downloads:
   - url: "{{ amps.googledrive_repo.repository }}/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_repo.version }}.amp"

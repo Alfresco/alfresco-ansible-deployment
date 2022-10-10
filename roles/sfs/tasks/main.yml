@@ -16,10 +16,10 @@
         group: "{{ group_name }}"
         mode: "0755"
 
-    - name: Download alfresco-shared-file-store-controller.jar
+    - name: Download {{ sfs.artifact_name }}.jar
       get_url:
         url: "{{ downloads.sfs_jar_url }}"
-        dest: "{{ ats_home }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar"
+        dest: "{{ ats_home }}/{{ sfs.artifact_name }}-{{ sfs.version }}.jar"
         checksum: sha1:{{ lookup('url', downloads.sfs_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
         owner: "{{ username }}"
         group: "{{ group_name }}"

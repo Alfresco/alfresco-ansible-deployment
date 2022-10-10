@@ -14,9 +14,10 @@ nexus_repository:
   enterprise_releases: "{{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.enterprise.repository }}/{{ artifacts_repositories.enterprise.group_id }}"
 
 acs:
-  version: 7.2.1
-  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution"
+  artifact_name: alfresco-content-services-distribution
   edition: Enterprise
+  repository: "{{ nexus_repository.enterprise_releases }}"
+  version: 7.2.1
 
 amps:
   aos_module:
@@ -32,28 +33,33 @@ amps:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share"
     version: 3.2.2
 api_explorer:
-  repository: "{{ nexus_repository.releases }}/api-explorer"
+  artifact_name: api-explorer
+  repository: "{{ nexus_repository.releases }}"
   version: 7.2.1
 search_enterprise:
-  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-elasticsearch-connector-distribution"
+  artifact_name: alfresco-elasticsearch-connector-distribution
+  repository: "{{ nexus_repository.enterprise_releases }}"
   version: 3.1.1
 search:
-  repository: "{{ nexus_repository.releases }}/alfresco-search-services"
+  artifact_name: alfresco-search-services
+  repository: "{{ nexus_repository.releases }}"
   version: 2.0.4
 transform:
-  repository: "{{ nexus_repository.releases }}/alfresco-transform-core-aio-boot"
+  artifact_name: alfresco-transform-core-aio-boot
+  repository: "{{ nexus_repository.releases }}"
   version: 2.5.7
-
 trouter:
-  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-transform-router"
+  artifact_name: alfresco-transform-router
+  repository: "{{ nexus_repository.enterprise_releases }}"
   version: 1.5.3
 sfs:
-  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-shared-file-store-controller"
+  artifact_name: alfresco-shared-file-store-controller
+  repository: "{{ nexus_repository.enterprise_releases }}"
   version: 1.5.3
 adw:
-  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-digital-workspace"
+  artifact_name: alfresco-digital-workspace
+  repository: "{{ nexus_repository.enterprise_releases }}"
   version: 2.9.0
-
 sync:
   repository: "{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x"
   version: 3.6.0
@@ -75,27 +81,27 @@ supported_os:
       - 18.04
 
 downloads:
-  acs_zip_url: "{{ acs.repository }}/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip"
-  acs_zip_sha1_checksum_url: "{{ acs.repository }}/{{ acs.version }}/alfresco-content-services-distribution-{{ acs.version }}.zip.sha1"
-  adw_zip_url: "{{ adw.repository }}/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip"
-  adw_zip_sha1_checksum_url: "{{ adw.repository }}/{{ adw.version }}/alfresco-digital-workspace-{{ adw.version }}.zip.sha1"
-  search_enterprise_zip_url: "{{ search_enterprise.repository }}/{{ search_enterprise.version }}/alfresco-elasticsearch-connector-distribution-{{ search_enterprise.version }}.zip"
-  search_enterprise_zip_sha1_url: "{{ search_enterprise.repository }}/{{ search_enterprise.version }}/alfresco-elasticsearch-connector-distribution-{{ search_enterprise.version }}.zip.sha1"
-  search_zip_url: "{{ search.repository }}/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip"
-  search_zip_sha1_checksum_url: "{{ search.repository }}/{{ search.version }}/alfresco-search-services-{{ search.version }}.zip.sha1"
-  sfs_jar_url: "{{ sfs.repository }}/{{ sfs.version }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar"
-  sfs_jar_sha1_checksum_url: "{{ sfs.repository }}/{{ sfs.version }}/alfresco-shared-file-store-controller-{{ sfs.version }}.jar.sha1"
-  trouter_jar_url: "{{ trouter.repository }}/{{ trouter.version }}/alfresco-transform-router-{{ trouter.version }}.jar"
-  trouter_jar_sha1_checksum_url: "{{ trouter.repository }}/{{ trouter.version }}/alfresco-transform-router-{{ trouter.version }}.jar.sha1"
-  transform_jar_url: "{{ transform.repository }}/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar"
-  transform_jar_sha1_checksum_url: "{{ transform.repository }}/{{ transform.version }}/alfresco-transform-core-aio-boot-{{ transform.version }}.jar.sha1"
+  acs_zip_url: "{{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip"
+  acs_zip_sha1_checksum_url: "{{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip.sha1"
+  adw_zip_url: "{{ adw.repository }}/{{ adw.artifact_name }}/{{ adw.version }}/{{ adw.artifact_name }}-{{ adw.version }}.zip"
+  adw_zip_sha1_checksum_url: "{{ adw.repository }}/{{ adw.artifact_name }}/{{ adw.version }}/{{ adw.artifact_name }}-{{ adw.version }}.zip.sha1"
+  search_enterprise_zip_url: "{{ search_enterprise.repository }}/{{ search_enterprise.artifact_name }}/{{ search_enterprise.version }}/{{ search_enterprise.artifact_name }}-{{ search_enterprise.version }}.zip"
+  search_enterprise_zip_sha1_url: "{{ search_enterprise.repository }}/{{ search_enterprise.artifact_name }}/{{ search_enterprise.version }}/{{ search_enterprise.artifact_name }}-{{ search_enterprise.version }}.zip.sha1"
+  search_zip_url: "{{ search.repository }}/{{ search.artifact_name }}/{{ search.version }}/{{ search.artifact_name }}-{{ search.version }}.zip"
+  search_zip_sha1_checksum_url: "{{ search.repository }}/{{ search.artifact_name }}/{{ search.version }}/{{ search.artifact_name }}-{{ search.version }}.zip.sha1"
+  sfs_jar_url: "{{ sfs.repository }}/{{ sfs.artifact_name }}/{{ sfs.version }}/{{ sfs.artifact_name }}-{{ sfs.version }}.jar"
+  sfs_jar_sha1_checksum_url: "{{ sfs.repository }}/{{ sfs.artifact_name }}/{{ sfs.version }}/{{ sfs.artifact_name }}-{{ sfs.version }}.jar.sha1"
+  trouter_jar_url: "{{ trouter.repository }}/{{ trouter.artifact_name }}/{{ trouter.version }}/{{ trouter.artifact_name }}-{{ trouter.version }}.jar"
+  trouter_jar_sha1_checksum_url: "{{ trouter.repository }}/{{ trouter.artifact_name }}/{{ trouter.version }}/{{ trouter.artifact_name }}-{{ trouter.version }}.jar.sha1"
+  transform_jar_url: "{{ transform.repository }}/{{ transform.artifact_name }}/{{ transform.version }}/{{ transform.artifact_name }}-{{ transform.version }}.jar"
+  transform_jar_sha1_checksum_url: "{{ transform.repository }}/{{ transform.artifact_name }}/{{ transform.version }}/{{ transform.artifact_name }}-{{ transform.version }}.jar.sha1"
   sync_zip_url: "{{ sync.repository }}/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip"
   sync_zip_sha1_checksum_url: "{{ sync.repository }}/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip.sha1"
 
 war_downloads:
-  - url: "{{ api_explorer.repository }}/{{ api_explorer.version }}/api-explorer-{{ api_explorer.version }}.war"
+  - url: "{{ api_explorer.repository }}/{{ api_explorer.artifact_name }}/{{ api_explorer.version }}/{{ api_explorer.artifact_name }}-{{ api_explorer.version }}.war"
     dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
-    sha1_checksum_url: "{{ api_explorer.repository }}/{{ api_explorer.version }}/api-explorer-{{ api_explorer.version }}.war.sha1"
+    sha1_checksum_url: "{{ api_explorer.repository }}/{{ api_explorer.artifact_name }}/{{ api_explorer.version }}/{{ api_explorer.artifact_name }}-{{ api_explorer.version }}.war.sha1"
 
 amp_downloads:
   - url: "{{ amps.googledrive_repo.repository }}/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp"

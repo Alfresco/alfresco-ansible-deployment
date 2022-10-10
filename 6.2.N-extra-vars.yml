@@ -1,8 +1,9 @@
 ---
 acs:
-  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution"
-  version: 6.2.2
+  artifact_name: alfresco-content-services-distribution
   edition: Enterprise
+  repository: "{{ nexus_repository.enterprise_releases }}"
+  version: 6.2.2
 
 amps:
   aos_module:
@@ -19,11 +20,13 @@ amps:
     version: 3.2.0
 
 api_explorer:
-  repository: "{{ nexus_repository.releases }}/api-explorer"
+  artifact_name: api-explorer
+  repository: "{{ nexus_repository.releases }}"
   version: 6.3.0
 
 search:
-  repository: "{{ nexus_repository.releases }}/alfresco-search-services"
+  artifact_name: alfresco-search-services
+  repository: "{{ nexus_repository.releases }}"
   version: 1.4.3
 
 sync:

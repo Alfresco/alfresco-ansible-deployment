@@ -65,11 +65,11 @@
         - enable-trouter
         - restart-trouter
 
-- name: Download alfresco-transform-router.jar
+- name: Download {{ trouter.artifact_name }}.jar
   become: true
   get_url:
     url: "{{ downloads.trouter_jar_url }}"
-    dest: "{{ ats_home }}/alfresco-transform-router-{{ trouter.version }}.jar"
+    dest: "{{ ats_home }}/{{ trouter.artifact_name }}-{{ trouter.version }}.jar"
     checksum: sha1:{{ lookup('url', downloads.trouter_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
     owner: "{{ username }}"
     group: "{{ group_name }}"
