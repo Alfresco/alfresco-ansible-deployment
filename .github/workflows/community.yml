@@ -60,13 +60,14 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version-file: '.python-version'
-          cache: pipenv
 
       - name: Install python packages
         uses: ./.github/actions/pipenv
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
+        with:
+          cache-version: 2
 
       - name: Setup workspace
         uses: ./.github/actions/setup-workspace
