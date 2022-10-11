@@ -32,6 +32,15 @@ The code in this repository is released under the Apache License, see the [LICEN
 
 Please use [this guide](CONTRIBUTING.md) to make a contribution to the project and information to report any issues.
 
+### Adding support for a new distribution
+
+We expect distribution support to be added using mostly roles `vars` files. If
+distro specific tasks are needed those should be skipped for other distros
+and possibly added in separate task files.
+
+The OS support table in `docs/README.md` must be updates and so does the
+`supported_os` variable in the `group_vars/all.yml` file.
+
 ## Release
 
 To start the release process, just create a tag and push it.
