@@ -1,13 +1,5 @@
 ---
-# handlers file for trouter
-- name: wait-for-repo
-  uri:
-    url: "http://{{ repo_host }}:{{ ports_cfg.repository.http }}/alfresco/api/-default-/public/alfresco/versions/1/probes/-ready-"
-  register: result
-  until: result.status == 200
-  retries: 12
-  delay: 10
-
+# handlers file for sync
 - name: enable-sync
   become: true
   service:
