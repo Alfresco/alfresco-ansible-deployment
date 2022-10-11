@@ -63,6 +63,8 @@ jobs:
 
   docker_integration:
     if: github.actor != 'dependabot[bot]'
+    needs:
+      - docker
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -111,7 +113,6 @@ jobs:
     if: github.actor != 'dependabot[bot]'
     needs:
       - docker
-      - docker_integration
     name: ${{ matrix.molecule_scenario.desc }}
     runs-on: ubuntu-latest
     strategy:
