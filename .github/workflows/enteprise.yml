@@ -104,7 +104,9 @@ jobs:
           NEXUS_USERNAME: ${{ secrets.nexus_username }}
           NEXUS_PASSWORD: ${{ secrets.nexus_password }}
           CLONE_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
-        run: pipenv run molecule test -s ${{ matrix.scenario.name }}
+        run: |
+          pipenv run molecule converge -s ${{ matrix.scenario.name }} &&
+          pipenv run molecule verify -s ${{ matrix.scenario.name }}
 
       - name: Debug on failure
         if: failure()
