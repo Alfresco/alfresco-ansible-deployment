@@ -1,9 +1,12 @@
 ---
 # handlers file for trouter
 - name: wait-for-repo
-  wait_for:
-    host: "{{ nginx_host }}"
-    port: "{{ ports_cfg.nginx.http }}"
+  uri:
+    url: "http://{{ repo_host }}:{{ ports_cfg.repository.http }}/alfresco/api/-default-/public/alfresco/versions/1/probes/-ready-"
+  register: result
+  until: result.status == 200
+  retries: 12
+  delay: 10
 
 - name: enable-sync
   become: true
@@ -26,5 +29,5 @@
     url: "http://127.0.0.1:{{ ports_cfg.sync.http }}/alfresco/healthcheck"
   register: result
   until: result.status == 200
-  retries: 60
+  retries: 12
   delay: 10
