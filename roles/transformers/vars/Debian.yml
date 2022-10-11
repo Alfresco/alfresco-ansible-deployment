@@ -11,5 +11,4 @@ utils_transform:
   - fontconfig
   - fonts-dejavu
   - libfreetype6
-  - ghostscript
   - libx11-xcb1

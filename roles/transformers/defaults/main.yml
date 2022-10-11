@@ -6,3 +6,5 @@ tengine_environment:
     - -Xms512m
     - -Xmx1536m
     - $JAVA_OPTS
+
+include_ghostscript: false

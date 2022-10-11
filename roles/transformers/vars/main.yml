@@ -9,3 +9,6 @@ libreoffice_home: "/opt/libreoffice{{ dependencies_version.libreoffice[0:3] }}/"
 
 alfresco_pdf_renderer: "{{ nexus_repository.releases }}/alfresco-pdf-renderer/{{ dependencies_version.pdf_renderer }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
 alfresco_pdf_renderer_sha1_checksum_url: "{{ alfresco_pdf_renderer }}.sha1"
+
+ghostscript_packages:
+  - ghostscript

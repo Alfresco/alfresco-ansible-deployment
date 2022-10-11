@@ -6,7 +6,6 @@ utils_repo:
   - fontconfig
   - fonts-dejavu
   - libfreetype6
-  - ghostscript
 
 utils_storage:
   nfs:

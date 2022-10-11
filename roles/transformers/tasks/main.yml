@@ -38,6 +38,12 @@
         name: "{{ utils_transform }}"
         state: present
 
+    - name: Install optional ghostscript packages (AGPL)
+      package:
+        name: "{{ ghostscript_packages }}"
+        state: present
+      when: include_ghostscript
+
     - name: Create transform-services folder
       file:
         path: "{{ ats_home }}"
