@@ -74,3 +74,5 @@ keystore_src: >-
   {%- else -%}
     {{ content_folder }}/alf_data/keystore/
   {%- endif %}
+
+repository_monitored_startup_timeout_seconds: 300

@@ -7,5 +7,5 @@ BindsTo=alfresco-content.service
 Type=notify
 NotifyAccess=exec
 ExecStart={{ binaries_folder }}/alfresco-content-monitored-startup.sh
-TimeoutStartSec=300
+TimeoutStartSec={{ repository_monitored_startup_timeout_seconds }}
 Environment=SVC=alfresco-content-probes
