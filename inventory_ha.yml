@@ -18,6 +18,8 @@ all:
         db.infra.local:
     repository:
       vars:
+        # Add at least Share URL bellow
+        known_urls: []
         # Every storage that can be enabled via `mount` on hosts is supported
         cs_storage:
           type: nfs
