@@ -35,11 +35,13 @@ The playbook uses the following roles:
 * **activemq** - deploys and configures Apache ActiveMQ
 * **adw** - deploys and configures Alfresco Digital Workspace
 * **common** - contains a set of common tasks that prepares the specified host for other roles (creates user and group, common directories)
+* **elasticsearch** - deploys and configures ElasticSearch cluster required by Alfresco Search Enterprise
 * **java** - deploys OpenJDK
 * **nginx** - deploys and configures Nginx as a proxy
 * **postgres** - deploys and configures PostgreSQL
 * **repository** - deploys and configures Alfresco Repository and Alfresco Share
 * **search** - deploys and configures Alfresco Search Services
+* **search_enteprise** - deploys and configures Alfresco Search Enterprise
 * **sfs** - deploys and configures Alfresco Shared File Store
 * **sync** - deploys and configures Alfresco Sync Service
 * **tomcat** - deploys and configures Apache Tomcat
