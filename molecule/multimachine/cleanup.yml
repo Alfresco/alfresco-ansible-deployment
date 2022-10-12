@@ -1,6 +1,6 @@
 ---
 - name: Default cleanup
-  import_playbook: ../default/cleanup.yml
+  import_playbook: ../default/cleanup-uninstall.yml
 
 - name: Multimachine cleanup
   hosts: localhost
