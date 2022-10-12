@@ -38,8 +38,6 @@
         aws mq describe-broker --broker-id {{ broker_name }} || true
       register: describe_broker_output
 
-    - debug: var=describe_broker_output
-
     - name: Set broker-id
       set_fact:
         broker_id: "{{ (describe_broker_output.stdout | from_json).BrokerId }}"
