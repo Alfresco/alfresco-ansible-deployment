@@ -1,0 +1,4 @@
+MOLECULE_IT_IMAGE_ID: ami-096800910c1b781ba 
+MOLECULE_IT_EXTRA_VARS: community-extra-vars.yml
+MOLECULE_IT_TEST_CONFIG: tests/test-config-community.json
+MOLECULE_IT_PLATFORM: ubuntu-community

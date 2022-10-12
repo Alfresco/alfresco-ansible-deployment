@@ -130,8 +130,8 @@ jobs:
             vars: vars-rhel8.yml
             desc: EC2 ACS 7.1 (RHEL8)
           - name: default
-            vars: vars-ubuntu20-community.yml
-            desc: EC2 ACS 7.2 Community (Ubuntu 20.04)
+            vars: vars-ubuntu22-community.yml
+            desc: EC2 ACS 7.2 Community (Ubuntu 22.04)
           - name: default
             vars: vars-ubuntu20.yml
             desc: EC2 ACS 7.2 (Ubuntu 20.04)
