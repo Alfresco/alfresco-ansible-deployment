@@ -54,17 +54,17 @@ all:
     syncservice:
       hosts:
         sync.infra.local:
-    3rd_party_repo_client:
+    other_repo_clients:
       hosts:
     external_activemq:
       hosts:
     external:
       children:
         external_activemq:
-        3rd_party_repo_client:
+        other_repo_clients:
     trusted_resource_consumers:
       children:
         repository:
         nginx:
         adw:
-        3rd_party_repo_client:
+        other_repo_clients:

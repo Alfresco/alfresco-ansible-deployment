@@ -51,17 +51,17 @@ all:
       hosts:
         syncservice_1:
           ansible_host: targetIP
-    3rd_party_repo_client:
+    other_repo_clients:
       hosts:
     trusted_resource_consumers:
       children:
         repository:
         nginx:
         adw:
-        3rd_party_repo_client:
+        other_repo_clients:
     external_activemq:
       hosts:
     external:
       children:
         external_activemq:
-        3rd_party_repo_client:
+        other_repo_clients:
