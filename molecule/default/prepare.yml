@@ -28,6 +28,14 @@
       ansible.builtin.set_fact:
         node_hostname: "{{ ansible_ec2_public_hostname | default('localhost') }}"
 
+    - name: Set hostname as known_urls
+      ansible.builtin.set_fact:
+        known_urls:
+          - https://{{ node_hostname }}/share/
+      delegate_to: "{{ item }}"
+      delegate_facts: true
+      loop: "{{ groups.repository }}"
+
     - name: "Set variables"
       ansible.builtin.set_fact:
         certificate_domain: "{{ node_hostname }}"

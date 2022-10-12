@@ -1,5 +1,7 @@
 ansible_user: ansible
 bssrf_protection_enabled: true
+known_urls:
+  - http://localhost/share
 cs_storage:
   type: tmpfs
   device: none
