@@ -30,7 +30,6 @@
   hosts: localhost
   gather_facts: false
   vars:
-  #  broker_name: molecule-{{ lookup('ansible.builtin.env', 'BRANCH_NAME')[:42] }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
     broker_name: molecule-{{ lookup('ansible.builtin.env', 'BRANCH_NAME')[:42] }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
   tasks:
 
@@ -39,15 +38,23 @@
         aws mq describe-broker --broker-id {{ broker_name }} || true
       register: describe_broker_output
 
+    - debug: var=describe_broker_output
+
     - name: Set broker-id
       set_fact:
         broker_id: "{{ (describe_broker_output.stdout | from_json).BrokerId }}"
       when: describe_broker_output.stdout | length > 0
+      register: abc
+
+    - debug: var=abc
  
     - name: Request mq broker destroy
       ansible.builtin.command: |
         aws mq delete-broker --broker-id {{ broker_id }}
       when: broker_id is defined
+      register: xyz
+
+    - debug: var=xyz
 
     - name: Wait for destroy mq broker
       ansible.builtin.shell: |
@@ -57,3 +64,6 @@
       until: wait_describe_broker_output.stderr.find("NotFoundException") != -1
       retries: 20
       delay: 30
+      register: uvw
+
+    - debug: var=uvw
