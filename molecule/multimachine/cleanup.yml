@@ -44,17 +44,11 @@
       set_fact:
         broker_id: "{{ (describe_broker_output.stdout | from_json).BrokerId }}"
       when: describe_broker_output.stdout | length > 0
-      register: abc
 
-    - debug: var=abc
- 
     - name: Request mq broker destroy
       ansible.builtin.command: |
         aws mq delete-broker --broker-id {{ broker_id }}
       when: broker_id is defined
-      register: xyz
-
-    - debug: var=xyz
 
     - name: Wait for destroy mq broker
       ansible.builtin.shell: |
@@ -64,6 +58,3 @@
       until: wait_describe_broker_output.stderr.find("NotFoundException") != -1
       retries: 20
       delay: 30
-      register: uvw
-
-    - debug: var=uvw
