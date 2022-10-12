@@ -28,13 +28,20 @@ An ACS inventory file has the following groups a host can belong to:
 * `repository`: the list of one or more hosts which will get an Alfresco repo deployed on (see [the deployment guide](#acs-cluster) for details on repository clustering).
 
 * `database`: a host on which the playbook will deploy PostgreSQL. See  [the deployment guide](./deployment-guide.md) for details on how to use another external RDBMS.
-* `activemq`: the host on which the playbook will deploy the message queue component required by ACS.
-* `external_activemq`: an alternative group to `activemq` in case you don't want to deploy ActiveMQ using our basic activemq role but instead use an ActiveMQ instance of yours which matched your hosting standards.
+* `activemq`: the host on which the playbook will deploy the message queue
+  component required by ACS.
+* `external_activemq`: an alternative group to `activemq` in case you don't want
+  to deploy ActiveMQ using our basic activemq role but instead use an ActiveMQ
+  instance of yours which matches your hosting standards.
 * `search`: a single host on which to deploy Alfresco Search services.
 * `search_enterprise`: one or more hosts on which deploy Search Enterprise, as
   an alternative to Alfresco Search.
 * `elasticsearch`: one or more hosts on which deploy the ElasticSearch cluster
   backing Search Enterprise.
+* `external_elasticsearch`: an alternative group to `elasticsearch` in case you
+  don't want to deploy ElasticSearch using the [community ElasticSearch
+  role](https://github.com/buluma/ansible-role-elasticsearch) but instead use an
+  ElasticSearch cluster of yours which matches your hosting standards.
 * `nginx`: a single host on which the playbook will deploy an NGINX reverse proxy configured for the numerous http based service in the platform.
 * `adw`: a single host where you want the Alfresco Digital Workspace UI to be installed
 * `transformers`: a single host where the playbook will deploy the Alfresco Transformation Services components
@@ -466,6 +473,30 @@ all:
     external:
       children:
         external_activemq:
+```
+
+Every hosts under the `external` group is not directly managed by the acs
+playbook and is required in the inventory just for the sake of architecture description.
+
+### External ElasticSearch
+
+In case you want to provide your own ElasticSearch cluster (or use AWS
+OpenSearch, as an example) you can define in the inventory file exactly one host
+as a member of the `external_elasticsearch` group (nested inside the `external`
+group) as follows:
+
+```yaml
+all:
+  children:
+    external_elasticsearch:
+      hosts:
+        whatever.eu-west-1.es.amazonaws.com:
+          elasticsearch_username: admin
+          elasticsearch_port: 9200
+          elasticsearch_protocol: http # or https with port 443
+    external:
+      children:
+        external_elasticsearch:
 ```
 
 Every hosts under the `external` group is not directly managed by the acs

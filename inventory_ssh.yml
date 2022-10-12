@@ -61,7 +61,10 @@ all:
         3rd_party_repo_client:
     external_activemq:
       hosts:
+    external_elasticsearch:
+      hosts:
     external:
       children:
         external_activemq:
+        external_elasticsearch:
         3rd_party_repo_client:
