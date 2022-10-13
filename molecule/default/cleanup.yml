@@ -20,6 +20,14 @@
         private_key_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.key"
         cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.crt"
 
+    - name: Set hostname as known_urls
+      ansible.builtin.blockinfile:
+        block: |
+          known_urls:
+            - https://{{ node_hostname }}/share/
+        path: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/host_vars/{{ item }}.yml"
+      loop: "{{ groups.repository }}"
+
     - name: Cleanup cert
       delegate_to: localhost
       file:

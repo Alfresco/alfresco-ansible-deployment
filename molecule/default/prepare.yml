@@ -29,11 +29,11 @@
         node_hostname: "{{ ansible_ec2_public_hostname | default('localhost') }}"
 
     - name: Set hostname as known_urls
-      ansible.builtin.set_fact:
-        known_urls:
-          - https://{{ node_hostname }}/share/
-      delegate_to: "{{ item }}"
-      delegate_facts: true
+      ansible.builtin.blockinfile:
+        block: |
+          known_urls:
+            - https://{{ node_hostname }}/share/
+        path: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/host_vars/{{ item }}.yml"
       loop: "{{ groups.repository }}"
 
     - name: "Set variables"
