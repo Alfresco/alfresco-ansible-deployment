@@ -43,7 +43,7 @@ elasticsearch_host: >-
   {{- groups.elasticsearch | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') -}}
   {% endif %}
 elasticsearch_protocol: >-
-  {{- groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_protocol']) | first | default('http') -}} 
+  {{- groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_protocol']) | first | default('http') -}}
 
 ports_cfg:
   nginx:
