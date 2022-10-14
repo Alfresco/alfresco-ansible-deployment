@@ -43,9 +43,7 @@ elasticsearch_host: >-
   {{- groups.elasticsearch | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') -}}
   {% endif %}
 elasticsearch_protocol: >-
-  {{- groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_protocol']) | first | default('http') -}}
-elasticsearch_port: >-
-  {{- groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_protocol']) | first | default('9200') -}}
+  {{- groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_protocol']) | first | default('http') -}} 
 
 ports_cfg:
   nginx:
@@ -75,7 +73,7 @@ ports_cfg:
     http: 9090
     admin: 9093
   elasticsearch:
-    http: 9200
+    http: "{{- groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_port']) | first | default('9200') -}}"
 
 # Default download location of necessary artefacts
 download_location: /tmp/ansible_artefacts
