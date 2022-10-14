@@ -23,3 +23,18 @@
           - "Installed Jinja2 version ({{ jinja2_version.stdout }}) is too old. Upgrade to at least version 3."
           - "Please refer to https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/deployment-guide.md#setup-a-control-node for detailed instructions."
       when: (jinja2_version.stdout.split('.')[0] | int < 3)
+
+- name: Repository pre-requisites
+  hosts: repository:!localhost
+  gather_facts: false
+  tasks:
+    - name: Check Share security setup
+      ansible.builtin.fail:
+        msg: |
+          No `known_urls` has been provided to set up Share security. This is likely
+          to result in a non working Share instance.
+          Take a look at the documentation to set it up properly or disable CORS,
+          https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/SECURITY.md
+      when:
+        - known_urls | default([]) | length == 0
+        - cors.enabled | default(True)

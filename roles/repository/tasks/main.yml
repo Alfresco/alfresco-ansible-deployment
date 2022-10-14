@@ -3,17 +3,6 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
-- name: Check Share security setup
-  ansible.builtin.fail:
-    msg: |
-      No `known_urls` has been provided to set up Share security. This is likely
-      to result in a non working Share instance.
-      Take a look at the documentation to set it up properly or disable CORS,
-      https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/SECURITY.md
-  when:
-    - known_urls | default([]) | length == 0
-    - cors.enabled
-
 - name: Handle secure properties
   block:
     - name: Initialize temporary accumulator
