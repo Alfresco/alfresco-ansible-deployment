@@ -14,7 +14,7 @@
       - ansible_distribution_version | int not in os_versions
 
 - name: Check required dependencies
-  ansible.builtin.import_playbook: check-versions.yml
+  ansible.builtin.import_playbook: prerun-checks.yml
 
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
