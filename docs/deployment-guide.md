@@ -31,6 +31,10 @@ An ACS inventory file has the following groups a host can belong to:
 * `activemq`: the host on which the playbook will deploy the message queue component required by ACS.
 * `external_activemq`: an alternative group to `activemq` in case you don't want to deploy ActiveMQ using our basic activemq role but instead use an ActiveMQ instance of yours which matched your hosting standards.
 * `search`: a single host on which to deploy Alfresco Search services.
+* `search_enterprise`: one or more hosts on which deploy Search Enterprise, as
+  an alternative to Alfresco Search.
+* `elasticsearch`: one or more hosts on which deploy the ElasticSearch cluster
+  backing Search Enterprise.
 * `nginx`: a single host on which the playbook will deploy an NGINX reverse proxy configured for the numerous http based service in the platform.
 * `adw`: a single host where you want the Alfresco Digital Workspace UI to be installed
 * `transformers`: a single host where the playbook will deploy the Alfresco Transformation Services components
@@ -75,28 +79,30 @@ A complete documentation about inventory file is available at [inventory file](h
 
 Regardless of role and connection type, a consistent folder structure is used. You will find the deployed files in the following locations:
 
-| Path | Purpose |
-| :--- | :--- |
-| ```/opt/alfresco```     | Binaries |
-| ```/etc/opt/alfresco``` | Configuration |
-| ```/var/opt/alfresco``` | Data |
-| ```/var/log/alfresco``` | Logs |
+| Path                | Purpose       |
+|:--------------------|:--------------|
+| `/opt/alfresco`     | Binaries      |
+| `/etc/opt/alfresco` | Configuration |
+| `/var/opt/alfresco` | Data          |
+| `/var/log/alfresco` | Logs          |
 
 ## Service Configuration
 
 The following systemd services are deployed and can be used to stop and start Alfresco components:
 
-| Service Name | Purpose |
-| :--- | :--- |
-| ```activemq.service``` | ActiveMQ Service |
-| ```postgresql-<version>.service``` | Postgresql DB Service (where `<version>` is 11 for ACS 6.2.N and 13 for ACS 7.x) |
-| ```nginx.service``` | Nginx Service |
-| ```alfresco-content.service``` | Alfresco Content Service |
-| ```alfresco-search.service``` | Alfresco Search Service |
-| ```alfresco-shared-fs.service``` | Alfresco Shared File Store Controller Service |
-| ```alfresco-sync.service``` | Alfresco Sync Service |
-| ```alfresco-tengine-aio.service``` | Alfresco AIO Transform Core Engine |
-| ```alfresco-transform-router.service``` | Alfresco Transformation Router Service |
+| Service Name                        | Purpose                                                                          |
+|:------------------------------------|:---------------------------------------------------------------------------------|
+| `activemq.service`                  | ActiveMQ Service                                                                 |
+| `postgresql-<version>.service`      | Postgresql DB Service (where `<version>` is 11 for ACS 6.2.N and 13 for ACS 7.x) |
+| `nginx.service`                     | Nginx Service                                                                    |
+| `alfresco-content.service`          | Alfresco Content Service                                                         |
+| `alfresco-search.service`           | Alfresco Search Service                                                          |
+| `alfresco-shared-fs.service`        | Alfresco Shared File Store Controller Service                                    |
+| `alfresco-sync.service`             | Alfresco Sync Service                                                            |
+| `alfresco-tengine-aio.service`      | Alfresco AIO Transform Core Engine                                               |
+| `alfresco-transform-router.service` | Alfresco Transformation Router Service                                           |
+| `elasticsearch-connector.service`   | Alfresco Search Enterprise Service                                               |
+| `elasticsearch.service`             | ElasticSearch Service                                                            |
 
 Please be aware that some configuration changes (e.g. postgres pg_hba,
 properties files, ...) can trigger a service restart and a consequent
@@ -107,17 +113,17 @@ during a scheduled maintenance window.
 
 Several roles setup services that listen on TCP ports and several roles wait for TCP ports to be listening before continuing execution (indicated by `Yes` in the "Required For Deployment" column). The table below shows the communication paths and port numbers used.
 
-| Target Host | Target Port | Source Hosts | Required For Deployment |
-| :--- | :--- | :--- | :--- |
-| activemq | 61616 | repository, syncservice, transformers | Yes |
-| database | 5432 | repository, syncservice | Yes |
-| repository | 8080 | nginx, search, syncservice | Yes |
-| search | 8983 | repository | No |
-| transformers (aio t-engine) | 8090 | repository | No |
-| syncservice | 9090 | nginx | No |
-| adw | 80 | nginx | No |
-| nginx | 80 | `<client-ips>` | No |
-| nginx | 443 | `<client-ips>` | No |
+| Target Host                 | Target Port | Source Hosts                                             | Required For Deployment |
+|:----------------------------|:------------|:---------------------------------------------------------|:------------------------|
+| activemq                    | 61616       | repository, syncservice, transformers, search enterprise | Yes                     |
+| database                    | 5432        | repository, syncservice                                  | Yes                     |
+| repository                  | 8080        | nginx, search, syncservice                               | Yes                     |
+| search                      | 8983        | repository                                               | No                      |
+| transformers (aio t-engine) | 8090        | repository                                               | No                      |
+| syncservice                 | 9090        | nginx                                                    | No                      |
+| adw                         | 80          | nginx                                                    | No                      |
+| nginx                       | 80          | `<client-ips>`                                           | No                      |
+| nginx                       | 443         | `<client-ips>`                                           | No                      |
 
 > NOTE: The transformers host will also contain the transform router process running on port 8095 and the shared file system process running on 8099 but communication between these components remains local.
 
@@ -637,8 +643,6 @@ The diagram below shows the result of a single machine deployment.
 
 ![Single Machine Deployment](./resources/acs-single-machine.png)
 
-> **NOTE**: You can optionally use the following [guide](./generate-target-hosts.md#generate-single-target-host) to generate a target host and an inventory file for testing purposes.
-
 Once you have prepared the target host and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
 To check your inventory file is configured correctly and the control node is able to connect to the target host navigate to the folder you extracted the ZIP to and run the following command:
@@ -699,8 +703,6 @@ Once ACS has initialized access the system using the following URLs with a brows
 The diagram below shows the result of a multi machine deployment.
 
 ![Multi Machine Deployment](./resources/acs-multi-machine.png)
-
-> **NOTE**: You can optionally use the following [guide](./generate-target-hosts.md#generate-multiple-target-hosts) to generate target hosts and an inventory file for testing purposes.
 
 Once you have prepared the target hosts (ensuring the [relevant ports](#tcp-port-configuration) are accessible) and configured the inventory_ssh.yaml file you are ready to run the playbook.
 

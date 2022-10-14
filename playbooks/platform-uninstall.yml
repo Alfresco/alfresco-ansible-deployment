@@ -153,6 +153,11 @@
         state: stopped
         enabled: no
 
+    - name: Unmount Alfresco Content
+      mount:
+        path: /var/opt/alfresco/content-services/content
+        state: absent
+
     - name: Removing the folders
       ansible.builtin.file:
         path: "{{ item }}"
@@ -162,7 +167,6 @@
         - "{{ tomcat_home_prefix | default('/opt/apache-tomcat') }}"
         - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
         - "{{ binaries_folder | default('/opt/alfresco') }}"
-        - "{{ data_folder | default('/var/opt/alfresco') }}"
         - "{{ logs_folder | default('/var/log/alfresco') }}"
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
         - "/tmp/Alfresco"
