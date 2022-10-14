@@ -2,7 +2,6 @@ name: "enterprise"
 
 on:
   push:
-    branches: ["*"]
     paths-ignore:
       - 'docs/**'
       - '*.md'
@@ -64,9 +63,11 @@ jobs:
 
   docker_integration:
     if: github.actor != 'dependabot[bot]'
+    needs:
+      - docker
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         molecule_distro:
           - image: centos:7
@@ -110,7 +111,6 @@ jobs:
     if: github.actor != 'dependabot[bot]'
     needs:
       - docker
-      - docker_integration
     name: ${{ matrix.molecule_scenario.desc }}
     runs-on: ubuntu-latest
     strategy:
@@ -164,8 +164,6 @@ jobs:
         uses: ./.github/actions/galaxy
         with:
           cache-name: enterprise
-
-      - run: ansible-galaxy install -r requirements.yml
 
       # https://stackoverflow.com/a/64210623/547195
       - name: Get branch name
