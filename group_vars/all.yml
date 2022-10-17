@@ -79,6 +79,7 @@ supported_os:
       - 7.9
   Ubuntu:
     versions:
+      - 22.04
       - 20.04
       - 18.04
 downloads:
