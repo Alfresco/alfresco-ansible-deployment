@@ -76,7 +76,6 @@
         mode: 'u=rwx,g=rwx'
         force: yes
       notify:
-        - wait-for-repo
         - restart-sync
 
     - name: Add paths to setenv file
@@ -98,7 +97,6 @@
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx'
       notify:
-        - wait-for-repo
         - restart-sync
 
     - name: Add alfresco-sync.service service
@@ -109,6 +107,5 @@
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx'
       notify:
-      - wait-for-repo
       - enable-sync
       - restart-sync

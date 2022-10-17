@@ -49,6 +49,15 @@
   tags:
     - activemq
 
+- name: Elasticsearch Role
+  hosts: elasticsearch
+  gather_facts: no
+  roles:
+    - role: "../roles/elasticsearch"
+      when: acs.edition == "Enterprise"
+  tags:
+    - elasticsearch
+
 - name: Transformers Role
   hosts: transformers
   gather_facts: no
@@ -157,15 +166,6 @@
         marker_end: SFS_END
   tags:
     - sfs
-
-- name: Elasticsearch Role
-  hosts: elasticsearch
-  gather_facts: no
-  roles:
-    - role: "../roles/elasticsearch"
-      when: acs.edition == "Enterprise"
-  tags:
-    - elasticsearch
 
 - name: Enterprise Search Role
   hosts: search_enterprise
