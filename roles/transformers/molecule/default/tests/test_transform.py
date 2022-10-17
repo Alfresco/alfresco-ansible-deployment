@@ -45,12 +45,6 @@ def test_aio_config_api(host):
     assert_that(cmd.stdout, contains_string("textToPdfOptions"))
     assert_that(cmd.stdout, contains_string("stringOptions"))
 
-def test_aio_root_api(host):
-    """Check that Transform AIO root api works"""
-    cmd = host.run("curl -iL http://{}:8090".format(test_host))
-    assert_that(cmd.stdout, contains_string("All in One Transformer Test Transformation"))
-    assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
-
 def test_environment_jvm_opts(host):
     "Check that overwritten JVM_OPTS are taken into consideration"
     java_processes = host.process.filter(user="alfresco", comm="java")

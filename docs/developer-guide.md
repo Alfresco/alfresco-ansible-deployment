@@ -122,3 +122,12 @@ molecule/default/vars-scenario.yml` parameter:
 ```bash
 molecule -e molecule/default/vars-rhel8.yml test
 ```
+
+## Adding support for a new distribution
+
+We expect distribution support to be added using mostly roles `vars` files. If
+distro specific tasks are needed those should be skipped for other distros
+and possibly added in separate task files.
+
+The OS support table in `docs/README.md` must be updates and so does the
+`supported_os` variable in the `group_vars/all.yml` file.

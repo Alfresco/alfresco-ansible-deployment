@@ -2,7 +2,6 @@ name: "enterprise"
 
 on:
   push:
-    branches: ["*"]
     paths-ignore:
       - 'docs/**'
       - '*.md'

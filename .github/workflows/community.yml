@@ -11,6 +11,9 @@ on:
       - "*.md"
 jobs:
   docker:
+    # -A* and -M* are not available without nexus credentials
+    if: |
+      ! startsWith(github.head_ref, 'next/')
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
