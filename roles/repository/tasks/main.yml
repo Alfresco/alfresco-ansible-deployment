@@ -67,7 +67,7 @@
   loop: "{{ war_downloads }}"
   get_url:
     url: "{{ item.url }}"
-    checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+    checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }}
     dest: "{{ item.dest }}"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
@@ -87,7 +87,7 @@
     dest: "{{ download_location }}/{{ acs.artifact_name }}.zip"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
-    checksum: sha1:{{ lookup('url', downloads.acs_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+    checksum: sha1:{{ lookup('url', downloads.acs_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
   register: distribution_download_result
   async: 1800
   poll: 0
@@ -99,7 +99,7 @@
   loop: "{{ amp_downloads }}"
   get_url:
     url: "{{ item.url }}"
-    checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+    checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }}
     dest: "{{ item.dest }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"

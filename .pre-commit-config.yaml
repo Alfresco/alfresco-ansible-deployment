@@ -39,15 +39,10 @@ repos:
       - id: ansible-lint
 
   - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.1.0
+    rev: v1.4.0
     hooks:
       - id: detect-secrets
-        name: detect generic secrets
-        args:
-          - --baseline
-          - .secrets.baseline
-          - --exclude-secrets
-          - (dummy|admin|mp6yc0UD9e|alfresco)
+        args: ["--baseline", ".secrets.baseline"]
 
   - repo: https://github.com/awslabs/git-secrets
     rev: b9e96b3

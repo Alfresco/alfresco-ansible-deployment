@@ -8,7 +8,7 @@
   get_url:
     url: "{{ downloads.search_zip_url }}"
     dest: "{{ download_location }}/{{ search.artifact_name }}-{{ search.version }}.zip"
-    checksum: sha1:{{ lookup('url', downloads.search_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+    checksum: sha1:{{ lookup('url', downloads.search_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
     mode: "0644"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"

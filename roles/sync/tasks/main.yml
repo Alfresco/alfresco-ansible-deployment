@@ -8,7 +8,7 @@
   get_url:
     url: "{{ downloads.sync_zip_url }}"
     dest: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
-    checksum: sha1:{{ lookup('url', downloads.sync_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+    checksum: sha1:{{ lookup('url', downloads.sync_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
 
