@@ -84,7 +84,7 @@
   hosts: localhost
   gather_facts: false
   vars:
-    broker_name: molecule-{{ lookup('ansible.builtin.env', 'BRANCH_NAME')[:42] }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
+    broker_name: molecule-{{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
   tasks:
     - name: Lookup existing ec2 group
       amazon.aws.ec2_group_info:
