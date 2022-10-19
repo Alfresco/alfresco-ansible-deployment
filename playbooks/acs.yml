@@ -13,7 +13,7 @@
       - not skip_os_test | default(true) | bool
       - ansible_distribution_version | int not in os_versions
 
-- name: Check required dependencies
+- name: Run preliminary checks
   ansible.builtin.import_playbook: prerun-checks.yml
 
 - name: Handle secrets
