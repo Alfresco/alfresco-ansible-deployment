@@ -18,6 +18,8 @@ all:
         db.infra.local:
     repository:
       vars:
+        # Add at least Share URL bellow
+        known_urls: []
         # Every storage that can be enabled via `mount` on hosts is supported
         cs_storage:
           type: nfs
@@ -54,7 +56,7 @@ all:
     syncservice:
       hosts:
         sync.infra.local:
-    3rd_party_repo_client:
+    other_repo_clients:
       hosts:
     external_activemq:
       hosts:
@@ -64,10 +66,10 @@ all:
       children:
         external_activemq:
         external_elasticsearch:
-        3rd_party_repo_client:
+        other_repo_clients:
     trusted_resource_consumers:
       children:
         repository:
         nginx:
         adw:
-        3rd_party_repo_client:
+        other_repo_clients:

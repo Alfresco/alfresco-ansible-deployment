@@ -17,6 +17,9 @@ all:
         database_1:
           ansible_host: targetIP
     repository:
+      vars:
+        # Add at least the Share url bellow
+        known_urls: []
       hosts:
         repository_1:
           ansible_host: targetIP
@@ -51,14 +54,14 @@ all:
       hosts:
         syncservice_1:
           ansible_host: targetIP
-    3rd_party_repo_client:
+    other_repo_clients:
       hosts:
     trusted_resource_consumers:
       children:
         repository:
         nginx:
         adw:
-        3rd_party_repo_client:
+        other_repo_clients:
     external_activemq:
       hosts:
     external_elasticsearch:
@@ -67,4 +70,4 @@ all:
       children:
         external_activemq:
         external_elasticsearch:
-        3rd_party_repo_client:
+        other_repo_clients:

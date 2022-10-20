@@ -1,4 +1,4 @@
-{% macro compute(type, urls) -%}
+{% macro compute(host, type, urls) -%}
   {% set Urlns = namespace() -%}
   {% set Origins = namespace(list=[]) -%}
   {% for url in urls -%}
@@ -7,6 +7,10 @@
     {% set Urlns.port = url | regex_replace('^(https?://)?(.*?)(:([0-9]+))?(/(.*))?$','\\3') -%}
     {{ Origins.list.append(Urlns.scheme | default('') + Urlns.domain + Urlns.port | default('')) -}}
   {% endfor -%}
+  {% if host == 'localhost' -%}
+  {{ Origins.list.append('https?://localhost') -}}
+  {{ urls.append('https?://localhost') -}}
+  {% endif -%}
   {% if type == 'origin' -%}
     {{ Origins.list | select() | join('|') -}}
   {% elif type == 'referer' -%}

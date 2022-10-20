@@ -1,6 +1,7 @@
 # SECURITY
 
 This pages focuses on providing information on making the platform deployed with alfresco-ansible-deployment secure.
+In particular, for Share to work, Follow the [Share security setup](#Share-security-setup).
 
 ## Specify trustworthy applications
 
@@ -12,7 +13,7 @@ In such circumstances, you can tell the playbook which are these applications by
 ```yaml
 all:
   chidren:
-    3rd_party_repo_client:
+    other_repo_clients:
       hosts:
         my_custom_app:
           known_urls:
@@ -85,6 +86,24 @@ To completely disable CORS simply use:
 ```yaml
 cors:
   enabled: false
+```
+
+## Share security setup
+
+Share is **always** deployed together with the repo (it's part of the same role), and as a consequence will always try to access the repo through the `localhost` interface.
+That means from the repo's point of view - unless Share itself is accessed using [http://localhost/share/](http://localhost/share/) - it is breaking CORS protection.
+For that reason in order for Share to work, it is mandatory to add the URL Share will be accessed from as `known_urls`. One way to do it is to add this variable to the
+`repository` group as shown bellow:
+
+```yaml
+all:
+  chidren:
+    repository:
+      vars:
+        known_urls:
+          - https://ecm.domain.local/share
+      hosts:
+        repository_1:
 ```
 
 ## Transformations security

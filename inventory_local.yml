@@ -4,6 +4,10 @@ all:
     ansible_connection: local
   children:
     repository:
+      vars:
+        known_urls:
+          - http://localhost/share
+          - https://localhost/share
       hosts:
         localhost:
     database:
@@ -34,7 +38,7 @@ all:
     syncservice:
       children:
         repository:
-    3rd_party_repo_client:
+    other_repo_clients:
       hosts:
     external_activemq:
       hosts:
@@ -44,10 +48,10 @@ all:
       children:
         external_activemq:
         external_elasticsearch:
-        3rd_party_repo_client:
+        other_repo_clients:
     trusted_resource_consumers:
       children:
         repository:
         nginx:
         adw:
-        3rd_party_repo_client:
+        other_repo_clients:

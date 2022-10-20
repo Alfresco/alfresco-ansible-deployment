@@ -18,6 +18,8 @@
     - name: Reset repo host_vars files
       blockinfile:
         state: absent
+        marker: >-
+          # {mark} CS_STORAGE VARS
         block: |
           cs_storage:
             type: nfs

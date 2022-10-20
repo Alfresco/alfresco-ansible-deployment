@@ -1,5 +1,7 @@
 ansible_user: ansible
 bssrf_protection_enabled: true
+known_urls:
+  - http://localhost:8080/share
 cs_storage:
   type: tmpfs
   device: none
@@ -61,9 +63,3 @@ repository_properties:
     protection:
       limit: 5
       periodSeconds: 60
-
-csrf:
-  enabled: true
-  force_headers: []
-  urls:
-    - http://localhost:8080/.*
