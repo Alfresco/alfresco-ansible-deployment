@@ -28,6 +28,16 @@
       ansible.builtin.set_fact:
         node_hostname: "{{ ansible_ec2_public_hostname | default('localhost') }}"
 
+    - name: Set hostname as known_urls
+      ansible.builtin.blockinfile:
+        marker: >-
+          # {mark} KNOWN_URLS VAR
+        block: |
+          known_urls:
+            - https://{{ node_hostname }}/share/
+        path: ../{{ lookup('env', 'MOLECULE_SCENARIO_NAME') }}/host_vars/{{ item }}.yml
+      loop: "{{ groups.repository }}"
+
     - name: "Set variables"
       ansible.builtin.set_fact:
         certificate_domain: "{{ node_hostname }}"
