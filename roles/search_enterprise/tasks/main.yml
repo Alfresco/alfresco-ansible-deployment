@@ -38,9 +38,9 @@
       template:
         src: elasticsearch-connector.service.j2
         dest: /etc/systemd/system/elasticsearch-connector.service
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: "0644"
+        owner: root
+        group: root
+        mode: "0640"
       notify:
         - enable elasticsearch-connector service
         - restart elasticsearch-connector service

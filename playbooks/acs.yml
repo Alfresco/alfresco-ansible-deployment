@@ -54,7 +54,7 @@
   gather_facts: no
   roles:
     - role: "../roles/elasticsearch"
-      when: acs.edition == "Enterprise"
+      when: acs.edition == "Enterprise" and not groups.external_elasticsearch | default([])
   tags:
     - elasticsearch
 

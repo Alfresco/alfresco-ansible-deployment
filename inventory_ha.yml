@@ -60,9 +60,12 @@ all:
       hosts:
     external_activemq:
       hosts:
+    external_elasticsearch:
+      hosts:
     external:
       children:
         external_activemq:
+        external_elasticsearch:
         other_repo_clients:
     trusted_resource_consumers:
       children:
