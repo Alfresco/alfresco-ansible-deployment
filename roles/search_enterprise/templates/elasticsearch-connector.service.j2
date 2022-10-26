@@ -24,5 +24,7 @@ Restart=on-failure
 RestartSec=60
 SuccessExitStatus=143
 
+WorkingDirectory={{ search_enterprise_binaries_dir }}
+
 [Install]
 WantedBy=multi-user.target
