@@ -1,16 +1,16 @@
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
-    version: 1.4.1
+    version: 1.5.0
   device_sync:
     repository: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo"
-    version: 3.6.0
+    version: 3.8.0
   googledrive_repo:
     repository: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise"
-    version: 3.2.2
+    version: 3.3.0
   googledrive_share:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share"
-    version: 3.2.2
+    version: 3.3.0
   ags_repo:
     repository: "{{ nexus_repository.enterprise_releases }}/alfresco-governance-services-enterprise-repo"
     version: 3.5.0
