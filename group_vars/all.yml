@@ -58,7 +58,7 @@ sfs:
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 3.0.1
+  version: 3.1.0
 sync:
   repository: "{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x"
   version: 3.8.0
