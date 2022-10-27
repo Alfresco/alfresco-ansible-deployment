@@ -6,7 +6,7 @@ runs:
   steps:
   - name: Install pipenv
     shell: bash
-    run: pip install --user pipenv
+    run: pip install --user pipenv==2022.10.12
   - name: Install packages from Pipfile
     shell: bash
     run: pipenv install --deploy --dev
