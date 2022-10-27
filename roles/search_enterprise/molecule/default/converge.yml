@@ -5,12 +5,15 @@
     - name: "Include activemq"
       include_role:
         name: "activemq"
-    - name: "Include transformers"
-      include_role:
-        name: "transformers"
     - name: "Include sfs"
       include_role:
         name: "sfs"
+    - name: "Include transformers"
+      include_role:
+        name: "transformers"
+    - name: "Include t-router"
+      include_role:
+        name: "trouter"
     - name: "Include search_enterprise"
       include_role:
         name: "search_enterprise"
