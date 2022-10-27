@@ -4,8 +4,17 @@ acs:
 adw:
   version: "3.1"
 
+aos:
+  version: "1.5"
+
 apiExplorer:
   version: "7.3"
+
+dsync:
+  version: "3.8"
+
+googleDrive:
+  version: "3.3"
 
 search:
   version: "2.0"
@@ -18,8 +27,5 @@ transform:
 
 trouter:
   version: "2.0"
-
-dsync:
-  version: "3.8"
 
 version_pattern: '(-(A|M)\d*)?$'

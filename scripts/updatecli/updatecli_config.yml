@@ -78,15 +78,23 @@ sources:
     spec:
       versionFilter:
         kind: regex
-        pattern: '{{ .adw.version }}.(\d+){{ .version_pattern }}'
+        pattern: '^{{ .adw.version }}.(\d+){{ .version_pattern }}'
   aosAmp:
     name: AOS AMP
     kind: gittag
     scmid: aosAmpRepo
+    spec:
+      versionFilter:
+        kind: regex
+        pattern: '{{ .aos.version }}.(\d+){{ .version_pattern }}'
   googleDriveAmp:
     name: Google Drive AMP
     kind: gittag
     scmid: googleDriveAmpRepo
+    spec:
+      versionFilter:
+        kind: regex
+        pattern: '{{ .googleDrive.version }}.(\d+){{ .version_pattern }}'
   apiExplorer:
     name: Api explorer {{ .apiExplorer.version }}.x
     kind: gittag
