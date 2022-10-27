@@ -1,6 +1,9 @@
 acs:
   version: "7.2"
 
+adw:
+  version: "2.9"
+
 apiExplorer:
   version: "7.2"
 
