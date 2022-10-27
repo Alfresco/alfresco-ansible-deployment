@@ -9,62 +9,59 @@ artifacts_repositories:
     group_id: "org/alfresco"
   development:
     repository: "groups/internal"
-# empty space
 nexus_repository:
   releases: "{{ artifacts_repositories.community.base_url }}/{{ artifacts_repositories.community.repository }}/{{ artifacts_repositories.community.group_id }}"
   enterprise_releases: "{{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.enterprise.repository }}/{{ artifacts_repositories.enterprise.group_id }}"
   development_releases: "{{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.development.repository }}/{{ artifacts_repositories.enterprise.group_id }}"
-# empty space
 acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 7.3.0-A28
+  version: 7.3.0
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
-    version: 1.5.0-A6
+    version: 1.5.0
   device_sync:
     repository: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo"
-    version: 4.0.0-M3
+    version: 3.8.0
   googledrive_repo:
     repository: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise"
-    version: 3.3.0-A1
+    version: 3.3.0
   googledrive_share:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share"
-    version: 3.3.0-A1
+    version: 3.3.0
 api_explorer:
   artifact_name: api-explorer
   repository: "{{ nexus_repository.releases }}"
-  version: 7.3.0-A1
+  version: 7.3.0
 search_enterprise:
   artifact_name: alfresco-elasticsearch-connector-distribution
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 3.2.0-A9
+  version: 3.2.0
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
-  version: 2.0.5-A2
+  version: 2.0.5
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
-  version: 3.0.0-A6
+  version: 3.0.0
 trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.0.0-A6
+  version: 2.0.0
 sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.0.0-A6
+  version: 2.0.0
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 3.0.1
-# empty space
 sync:
   repository: "{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x"
-  version: 4.0.0-M3
+  version: 3.8.0
 supported_os:
   RHEL:
     versions:
