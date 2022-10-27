@@ -165,10 +165,11 @@ jobs:
         with:
           cache-name: enterprise
 
-      # https://stackoverflow.com/a/64210623/547195
-      - name: Get branch name
-        shell: bash
-        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+      - name: Set BRANCH_NAME
+        uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@d8f8ad5fbd23226ba2cef685326898f182d1b78a
+        with:
+          sanitize: true
+          max-length: 20
 
       - name: Setup workspace
         uses: ./.github/actions/setup-workspace

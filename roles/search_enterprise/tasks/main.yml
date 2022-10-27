@@ -4,7 +4,7 @@
   get_url:
     url: "{{ downloads.search_enterprise_zip_url }}"
     dest: "{{ download_location }}/{{ search_enterprise.artifact_name }}-{{ search_enterprise.version }}.zip"
-    checksum: sha1:{{ lookup('url', downloads.search_enterprise_zip_sha1_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+    checksum: sha1:{{ lookup('url', downloads.search_enterprise_zip_sha1_url, username=nexus_user, password=nexus_password) }}
     mode: "0644"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
@@ -38,9 +38,9 @@
       template:
         src: elasticsearch-connector.service.j2
         dest: /etc/systemd/system/elasticsearch-connector.service
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: "0644"
+        owner: root
+        group: root
+        mode: "0640"
       notify:
         - enable elasticsearch-connector service
         - restart elasticsearch-connector service

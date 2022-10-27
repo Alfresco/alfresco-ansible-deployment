@@ -8,7 +8,7 @@ if [ -n "$MOLECULE_IT_SCENARIO" ]; then
         ansible-playbook -e vault_init=encrypted_variables playbooks/secrets-init.yml
     fi
 
-    SECRETS='vars/secrets.yml' # pragma: allowlist secret
+    SECRETS='vars/secrets.yml'
     if [ ! -f "$SECRETS" ]; then
         echo "$SECRETS should exists at this point"
         exit 1

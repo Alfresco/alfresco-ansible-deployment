@@ -18,6 +18,8 @@
     - name: Reset repo host_vars files
       blockinfile:
         state: absent
+        marker: >-
+          # {mark} CS_STORAGE VARS
         block: |
           cs_storage:
             type: nfs
@@ -30,7 +32,7 @@
   hosts: localhost
   gather_facts: false
   vars:
-    broker_name: molecule-{{ lookup('ansible.builtin.env', 'BRANCH_NAME')[:42] }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
+    broker_name: molecule-{{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
   tasks:
 
     - name: Grab activemq broker id

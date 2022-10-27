@@ -12,7 +12,7 @@
     - name: Creating cluster contentstore
       when: molecule_yml.platforms | selectattr('name', 'in', groups.repository) | length > 1
       block:
-        - name: get EC2 instance info
+        - name: Get EC2 instance info
           amazon.aws.ec2_instance_info:
             filters:
               "tag:Name": molecule_{{ lookup('ansible.builtin.env', 'MOLECULE_IT_PLATFORM') }}_repo_{{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}_{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
@@ -36,6 +36,8 @@
 
         - name: Generate repo host_vars files
           blockinfile:
+            marker: >-
+              # {mark} CS_STORAGE VARS
             state: present
             block: |
               cs_storage:
@@ -50,30 +52,30 @@
           become: true
           delegate_to: "{{ groups.repository | first }}"
           block:
-            - name: install required packages
+            - name: Install required packages
               package:
                 state: present
                 name: nfs-utils
             # Wait up to ~10 min for DNS propagation
-            - name: check for DNS propagation
+            - name: Check for DNS propagation
               ansible.builtin.command:
                 cmd: getent hosts {{ contentstore.results[0].efs.filesystem_address.split(':/')[0] }}
               until: resolvcheck.rc == 0
               register: resolvcheck
               retries: 9
               delay: 60
-            - name: mount the EFS volume
+            - name: Mount the EFS volume
               ansible.posix.mount:
                 path: /mnt
                 src: "{{ hostvars.localhost.contentstore.results[0].efs.filesystem_address }}"
                 fstype: nfs
                 state: mounted
-            - name: create contentstore root folder
+            - name: Create contentstore root folder
               file:
                 state: directory
                 mode: 0777
                 path: /mnt/{{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
-            - name: umount the EFS volume
+            - name: Umount the EFS volume
               ansible.posix.mount:
                 path: /mnt
                 src: "{{ hostvars.localhost.contentstore.results[0].efs.filesystem_address }}"
@@ -84,7 +86,7 @@
   hosts: localhost
   gather_facts: false
   vars:
-    broker_name: molecule-{{ lookup('ansible.builtin.env', 'BRANCH_NAME')[:42] }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
+    broker_name: molecule-{{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}-{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
   tasks:
     - name: Lookup existing ec2 group
       amazon.aws.ec2_group_info:

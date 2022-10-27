@@ -13,8 +13,8 @@
       - not skip_os_test | default(true) | bool
       - ansible_distribution_version | int not in os_versions
 
-- name: Check required dependencies
-  ansible.builtin.import_playbook: check-versions.yml
+- name: Run preliminary checks
+  ansible.builtin.import_playbook: prerun-checks.yml
 
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
@@ -54,7 +54,7 @@
   gather_facts: no
   roles:
     - role: "../roles/elasticsearch"
-      when: acs.edition == "Enterprise"
+      when: acs.edition == "Enterprise" and not groups.external_elasticsearch | default([])
   tags:
     - elasticsearch
 

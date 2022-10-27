@@ -87,7 +87,7 @@ def test_alfresco_api(host):
     response = json.loads(cmd.stdout)
     acs_version = host.ansible.get_variables()['acs']['version']
     if '-' in acs_version:
-        # Remove optional -Ax postfix in acs version
+        # Remove optional -Ax suffix in acs version
         acs_version_split = acs_version.split('-')
         acs_version = acs_version_split[:-1][0]
     assert_that(response['entry']['repository']['version']['display'], contains_string(acs_version))
