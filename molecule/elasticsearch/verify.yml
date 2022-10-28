@@ -1,4 +1,3 @@
----
 - name: Verify
   hosts: all
   gather_facts: false
@@ -17,19 +16,34 @@
       ansible.builtin.shell: journalctl -u elasticsearch-connector.service
       register: error_log
 
-    - name: Check logs for errors, warning and expected patterns
-      vars:
-        log_expected_regex: |-
-          Refreshing accepted content media-type cache, accepted type count: ([7-9]\d|[1-9]\d{2,})$
+    - name: Check logs for errors and warnings
       ansible.builtin.assert:
         that:
           - not error_log.stdout | regex_search(' WARN ')
           - not error_log.stderr | regex_search(' ERROR ')
-          - error_log.stdout | regex_search('{{ log_expected_regex }}')
-        msg: "{{ error_log.stdout }} {{ error_log.stderr }}"
 
-    - name: Check that Elasticsearch Connector reindex is available
+    - name: Check that Elasticsearch Connector reindex service is defined and not running
       ansible.builtin.assert:
         that:
           - ansible_facts.services['elasticsearch-connector-reindex.service'] is defined
           - ansible_facts.services['elasticsearch-connector-reindex.service'].state == 'inactive'
+
+    - name: Run the Elasticsearch Connector Reindex once
+      become: true
+      ansible.builtin.systemd:
+        state: started
+        name: elasticsearch-connector-reindex
+
+    - name: Get errors in the journal of Elasticsearch Connector Reindex service
+      become: true
+      ansible.builtin.shell: journalctl -u elasticsearch-connector-reindex.service
+      register: error_log
+
+    - name: Check logs for errors and warnings
+      ansible.builtin.assert:
+        that:
+          - not error_log.stdout | regex_search(' WARN ')
+          - not error_log.stderr | regex_search(' ERROR ')
+
+- name: Run default verify
+  import_playbook: ../default/verify.yml
