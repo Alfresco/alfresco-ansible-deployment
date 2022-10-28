@@ -44,3 +44,11 @@
       notify:
         - enable elasticsearch-connector service
         - restart elasticsearch-connector service
+
+    - name: Add elasticsearch-connector reindex service
+      template:
+        src: elasticsearch-connector-reindex.service.j2
+        dest: /etc/systemd/system/elasticsearch-connector-reindex.service
+        owner: root
+        group: root
+        mode: "0640"
