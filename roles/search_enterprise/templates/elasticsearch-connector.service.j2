@@ -9,7 +9,7 @@ User={{ username }}
 
 Environment=SERVER_PORT={{ search_enterprise_port }}
 
-{% include 'elasticsearch-cfg.j2' %}
+{% include "elasticsearch-cfg.j2" %}
 
 ExecStart={{ java_home }}/bin/java -jar {{ search_enterprise_binaries_dir }}/alfresco-elasticsearch-live-indexing-{{ search_enterprise.version }}-app.jar
 ExecStop=/bin/kill -15 $MAINPID

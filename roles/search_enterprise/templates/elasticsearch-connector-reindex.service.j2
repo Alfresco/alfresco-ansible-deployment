@@ -7,7 +7,7 @@ Type=oneshot
 
 User={{ username }}
 
-{% include 'elasticsearch-cfg.j2' %}
+{% include "elasticsearch-cfg.j2" %}
 
 Environment=SPRING_DATASOURCE_URL=jdbc:postgresql://{{ db_host }}:{{ ports_cfg.postgres.sql }}/{{ repo_db_name }}
 Environment=SPRING_DATASOURCE_USERNAME={{ repo_db_username }}
