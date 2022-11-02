@@ -28,12 +28,13 @@
           - ansible_facts.services['elasticsearch-connector-reindex.service'] is defined
           - ansible_facts.services['elasticsearch-connector-reindex.service'].state == 'inactive'
 
-    - name: Run the Elasticsearch Connector Reindex once
-      become: true
-      ansible.builtin.systemd:
-        state: started
-        name: elasticsearch-connector-reindex
+- name: Run the Elasticsearch Connector Reindex
+  import_playbook: ../../playbooks/search-enterprise-reindex.yml
 
+- name: Verify Reindex
+  hosts: all
+  gather_facts: false
+  tasks:
     - name: Get errors in the journal of Elasticsearch Connector Reindex service
       become: true
       ansible.builtin.shell: journalctl -u elasticsearch-connector-reindex.service
