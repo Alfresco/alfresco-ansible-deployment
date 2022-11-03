@@ -8,7 +8,6 @@
     mode: "0644"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
-    timeout: 2
 
 - name: Install & configure Search services
   become: true
