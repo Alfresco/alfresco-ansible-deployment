@@ -24,9 +24,9 @@
       ansible.builtin.assert:
         that:
           - not error_log.stdout | regex_search(' WARN ')
-          - not error_log.stderr | regex_search(' ERROR ')
+          - not error_log.stdout | regex_search(' ERROR ')
           - error_log.stdout | regex_search('{{ log_expected_regex }}')
-        msg: "{{ error_log.stdout }} {{ error_log.stderr }}"
+        msg: "{{ error_log.stdout }}"
 
     - name: Check that Elasticsearch Connector reindex is available
       ansible.builtin.assert:

@@ -1,6 +1,8 @@
 - name: Verify
   hosts: all
   gather_facts: false
+  vars:
+    job_name: elasticsearch-connector.service
   tasks:
     - name: Populate service facts
       ansible.builtin.service_facts:
@@ -8,43 +10,49 @@
     - name: Check that Elasticsearch Connector service is up and running
       ansible.builtin.assert:
         that:
-          - ansible_facts.services['elasticsearch-connector.service'] is defined
-          - ansible_facts.services['elasticsearch-connector.service'].state == 'running'
+          - ansible_facts.services[job_name] is defined
+          - ansible_facts.services[job_name].state == 'running'
 
     - name: Get errors in the journal of Elasticsearch Connector service
       become: true
-      ansible.builtin.shell: journalctl -u elasticsearch-connector.service
+      ansible.builtin.shell: journalctl -u {{ job_name }}
       register: error_log
 
-    - name: Check logs for errors and warnings
+    - name: Assert logs
       ansible.builtin.assert:
         that:
-          - not error_log.stdout | regex_search(' WARN ')
-          - not error_log.stderr | regex_search(' ERROR ')
+          - error_log.stdout | regex_search('Started LiveIndexingApp')
 
-    - name: Check that Elasticsearch Connector reindex service is defined and not running
+- name: Verify Reindex before first run
+  hosts: all
+  gather_facts: false
+  vars:
+    job_name: elasticsearch-connector-reindex.service
+  tasks:
+    - name: Check that {{ job_name }} is defined and not running
       ansible.builtin.assert:
         that:
-          - ansible_facts.services['elasticsearch-connector-reindex.service'] is defined
-          - ansible_facts.services['elasticsearch-connector-reindex.service'].state == 'inactive'
+          - ansible_facts.services[job_name] is defined
+          - ansible_facts.services[job_name].state == 'inactive'
 
 - name: Run the Elasticsearch Connector Reindex
   import_playbook: ../../playbooks/search-enterprise-reindex.yml
 
-- name: Verify Reindex
+- name: Verify Reindex after first run
   hosts: all
   gather_facts: false
+  vars:
+    job_name: elasticsearch-connector-reindex.service
   tasks:
-    - name: Get errors in the journal of Elasticsearch Connector Reindex service
+    - name: Get errors in the journal of {{ job_name }}
       become: true
-      ansible.builtin.shell: journalctl -u elasticsearch-connector-reindex.service
+      ansible.builtin.shell: journalctl -u {{ job_name }}
       register: error_log
 
-    - name: Check logs for errors and warnings
+    - name: Assert logs
       ansible.builtin.assert:
         that:
-          - not error_log.stdout | regex_search(' WARN ')
-          - not error_log.stderr | regex_search(' ERROR ')
+          - error_log.stdout | regex_search('reindexByIds.*COMPLETED.*')
 
 - name: Run default verify
   import_playbook: ../default/verify.yml
