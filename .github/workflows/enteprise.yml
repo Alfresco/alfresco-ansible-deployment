@@ -13,6 +13,7 @@ env:
 
 jobs:
   docker:
+    name: ${{ matrix.role.name }} on ${{ matrix.molecule_distro.image }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -62,6 +63,7 @@ jobs:
           command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
 
   docker_integration:
+    name: ${{ matrix.scenario.name }} on ${{ matrix.scenario.name }}
     if: github.actor != 'dependabot[bot]'
     needs:
       - docker
@@ -108,10 +110,10 @@ jobs:
         run: pipenv run molecule test -s ${{ matrix.scenario.name }}
 
   ec2:
+    name: ${{ matrix.molecule_scenario.desc }}
     if: github.actor != 'dependabot[bot]'
     needs:
       - docker
-    name: ${{ matrix.molecule_scenario.desc }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
