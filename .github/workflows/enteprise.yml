@@ -63,7 +63,7 @@ jobs:
           command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
 
   docker_integration:
-    name: ${{ matrix.scenario.name }} on ${{ matrix.scenario.name }}
+    name: ${{ matrix.scenario.name }} on ${{ matrix.molecule_distro.image }}
     if: github.actor != 'dependabot[bot]'
     needs:
       - docker
