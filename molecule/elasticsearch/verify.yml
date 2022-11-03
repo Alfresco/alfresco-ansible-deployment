@@ -13,15 +13,13 @@
           - ansible_facts.services[job_name] is defined
           - ansible_facts.services[job_name].state == 'running'
 
-    - name: Get errors in the journal of Elasticsearch Connector service
+    - name: "Check that {{ job_name }} is really up and running"
       become: true
       ansible.builtin.shell: journalctl -u {{ job_name }}
       register: error_log
-
-    - name: Assert logs
-      ansible.builtin.assert:
-        that:
-          - error_log.stdout | regex_search('Started LiveIndexingApp')
+      retries: 6
+      delay: 10
+      until: error_log.stdout | regex_search('Started LiveIndexingApp')
 
 - name: Verify Reindex before first run
   hosts: all
@@ -44,15 +42,13 @@
   vars:
     job_name: elasticsearch-connector-reindex.service
   tasks:
-    - name: Get errors in the journal of {{ job_name }}
+    - name: "Check that {{ job_name }} is really up and running"
       become: true
       ansible.builtin.shell: journalctl -u {{ job_name }}
       register: error_log
-
-    - name: Assert logs
-      ansible.builtin.assert:
-        that:
-          - error_log.stdout | regex_search('reindexByIds.*COMPLETED.*')
+      retries: 6
+      delay: 10
+      until: error_log.stdout | regex_search('reindexByIds.*COMPLETED.*')
 
 - name: Run default verify
   import_playbook: ../default/verify.yml
