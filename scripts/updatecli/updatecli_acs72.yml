@@ -29,3 +29,5 @@ trouter:
   version: "1.5"
 
 version_pattern: '(-M\d*)?$'
+
+target_file: group_vars/all.yml
