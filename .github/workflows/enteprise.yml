@@ -70,8 +70,8 @@ jobs:
       fail-fast: false
       matrix:
         molecule_distro:
-          - image: centos:7
           - image: ubuntu:20.04
+          - image: ubuntu:22.04
           - image: rockylinux:8
         scenario:
           - name: elasticsearch
