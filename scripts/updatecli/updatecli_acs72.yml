@@ -1,33 +1,31 @@
 acs:
-  version: "7.2"
+  version: "~7.2"
 
 adw:
-  version: "2.9"
+  version: "~3.0"
 
 aos:
-  version: "1.4"
+  version: "~1.4"
 
 apiExplorer:
-  version: "7.2"
+  version: "~7.2"
 
 dsync:
-  version: "3.6"
+  version: "~3.7"
 
 googleDrive:
-  version: "3.2"
+  version: "~3.2"
 
 search:
-  version: "2.0"
+  version: "~2.0"
 
 searchEnterprise:
-  version: "3.1"
+  version: "~3.1"
 
 transform:
-  version: "2.5"
+  version: "~2"
 
 trouter:
-  version: "1.5"
-
-version_pattern: '(-M\d*)?$'
+  version: "~1"
 
 target_file: group_vars/all.yml
