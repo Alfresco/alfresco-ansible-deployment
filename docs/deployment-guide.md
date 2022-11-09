@@ -470,7 +470,7 @@ all:
         whatever.mq.eu-west-1.amazonaws.com:
           activemq_username: alfresco
           activemq_port: 61617
-          activemq_protocol: tcp # or ssl
+          activemq_transport: tcp # or ssl
     external:
       children:
         external_activemq:

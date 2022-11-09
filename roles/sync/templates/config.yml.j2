@@ -30,7 +30,7 @@ messaging:
     broker:
         host: {{ activemq_host }}
         port: {{ ports_cfg.activemq.openwire }}
-        protocol: {{ activemq_protocol }}
+        protocol: {{ activemq_transport }}
         endpoint: ${messaging.broker.protocol}://${messaging.broker.host}:${messaging.broker.port}
         url: failover:(${messaging.broker.endpoint}?wireFormat.maxInactivityDurationInitalDelay=30000)?timeout=3000&jms.useCompression=true&startupMaxReconnectAttempts=0&jms.redeliveryPolicy.maximumRedeliveries=${messaging.events.repo.node.maxConsumers}
     pool:
