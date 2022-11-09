@@ -1,3 +1,5 @@
 ---
 # defaults file for search_enterprise
 search_enterprise_port: 8081
+# see https://docs.alfresco.com/search-enterprise/latest/admin/#alfresco-elasticsearch-connector
+search_enterprise_reindex_options: ''

@@ -1,6 +1,6 @@
 ---
 - name: Verify
-  hosts: all
+  hosts: search_enterprise
   gather_facts: false
   tasks:
     - name: Populate service facts
@@ -33,3 +33,19 @@
         that:
           - ansible_facts.services['elasticsearch-connector-reindex.service'] is defined
           - ansible_facts.services['elasticsearch-connector-reindex.service'].state == 'inactive'
+
+    - name: Retrieve contents of elasticsearch-connector-reindex.service
+      become: true
+      ansible.builtin.slurp:
+        src: /etc/systemd/system/elasticsearch-connector-reindex.service
+      register: service_file
+
+    - name: Check reindex service contains the expected ExecStart line
+      become: true
+      vars:
+        service_file_content: "{{ service_file['content'] | b64decode }}"
+        expected_exec_start: "ExecStart=/opt/openjdk-11.0.15/bin/java -jar /opt/alfresco/enterprise-search-3.1.1/alfresco-elasticsearch-reindexing-3.1.1-app.jar --alfresco.reindex.concurrentProcessors=6"
+      ansible.builtin.assert:
+        that:
+          - "expected_exec_start in service_file_content"
+        msg: "{{ service_file_content }}"

@@ -13,7 +13,7 @@ Environment=SPRING_DATASOURCE_URL=jdbc:postgresql://{{ db_host }}:{{ ports_cfg.p
 Environment=SPRING_DATASOURCE_USERNAME={{ repo_db_username }}
 Environment=SPRING_DATASOURCE_PASSWORD={{ repo_db_password }}
 
-ExecStart={{ java_home }}/bin/java -jar {{ search_enterprise_binaries_dir }}/alfresco-elasticsearch-reindexing-{{ search_enterprise.version }}-app.jar
+ExecStart={{ java_home }}/bin/java -jar {{ search_enterprise_binaries_dir }}/alfresco-elasticsearch-reindexing-{{ search_enterprise.version }}-app.jar {{ search_enterprise_reindex_options }}
 
 WorkingDirectory={{ search_enterprise_binaries_dir }}
 
