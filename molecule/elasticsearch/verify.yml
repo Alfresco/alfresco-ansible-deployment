@@ -1,5 +1,5 @@
 - name: Verify
-  hosts: all
+  hosts: search_enterprise
   gather_facts: false
   vars:
     job_name: elasticsearch-connector.service
@@ -22,7 +22,7 @@
       until: error_log.stdout | regex_search('Started LiveIndexingApp')
 
 - name: Verify Reindex before first run
-  hosts: all
+  hosts: search_enterprise
   gather_facts: false
   vars:
     job_name: elasticsearch-connector-reindex.service
@@ -37,7 +37,7 @@
   import_playbook: ../../playbooks/search-enterprise-reindex.yml
 
 - name: Verify Reindex after first run
-  hosts: all
+  hosts: search_enterprise[0]
   gather_facts: false
   vars:
     job_name: elasticsearch-connector-reindex.service
