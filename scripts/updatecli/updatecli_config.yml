@@ -66,13 +66,13 @@ scms:
 # Available selectors: https://github.com/Masterminds/semver#basic-comparisons
 sources:
   acs:
-    name: ACS {{ .acs.version }}
+    name: ACS {{ .acs.version }}.x
     kind: gittag
     scmid: acsRepo
     spec:
       versionFilter:
-        kind: semver
-        pattern: '{{ .acs.version }}'
+        kind: regex
+        pattern: '{{ .acs.version }}.(\d+){{ .acs_version_pattern }}'
   adw:
     name: ADW {{ .adw.version }}
     kind: gittag
