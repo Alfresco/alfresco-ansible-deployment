@@ -153,88 +153,88 @@ targets:
     sourceid: acs
     spec:
       key: acs.version
-      file: {{ .target_file }}
+      file: '{{ .target_file }}'
   adw:
     name: Bump adw
     kind: yaml
     sourceid: adw
     spec:
       key: adw.version
-      file: {{ .target_file }}
+      file: '{{ .target_file }}'
   aosAmp:
     name: Bump AOS AMP
     kind: yaml
     sourceid: aosAmp
     spec:
       key: amps.aos_module.version
-      file: {{ .target_file }}
+      file: '{{ .target_file }}'
   dsyncAmp:
     name: Bump Device Sync AMP
     kind: yaml
     sourceid: dsync
     spec:
       key: amps.device_sync.version
-      file: {{ .target_file }}
+      file: '{{ .target_file }}'
   googleDriveRepoAmp:
     name: Bump Google Drive Repo AMP
     kind: yaml
     sourceid: googleDriveAmp
     spec:
       key: amps.googledrive_repo.version
-      file: {{ .target_file }}
+      file: '{{ .target_file }}'
   googleDriveShareAmp:
     name: Bump Google Drive Share AMP
     kind: yaml
     sourceid: googleDriveAmp
     spec:
       key: amps.googledrive_share.version
-      file: {{ .target_file }}
+      file: '{{ .target_file }}'
   apiExplorer:
     name: Bump api-explorer
     kind: yaml
     sourceid: apiExplorer
     spec:
       key: api_explorer.version
-      file: {{ .target_file }}
+      file: '{{ .target_file }}'
   dsync:
     name: Bump sync
     kind: yaml
     sourceid: dsync
     spec:
       key: sync.version
-      file: {{ .target_file }}
+      file: '{{ .target_file }}'
   search:
     name: Bump InsightEngine
     kind: yaml
     sourceid: search
     spec:
       key: search.version
-      file: {{ .target_file }}
+      file: '{{ .target_file }}'
   searchEnterprise:
     name: Bump Search Enterprise
     kind: yaml
     sourceid: searchEnterprise
     spec:
       key: search_enterprise.version
-      file: {{ .target_file }}
+      file: '{{ .target_file }}'
   transform:
     name: Bump Transform Core
     kind: yaml
     sourceid: transform
     spec:
       key: transform.version
-      file: {{ .target_file }}
+      file: '{{ .target_file }}'
   trouter:
     name: Bump ATS Transform Service
     kind: yaml
     sourceid: trouter
     spec:
       key: trouter.version
-      file: {{ .target_file }}
+      file: '{{ .target_file }}'
   sfs:
     name: Bump Shared File Store
     kind: yaml
     sourceid: trouter
     spec:
       key: sfs.version
-      file: {{ .target_file }}
+      file: '{{ .target_file }}'
