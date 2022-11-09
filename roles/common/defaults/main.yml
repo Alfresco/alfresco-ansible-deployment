@@ -29,6 +29,7 @@ activemq_host: >-
   {% endif %}
 activemq_transport: >-
   {{- groups.external_activemq | default([]) | map('extract', hostvars, ['activemq_transport']) | first | default('tcp') -}}
+activemq_protocol: openwire
 db_host: "{{ groups['database'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
 solr_host: "{{ groups['search'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
 ats_tengine_aio_host: "{{ groups['transformers'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"

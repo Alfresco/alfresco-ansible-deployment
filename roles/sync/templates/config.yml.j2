@@ -29,7 +29,7 @@ messaging:
                    bean: org.apache.activemq:type=Broker,brokerName=localhost,destinationType=${messaging.events.repo.node.endpoint.type},destinationName=${messaging.events.repo.node.endpoint.name}
     broker:
         host: {{ activemq_host }}
-        port: {{ ports_cfg.activemq.openwire }}
+        port: {{ ports_cfg.activemq[activemq_protocol] }}
         protocol: {{ activemq_transport }}
         endpoint: ${messaging.broker.protocol}://${messaging.broker.host}:${messaging.broker.port}
         url: failover:(${messaging.broker.endpoint}?wireFormat.maxInactivityDurationInitalDelay=30000)?timeout=3000&jms.useCompression=true&startupMaxReconnectAttempts=0&jms.redeliveryPolicy.maximumRedeliveries=${messaging.events.repo.node.maxConsumers}
