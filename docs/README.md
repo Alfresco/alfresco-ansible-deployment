@@ -54,19 +54,22 @@ The same playbook can be run to deploy the system in several different ways, ple
 
 While ACS supports a wide range of OS, the playbook is only known to work and is supported for a subset of them. The table below gives detailed information on the status of supported OS (which we aim at growing with time).
 
-| OS Flavor / version |     7.2 Enterprise |     7.1 Enterprise |     7.0 Enterprise |   6.2.2 Enterprise |          Community |
-|---------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
-| Amazon Linux (v2)   |                :x: |                :x: |                :x: |                :x: |                :x: |
-| Amazon Linux (v1)   |                :x: |                :x: |                :x: |                :x: |                :x: |
-| RHEL 8.4            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |                  - | :heavy_check_mark: |
-| RHEL 8.2            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |                  - | :heavy_check_mark: |
-| RHEL 7.7            |                  - | :heavy_check_mark: | :heavy_check_mark: |                  - | :heavy_check_mark: |
-| RHEL 7.6            |                  - | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| CentOS 7 x64        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| Ubuntu 20.04        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |                  - | :heavy_check_mark: |
-| Ubuntu 18.04        |                  : | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| SUSE 15.0           |                  - |                  - |                :x: |                  - |                :x: |
-| SUSE 12.0 SP1 x64   |                  - |                  - |                :x: |                :x: |                :x: |
+| OS Flavor / version |     7.3 Enterprise |     7.2 Enterprise |     7.1 Enterprise |     7.0 Enterprise |   6.2.2 Enterprise |          Community |
+|---------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
+| Amazon Linux (v2)   |                :x: |                :x: |                :x: |                :x: |                :x: |                :x: |
+| Amazon Linux (v1)   |                :x: |                :x: |                :x: |                :x: |                :x: |                :x: |
+| RHEL 8.6            | :heavy_check_mark: |                  - |                  - |                  - |                  - | :heavy_check_mark: |
+| RHEL 8.5            | :heavy_check_mark: | :heavy_check_mark: |                  - |                  - |                  - | :heavy_check_mark: |
+| RHEL 8.4            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |                  - | :heavy_check_mark: |
+| RHEL 8.2            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |                  - | :heavy_check_mark: |
+| RHEL 7.7            |                  - |                  - | :heavy_check_mark: | :heavy_check_mark: |                  - | :heavy_check_mark: |
+| RHEL 7.6            |                  - |                  - | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| CentOS 7 x64        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| Ubuntu 22.04        | :heavy_check_mark: |                  - |                  - |                  - |                  - | :heavy_check_mark: |
+| Ubuntu 20.04        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |                  - | :heavy_check_mark: |
+| Ubuntu 18.04        |                  - | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| SUSE 15.0           |                  - |                  - |                  - |                :x: |                  - |                :x: |
+| SUSE 12.0 SP1 x64   |                  - |                  - |                  - |                :x: |                :x: |                :x: |
 
 > Ansible version 2.12.x is used for testing this playbook
 
