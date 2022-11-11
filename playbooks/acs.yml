@@ -186,7 +186,7 @@
         marker_begin: SEARCH_ENTERPRISE_BEGIN
         marker_end: SEARCH_ENTERPRISE_END
   tags:
-    - sfs
+    - search_enterprise
 
 - name: Alfresco Digital Workspace Role
   hosts: adw

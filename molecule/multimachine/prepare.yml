@@ -128,7 +128,7 @@
         mqattrs:
           activemq_username: alfresco
           activemq_port: 61617
-          activemq_protocol: ssl
+          activemq_transport: ssl
       ansible.builtin.template:
         src: hosts.yml.j2
         dest: hosts.yml

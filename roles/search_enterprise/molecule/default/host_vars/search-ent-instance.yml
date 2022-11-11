@@ -1,1 +1,2 @@
 ansible_user: ansible
+search_enterprise_reindex_options: '--alfresco.reindex.concurrentProcessors=6'

@@ -97,19 +97,20 @@ Regardless of role and connection type, a consistent folder structure is used. Y
 
 The following systemd services are deployed and can be used to stop and start Alfresco components:
 
-| Service Name                        | Purpose                                                                          |
-|:------------------------------------|:---------------------------------------------------------------------------------|
-| `activemq.service`                  | ActiveMQ Service                                                                 |
-| `postgresql-<version>.service`      | Postgresql DB Service (where `<version>` is 11 for ACS 6.2.N and 13 for ACS 7.x) |
-| `nginx.service`                     | Nginx Service                                                                    |
-| `alfresco-content.service`          | Alfresco Content Service                                                         |
-| `alfresco-search.service`           | Alfresco Search Service                                                          |
-| `alfresco-shared-fs.service`        | Alfresco Shared File Store Controller Service                                    |
-| `alfresco-sync.service`             | Alfresco Sync Service                                                            |
-| `alfresco-tengine-aio.service`      | Alfresco AIO Transform Core Engine                                               |
-| `alfresco-transform-router.service` | Alfresco Transformation Router Service                                           |
-| `elasticsearch-connector.service`   | Alfresco Search Enterprise Service                                               |
-| `elasticsearch.service`             | ElasticSearch Service                                                            |
+| Service Name                              | Purpose                                                                                 |
+|:------------------------------------------|:----------------------------------------------------------------------------------------|
+| `activemq.service`                        | ActiveMQ Service                                                                        |
+| `postgresql-<version>.service`            | Postgresql DB Service (where `<version>` is 11 for ACS 6.2.N and 13 for ACS 7.x)        |
+| `nginx.service`                           | Nginx Service                                                                           |
+| `alfresco-content.service`                | Alfresco Content Service                                                                |
+| `alfresco-search.service`                 | Alfresco Search Service                                                                 |
+| `alfresco-shared-fs.service`              | Alfresco Shared File Store Controller Service                                           |
+| `alfresco-sync.service`                   | Alfresco Sync Service                                                                   |
+| `alfresco-tengine-aio.service`            | Alfresco AIO Transform Core Engine                                                      |
+| `alfresco-transform-router.service`       | Alfresco Transformation Router Service                                                  |
+| `elasticsearch-connector.service`         | Alfresco Search Enterprise Service                                                      |
+| `elasticsearch-connector-reindex.service` | Alfresco Search Enterprise job to force the reindexing of all the contents of the store |
+| `elasticsearch.service`                   | ElasticSearch Service                                                                   |
 
 Please be aware that some configuration changes (e.g. postgres pg_hba,
 properties files, ...) can trigger a service restart and a consequent
@@ -469,7 +470,7 @@ all:
         whatever.mq.eu-west-1.amazonaws.com:
           activemq_username: alfresco
           activemq_port: 61617
-          activemq_protocol: tcp # or ssl
+          activemq_transport: tcp # or ssl
     external:
       children:
         external_activemq:
@@ -794,11 +795,11 @@ Once ACS has initialized access the system using the following URLs with a brows
 
 There are some useful argument you can use with `ansible-playbook` command in many circumstances. Some are highlighted bellow but take a look at [The ansible-playbook documentation](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) for complete list of options.
 
-* `-k` : Prompt for SSH password. Usefull when no SSH keys have been deployed but needs to be th same on all hosts (prefer SSH whenever possible)
-* `-K` : Prompt for sudo password. Usefull when the user used to connect to the machine is not root
+* `-k` : Prompt for SSH password. Useful when no SSH keys have been deployed but needs to be th same on all hosts (prefer SSH whenever possible)
+* `-K` : Prompt for sudo password. Useful when the user used to connect to the machine is not root
 * `-e` : Pass an extra variable or override an existing one (read from file with `-e @file`).
 * `-l` : Limit the play to a subset of hosts (either groups or individuals hosts or a mix of both)
-* `-u user` : specify the username to use to cnnect to all targets (Prefer adding the ànsible_ssh_user` to the inventory file in the right scope, e.g. under the `all`group)
+* `-u user` : specify the username to use to connect to all targets (Prefer adding the `ansible_ssh_user` to the inventory file in the right scope, e.g. under the `all`group)
 
 ## ACS cluster
 
@@ -833,6 +834,18 @@ In that case, you can add the `cluster_keepoff` variable to one of the `reposito
 
 > A typical use case is to have a dedicated Solr tracking node. The playbook will then prefer to use that dedicated node - if it finds one - for solr tracking and only use the other as backup server (no load balancing)
 
+## Maintenance
+
+After the initial deploy, may arise the need to execute maintenance tasks that are handled via specific playbooks.
+
+### Search Enterprise Reindexing
+
+You can trigger the reindexing of existing content in Search Enterprise using a dedicated playbook:
+
+```bash
+pipenv run ansible-playbook playbooks/search-enterprise-reindex.yml -i <inventory_file>.yml
+```
+
 ## Cleanup & Uninstallation of ACS
 
 What needs to be removed from a system will depend on your inventory configuration. The steps below presume a cleanup and uninstallation of Alfresco content service after deployment of ansible artifacts by using platform-cleanup.yml playbook and platform-uninstall.yml playbook respectively.
@@ -842,7 +855,7 @@ What needs to be removed from a system will depend on your inventory configurati
 This playbook will remove the temporary artifacts which are stored on the hosts.In order to cleanup the system post deployment run the following command:
 
 ```bash
-pipenv run ansible-playbook playbooks/platform-cleanup.yml -i inventory_ssh.yml
+pipenv run ansible-playbook playbooks/platform-cleanup.yml -i <inventory_file>.yml
 ```
 
 > Note: This playbook can break the idempotency i.e Downloaded artifacts again needs to removed by running cleanup playbook.
@@ -851,7 +864,7 @@ pipenv run ansible-playbook playbooks/platform-cleanup.yml -i inventory_ssh.yml
 
 This playbook will uninstall the sevices which belong to the specific hosts. Below are the services, packages & folders we are removing when uninstalling
 
-1. Stoping and removing the following services:
+1. Stopping and removing the following services:
    * alfresco-transform-router.service
    * alfresco-shared-fs.service
    * alfresco-tengine-aio.service
