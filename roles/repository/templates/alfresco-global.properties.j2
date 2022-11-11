@@ -70,7 +70,7 @@ tika.url=${localTransform.core-aio.url}
 transform.misc.url=${localTransform.core-aio.url}
 sfs.url=http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}/
 
-messaging.broker.url=failover:({{ activemq_protocol }}://{{ activemq_host }}:{{ ports_cfg.activemq.openwire }})?timeout=3000
+messaging.broker.url=failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})?timeout=3000
 messaging.broker.username={{ activemq_username }}
 messaging.broker.password={{ activemq_password }}
 

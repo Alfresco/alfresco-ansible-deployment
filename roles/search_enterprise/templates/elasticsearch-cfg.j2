@@ -1,0 +1,9 @@
+Environment=ALFRESCO_SHAREDFILESTORE_BASEURL=http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}/alfresco/api/-default-/private/sfs/versions/1/file
+Environment=ALFRESCO_ACCEPTED_CONTENT_MEDIA_TYPES_CACHE_BASE_URL=http://{{ trouter_host }}:{{ ports_cfg.transformers.trouter }}/transform/config
+Environment=ELASTICSEARCH_INDEXNAME=alfresco
+Environment=SPRING_ACTIVEMQ_BROKERURL=failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})
+Environment=SPRING_ACTIVEMQ_USER={{ activemq_username }}
+Environment=SPRING_ACTIVEMQ_PASSWORD={{ activemq_password }}
+Environment=SPRING_ELASTICSEARCH_REST_URIS={{ elasticsearch_protocol }}://{{ elasticsearch_host }}:{{ ports_cfg.elasticsearch.http }}
+Environment=SPRING_ELASTICSEARCH_REST_USERNAME={{ elasticsearch_username }}
+Environment=SPRING_ELASTICSEARCH_REST_PASSWORD={{ elasticsearch_password }}

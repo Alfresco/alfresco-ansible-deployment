@@ -43,6 +43,5 @@ provisioner:
       host_vars: host_vars
   playbooks:
     prepare: ../default/prepare.yml
-    verify: ../default/verify.yml
 verifier:
   name: ansible

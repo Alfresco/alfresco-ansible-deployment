@@ -8,7 +8,6 @@
     mode: "0644"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
-    timeout: 2
 
 - name: Install & configure Search services
   become: true
@@ -33,6 +32,14 @@
         creates: "{{ search_enterprise_binaries_dir }}/README.md"
         owner: "{{ username }}"
         group: "{{ group_name }}"
+
+    - name: Add elasticsearch-connector reindex service
+      template:
+        src: elasticsearch-connector-reindex.service.j2
+        dest: /etc/systemd/system/elasticsearch-connector-reindex.service
+        owner: root
+        group: root
+        mode: "0640"
 
     - name: Add elasticsearch-connector service
       template:
