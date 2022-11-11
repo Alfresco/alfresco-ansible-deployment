@@ -44,7 +44,7 @@
       become: true
       vars:
         service_file_content: "{{ service_file['content'] | b64decode }}"
-        expected_exec_start: "ExecStart=/opt/openjdk-11.0.15/bin/java -jar /opt/alfresco/enterprise-search-3.1.1/alfresco-elasticsearch-reindexing-3.1.1-app.jar --alfresco.reindex.concurrentProcessors=6"
+        expected_exec_start: "ExecStart=/opt/openjdk-{{ dependencies_version.java }}/bin/java -jar /opt/alfresco/enterprise-search-{{ search_enterprise.version }}/alfresco-elasticsearch-reindexing-{{ search_enterprise.version }}-app.jar --alfresco.reindex.concurrentProcessors=6"
       ansible.builtin.assert:
         that:
           - "expected_exec_start in service_file_content"
