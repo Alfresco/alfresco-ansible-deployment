@@ -44,7 +44,6 @@ acs_environment:
     - -Xms350m
     - -Xmx900m
     - -XX:+DisableExplicitGC
-    - -XX:+UseConcMarkSweepGC
     - -Djava.awt.headless=true
     - -XX:ReservedCodeCacheSize=128m
     - $JAVA_OPTS
