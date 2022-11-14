@@ -18,6 +18,10 @@ amps:
   googledrive_share:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-repo-community"
     version: 3.2.2
+search:
+  artifact_name: alfresco-search-services
+  repository: "{{ nexus_repository.releases }}"
+  version: 2.0.5.1
 
 downloads:
   acs_zip_url: "{{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip"
