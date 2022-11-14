@@ -38,7 +38,7 @@
         slave_xml: |
           <lst name="slave">
             <str name="masterUrl">{{ solr.scheme }}://{{ master }}:{{ solr.port }}/solr/alfresco</str>
-            <str name="PollInterval">00:00:15</str>
+            <str name="pollInterval">00:00:15</str>
           </lst>
         replication_xml: >-
           {% if inventory_hostname==master %}{{ master_xml }}
