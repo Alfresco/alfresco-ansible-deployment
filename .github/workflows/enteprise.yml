@@ -182,13 +182,17 @@ jobs:
       - name: Generate unique id
         run: echo "MOLECULE_IT_ID=$(date +%s%4N)" >> $GITHUB_ENV
 
+      - name: Set nexus credentials only when required
+        if: ${{ ! contains( matrix.molecule_scenario.name, 'community' ) }}
+        run: |
+          echo "NEXUS_USERNAME=${{ secrets.nexus_username }}" >> $GITHUB_ENV
+          echo "NEXUS_PASSWORD=${{ secrets.nexus_password }}" >> $GITHUB_ENV
+
       - name: Run tests
         timeout-minutes: 120
         env:
           MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
           MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
-          NEXUS_USERNAME: ${{ secrets.nexus_username }}
-          NEXUS_PASSWORD: ${{ secrets.nexus_password }}
           AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
           CLONE_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
@@ -200,8 +204,6 @@ jobs:
         env:
           MOLECULE_IT_SCENARIO: ${{ matrix.molecule_scenario.name }}
           MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
-          NEXUS_USERNAME: ${{ secrets.nexus_username }}
-          NEXUS_PASSWORD: ${{ secrets.nexus_password }}
           AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
         uses: nick-fields/retry@v2

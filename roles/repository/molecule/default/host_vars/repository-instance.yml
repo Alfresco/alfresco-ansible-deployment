@@ -8,35 +8,41 @@ cs_storage:
   options: size=100m,mode=777
 amps:
   aos_module:
-    version: 1.4.0
+    repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
+    version: 1.5.0
   device_sync:
-    version: 3.4.0
+    repository: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo"
+    version: 3.8.0
   googledrive_repo:
-    version: 3.2.1
+    repository: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise"
+    version: 3.3.0
   googledrive_share:
-    version: 3.2.1
+    repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share"
+    version: 3.3.0
   ags_repo:
+    repository: "{{ nexus_repository.enterprise_releases }}/alfresco-governance-services-enterprise-repo"
     version: 3.5.0
   ags_share:
+    repository: "{{ nexus_repository.enterprise_releases }}/alfresco-governance-services-enterprise-share"
     version: 3.5.0
 amp_downloads:
-  - url: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp"
-    sha1_checksum_url: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp.sha1"
+  - url: "{{ amps.googledrive_repo.repository }}/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp"
+    sha1_checksum_url: "{{ amps.googledrive_repo.repository }}/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp.sha1"
     dest: "{{ content_folder }}/amps_repo/alfresco-googledrive-repo-enterprise.amp"
-  - url: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp"
-    sha1_checksum_url: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp.sha1"
+  - url: "{{ amps.googledrive_share.repository }}/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp"
+    sha1_checksum_url: "{{ amps.googledrive_share.repository }}/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp.sha1"
     dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
-  - url: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp"
-    sha1_checksum_url: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp.sha1"
+  - url: "{{ amps.device_sync.repository }}/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp"
+    sha1_checksum_url: "{{ amps.device_sync.repository }}/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp.sha1"
     dest: "{{ content_folder }}/amps_repo/alfresco-device-sync-repo.amp"
-  - url: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
-    sha1_checksum_url: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp.sha1"
+  - url: "{{ amps.aos_module.repository }}/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
+    sha1_checksum_url: "{{ amps.aos_module.repository }}/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp.sha1"
     dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
-  - url: "{{ nexus_repository.enterprise_releases }}/alfresco-governance-services-enterprise-repo/{{ amps.ags_repo.version }}/alfresco-governance-services-enterprise-repo-{{ amps.ags_repo.version }}.amp"
-    sha1_checksum_url: "{{ nexus_repository.enterprise_releases }}/alfresco-governance-services-enterprise-repo/{{ amps.ags_repo.version }}/alfresco-governance-services-enterprise-repo-{{ amps.ags_repo.version }}.amp.sha1"
+  - url: "{{ amps.ags_repo.repository }}/{{ amps.ags_repo.version }}/alfresco-governance-services-enterprise-repo-{{ amps.ags_repo.version }}.amp"
+    sha1_checksum_url: "{{ amps.ags_repo.repository }}/{{ amps.ags_repo.version }}/alfresco-governance-services-enterprise-repo-{{ amps.ags_repo.version }}.amp.sha1"
     dest: "{{ content_folder }}/amps_repo/ags-repo.amp"
-  - url: "{{ nexus_repository.enterprise_releases }}/alfresco-governance-services-enterprise-share/{{ amps.ags_share.version }}/alfresco-governance-services-enterprise-share-{{ amps.ags_share.version }}.amp"
-    sha1_checksum_url: "{{ nexus_repository.enterprise_releases }}/alfresco-governance-services-enterprise-share/{{ amps.ags_share.version }}/alfresco-governance-services-enterprise-share-{{ amps.ags_share.version }}.amp.sha1"
+  - url: "{{ amps.ags_share.repository }}/{{ amps.ags_share.version }}/alfresco-governance-services-enterprise-share-{{ amps.ags_share.version }}.amp"
+    sha1_checksum_url: "{{ amps.ags_share.repository }}/{{ amps.ags_share.version }}/alfresco-governance-services-enterprise-share-{{ amps.ags_share.version }}.amp.sha1"
     dest: "{{ content_folder }}/amps_share/ags-share.amp"
 use_custom_keystores: true
 acs_environment:
