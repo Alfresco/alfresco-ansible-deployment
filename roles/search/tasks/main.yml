@@ -53,6 +53,8 @@
             owner: "{{ username }}"
             group: "{{ group_name }}"
           loop:
+            - src: alfresco-search-services/solr.in.sh
+              dest: "{{ config_dir }}/"
             - src: alfresco-search-services/
               dest: "{{ binaries_dir }}/"
             - src: "solrhome"
@@ -64,6 +66,7 @@
           register: search_dest_dirs
           loop:
             - "{{ binaries_dir }}/README.MD"
+            - "{{ config_dir }}/solr.in.sh"
             - "{{ config_dir }}/solrhome"
         - name: Handle missing sources
           ansible.builtin.debug:
@@ -114,10 +117,23 @@
       notify:
         - restart-search
 
-    - name: Add "{{ config_dir }}/solr.in.sh"
-      template:
-        src: solr.in.sh
-        dest: "{{ config_dir }}/solr.in.sh"
+    - name: Add options to "{{ config_dir }}/solr.in.sh"
+      vars:
+        search_required_opts:
+          SOLR_PID_DIR: "{{ data_folder }}"
+          SOLR_HOME: "{{ config_dir }}/solrhome"
+          SOLR_LOGS_DIR: "{{ logs_folder }}"
+          LOG4J_PROPS: ${SOLR_TIP}/../logs/log4j.properties
+          SOLR_OPTS: >-
+            -Dsolr.content.dir={{ binaries_dir }}/contentstore
+            $SOLR_OPTS
+      blockinfile:
+        path: "{{ config_dir }}/solr.in.sh"
+        block: |
+          {% for opt in search_environment| combine(search_required_opts) | dict2items %}
+          {{ opt.key }}="{{ opt.value }}"
+          {% endfor %}
+        marker: "# {mark} ANSIBLE SEARCH CONFIG"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0755"
@@ -126,11 +142,11 @@
 
     - name: Add alfresco-search.service
       template:
-          src: alfresco-search.service
-          dest:  /etc/systemd/system/alfresco-search.service
-          owner: "{{ username }}"
-          group: "{{ group_name }}"
-          mode: "0644"
+        src: alfresco-search.service
+        dest: /etc/systemd/system/alfresco-search.service
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0644"
       notify:
         - enable-search
         - restart-search
