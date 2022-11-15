@@ -1,5 +1,6 @@
 ---
-# vars file for search-services
-binaries_dir: "{{ binaries_folder }}/search-services-{{ search.version }}"
-config_dir: "{{ config_folder }}/search-services"
-data_dir: "{{ data_folder }}/search-services"
+# vars file for search
+product_dir: "{{ search_flavor | regex_search('alfresco-(.*)','\\1') | first }}"
+binaries_dir: "{{ binaries_folder }}/{{ product_dir }}-{{ search.version }}"
+config_dir: "{{ config_folder }}/{{ product_dir }}"
+data_dir: "{{ data_folder }}/{{ product_dir }}"

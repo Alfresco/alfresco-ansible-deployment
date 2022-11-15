@@ -1,5 +1,5 @@
 ---
-# tasks file for search-services
+# tasks file for search
 - name: Include OS specific variables
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
@@ -45,7 +45,7 @@
 
     - name: Install Search services in Unix Filesystem Hierarchy Standard structure
       block:
-        - name: "Copy files from {{ binaries_dir }}/alfresco-search-services to {{ binaries_dir }}/"
+        - name: "Copy files from {{ binaries_dir }}/{{ search_flavor }} to {{ binaries_dir }}/"
           copy:
             remote_src: true
             src: "{{ binaries_dir }}/{{ item.src }}"
@@ -53,9 +53,9 @@
             owner: "{{ username }}"
             group: "{{ group_name }}"
           loop:
-            - src: alfresco-search-services/solr.in.sh
+            - src: "{{ search_flavor }}/solr.in.sh"
               dest: "{{ config_dir }}/"
-            - src: alfresco-search-services/
+            - src: "{{ search_flavor }}/"
               dest: "{{ binaries_dir }}/"
             - src: "solrhome"
               dest: "{{ config_dir }}/"
@@ -80,12 +80,12 @@
               Please reinstall from scratch :(
           when: search_dest_dirs.results | map(attribute='stat.exists') | difference([True])
 
-    - name: Remove old files {{ binaries_dir }}/alfresco-search-services
+    - name: Remove old files {{ binaries_dir }}/{{ search_flavor }}
       file:
         path: "{{ binaries_dir }}/{{ item }}"
         state: absent
       loop:
-        - alfresco-search-services
+        - "{{ search_flavor }}"
         - solrhome
 
     - name: Add solrcore.properties to solr templates
