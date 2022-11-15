@@ -108,7 +108,6 @@
     url_password: "{{ nexus_password }}"
   register: amp_download_result
   async: 900
-  no_log: true
   poll: 0
   tags:
     - molecule-idempotence-notest
