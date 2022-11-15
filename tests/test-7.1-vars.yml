@@ -5,8 +5,8 @@ acs:
   version: 7.1.1
 
 search:
-  artifact_name: alfresco-search-services
-  repository: "{{ nexus_repository.releases }}"
+  artifact_name: alfresco-insight-engine-distribution
+  repository: "{{ nexus_repository.enterprise_releases }}"
   version: 2.0.2
 
 transform:
@@ -71,3 +71,14 @@ amp_downloads:
   - url: "{{ amps.ags_share.repository }}/{{ amps.ags_share.version }}/alfresco-governance-services-enterprise-share-{{ amps.ags_share.version }}.amp"
     sha1_checksum_url: "{{ amps.ags_share.repository }}/{{ amps.ags_share.version }}/alfresco-governance-services-enterprise-share-{{ amps.ags_share.version }}.amp.sha1"
     dest: "{{ content_folder }}/amps_share/ags-share.amp"
+
+dependencies_version:
+  postgresql_connector: 42.2.19
+  postgres_major_version: 13
+  activemq: 5.16.4
+  java: 11.0.15
+  java_build: 10
+  tomcat: 9.0.59
+  libreoffice: 7.0.6.2
+  pdf_renderer: 1.1
+  imagemagick: 7.1.0-16
