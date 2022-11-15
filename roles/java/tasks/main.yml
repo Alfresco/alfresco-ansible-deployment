@@ -4,7 +4,7 @@
   get_url:
     url: "{{ dependencies_url.java }}"
     dest: "{{ download_location }}/{{ java_tar_file }}"
-    checksum: "md5:{{ dependencies_url.java_md5_checksum }}"
+    checksum: "sha256:{{ dependencies_url.java_sha256_checksum }}"
     timeout: 570
 
 - name: Install OpenJDK {{ dependencies_version.java }}
@@ -25,7 +25,7 @@
       blockinfile:
         path: "{{ config_folder }}/setenv.sh"
         marker: "# {mark} JAVA ENV VARS"
-        create: yes
+        create: true
         block: |
           #!/bin/sh
           #
