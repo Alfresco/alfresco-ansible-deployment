@@ -1,5 +1,5 @@
 ---
-imagemagick_version: "{{ dependencies_version.imagemagick }}-ci"
+imagemagick_version: "{{ dependencies_version.imagemagick }}-ci-1"
 imagemagick_packages:
   - imagemagick-distribution-el8-libs
   - imagemagick-distribution-el8
