@@ -1,5 +1,5 @@
 ---
-# tasks file for search-services
+# tasks file for search
 - name: Include OS specific variables
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
@@ -45,7 +45,7 @@
 
     - name: Install Search services in Unix Filesystem Hierarchy Standard structure
       block:
-        - name: "Copy files from {{ binaries_dir }}/alfresco-search-services to {{ binaries_dir }}/"
+        - name: "Copy files from {{ binaries_dir }}/{{ search_flavor }} to {{ binaries_dir }}/"
           copy:
             remote_src: true
             src: "{{ binaries_dir }}/{{ item.src }}"
@@ -53,7 +53,9 @@
             owner: "{{ username }}"
             group: "{{ group_name }}"
           loop:
-            - src: alfresco-search-services/
+            - src: "{{ search_flavor }}/solr.in.sh"
+              dest: "{{ config_dir }}/"
+            - src: "{{ search_flavor }}/"
               dest: "{{ binaries_dir }}/"
             - src: "solrhome"
               dest: "{{ config_dir }}/"
@@ -64,6 +66,7 @@
           register: search_dest_dirs
           loop:
             - "{{ binaries_dir }}/README.MD"
+            - "{{ config_dir }}/solr.in.sh"
             - "{{ config_dir }}/solrhome"
         - name: Handle missing sources
           ansible.builtin.debug:
@@ -77,12 +80,12 @@
               Please reinstall from scratch :(
           when: search_dest_dirs.results | map(attribute='stat.exists') | difference([True])
 
-    - name: Remove old files {{ binaries_dir }}/alfresco-search-services
+    - name: Remove old files {{ binaries_dir }}/{{ search_flavor }}
       file:
         path: "{{ binaries_dir }}/{{ item }}"
         state: absent
       loop:
-        - alfresco-search-services
+        - "{{ search_flavor }}"
         - solrhome
 
     - name: Add solrcore.properties to solr templates
@@ -114,10 +117,23 @@
       notify:
         - restart-search
 
-    - name: Add "{{ config_dir }}/solr.in.sh"
-      template:
-        src: solr.in.sh
-        dest: "{{ config_dir }}/solr.in.sh"
+    - name: Add options to "{{ config_dir }}/solr.in.sh"
+      vars:
+        search_required_opts:
+          SOLR_PID_DIR: "{{ data_folder }}"
+          SOLR_HOME: "{{ config_dir }}/solrhome"
+          SOLR_LOGS_DIR: "{{ logs_folder }}"
+          LOG4J_PROPS: ${SOLR_TIP}/../logs/log4j.properties
+          SOLR_OPTS: >-
+            -Dsolr.content.dir={{ binaries_dir }}/contentstore
+            $SOLR_OPTS
+      blockinfile:
+        path: "{{ config_dir }}/solr.in.sh"
+        block: |
+          {% for opt in search_environment| combine(search_required_opts) | dict2items %}
+          {{ opt.key }}="{{ opt.value }}"
+          {% endfor %}
+        marker: "# {mark} ANSIBLE SEARCH CONFIG"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0755"
@@ -126,11 +142,11 @@
 
     - name: Add alfresco-search.service
       template:
-          src: alfresco-search.service
-          dest:  /etc/systemd/system/alfresco-search.service
-          owner: "{{ username }}"
-          group: "{{ group_name }}"
-          mode: "0644"
+        src: alfresco-search.service
+        dest: /etc/systemd/system/alfresco-search.service
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0644"
       notify:
         - enable-search
         - restart-search

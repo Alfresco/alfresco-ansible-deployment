@@ -525,7 +525,6 @@ repository:
         - -Xms512m
         - -Xmx3g
         - -XX:+DisableExplicitGC
-        - -XX:+UseConcMarkSweepGC
         - -Djava.awt.headless=true
         - -XX:ReservedCodeCacheSize=128m
         - $JAVA_OPTS"

@@ -82,7 +82,9 @@
   hosts: search
   gather_facts: no
   roles:
-    - role: "../roles/search"
+    - role: ../roles/search
+      search_flavor: >-
+        {{ 'alfresco-insight-engine' if 'insight-engine' in search.artifact_name else 'alfresco-search-services' }}
   post_tasks:
     - name: Make sure Solr is running
       become: yes
