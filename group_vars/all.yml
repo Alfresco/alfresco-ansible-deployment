@@ -129,6 +129,7 @@ dependencies_version:
   libreoffice: 7.2.5.1
   pdf_renderer: 1.1
   imagemagick: 7.1.0-16
+  imagemagick_release: 1
 apache_archive_url: https://archive.apache.org
 tomcat_archive_url: "{{ apache_archive_url }}/dist/tomcat"
 activemq_archive_url: "{{ apache_archive_url }}/dist/activemq"
