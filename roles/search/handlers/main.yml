@@ -1,5 +1,5 @@
 ---
-# handlers file for search-services
+# handlers file for search
 - name: enable-search
   become: true
   service:

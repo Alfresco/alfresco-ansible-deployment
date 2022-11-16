@@ -1,10 +1,15 @@
 ---
 - name: Converge
   hosts: all
+  vars:
+    search:
+      artifact_name: alfresco-search-services
+      repository: "{{ nexus_repository.releases }}"
+      version: 2.0.5.1
   tasks:
     - name: "Include search"
       include_role:
         name: "search"
       vars:
-        search_environment: # This will add extra vars at the end of the solr.in.sh file
+        search_environment:
           SOLR_JAVA_MEM: "-Xms700m -Xmx900m"

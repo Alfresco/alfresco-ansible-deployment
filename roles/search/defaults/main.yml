@@ -1,4 +1,5 @@
 ---
-# defaults file for search-services
-search_environment: # This will add extra vars at the end of the solr.in.sh file
-  SOLR_JAVA_MEM: "-Xms1g -Xmx1g"
+# defaults file for search
+search_flavor: alfresco-search-services  # set to alfresco-insight-engine for IE
+search_environment:  # This will add env vars at the end of the solr.in.sh file
+  SOLR_JAVA_MEM: -Xms1g -Xmx1g
