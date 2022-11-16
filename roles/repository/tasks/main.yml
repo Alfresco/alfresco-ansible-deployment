@@ -178,14 +178,6 @@
         group: "{{ group_name }}"
       loop: "{{ acs_environment | combine(acs_secure_environment | default(None), list_merge='prepend') | dict2items }}"
 
-    - name: Add old GC options
-      lineinfile:
-        path: "{{ binaries_folder }}/tomcat.sh"
-        line: export JAVA_OPTS="$JAVA_OPTS -XX:+UseConcMarkSweepGC"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-      when: acs.version is version('7.3.0', '>=')
-
     - name: Create apply_amps.sh
       template:
         owner: "{{ username }}"
