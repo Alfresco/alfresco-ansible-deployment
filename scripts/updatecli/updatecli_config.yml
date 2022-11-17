@@ -72,79 +72,79 @@ sources:
     spec:
       versionFilter:
         kind: regex
-        pattern: '{{ .acs.version }}.(\d+){{ .acs_version_pattern }}'
+        pattern: '{{ .acs.version }}(.(\d+))+{{ .version_pattern }}'
   adw:
     name: ADW {{ .adw.version }}
     kind: gittag
     scmid: adwRepo
     spec:
       versionFilter:
-        kind: semver
-        pattern: '{{ .adw.version }}'
+        kind: regex
+        pattern: '{{ .adw.version }}(.(\d+))+{{ .version_pattern }}'
   aosAmp:
     name: AOS AMP {{ .aos.version }}
     kind: gittag
     scmid: aosAmpRepo
     spec:
       versionFilter:
-        kind: semver
-        pattern: '{{ .aos.version }}'
+        kind: regex
+        pattern: '{{ .aos.version }}(.(\d+))+{{ .version_pattern }}'
   googleDriveAmp:
     name: Google Drive AMP {{ .googleDrive.version }}
     kind: gittag
     scmid: googleDriveAmpRepo
     spec:
       versionFilter:
-        kind: semver
-        pattern: '{{ .googleDrive.version }}'
+        kind: regex
+        pattern: '{{ .googleDrive.version }}(.(\d+))+{{ .version_pattern }}'
   apiExplorer:
     name: Api explorer {{ .apiExplorer.version }}
     kind: gittag
     scmid: apiExplorerRepo
     spec:
       versionFilter:
-        kind: semver
-        pattern: '{{ .apiExplorer.version }}'
+        kind: regex
+        pattern: '{{ .apiExplorer.version }}(.(\d+))+{{ .version_pattern }}'
   dsync:
     name: Desktop Sync {{ .dsync.version }}
     kind: gittag
     scmid: dsyncRepo
     spec:
       versionFilter:
-        kind: semver
-        pattern: '{{ .dsync.version }}'
+        kind: regex
+        pattern: '{{ .dsync.version }}(.(\d+))+{{ .version_pattern }}'
   search:
     name: InsightEngine {{ .search.version }}
     kind: gittag
     scmid: searchRepo
     spec:
       versionFilter:
-        kind: semver
-        pattern: '{{ .search.version }}'
+        kind: regex
+        pattern: '{{ .search.version }}(.(\d+))+{{ .version_pattern }}'
   searchEnterprise:
     name: Search Enterprise {{ .searchEnterprise.version }}
     kind: gittag
     scmid: searchEnterpriseRepo
     spec:
       versionFilter:
-        kind: semver
-        pattern: '{{ .searchEnterprise.version }}'
+        kind: regex
+        pattern: '{{ .searchEnterprise.version }}(.(\d+))+{{ .version_pattern }}'
   transform:
     name: Transform Core {{ .transform.version }}
     kind: gittag
     scmid: transformRepo
     spec:
       versionFilter:
-        kind: semver
-        pattern: '{{ .transform.version }}'
+        kind: regex
+        pattern: '{{ .transform.version }}(.(\d+))+{{ .version_pattern }}'
   trouter:
     name: ATS Transform Service {{ .trouter.version }}
     kind: gittag
     scmid: trouterRepo
     spec:
       versionFilter:
-        kind: semver
-        pattern: '{{ .trouter.version }}'
+        kind: regex
+        pattern: '{{ .trouter.version }}(.(\d+))+{{ .version_pattern }}'
 
 targets:
   acs:
