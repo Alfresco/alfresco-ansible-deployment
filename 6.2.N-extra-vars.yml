@@ -43,5 +43,4 @@ dependencies_version:
   tomcat: 8.5.76
   libreoffice: 6.3.5.2
   pdf_renderer: 1.1
-  imagemagick: 7.0.10-59
-  imagemagick_release: 1
+  imagemagick: 7.0.10-59-ci-1
