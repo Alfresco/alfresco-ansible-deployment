@@ -4,6 +4,11 @@ acs:
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 7.1.1
 
+search_enterprise:
+  artifact_name: alfresco-elasticsearch-connector-distribution
+  repository: "{{ nexus_repository.enterprise_releases }}"
+  version: 3.1.1
+
 search:
   artifact_name: alfresco-insight-engine-distribution
   repository: "{{ nexus_repository.enterprise_releases }}"
