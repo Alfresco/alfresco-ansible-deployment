@@ -1,8 +1,19 @@
 ---
-imagemagick_version: "{{ dependencies_version.imagemagick }}-ci"
+imagemagick_version: "{{ dependencies_version.imagemagick }}"
 imagemagick_packages:
   - imagemagick-distribution-el8-libs
   - imagemagick-distribution-el8
 
 utils_transform:
   - libX11-xcb
+  - cairo
+  - cups-libs
+  - libSM
+  - unzip
+  - which
+  - fontconfig
+  - dejavu-fonts-common
+  - fontpackages-filesystem
+  - freetype
+  - libpng
+  - dejavu-sans-fonts
