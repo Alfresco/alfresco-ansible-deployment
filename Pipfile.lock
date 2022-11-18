@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "23caaee52e1eeb3b1543e3abfd944906c7bdd9b4caf1c5bf6dcd3ece94b01e45"
+            "sha256": "a1fa20a980bb57862e472a72be72a6b08c463ecf31b218ca826dc8de30d1d35b"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -353,11 +353,11 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:01f168e2418419a6d8b335ecc4330faa6a7332d5a097029fc9b4a3ae3c41cea2",
-                "sha256:c876a7c6a07d7f86f46a8cc765f0d38999b84ac1d7b0666d6ce08c0503e13145"
+                "sha256:68af34e51597389e7de5ec239ce582853b65d4288308d19f40a30eb3e241fb0d",
+                "sha256:9f1d4e356ab4c8512516db41901efa29cbfb8c73acefc29f1dbc7ce53b9ea24d"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==1.29.9"
+            "version": "==1.29.10"
         },
         "bracex": {
             "hashes": [
@@ -727,11 +727,11 @@
         },
         "molecule": {
             "hashes": [
-                "sha256:13362f741a1c80279a2b25f49a1f55c3bfc345054c5feedcdcdf928e1103e1e5",
-                "sha256:22c61eb226958ff6cb8a88ade5b7aeaaddeb0d7d9d1649b528fd8c12fb7b6729"
+                "sha256:3ddf33a8b3a3fb33b75cf1c31a410834eda42dbc23d6161fbdb7b0e72009f4ce",
+                "sha256:b5a78a77f29f1deecf768dfbffafc21b419d9520123468191438ec4c72eaef69"
             ],
             "index": "pypi",
-            "version": "==4.0.2"
+            "version": "==4.0.3"
         },
         "molecule-docker": {
             "hashes": [
