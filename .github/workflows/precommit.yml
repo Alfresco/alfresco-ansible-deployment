@@ -3,17 +3,24 @@ name: pre-commit
 on:
   pull_request:
   push:
-    branches: [master]
+    branches:
+      - master
 
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version-file: '.python-version'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version-file: ".python-version"
 
-    - uses: pre-commit/action@v3.0.0
+      - name: Install python packages
+        uses: ./.github/actions/pipenv
+
+      - name: Install and cache ansible galaxy dependencies
+        uses: ./.github/actions/galaxy
+
+      - uses: pre-commit/action@v3.0.0
