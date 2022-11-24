@@ -33,11 +33,6 @@ repos:
     hooks:
       - id: prospector
 
-  - repo: https://github.com/ansible/ansible-lint
-    rev: v6.4.0
-    hooks:
-      - id: ansible-lint
-
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.4.0
     hooks:
@@ -72,3 +67,8 @@ repos:
         additional_dependencies: [pyyaml]
         pass_filenames: false
         always_run: true
+      - id: ansible-lint
+        name: ansible-lint
+        language: system
+        pass_filenames: false
+        entry: pipenv run ansible-lint --progressive
