@@ -29,4 +29,4 @@ trouter:
   version: "2"
 
 target_file: group_vars/all.yml
-version_pattern: '(-(A|M)\d*)?$'
+version_pattern: '(-M\d*)?$'
