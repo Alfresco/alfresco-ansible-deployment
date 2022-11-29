@@ -1,5 +1,6 @@
 warn_list:
   - experimental
+  - role-name
 skip_list:
   - 'risky-file-permissions'
   - 'no-changed-when'
