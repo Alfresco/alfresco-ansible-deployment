@@ -2,15 +2,15 @@ warn_list:
   - experimental
   - role-name
 skip_list:
-  - 'risky-file-permissions'
-  - 'no-changed-when'
-  - 'command-instead-of-module'
-  - 'command-instead-of-shell'
-  - 'risky-shell-pipe'
-  - 'no-handler'
-  - 'no-tabs'
-  - 'empty-string-compare'
-  - 'fqcn-builtins'
+  - risky-file-permissions
+  - no-changed-when
+  - command-instead-of-module
+  - command-instead-of-shell
+  - risky-shell-pipe
+  - no-handler
+  - no-tabs
+  - empty-string-compare
+  - fqcn-builtins
   # Allow Jinja templating inside task and play names
   - name[template]
 kinds:
