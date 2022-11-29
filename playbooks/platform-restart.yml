@@ -1,9 +1,10 @@
 ---
-- hosts: adw
+- name: Stop Alfresco Digital Workspace
+  hosts: adw
   gather_facts: no
   become: yes
   tasks:
-    - name: Stop Alfresco Digital Workspace
+    - name: Stop nginx service
       service:
         name: nginx
         state: stopped
@@ -11,11 +12,12 @@
         - alfresco
         - stop
 
-- hosts: nginx
+- name: Stop Reverse Proxy
+  hosts: nginx
   gather_facts: no
   become: yes
   tasks:
-    - name: Stop Reverse Proxy
+    - name: Stop nginx service
       service:
         name: nginx
         state: stopped
@@ -23,11 +25,12 @@
         - infrastructure
         - stop
 
-- hosts: syncservice
+- name: Stop Alfresco Sync services
+  hosts: syncservice
   gather_facts: no
   become: yes
   tasks:
-    - name: Stop Alfresco Sync services
+    - name: Stop alfresco-sync service
       service:
         name: alfresco-sync
         state: stopped
@@ -35,11 +38,12 @@
         - alfresco
         - stop
 
-- hosts: search
+- name: Stop Alfresco Search services
+  hosts: search
   gather_facts: no
   become: yes
   tasks:
-    - name: Stop Alfresco Search services
+    - name: Stop alfresco-search service
       service:
         name: alfresco-search
         state: stopped
@@ -47,23 +51,27 @@
         - alfresco
         - stop
 
-- hosts: repository
+- name: Stop Alfresco Content services
+  hosts: repository
   gather_facts: no
   become: yes
+  vars:
+    service_name: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
   tasks:
-    - name: Stop Alfresco Content services
+    - name: Stop {{ service_name }} service
       service:
-        name: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
+        name: "{{ service_name }}"
         state: stopped
       tags:
         - alfresco
         - stop
 
-- hosts: transformers
+- name: Stop Alfresco Transformation services
+  hosts: transformers
   gather_facts: no
   become: yes
   tasks:
-    - name: Stop Alfresco Transformation services
+    - name: Stop {{ item }} service
       service:
         name: "{{ item }}"
         state: stopped
@@ -75,22 +83,26 @@
         - alfresco
         - stop
 
-- hosts: database
+- name: Stop PostgreSQL
+  hosts: database
   become: yes
+  vars:
+    service_name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
   tasks:
-    - name: Stop PostgreSQL
+    - name: Stop {{ service_name }} service
       service:
-        name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
+        name: "{{ service_name }}"
         state: stopped
       tags:
         - infrastructure
         - stop
 
-- hosts: activemq
+- name: Stop ActiveMQ
+  hosts: activemq
   gather_facts: no
   become: yes
   tasks:
-    - name: Stop ActiveMQ
+    - name: Stop activemq service
       service:
         name: activemq
         state: stopped
@@ -98,11 +110,12 @@
         - infrastructure
         - stop
 
-- hosts: activemq
+- name: Start ActiveMQ
+  hosts: activemq
   gather_facts: no
   become: yes
   tasks:
-    - name: Start ActiveMQ
+    - name: Start activemq service
       service:
         name: activemq
         state: started
@@ -110,22 +123,26 @@
         - infrastructure
         - start
 
-- hosts: database
+- name: Start PostgreSQL
+  hosts: database
   become: yes
+  vars:
+    service_name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
   tasks:
-    - name: Start PostgreSQL
+    - name: Start {{ service_name }} service
       service:
-        name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
+        name: "{{ service_name }}"
         state: started
       tags:
         - infrastructure
         - start
 
-- hosts: transformers
+- name: Start Alfresco Transformation services
+  hosts: transformers
   gather_facts: no
   become: yes
   tasks:
-    - name: Start Alfresco Transformation services
+    - name: Start {{ item  }} service
       service:
         name: "{{ item }}"
         state: started
@@ -137,23 +154,27 @@
         - alfresco
         - start
 
-- hosts: repository
+- name: Start Alfresco Content services
+  hosts: repository
   gather_facts: no
   become: yes
+  vars:
+    service_name: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
   tasks:
-    - name: Start Alfresco Content services
+    - name: Start {{ service_name }} service
       service:
-        name: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
+        name: "{{ service_name }}"
         state: started
       tags:
         - alfresco
         - start
 
-- hosts: search
+- name: Start Alfresco Search services
+  hosts: search
   gather_facts: no
   become: yes
   tasks:
-    - name: Start Alfresco Search services
+    - name: Start alfresco-search service
       service:
         name: alfresco-search
         state: started
@@ -161,11 +182,12 @@
         - alfresco
         - start
 
-- hosts: syncservice
+- name: Start Alfresco Sync services
+  hosts: syncservice
   gather_facts: no
   become: yes
   tasks:
-    - name: Start Alfresco Sync services
+    - name: Start alfresco-sync service
       service:
         name: alfresco-sync
         state: started
@@ -173,14 +195,28 @@
         - alfresco
         - start
 
-- hosts: nginx
+- name: Start Reverse Proxy
+  hosts: nginx
   gather_facts: no
   become: yes
   tasks:
-    - name: Start Reverse Proxy
+    - name: Start nginx service
       service:
         name: nginx
         state: started
       tags:
         - infrastructure
+        - start
+
+- name: Start Alfresco Digital Workspace
+  hosts: adw
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Start nginx service
+      service:
+        name: nginx
+        state: started
+      tags:
+        - alfresco
         - start
