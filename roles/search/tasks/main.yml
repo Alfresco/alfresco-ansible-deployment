@@ -99,10 +99,6 @@
         - rerank
         - noRerank
 
-    - name: Set Replication in Solr templates
-      import_tasks: replication.yml
-      when: ansible_play_hosts_all | length > 1
-
     - name: add solr home to setenv.sh
       lineinfile:
         path: "{{ config_folder }}/setenv.sh"
@@ -154,3 +150,7 @@
       notify:
         - enable-search
         - restart-search
+
+    - name: Set Replication in Solr templates
+      import_tasks: replication.yml
+      when: topology == "replication"
