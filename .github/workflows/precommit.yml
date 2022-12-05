@@ -25,4 +25,10 @@ jobs:
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
 
+      - name: Cache pre-commit
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: ${{ runner.os }}-precommit-${{ hashFiles('.pre-commit-config.yaml') }}
+
       - uses: pre-commit/action@v3.0.0
