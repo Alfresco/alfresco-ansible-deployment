@@ -1,6 +1,5 @@
 warn_list:
   - experimental
-  - role-name
 skip_list:
   - risky-file-permissions
   - no-changed-when
@@ -13,6 +12,7 @@ skip_list:
   - fqcn-builtins
   # Allow Jinja templating inside task and play names
   - name[template]
+  - role-name
 kinds:
   - yaml: "**/molecule/**/vars*.yml"
   - yaml: "**/molecule/**/hosts.yml"
