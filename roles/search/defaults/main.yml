@@ -5,12 +5,16 @@ search_environment:  # This will add extra vars at the end of the solr.in.sh fil
   SOLR_JAVA_MEM: "-Xms1g -Xmx1g"
 
 data_folder: /opt/alfresco
+cores:
+  - alfresco
+  - archive
 alfresco:
   host: localhost
   port: 80
   port_ssl: 443
 topology: standalone
 master: "{{ ansible_play_hosts_all | first }}"
+master_hostname: "{{ master }}"
 solr:
   port: 8983
   scheme: http

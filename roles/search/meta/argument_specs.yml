@@ -21,6 +21,15 @@ argument_specs:
         required: false
         type: str
         default: /opt/alfresco/search-services
+      cores:
+        description: |
+          List of Solr cores.
+        required: false
+        type: list
+        element: str
+        default:
+          - alfresco
+          - archive
       alfresco:
         description: |
           A dictionnary to define Alfresco repository configuration.
@@ -63,6 +72,13 @@ argument_specs:
         required: false
         type: str
         default: "{{ ansible_play_hosts_all | first }}"
+      master_hostname:
+        description: |
+          Allow overriding the hostname of the Solr master in case the
+          inventory hostname cannot be accessed by slaves.
+        required: false
+        type: str
+        default: "{{ master }}"
       solr:
         description: |
           A dictionnary to describe Solr setup
