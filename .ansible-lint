@@ -12,6 +12,7 @@ skip_list:
   - fqcn-builtins
   # Allow Jinja templating inside task and play names
   - name[template]
+  # Workaround for Role name buluma.elasticsearch does not match ``^[a-z][a-z0-9_]*$`` pattern.
   - role-name
 kinds:
   - yaml: "**/molecule/**/vars*.yml"
