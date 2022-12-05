@@ -1,18 +1,10 @@
 #
 # solrcore.properties - used in solrconfig.xml
 #
-{% if topology=='standalone' or inventory_hostname==master %}
+{% if topology == 'standalone' or inventory_hostname == master %}
 enable.alfresco.tracking=true
 {% else %}
 enable.alfresco.tracking=false
-{% endif %}
-
-{% if topology=='replication' %}
-#
-#Replication setup
-#
-enable.master={{ (inventory_hostname == master) | ternary('true','false') }}
-enable.slave={{ (inventory_hostname != master) | ternary('true','false') }}
 {% endif %}
 
 #
