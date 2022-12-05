@@ -1,56 +1,61 @@
 ---
+- name: Flush handlers
+  meta: flush_handlers
+
 - name: Solr Replication
   become: true
   block:
     - name: Make sure host do not assume a previous role
       vars:
         replication_norole: >-
-          {% if inventory_hostname==master %}slave
+          {% if inventory_hostname == master %}slave
           {%- else %}master
           {%- endif %}
       community.general.xml:
-        path: "{{ config_dir }}/solrhome/templates/{{ item }}/conf/solrconfig.xml"
+        path: "{{ config_dir }}/solrhome/{{ item }}/conf/solrconfig.xml"
         xpath: /config/requestHandler[@name="/replication"]/lst[@name="{{ replication_norole }}"]
         state: absent
-      loop:
-        - rerank
-        - noRerank
+      loop: "{{ cores }}"
+      retries: 2
+      delay: 3
+      notify:
+        - restart-search
 
     - name: Configure Solr Replication Handler
       community.general.xml:
         pretty_print: yes
-        path: "{{ config_dir }}/solrhome/templates/{{ item }}/conf/solrconfig.xml"
+        path: "{{ config_dir }}/solrhome/{{ item }}/conf/solrconfig.xml"
         xpath: /config/requestHandler[@name="/replication"]
         attribute: class
         value: solr.ReplicationHandler
-      loop:
-        - rerank
-        - noRerank
+      loop: "{{ cores }}"
+      notify:
+        - restart-search
 
     - name: Configure solrconfig.xml for Solr Replication
       vars:
         master_xml: |
           <lst name="master">
-            <str name="ReplicateAfter">commit</str>
-            <str name="ReplicateAfter">startup</str>
-            <str name="confFiles">"schema.xml,stopwords.txt"</str>
+            <str name="replicateAfter">commit</str>
+            <str name="replicateAfter">startup</str>
+            <str name="confFiles">schema.xml,stopwords.txt</str>
           </lst>
         slave_xml: |
           <lst name="slave">
-            <str name="masterUrl">{{ solr.scheme }}://{{ master }}:{{ solr.port }}/solr/alfresco</str>
+            <str name="masterUrl">{{ solr.scheme }}://{{ master_hostname }}:{{ solr.port }}/solr/{{ item }}</str>
             <str name="pollInterval">00:00:15</str>
           </lst>
         replication_xml: >-
-          {% if inventory_hostname==master %}{{ master_xml }}
+          {% if inventory_hostname == groups.search[0] %}{{ master_xml }}
           {%- else %}{{ slave_xml }}
           {%- endif %}
       community.general.xml:
         input_type: xml
         pretty_print: yes
-        path: "{{ config_dir }}/solrhome/templates/{{ item }}/conf/solrconfig.xml"
+        path: "{{ config_dir }}/solrhome/{{ item }}/conf/solrconfig.xml"
         xpath: /config/requestHandler[@name="/replication"]
         set_children:
           - "{{ replication_xml }}"
-      loop:
-        - rerank
-        - noRerank
+      loop: "{{ cores }}"
+      notify:
+        - restart-search
