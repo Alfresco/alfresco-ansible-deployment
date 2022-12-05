@@ -17,7 +17,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version-file: ".python-version"
+          python-version-file: .python-version
+          cache: pipenv
 
       - name: Install python packages
         uses: ./.github/actions/pipenv
