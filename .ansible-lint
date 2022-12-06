@@ -1,17 +1,19 @@
 warn_list:
   - experimental
 skip_list:
-  - 'risky-file-permissions'
-  - 'no-changed-when'
-  - 'command-instead-of-module'
-  - 'command-instead-of-shell'
-  - 'risky-shell-pipe'
-  - 'no-handler'
-  - 'no-tabs'
-  - 'empty-string-compare'
-  - 'fqcn-builtins'
+  - risky-file-permissions
+  - no-changed-when
+  - command-instead-of-module
+  - command-instead-of-shell
+  - risky-shell-pipe
+  - no-handler
+  - no-tabs
+  - empty-string-compare
+  - fqcn-builtins
   # Allow Jinja templating inside task and play names
   - name[template]
+  # Workaround for Role name buluma.elasticsearch does not match ``^[a-z][a-z0-9_]*$`` pattern.
+  - role-name
 kinds:
   - yaml: "**/molecule/**/vars*.yml"
   - yaml: "**/molecule/**/hosts.yml"
