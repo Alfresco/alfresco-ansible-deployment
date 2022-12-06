@@ -5,6 +5,12 @@
 - name: Solr Replication
   become: true
   block:
+    - name: wait for core creation to complete
+      wait_for:
+        path: "{{ config_dir }}/solrhome/{{ cores | first }}/conf/solrconfig.xml"
+      timeout: 30
+      delay: 3
+
     - name: Make sure host do not assume a previous role
       vars:
         replication_norole: >-
@@ -16,7 +22,7 @@
         xpath: /config/requestHandler[@name="/replication"]/lst[@name="{{ replication_norole }}"]
         state: absent
       loop: "{{ cores }}"
-      retries: 2
+      retries: 3
       delay: 3
       notify:
         - restart-search
