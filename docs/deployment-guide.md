@@ -100,7 +100,7 @@ The following systemd services are deployed and can be used to stop and start Al
 | Service Name                              | Purpose                                                                                 |
 |:------------------------------------------|:----------------------------------------------------------------------------------------|
 | `activemq.service`                        | ActiveMQ Service                                                                        |
-| `postgresql-<version>.service`            | Postgresql DB Service (where `<version>` is 11 for ACS 6.2.N and 13 for ACS 7.x)        |
+| `postgresql-<version>.service`            | Postgresql DB Service (where `<version>` is 13 for ACS 7.x and 14 for 7.3)              |
 | `nginx.service`                           | Nginx Service                                                                           |
 | `alfresco-content.service`                | Alfresco Content Service                                                                |
 | `alfresco-search.service`                 | Alfresco Search Service                                                                 |
@@ -612,12 +612,6 @@ Alternatively, to deploy an ACS Enterprise 7.0 system use the following command:
 pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@7.0.N-extra-vars.yml"
 ```
 
-Alternatively, to deploy an ACS Enterprise 6.2.N system use the following command:
-
-```bash
-pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@6.2.N-extra-vars.yml"
-```
-
 Or to deploy ACS Community use the following command:
 
 ```bash
@@ -694,12 +688,6 @@ Alternatively, to deploy an ACS 7.0 Enterprise system use the following command:
 pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.0.N-extra-vars.yml"
 ```
 
-Alternatively, to deploy an ACS 6.2.N Enterprise system use the following command:
-
-```bash
-pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@6.2.N-extra-vars.yml"
-```
-
 Or to deploy ACS Community use the following command:
 
 ```bash
@@ -753,12 +741,6 @@ To deploy ACS 7 Enterprise on the target hosts execute the playbook as the curre
 
 ```bash
 pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
-```
-
-Alternatively, to deploy an ACS 6.2.N Enterprise system use the following command:
-
-```bash
-pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@6.2.N-extra-vars.yml"
 ```
 
 Or to deploy ACS Community use the following command:
@@ -872,7 +854,7 @@ This playbook will uninstall the sevices which belong to the specific hosts. Bel
    * alfresco-content.service
    * nginx.service
    * activemq.service
-   * postgresql-`version`.service (where `version` is 11 for ACS 6.2.N and 13 for ACS 7.x)
+   * postgresql-`version`.service (where `version` is 13 for ACS 7.x and 14 for 7.3)
 
 2. Remove the following packages:
    * ImageMagick
@@ -921,17 +903,17 @@ Error was a <class 'ansible.errors.AnsibleError'>, original message: An unhandle
 You can run the command shown below in the same terminal you're using to run the playbook to quickly test downloading a protected resource from Nexus.
 
 ```bash
-wget -qO /dev/null --user=${NEXUS_USERNAME} --password=${NEXUS_PASSWORD} https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-content-services-distribution/6.2.2/alfresco-content-services-distribution-6.2.2.pom
+wget -qO /dev/null --user=${NEXUS_USERNAME} --password=${NEXUS_PASSWORD} https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-content-services-distribution/7.3.0/alfresco-content-services-distribution-7.3.0.pom
 ```
 
 If everything is configured correctly you should see the following at the end of the output:
 
 ```bash
-Saving to: ‘alfresco-content-services-distribution-6.2.2.pom’
+Saving to: ‘alfresco-content-services-distribution-7.3.0.pom’
 
-alfresco-content-services-distribution-6.2.2.pom      100%[=============================================>]   8.53K  --.-KB/s    in 0.003s
+alfresco-content-services-distribution-7.3.0.pom      100%[=============================================>]   8.53K  --.-KB/s    in 0.003s
 
-2021-02-18 13:50:44 (2.54 MB/s) - ‘alfresco-content-services-distribution-6.2.2.pom’ saved [8739/8739]
+2021-02-18 13:50:44 (2.54 MB/s) - ‘alfresco-content-services-distribution-7.3.0.pom’ saved [8739/8739]
 ```
 
 ### Nginx Failure
