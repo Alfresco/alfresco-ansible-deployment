@@ -19,7 +19,6 @@ jobs:
       fail-fast: true
       matrix:
         molecule_distro:
-          - image: centos:7
           - image: ubuntu:20.04
           - image: rockylinux:8
         role:
