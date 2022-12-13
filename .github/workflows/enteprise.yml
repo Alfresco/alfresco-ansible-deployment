@@ -184,7 +184,7 @@ jobs:
         run: echo "MOLECULE_IT_ID=$(date +%s%4N)" >> $GITHUB_ENV
 
       - name: Set nexus credentials only when required
-        if: ${{ ! contains( matrix.molecule_scenario.name, 'community' ) }}
+        if: ${{ ! contains( matrix.molecule_scenario.desc, 'community' ) }}
         run: |
           echo "NEXUS_USERNAME=${{ secrets.nexus_username }}" >> $GITHUB_ENV
           echo "NEXUS_PASSWORD=${{ secrets.nexus_password }}" >> $GITHUB_ENV
