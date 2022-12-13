@@ -113,40 +113,17 @@ jobs:
   ec2:
     name: ${{ matrix.molecule_scenario.desc }}
     if: github.actor != 'dependabot[bot]'
-    needs:
-      - docker
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         molecule_scenario:
           - name: default
-            vars: vars-centos7.yml
-            desc: EC2 ACS 7.0 (Centos7)
-          - name: default
-            vars: vars-rhel7.yml
-            desc: EC2 ACS 7.0 (RHEL7)
-          - name: default
-            vars: vars-ubuntu18.yml
-            desc: EC2 ACS 7.1 (Ubuntu 18.04)
-          - name: default
-            vars: vars-rhel8.yml
-            desc: EC2 ACS 7.1 (RHEL8)
-          - name: default
             vars: vars-ubuntu20-72.yml
             desc: EC2 ACS 7.2 (Ubuntu 20.04)
           - name: default
             vars: vars-ubuntu22-community.yml
             desc: EC2 ACS 7.3 Community (Ubuntu 22.04)
-          - name: default
-            vars: vars-ubuntu20.yml
-            desc: EC2 ACS 7.3 (Ubuntu 20.04)
-          - name: default
-            vars: vars-rocky8.yml
-            desc: EC2 ACS 7.3 (Rocky Linux 8)
-          - name: multimachine
-            vars: vars.yml
-            desc: EC2 ACS 7.3 clustered (RHEL8)
     env:
       AWS_REGION: eu-west-1
       MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
