@@ -79,6 +79,12 @@ argument_specs:
         required: false
         type: str
         default: "{{ master }}"
+      search_flavor:
+        description: |
+          Choose between alfresco-search-services and alfresco-insight-engine.
+          Insight Engine requires a specific entitlement.
+        required: false
+        default: alfresco-search-services
       solr:
         description: |
           A dictionnary to describe Solr setup
