@@ -5,7 +5,7 @@
 - name: Solr Replication
   become: true
   block:
-    - name: wait for core creation to complete
+    - name: Wait for core creation to complete
       wait_for:
         path: "{{ config_dir }}/solrhome/{{ cores | first }}/conf/solrconfig.xml"
       timeout: 30

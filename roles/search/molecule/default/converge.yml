@@ -10,7 +10,7 @@
     search_environment: # This will add extra vars at the end of the solr.in.sh file
       SOLR_JAVA_MEM: "-Xms700m -Xmx900m"
   pre_tasks:
-    - name: generate a shared secret
+    - name: Generate a shared secret
       set_fact:
         reposearch_shared_secret: >-
           {{ lookup('ansible.builtin.password', '/dev/null chars=ascii_letters,digits') }}
