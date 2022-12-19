@@ -21,7 +21,6 @@ jobs:
       fail-fast: true
       matrix:
         molecule_distro:
-          - image: centos:7
           - image: ubuntu:20.04
           - image: rockylinux:8
         role:
@@ -123,7 +122,7 @@ jobs:
         molecule_scenario:
           - name: default
             vars: vars-centos7.yml
-            desc: EC2 ACS 6.2 (Centos7)
+            desc: EC2 ACS 7.0 (Centos7)
           - name: default
             vars: vars-rhel7.yml
             desc: EC2 ACS 7.0 (RHEL7)
