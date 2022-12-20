@@ -48,7 +48,7 @@ search_enterprise:
   version: 3.2.0
 search:
   artifact_name: alfresco-search-services
-  repository: "{{ nexus_repository.enterprise_releases }}"
+  repository: "{{ nexus_repository.releases }}"
   version: 2.0.5.1
 transform:
   artifact_name: alfresco-transform-core-aio

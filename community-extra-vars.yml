@@ -10,7 +10,7 @@ amps:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
     version: 1.5.0
   googledrive_repo:
-    repository: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-community"
+    repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-repo-community"
     version: 3.3.0
   googledrive_share:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-repo-community"
