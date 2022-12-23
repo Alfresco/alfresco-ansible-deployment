@@ -83,6 +83,7 @@
   gather_facts: true
   roles:
     - role: ../roles/search
+      search_version: "{{ search.version }}"
       search_flavor: >-
         {{ 'alfresco-insight-engine' if 'insight-engine' in search.artifact_name else 'alfresco-search-services' }}
       master_hostname: "{{ solr_host }}"

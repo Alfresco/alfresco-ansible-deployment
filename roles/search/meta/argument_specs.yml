@@ -79,6 +79,10 @@ argument_specs:
         required: false
         type: str
         default: "{{ master }}"
+      search_version:
+        description: Alfresco Search Service version to use for deployment.
+        required: false
+        default: 2.0.6
       search_flavor:
         description: |
           Choose between alfresco-search-services and alfresco-insight-engine.
