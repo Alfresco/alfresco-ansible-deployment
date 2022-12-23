@@ -14,9 +14,7 @@
     - name: Make sure host do not assume a previous role
       vars:
         replication_norole: >-
-          {% if inventory_hostname == master %}slave
-          {%- else %}master
-          {%- endif %}
+          {{ 'slave' if inventory_hostname == master else 'master' }}
       community.general.xml:
         path: "{{ config_dir }}/solrhome/{{ item }}/conf/solrconfig.xml"
         xpath: /config/requestHandler[@name="/replication"]/lst[@name="{{ replication_norole }}"]
@@ -52,9 +50,7 @@
             <str name="pollInterval">00:00:15</str>
           </lst>
         replication_xml: >-
-          {% if inventory_hostname == groups.search[0] %}{{ master_xml }}
-          {%- else %}{{ slave_xml }}
-          {%- endif %}
+          {{ master_xml if inventory_hostname == groups.search[0] else slave_xml }}
       community.general.xml:
         input_type: xml
         pretty_print: yes
