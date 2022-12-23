@@ -87,6 +87,7 @@
       search_flavor: >-
         {{ 'alfresco-insight-engine' if 'insight-engine' in search.artifact_name else 'alfresco-search-services' }}
       search_master_hostname: "{{ solr_host }}"
+      search_shared_secret: "{{ reposearch_shared_secret }}"
       alfresco:
         host: "{{ nginx_host }}"
         port: "{{ ports_cfg.nginx.http }}"
