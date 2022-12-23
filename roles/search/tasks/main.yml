@@ -153,4 +153,4 @@
 
     - name: Set Replication in Solr templates
       import_tasks: replication.yml
-      when: topology == "replication"
+      when: search_topology == "replication"

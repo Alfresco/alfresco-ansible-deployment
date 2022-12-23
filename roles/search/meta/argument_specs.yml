@@ -21,9 +21,9 @@ argument_specs:
         required: false
         type: str
         default: /opt/alfresco/search-services
-      cores:
+      search_cores:
         description: |
-          List of Solr cores.
+          List of Solr cores to create
         required: false
         type: list
         elements: str
@@ -57,7 +57,7 @@ argument_specs:
             required: false
             type: int
             default: 443
-      topology:
+      search_topology:
         description: |
           The setup type for multiple Solr hosts.
         required: true
@@ -65,14 +65,14 @@ argument_specs:
         choices:
           - standalone
           - replication
-      master:
+      search_master:
         description: |
           The hostname of the Solr master node (when replication is enabled).
           Defaults to the first host of the play hosts.
         required: false
         type: str
         default: "{{ ansible_play_hosts_all | first }}"
-      master_hostname:
+      search_master_hostname:
         description: |
           Allow overriding the hostname of the Solr master in case the
           inventory hostname cannot be accessed by slaves.

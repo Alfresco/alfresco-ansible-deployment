@@ -1,7 +1,7 @@
 #
 # solrcore.properties - used in solrconfig.xml
 #
-{% if topology == 'standalone' or inventory_hostname == master %}
+{% if search_topology == 'standalone' or inventory_hostname == search_master %}
 enable.alfresco.tracking=true
 {% else %}
 enable.alfresco.tracking=false

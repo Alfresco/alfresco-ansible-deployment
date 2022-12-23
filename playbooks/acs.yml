@@ -86,12 +86,12 @@
       search_version: "{{ search.version }}"
       search_flavor: >-
         {{ 'alfresco-insight-engine' if 'insight-engine' in search.artifact_name else 'alfresco-search-services' }}
-      master_hostname: "{{ solr_host }}"
+      search_master_hostname: "{{ solr_host }}"
       alfresco:
         host: "{{ nginx_host }}"
         port: "{{ ports_cfg.nginx.http }}"
         port_ssl: "{{ ports_cfg.nginx.https }}"
-      topology: >-
+      search_topology: >-
         {% if groups.search | length > 1 %}replication
         {%- else %}standalone
         {%- endif %}

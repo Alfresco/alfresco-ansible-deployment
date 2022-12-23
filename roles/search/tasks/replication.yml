@@ -7,19 +7,19 @@
   block:
     - name: Wait for core creation to complete
       wait_for:
-        path: "{{ config_dir }}/solrhome/{{ cores | first }}/conf/solrconfig.xml"
+        path: "{{ config_dir }}/solrhome/{{ search_cores | first }}/conf/solrconfig.xml"
       timeout: 30
       delay: 3
 
     - name: Make sure host do not assume a previous role
       vars:
         replication_norole: >-
-          {{ 'slave' if inventory_hostname == master else 'master' }}
+          {{ 'slave' if inventory_hostname == search_master else 'master' }}
       community.general.xml:
         path: "{{ config_dir }}/solrhome/{{ item }}/conf/solrconfig.xml"
         xpath: /config/requestHandler[@name="/replication"]/lst[@name="{{ replication_norole }}"]
         state: absent
-      loop: "{{ cores }}"
+      loop: "{{ search_cores }}"
       retries: 3
       delay: 3
       notify:
@@ -32,7 +32,7 @@
         xpath: /config/requestHandler[@name="/replication"]
         attribute: class
         value: solr.ReplicationHandler
-      loop: "{{ cores }}"
+      loop: "{{ search_cores }}"
       notify:
         - restart-search
 
@@ -46,7 +46,7 @@
           </lst>
         slave_xml: |
           <lst name="slave">
-            <str name="masterUrl">{{ solr.scheme }}://{{ master_hostname }}:{{ solr.port }}/solr/{{ item }}</str>
+            <str name="masterUrl">{{ solr.scheme }}://{{ search_master_hostname }}:{{ solr.port }}/solr/{{ item }}</str>
             <str name="pollInterval">00:00:15</str>
           </lst>
         replication_xml: >-
@@ -58,6 +58,6 @@
         xpath: /config/requestHandler[@name="/replication"]
         set_children:
           - "{{ replication_xml }}"
-      loop: "{{ cores }}"
+      loop: "{{ search_cores }}"
       notify:
         - restart-search
