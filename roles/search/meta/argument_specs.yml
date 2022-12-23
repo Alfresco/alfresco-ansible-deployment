@@ -78,7 +78,7 @@ argument_specs:
           inventory hostname cannot be accessed by slaves.
         required: false
         type: str
-        default: "{{ master }}"
+        default: "{{ search_master }}"
       search_version:
         description: Alfresco Search Service version to use for deployment.
         required: false

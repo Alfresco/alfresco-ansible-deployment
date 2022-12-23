@@ -16,7 +16,7 @@
           {{ lookup('ansible.builtin.password', '/dev/null chars=ascii_letters,digits') }}
   roles:
     - role: search
-      master_hostname: >-
+      search_master_hostname: >-
         {{ ansible_play_hosts_all | map('extract', hostvars, ['ansible_default_ipv4','address']) | first }}
-      topology: replication
+      search_topology: replication
       reposearch_shared_secret: "{{ reposearch_shared_secret }}"
