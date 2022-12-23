@@ -7,7 +7,7 @@
       artifact_name: alfresco-search-services
       repository: "{{ nexus_repository.releases }}"
       version: 2.0.5.1
-    search_environment: # This will add extra vars at the end of the solr.in.sh file
+    search_environment:
       SOLR_JAVA_MEM: "-Xms700m -Xmx900m"
   pre_tasks:
     - name: Generate a shared secret

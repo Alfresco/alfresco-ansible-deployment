@@ -39,7 +39,7 @@ alfresco.tracker.maxNodeLockMs=120000
 # encryption
 
 # none, https
-alfresco.secureComms={% if search.version is version('2.0.3', '>=') %}secret{% else %}none{% endif %}
+alfresco.secureComms={% if search_version is version('2.0.3', '>=') %}secret{% else %}none{% endif %}
 
 # ssl, default values
 # keystore and trustore files are not provided by default
