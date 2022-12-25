@@ -3,6 +3,7 @@
 #
 {% if search_topology == 'replication' and inventory_hostname != search_master %}
 enable.alfresco.tracking=false
+alfresco.cron=* * * * * ? 1900
 alfresco.nodestate.tracker.cron=* * * * * ? 1900
 {% else %}
 enable.alfresco.tracking=true
