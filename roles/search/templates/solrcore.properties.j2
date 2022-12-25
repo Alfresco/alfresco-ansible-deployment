@@ -1,11 +1,11 @@
 #
 # solrcore.properties - used in solrconfig.xml
 #
-{% if search_topology == 'standalone' or inventory_hostname == search_master %}
-enable.alfresco.tracking=true
-{% else %}
+{% if search_topology == 'replication' and inventory_hostname != search_master %}
 enable.alfresco.tracking=false
 alfresco.nodestate.tracker.cron=* * * * * ? 1900
+{% else %}
+enable.alfresco.tracking=true
 {% endif %}
 
 #
