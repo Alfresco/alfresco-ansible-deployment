@@ -26,11 +26,12 @@
 
     - name: Tweak Solr config based on assumed role
       vars:
-        merge_factor: {{ '20' if inventory_hostname == search_master else '5' }}
+        merge_factor: >-
+          {{ '20' if inventory_hostname == search_master else '5' }}
       community.general.xml:
         path: "{{ config_dir }}/solrhome/{{ item }}/conf/solrconfig.xml"
         xpath: /config/indexConfig/mergeFactor
-        value: 20
+        value: "{{ merge_factor }}"
       loop: "{{ search_cores }}"
       when: inventory_hostname == ansible_play_hosts_all | first
       notify:
