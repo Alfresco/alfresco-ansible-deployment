@@ -6,7 +6,7 @@
       You cannot request anything but "standalone" topology when providing
       a single host in the inventory. Please add more hosts to you inventory
       file.
-    when: search_topology != 'standalone' and ansible_play_hosts_all | length < 2
+  when: search_topology != 'standalone' and ansible_play_hosts_all | length < 2
 
 - name: Include OS specific variables
   include_vars: "{{ item }}"
@@ -138,7 +138,7 @@
       blockinfile:
         path: "{{ config_dir }}/solr.in.sh"
         block: |
-          {% for opt in search_environment| combine(search_required_opts) | dict2items %}
+          {% for opt in search_environment | combine(search_required_opts) | dict2items %}
           {{ opt.key }}="{{ opt.value }}"
           {% endfor %}
         marker: "# {mark} ANSIBLE SEARCH CONFIG"
