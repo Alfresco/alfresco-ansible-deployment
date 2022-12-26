@@ -1,0 +1,41 @@
+# This playbook is an EXAMPLE of how to setup multiple Solr systems within
+# running the full playbook. Here we deploy a master with read-replicas.
+# The master may already exist (but should have been deployed with the main
+# playbook or this playbook, using the same Alfresco Search service version)
+# but the slaves should be pristine.
+# Configuring the load-balancer or changing the repo configuration is not part
+# of this playbook
+---
+- name: Check if current OS version is in the supported matrix
+  hosts: all:!external
+  gather_facts: yes
+  tasks:
+  - name: Compare host OS with supported matrix
+    vars:
+      os_versions: "{{ supported_os[ansible_distribution].versions | default([]) }}"
+    ansible.builtin.fail:
+      msg:
+        - "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS"
+    when:
+      - not skip_os_test | default(true) | bool
+      - ansible_distribution_version | int not in os_versions
+
+- name: Run preliminary checks
+  ansible.builtin.import_playbook: prerun-checks.yml
+
+- name: Handle secrets
+  ansible.builtin.import_playbook: secrets.yml
+
+- name: Alfresco Search Role
+  hosts: search
+  gather_facts: true
+  roles:
+    - role: ../roles/search
+      search_flavor: alfresco-search-services
+      search_shared_secret: "{{ reposearch_shared_secret }}"
+      alfresco:
+        host: "{{ ecm_host | default('localhost') }}"
+        port: "{{ ecm_port | default('80') }}"
+        port_ssl: "{{ ecm_ssl | default('443') }}"
+      search_master_hostname: "{{ solr_master_host | omit() }}"
+      search_topology: replication
