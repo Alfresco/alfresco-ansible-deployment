@@ -1,5 +1,13 @@
 ---
 # tasks file for search
+- name: Check playbook config is consistent
+  ansible.builtin.fail:
+    msg: |
+      You cannot request anything but "standalone" topology when providing
+      a single host in the inventory. Please add more hosts to you inventory
+      file.
+    when: search_topology != 'standalone' and ansible_play_hosts_all | length < 2
+
 - name: Include OS specific variables
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
