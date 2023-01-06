@@ -107,7 +107,7 @@
         - rerank
         - noRerank
 
-    - name: add solr home to setenv.sh
+    - name: Add solr home to setenv.sh
       lineinfile:
         path: "{{ config_folder }}/setenv.sh"
         insertafter: EOF
