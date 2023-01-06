@@ -3,20 +3,11 @@
   hosts: all
   order: sorted
   vars:
-    search:
-      artifact_name: alfresco-search-services
-      repository: "{{ nexus_repository.releases }}"
-      version: 2.0.5.1
     search_environment:
       SOLR_JAVA_MEM: "-Xms700m -Xmx900m"
-  pre_tasks:
-    - name: Generate a shared secret
-      set_fact:
-        reposearch_shared_secret: >-
-          {{ lookup('ansible.builtin.password', '/dev/null chars=ascii_letters,digits') }}
   roles:
     - role: search
       search_master_hostname: >-
         {{ ansible_play_hosts_all | map('extract', hostvars, ['ansible_default_ipv4','address']) | first }}
       search_topology: replication
-      search_shared_secret: "{{ reposearch_shared_secret }}"
+      search_shared_secret: alfresco with space
