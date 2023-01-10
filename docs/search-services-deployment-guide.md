@@ -92,7 +92,7 @@ ansible-playbook -i inventory_ssh.yml playbooks/search_replication.yml \
 
 There are more actions required at that point to complete the installation:
 
-- Confugre ACS repo to use Solr6 index if not done already.
+- Configure ACS repo to use Solr6 index if not done already.
 
 - Configure a load-balancer to route search requests to read-replicas
 
