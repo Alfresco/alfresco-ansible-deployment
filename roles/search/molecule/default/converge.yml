@@ -1,15 +1,13 @@
 ---
 - name: Converge
   hosts: all
+  order: sorted
   vars:
-    search:
-      artifact_name: alfresco-search-services
-      repository: "{{ nexus_repository.releases }}"
-      version: 2.0.5.1
-  tasks:
-    - name: "Include search"
-      include_role:
-        name: "search"
-      vars:
-        search_environment:
-          SOLR_JAVA_MEM: "-Xms700m -Xmx900m"
+    search_environment:
+      SOLR_JAVA_MEM: "-Xms700m -Xmx900m"
+  roles:
+    - role: search
+      search_master_hostname: >-
+        {{ ansible_play_hosts_all | map('extract', hostvars, ['ansible_default_ipv4','address']) | first }}
+      search_topology: replication
+      search_shared_secret: alfresco with space

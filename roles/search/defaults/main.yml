@@ -1,5 +1,21 @@
 ---
 # defaults file for search
+data_folder: /opt/alfresco
+alfresco:
+  host: localhost
+  port: 80
+  port_ssl: 443
+
 search_flavor: alfresco-search-services  # set to alfresco-insight-engine for IE
-search_environment:  # This will add env vars at the end of the solr.in.sh file
-  SOLR_JAVA_MEM: -Xms1g -Xmx1g
+search_version: 2.0.6
+search_environment:  # This will add extra vars at the end of the solr.in.sh file
+  SOLR_JAVA_MEM: "-Xms1g -Xmx1g"
+search_cores:
+  - alfresco
+  - archive
+search_topology: standalone
+search_master: "{{ ansible_play_hosts_all | first }}"
+search_master_hostname: "{{ search_master }}"
+solr:
+  port: 8983
+  scheme: http

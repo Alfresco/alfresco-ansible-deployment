@@ -1,8 +1,13 @@
 #
 # solrcore.properties - used in solrconfig.xml
 #
-
+{% if search_topology == 'replication' and inventory_hostname != search_master %}
+enable.alfresco.tracking=false
+alfresco.cron=* * * * * ? 1900
+alfresco.nodestate.tracker.cron=* * * * * ? 1900
+{% else %}
 enable.alfresco.tracking=true
+{% endif %}
 
 #
 #These are replaced by the admin handler
@@ -15,9 +20,9 @@ data.dir.root={{ data_dir }}
 # Properties loaded during alfresco tracking
 #
 
-alfresco.host={{ nginx_host }}
-alfresco.port={{ ports_cfg.nginx.http }}
-alfresco.port.ssl={{ ports_cfg.nginx.https }}
+alfresco.host={{ alfresco.host }}
+alfresco.port={{ alfresco.port }}
+alfresco.port.ssl={{ alfresco.port_ssl }}
 alfresco.baseUrl=/alfresco
 
 #alfresco.index.transformContent=false
@@ -36,7 +41,7 @@ alfresco.tracker.maxNodeLockMs=120000
 # encryption
 
 # none, https
-alfresco.secureComms={% if search.version is version('2.0.3', '>=') %}secret{% else %}none{% endif %}
+alfresco.secureComms={% if search_version is version('2.0.3', '>=') %}secret{% else %}none{% endif %}
 
 # ssl, default values
 # keystore and trustore files are not provided by default
@@ -91,28 +96,67 @@ alfresco.maxHostConnections=200
 alfresco.socketTimeout=360000
 
 # SOLR caching
+{% if search_topology == 'replication' and inventory_hostname == search_master %}
+solr.filterCache.size=0
+solr.filterCache.initialSize=0
+solr.filterCache.autowarmCount=0
+solr.queryResultCache.size=0
+solr.queryResultCache.initialSize=0
+solr.queryResultCache.autowarmCount=0
+solr.documentCache.size=0
+solr.documentCache.initialSize=0
+solr.documentCache.autowarmCount=0
+solr.queryResultMaxDocsCached=2048
 
+solr.authorityCache.size=0
+solr.authorityCache.initialSize=0
+solr.authorityCache.autowarmCount=0
+solr.pathCache.size=0
+solr.pathCache.initialSize=0
+solr.pathCache.autowarmCount=0
+
+solr.ownerCache.size=0
+solr.ownerCache.initialSize=0
+solr.ownerCache.autowarmCount=0
+
+solr.readerCache.size=0
+solr.readerCache.initialSize=0
+solr.readerCache.autowarmCount=0
+
+solr.deniedCache.size=0
+solr.deniedCache.initialSize=0
+solr.deniedCache.autowarmCount=0
+{% else %}
 solr.filterCache.size=256
 solr.filterCache.initialSize=128
+solr.filterCache.autowarmCount=32
 solr.queryResultCache.size=1024
 solr.queryResultCache.initialSize=1024
+solr.queryResultCache.autowarmCount=4
 solr.documentCache.size=1024
 solr.documentCache.initialSize=1024
+solr.documentCache.autowarmCount=512
 solr.queryResultMaxDocsCached=2048
 
 solr.authorityCache.size=128
 solr.authorityCache.initialSize=64
+solr.authorityCache.autowarmCount=4
 solr.pathCache.size=256
 solr.pathCache.initialSize=128
+solr.pathCache.autowarmCount=32
 
 solr.ownerCache.size=128
 solr.ownerCache.initialSize=64
+solr.ownerCache.autowarmCount=0
 
 solr.readerCache.size=128
 solr.readerCache.initialSize=64
+solr.readerCache.autowarmCount=0
 
 solr.deniedCache.size=128
 solr.deniedCache.initialSize=64
+solr.deniedCache.autowarmCount=0
+{% endif %}
 
 # SOLR
 
@@ -126,17 +170,6 @@ alfresco.changeSetAclsBatchSize=500
 alfresco.aclBatchSize=100
 alfresco.contentReadBatchSize=100
 alfresco.contentUpdateBatchSize=1000
-
-# Warming
-
-solr.filterCache.autowarmCount=32
-solr.authorityCache.autowarmCount=4
-solr.pathCache.autowarmCount=32
-solr.deniedCache.autowarmCount=0
-solr.readerCache.autowarmCount=0
-solr.ownerCache.autowarmCount=0
-solr.queryResultCache.autowarmCount=4
-solr.documentCache.autowarmCount=512
 
 solr.queryResultWindowSize=512
 

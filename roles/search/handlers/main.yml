@@ -9,6 +9,7 @@
 
 - name: restart-search
   become: true
+  throttle: 1
   service:
     name: alfresco-search
     state: restarted

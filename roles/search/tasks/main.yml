@@ -1,13 +1,21 @@
 ---
 # tasks file for search
+- name: Check playbook config is consistent
+  ansible.builtin.fail:
+    msg: |
+      You cannot request anything but "standalone" topology when providing
+      a single host in the inventory. Please add more hosts to you inventory
+      file.
+  when: search_topology != 'standalone' and ansible_play_hosts_all | length < 2
+
 - name: Include OS specific variables
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
-- name: "Download {{ search.artifact_name }}-{{ search.version }}.zip"
+- name: "Download {{ search_flavor }}-{{ search_version }}.zip"
   get_url:
     url: "{{ downloads.search_zip_url }}"
-    dest: "{{ download_location }}/{{ search.artifact_name }}-{{ search.version }}.zip"
+    dest: "{{ download_location }}/{{ search_flavor }}-{{ search_version }}.zip"
     checksum: sha1:{{ lookup('url', downloads.search_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
     mode: "0644"
     url_username: "{{ nexus_user }}"
@@ -36,7 +44,7 @@
 
     - name: Extract Search services into {{ binaries_dir }}
       unarchive:
-        src: "{{ download_location }}/{{ search.artifact_name }}-{{ search.version }}.zip"
+        src: "{{ download_location }}/{{ search_flavor }}-{{ search_version }}.zip"
         dest: "{{ binaries_dir }}"
         remote_src: true
         creates: "{{ binaries_dir }}/README.MD"
@@ -99,7 +107,7 @@
         - rerank
         - noRerank
 
-    - name: add solr home to setenv.sh
+    - name: Add solr home to setenv.sh
       lineinfile:
         path: "{{ config_folder }}/setenv.sh"
         insertafter: EOF
@@ -130,7 +138,7 @@
       blockinfile:
         path: "{{ config_dir }}/solr.in.sh"
         block: |
-          {% for opt in search_environment| combine(search_required_opts) | dict2items %}
+          {% for opt in search_environment | combine(search_required_opts) | dict2items %}
           {{ opt.key }}="{{ opt.value }}"
           {% endfor %}
         marker: "# {mark} ANSIBLE SEARCH CONFIG"
@@ -150,3 +158,7 @@
       notify:
         - enable-search
         - restart-search
+
+    - name: Set Replication in Solr templates
+      import_tasks: replication.yml
+      when: search_topology == "replication"
