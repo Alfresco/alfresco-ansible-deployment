@@ -127,9 +127,11 @@ Now you have the control node setup you can [configure](#configure-your-deployme
 To deploy everything on the control node follow the steps in the [Localhost Deployment](#localhost-deployment) section or to deploy to one or more other machines follow the steps in the [SSH Deployment](#ssh-deployment) section.
 
 If you are going to do a production deployment, please take a look at the
-mandatory [Secrets management](#secrets-management) section, otherwise you can
-set `autogen_unsecure_secrets: true` in `groups_var/all.yml` to just autogenerate secrets
-before running the playbook.
+mandatory [Secrets management](#secrets-management) section.
+
+Alternatively, you can add the parameter `-e autogen_unsecure_secrets=true` to
+the `ansible-playbook` command to just autogenerate secrets before running the
+playbook for the first time (remove it for the next runs).
 
 ## Understanding the playbook
 
