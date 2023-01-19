@@ -38,11 +38,11 @@ Once ACS has initialized access the system using the following URLs using a brow
 
 To access the machine vagrant created and ran the playbook on use `vagrant ssh`.
 
-## Getting started with localhost deployment
+## Getting started
 
 If you have access to a pristine host running one of the supported Linux distributions, you can follow this quickstart for a localhost deployment.
 
-### Download playbook
+### Get the playbook
 
 If you're not working directly working on the control node, transfer the ZIP
 file to the control node together with the SSH private key required to login to
