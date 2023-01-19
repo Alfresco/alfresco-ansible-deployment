@@ -76,7 +76,6 @@ Before starting using the playbook, make sure you are running at least python 3.
 
 ```bash
 python3 --version
-pip install --user pipenv
 ```
 
 We made mandatory the usage of [pipenv](https://pipenv.pypa.io/en/latest/) to
