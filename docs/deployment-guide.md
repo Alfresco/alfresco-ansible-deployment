@@ -4,6 +4,9 @@ This page describes how to deploy Alfresco Content Services (ACS) using the Ansi
 
 If it's your first time with Ansible, then a read of [Ansible concepts](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html) is highly suggested.
 
+A basic understanding of Ansible concepts is highly recommended to successfully complete the deployment and better understand all the steps documented in this guide.
+If it's your first time with Ansible, please have a read at [Ansible concepts](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html) for a brief introduction.
+
 ## Getting started quickly with Vagrant
 
 The quickest way to get started and experiment with the playbook is by leveraging Vagrant to create a Virtualbox virtual machine to act as the control node **and** the target host.
