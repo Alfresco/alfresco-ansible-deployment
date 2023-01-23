@@ -2,16 +2,151 @@
 
 This page describes how to deploy Alfresco Content Services (ACS) using the Ansible playbook found in this project.
 
-Before continuing we need to introduce some more [Ansible concepts](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html) and the notion of [idempotency](https://docs.ansible.com/ansible/latest/reference_appendices/glossary.html#term-Idempotency).
+If it's your first time with Ansible, then a read of [Ansible concepts](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html) is highly suggested.
 
-## The control node
+A basic understanding of Ansible concepts is highly recommended to successfully complete the deployment and better understand all the steps documented in this guide.
+If it's your first time with Ansible, please have a read at [Ansible concepts](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html) for a brief introduction.
+
+## Getting started quickly with Vagrant
+
+The quickest way to get started and experiment with the playbook is by leveraging Vagrant to create a Virtualbox virtual machine to act as the control node **and** the target host.
+
+1. Ensure your local machine has a minimum of 10G of memory and 4 CPUs
+2. Clone via Git or Download this repository to your local machine
+3. Install [Vagrant](https://www.vagrantup.com/downloads)
+4. Install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
+5. Open Virtualbox application to make sure it startup correctly
+6. In a terminal, navigate to where you cloned or unpacked the repository
+7. Set environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
+
+    ```bash
+    export NEXUS_USERNAME="<your-username>"
+    export NEXUS_PASSWORD="<your-password>"
+    ```
+
+8. Run the main vagrant:
+
+    ```bash
+    vagrant up
+    ```
+
+    > NOTE: The playbook takes around 30 minutes to complete and mostly depends on your internet connection speed.
+
+Once ACS has initialized access the system using the following URLs using a browser:
+
+* Digital Workspace: `http://192.168.56.100/workspace`
+* Share: `http://192.168.56.100/share`
+* Repository: `http://192.168.56.100/alfresco`
+* API Explorer: `http://192.168.56.100/api-explorer`
+
+To access the machine vagrant created and ran the playbook on use `vagrant ssh`.
+
+## Getting started
+
+If you have access to a pristine host running one of the supported Linux distributions, you can follow this quickstart for a localhost deployment.
+
+### Get the playbook
+
+If you're not working directly working on the control node, transfer the ZIP
+file to the control node together with the SSH private key required to login to
+the target machines, and SSH into the machine:
+
+```bash
+scp  alfresco-ansible-deployment-<version>.zip user@controlnode:
+scp  -i ~/.ssh/ansible_rsa user@controlnode:.ssh
+ssh  user@controlnode
+unzip alfresco-ansible-deployment-<version>.zip
+cd alfresco-ansible-deployment
+```
+
+You can also use Git to fetch latest sources (or a specific release for example by adding `-b v2.1.0`) on the control node with:
+
+```bash
+git clone https://github.com/Alfresco/alfresco-ansible-deployment.git
+cd alfresco-ansible-deployment
+```
+
+> You may want to generate an SSH key pair locally and use it later for
+> deployment. Wether you generate one or you use one you copied over to the
+> control node, it is your responsibility to deploy it to the target machines so
+> Ansible can use it. Using SSH keys is recommended but not mandatory. If using
+> password instead make sure to add the `-k`switch to the ansible command so it
+> prompts you for a password.
+
+### Setup runtime environment
+
+Before starting using the playbook, make sure you are running at least python 3.8:
+
+```bash
+python3 --version
+```
+
+We made mandatory the usage of [pipenv](https://pipenv.pypa.io/en/latest/) to
+make sure that you will run the playbook with the same set of python
+dependencies we are running our integration tests.
+
+Install pipenv via pip:
+
+```bash
+pip install --user pipenv
+```
+
+If `pip` is not available, you can bootstrap pipenv using the [crude
+installation](https://pipenv.pypa.io/en/latest/install/#crude-installation-of-pipenv):
+
+```bash
+curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python3
+```
+
+Now you are ready to install Ansible and required runtime dependencies in a dedicated
+virtual environment managed by pipenv.
+
+Run from the playbook folder:
+
+```bash
+pipenv install --deploy
+pipenv run ansible-galaxy install -r requirements.yml
+```
+
+> When using `pipenv`, it is sufficient to prefix any ansible command with
+> `pipenv run`. We always provide command snippets in this documentation with
+> that prefix for your copy-pasting convenience. Keep in mind that you can also
+> run `pipenv shell` that will spawn a new shell that automatically assume that
+> every command is related to the current pipenv virtualenv. You can exit from
+> that shell just by using `exit` or `Ctrl+D`.
+
+If you intend to deploy an Enterprise system, create the mandatory environment
+variables that hold your Nexus credentials as shown below (replacing the values
+appropriately):
+
+```bash
+export NEXUS_USERNAME="<your-username>"
+export NEXUS_PASSWORD="<your-password>"
+```
+
+Now you have the control node setup you can [configure](#configure-your-deployment) your deployment and decide what kind of deployment you would like.
+
+To deploy everything on the control node follow the steps in the [Localhost Deployment](#localhost-deployment) section or to deploy to one or more other machines follow the steps in the [SSH Deployment](#ssh-deployment) section.
+
+If you are going to do a production deployment, please take a look at the
+mandatory [Secrets management](#secrets-management) section.
+
+Alternatively, you can add the parameter `-e autogen_unsecure_secrets=true` to
+the `ansible-playbook` command to just autogenerate secrets before running the
+playbook for the first time (remove it for the next runs).
+
+## Understanding the playbook
+
+Let's take a step back to learn more about Ansible and the playbook before moving to more advanced topics.
+
+### The control node
 
 The machine the playbook is run from is known as the control node. Ansible has some prerequisites for this control node. The main one is that it needs to run on a POSIX compliant system, meaning Linux or others Unix (including MacOSX) but not Windows.
 On windows please make see the provided `Vagrantfile` in order to kick start a local Linux VM where to deploy the playbook.
 
 More info on [control node](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html#control-node)
 
-## Understanding the inventory file
+### Understanding the inventory file
 
 An inventory file is used to describe the architecture or environment where you want to deploy the ACS platform. Each machine taking part in the environment needs to be described with at least:
 
@@ -82,7 +217,7 @@ The `inventory_ha.yml` which is very similar to the previous one but also provid
 
 A complete documentation about inventory file is available at [inventory file](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#intro-inventory)
 
-## Folder Structure
+### Folder Structure
 
 Regardless of role and connection type, a consistent folder structure is used. You will find the deployed files in the following locations:
 
@@ -93,7 +228,7 @@ Regardless of role and connection type, a consistent folder structure is used. Y
 | `/var/opt/alfresco` | Data          |
 | `/var/log/alfresco` | Logs          |
 
-## Service Configuration
+### Service Configuration
 
 The following systemd services are deployed and can be used to stop and start Alfresco components:
 
@@ -117,7 +252,7 @@ properties files, ...) can trigger a service restart and a consequent
 application downtime. For this reason you may want to run the playbook only
 during a scheduled maintenance window.
 
-## TCP Port Configuration
+### TCP Port Configuration
 
 Several roles setup services that listen on TCP ports and several roles wait for TCP ports to be listening before continuing execution (indicated by `Yes` in the "Required For Deployment" column). The table below shows the communication paths and port numbers used.
 
@@ -134,122 +269,6 @@ Several roles setup services that listen on TCP ports and several roles wait for
 | nginx                       | 443         | `<client-ips>`                                           | No                      |
 
 > NOTE: The transformers host will also contain the transform router process running on port 8095 and the shared file system process running on 8099 but communication between these components remains local.
-
-## Getting Started Quickly
-
-The quickest way to get started and experiment with the playbook is by leveraging Vagrant to create a Virtualbox virtual machine to act as the control node **and** the target host.
-
-1. Ensure your local machine has a minimum of 10G of memory and 4 CPUs
-2. Clone this repository to your local machine
-3. Install [Vagrant](https://www.vagrantup.com/downloads)
-4. Install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
-5. Open Virtualbox application
-6. In a terminal, navigate to the where you cloned the repository
-7. Create environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
-
-    ```bash
-    export NEXUS_USERNAME="<your-username>"
-    export NEXUS_PASSWORD="<your-password>"
-    ```
-
-8. Run the following command:
-
-    ```bash
-    vagrant up
-    ```
-
-    > NOTE: The playbook takes around 30 minutes to complete.
-
-Once ACS has initialized access the system using the following URLs using a browser:
-
-* Digital Workspace: `http://192.168.56.100/workspace`
-* Share: `http://192.168.56.100/share`
-* Repository: `http://192.168.56.100/alfresco`
-* API Explorer: `http://192.168.56.100/api-explorer`
-
-To access the machine vagrant created and ran the playbook on use `vagrant ssh`.
-
-## Setup A Control Node
-
-As mentioned in the introduction, a control node is required to run the playbook.
-
-### Download playbook
-
-If you're not working directly working on the control node, transfer the ZIP
-file to the control node together with the SSH private key required to login to
-the target machines, and SSH into the machine:
-
-```bash
-scp  alfresco-ansible-deployment-<version>.zip user@controlnode:
-scp  ~/.ssh/ansible_rsa user@controlnode:.ssh
-ssh  user@controlnode
-unzip alfresco-ansible-deployment-<version>.zip
-cd alfresco-ansible-deployment
-```
-
-You can also use GIT to fetch latest sources (or a specific release for example by adding `-b v2.1.0`) on the control node with:
-
-```bash
-git clone https://github.com/Alfresco/alfresco-ansible-deployment.git
-cd alfresco-ansible-deployment
-```
-
-> You may want to generate an SSH key pair locally and use it later for
-> deployment. Wether you generate one or you use one you copied over to the
-> control node, it is your responsibility to deploy it to the target machines so
-> Ansible can use it. Using SSH keys is recommended but not mandatory. If using
-> password instead make sure to add the `-k`switch to the ansible command so it
-> prompts you for a password.
-
-### Setup runtime environment
-
-Check prerequisites and install required tools (the usage of pipenv is mandatory
-to setup tested python dependencies):
-
-```bash
-python --version # must be at least 3.8 in order to use Ansible 2.12
-pip install --user pipenv
-```
-
-If `pip` is not available, you can try with the [pipenv full
-bootstrap](https://pipenv.pypa.io/en/latest/install/#crude-installation-of-pipenv):
-
-```bash
-curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-```
-
-Now you can install Ansible and required runtime dependencies in a dedicated
-virtual environment managed by pipenv:
-
-```bash
-pipenv install --deploy --python $(cat .python-version)
-pipenv run ansible-galaxy install -r requirements.yml
-```
-
-> When using `pipenv`, it is sufficient to prefix any ansible command with
-> `pipenv run`. We always provide command snippets in this documentation with
-> that prefix for your copy-pasting convenience. Keep in mind that you can also
-> run `pipenv shell` that will spawn a new shell that automatically assume that
-> every command is related to the current pipenv virtualenv. You can exit from
-> that shell just by using `exit` or `Ctrl+D`.
-
-If you intend to deploy an Enterprise system, create the mandatory environment
-variables that hold your Nexus credentials as shown below (replacing the values
-appropriately):
-
-```bash
-export NEXUS_USERNAME="<your-username>"
-export NEXUS_PASSWORD="<your-password>"
-```
-
-Now you have the control node setup you can [configure](#configure-your-deployment) your deployment and decide what kind of deployment you would like.
-
-To deploy everything on the control node follow the steps in the [Locahost Deployment](#localhost-deployment) section or to deploy to one or more other machines follow the steps in the [SSH Deployment](#ssh-deployment) section.
-
-If you are going to do a production deployment, please take a look at the
-mandatory [Secrets management](#secrets-management) section, otherwise you can
-set `autogen_unsecure_secrets: true` in `groups_var/all.yml` to just autogenerate secrets
-before running the playbook.
 
 ## Configure Your Deployment
 
