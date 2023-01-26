@@ -77,13 +77,14 @@ The table below shows the version of the components deployed by the playbook for
 
 | Component           | 7.3 Enterprise | 7.2 Enterprise | 7.1 Enterprise | 7.0 Enterprise | Community |
 |---------------------|----------------|----------------|----------------|----------------|-----------|
-| OpenJDK             | 11.0.15        | 11.0.15        | 11.0.15        | 11.0.15        | 11.0.15   |
+| OpenJDK             | 17.0.3         | 11.0.15        | 11.0.15        | 11.0.15        | 17.0.3    |
 | Apache Tomcat       | 9.0.59         | 9.0.59         | 9.0.59         | 8.5.76         | 9.0.59    |
 | PostgreSQL          | 14.x           | 13.x           | 13.x           | 13.x           | 13.x      |
 | Apache ActiveMQ     | 5.16.4         | 5.16.4         | 5.16.4         | 5.16.4         | 5.16.4    |
 | Repository          | 7.3.0          | 7.2.1          | 7.1.1          | 7.0.1.4        | 7.2.0     |
 | Share               | 7.3.0          | 7.2.1          | 7.1.1          | 7.0.1.4        | 7.2.0     |
 | Search Services     | 2.0.5          | 2.0.4          | 2.0.2          | 2.0.1.1        | 2.0.3     |
+| Search Enterprise   | 3.2.0          | 3.1.1          | 3.1.1          | -              | -         |
 | All-In-One T-Engine | 3.0.0          | 2.5.7          | 2.5.6          | 2.3.10         | 2.5.7     |
 | AOS                 | 1.5.0          | 1.4.1          | 1.4.0          | 1.4.0          |           |
 | Google Docs         | 3.3.0          | 3.2.2          | 3.2.1          | 3.2.1          |           |
