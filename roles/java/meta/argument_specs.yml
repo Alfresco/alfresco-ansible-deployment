@@ -7,21 +7,33 @@ argument_specs:
         type: str
         required: false
         description: |
-          local path to the java keystore
+          Local path to the java keystore
         default: "{{ java_home }}/lib/security/keystore.jceks"
       java_keystore_pass:
         type: str
         required: false
         description: |
-          local path to the java keystore
+          Password to unlock the java keystore
+        default: changeit
+      java_truststore:
+        type: str
+        required: false
+        description: |
+          Local path to the java truststore
+        default: "{{ java_home }}/lib/security/cacerts"
+      java_truststore_pass:
+        type: str
+        required: false
+        description: |
+          Password to unlock the java truststore
         default: changeit
       certificate_container_password:
         type: str
         required: false
         description: |
-          PKCS12 certificate container password
+          Certificate container password
       certificate_container:
         type: str
         required: false
         description: |
-          local path to the host specific PKCS12 certificate container
+          Local path to the host specific PKCS12 certificate container

@@ -6,3 +6,5 @@ java_folder: >-
 java_home: /opt/openjdk-{{ dependencies_version.java }}
 java_keystore: "{{ java_home }}/lib/security/keystore.jceks"
 java_keystore_pass: changeit
+java_truststore: "{{ java_home }}/lib/security/cacerts"
+java_truststore_pass: changeit
