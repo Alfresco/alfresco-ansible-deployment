@@ -1,7 +1,8 @@
 ---
 - name: Converge
   hosts: all
-  tasks:
-    - name: "Include java"
-      include_role:
-        name: "java"
+  roles:
+    - role: java
+      java_keystore_pass: alfresco
+      certificate_container: "{{ inventory_hostname }}.p12"
+      certificate_container_password: alfresco with space

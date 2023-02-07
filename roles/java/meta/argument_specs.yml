@@ -25,8 +25,3 @@ argument_specs:
         required: false
         description: |
           local path to the host specific PKCS12 certificate container
-      certificate_container_password:
-        type: str
-        required: false
-        description: |
-          PKCS12 certificate container password
