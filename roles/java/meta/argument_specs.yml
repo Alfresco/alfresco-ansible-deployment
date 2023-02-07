@@ -1,0 +1,32 @@
+---
+argument_specs:
+  main:
+    short_description: Main entrypoint for the java role
+    options:
+      java_keystore:
+        type: str
+        required: false
+        description: |
+          local path to the java keystore
+        default: "{{ java_home }}/lib/security/keystore.jceks"
+      java_keystore_pass:
+        type: str
+        required: false
+        description: |
+          local path to the java keystore
+        default: changeit
+      certificate_container_password:
+        type: str
+        required: false
+        description: |
+          PKCS12 certificate container password
+      certificate_container:
+        type: str
+        required: false
+        description: |
+          local path to the host specific PKCS12 certificate container
+      certificate_container_password:
+        type: str
+        required: false
+        description: |
+          PKCS12 certificate container password
