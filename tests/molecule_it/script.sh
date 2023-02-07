@@ -26,6 +26,8 @@ if [ -n "$MOLECULE_IT_SCENARIO" ]; then
         # shellcheck disable=SC2086
         pipenv run molecule $EXTRA_CONFIG converge -s "$MOLECULE_IT_SCENARIO"
         # shellcheck disable=SC2086
+        pipenv run molecule $EXTRA_CONFIG idempotence -s "$MOLECULE_IT_SCENARIO"
+        # shellcheck disable=SC2086
         pipenv run molecule $EXTRA_CONFIG side-effect -s "$MOLECULE_IT_SCENARIO"
         # shellcheck disable=SC2086
         pipenv run molecule $EXTRA_CONFIG verify -s "$MOLECULE_IT_SCENARIO"
