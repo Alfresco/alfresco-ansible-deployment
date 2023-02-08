@@ -8,5 +8,6 @@ utils:
   - python3-lxml
   - python3-selinux
   - python3-semanage
+  - python3-cryptography
   - gpg
   - curl
