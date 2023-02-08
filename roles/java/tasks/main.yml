@@ -21,8 +21,11 @@
         extra_opts:
           - --xform=s,[^/]*,{{ java_home | basename }},
 
-    - name: configure Java certificates
+    - name: Configure JRE Keystores
       include_tasks: keystores.yml
+      when:
+        - certificate_container
+        - certificate_container_password
 
     - name: Add setenv bash file
       blockinfile:
