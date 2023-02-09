@@ -23,9 +23,10 @@
 
     - name: Configure JRE Keystores
       include_tasks: keystores.yml
-      when:
-        - certificate_container is defined
-        - certificate_container_password is defined
+      when: >-
+        (certificate_container is defined and
+        certificate_container_password is defined ) or
+        java_keystore is defined
 
     - name: Add setenv bash file
       blockinfile:
