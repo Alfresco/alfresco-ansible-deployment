@@ -30,11 +30,7 @@ argument_specs:
               the name will be used as a key alias.
             required: false
             type: list
-            default: []
-            elements:
-              type: str
-              description: Alias name to use for the security key
-              required: false
+            elements: str
         required: false
         description: |
           Representation of the JRE keystore
