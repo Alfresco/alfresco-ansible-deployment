@@ -9,20 +9,18 @@ argument_specs:
           path:
             description: |
               Local path to the java keystore
-            required: false
+            required: true
             type: str
-            default: "{{ java_home }}/lib/security/keystore.jceks"
           pass:
             description: |
               Password to unlock the java keystore
-            required: false
+            required: true
             type: str
           type:
             description: |
               Type of keystore (JKS, JCEKS, PKCS12)
-            required: false
+            required: true
             type: str
-            default: JCEKS
           cert_containers:
             description: |
               A list of dict to represent certificates to import in keystore.
@@ -34,14 +32,17 @@ argument_specs:
                 type: str
                 description: |
                   Local path to the host specific PKCS12 certificate container
+                required: true
               pass:
                 type: str
                 description: |
                   Certificate container password
+                required: true
               trustcachain:
                 type: bool
                 description: |
                   Whether to look for and trust CA chain
+                default: false
           seckeys:
             description: |
               A list of dict to represent security keys.
@@ -53,10 +54,12 @@ argument_specs:
                 type: str
                 description: |
                   Name of the security key to  use as an alias in the keystore
+                required: true
               pass:
                 type: str
                 description: |
                   Passphrase of the security key
+                required: true
               algorythm:
                 type: str
                 description: |
