@@ -13,7 +13,6 @@ argument_specs:
             type: str
             default: "{{ java_home }}/lib/security/keystore.jceks"
           pass:
-            no_log: true
             description: |
               Password to unlock the java keystore
             required: false
@@ -79,7 +78,6 @@ argument_specs:
           Local path to the java truststore
         default: "{{ java_home }}/lib/security/cacerts"
       java_truststore_pass:
-        no_log: true
         type: str
         required: false
         description: |
