@@ -17,6 +17,12 @@ argument_specs:
               Password to unlock the java keystore
             required: false
             type: str
+          type:
+            description: |
+              Type of keystore (JKS, JCEKS, PKCS12)
+            required: false
+            type: str
+            default: JCEKS
         required: false
         description: |
           Representation of the JRE keystore

@@ -5,6 +5,7 @@ java_folder: >-
   openjdk-{{ dependencies_version.java }}_{{ dependencies_version.java_build }}
 java_home: /opt/openjdk-{{ dependencies_version.java }}
 java_keystore:
+  type: JCEKS
   path: "{{ java_home }}/lib/security/keystore.jceks"
 java_truststore: "{{ java_home }}/lib/security/cacerts"
 java_truststore_pass: changeit
