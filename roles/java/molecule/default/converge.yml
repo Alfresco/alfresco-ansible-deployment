@@ -8,6 +8,9 @@
         path: "{{ java_home }}/lib/security/keystore.jceks"
         pass: alfresco
         seckeys:
-          - test
+          - name: test
+            algorythm: AES
+            length: 256
+            pass: dummy
       certificate_container: "{{ inventory_hostname }}.p12"
       certificate_container_password: alfresco with space
