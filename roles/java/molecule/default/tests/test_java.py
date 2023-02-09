@@ -113,5 +113,5 @@ def test_truststore(host, get_ansible_vars):
     print(cmd.stdout)
     assert_that(
             cmd.stdout,
-            contains_string('hyland - alfresco deployment ca')
+            contains_string('alfresco ansible imported ca')
             )

@@ -24,6 +24,25 @@ argument_specs:
             required: false
             type: str
             default: JCEKS
+          cert_containers:
+            description: |
+              A list of dict to represent certificates to import in keystore.
+            required: false
+            type: list
+            elements: dict
+            options:
+              path:
+                type: str
+                description: |
+                  Local path to the host specific PKCS12 certificate container
+              pass:
+                type: str
+                description: |
+                  Certificate container password
+              trustcachain:
+                type: bool
+                description: |
+                  Whether to look for and trust CA chain
           seckeys:
             description: |
               A list of dict to represent security keys.
@@ -66,14 +85,3 @@ argument_specs:
         description: |
           Password to unlock the java truststore
         default: changeit
-      certificate_container_password:
-        no_log: true
-        type: str
-        required: false
-        description: |
-          Certificate container password
-      certificate_container:
-        type: str
-        required: false
-        description: |
-          Local path to the host specific PKCS12 certificate container
