@@ -26,6 +26,7 @@ argument_specs:
         required: false
         description: |
           Representation of the JRE keystore
+          The whole object needs to be given (defaults are not merged)
       java_truststore:
         type: str
         required: false

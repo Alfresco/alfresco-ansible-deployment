@@ -3,6 +3,9 @@
   hosts: all
   roles:
     - role: java
-      java_keystore_pass: alfresco
+      java_keystore:
+        type: JCEKS
+        path: "{{ java_home }}/lib/security/keystore.jceks"
+        pass: alfresco
       certificate_container: "{{ inventory_hostname }}.p12"
       certificate_container_password: alfresco with space
