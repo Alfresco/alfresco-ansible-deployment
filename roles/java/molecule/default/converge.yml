@@ -11,6 +11,6 @@
           - name: test
             algorythm: AES
             length: 256
-            pass: dummy
+            pass: alfresco with space
       certificate_container: "{{ inventory_hostname }}.p12"
       certificate_container_password: alfresco with space
