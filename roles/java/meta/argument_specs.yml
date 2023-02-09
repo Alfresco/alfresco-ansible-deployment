@@ -26,11 +26,29 @@ argument_specs:
             default: JCEKS
           seckeys:
             description: |
-              A list of security keys to include in the keystore
-              the name will be used as a key alias.
+              A list of dict to represent security keys.
             required: false
             type: list
-            elements: str
+            elements: dict
+            options:
+              name:
+                type: str
+                description: |
+                  Name of the security key to  use as an alias in the keystore
+              pass:
+                type: str
+                description: |
+                  Passphrase of the security key
+              algorythm:
+                type: str
+                description: |
+                  Encryption algorythm of the security key
+                default: AES
+              length:
+                type: int
+                description: |
+                  Length of the security key
+                default: 256
         required: false
         description: |
           Representation of the JRE keystore
