@@ -13,6 +13,7 @@ argument_specs:
             type: str
             default: "{{ java_home }}/lib/security/keystore.jceks"
           pass:
+            no_log: true
             description: |
               Password to unlock the java keystore
             required: false
@@ -23,6 +24,17 @@ argument_specs:
             required: false
             type: str
             default: JCEKS
+          seckeys:
+            description: |
+              A list of security keys to include in the keystore
+              the name will be used as a key alias.
+            required: false
+            type: list
+            default: []
+            elements:
+              type: str
+              description: Alias name to use for the security key
+              required: false
         required: false
         description: |
           Representation of the JRE keystore
@@ -34,12 +46,14 @@ argument_specs:
           Local path to the java truststore
         default: "{{ java_home }}/lib/security/cacerts"
       java_truststore_pass:
+        no_log: true
         type: str
         required: false
         description: |
           Password to unlock the java truststore
         default: changeit
       certificate_container_password:
+        no_log: true
         type: str
         required: false
         description: |
