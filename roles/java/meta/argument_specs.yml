@@ -1,0 +1,88 @@
+---
+argument_specs:
+  main:
+    short_description: Main entrypoint for the java role
+    options:
+      java_keystore:
+        type: dict
+        options:
+          path:
+            description: |
+              Local path to the java keystore
+            required: true
+            type: str
+          pass:
+            description: |
+              Password to unlock the java keystore
+            required: true
+            type: str
+          type:
+            description: |
+              Type of keystore (JKS, JCEKS, PKCS12)
+            required: true
+            type: str
+          cert_containers:
+            description: |
+              A list of dict to represent certificates to import in keystore.
+            required: false
+            type: list
+            elements: dict
+            options:
+              path:
+                type: str
+                description: |
+                  Local path to the host specific PKCS12 certificate container
+                required: true
+              pass:
+                type: str
+                description: |
+                  Certificate container password
+                required: true
+              add_to_trusted_ca:
+                type: bool
+                description: |
+                  Whether to look for and trust CA chain
+                default: false
+          seckeys:
+            description: |
+              A list of dict to represent security keys.
+            required: false
+            type: list
+            elements: dict
+            options:
+              name:
+                type: str
+                description: |
+                  Name of the security key to  use as an alias in the keystore
+                required: true
+              pass:
+                type: str
+                description: |
+                  Passphrase of the security key
+                required: true
+              algorythm:
+                type: str
+                description: |
+                  Encryption algorythm of the security key
+                default: AES
+              length:
+                type: int
+                description: |
+                  Length of the security key
+                default: 256
+        required: false
+        description: |
+          Representation of the JRE keystore
+          The whole object needs to be given (defaults are not merged)
+      java_truststore:
+        type: str
+        required: false
+        description: |
+          Local path to the java truststore
+        default: "{{ java_home }}/lib/security/cacerts"
+      java_truststore_pass:
+        type: str
+        required: false
+        description: |
+          Password to unlock the java truststore
+        default: changeit
