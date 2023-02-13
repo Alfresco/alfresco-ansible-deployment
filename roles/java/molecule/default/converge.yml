@@ -15,4 +15,4 @@
         cert_containers:
           - path: "{{ inventory_hostname }}.p12"
             pass: alfresco with space
-            trustcachain: true
+            add_to_trusted_ca: true

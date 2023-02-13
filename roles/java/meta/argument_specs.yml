@@ -38,7 +38,7 @@ argument_specs:
                 description: |
                   Certificate container password
                 required: true
-              trustcachain:
+              add_to_trusted_ca:
                 type: bool
                 description: |
                   Whether to look for and trust CA chain
