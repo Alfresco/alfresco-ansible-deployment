@@ -19,6 +19,12 @@
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
 
+- name: Generate hosts certificates
+  vars:
+    p12_passphrase: "{{ certs_p12_passphrase }}"
+    secret_ca_passphrase: "{{ ca_signing_key_passphrase }}"
+  ansible.builtin.import_playbook: pki.yml
+
 - name: Gather facts from all hosts
   hosts: all:!external
   gather_facts: no
