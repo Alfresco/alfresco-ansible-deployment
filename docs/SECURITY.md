@@ -200,3 +200,19 @@ Similar options can be used to control how certificates are generated.
 - cert_key_type: type of private key to generate (default to RSA keys).
 - cert_days_valid_for: how many days will the generated certificate will be
   valid for (default 10y)
+
+### Using the PKI playbook independently
+
+One can call the playbook directly without playing the full ACS playbook.
+Below is an example of how to do that:
+
+```bash
+pipenv run \
+  ansible-playbook playbooks/pki.yml
+    -e p12_passphrase=$P12_PASSPHRASE
+    -e secret_ca_passphrase=$MYPKI_PASSPHRASE
+    -i my_inventory_file.yml
+```
+
+> Above command expects you have first exported the PKCS12 container and the CA
+> signing key passphrases as environment variables.

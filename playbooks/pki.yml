@@ -146,7 +146,7 @@
         state: present
 
     - name: Create private key for new certificate
-      no_log: false
+      no_log: true
       become: true
       community.crypto.openssl_privatekey:
         path: /etc/pki/{{ inventory_hostname }}_{{ cert_key_type | default('') }}.key
@@ -161,7 +161,7 @@
         alt_names:
           - DNS:{{ inventory_hostname }}
           - DNS:{{ ansible_hostname }}
-      no_log: false
+      no_log: true
       community.crypto.openssl_csr_pipe:
         privatekey_content: "{{ srvkey.privatekey }}"
         common_name: "{{ ansible_fqdn | default(inventory_hostname) }}"
@@ -179,7 +179,7 @@
       changed_when: false
 
     - name: Sign certificate with our CA
-      no_log: false
+      no_log: true
       community.crypto.x509_certificate:
         csr_content: "{{ csr.csr }}"
         provider: ownca
