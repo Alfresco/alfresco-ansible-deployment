@@ -122,7 +122,6 @@
           set_fact:
             pki_dir: "{{ actual_pki_dir }}"
 
-
 - name: Request and sign certificates for hosts
   hosts: all:!external
   tasks:
@@ -136,6 +135,13 @@
         - name: /etc/pki
         - name: /etc/pki/private
           mode: "0600"
+
+    - name: Install PKI required packages
+      become: true
+      package:
+        name: python3-cryptography
+        update_cache: true
+        state: present
 
     - name: Create private key for new certificate
       no_log: false
@@ -177,8 +183,8 @@
         provider: ownca
         ownca_path: "{{ hostvars.localhost.ca_cert_path }}"
         ownca_privatekey_path: "{{ hostvars.localhost.ca_key_path }}"
-        ownca_privatekey_passphrase: "{{ hostvars.localhost.secret_ca_passphrase }}"
-        ownca_not_after: "{{ hostvars.localhost.cert_days_valid_for | default(omit) }}"
+        ownca_privatekey_passphrase: "{{ secret_ca_passphrase }}"
+        ownca_not_after: "{{ cert_days_valid_for | default(omit) }}"
         ownca_not_before: "+0s"
         path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.crt"
       delegate_to: localhost
@@ -187,7 +193,7 @@
       community.crypto.openssl_pkcs12:
         action: export
         path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
-        passphrase: "{{ hostvars.localhost.p12_passphrase }}"
+        passphrase: "{{ p12_passphrase }}"
         friendly_name: "{{ inventory_hostname }}"
         privatekey_content: "{{ srvkey.privatekey }}"
         certificate_path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.crt"
