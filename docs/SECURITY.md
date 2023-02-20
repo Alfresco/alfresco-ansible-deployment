@@ -189,6 +189,8 @@ still have some control on it using the variables below:
 - ca_cn: Common Name to use to generate the CA signing certificate (defaults
   to Hyland - Alfresco signing CA)
 - ca_signing_key_passphrase: passphrase to use to encrypt to CA signing key
+- ca_days_valid_for: how many days will the generated certificate will be
+  valid for (default 10y)
 
 ### Certificates generation parameters
 

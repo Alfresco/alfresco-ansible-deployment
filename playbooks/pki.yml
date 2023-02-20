@@ -8,6 +8,7 @@
     actual_ca_key_size: "{{ ca_key_size | default(4096) }}"
     actual_ca_key_type: "{{ ca_key_type | default('RSA') }}"
     actual_ca_cn: "{{ ca_cn | default('Hyland - Alfresco signing CA') }}"
+    actual_ca_days_valid_for: "{{ ca_days_valid_for | default('3652') }}"
   tasks:
     - name: Check PKCS12 and CA signing key are given a password
       ansible.builtin.assert:
@@ -31,7 +32,7 @@
         - name: ca
         - name: certificates
         - name: private
-          mode: 0700
+          mode: "0700"
     - name: Check for provided CA signing certificate
       ansible.builtin.stat:
         path: "{{ ca_file }}"
@@ -111,6 +112,7 @@
             csr_content: "{{ ca_csr.csr }}"
             privatekey_path: "{{ cakey.filename }}"
             privatekey_passphrase: "{{ secret_ca_passphrase }}"
+            selfsigned_not_after: +{{ actual_ca_days_valid_for }}
             provider: selfsigned
 
         - name: Set CA variables
@@ -128,7 +130,7 @@
   vars:
     actual_cert_key_size: "{{ cert_key_size | default(4096) }}"
     actual_cert_key_type: "{{ cert_key_type | default('RSA') }}"
-    actual_cert_days_valid_for: 365
+    actual_cert_days_valid_for: "{{ cert_days_valid_for | default('365') }}"
   tasks:
     - name: Create private key for new certificate
       no_log: false
