@@ -172,7 +172,7 @@
         ownca_privatekey_path: "{{ hostvars.localhost.ca_key_path }}"
         ownca_privatekey_passphrase: "{{ secret_ca_passphrase }}"
         ownca_not_after: +{{ actual_cert_days_valid_for }}
-        ownca_not_before: "-1d"
+        ownca_not_before: "+0s"
         path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.crt"
       delegate_to: localhost
 
@@ -180,7 +180,7 @@
       community.crypto.openssl_pkcs12:
         action: export
         path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
-        passphrase: "{{  p12_passphrase }}"
+        passphrase: "{{ p12_passphrase }}"
         friendly_name: "{{ inventory_hostname }}"
         privatekey_content: "{{ srvkey.privatekey }}"
         certificate_path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.crt"
