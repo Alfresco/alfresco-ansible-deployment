@@ -199,4 +199,4 @@ Similar options can be used to control how certificates are generated.
 - cert_key_size: size of the private key in bits (default to 4kb long keys).
 - cert_key_type: type of private key to generate (default to RSA keys).
 - cert_days_valid_for: how many days will the generated certificate will be
-  valid for (default 1y)
+  valid for (default 10y)
