@@ -124,13 +124,14 @@
 
 - name: Request and sign certificates for hosts
   hosts: all:!external
+  gather_facts: true
   tasks:
     - name: Create host's PKI directory
       become: true
       file:
         path: "{{ item.name }}"
         state: directory
-        mode: "{{ itme.mode | default(omit) }}"
+        mode: "{{ item.mode | default(omit) }}"
       loop:
         - name: /etc/pki
         - name: /etc/pki/private
@@ -139,7 +140,8 @@
     - name: Install PKI required packages
       become: true
       package:
-        name: python3-cryptography
+        name: >-
+          {{ 'python2-cryptography' if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' else 'python3-cryptography' }}
         update_cache: true
         state: present
 
