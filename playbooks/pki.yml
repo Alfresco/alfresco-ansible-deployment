@@ -22,6 +22,16 @@
           key_password
         quiet: true
 
+    - name: Prepare PKI directory structure
+      file:
+        path: "{{ actual_pki_dir }}/{{ item.name }}"
+        state: directory
+        mode: "{{ item.mode | default(omit) }}"
+      loop:
+        - name: ca
+        - name: certificates
+        - name: private
+          mode: 0700
     - name: Check for provided CA signing certificate
       ansible.builtin.stat:
         path: "{{ ca_file }}"
