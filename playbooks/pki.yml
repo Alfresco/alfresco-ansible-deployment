@@ -57,6 +57,9 @@
       register: ca_key_stat
 
     - name: Validate provided CA certificate and key
+      when:
+        - ca_cert_stat.stat.exists
+        - ca_key_stat.stat.exists
       block:
         - name: Read CA signing certificate
           community.crypto.x509_certificate_info:
@@ -71,14 +74,24 @@
             passphrase: "{{ secret_ca_passphrase }}"
           register: ca_key_valid
 
+        - name: Check PKCS12 and CA signing key are given a password
+          ansible.builtin.assert:
+            that:
+              - ca_cert_valid.valid_at.tomorrow
+              - ca_key_valid.can_parse_key
+            fail_msg: |
+              We could not pearse your provided CA! Please check the files:
+              {{ ca_cert_stat.stat.path }} & {{ ca_key_stat.stat.path }}
+              and its passphrase.
+
         - name: Set CA variables
-          when:
-            - ca_cert_valid.valid_at.tomorrow
-            - ca_key_valid.can_parse_key
           set_fact:
             ca_cert_path: "{{ ca_cert_stat.stat.path }}"
             ca_key_path: "{{ ca_key_stat.stat.path }}"
-      rescue:
+
+    - name: Generate out own CA
+      when: not (ca_cert_stat.stat.exists and ca_key_stat.stat.exists)
+      block:
         - name: Create private key with password protection
           community.crypto.openssl_privatekey:
             backup: true
@@ -117,10 +130,10 @@
           set_fact:
             ca_cert_path: "{{ actual_pki_dir }}/ca/alfresco_platform_CA.crt"
             ca_key_path: "{{ cakey.filename }}"
-      always:
-        - name: Set PKI variables
-          set_fact:
-            pki_dir: "{{ actual_pki_dir }}"
+
+    - name: Set PKI variables
+      set_fact:
+        pki_dir: "{{ actual_pki_dir }}"
 
 - name: Request and sign certificates for hosts
   hosts: all:!external
