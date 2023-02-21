@@ -126,78 +126,87 @@
   hosts: all:!external
   gather_facts: true
   tasks:
-    - name: Create host's PKI directory
-      become: true
-      file:
-        path: "{{ item.name }}"
-        state: directory
-        mode: "{{ item.mode | default(omit) }}"
-      loop:
-        - name: /etc/pki
-        - name: /etc/pki/private
-          mode: "0600"
-
-    - name: Install PKI required packages
-      become: true
-      package:
-        name: >-
-          {{ 'python2-cryptography' if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' else 'python3-cryptography' }}
-        update_cache: true
-        state: present
-
-    - name: Create private key for new certificate
-      no_log: true
-      become: true
-      community.crypto.openssl_privatekey:
-        path: /etc/pki/{{ inventory_hostname }}_{{ cert_key_type | default('') }}.key
-        mode: 0600
-        size: "{{ cert_key_size | default(omit) }}"
-        type: "{{ cert_key_type | default(omit) }}"
-        return_content: true
-      register: srvkey
-
-    - name: Create certificate signing request (CSR) for new certificate
-      vars:
-        alt_names:
-          - DNS:{{ inventory_hostname }}
-          - DNS:{{ ansible_hostname }}
-      no_log: true
-      community.crypto.openssl_csr_pipe:
-        privatekey_content: "{{ srvkey.privatekey }}"
-        common_name: "{{ ansible_fqdn | default(inventory_hostname) }}"
-        basic_constraints:
-          - 'CA:FALSE'
-        key_usage:
-          - nonRepudiation
-          - digitalSignature
-          - keyEncipherment
-        extended_key_usage:
-          - serverAuth
-          - clientAuth
-        subject_alt_name: "{{ alt_names | unique }}"
-      register: csr
-      changed_when: false
-
-    - name: Sign certificate with our CA
-      no_log: true
-      community.crypto.x509_certificate:
-        csr_content: "{{ csr.csr }}"
-        provider: ownca
-        ownca_path: "{{ hostvars.localhost.ca_cert_path }}"
-        ownca_privatekey_path: "{{ hostvars.localhost.ca_key_path }}"
-        ownca_privatekey_passphrase: "{{ secret_ca_passphrase }}"
-        ownca_not_after: "{{ cert_days_valid_for | default(omit) }}"
-        ownca_not_before: "+0s"
-        path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.crt"
-      delegate_to: localhost
-
-    - name: Generate PKCS12 keystores
-      community.crypto.openssl_pkcs12:
-        action: export
+    - name: Check for provided host's PKCS12 container
+      ansible.builtin.stat:
         path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
-        passphrase: "{{ p12_passphrase }}"
-        friendly_name: "{{ inventory_hostname }}"
-        privatekey_content: "{{ srvkey.privatekey }}"
-        certificate_path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.crt"
-        ca_certificates: "{{ hostvars.localhost.ca_cert_path }}"
+      register: host_p12
       delegate_to: localhost
+
+    - name: request and sign certificates as none was given
+      when: not host_p12.stat.exists
+      block:
+        - name: Create host's PKI directory
+          become: true
+          file:
+            path: "{{ item.name }}"
+            state: directory
+            mode: "{{ item.mode | default(omit) }}"
+          loop:
+            - name: /etc/pki
+            - name: /etc/pki/private
+              mode: "0600"
+
+        - name: Install PKI required packages
+          become: true
+          package:
+            name: >-
+              {{ 'python2-cryptography' if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' else 'python3-cryptography' }}
+            update_cache: true
+            state: present
+
+        - name: Create private key for new certificate
+          no_log: true
+          become: true
+          community.crypto.openssl_privatekey:
+            path: /etc/pki/{{ inventory_hostname }}_{{ cert_key_type | default('') }}.key
+            mode: 0600
+            size: "{{ cert_key_size | default(omit) }}"
+            type: "{{ cert_key_type | default(omit) }}"
+            return_content: true
+          register: srvkey
+
+        - name: Create certificate signing request (CSR) for new certificate
+          vars:
+            alt_names:
+              - DNS:{{ inventory_hostname }}
+              - DNS:{{ ansible_hostname }}
+          no_log: true
+          community.crypto.openssl_csr_pipe:
+            privatekey_content: "{{ srvkey.privatekey }}"
+            common_name: "{{ ansible_fqdn | default(inventory_hostname) }}"
+            basic_constraints:
+              - 'CA:FALSE'
+            key_usage:
+              - nonRepudiation
+              - digitalSignature
+              - keyEncipherment
+            extended_key_usage:
+              - serverAuth
+              - clientAuth
+            subject_alt_name: "{{ alt_names | unique }}"
+          register: csr
+          changed_when: false
+
+        - name: Sign certificate with our CA
+          no_log: true
+          community.crypto.x509_certificate:
+            csr_content: "{{ csr.csr }}"
+            provider: ownca
+            ownca_path: "{{ hostvars.localhost.ca_cert_path }}"
+            ownca_privatekey_path: "{{ hostvars.localhost.ca_key_path }}"
+            ownca_privatekey_passphrase: "{{ secret_ca_passphrase }}"
+            ownca_not_after: "{{ cert_days_valid_for | default(omit) }}"
+            ownca_not_before: "+0s"
+            path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.crt"
+          delegate_to: localhost
+
+        - name: Generate PKCS12 keystores
+          community.crypto.openssl_pkcs12:
+            action: export
+            path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
+            passphrase: "{{ p12_passphrase }}"
+            friendly_name: "{{ inventory_hostname }}"
+            privatekey_content: "{{ srvkey.privatekey }}"
+            certificate_path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.crt"
+            ca_certificates: "{{ hostvars.localhost.ca_cert_path }}"
+          delegate_to: localhost

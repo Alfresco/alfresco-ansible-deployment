@@ -141,11 +141,32 @@ bssrf_protection_enabled: true
 
 ## Hosts certificates & keys
 
-By default the playbook will generate a dedicated host certificate and private
-key pair. It is possible to either use your own private PKI or let the playbook
-generate a small PKI infrastructure.
-If you want to leverage your own PKI infrastructure, you need to pass the
-playbook 2 assets:
+Support for hosts' certificates has been introduced.
+Its main purpose is to provide mTLS authentication for components which may
+need it. By default the playbook will generate its own PKI and issue dedicated
+host certificate and private key pairs. It is also possible to use your own
+private PKI. To do so you can either request a CA signing certificate and key,
+or you can request individual hosts certificates.
+
+### Providing hosts certificates
+
+In this configuration you will have to provide one certificate per hosts in the
+inventory. All certificates MUST conform to the following:
+
+- The certificates must be store in a PKCS12 container
+- The correcponding private key must be added to the PKCS12 contiainer
+- All the p12 files for individual hosts must share the same passphrase
+- The PKCS12 container must contain the CA certificate chain
+
+> That approach can be tedious and it's usually easier to either use your own
+> CA signing or let the playbook generate its own PKI if that's allowed by your
+> security policy.
+
+### Using your own PKI signing CA
+
+This is the prefered approach as it is much easier. And lets you be more
+autonomous.  In this configuration, you need to provide the following to the
+playbook:
 
 - A CA signing certificate in PEM format
 - The encrypted CA signing key in PEM format
@@ -175,7 +196,7 @@ In order to set secrets in the playbook's vault please refer to
 
 If you want to fully automate this generation just make sure to run the
 `secrets-init.yml` playbook as described in the
-[Deployment guide](./deployment-guide.md#Encrypted variables).
+[Deployment guide](./deployment-guide.md#encrypted-variables).
 
 ### CA generation parameters
 
