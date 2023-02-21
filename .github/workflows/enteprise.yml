@@ -78,6 +78,7 @@ jobs:
           - image: rockylinux:8
         scenario:
           - name: elasticsearch
+          - name: pki
     steps:
       - name: Checkout
         uses: actions/checkout@v3
