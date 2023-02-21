@@ -4,8 +4,6 @@
   gather_facts: false
   tasks:
     - name: Load secrets
-      environment:
-        ANSIBLE_VAULT_PASSWORD: alfresco with space
       include_vars: ../../vars/secrets.yml
       delegate_to: localhost
       delegate_facts: true
@@ -14,7 +12,7 @@
       community.crypto.openssl_pkcs12:
         action: parse
         src: >-
-          {{ lookup('env','MOLECULE_SCENARIO_DIRECTORY') }}/files/certificates/{{ inventory_hostname }}.p12
+          {{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/files/certificates/{{ inventory_hostname }}.p12
         path: /tmp/{{ inventory_hostname }}.crt
         passphrase: "{{ hostvars.localhost.certs_p12_passphrase }}"
         state: present

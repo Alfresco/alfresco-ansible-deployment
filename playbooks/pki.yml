@@ -145,7 +145,7 @@
       register: host_p12
       delegate_to: localhost
 
-    - name: request and sign certificates as none was given
+    - name: Request and sign certificates as none was given
       when: not host_p12.stat.exists
       block:
         - name: Create host's PKI directory

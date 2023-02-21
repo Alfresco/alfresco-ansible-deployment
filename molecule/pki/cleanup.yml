@@ -3,9 +3,9 @@
   hosts: localhost
   gather_facts: false
   vars:
-    pki_dir: "{{ lookup('env','MOLECULE_SCENARIO_DIRECTORY') }}/files"
+    pki_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/files"
   tasks:
-    - name: wipe pki local directory
+    - name: Wipe pki local directory
       ansible.builtin.file:
         path: "{{ pki_dir }}"
         state: absent

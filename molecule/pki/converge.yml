@@ -1,14 +1,12 @@
 ---
 - name: Generate & load secrets
-  environment:
-    ANSIBLE_VAULT_PASSWORD: alfresco with space
   vars:
     autogen_unsecure_secrets: True
   ansible.builtin.import_playbook: ../../playbooks/secrets.yml
 
 - name: Generate PKI issued certs
   vars:
-    pki_dir: "{{ lookup('env','MOLECULE_SCENARIO_DIRECTORY') }}/files"
+    pki_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/files"
     p12_passphrase: "{{ hostvars.localhost.certs_p12_passphrase }}"
     secret_ca_passphrase: "{{ hostvars.localhost.ca_signing_key_passphrase }}"
   ansible.builtin.import_playbook: ../../playbooks/pki.yml
