@@ -9,7 +9,7 @@ on:
       - '*.md'
 
 env:
-  DTAS_VERSION: v1.1.1
+  DTAS_VERSION: v1.1.2
   BUILD_NUMBER: ${{ github.run_id }}
   PY_COLORS: 1
 
