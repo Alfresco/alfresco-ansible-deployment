@@ -1,0 +1,27 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Load secrets
+      include_vars: ../../vars/secrets.yml
+      delegate_to: localhost
+      delegate_facts: true
+
+    - name: Check Generated p12 valid
+      community.crypto.openssl_pkcs12:
+        action: parse
+        src: >-
+          {{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/files/certificates/{{ inventory_hostname }}.p12
+        path: /tmp/{{ inventory_hostname }}.crt
+        passphrase: "{{ hostvars.localhost.certs_p12_passphrase }}"
+        state: present
+        return_content: true
+      delegate_to: localhost
+      register: p12
+
+    - name: Check basic expected assets
+      ansible.builtin.assert:
+        that:
+          - "'BEGIN RSA PRIVATE KEY' in p12.pkcs12 | b64decode"
+          - "'BEGIN CERTIFICATE' in p12.pkcs12 | b64decode"
