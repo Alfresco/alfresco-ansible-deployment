@@ -173,7 +173,7 @@ jobs:
           cache-name: enterprise
 
       - name: Set BRANCH_NAME
-        uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@850c5b2b148b9b7bba3427ef0249de1015918441
+        uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@277923c59c121e89263f7b93f3b0fb4aa89a6e31
         with:
           sanitize: true
           max-length: 20
