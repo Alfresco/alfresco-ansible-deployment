@@ -12,7 +12,7 @@
   {{ urls.append('https?://localhost') -}}
   {% endif -%}
   {% if type == 'origin' -%}
-    {{ Origins.list | select() | join('|') -}}
+    {{ Origins.list | unique | select() | join(',') -}}
   {% elif type == 'referer' -%}
     {{ urls | unique  | map('trim', '/') | product(['/.*']) | map('join') | select() | join('|') -}}
   {% endif -%}
