@@ -58,7 +58,8 @@
          </action>
       </rule>
    -->
-   <config evaluator="string-compare" condition="CSRFPolicy" replace="{{ csrf_config.enabled }}">
+   <config evaluator="string-compare" condition="CSRFPolicy" replace="true">
+{% if csrf.enabled | bool %}
       <!--
          Properties that may be used inside the rest of the CSRFPolicy config to avoid repetition but
          also making it possible to provide different values in different environments.
@@ -263,7 +264,9 @@
             </action>
          </rule>
       </filter>
-
+{% else %}
+      <filter/>
+{% endif %}
    </config>
 
    <!--
