@@ -71,7 +71,7 @@ sync:
     {{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x
   version: 3.8.0
 supported_os:
-  RHEL:
+  RedHat:
     versions:
       - 8.6
       - 8.5
