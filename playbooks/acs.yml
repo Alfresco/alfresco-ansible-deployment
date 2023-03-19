@@ -10,7 +10,7 @@
       msg:
         - "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS"
     when:
-       - not (skip_os_test | default(false) | bool)
+      - not (skip_os_test | default(false) | bool)
       - ansible_distribution_version | float not in os_versions
 
 - name: Run preliminary checks
