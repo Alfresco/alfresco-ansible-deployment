@@ -10,7 +10,7 @@
     - name: Gather EC2 facts
       delegate_to: "{{ groups['nginx'][0] }}"
       amazon.aws.ec2_metadata_facts:
-      failed_when: false
+      #failed_when: false
 
     - name: Set hostname fact from EC2 or localhost if detection failed
       ansible.builtin.set_fact:
