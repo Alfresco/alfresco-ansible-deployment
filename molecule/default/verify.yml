@@ -12,7 +12,7 @@
       amazon.aws.ec2_metadata_facts:
       failed_when: false
 
-    - name: Set hostname fact from EC2 or localhost
+    - name: Set hostname fact from EC2 or localhost if detection failed
       ansible.builtin.set_fact:
         node_hostname: "{{ ansible_ec2_public_hostname | default('localhost') }}"
 
@@ -21,7 +21,7 @@
         chdir: "{{ dtas_dir }}"
         requirements: requirements.txt
 
-    - name: Configure deployment URL in {{ test_config_file }}
+    - name: Configure {{ node_hostname }} as target host for tests in {{ test_config_file }}
       ansible.builtin.replace:
         path: "{{ test_config_file }}"
         regexp: 'TEST_URL'
