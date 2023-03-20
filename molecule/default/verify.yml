@@ -7,10 +7,24 @@
     dtas_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
     test_config_file: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/{{ lookup('ansible.builtin.env', 'MOLECULE_IT_TEST_CONFIG') | default('tests/test-config.json', True) }}"
   tasks:
+    # https://www.jeffgeerling.com/blog/2017/quick-way-check-if-youre-aws-ansible-playbook
+    - name: Check if AWS metadata is reachable
+      delegate_to: "{{ groups['nginx'][0] }}"
+      ansible.builtin.uri:
+        url: http://169.254.169.254/latest/meta-data
+        timeout: 2
+      register: aws_uri_check
+      failed_when: False
+
+    - name: Set variable for AWS instance detection
+      delegate_to: "{{ groups['nginx'][0] }}"
+      ansible.builtin.set_fact:
+        is_aws_environment: "{{ aws_uri_check.status == 200 }}"
+
     - name: Gather EC2 facts
       delegate_to: "{{ groups['nginx'][0] }}"
+      when: is_aws_environment
       amazon.aws.ec2_metadata_facts:
-      #failed_when: false
 
     - name: Set hostname fact from EC2 or localhost if detection failed
       ansible.builtin.set_fact:
