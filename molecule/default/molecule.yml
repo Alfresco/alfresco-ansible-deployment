@@ -10,6 +10,7 @@ platforms:
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.large
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    region: ${AWS_REGION}
     tags:
       Name: molecule_${MOLECULE_IT_PLATFORM}_${BRANCH_NAME}_${BUILD_NUMBER}
       Owner: Ops Readiness Team
