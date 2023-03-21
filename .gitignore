@@ -1,6 +1,7 @@
 # project specifics
 configuration_files/ssl_certificates/
 configuration_files/keystores/
+configuration_files/pki/
 dtas
 .env.credentials
 .vault_pass.txt
