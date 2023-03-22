@@ -43,4 +43,3 @@ provisioner:
       host_vars: host_vars
   playbooks:
     converge: ../../playbooks/acs.yml
-    cleanup: cleanup-uninstall.yml

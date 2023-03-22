@@ -1,4 +1,0 @@
----
-- name: Default cleanup
-  import_playbook: ./cleanup.yml
-
