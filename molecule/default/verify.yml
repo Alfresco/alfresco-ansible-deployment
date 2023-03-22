@@ -25,6 +25,8 @@
       delegate_to: "{{ groups['nginx'][0] }}"
       when: is_aws_environment
       amazon.aws.ec2_metadata_facts:
+      vars:
+        ansible_python_interpreter: python3
 
     - name: Set hostname fact from EC2 or localhost if detection failed
       ansible.builtin.set_fact:
