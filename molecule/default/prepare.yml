@@ -18,27 +18,8 @@
     dtas_version: "{{ lookup('ansible.builtin.env', 'DTAS_VERSION') }}"
     clone_github_token: "{{ lookup('ansible.builtin.env', 'CLONE_GITHUB_TOKEN') }}"
   tasks:
-
-    # https://www.jeffgeerling.com/blog/2017/quick-way-check-if-youre-aws-ansible-playbook
-    - name: Check if AWS metadata is reachable
-      delegate_to: "{{ groups['nginx'][0] }}"
-      ansible.builtin.uri:
-        url: http://169.254.169.254/latest/meta-data
-        timeout: 2
-      register: aws_uri_check
-      failed_when: False
-
-    - name: Set variable for AWS instance detection
-      delegate_to: "{{ groups['nginx'][0] }}"
-      ansible.builtin.set_fact:
-        is_aws_environment: "{{ aws_uri_check.status == 200 }}"
-
-    - name: Gather EC2 facts
-      delegate_to: "{{ groups['nginx'][0] }}"
-      when: is_aws_environment
-      amazon.aws.ec2_metadata_facts:
-      vars:
-        ansible_python_interpreter: python3
+    - name: Detect ec2 hostname
+      ansible.builtin.include_tasks: "tasks/detect_ec2_node_hostname.yml"
 
     - name: Set hostname as known_urls
       ansible.builtin.blockinfile:
