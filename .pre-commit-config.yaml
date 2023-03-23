@@ -71,9 +71,9 @@ repos:
         name: ensure pipenv env is up to date
         language: system
         pass_filenames: false
-        entry: pipenv install --dev
+        entry: pipenv install --deploy --dev
       - id: ansible-lint
         name: ansible-lint
         language: system
         pass_filenames: false
-        entry: pipenv run ansible-lint --progressive
+        entry: pipenv run ansible-lint
