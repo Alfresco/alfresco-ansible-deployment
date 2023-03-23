@@ -12,6 +12,7 @@ env:
   DTAS_VERSION: v1.1.2
   BUILD_NUMBER: ${{ github.run_id }}
   PY_COLORS: 1
+  PYTHONUNBUFFERED: 1
 
 jobs:
   docker:
