@@ -25,9 +25,6 @@
         state: absent
         marker: >-
           # {mark} KNOWN_URLS VAR
-        block: |
-          known_urls:
-            - https://{{ node_hostname }}/share/
         path: ../{{ lookup('env', 'MOLECULE_SCENARIO_NAME') }}/host_vars/{{ item }}.yml
       loop: "{{ groups.repository }}"
 
