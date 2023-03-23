@@ -60,13 +60,18 @@ repos:
   - repo: local
     hooks:
       - id: generate-table
-        name: Generate components version table
+        name: generate components version table
         entry: python ./scripts/generate-comp-ver-table.py
         language: python
         language_version: python3.9
         additional_dependencies: [pyyaml]
         pass_filenames: false
         always_run: true
+      - id: pipenv install
+        name: ensure pipenv env is up to date
+        language: system
+        pass_filenames: false
+        entry: pipenv install --dev
       - id: ansible-lint
         name: ansible-lint
         language: system
