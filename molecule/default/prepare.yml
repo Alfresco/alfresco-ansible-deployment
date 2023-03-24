@@ -18,15 +18,8 @@
     dtas_version: "{{ lookup('ansible.builtin.env', 'DTAS_VERSION') }}"
     clone_github_token: "{{ lookup('ansible.builtin.env', 'CLONE_GITHUB_TOKEN') }}"
   tasks:
-
-    - name: Gather EC2 facts
-      delegate_to: "{{ groups['nginx'] | first }}"
-      amazon.aws.ec2_metadata_facts:
-      failed_when: false
-
-    - name: Set hostname fact from EC2 or localhost
-      ansible.builtin.set_fact:
-        node_hostname: "{{ ansible_ec2_public_hostname | default('localhost') }}"
+    - name: Detect ec2 hostname
+      ansible.builtin.include_tasks: "tasks/detect_ec2_node_hostname.yml"
 
     - name: Set hostname as known_urls
       ansible.builtin.blockinfile:

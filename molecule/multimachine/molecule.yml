@@ -10,6 +10,7 @@ platforms:
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    region: ${AWS_REGION}
     groups:
       - database
     tags:
@@ -22,6 +23,7 @@ platforms:
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    region: ${AWS_REGION}
     groups:
       - search
     tags:
@@ -34,6 +36,7 @@ platforms:
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    region: ${AWS_REGION}
     groups:
       - repository
       - trusted_resource_consumers
@@ -47,6 +50,7 @@ platforms:
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    region: ${AWS_REGION}
     groups:
       - repository
       - trusted_resource_consumers
@@ -60,6 +64,7 @@ platforms:
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    region: ${AWS_REGION}
     groups:
       - repository
       - trusted_resource_consumers
@@ -73,6 +78,7 @@ platforms:
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    region: ${AWS_REGION}
     groups:
       - transformers
     tags:
@@ -85,6 +91,7 @@ platforms:
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    region: ${AWS_REGION}
     groups:
       - syncservice
     tags:
@@ -97,6 +104,7 @@ platforms:
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    region: ${AWS_REGION}
     groups:
       - adw
       - trusted_resource_consumers
@@ -110,6 +118,7 @@ platforms:
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
+    region: ${AWS_REGION}
     groups:
       - nginx
       - trusted_resource_consumers

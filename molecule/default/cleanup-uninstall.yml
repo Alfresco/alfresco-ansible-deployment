@@ -1,6 +1,0 @@
----
-- name: Default cleanup
-  import_playbook: ./cleanup.yml
-
-- name: Uninstall playbook
-  import_playbook: ../../playbooks/platform-uninstall.yml

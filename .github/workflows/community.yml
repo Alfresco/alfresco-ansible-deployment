@@ -33,6 +33,7 @@ jobs:
           - name: transformers
     env:
       PY_COLORS: 1
+      PYTHONUNBUFFERED: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v3

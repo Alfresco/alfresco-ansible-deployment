@@ -1,6 +1,6 @@
 ---
 - name: Default cleanup
-  import_playbook: ../default/cleanup-uninstall.yml
+  import_playbook: ../default/cleanup.yml
 
 - name: Multimachine cleanup
   hosts: localhost
@@ -16,15 +16,10 @@
       register: contentstore
 
     - name: Reset repo host_vars files
-      blockinfile:
+      ansible.builtin.blockinfile:
         state: absent
         marker: >-
           # {mark} CS_STORAGE VARS
-        block: |
-          cs_storage:
-            type: nfs
-            device: {{ item | map('extract', hostvars, ['cs_storage','device']) }}
-            options: _netdev,noatime,nodiratime,tcp,soft,intr
         path: host_vars/{{ item }}.yml
       loop: "{{ molecule_yml.platforms | selectattr('name', 'in', groups.repository) | map(attribute='name') }}"
 
@@ -41,7 +36,7 @@
       register: describe_broker_output
 
     - name: Set broker-id
-      set_fact:
+      ansible.builtin.set_fact:
         broker_id: "{{ (describe_broker_output.stdout | from_json).BrokerId }}"
       when: describe_broker_output.stdout | length > 0
 
