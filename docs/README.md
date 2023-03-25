@@ -71,7 +71,7 @@ While ACS supports a wide range of OS, the playbook is only known to work and is
 | SUSE 15.0           | -                  | -                  | -                  | :x:                | :x:                |
 | SUSE 12.0 SP1 x64   | -                  | -                  | -                  | :x:                | :x:                |
 
-> Ansible version 2.12.x is used for testing this playbook
+> Ansible version used for testing this playbook can be retrieved [here](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/Pipfile#L7).
 
 The table below shows the version of the components deployed by the playbook for ACS 7.x.
 
