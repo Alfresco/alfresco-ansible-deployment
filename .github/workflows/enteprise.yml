@@ -25,6 +25,7 @@ jobs:
           - image: ubuntu:20.04
           - image: rockylinux:8
         role:
+          - name: acc
           - name: adw
           - name: search_enterprise
           - name: repository
