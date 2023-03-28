@@ -9,4 +9,4 @@ argument_specs:
       setup_vhosts:
         description: If the nginx reverse proxy vhosts should be enabled
         type: bool
-        default: false
+        default: true

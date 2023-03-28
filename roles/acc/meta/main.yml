@@ -16,3 +16,4 @@ galaxy_info:
         - "8"
 dependencies:
   - role: nginx
+    setup_vhosts: false
