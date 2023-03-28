@@ -1,6 +1,6 @@
 - name: Verify
   hosts: all
-  gather_facts: false
+  gather_facts: true
   tasks:
     - name: Populate service facts
       ansible.builtin.service_facts:
@@ -11,9 +11,19 @@
           - ansible_facts.services['nginx.service'] is defined
           - ansible_facts.services['nginx.service'].state == 'running'
 
+    - name: Load nginx variables (but I am not sure I should really do it)
+      ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', params) }}"
+      vars:
+        params:
+          files:
+            - '{{ansible_os_family}}.yml'
+            - main.yml
+          paths:
+            - '../../../nginx/vars'
+
     - name: Peek that app config
       stat:
-        path: /usr/share/nginx/html/control-center/app.config.json
+        path: "{{ nginx_default_vhost_docroot }}/control-center/app.config.json"
       register: app_config_json
 
     - name: Ensure that app config exists
