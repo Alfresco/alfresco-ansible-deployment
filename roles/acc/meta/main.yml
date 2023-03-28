@@ -1,0 +1,11 @@
+galaxy_info:
+  author: Alfresco Ops Readiness Team
+  description: Configure Alfresco Control Center
+  company: Hyland
+  license: Apache-2.0
+
+  min_ansible_version: "2.1"
+  galaxy_tags: []
+
+dependencies:
+  - role: nginx

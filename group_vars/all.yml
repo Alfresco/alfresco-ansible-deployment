@@ -71,6 +71,10 @@ sync:
   repository: >-
     {{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x
   version: 3.9.0
+acc:
+  artifact_name: alfresco-control-center
+  repository: "{{ nexus_repository.development_releases }}"
+  version: 7.9.0
 supported_os:
   RedHat:
     versions:
@@ -98,6 +102,10 @@ downloads:
     {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip
   acs_zip_sha1_checksum_url: >-
     {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip.sha1
+  acc_zip_url: >-
+    {{ acc.repository }}/{{ acc.artifact_name }}/{{ acc.version }}/{{ acc.artifact_name }}-{{ acc.version }}.zip
+  acc_zip_sha1_checksum_url: >-
+    {{ acc.repository }}/{{ acc.artifact_name }}/{{ acc.version }}/{{ acc.artifact_name }}-{{ acc.version }}.zip.sha1
   adw_zip_url: >-
     {{ adw.repository }}/{{ adw.artifact_name }}/{{ adw.version }}/{{ adw.artifact_name }}-{{ adw.version }}.zip
   adw_zip_sha1_checksum_url: >-

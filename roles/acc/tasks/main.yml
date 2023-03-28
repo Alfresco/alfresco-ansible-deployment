@@ -1,0 +1,37 @@
+---
+- name: Create "{{ nginx_default_vhost_docroot }}/{{ acc_context }}/" dir
+  become: true
+  file:
+    path: "{{ nginx_default_vhost_docroot }}/{{ acc_context }}/"
+    state: directory
+    mode: "0755"
+
+- name: Download alfresco-control-center-{{ acc.version }}.zip
+  get_url:
+    url: "{{ downloads.acc_zip_url }}"
+    dest: "{{ download_location }}/alfresco-control-center-{{ acc.version }}.zip"
+    checksum: sha1:{{ lookup('url', downloads.acc_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
+    mode: 'u=r,g=r,o=r'
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+    timeout: 570
+
+- name: Extract alfresco-control-center-{{ acc.version }}.zip
+  become: true
+  unarchive:
+    src: "{{ download_location }}/alfresco-control-center-{{ acc.version }}.zip"
+    dest: "{{ nginx_default_vhost_docroot }}/{{ acc_context }}/"
+    remote_src: true
+    creates: "{{ nginx_default_vhost_docroot }}/{{ acc_context }}/app.config.json"
+
+- name: Add acc vhost config
+  become: true
+  template:
+    src: default_server.conf.j2
+    dest: "{{ nginx_vhost_path }}/alfresco_acc.conf"
+    force: true
+    owner: root
+    group: root
+    mode: 'u=rw,g=r,o=r'
+  notify:
+    - restart-nginx

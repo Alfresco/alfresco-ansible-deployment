@@ -1,0 +1,12 @@
+argument_specs:
+  main:
+    short_description: Main entrypoint for the nginx role
+    options:
+      setup_service:
+        description: If the nginx base service should be installed
+        type: bool
+        default: true
+      setup_vhosts:
+        description: If the nginx reverse proxy vhosts should be enabled
+        type: bool
+        default: false

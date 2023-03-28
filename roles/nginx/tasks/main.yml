@@ -48,3 +48,4 @@
 
 - name: Vhosts configuration
   import_tasks: vhosts.yml
+  when: setup_vhosts is defined and setup_vhosts

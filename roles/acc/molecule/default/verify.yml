@@ -1,0 +1,22 @@
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Populate service facts
+      ansible.builtin.service_facts:
+
+    - name: Check that Nginx service is up and running
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['nginx.service'] is defined
+          - ansible_facts.services['nginx.service'].state == 'running'
+
+    - name: Peek that app config
+      stat:
+        path: /usr/share/nginx/html/control-center/app.config.json
+      register: app_config_json
+
+    - name: Ensure that app config exists
+      ansible.builtin.assert:
+        that:
+          - app_config_json.stat.exists
