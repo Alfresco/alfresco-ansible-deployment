@@ -1,6 +1,8 @@
 name: "release"
 on:
   push:
+    branches:
+      - OPSEXP-1990
     tags:
       - v[0-9]+\.[0-9]+\.[0-9]+
 jobs:
@@ -19,6 +21,8 @@ jobs:
       - run: |
           ./scripts/generate-zip.sh
           unzip -l alfresco-ansible-deployment-${VERSION}.zip
+        env:
+          VERSION: 0.0.0
 
         #      - name: Configure AWS credentials
         #        uses: aws-actions/configure-aws-credentials@v2
