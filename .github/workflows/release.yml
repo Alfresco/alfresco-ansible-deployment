@@ -27,7 +27,7 @@ jobs:
 
       - name: Publish to S3 staging bucket
         run: |
-          aws s3 cp dist/alfresco-ansible-deployment-${VERSION}.zip s3://alfresco-artefacts-staging/enterprise/alfresco-ansible-deployment/
+          aws s3 cp alfresco-ansible-deployment-${VERSION}.zip s3://alfresco-artefacts-staging/enterprise/alfresco-ansible-deployment/
 
       - name: Publish on Nexus
         env:
@@ -35,6 +35,6 @@ jobs:
           NEXUS_PASSWORD: ${{ secrets.nexus_password }}
         run: >-
           curl -F "r=releases" -F "g=org.alfresco" -F "a=alfresco-ansible-deployment"
-          -F "v=${VERSION}" -F "p=zip" -F "file=@dist/alfresco-ansible-deployment-${VERSION}.zip"
+          -F "v=${VERSION}" -F "p=zip" -F "file=@alfresco-ansible-deployment-${VERSION}.zip"
           -u "$NEXUS_USERNAME:$NEXUS_PASSWORD"
           https://artifacts.alfresco.com/nexus/service/local/artifact/maven/content
