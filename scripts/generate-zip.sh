@@ -1,4 +1,4 @@
-#!/bin/bash -xe
+#!/bin/bash -e
 
 if [ -z "$VERSION" ]; then
     echo "VERSION must be set"
