@@ -27,4 +27,4 @@ find "$ARTIFACT_NAME" \( -type f \
 	-o -path ./scripts/generate-secret.sh \
 	-o -path ./scripts/vagrant_provision.sh \
 	-o -name .envrc \) \
-	-exec zip "${REPO_ROOT_DIR}/{ARTIFACT_NAME}.zip" {} +
+	-exec zip "${REPO_ROOT_DIR}/${ARTIFACT_NAME}.zip" {} +
