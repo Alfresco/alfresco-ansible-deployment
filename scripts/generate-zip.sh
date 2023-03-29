@@ -6,7 +6,7 @@ if [ -z "$VERSION" ]; then
 fi
 
 # variables
-REPO_ROOT_DIR="$(realpath $(dirname "$0")/..)"
+REPO_ROOT_DIR="$(realpath "$(dirname "$0")"/..)"
 ARTIFACT_NAME="alfresco-ansible-deployment-${VERSION}"
 
 echo "create distribution folder"
@@ -21,7 +21,7 @@ find "$ARTIFACT_NAME" \( -type f \
 	! -path "${ARTIFACT_NAME}/.*" \
 	! -path "${ARTIFACT_NAME}/tests/*" \
 	! -path "${ARTIFACT_NAME}/molecule/*" \
-	! -name "${ARTIFACT_NAME}/puml" \
+	! -name "*.puml" \
 	! -path "${ARTIFACT_NAME}/scripts/*" \
 	! -name ".git*" \
 	! -name alfresco-ansible.pem.enc \
