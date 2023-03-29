@@ -18,13 +18,14 @@ echo "# Run the helper scripts/generate-secrets.sh to kick start your Ansible va
 
 echo "Generating ZIP file..."
 find "$ARTIFACT_NAME" \( -type f \
-	! -path './.*' \
-	! -path './tests/*' \
-	! -path '*/molecule/*' \
-	! -name '*.puml' \
-	! -path './scripts/*' \
+	! -path "./${ARTIFACT_NAME}/.*" \
+	! -path "./${ARTIFACT_NAME}/tests/*" \
+	! -path "*/${ARTIFACT_NAME}/molecule/*" \
+	! -name "*.${ARTIFACT_NAME}/puml" \
+	! -path "./${ARTIFACT_NAME}/scripts/*" \
+	! -name ".git*" \
 	! -name alfresco-ansible.pem.enc \
-	-o -path ./scripts/generate-secret.sh \
-	-o -path ./scripts/vagrant_provision.sh \
+	-o -path ./${ARTIFACT_NAME}/scripts/generate-secret.sh \
+	-o -path ./${ARTIFACT_NAME}/scripts/vagrant_provision.sh \
 	-o -name .envrc \) \
 	-exec zip "${REPO_ROOT_DIR}/${ARTIFACT_NAME}.zip" {} +
