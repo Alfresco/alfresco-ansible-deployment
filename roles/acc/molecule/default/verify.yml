@@ -16,7 +16,7 @@
       vars:
         params:
           files:
-            - '{{ansible_os_family}}.yml'
+            - '{{ ansible_os_family }}.yml'
             - main.yml
           paths:
             - '../../../nginx/vars'
