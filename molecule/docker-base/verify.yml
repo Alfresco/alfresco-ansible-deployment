@@ -1,0 +1,17 @@
+- name: Verify
+  hosts: all
+  gather_facts: false
+  vars:
+    job_name: elasticsearch-connector.service
+  tasks:
+    - name: Populate service facts
+      ansible.builtin.service_facts:
+
+    - name: Check that Elasticsearch Connector service is up and running
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services[job_name] is defined
+          - ansible_facts.services[job_name].state == 'running'
+
+#- name: Run default verify
+#  import_playbook: ../default/verify.yml
