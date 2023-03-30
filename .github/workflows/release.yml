@@ -1,5 +1,6 @@
 name: "release"
 on:
+  workflow_dispatch:
   push:
     tags:
       - v[0-9]+\.[0-9]+\.[0-9]+
@@ -12,13 +13,20 @@ jobs:
 
       - name: Get tag name
         shell: bash
-        run: echo "VERSION=${GITHUB_REF##*/v}" >> $GITHUB_ENV
-      - name: Debug VERSION variable
-        run: echo ${{ env.VERSION }}
+        run: |
+          if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            VERSION="${GITHUB_REF##*/v}"
+          else
+            VERSION="0.0.0"
+          fi
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
-      - run: ./scripts/generate-zip.sh
+      - name: Generate Ansible playbook v${{ env.VERSION }}
+        run: |
+          ./scripts/generate-zip.sh
 
       - name: Configure AWS credentials
+        if: github.event_name != 'workflow_dispatch'
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.S3_STAGING_AWS_ACCESS_KEY_ID }}
@@ -26,15 +34,17 @@ jobs:
           aws-region: eu-west-1
 
       - name: Publish to S3 staging bucket
+        if: github.event_name != 'workflow_dispatch'
         run: |
-          aws s3 cp dist/alfresco-ansible-deployment-${VERSION}.zip s3://alfresco-artefacts-staging/enterprise/alfresco-ansible-deployment/
+          aws s3 cp alfresco-ansible-deployment-${VERSION}.zip s3://alfresco-artefacts-staging/enterprise/alfresco-ansible-deployment/
 
       - name: Publish on Nexus
+        if: github.event_name != 'workflow_dispatch'
         env:
           NEXUS_USERNAME: ${{ secrets.nexus_username }}
           NEXUS_PASSWORD: ${{ secrets.nexus_password }}
         run: >-
           curl -F "r=releases" -F "g=org.alfresco" -F "a=alfresco-ansible-deployment"
-          -F "v=${VERSION}" -F "p=zip" -F "file=@dist/alfresco-ansible-deployment-${VERSION}.zip"
+          -F "v=${VERSION}" -F "p=zip" -F "file=@alfresco-ansible-deployment-${VERSION}.zip"
           -u "$NEXUS_USERNAME:$NEXUS_PASSWORD"
           https://artifacts.alfresco.com/nexus/service/local/artifact/maven/content

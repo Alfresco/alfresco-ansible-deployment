@@ -6,43 +6,26 @@ if [ -z "$VERSION" ]; then
 fi
 
 # variables
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-REPO_ROOT_DIR="${SCRIPT_DIR}/.."
-ARTIFACT_DIR_NAME="alfresco-ansible-deployment-${VERSION}"
-BUILD_DIR="${REPO_ROOT_DIR}/dist/${ARTIFACT_DIR_NAME}"
-ARTIFACT_NAME="${ARTIFACT_DIR_NAME}.zip"
+REPO_ROOT_DIR="$(realpath "$(dirname "$0")"/..)"
+ARTIFACT_NAME="alfresco-ansible-deployment-${VERSION}"
 
 echo "create distribution folder"
-mkdir -p "$BUILD_DIR"
+git clean -f -d
+BUILD_DIR=$(mktemp -d)
+pushd "$BUILD_DIR" && cp -a "${REPO_ROOT_DIR}" "$ARTIFACT_NAME"
 
-cd "$REPO_ROOT_DIR"
+echo "# Run the helper scripts/generate-secrets.sh to kick start your Ansible vault" \
+	> "${ARTIFACT_NAME}/vars/secrets.yml"
 
-echo "Adding main playbook resources"
-echo "You can find full documentation on how to use the playbook for Enterprise deployments here https://docs.alfresco.com/content-services/latest/install/ansible and for Community deployments here https://docs.alfresco.com/content-services/community/install/ansible" > "$BUILD_DIR/README.txt"
-cp -r configuration_files "$BUILD_DIR"
-cp -r docs "$BUILD_DIR"
-cp -r group_vars "$BUILD_DIR"
-cp -r playbooks "$BUILD_DIR"
-rsync -rvq --exclude molecule/ roles "$BUILD_DIR"
-cp inventory_*.yml "$BUILD_DIR"
-cp ./*.md "$BUILD_DIR"
-cp LICENSE "$BUILD_DIR"
-cp ./*-extra-vars.yml "$BUILD_DIR"
-
-echo "Adding vagrant support"
-cp Vagrantfile "$BUILD_DIR"
-mkdir "$BUILD_DIR/scripts"
-cp scripts/vagrant_provision.sh "$BUILD_DIR/scripts"
-
-echo "Adding Ansible Galaxy support"
-cp requirements.yml "$BUILD_DIR"
-
-echo "Adding Pipenv support"
-cp Pipfile Pipfile.lock "$BUILD_DIR"
-
-echo ""
 echo "Generating ZIP file..."
-cd "$REPO_ROOT_DIR/dist"
-zip -r "$ARTIFACT_NAME" "$ARTIFACT_DIR_NAME"
-
-echo "Done"
+find "$ARTIFACT_NAME" \( -type f \
+	! -path "${ARTIFACT_NAME}/.*" \
+	! -path "${ARTIFACT_NAME}/tests/*" \
+	! -path "${ARTIFACT_NAME}*/molecule/*" \
+	! -name "*.puml" \
+	! -path "${ARTIFACT_NAME}/scripts/*" \
+	! -name ".git*" \
+	! -name alfresco-ansible.pem.enc \
+	-o -path "${ARTIFACT_NAME}/scripts/generate-secret.sh" \
+	-o -path "${ARTIFACT_NAME}/scripts/vagrant_provision.sh" \) \
+	-exec zip "${REPO_ROOT_DIR}/${ARTIFACT_NAME}.zip" {} +
