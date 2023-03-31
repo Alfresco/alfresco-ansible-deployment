@@ -43,6 +43,9 @@
     - name: Early secrets loading from vault
       include_vars: ../../vars/secrets.yml
 
+    - debug:
+        var: elasticsearch_password
+
     - name: Request OpenSearch domain creation
       vars:
         ec2_sg: "{{ meta_ec2.instances | json_query('[].security_groups[].group_id') }}"
