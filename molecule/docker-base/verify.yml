@@ -1,17 +1,26 @@
 - name: Verify
   hosts: all
   gather_facts: false
-  vars:
-    job_name: elasticsearch-connector.service
   tasks:
     - name: Populate service facts
       ansible.builtin.service_facts:
 
-    - name: Check that Elasticsearch Connector service is up and running
+    - name: Check that expected services are up and running
       ansible.builtin.assert:
+        quiet: true
         that:
-          - ansible_facts.services[job_name] is defined
-          - ansible_facts.services[job_name].state == 'running'
+          - ansible_facts.services[item] is defined
+          - ansible_facts.services[item].state == 'running'
+      loop:
+        - activemq.service
+        - alfresco-content.service
+        - alfresco-search.service
+        - alfresco-shared-fs.service
+        - alfresco-sync.service
+        - alfresco-tengine-aio.service
+        - alfresco-transform-router.service
+        - nginx.service
+        - postgresql-14.service
 
-#- name: Run default verify
-#  import_playbook: ../default/verify.yml
+- name: Run default verify
+  import_playbook: ../default/verify.yml
