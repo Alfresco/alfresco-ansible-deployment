@@ -21,7 +21,7 @@ if [ -z "${SECRET_KEY}" ]; then
     exit_abnormal
 fi
 
-RANDOM_STRING=$(ansible -m ansible.builtin.debug -a "var=lookup('password','/dev/null',chars=['ascii_letters','digits','+$?/&\,;()[]:_='],length=33)" localhost)
+RANDOM_STRING=$(ansible -m ansible.builtin.command -a "echo {{ lookup('password','/dev/null',chars=['ascii_letters','digits','+$?/&\,;()[]:_='],length=33) }}" localhost)
 if [ "$MODE" == 'plaintext' ]; then
     echo "${SECRET_KEY}: \"$RANDOM_STRING\""
 elif [ "$MODE" == 'plugin' ]; then
