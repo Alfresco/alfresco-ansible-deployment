@@ -283,6 +283,27 @@
   tags:
     - search_enterprise
 
+- name: Alfresco Control Center Role
+  hosts: acc
+  gather_facts: no
+  roles:
+    - role: "../roles/acc"
+      when: acs.edition == "Enterprise"
+  post_tasks:
+    - name: Update installation status file with ACC
+      become: yes
+      vars:
+        acc_components:
+          acc: "{{ acc }}"
+      ansible.builtin.blockinfile:
+        block: "{{ acc_components | to_nice_yaml(indent=2) }}"
+        create: yes
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: ACC_BEGIN
+        marker_end: ACC_END
+  tags:
+    - acc
+
 - name: Alfresco Digital Workspace Role
   hosts: adw
   gather_facts: no
