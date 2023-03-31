@@ -1,8 +1,4 @@
 ---
-- name: Include OS specific variables
-  include_vars: "{{ item }}"
-  loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
-
 - name: Create "{{ nginx_default_vhost_docroot }}/{{ acc_context }}/" dir
   become: true
   file:
@@ -39,3 +35,11 @@
     mode: 'u=rw,g=r,o=r'
   notify:
     - restart-nginx
+
+- name: Replace placeholders in app.config.json
+  ansible.builtin.replace:
+    path: "{{ app_config_json_path }}"
+    regexp: "{{ '\\${' }}{{ item.key }}{{ '}' }}"
+    replace: "{{ item.value }}"
+    backup: true
+  with_items: "{{ app_default_configuration | dict2items }}"
