@@ -37,5 +37,16 @@
         persistent: true
       when: ansible_selinux.status == "enabled"
 
+    - name: Allow nginx to write logs under {{ logs_folder }}
+      community.general.sefcontext:
+        target: "{{ logs_folder }}(/.*)?"
+        setype: httpd_log_t
+        state: present
+      when: ansible_selinux.status == "enabled"
+
+    - name: Apply new SELinux file context to {{ logs_folder }}
+      ansible.builtin.command: "restorecon -irv {{ logs_folder }}"
+      when: ansible_selinux.status == "enabled"
+
 - name: Vhosts configuration
   import_tasks: vhosts.yml
