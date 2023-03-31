@@ -18,6 +18,7 @@
       community.aws.opensearch:
         domain_name: "{{ domain_name }}"
         state: absent
+        wait_timeout: 1200
         wait: true
 
 - name: Default cleanup
