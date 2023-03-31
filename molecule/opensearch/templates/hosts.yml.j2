@@ -1,0 +1,8 @@
+all:
+  children:
+    external:
+      children:
+        external_elasticsearch:
+          hosts:
+            {{ eshost }}:
+              {{ esattrs | to_yaml }}

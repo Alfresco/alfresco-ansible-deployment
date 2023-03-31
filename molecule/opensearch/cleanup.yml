@@ -1,0 +1,24 @@
+---
+- name: Opensearch cleanup
+  hosts: localhost
+  gather_facts: false
+  vars:
+    aws_region: "{{ lookup('env', 'AWS_REGION') }}"
+    it_platform: >-
+      {{ lookup('ansible.builtin.env', 'MOLECULE_IT_PLATFORM') }}
+    repo_branch: >-
+      {{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}
+    build: >-
+      {{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
+    aws_base_resource_name: "{{ ['molecule', it_platform, repo_branch, build] | join('_') }}"
+    domain_name: >-
+      {{ aws_base_resource_name | ansible.builtin.regex_replace('[^a-zA-Z0-9]','-') | lower | truncate(28, True, '') }}
+  tasks:
+    - name: Destroy Opensearch domain {{ domain_name }}
+      community.aws.opensearch:
+        domain_name: "{{ domain_name }}"
+        state: absent
+        wait: true
+
+- name: Default cleanup
+  import_playbook: ../default/cleanup.yml

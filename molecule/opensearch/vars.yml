@@ -1,0 +1,2 @@
+MOLECULE_IT_IMAGE_ID: ami-0f0f1c02e5e4d9d9f # rhel8
+MOLECULE_IT_PLATFORM: opensearch
