@@ -72,8 +72,14 @@
                 - es:*
               Resource: >-
                 arn:aws:es:{{ aws_region }}:{{ caller_info.account }}:domain/{{ domain_name }}/*
+        encryption_at_rest_options:
+          enabled: true
+        node_to_node_encryption_options:
+          enabled: true
+        domain_endpoint_options:
+          enforce_https: true
         advanced_security_options:
-          enabled: false
+          enabled: true
           internal_user_database_enabled: true
           master_user_options:
             master_user_name: "{{ domain_admin }}"
