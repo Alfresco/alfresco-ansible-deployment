@@ -2,5 +2,5 @@
 # required for settings vars in prepare step
 # BEGIN KNOWN_URLS VAR
 known_urls:
-  - https://ec2-54-229-201-25.eu-west-1.compute.amazonaws.com/share/
+  - https://ec2-3-249-156-32.eu-west-1.compute.amazonaws.com/share/
 # END KNOWN_URLS VAR
