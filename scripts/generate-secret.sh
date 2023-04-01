@@ -22,10 +22,10 @@ if [ -z "${SECRET_KEY}" ]; then
 fi
 
 RANDOM_STRING=$(\
-	ansible -m ansible.builtin.command \
-	-a "echo {{ lookup('password','/dev/null',chars=['ascii_letters','digits','+$?/&\,;()[]:_='],length=33) }}" \
-	localhost -o 2>/dev/null \
-	| awk '{print $NF}' \
+    ansible -m ansible.builtin.command \
+    -a "echo {{ lookup('password','/dev/null',chars=['ascii_letters','digits','+$?/&\,;()[]:_='],length=33) }}" \
+    localhost -o 2>/dev/null \
+    | awk '{print $NF}' \
 )
 if [ "$MODE" == 'plaintext' ]; then
     echo "${SECRET_KEY}: \"$RANDOM_STRING\""
