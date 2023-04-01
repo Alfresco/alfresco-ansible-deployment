@@ -43,9 +43,6 @@
     - name: Early secrets loading from vault
       include_vars: ../../vars/secrets.yml
 
-    - debug:
-        var: elasticsearch_password
-
     - name: Request OpenSearch domain creation
       vars:
         ec2_sg: "{{ meta_ec2.instances | json_query('[].security_groups[].group_id') }}"
@@ -99,7 +96,7 @@
     - name: Gather OpenSearch domain info
       community.aws.opensearch_info:
         domain_name: "{{ domain_name }}"
-      until: es_domain.domains[0].domain_status.endpoints.vpc
+      until: es_domain.domains[0].domain_status.endpoints.vpc | default(false)
       delay: 5
       retries: 10
       register: es_domain
