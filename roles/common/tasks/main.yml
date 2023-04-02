@@ -20,6 +20,13 @@
     name: "{{ utils }}"
     state: present
 
+- name: Ensure a SELinux related packages are installed
+  become: true
+  package:
+    name: "{{ utils_selinux }}"
+    state: present
+  when: ansible_selinux.status == 'enabled'
+
 - name: Prepare Alfresco platform installation
   become: true
   block:

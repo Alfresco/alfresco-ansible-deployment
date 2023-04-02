@@ -4,7 +4,9 @@ utils:
   - unzip
   - tar
   - python-lxml
-  - libselinux-python
-  - libsemanage-python
   - gpg
   - curl
+utils_selinux:
+  - libselinux-python
+  - libsemanage-python
+  - policycoreutils
