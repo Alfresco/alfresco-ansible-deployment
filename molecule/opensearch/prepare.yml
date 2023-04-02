@@ -97,7 +97,7 @@
       community.aws.opensearch_info:
         domain_name: "{{ domain_name }}"
       until: es_domain.domains[0].domain_status.endpoints.vpc | default(false)
-      delay: 5
+      delay: 30
       retries: 10
       register: es_domain
 
