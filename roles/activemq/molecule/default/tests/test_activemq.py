@@ -50,7 +50,7 @@ def test_activemq_service(host):
 
 def test_activemq_web_console(host, get_ansible_vars):
     "Check that ActiveMQ web console is available and returns a HTTP 200 for the home page"
-    cmd = host.run("curl -iL --user admin:{} http://{}:8161".format(get_ansible_vars["activemq_password"], test_host))
+    cmd = host.run('curl -iL --user admin:"{}" http://{}:8161'.format(get_ansible_vars["activemq_password"], test_host))
     assert_that(cmd.stdout, contains_string("Welcome to the Apache ActiveMQ!"))
     assert_that(cmd.stdout, contains_string("200 OK"))
 
