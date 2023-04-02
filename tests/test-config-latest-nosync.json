@@ -1,0 +1,26 @@
+{
+    "config": {
+      "host": "https://ec2-34-244-250-29.eu-west-1.compute.amazonaws.com",
+      "username": "admin",
+      "password": "admin"
+    },
+    "assertions": {
+      "acs": {
+        "edition": "Enterprise",
+        "version": "7.3.0",
+        "identity": false,
+        "modules": [
+          {
+            "id": "org.alfresco.integrations.google.docs",
+            "version": "3.3.0",
+            "installed": true
+          },
+          {
+            "id": "alfresco-aos-module",
+            "version": "1.5.0",
+            "installed": true
+          }
+        ]
+      }
+    }
+  }
