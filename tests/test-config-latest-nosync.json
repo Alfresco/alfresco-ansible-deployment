@@ -1,6 +1,6 @@
 {
     "config": {
-      "host": "https://ec2-34-244-250-29.eu-west-1.compute.amazonaws.com",
+      "host": "TEST_URL",
       "username": "admin",
       "password": "admin"
     },
