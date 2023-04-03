@@ -29,8 +29,19 @@
   ansible.builtin.replace:
     path: "{{ app_config_json_path }}"
     regexp: "{{ '\\${' }}{{ item.key }}{{ '}' }}"
-    replace: "{{ item.value }}"
+    replace: "{{ (item.value is boolean) | ternary(item.value | to_json, item.value) }}"
   with_items: "{{ app_default_configuration | dict2items }}"
+
+- name: Retrieve the current app.config.json contents
+  ansible.builtin.slurp:
+    src: "{{ app_config_json_path }}"
+  register: app_config_json
+
+- name: Ensure that app.config.json is actually a valid json
+  ansible.builtin.assert:
+    that:
+      - app_config_json['content'] | b64decode | from_json
+    quiet: true
 
 - name: Add acc vhost config
   become: true
