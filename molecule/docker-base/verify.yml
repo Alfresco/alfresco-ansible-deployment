@@ -20,7 +20,13 @@
         - alfresco-tengine-aio.service
         - alfresco-transform-router.service
         - nginx.service
-        - postgresql-14.service
+
+    - name: Check that control-center virtualhost is returning expected content
+      ansible.builtin.uri:
+        url: http://localhost/control-center/
+        return_content: true
+      register: this
+      failed_when: "'Alfresco Admin App' not in this.content"
 
 - name: Run default verify
   import_playbook: ../default/verify.yml
