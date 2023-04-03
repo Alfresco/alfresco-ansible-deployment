@@ -15,14 +15,18 @@
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
+  notify:
+    - Extract alfresco-control-center zip
 
-- name: Extract alfresco-control-center-{{ acc.version }}.zip
-  become: true
-  unarchive:
-    src: "{{ download_location }}/alfresco-control-center-{{ acc.version }}.zip"
-    dest: "{{ nginx_default_vhost_docroot }}/{{ acc_context }}/"
-    remote_src: true
-    creates: "{{ nginx_default_vhost_docroot }}/{{ acc_context }}/app.config.json"
+- name: Dump current app configuration to disk
+  ansible.builtin.copy:
+    content: "{{ app_default_configuration | to_json }}"
+    dest: "{{ download_location }}/alfresco-control-center-config.json"
+  notify:
+    - Extract alfresco-control-center zip
+
+- name: Flush handlers
+  meta: flush_handlers
 
 - name: Replace placeholders in app.config.json
   become: true
