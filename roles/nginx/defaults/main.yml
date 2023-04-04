@@ -3,8 +3,6 @@
 nginx_vhost_template: "alfresco.conf.j2"
 nginx_vhosts:
   - listen: "80"
-    root: "{% if ansible_os_family == 'Debian' %}/var/www/html{% else %}/usr/share/nginx/html{% endif %}"
-    index: "index.html index.htm"
     filename: "alfresco.conf"
 
 # role arguments defaults
