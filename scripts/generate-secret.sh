@@ -21,7 +21,14 @@ if [ -z "${SECRET_KEY}" ]; then
     exit_abnormal
 fi
 
-RANDOM_STRING=$(openssl rand -base64 33)
+RANDOM_STRING=$(\
+    ANSIBLE_FORCE_COLOR=False \
+    ANSIBLE_NOCOLOR=True \
+    ansible -m ansible.builtin.command \
+    -a "echo {{ lookup('password','/dev/null',chars=['ascii_letters','digits','+.$?/#@^}()[]_'],length=33) }}" \
+    localhost -o 2>/dev/null \
+    | awk '{print $NF}' \
+)
 if [ "$MODE" == 'plaintext' ]; then
     echo "${SECRET_KEY}: \"$RANDOM_STRING\""
 elif [ "$MODE" == 'plugin' ]; then

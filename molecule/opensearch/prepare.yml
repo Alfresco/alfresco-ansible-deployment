@@ -1,0 +1,113 @@
+---
+- name: Prepare
+  hosts: all:!external
+  gather_facts: false
+  tasks:
+    - name: Make sure python3 is installed
+      package:
+        name: python3
+        state: present
+      become: true
+
+- name: Import default prepare playbook
+  import_playbook: ../default/prepare.yml
+
+- name: Create Opensearch Domain
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  vars:
+    aws_region: "{{ lookup('env', 'AWS_REGION') }}"
+    it_platform: >-
+      {{ lookup('ansible.builtin.env', 'MOLECULE_IT_PLATFORM') }}
+    repo_branch: >-
+      {{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}
+    build: >-
+      {{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
+    aws_base_resource_name: "{{ ['molecule', it_platform, repo_branch, build] | join('_') }}"
+    domain_name: >-
+      {{ aws_base_resource_name | ansible.builtin.regex_replace('[^a-zA-Z0-9]','-') | lower | truncate(28, True, '') }}
+    domain_admin: admin
+  tasks:
+    - name: Gather caller info
+      amazon.aws.aws_caller_info:
+      register: caller_info
+
+    - name: Gather EC2 metadata
+      amazon.aws.ec2_instance_info:
+        filters:
+          instance-state-name: running
+          "tag:Name": "{{ aws_base_resource_name }}"
+      register: meta_ec2
+
+    - name: Early secrets loading from vault
+      include_vars: ../../vars/secrets.yml
+
+    - name: Request OpenSearch domain creation
+      vars:
+        ec2_sg: "{{ meta_ec2.instances | json_query('[].security_groups[].group_id') }}"
+        ec2_instance_ids: "{{ meta_ec2.instances | map(attribute='instance_id') }}"
+        ec2_subnet_ids: "{{ meta_ec2.instances | map(attribute='subnet_id') }}"
+      community.aws.opensearch:
+        domain_name: "{{ domain_name }}"
+        engine_version: OpenSearch_1.3
+        wait: true
+        wait_timeout: 1200
+        cluster_config:
+          instance_type: c6g.large.search
+          instance_count: 2
+          zone_awareness: false
+          dedicated_master: false
+        ebs_options:
+          ebs_enabled: true
+          volume_type: gp2
+          volume_size: 10
+        access_policies:
+          Version: 2012-10-17
+          Statement:
+            - Effect: Allow
+              Principal:
+                AWS: "*"
+              Action:
+                - es:*
+              Resource: >-
+                arn:aws:es:{{ aws_region }}:{{ caller_info.account }}:domain/{{ domain_name }}/*
+        encryption_at_rest_options:
+          enabled: true
+        node_to_node_encryption_options:
+          enabled: true
+        domain_endpoint_options:
+          enforce_https: true
+        advanced_security_options:
+          enabled: true
+          internal_user_database_enabled: true
+          master_user_options:
+            master_user_name: "{{ domain_admin }}"
+            master_user_password: "{{ elasticsearch_password }}"
+        vpc_options:
+          security_groups: "{{ ec2_sg | unique }}"
+          subnets: "{{ ec2_subnet_ids | unique }}"
+        tags:
+          ClientInstances: "{{ molecule_yml.platforms | map(attribute='name') | join('/') }}"
+          Owner: Ops Readiness Team
+          Department: Engineering
+          Production: false
+
+    - name: Gather OpenSearch domain info
+      community.aws.opensearch_info:
+        domain_name: "{{ domain_name }}"
+      until: es_domain.domains[0].domain_status.endpoints.vpc | default(false)
+      delay: 30
+      retries: 10
+      register: es_domain
+
+    - name: Hack inventory to add Opensearch domain
+      vars:
+        eshost: "{{ es_domain.domains[0].domain_status.endpoints.vpc }}"
+        esattrs:
+          elasticsearch_username: "{{ domain_admin }}"
+          elasticsearch_port: 443
+          elasticsearch_protocol: https
+      ansible.builtin.template:
+        src: hosts.yml.j2
+        dest: hosts.yml
