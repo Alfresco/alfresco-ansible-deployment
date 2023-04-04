@@ -1,6 +1,8 @@
 - name: Verify
   hosts: all
   gather_facts: true
+  vars:
+    verify_base_url: http://localhost:8881
   tasks:
     - name: Populate service facts
       ansible.builtin.service_facts:
@@ -11,22 +13,15 @@
           - ansible_facts.services['nginx.service'] is defined
           - ansible_facts.services['nginx.service'].state == 'running'
 
-    - name: Load nginx variables (but I am not sure I should really do it)
-      ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', params) }}"
-      vars:
-        params:
-          files:
-            - '{{ ansible_os_family }}.yml'
-            - main.yml
-          paths:
-            - '../../../nginx/vars'
+    - name: Check that the home contains the expected contents
+      ansible.builtin.uri:
+        url: "{{ verify_base_url }}/"
+        return_content: true
+      register: this
+      failed_when: "'Alfresco Admin App' not in this.content"
 
-    - name: Peek that app config
-      stat:
-        path: "{{ nginx_default_vhost_docroot }}/control-center/app.config.json"
-      register: app_config_json
-
-    - name: Ensure that app config exists
-      ansible.builtin.assert:
-        that:
-          - app_config_json.stat.exists
+    - name: Check that the config contains the expected contents
+      ansible.builtin.uri:
+        url: "{{ verify_base_url }}/app.config.json"
+      register: this
+      failed_when: "this.json.authType !=  'BASIC'"
