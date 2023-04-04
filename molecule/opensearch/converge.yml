@@ -1,7 +1,0 @@
----
-- name: Converge
-  hosts: all
-  tasks:
-    - name: "Include alfresco-ansible-deployment"
-      include_role:
-        name: "alfresco-ansible-deployment"
