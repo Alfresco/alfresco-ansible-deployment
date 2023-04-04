@@ -24,4 +24,4 @@
       ansible.builtin.uri:
         url: "{{ verify_base_url }}/app.config.json"
       register: this
-      failed_when: "this.json.authType !=  'BASIC'"
+      failed_when: "this.json.authType != 'BASIC'"
