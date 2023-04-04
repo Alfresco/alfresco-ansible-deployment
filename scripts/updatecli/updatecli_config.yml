@@ -62,7 +62,6 @@ scms:
       branch: master
       directory: '/tmp/updatecli/trouter'
 
-# Alfresco follow semantic versioning (https://semver.org/)
 # Available selectors: https://github.com/Masterminds/semver#basic-comparisons
 sources:
   acs:
