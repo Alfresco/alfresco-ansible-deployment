@@ -1,0 +1,32 @@
+acs:
+  version: "7.4"
+
+adw:
+  version: "4.0"
+
+aos:
+  version: "1.6"
+
+apiExplorer:
+  version: "7.4"
+
+dsync:
+  version: "4.0"
+
+googleDrive:
+  version: "3.4"
+
+search:
+  version: "2.0"
+
+searchEnterprise:
+  version: "3.3"
+
+transform:
+  version: "3"
+
+trouter:
+  version: "2"
+
+target_file: group_vars/all.yml
+version_pattern: '(-M\d*)?$'
