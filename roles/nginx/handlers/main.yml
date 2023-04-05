@@ -19,6 +19,7 @@
     state: reloaded
 
 - name: Apply new SELinux file contexts
+  become: true
   ansible.builtin.command: "restorecon -irv {{ item }}"
   with_items:
     - "{{ logs_folder }}"
