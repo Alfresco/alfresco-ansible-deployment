@@ -43,10 +43,8 @@
         setype: httpd_log_t
         state: present
       when: ansible_selinux.status == "enabled"
-
-    - name: Apply new SELinux file context to {{ logs_folder }}
-      ansible.builtin.command: "restorecon -irv {{ logs_folder }}"
-      when: ansible_selinux.status == "enabled"
+      notify:
+      - Apply new SELinux file contexts
 
 - name: Vhosts configuration
   import_tasks: vhosts.yml
