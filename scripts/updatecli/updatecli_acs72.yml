@@ -28,5 +28,9 @@ transform:
 trouter:
   version: "1"
 
-target_file: group_vars/all.yml
-acs_version_pattern: '(-M\d*)?$'
+target_file: 7.2.N-extra-vars.yml
+version_pattern: '(-M\d*)?$'
+
+targets:
+  main: true
+  amps: true

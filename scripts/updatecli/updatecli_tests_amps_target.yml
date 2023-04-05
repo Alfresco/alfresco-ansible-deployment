@@ -1,0 +1,4 @@
+target_file: tests/test-extra-vars.yml
+targets:
+  main: false
+  amps: true

@@ -4,6 +4,9 @@ acs:
 adw:
   version: "3.1" # FIXME 4.0
 
+ags:
+  version: "3.5"
+
 aos:
   version: "1.6"
 
@@ -30,3 +33,7 @@ trouter:
 
 target_file: group_vars/all.yml
 version_pattern: '(-M\d*)?$'
+
+targets:
+  main: true
+  amps: true
