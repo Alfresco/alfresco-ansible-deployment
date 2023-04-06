@@ -61,7 +61,7 @@ encryption.keystore.backup.type=JCEKS
 encryption.ssl.truststore.location={{ created_java_truststore | default(java_home + '/lib/security/cacerts') }}
 {% if created_java_keystore | default(False) %}
 encryption.ssl.keystore.location={{ created_java_keystore.path }}
-ssl.repo.password={{ java_keystore_pass }}
+ssl.repo.password={{ repo_keystore.pass | default('') }}
 httpclient.config.transform.mTLSEnabled=true
 {% endif %}
 
