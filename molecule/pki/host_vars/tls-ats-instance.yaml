@@ -1,0 +1,11 @@
+# placeholder
+ansible_user: ansible
+autogen_unsecure_secrets: true
+known_urls:
+  - http://localhost:8080/share
+  - https://someotherapp/
+acs:
+  artifact_name: alfresco-content-services-community-distribution
+  edition: Community
+  repository: "{{ nexus_repository.development_releases }}"
+  version: 7.4.0-A27
