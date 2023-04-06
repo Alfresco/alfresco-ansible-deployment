@@ -117,6 +117,18 @@
         group: "{{ group_name }}"
       changed_when: false
 
+    - name: Add AIO config mTLS config file
+      template:
+        src: application.properties.j2
+        dest: "{{ binaries_folder }}/transform-service/application.properties"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 0600
+      when: tengines_keystore
+      notify:
+        - wait-for-activemq
+        - restart-aio
+
     - name: Add AIO startup script
       template:
         src: ats-ate-aio.sh.j2
