@@ -1,0 +1,8 @@
+[Unit]
+BindsTo=alfresco-content-monitored-startup.service
+
+[Service]
+User={{ username }}
+{%- if repo_keystore and repo_keystore.pass %}
+Environment="JAVA_OPTS=${JAVA_OPTS} -Dssl-keystore='{{ repo_keystore.pass | default('') }}'"
+{%- endif %}
