@@ -69,6 +69,14 @@
   gather_facts: no
   roles:
     - role: "../roles/transformers"
+      tengines_keystore:
+        path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
+        pass: "FAgbreg#rc<F3tgVED"
+        type: JCEKS
+        cert_containers:
+          - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
+            pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
+            add_to_trusted_ca: true
   post_tasks:
     - name: Update installation status file with Transformers
       become: yes
@@ -127,6 +135,14 @@
   gather_facts: no
   roles:
     - role: "../roles/repository"
+      repo_keystore:
+        path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
+        pass: "FAgbreg#rc<F3tgVED"
+        type: JCEKS
+        cert_containers:
+          - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
+            pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
+            add_to_trusted_ca: true
   post_tasks:
     - name: Update installation status file with ACS
       become: yes
