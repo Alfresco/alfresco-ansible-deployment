@@ -66,16 +66,18 @@ httpclient.config.transform.mTLSEnabled=true
 
 alfresco.cluster.enabled={% if groups['repository'] | length > 1 and not cluster_keepoff %}true{% else %}false{% endif %}
 
+{%- macro ats_proto() -%}
+http
+{%- if repo_keystore and repo_keystore.cert_containers -%}
+s
+{%- endif -%}
+{%- endmacro %}
+
 local.transform.service.enabled=true
-localTransform.core-aio.url=http://{{ ats_tengine_aio_host }}:{{ ports_cfg.transformers.tengine }}
+localTransform.core-aio.url={{ ats_proto() }}://{{ ats_tengine_aio_host }}:{{ ports_cfg.transformers.tengine }}
 {% if acs.edition == 'Enterprise' %}
 transform.service.enabled=true
-transform.service.url=http://{{ trouter_host }}:{{ ports_cfg.transformers.trouter }}
-alfresco-pdf-renderer.url=${localTransform.core-aio.url}
-jodconverter.url=${localTransform.core-aio.url}
-img.url=${localTransform.core-aio.url}
-tika.url=${localTransform.core-aio.url}
-transform.misc.url=${localTransform.core-aio.url}
+transform.service.url={{ ats_proto() }}://{{ trouter_host }}:{{ ports_cfg.transformers.trouter }}
 sfs.url=http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}
 {% endif %}
 
