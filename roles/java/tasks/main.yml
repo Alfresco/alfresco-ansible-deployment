@@ -23,7 +23,12 @@
 
     - name: Configure JRE Keystores
       include_tasks: keystores.yml
-      when: java_keystore is defined
+      when:
+        - java_keystore is defined
+        - java_keystore.keys() | length | bool
+        - java_keystore.pass
+        - java_keystore.path
+        - java_keystore.type
 
     - name: Add setenv bash file
       blockinfile:

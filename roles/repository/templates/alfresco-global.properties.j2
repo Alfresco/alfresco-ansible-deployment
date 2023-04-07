@@ -69,7 +69,7 @@ alfresco.cluster.enabled={% if groups['repository'] | length > 1 and not cluster
 
 {%- macro ats_proto() -%}
 http
-{%- if repo_keystore and repo_keystore.cert_containers -%}
+{%- if repo_keystore | default({}) | dict2items | length | bool and repo_keystore.cert_containers | default([]) | length | bool -%}
 s
 {%- endif -%}
 {%- endmacro %}
