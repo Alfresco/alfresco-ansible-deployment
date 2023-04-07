@@ -62,6 +62,7 @@ encryption.ssl.truststore.location={{ created_java_truststore | default(java_hom
 {% if created_java_keystore | default(False) %}
 encryption.ssl.keystore.location={{ created_java_keystore.path }}
 httpclient.config.transform.mTLSEnabled=true
+httpclient.config.transform.hostnameVerificationDisabled=true
 {% endif %}
 
 alfresco.cluster.enabled={% if groups['repository'] | length > 1 and not cluster_keepoff %}true{% else %}false{% endif %}
