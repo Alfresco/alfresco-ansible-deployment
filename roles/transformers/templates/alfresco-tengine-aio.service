@@ -6,7 +6,7 @@ After=syslog.socket network.target
 Type=simple
 User={{ username }}
 ExecStart={{ binaries_folder }}/ats-ate-aio.sh
-WorkingDirectory="{{ ats_home }}"
+WorkingDirectory={{ ats_home }}
 
 [Install]
 WantedBy=multi-user.target
