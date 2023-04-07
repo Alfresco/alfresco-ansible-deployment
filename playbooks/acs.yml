@@ -71,7 +71,7 @@
     - name: Check wether we want mTLS for Tengines
       set_fact:
         tengine_srv_mtls: >-
-          {{ groups.repository | difference(groups.transformers) | length | bool }}
+          {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
       set_fact:
         transformers_keystore:
@@ -146,7 +146,7 @@
     - name: Check wether we want mTLS for Repostory
       set_fact:
         repo_cli_mtls: >-
-          {{ groups.repository | difference(groups.transformers) | length | bool }}
+          {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
       set_fact:
         repository_keystore:

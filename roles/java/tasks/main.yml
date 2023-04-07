@@ -25,10 +25,10 @@
       include_tasks: keystores.yml
       when:
         - java_keystore is defined
-        - java_keystore.keys() | length | bool
-        - java_keystore.pass
-        - java_keystore.path
-        - java_keystore.type
+        - java_keystore | default({}) | dict2items | length > 0
+        - java_keystore.pass is defined
+        - java_keystore.path is defined
+        - java_keystore.type is defined
 
     - name: Add setenv bash file
       blockinfile:
