@@ -124,7 +124,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 0600
-      when: tengines_keystore
+      when: tengines_keystore | default({}) | dict2items | length | bool
       notify:
         - wait-for-activemq
         - restart-aio
