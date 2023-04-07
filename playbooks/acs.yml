@@ -67,16 +67,25 @@
 - name: Transformers Role
   hosts: transformers
   gather_facts: no
+  pre_tasks:
+    - name: Check wether we want mTLS for Tengines
+      set_fact:
+        tengine_srv_mtls: >-
+          {{ groups.repository | difference(groups.transformers) | length | bool }}
+    - name: Build keystore role argument
+      set_fact:
+        transformers_keystore:
+          path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
+          pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
+          type: JCEKS
+          cert_containers:
+            - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
+              pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
+              add_to_trusted_ca: true
+      when: tengine_srv_mtls and acs.edition == 'Community'
   roles:
     - role: "../roles/transformers"
-      tengines_keystore:
-        path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
-        pass: "FAgbreg#rc<F3tgVED"
-        type: JCEKS
-        cert_containers:
-          - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
-            pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
-            add_to_trusted_ca: true
+      tengines_keystore: "{{ transformers_keystore }}"
   post_tasks:
     - name: Update installation status file with Transformers
       become: yes
@@ -133,16 +142,25 @@
 - name: Alfresco Repository Role
   hosts: repository
   gather_facts: no
+  pre_tasks:
+    - name: Check wether we want mTLS for Repostory
+      set_fact:
+        repo_cli_mtls: >-
+          {{ groups.repository | difference(groups.transformers) | length | bool }}
+    - name: Build keystore role argument
+      set_fact:
+        repository_keystore:
+          path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
+          pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
+          type: JCEKS
+          cert_containers:
+            - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
+              pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
+              add_to_trusted_ca: true
+      when: repo_cli_mtls and acs.edition == 'Community'
   roles:
     - role: "../roles/repository"
-      repo_keystore:
-        path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
-        pass: "FAgbreg#rc<F3tgVED"
-        type: JCEKS
-        cert_containers:
-          - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
-            pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
-            add_to_trusted_ca: true
+      repo_keystore: "{{ repository_keystore }}"
   post_tasks:
     - name: Update installation status file with ACS
       become: yes
