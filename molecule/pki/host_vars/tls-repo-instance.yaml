@@ -1,6 +1,5 @@
 # placeholder
 ansible_user: ansible
-autogen_unsecure_secrets: true
 known_urls:
   - http://localhost:8080/share
   - https://someotherapp/
