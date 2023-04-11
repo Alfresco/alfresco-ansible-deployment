@@ -227,47 +227,13 @@ targets:
       key: sfs.version
       file: '{{ .target_file }}'
   {{- end }}
-  {{- if index . "targets" "amps" }}
-  agsRepoAmp:
-    name: Bump AGS Repo AMP
+  {{ range $index, $element := index . "targets" "amps" }}
+  {{ $indexAmp := printf "%s%s" $index "Amp"}}
+  {{ $indexAmp }}:
+    name: Bump {{ $index }} AMP
     kind: yaml
-    sourceid: agsAmp
+    sourceid: {{ $element.sourceid }}
     spec:
-      key: amps.ags_repo.version
-      file: '{{ .target_file }}'
-  agsShareAmp:
-    name: Bump AGS Share AMP
-    kind: yaml
-    sourceid: agsAmp
-    spec:
-      key: amps.ags_share.version
-      file: '{{ .target_file }}'
-  aosAmp:
-    name: Bump AOS AMP
-    kind: yaml
-    sourceid: aosAmp
-    spec:
-      key: amps.aos_module.version
-      file: '{{ .target_file }}'
-  dsyncAmp:
-    name: Bump Device Sync AMP
-    kind: yaml
-    sourceid: dsync
-    spec:
-      key: amps.device_sync.version
-      file: '{{ .target_file }}'
-  googleDriveRepoAmp:
-    name: Bump Google Drive Repo AMP
-    kind: yaml
-    sourceid: googleDriveAmp
-    spec:
-      key: amps.googledrive_repo.version
-      file: '{{ .target_file }}'
-  googleDriveShareAmp:
-    name: Bump Google Drive Share AMP
-    kind: yaml
-    sourceid: googleDriveAmp
-    spec:
-      key: amps.googledrive_share.version
-      file: '{{ .target_file }}'
+      key: amps.{{ $element.key_selector }}.version
+      file: {{ $.target_file }}
   {{- end }}

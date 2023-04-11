@@ -1,13 +1,9 @@
-target_file: tests/test-extra-vars.yml
+# Common updatecli values for different acs versions
+# meant to be used with at least another updatecli_acsxx.yml value file
+
 targets:
-  main: false
+  main: true
   amps:
-    agsRepo:
-      sourceid: agsAmp
-      key_selector: ags_repo
-    agsShare:
-      sourceid: agsAmp
-      key_selector: ags_share
     aos:
       sourceid: aosAmp
       key_selector: aos_module

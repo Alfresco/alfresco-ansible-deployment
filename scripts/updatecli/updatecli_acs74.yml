@@ -33,7 +33,3 @@ trouter:
 
 target_file: group_vars/all.yml
 version_pattern: '(-M\d*)?$'
-
-targets:
-  main: true
-  amps: true
