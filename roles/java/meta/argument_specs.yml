@@ -1,23 +1,27 @@
 ---
 argument_specs:
-  main:
+  keystores:
     short_description: Main entrypoint for the java role
     options:
       java_keystore:
+        required: true
         type: dict
         options:
           path:
             description: |
               Local path to the java keystore
             type: str
+            required: true
           pass:
             description: |
               Password to unlock the java keystore
             type: str
+            required: true
           type:
             description: |
               Type of keystore (JKS, JCEKS, PKCS12)
             type: str
+            required: true
           cert_containers:
             description: |
               A list of dict to represent certificates to import in keystore.
@@ -63,7 +67,6 @@ argument_specs:
                 description: |
                   Length of the security key
                 default: 256
-        required: false
         description: |
           Representation of the JRE keystore
           The whole object needs to be given (defaults are not merged)
