@@ -70,7 +70,7 @@
   pre_tasks:
     - name: Check wether we want mTLS for Tengines
       set_fact:
-        tengine_srv_mtls: >-
+        tengine_mtls: >-
           {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
       set_fact:
@@ -82,10 +82,13 @@
             - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
-      when: tengine_srv_mtls and acs.edition == 'Community'
+      when: tengine_mtls and acs.edition == 'Community'
   roles:
     - role: "../roles/transformers"
       tengines_keystore: "{{ transformers_keystore }}"
+      when: transformers_keystore is defined
+    - role: "../roles/transformers"
+      when: transformers_keystore is undefined
   post_tasks:
     - name: Update installation status file with Transformers
       become: yes
@@ -161,6 +164,9 @@
   roles:
     - role: "../roles/repository"
       repo_keystore: "{{ repository_keystore }}"
+      when: repository_keystore is defined
+    - role: "../roles/repository"
+      when: repository_keystore is undefined
   post_tasks:
     - name: Update installation status file with ACS
       become: yes
