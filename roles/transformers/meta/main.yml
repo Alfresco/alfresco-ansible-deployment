@@ -17,4 +17,3 @@ galaxy_info:
 allow_duplicates: false
 dependencies:
   - role: java
-    java_keystore: "{{ tengines_keystore | default({}) }}"

@@ -8,6 +8,14 @@
   include_vars:
     file: "{{ os_version_yml }}"
 
+- name: Instanciate Java keystore
+  ansible.builtin.include_role:
+    name: ../roles/java
+    tasks_from: keystores
+  when: tengines_keystore
+  vars:
+    java_keystore: "{{ tengines_keystore }}"
+
 - name: Download libreoffice package archive
   get_url:
     url: "{{ libreoffice_archive_url }}"
@@ -124,7 +132,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 0600
-      when: tengines_keystore | default({}) | dict2items | length > 0
+      when: tengines_keystore
       notify:
         - wait-for-activemq
         - restart-aio
