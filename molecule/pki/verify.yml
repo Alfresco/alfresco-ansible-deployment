@@ -1,5 +1,5 @@
 ---
-- name: Verify
+- name: Verify PKI generation
   hosts: all
   gather_facts: false
   tasks:
@@ -24,3 +24,54 @@
         that:
           - "'BEGIN RSA PRIVATE KEY' in p12.pkcs12 | b64decode"
           - "'BEGIN CERTIFICATE' in p12.pkcs12 | b64decode"
+
+- name: Verify ACS target
+  hosts: repository
+  gather_facts: true
+  tasks:
+    - name: Populate services facts
+      ansible.builtin.service_facts:
+
+    - name: Check services up
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['alfresco-content.service'].state == "running"
+
+- name: Verify ATS target
+  hosts: transformers
+  gather_facts: true
+  tasks:
+    - name: Populate services facts
+      ansible.builtin.service_facts:
+
+    - name: Check in logs a client did connect
+      ansible.builtin.slurp:
+        src: /var/log/alfresco/ats-ate-aio.log
+      register: aio_log
+      become: true
+      until: "'GET Transform Config version' in aio_log.content | b64decode"
+      retries: 10
+      delay: 3
+
+    - name: Copy cert as PEM
+      ansible.builtin.copy:
+        src: /tmp/{{ inventory_hostname }}.crt
+        dest: /tmp
+    - name: Check certificates requires auth
+      ansible.builtin.uri:
+        url: https://localhost:8090
+        client_cert: "{{ item.client_crt | default(omit) }}"
+        validate_certs: "{{ item.check_cert | default(omit) }}"
+      register: response
+      ignore_errors: true
+      loop:
+        - check_cert: true
+        - check_cert: false
+          client_crt: /tmp/{{ inventory_hostname }}.crt
+
+    - name: Check Assertions
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['alfresco-tengine-aio.service'].state == "running"
+          - "'SSL: CERTIFICATE_VERIFY_FAILED' in response.results[0].msg"
+          - response.results[1].status == 200
