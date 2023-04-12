@@ -114,7 +114,7 @@ jobs:
 
   ec2:
     name: ${{ matrix.molecule_scenario.desc }}
-    if: github.actor != 'dependabot[bot]' && github.actor  == 'dvador'
+    if: github.actor != 'dependabot[bot]'
     needs:
       - docker
     runs-on: ubuntu-latest
