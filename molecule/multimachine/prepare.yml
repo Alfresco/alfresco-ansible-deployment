@@ -99,20 +99,22 @@
         file: ../../vars/secrets.yml
 
     - name: Create mq broker
-      ansible.builtin.command: |
-        aws mq create-broker --broker-name {{ broker_name }} \
-          --deployment-mode SINGLE_INSTANCE \
-          --engine-type ACTIVEMQ \
-          --host-instance-type mq.t3.micro \
-          --engine-version 5.15.15 \
-          --users Password={{ activemq_password | quote }},Username=alfresco \
-          --security-groups {{ ec2_groups_lookup.security_groups[0].group_id }} \
-          --publicly-accessible \
-          --no-auto-minor-version-upgrade
+      ansible.builtin.command:
+        cmd: >
+          aws mq create-broker --broker-name {{ broker_name }}
+            --deployment-mode SINGLE_INSTANCE
+            --engine-type ACTIVEMQ
+            --host-instance-type mq.t3.micro
+            --engine-version 5.15.15
+            --users Password={{ activemq_password | quote }},Username=alfresco
+            --security-groups {{ ec2_groups_lookup.security_groups[0].group_id }}
+            --publicly-accessible
+            --no-auto-minor-version-upgrade
 
     - name: Wait for creation
-      ansible.builtin.command: |
-        aws mq describe-broker --broker-id {{ broker_name }}
+      ansible.builtin.command:
+        cmd: |
+          aws mq describe-broker --broker-id {{ broker_name }}
       register: describe_broker_output
       until: ((describe_broker_output.stdout | from_json).BrokerState) == 'RUNNING'
       retries: 20
