@@ -1,18 +1,25 @@
 ---
 - name: Converge
   hosts: all
-  roles:
-    - role: java
-      java_keystore:
-        type: JCEKS
-        path: "{{ java_home }}/lib/security/keystore.jceks"
-        pass: alfresco
-        seckeys:
-          - name: test
-            algorythm: AES
-            length: 256
-            pass: alfresco with space
-        cert_containers:
-          - path: "{{ inventory_hostname }}.p12"
-            pass: alfresco with space
-            add_to_trusted_ca: true
+  tasks:
+    - name: Include java Role
+      ansible.builtin.include_role:
+        name: java
+    - name: Include java Role
+      ansible.builtin.include_role:
+        name: java
+        tasks_from: keystores
+      vars:
+        java_keystore:
+          type: JCEKS
+          path: "{{ java_home }}/lib/security/keystore.jceks"
+          pass: alfresco
+          seckeys:
+            - name: test
+              algorythm: AES
+              length: 256
+              pass: alfresco with space
+          cert_containers:
+            - path: "{{ inventory_hostname }}.p12"
+              pass: alfresco with space
+              add_to_trusted_ca: true
