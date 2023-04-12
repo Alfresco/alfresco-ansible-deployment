@@ -85,10 +85,7 @@
       when: tengine_mtls and acs.edition == 'Community'
   roles:
     - role: "../roles/transformers"
-      tengines_keystore: "{{ transformers_keystore }}"
-      when: transformers_keystore is defined
-    - role: "../roles/transformers"
-      when: transformers_keystore is undefined
+      tengines_keystore: "{{ transformers_keystore | default({}) }}"
   post_tasks:
     - name: Update installation status file with Transformers
       become: yes
@@ -163,10 +160,7 @@
       when: repo_cli_mtls and acs.edition == 'Community'
   roles:
     - role: "../roles/repository"
-      repo_keystore: "{{ repository_keystore }}"
-      when: repository_keystore is defined
-    - role: "../roles/repository"
-      when: repository_keystore is undefined
+      repo_keystore: "{{ repository_keystore | default({}) }}"
   post_tasks:
     - name: Update installation status file with ACS
       become: yes
