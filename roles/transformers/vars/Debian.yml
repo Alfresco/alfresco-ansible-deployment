@@ -12,3 +12,4 @@ utils_transform:
   - fonts-dejavu
   - libfreetype6
   - libx11-xcb1
+  - libimage-exiftool-perl
