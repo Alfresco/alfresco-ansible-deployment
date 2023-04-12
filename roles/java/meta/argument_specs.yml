@@ -10,18 +10,18 @@ argument_specs:
           path:
             description: |
               Local path to the java keystore
-            type: str
             required: true
+            type: str
           pass:
             description: |
               Password to unlock the java keystore
-            type: str
             required: true
+            type: str
           type:
             description: |
               Type of keystore (JKS, JCEKS, PKCS12)
-            type: str
             required: true
+            type: str
           cert_containers:
             description: |
               A list of dict to represent certificates to import in keystore.
@@ -33,10 +33,12 @@ argument_specs:
                 type: str
                 description: |
                   Local path to the host specific PKCS12 certificate container
+                required: true
               pass:
                 type: str
                 description: |
                   Certificate container password
+                required: true
               add_to_trusted_ca:
                 type: bool
                 description: |
@@ -53,10 +55,12 @@ argument_specs:
                 type: str
                 description: |
                   Name of the security key to  use as an alias in the keystore
+                required: true
               pass:
                 type: str
                 description: |
                   Passphrase of the security key
+                required: true
               algorythm:
                 type: str
                 description: |
