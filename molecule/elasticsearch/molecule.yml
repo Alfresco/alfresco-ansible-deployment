@@ -34,8 +34,6 @@ provisioner:
   name: ansible
   ansible_args:
     - -e
-    - "@tests/test-extra-vars.yml"
-    - -e
     - "@tests/test-ssl.yml"
   inventory:
     links:
