@@ -12,7 +12,7 @@
       vars:
         java_keystore:
           type: JCEKS
-          path: "{{ java_home }}/lib/security/keystore.jceks"
+          path: "{{ java_home }}/lib/security/keystore/ansible.jceks"
           pass: alfresco
           seckeys:
             - name: test
