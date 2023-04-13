@@ -21,14 +21,21 @@ if [ -z "${SECRET_KEY}" ]; then
     exit_abnormal
 fi
 
-RANDOM_STRING=$(\
-    ANSIBLE_FORCE_COLOR=False \
-    ANSIBLE_NOCOLOR=True \
-    ansible -m ansible.builtin.command \
-    -a "echo {{ lookup('password','/dev/null',chars=['ascii_letters','digits','+./#@^()[_'],length=33) }}" \
-    localhost -o 2>/dev/null \
-    | awk '{print $NF}' \
-)
+while true; do
+    RANDOM_STRING=$(\
+        ANSIBLE_FORCE_COLOR=False \
+        ANSIBLE_NOCOLOR=True \
+        ansible -m ansible.builtin.command \
+        -a "echo {{ lookup('password','/dev/null',chars=['ascii_letters','digits','+./#@^()[_'],length=33) }}" \
+        localhost -o 2>/dev/null \
+        | awk '{print $NF}' \
+    )
+    # Ensure that the generated password meet simple complexity requirements
+    if [[ $RANDOM_STRING =~ [A-Z] && $RANDOM_STRING =~ [a-z] && $RANDOM_STRING =~ [0-9] && $RANDOM_STRING =~ [^A-Za-z0-9] ]]; then
+        break
+    fi
+done
+
 if [ "$MODE" == 'plaintext' ]; then
     echo "${SECRET_KEY}: \"$RANDOM_STRING\""
 elif [ "$MODE" == 'plugin' ]; then
