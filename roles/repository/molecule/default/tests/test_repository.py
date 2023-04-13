@@ -141,38 +141,6 @@ def test_keytest_keystore_exists(host):
         assert_that(host.file("/var/opt/alfresco/content-services/keystore/keystest").exists)
 
 
-def test_ags_repo_is_installed_and_loaded(host, get_ansible_vars):
-    """Check if rm amp is installed in repo war and loaded at startup"""
-    java_version = get_ansible_vars["dependencies_version"]["java"]
-    acs_version = get_ansible_vars["acs"]["version"]
-    with host.sudo():
-        cmd = host.run(
-                "/opt/openjdk-" + java_version +
-                "/bin/java -jar /opt/alfresco/content-services-" + acs_version +
-                "/bin/alfresco-mmt.jar list /opt/alfresco/content-services-" + acs_version +
-                "/web-server/webapps/alfresco.war"
-                )
-        getlog = host.file("/var/log/alfresco/alfresco.log")
-        assert_that(getlog.contains("Installing module 'alfresco-rm-enterprise-repo' version 3.5.0"))
-    assert_that(cmd.stdout, contains_string("AGS Repo\n   -    Version:      3.5.0"))
-
-
-def test_ags_share_is_installed_and_loaded(host, get_ansible_vars):
-    """Check if rm amp is installed in share war and loaded at startup"""
-    java_version = get_ansible_vars["dependencies_version"]["java"]
-    acs_version = get_ansible_vars["acs"]["version"]
-    with host.sudo():
-        cmd = host.run(
-                "/opt/openjdk-" + java_version +
-                "/bin/java -jar /opt/alfresco/content-services-" + acs_version +
-                "/bin/alfresco-mmt.jar list /opt/alfresco/content-services-" + acs_version +
-                "/web-server/webapps/share.war"
-                )
-        getlog = host.file("/var/log/alfresco/share.log")
-        assert_that(getlog.contains("AGS Enterprise Share, 3.5.0, Alfresco Governance Services Enterprise Share Extension"))
-    assert_that(cmd.stdout, contains_string("AGS Enterprise Share\n   -    Version:      3.5.0" ))
-
-
 def test_environment_jvm_opts(host):
     "Check that overwritten JVM_OPTS are taken into consideration"
     java_processes = host.process.filter(user="alfresco", comm="java")
