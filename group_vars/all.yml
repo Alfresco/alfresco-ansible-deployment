@@ -16,6 +16,9 @@ nexus_repository:
     {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.enterprise.repository }}/{{ artifacts_repositories.enterprise.group_id }}
   development_releases: >-
     {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.development.repository }}/{{ artifacts_repositories.enterprise.group_id }}
+
+# All references to nexus_repository.development_releases in the below
+# components specs must be removed BEFORE merging to master
 acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
