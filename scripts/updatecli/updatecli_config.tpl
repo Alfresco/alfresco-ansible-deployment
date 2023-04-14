@@ -7,6 +7,12 @@ scms:
         url: https://github.com/Alfresco/acs-packaging.git
         branch: master
         directory: '/tmp/updatecli/acs'
+  acsEntRepo:
+    kind: git
+    spec:
+        url: git@github.com:Alfresco/alfresco-enterprise-repo.git
+        branch: master
+        directory: '/tmp/updatecli/acsEnt'
   adwRepo:
     kind: git
     spec:
@@ -62,7 +68,6 @@ scms:
       branch: master
       directory: '/tmp/updatecli/trouter'
 
-# Alfresco follow semantic versioning (https://semver.org/)
 # Available selectors: https://github.com/Masterminds/semver#basic-comparisons
 sources:
   acs:
@@ -81,6 +86,16 @@ sources:
       versionFilter:
         kind: regex
         pattern: '{{ .adw.version }}(.(\d+))+{{ .version_pattern }}'
+  agsAmp:
+    name: AGS AMP {{ .ags.version }}.x
+    kind: gittag
+    scmid: acsEntRepo
+    spec:
+      versionFilter:
+        kind: regex
+        pattern: 'ags-{{ .ags.version }}(.(\d+))+{{ .version_pattern }}'
+    transformers:
+      - trimprefix: "ags-"
   aosAmp:
     name: AOS AMP {{ .aos.version }}
     kind: gittag
@@ -147,6 +162,7 @@ sources:
         pattern: '{{ .trouter.version }}(.(\d+))+{{ .version_pattern }}'
 
 targets:
+  {{- if index . "targets" "main" }}
   acs:
     name: Bump acs
     kind: yaml
@@ -160,34 +176,6 @@ targets:
     sourceid: adw
     spec:
       key: adw.version
-      file: '{{ .target_file }}'
-  aosAmp:
-    name: Bump AOS AMP
-    kind: yaml
-    sourceid: aosAmp
-    spec:
-      key: amps.aos_module.version
-      file: '{{ .target_file }}'
-  dsyncAmp:
-    name: Bump Device Sync AMP
-    kind: yaml
-    sourceid: dsync
-    spec:
-      key: amps.device_sync.version
-      file: '{{ .target_file }}'
-  googleDriveRepoAmp:
-    name: Bump Google Drive Repo AMP
-    kind: yaml
-    sourceid: googleDriveAmp
-    spec:
-      key: amps.googledrive_repo.version
-      file: '{{ .target_file }}'
-  googleDriveShareAmp:
-    name: Bump Google Drive Share AMP
-    kind: yaml
-    sourceid: googleDriveAmp
-    spec:
-      key: amps.googledrive_share.version
       file: '{{ .target_file }}'
   apiExplorer:
     name: Bump api-explorer
@@ -238,3 +226,14 @@ targets:
     spec:
       key: sfs.version
       file: '{{ .target_file }}'
+  {{- end }}
+  {{ range $index, $element := index . "targets" "amps" }}
+  {{ $indexAmp := printf "%s%s" $index "Amp"}}
+  {{ $indexAmp }}:
+    name: Bump {{ $index }} AMP
+    kind: yaml
+    sourceid: {{ $element.sourceid }}
+    spec:
+      key: amps.{{ $element.key_selector }}.version
+      file: {{ $.target_file }}
+  {{- end }}
