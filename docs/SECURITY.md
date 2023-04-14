@@ -154,7 +154,7 @@ In this configuration you will have to provide one certificate per hosts in the
 inventory. All certificates MUST conform to the following:
 
 - The certificates must be store in a PKCS12 container
-- The correcponding private key must be added to the PKCS12 contiainer
+- The corresponding private key must be added to the PKCS12 container
 - All the p12 files for individual hosts must share the same passphrase
 - The PKCS12 container must contain the CA certificate chain
 
@@ -164,7 +164,7 @@ inventory. All certificates MUST conform to the following:
 
 ### Using your own PKI signing CA
 
-This is the prefered approach as it is much easier. And lets you be more
+This is the preferred approach as it is much easier. And lets you be more
 autonomous.  In this configuration, you need to provide the following to the
 playbook:
 

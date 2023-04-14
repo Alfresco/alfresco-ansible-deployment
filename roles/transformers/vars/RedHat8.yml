@@ -17,3 +17,4 @@ utils_transform:
   - freetype
   - libpng
   - dejavu-sans-fonts
+  - perl-Image-ExifTool

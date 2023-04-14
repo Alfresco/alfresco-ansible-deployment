@@ -44,11 +44,12 @@ index.subsystem.name=noindex
 {% endif %}
 
 dir.root={{ content_data_folder }}/content
-{% if acs.version is version('7.0.0', '<') %}
-dir.keystore={{ content_data_folder }}/keystore
-{% elif use_custom_keystores %}
+dir.license.external={{ settings_folder }}/licenses
 
-{% else %}
+# KEYSTORES
+
+dir.keystore={{ content_data_folder }}/keystore
+{% if not use_custom_keystores %}
 encryption.keystore.location={{ content_data_folder }}/keystore/keystore
 encryption.keystore.keyMetaData.location={{ content_data_folder }}/keystore/keystore-passwords.properties
 encryption.keyAlgorithm=DESede
@@ -56,21 +57,30 @@ encryption.cipherAlgorithm=DESede/CBC/PKCS5Padding
 encryption.keystore.type=JCEKS
 encryption.keystore.backup.type=JCEKS
 {% endif %}
-encryption.ssl.truststore.location={{ java_home }}/lib/security/cacerts
-dir.license.external={{ settings_folder }}/licenses
+
+encryption.ssl.truststore.location={{ java_truststore | default(java_home + '/lib/security/cacerts') }}
+{% if repo_keystore %}
+encryption.ssl.keystore.location={{ repo_keystore.path }}
+httpclient.config.transform.mTLSEnabled=true
+httpclient.config.transform.hostnameVerificationDisabled=true
+{% endif %}
 
 alfresco.cluster.enabled={% if groups['repository'] | length > 1 and not cluster_keepoff %}true{% else %}false{% endif %}
 
-transform.service.enabled=true
+{%- macro ats_proto() -%}
+http
+{%- if repo_keystore.cert_containers | default([]) | length > 0 -%}
+s
+{%- endif -%}
+{%- endmacro %}
+
 local.transform.service.enabled=true
-transform.service.url=http://{{ trouter_host }}:{{ ports_cfg.transformers.trouter }}
-localTransform.core-aio.url=http://{{ ats_tengine_aio_host }}:{{ ports_cfg.transformers.tengine }}/
-alfresco-pdf-renderer.url=${localTransform.core-aio.url}
-jodconverter.url=${localTransform.core-aio.url}
-img.url=${localTransform.core-aio.url}
-tika.url=${localTransform.core-aio.url}
-transform.misc.url=${localTransform.core-aio.url}
-sfs.url=http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}/
+localTransform.core-aio.url={{ ats_proto() }}://{{ ats_tengine_aio_host }}:{{ ports_cfg.transformers.tengine }}
+{% if acs.edition == 'Enterprise' %}
+transform.service.enabled=true
+transform.service.url={{ ats_proto() }}://{{ trouter_host }}:{{ ports_cfg.transformers.trouter }}
+sfs.url=http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}
+{% endif %}
 
 messaging.broker.url=failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})?timeout=3000
 messaging.broker.username={{ activemq_username }}
@@ -87,8 +97,8 @@ csrf.filter.enabled={% if csrf.enabled | bool %}true
   csrf.filter.referer={{ _xorigins_protection.compute(inventory_hostname, 'referer', csrf.urls) }}
   csrf.filter.origin={{ _xorigins_protection.compute(inventory_hostname, 'origin', csrf.urls) }}
 {% endif %}
-csrf.filter.referer.always={{ 'true' if 'origin' in csrf.force_headers | lower else 'false' }}
-csrf.filter.origin.always={{ 'true' if 'referer' in csrf.force_headers | lower else 'false' }}
+csrf.filter.referer.always={{ 'true' if 'origin' in csrf.force_headers | lower else 'false' }}
+csrf.filter.origin.always={{ 'true' if 'referer' in csrf.force_headers | lower else 'false' }}
 {% else -%}
   false
 {% endif %}
@@ -101,8 +111,8 @@ cors.enabled={% if cors.enabled | bool %}true
 cors.allowed.methods={{ cors.allowed_methods | default([]) | join(',') }}
 cors.allowed.headers={{ cors.allowed_headers | default([]) | join(',') }}
 cors.exposed.headers={{ cors.exposed_headers | default([]) | join(',') }}
-cors.support.credentials={{ cors.support_credentials | default('true') }}
-cors.preflight.maxage={{ cors.preflight_maxage | default('10') }}
+cors.support.credentials={{ cors.support_credentials | default('true') }}
+cors.preflight.maxage={{ cors.preflight_maxage | default('10') }}
 {% else -%}
   false
 {% endif %}

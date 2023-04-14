@@ -4,7 +4,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: certified-instance
+  - name: tls-repo-instance
     image: ${MOLECULE_ROLE_IMAGE:-ubuntu:22.04}
     dockerfile: ../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
@@ -15,7 +15,31 @@ platforms:
       - /tmp
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    groups:
+      - database
+      - repository
+      - trusted_resource_consumers
+  - name: tls-ats-instance
+    image: ${MOLECULE_ROLE_IMAGE:-ubuntu:22.04}
+    dockerfile: ../../tests/molecule/Dockerfile-noprivs.j2
+    command: "/lib/systemd/systemd"
+    privileged: true
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+    volume_mounts:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    groups:
+      - activemq
+      - transformers
 provisioner:
   name: ansible
+  playbooks:
+    converge: ../../playbooks/acs.yml
+  inventory:
+    links:
+      group_vars: ../../group_vars
+      host_vars: host_vars
 verifier:
   name: ansible

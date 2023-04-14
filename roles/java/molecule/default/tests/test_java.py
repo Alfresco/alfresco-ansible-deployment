@@ -72,15 +72,16 @@ def test_keystore(host, get_ansible_vars):
     hostname = host.ansible.get_variables()["inventory_hostname"]
     java_version = get_ansible_vars["dependencies_version"]["java"]
     java_home = '/opt/openjdk-' + java_version
-    keystore = java_home + '/lib/security/keystore.jceks'
+    keystore = java_home + '/lib/security/keystore/ansible.jceks'
     cmd_tpl = '{}/bin/keytool -list -keystore {} -storepass alfresco -alias {}'
-    cmd = host.run(
-            cmd_tpl.format(
-                java_home,
-                keystore,
-                hostname
+    with host.sudo():
+        cmd = host.run(
+                cmd_tpl.format(
+                    java_home,
+                    keystore,
+                    hostname
+                    )
                 )
-            )
     print(cmd.stdout)
     assert_that(cmd.rc == 0)
 
@@ -89,7 +90,7 @@ def test_keystore_seckey(host, get_ansible_vars):
     """Check the Java keytore is populated with certificate"""
     java_version = get_ansible_vars["dependencies_version"]["java"]
     java_home = '/opt/openjdk-' + java_version
-    keystore = java_home + '/lib/security/keystore.jceks'
+    keystore = java_home + '/lib/security/keystore/ansible.jceks'
     cmd_tpl = '{}/bin/keytool -keypasswd -keystore {} -storepass alfresco -keypass "{}" -new "{}" -alias test'
     with host.sudo():
         cmd = host.run(
