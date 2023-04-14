@@ -2,7 +2,7 @@
 - name: Prepare CA signing infrastructuren
   hosts: localhost
   connection: local
-  gather_facts: no
+  gather_facts: false
   vars:
     actual_pki_dir: "{{ pki_dir | default('../configuration_files/pki') }}"
     actual_ca_cn: "{{ ca_cn | default('Hyland - Alfresco signing CA') }}"
@@ -90,6 +90,9 @@
             ca_key_path: "{{ ca_key_stat.stat.path }}"
 
     - name: Generate out own CA
+      vars:
+        ownca_key_path: "{{ actual_pki_dir }}/private/alfresco_platform_CA.key"
+        ownca_cert_path: "{{ actual_pki_dir }}/ca/alfresco_platform_CA.crt"
       when: not (ca_cert_stat.stat.exists and ca_key_stat.stat.exists)
       block:
         - name: Create private key with password protection
@@ -97,14 +100,13 @@
             backup: true
             size: "{{ ca_key_size | default(omit) }}"
             type: "{{ ca_key_type | default(omit) }}"
-            path: "{{ actual_pki_dir }}/private/alfresco_platform_CA.key"
+            path: "{{ ownca_key_path }}"
             passphrase: "{{ secret_ca_passphrase }}"
             cipher: auto
-          register: cakey
 
         - name: Create certificate signing request (CSR) for CA certificate
           community.crypto.openssl_csr_pipe:
-            privatekey_path: "{{ cakey.filename }}"
+            privatekey_path: "{{ ownca_key_path }}"
             privatekey_passphrase: "{{ secret_ca_passphrase }}"
             common_name: "{{ actual_ca_cn }}"
             use_common_name_for_san: false
@@ -119,17 +121,17 @@
 
         - name: Create {{ actual_ca_cn }} certificate
           community.crypto.x509_certificate:
-            path: "{{ actual_pki_dir }}/ca/alfresco_platform_CA.crt"
+            path: "{{ ownca_cert_path }}"
             csr_content: "{{ ca_csr.csr }}"
-            privatekey_path: "{{ cakey.filename }}"
+            privatekey_path: "{{ ownca_key_path }}"
             privatekey_passphrase: "{{ secret_ca_passphrase }}"
             selfsigned_not_after: "{{ ca_days_valid_for | default(omit) }}"
             provider: selfsigned
 
         - name: Set CA variables
           set_fact:
-            ca_cert_path: "{{ actual_pki_dir }}/ca/alfresco_platform_CA.crt"
-            ca_key_path: "{{ cakey.filename }}"
+            ca_cert_path: "{{ ownca_cert_path }}"
+            ca_key_path: "{{ ownca_key_path }}"
 
     - name: Set PKI variables
       set_fact:

@@ -1,9 +1,10 @@
 ---
 argument_specs:
-  main:
+  keystores:
     short_description: Main entrypoint for the java role
     options:
       java_keystore:
+        required: true
         type: dict
         options:
           path:
@@ -70,7 +71,6 @@ argument_specs:
                 description: |
                   Length of the security key
                 default: 256
-        required: false
         description: |
           Representation of the JRE keystore
           The whole object needs to be given (defaults are not merged)

@@ -3,6 +3,14 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
+- name: Instanciate Java keystore
+  ansible.builtin.include_role:
+    name: ../roles/java
+    tasks_from: keystores
+  when: repo_keystore
+  vars:
+    java_keystore: "{{ repo_keystore }}"
+
 - name: Handle secure properties
   block:
     - name: Initialize temporary accumulator
@@ -401,32 +409,35 @@
 
 - name: Setup ACS service
   become: true
+  vars:
+    systemd_root: /etc/systemd/system/
   block:
+    - name: Create systemd overrides folder
+      file:
+        path: "{{ systemd_root }}/alfresco-content.service.d"
+        state: directory
+        owner: root
+        group: root
+        mode: 0700
+    - name: Systemd Overrides for the tomcat unit
+      ansible.builtin.template:
+        src: alfresco-content-unit-overrides.j2
+        dest: "{{ systemd_root }}/alfresco-content.service.d/environment.conf"
+        mode: 0600
+        owner: root
+        group: root
     - name: Create monitoring start up service
-      become: true
       template:
         src: alfresco-content-monitored-startup.sh.j2
         dest: "{{ binaries_folder }}/alfresco-content-monitored-startup.sh"
         mode: 0750
-
     - name: Create monitored start up service
-      become: true
       template:
         src: alfresco-content-monitored-startup.service.j2
-        dest: /etc/systemd/system/alfresco-content-monitored-startup.service
+        dest: "{{ systemd_root }}/alfresco-content-monitored-startup.service"
         mode: 0644
         owner: root
         group: root
-
-    - name: Amend alfresco-content unit
-      become: true
-      lineinfile:
-        line: BindsTo=alfresco-content-monitored-startup.service
-        insertafter: [Unit]
-        path: /etc/systemd/system/alfresco-content.service
-        firstmatch: yes
-      tags:
-        - molecule-idempotence-notest # Files is dealt with outside this role
   notify:
     - systemd-reload
 

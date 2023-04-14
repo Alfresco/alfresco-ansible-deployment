@@ -1,0 +1,14 @@
+---
+argument_specs:
+  main:
+    short_description: Main entrypoint for the repository role
+    options:
+      repo_keystore:
+        type: dict
+        required: false
+        no_log: true
+        description: |
+          Representation of the JRE keystore as expected by the java role.
+          Check the java role's argument specification for details.
+          Pay special attention to using the same passphrase for the keystore
+          than the one used in the source PKCS12 certificate container.
