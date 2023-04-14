@@ -288,7 +288,7 @@
   gather_facts: no
   roles:
     - role: "../roles/acc"
-      when: acs.edition == "Enterprise"
+      when: acs.edition == "Enterprise" ## FIXME should work for community too once moved to public repo
   post_tasks:
     - name: Update installation status file with ACC
       become: yes
