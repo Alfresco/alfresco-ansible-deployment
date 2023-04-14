@@ -146,13 +146,11 @@ Run updatecli with:
 
 ```bash
 updatecli apply --config scripts/updatecli/updatecli_config.tpl --values scripts/updatecli/updatecli_base.yml --values scripts/updatecli/updatecli_acsXX.yml
-updatecli apply --config scripts/updatecli/updatecli_config.tpl --values scripts/updatecli/updatecli_base.yml --values scripts/updatecli/updatecli_acsXX.yml --values scripts/updatecli/updatecli_tests_amps_target.yml
 ```
 
-When the commands completes successfully you will find the following files
-automatically modified with the latest available versions as requested:
+Once the command completes successfully, you will find the target file
+automatically modified with the latest available versions:
 
 * `groups_vars/all.yml`
-* `tests/test-extra-vars.yml`
 
 Commit and push them on a new `next/acs-XX` branch.
