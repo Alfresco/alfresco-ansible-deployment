@@ -8,6 +8,31 @@
   include_vars:
     file: "{{ os_version_yml }}"
 
+- name: Instanciate Java keystore
+  ansible.builtin.include_role:
+    name: ../roles/java
+    tasks_from: keystores
+  when: tengines_keystore
+  vars:
+    java_keystore: "{{ tengines_keystore }}"
+
+- name: Enable EPEL repository
+  become: true
+  vars:
+    epel_ver: "{{ ansible_distribution_major_version }}"
+    epel_gpg_base: https://dl.fedoraproject.org/pub/epel
+    epel_meta_base: https://mirrors.fedoraproject.org/metalink
+    epel_meta_args: "&arch=$basearch&infra=$infra&content=$contentdir"
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    metalink: >-
+      {{ epel_meta_base }}?repo=epel-{{ epel_ver }}{{ epel_meta_args }}
+    gpgcheck: true
+    gpgkey: >-
+      {{ epel_gpg_base }}/RPM-GPG-KEY-EPEL-{{ epel_ver }}
+  when: pkg_format == 'rpm'
+
 - name: Download libreoffice package archive
   get_url:
     url: "{{ libreoffice_archive_url }}"
@@ -116,6 +141,18 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
       changed_when: false
+
+    - name: Add AIO config mTLS config file
+      template:
+        src: application.properties.j2
+        dest: "{{ binaries_folder }}/transform-service/application.properties"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 0600
+      when: tengines_keystore
+      notify:
+        - wait-for-activemq
+        - restart-aio
 
     - name: Add AIO startup script
       template:

@@ -2,10 +2,12 @@
 - name: Cleanup
   hosts: localhost
   gather_facts: false
-  vars:
-    pki_dir: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/files"
   tasks:
     - name: Wipe pki local directory
       ansible.builtin.file:
-        path: "{{ pki_dir }}"
+        path: ../../configuration_files/pki
+        state: absent
+    - name: Wipe secrets vault
+      ansible.builtin.file:
+        path: ../../vars/secrets.yml
         state: absent

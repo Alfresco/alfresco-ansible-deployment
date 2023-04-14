@@ -16,15 +16,18 @@ nexus_repository:
     {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.enterprise.repository }}/{{ artifacts_repositories.enterprise.group_id }}
   development_releases: >-
     {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.development.repository }}/{{ artifacts_repositories.enterprise.group_id }}
+
+# All references to nexus_repository.development_releases in the below
+# components specs must be removed BEFORE merging to master
 acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 7.4.0-M3
+  repository: "{{ nexus_repository.development_releases }}"
+  version: 7.4.0-A27
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
-    version: 1.6.0-M1
+    version: 1.6.0-A4
   device_sync:
     repository: >-
       {{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo
@@ -52,15 +55,15 @@ search:
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
-  version: 3.0.0
+  version: 3.1.0-A5
 trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.0.0
+  version: 2.1.0-A5
 sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.0.0
+  version: 2.1.0-A5
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
