@@ -23,7 +23,7 @@ acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
   repository: "{{ nexus_repository.development_releases }}"
-  version: 7.4.0-A27
+  version: 7.4.0-A29
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"

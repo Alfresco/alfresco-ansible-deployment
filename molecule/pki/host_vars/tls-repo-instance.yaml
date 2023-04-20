@@ -11,4 +11,4 @@ acs:
   artifact_name: alfresco-content-services-community-distribution
   edition: Community
   repository: "{{ nexus_repository.development_releases }}"
-  version: 7.4.0-A27
+  version: 7.4.0-A29
