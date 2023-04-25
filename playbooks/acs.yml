@@ -202,8 +202,25 @@
 - name: Shared File Store Role
   hosts: transformers
   gather_facts: no
+  pre_tasks:
+    - name: Check wether we want mTLS for Tengines
+      set_fact:
+        sfs_mtls: >-
+          {{ groups.repository | difference(groups.transformers) | length > 0 }}
+    - name: Build keystore role argument
+      set_fact:
+        sfs_keystore:
+          path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
+          pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
+          type: JCEKS
+          cert_containers:
+            - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
+              pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
+              add_to_trusted_ca: true
+      when: sfs_mtls
   roles:
     - role: "../roles/sfs"
+      ats_keystore: "{{ sfs_keystore | default({}) }}"
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with SFS
