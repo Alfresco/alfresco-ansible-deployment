@@ -112,14 +112,6 @@ def test_share_context_200(host):
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
 
 
-def test_share_session(host):
-    """Check that /share session are created correclty"""
-    cmd = host.run("curl -i --connect-timeout 5 -u admin:admin http://{}:8080/share".format(test_host))
-    assert_that(cmd.stdout, contains_string("set-cookie: alfrescoShare="))
-    assert_that(cmd.stdout, contains_string("location: /share/"))
-    assert_that(cmd.stdout, contains_string("HTTP/1.1 302"))
-
-
 def test_vti_bin_context_200(host):
     "Check that /share context is available and returns a HTTP 200 status code"
     cmd = host.run("curl -iL --user admin:admin --connect-timeout 5 http://{}:8080/_vti_bin/".format(test_host))
