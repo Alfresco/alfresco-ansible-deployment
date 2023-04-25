@@ -1,0 +1,15 @@
+---
+argument_specs:
+  main:
+    short_description: Main entrypoint for the tranformers role
+    options:
+      ats_keystore:
+        type: dict
+        required: false
+        no_log: true
+        default: {}
+        description: |
+          Representation of the JRE keystore used by ATS for both mTLS client
+          and server configuration. The object needs to be passed as expected
+          by the java role. Check the java role's arguments specification for
+          details.
