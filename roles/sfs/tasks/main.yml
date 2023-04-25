@@ -1,5 +1,12 @@
 ---
 # tasks file for sfs
+- name: Instanciate Java keystore
+  ansible.builtin.include_role:
+    name: ../roles/java
+    tasks_from: keystores
+  when: ats_keystore
+  vars:
+    java_keystore: "{{ ats_keystore }}"
 - name: Install SFS
   become: true
   block:
@@ -35,6 +42,17 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0755"
+      notify:
+        - restart-sfs
+
+    - name: Add AIO config mTLS config file
+      template:
+        src: application.properties.j2
+        dest: "{{ ats_home }}/application.properties"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 0600
+      when: ats_keystore
       notify:
         - restart-sfs
 
