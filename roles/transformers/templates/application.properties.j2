@@ -1,9 +1,16 @@
 server.ssl.enabled=true
 server.ssl.key-password={{ tengines_keystore.pass | default('') }}
-server.ssl.key-store={{ tengines_keystore.path | quote }}
+server.ssl.key-store=file:{{ tengines_keystore.path | quote }}
 server.ssl.key-store-password={{ tengines_keystore.pass | default('') }}
 server.ssl.key-store-type={{ tengines_keystore.type | default('JCEKS') }}
-server.ssl.trust-store={{ tengines_truststore | default(java_home + '/lib/security/cacerts') }}
+server.ssl.trust-store=file:{{ tengines_truststore | default(java_home + '/lib/security/cacerts') }}
 server.ssl.trust-store-password={{ tengines_truststore_pass | default('changeit') }}
 server.ssl.trust-store-type=JCEKS
 server.ssl.client-auth=need
+
+client.ssl.key-store=file:{{ tengines_keystore.path | quote }}
+client.ssl.key-store-password={{ tengines_keystore.pass | default('') }}
+client.ssl.key-store-type={{ tengines_keystore.type | default('JCEKS') }}
+client.ssl.trust-store=file:{{ tengines_truststore | default(java_home + '/lib/security/cacerts') }}
+client.ssl.trust-store-password={{ tengines_truststore_pass | default('changeit') }}
+client.ssl.trust-store-type=JCEKS
