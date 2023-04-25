@@ -82,7 +82,7 @@
             - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
-      when: tengine_mtls and acs.edition == 'Community'
+      when: tengine_mtls
   roles:
     - role: "../roles/transformers"
       tengines_keystore: "{{ transformers_keystore | default({}) }}"
@@ -157,7 +157,7 @@
             - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
-      when: repo_cli_mtls and acs.edition == 'Community'
+      when: repo_cli_mtls
   roles:
     - role: "../roles/repository"
       repo_keystore: "{{ repository_keystore | default({}) }}"

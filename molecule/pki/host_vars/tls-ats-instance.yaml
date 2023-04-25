@@ -6,7 +6,7 @@ known_urls:
 # We are forced to use community now otherwise other transformers may conflict with mtls config
 # Remove when mTLS is implemented for SFS and trouter as well.
 acs:
-  artifact_name: alfresco-content-services-community-distribution
-  edition: Community
+  artifact_name: alfresco-content-services-distribution
+  edition: Enterprise
   repository: "{{ nexus_repository.development_releases }}"
-  version: 7.4.0-A27
+  version: 7.4.0-A33
