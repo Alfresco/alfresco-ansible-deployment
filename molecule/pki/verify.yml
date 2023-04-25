@@ -46,17 +46,18 @@
 
     - name: Check in logs a client did connect
       ansible.builtin.slurp:
-        src: /var/log/alfresco/{{ item }}.log
+        src: /var/log/alfresco/{{ item.file }}.log
       register: ats_log
       become: true
       until:
-        - "'GET Transform Config version' in ats_log.results[0].content | b64decode"
-        - "'TLS virtual host' in ats_log.results[1].content | b64decode"
+        - item.pattern in ats_log.content | b64decode
       retries: 10
       delay: 3
       loop:
-        - ats-ate-aio
-        - ats-shared-fs
+        - file: ats-ate-aio
+          pattern: GET Transform Config version
+        - file: ats-shared-fs
+          pattern: TLS virtual host
 
     - name: Copy cert as PEM
       ansible.builtin.copy:
