@@ -37,7 +37,7 @@
 
     - name: Add sfs startup script
       template:
-        src: ats-shared-fs.sh
+        src: ats-shared-fs.sh.j2
         dest: "{{ binaries_folder }}/ats-shared-fs.sh"
         owner: "{{ username }}"
         group: "{{ group_name }}"
@@ -48,7 +48,7 @@
     - name: Add AIO config mTLS config file
       template:
         src: application.properties.j2
-        dest: "{{ ats_home }}/application.properties"
+        dest: "{{ ats_home }}/sfs-mtls-server.properties"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 0600
