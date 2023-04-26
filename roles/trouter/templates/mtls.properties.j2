@@ -14,3 +14,4 @@ client.ssl.key-store-type={{ ats_keystore.type | default('JCEKS') }}
 client.ssl.trust-store=file:{{ tengines_truststore | default(java_home + '/lib/security/cacerts') }}
 client.ssl.trust-store-password={{ tengines_truststore_pass | default('changeit') }}
 client.ssl.trust-store-type=JCEKS
+client.ssl.hostname-verification-disabled=true
