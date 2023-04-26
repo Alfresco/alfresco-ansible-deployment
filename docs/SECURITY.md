@@ -157,6 +157,9 @@ inventory. All certificates MUST conform to the following:
 - The corresponding private key must be added to the PKCS12 container
 - All the p12 files for individual hosts must share the same passphrase
 - The PKCS12 container must contain the CA certificate chain
+- The certificates must have the following `extendedKeyUsage`: `serverAuth` &
+  `clientAuth` so the same certificate serves for server and client
+  authentication (this is a host certificate)
 
 > That approach can be tedious and it's usually easier to either use your own
 > CA signing or let the playbook generate its own PKI if that's allowed by your
