@@ -85,7 +85,7 @@
       when: tengine_mtls
   roles:
     - role: "../roles/transformers"
-      tengines_keystore: "{{ transformers_keystore | default({}) }}"
+      ats_keystore: "{{ transformers_keystore | default({}) }}"
   post_tasks:
     - name: Update installation status file with Transformers
       become: yes

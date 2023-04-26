@@ -12,9 +12,9 @@
   ansible.builtin.include_role:
     name: ../roles/java
     tasks_from: keystores
-  when: tengines_keystore
+  when: ats_keystore
   vars:
-    java_keystore: "{{ tengines_keystore }}"
+    java_keystore: "{{ ats_keystore }}"
 
 - name: Enable EPEL repository
   become: true
@@ -149,7 +149,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 0600
-      when: tengines_keystore
+      when: ats_keystore
       notify:
         - wait-for-activemq
         - restart-aio
