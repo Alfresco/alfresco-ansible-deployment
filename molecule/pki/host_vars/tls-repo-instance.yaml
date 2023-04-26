@@ -2,13 +2,5 @@
 ansible_user: ansible
 known_urls:
   - http://localhost:8080/share
-  - https://someotherapp/
 amps: {}
 amp_downloads: []
-# We are forced to use community now otherwise other transformers may conflict with mtls config
-# Remove when mTLS is implemented for SFS and trouter as well.
-acs:
-  artifact_name: alfresco-content-services-community-distribution
-  edition: Enterprise
-  repository: "{{ nexus_repository.development_releases }}"
-  version: 7.4.0-A33
