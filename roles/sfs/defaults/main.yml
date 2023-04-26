@@ -6,3 +6,4 @@ sfs_environment:
     - -Xmx512m
     - $JAVA_OPTS
 utils_sfs: []
+ats_keystore: {}

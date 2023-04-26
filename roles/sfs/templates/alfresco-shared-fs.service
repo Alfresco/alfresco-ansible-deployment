@@ -6,6 +6,7 @@ After=syslog.socket network.target
 Type=simple
 User={{ username }}
 ExecStart={{ binaries_folder }}/ats-shared-fs.sh
+WorkingDirectory={{ ats_home }}
 
 [Install]
 WantedBy=multi-user.target

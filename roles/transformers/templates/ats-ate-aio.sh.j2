@@ -18,4 +18,7 @@ export JAVA_OPTS="${JAVA_OPTS} -DFILE_STORE_URL=http://${ATS_SHARED_FS_HOST}:{{ 
 {% for key, value in tengine_environment.items() %}
 export {{ key }}="{{ value | join(' ') }}"
 {% endfor %}
-exec ${JAVA_HOME}/bin/java ${JAVA_OPTS} -jar ${ATS_HOME}/{{ transform.artifact_name }}-{{ transform.version }}.jar > {{ logs_folder }}/ats-ate-aio.log
+exec ${JAVA_HOME}/bin/java ${JAVA_OPTS} \
+	-jar ${ATS_HOME}/{{ transform.artifact_name }}-{{ transform.version }}.jar \
+	--spring.config.additional-location=optional:tengine-mtls.properties \
+	> {{ logs_folder }}/ats-ate-aio.log
