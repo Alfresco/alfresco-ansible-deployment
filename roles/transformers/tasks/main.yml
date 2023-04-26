@@ -144,8 +144,8 @@
 
     - name: Add AIO config mTLS config file
       template:
-        src: application.properties.j2
-        dest: "{{ binaries_folder }}/transform-service/application.properties"
+        src: mtls.properties.j2
+        dest: "{{ binaries_folder }}/transform-service/tengine-mtls.properties"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 0600

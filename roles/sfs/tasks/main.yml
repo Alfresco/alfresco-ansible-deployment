@@ -47,8 +47,8 @@
 
     - name: Add AIO config mTLS config file
       template:
-        src: application.properties.j2
-        dest: "{{ ats_home }}/sfs-mtls-server.properties"
+        src: mtls.properties.j2
+        dest: "{{ ats_home }}/sfs-mtls.properties"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 0600
