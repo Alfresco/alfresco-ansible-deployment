@@ -56,6 +56,8 @@
       loop:
         - file: ats-ate-aio
           pattern: GET Transform Config version
+        - file: ats-atr
+          pattern: GET Transform Config version
         - file: ats-shared-fs
           pattern: TLS virtual host
 
@@ -79,5 +81,7 @@
       ansible.builtin.assert:
         that:
           - ansible_facts.services['alfresco-tengine-aio.service'].state == "running"
+          - ansible_facts.services['alfresco-shared-fs.service'].state == "running"
+          - ansible_facts.services['alfresco-transform-router.service'].state == "running"
           - "'SSL: CERTIFICATE_VERIFY_FAILED' in response.results[0].msg"
           - response.results[1].status == 200
