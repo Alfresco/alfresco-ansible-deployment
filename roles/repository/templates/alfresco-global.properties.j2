@@ -79,7 +79,7 @@ localTransform.core-aio.url={{ ats_proto() }}://{{ ats_tengine_aio_host }}:{{ po
 {% if acs.edition == 'Enterprise' %}
 transform.service.enabled=true
 transform.service.url={{ ats_proto() }}://{{ trouter_host }}:{{ ports_cfg.transformers.trouter }}
-sfs.url=http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}
+sfs.url={{ ats_proto() }}://{{ sfs_host }}:{{ ports_cfg.sfs.http }}
 {% endif %}
 
 messaging.broker.url=failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})?timeout=3000

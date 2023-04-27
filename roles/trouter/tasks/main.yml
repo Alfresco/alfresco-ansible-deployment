@@ -4,6 +4,14 @@
   include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
+- name: Instanciate Java keystore
+  ansible.builtin.include_role:
+    name: ../roles/java
+    tasks_from: keystores
+  when: ats_keystore
+  vars:
+    java_keystore: "{{ ats_keystore }}"
+
 - name: Install T-Router
   become: true
   block:
@@ -19,6 +27,17 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0755"
+
+    - name: Add AIO config mTLS config file
+      template:
+        src: mtls.properties.j2
+        dest: "{{ ats_home }}/atr-mtls.properties"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: 0600
+      when: ats_keystore
+      notify:
+        - restart-trouter
 
     - name: Add T-Router startup script
       template:

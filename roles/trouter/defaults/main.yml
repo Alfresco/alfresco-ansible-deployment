@@ -6,3 +6,4 @@ trouter_environment:
     - -Xmx512m
     - $JAVA_OPTS
 utils_trouter: []
+ats_keystore: {}
