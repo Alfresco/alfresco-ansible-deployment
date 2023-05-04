@@ -38,3 +38,6 @@
       when:
         - known_urls | default([]) | length == 0
         - cors.enabled | default(True)
+
+- name: Run preliminary network checks
+  ansible.builtin.import_playbook: prerun-network-checks.yml
