@@ -2,6 +2,8 @@
     include_vars: ../../common/defaults/main.yml
 
   - name: check connectivity
+    vars:
+      local_ip_checked_host: "{{ hostvars[delegate_target]['ansible_default_ipv4']['address'] }}"
     block:
     # This task needs to be retried in case a previous iteration still listens (default retry of 3 is fine as it aligns with async 10 of listen tasks)
     - name: "Check if {{ checked_port }} already open on {{ delegate_target }}"
@@ -13,7 +15,7 @@
         state: stopped
         delay: 0
         timeout: 2
-        msg: "Port {{ checked_port }} is already in use on {{ delegate_target }}/{{ checked_host }}!"
+        msg: "Port {{ checked_port }} is already in use on {{ delegate_target }}!"
       delegate_to: "{{ delegate_target }}"
     - name: "Start to listen on {{ delegate_target }}:{{ checked_port }}"
       listen_port:
@@ -21,11 +23,11 @@
       delegate_to: "{{ delegate_target }}"
       async: 10
       poll: 0
-    - name: "Verify if {{ inventory_hostname }} can reach {{ delegate_target }}:{{ checked_port }}"
+    - name: "Verify if {{ inventory_hostname }} can reach {{ delegate_target }} on {{ local_ip_checked_host }}:{{ checked_port }}"
       wait_for:
-        host: "{{ checked_host }}"
+        host: "{{ local_ip_checked_host }}"
         port: "{{ checked_port }}"
         state: started
         delay: 0
         timeout: 5
-        msg: "Port {{ checked_port }} on the {{ delegate_target }}/{{ checked_host }} machine cannot be reached, please check your firewall!"
+        msg: "Port {{ checked_port }} on the {{ delegate_target }} ({{ local_ip_checked_host }}) machine cannot be reached, please check your firewall!"
