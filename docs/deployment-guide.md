@@ -263,12 +263,14 @@ Several roles setup services that listen on TCP ports and several roles wait for
 | repository                  | 8080        | nginx, search, syncservice                               | Yes                     |
 | search                      | 8983        | repository                                               | No                      |
 | transformers (aio t-engine) | 8090        | repository                                               | No                      |
+| transformers (router)       | 8095        | repository                                               | No                      |
+| transformers (sfs)          | 8099        | repository                                               | No                      |
 | syncservice                 | 9090        | nginx                                                    | No                      |
-| adw                         | 80          | nginx                                                    | No                      |
+| adw                         | 8880        | nginx                                                    | No                      |
 | nginx                       | 80          | `<client-ips>`                                           | No                      |
 | nginx                       | 443         | `<client-ips>`                                           | No                      |
 
-> NOTE: The transformers host will also contain the transform router process running on port 8095 and the shared file system process running on 8099 but communication between these components remains local.
+> NOTE: When using the ACS Community, some of these ports do not need to be opened (e.g. transform router/sfs, adw).
 
 ## Configure Your Deployment
 
@@ -750,10 +752,10 @@ To check your inventory file is configured correctly and the control node is abl
 ansible all -m ping -i inventory_ssh.yml
 ```
 
-**Optional** To check if the required ports for the deployment are available on the target machine and we also have connectivity between nodes (ex. repository connecting to the db on 5432) please run the prerequisite-checks playbook before you deploy ACS. If there are any firewalls blocking connectivity this playbook will discover them.
+**Optional** To check if the required ports for the deployment are available on the target machine and we also have connectivity between nodes (ex. repository connecting to the db on 5432) the prerun-network-checks playbook can be executed before you deploy ACS. If there are any firewalls blocking connectivity this playbook will discover them.
 
 ```bash
-pipenv run ansible-playbook playbooks/prerequisite-checks.yml -i inventory_ssh.yml
+pipenv run ansible-playbook playbooks/prerun-network-checks.yml -i inventory_ssh.yml [-e "@community-extra-vars.yml"]
 ```
 
 To deploy ACS 7 Enterprise on the target hosts execute the playbook as the current user using the following command:

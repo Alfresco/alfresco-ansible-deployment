@@ -32,6 +32,9 @@
     - name: Setup
       ansible.builtin.setup:
 
+- name: Make sure the firewall is setup properly
+  ansible.builtin.import_playbook: firewall.yml
+
 - name: Database Role
   hosts: database
   gather_facts: no

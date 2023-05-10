@@ -1,0 +1,91 @@
+---
+- name: include common defaults
+  include_vars: ../defaults/main.yml
+
+- name: firewalld - Configure and enable the firewall
+  block:
+    - name: firewalld - Install
+      ansible.builtin.yum:
+        name: firewalld
+        state: present
+        update_cache: true
+
+    - name: firewalld - Ensure the firewall is started
+      ansible.builtin.service:
+        name: firewalld
+        state: started
+        enabled: true
+
+    - name: firewalld - Open the ssh service
+      ansible.posix.firewalld:
+        service: ssh
+        permanent: true
+        immediate: true
+        state: enabled
+
+    - name: firewalld - Open ports needed from specified sources
+      ansible.posix.firewalld:
+        rich_rule: rule family="ipv4" source address="{{ item[1] }}" port protocol="tcp" port="{{ item[0] }}" accept
+        permanent: true
+        immediate: true
+        state: enabled
+      loop: "{{ firewall_ports | product(firewall_sources | flatten | difference([ansible_default_ipv4.address])) | list }}"
+      when: firewall_sources is defined
+
+    - name: firewalld - Open ports needed from any sources
+      ansible.posix.firewalld:
+        port: "{{ item }}/tcp"
+        permanent: true
+        immediate: true
+        state: enabled
+      loop: "{{ firewall_ports }}"
+      when: firewall_sources is undefined
+  when: ansible_os_family == 'RedHat'
+
+- name: ufw - Configure and enable the firewall
+  block:
+    - name: ufw - Install
+      ansible.builtin.apt:
+        name: ufw
+        state: present
+        update_cache: true
+
+    - name: ufw - Deny all incoming requests
+      community.general.ufw:
+        direction: incoming
+        proto: any
+        policy: deny
+
+    - name: ufw - Allow all outgoing requests
+      community.general.ufw:
+        direction: outgoing
+        proto: any
+        policy: allow
+
+    - name: ufw - Open the ssh service
+      community.general.ufw:
+        proto: tcp
+        port: ssh
+        rule: allow
+
+    - name: ufw - Open ports needed from specified sources
+      community.general.ufw:
+        proto: tcp
+        port: "{{ item[0] }}"
+        from: "{{ item[1] }}"
+        rule: allow
+      loop: "{{ firewall_ports | product(firewall_sources | flatten | difference([ansible_default_ipv4.address])) | list }}"
+      when: firewall_sources is defined
+
+    - name: ufw - Open ports needed from any sources
+      community.general.ufw:
+        proto: tcp
+        port: "{{ item }}"
+        rule: allow
+      loop: "{{ firewall_ports }}"
+      when: firewall_sources is undefined
+
+    - name: ufw - Enable the service
+      community.general.ufw:
+        state: enabled
+  when: ansible_os_family == 'Debian'

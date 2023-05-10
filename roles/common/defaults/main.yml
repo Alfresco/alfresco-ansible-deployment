@@ -46,10 +46,20 @@ elasticsearch_host: >-
 elasticsearch_protocol: >-
   {{- groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_protocol']) | first | default('http') -}}
 
+# List of all hosts for Firewall
+nginx_hosts_list: "{{ groups.nginx | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
+repo_hosts_list: "{{ groups.repository | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
+trans_hosts_list: "{{ groups.transformers | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
+sync_hosts_list: "{{ groups.syncservice | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
+search_hosts_list: "{{ groups.search | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
+search_ent_hosts_list: "{{ groups.search_enterprise | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
+
 ports_cfg:
   nginx:
     http: 80
     https: 443
+  adw:
+    http: 8880
   activemq:
     openwire: >-
       {% if groups.external_activemq | default(False) %}
