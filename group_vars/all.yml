@@ -205,3 +205,10 @@ use_ssl: false
 # Needs to be empty if unused (don't use dummy values)
 fqdn_alfresco: ""
 autogen_unsecure_secrets: false
+ats_mtls_capable: >
+  {{
+    acs.version is version('7.4', 'ge') and
+    transform.version is version('3.1', 'ge') and
+    trouter.version is version('2.1', 'ge') and
+    sfs.version is version('2.1', 'ge')
+  }}
