@@ -10,7 +10,7 @@
   get_url:
     url: "{{ downloads.acc_zip_url }}"
     dest: "{{ download_location }}/alfresco-control-center-{{ acc.version }}.zip"
-    checksum: sha1:{{ lookup('url', downloads.acc_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
+    checksum: sha1:{{ downloads.acc_zip_sha1_checksum_url }}
     mode: 'u=r,g=r,o=r'
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
