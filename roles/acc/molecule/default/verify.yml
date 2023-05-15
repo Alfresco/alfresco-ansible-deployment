@@ -18,7 +18,7 @@
         url: "{{ verify_base_url }}/"
         return_content: true
       register: this
-      failed_when: "'Alfresco Admin App' not in this.content"
+      failed_when: "'Alfresco Control Center' not in this.content"
 
     - name: Check that the config contains the expected contents
       ansible.builtin.uri:
