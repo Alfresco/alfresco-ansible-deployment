@@ -73,9 +73,8 @@ sync:
   version: 3.9.0
 acc:
   artifact_name: alfresco-control-center
-  # should move to enterprise_releases once we really get a GA release
-  repository: "{{ nexus_repository.development_releases }}"
-  version: 7.9.0
+  repository: "{{ nexus_repository.enterprise_releases }}"
+  version: 8.0.0
 supported_os:
   RedHat:
     versions:
