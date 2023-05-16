@@ -283,12 +283,26 @@
   tags:
     - search_enterprise
 
-- name: Alfresco Control Center Role
+- name: Build list of ACC hosts
   hosts: acc
+  gather_facts: no
+  tasks:
+    - name: Build up group of acc hosts
+      ansible.builtin.add_host:
+        name: "{{ item }}"
+        groups:
+          - validated_acc
+      loop: "{{ groups.acc }}"
+      when: acs.version is version('7.4', 'ge')
+      changed_when: false
+  tags:
+    - acc
+
+- name: Alfresco Control Center Role
+  hosts: validated_acc
   gather_facts: no
   roles:
     - role: "../roles/acc"
-      when: acs.edition == "Enterprise" ## FIXME should work for community too once moved to public repo
   post_tasks:
     - name: Update installation status file with ACC
       become: yes
