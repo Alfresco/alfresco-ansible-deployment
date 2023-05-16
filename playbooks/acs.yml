@@ -70,7 +70,7 @@
   pre_tasks:
     - name: Check wether we want mTLS for Tengines
       set_fact:
-        tengine_mtls: >-
+        tengine_mtls_required: >-
           {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
       set_fact:
@@ -82,7 +82,9 @@
             - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
-      when: tengine_mtls
+      when:
+        - tengine_mtls_required
+        - ats_mtls_capable
   roles:
     - role: "../roles/transformers"
       ats_keystore: "{{ transformers_keystore | default({}) }}"
@@ -145,7 +147,7 @@
   pre_tasks:
     - name: Check wether we want mTLS for Repostory
       set_fact:
-        repo_cli_mtls: >-
+        repo_mtls_required: >-
           {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
       set_fact:
@@ -157,7 +159,9 @@
             - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
-      when: repo_cli_mtls
+      when:
+        - repo_mtls_required
+        - ats_mtls_capable
   roles:
     - role: "../roles/repository"
       repo_keystore: "{{ repository_keystore | default({}) }}"
@@ -184,7 +188,7 @@
   pre_tasks:
     - name: Check wether we want mTLS for Tengines
       set_fact:
-        trouter_mtls: >-
+        trouter_mtls_required: >-
           {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
       set_fact:
@@ -196,7 +200,9 @@
             - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
-      when: tengine_mtls
+      when:
+        - trouter_mtls_required
+        - ats_mtls_capable
   roles:
     - role: "../roles/trouter"
       ats_keystore: "{{ trouter_keystore | default({}) }}"
@@ -222,7 +228,7 @@
   pre_tasks:
     - name: Check wether we want mTLS for Tengines
       set_fact:
-        sfs_mtls: >-
+        sfs_mtls_required: >-
           {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
       set_fact:
@@ -234,7 +240,9 @@
             - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
-      when: sfs_mtls
+      when:
+        - sfs_mtls_required
+        - ats_mtls_capable
   roles:
     - role: "../roles/sfs"
       ats_keystore: "{{ sfs_keystore | default({}) }}"
