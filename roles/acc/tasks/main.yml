@@ -58,3 +58,12 @@
     mode: 'u=rw,g=r,o=r'
   notify:
     - restart-nginx
+
+- name: Allow web-server to listen on tcp port {{ acc_port }}
+  become: true
+  community.general.seport:
+    ports: "{{ acc_port }}"
+    proto: tcp
+    setype: http_port_t
+    state: present
+  when: ansible_selinux.status == "enabled"
