@@ -100,12 +100,13 @@ platforms:
       Department: Engineering
       Production: false
 
-  - name: adw_instance
+  - name: adf_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
     region: ${AWS_REGION}
     groups:
+      - acc
       - adw
       - trusted_resource_consumers
     tags:

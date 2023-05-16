@@ -20,6 +20,7 @@ platforms:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
       - activemq
+      - acc
       - adw
       - database
       - elasticsearch
