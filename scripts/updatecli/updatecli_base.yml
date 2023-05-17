@@ -1,0 +1,18 @@
+# Common updatecli values for different acs versions
+# meant to be used with at least another updatecli_acsxx.yml value file
+
+targets:
+  main: true
+  amps:
+    aos:
+      sourceid: aosAmp
+      key_selector: aos_module
+    dsync:
+      sourceid: dsync
+      key_selector: device_sync
+    googleDriveRepo:
+      sourceid: googleDriveAmp
+      key_selector: googledrive_repo
+    googleDriveShare:
+      sourceid: googleDriveAmp
+      key_selector: googledrive_repo

@@ -134,18 +134,23 @@ The OS support table in `docs/README.md` must be updates and so does the
 
 ### Bumping ACS version via updatecli
 
-This repo provide experimental support for keeping ACS components versions
-defined in `groups_vars/all.yml` in sync the the ACS releases.
+This repo provide experimental support for updatecli to keep ACS components
+versions in sync with the latest ACS releases. Configurations files are in the
+`scripts/updatecli` folder.
 
-The `updatecli_config.yml` file provides the main pipeline definition and there
+The `updatecli_config.tpl` file provides the main pipeline definition and there
 are multiple values files depending on which acs major version we want to check
 for any new minor release.
 
 Run updatecli with:
 
 ```bash
-updatecli apply --config scripts/updatecli/updatecli_config.yml --values scripts/updatecli/updatecli_acs73.yml
+updatecli apply --config scripts/updatecli/updatecli_config.tpl --values scripts/updatecli/updatecli_base.yml --values scripts/updatecli/updatecli_acsXX.yml
 ```
 
-When the command completes succesfully you will find the `groups_vars/all.yml`
-automatically modified with the latest available versions as requested.
+Once the command completes successfully, you will find the target file
+automatically modified with the latest available versions:
+
+* `groups_vars/all.yml`
+
+Commit and push them on a new `next/acs-XX` branch.
