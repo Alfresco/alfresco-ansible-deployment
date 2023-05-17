@@ -1,0 +1,47 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: base-integration-instance
+    image: ${MOLECULE_ROLE_IMAGE:-rockylinux:8}
+    dockerfile: ../../tests/molecule/Dockerfile-noprivs.j2
+    command: "/lib/systemd/systemd"
+    privileged: true
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+    volume_mounts:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    groups:
+      - database
+      - activemq
+      - transformers
+      - search
+      - repository
+      - trusted_resource_consumers
+      - syncservice
+      - adw
+      - acc
+      - nginx
+    published_ports:
+      - 80/tcp
+      - 0.0.0.0:443:443/tcp
+
+provisioner:
+  name: ansible
+  ansible_args:
+    - -e
+    - "@tests/test-extra-vars.yml"
+    - -e
+    - "@tests/test-ssl.yml"
+  inventory:
+    links:
+      group_vars: ../../group_vars
+      host_vars: host_vars
+  playbooks:
+    prepare: ../default/prepare.yml
+verifier:
+  name: ansible

@@ -1,0 +1,5 @@
+---
+- name: Run the playbook
+  ansible.builtin.import_playbook: ../../playbooks/acs.yml
+  vars:
+    autogen_unsecure_secrets: True
