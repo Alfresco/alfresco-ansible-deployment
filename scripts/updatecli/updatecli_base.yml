@@ -15,4 +15,4 @@ targets:
       key_selector: googledrive_repo
     googleDriveShare:
       sourceid: googleDriveAmp
-      key_selector: googledrive_repo
+      key_selector: googledrive_share
