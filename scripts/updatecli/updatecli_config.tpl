@@ -86,6 +86,7 @@ sources:
       versionFilter:
         kind: regex
         pattern: '{{ .adw.version }}(.(\d+))+{{ .version_pattern }}'
+  {{- if index . "ags" "version" }}
   agsAmp:
     name: AGS AMP {{ .ags.version }}.x
     kind: gittag
@@ -96,6 +97,7 @@ sources:
         pattern: 'ags-{{ .ags.version }}(.(\d+))+{{ .version_pattern }}'
     transformers:
       - trimprefix: "ags-"
+  {{- end }}
   aosAmp:
     name: AOS AMP {{ .aos.version }}
     kind: gittag
