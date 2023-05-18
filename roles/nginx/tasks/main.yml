@@ -47,4 +47,5 @@
       - Apply new SELinux file contexts
 
 - name: Vhosts configuration
-  import_tasks: vhosts.yml
+  ansible.builtin.include_tasks: vhosts.yml
+  when: setup_vhosts

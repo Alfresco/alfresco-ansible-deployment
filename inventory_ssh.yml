@@ -42,6 +42,10 @@ all:
       hosts:
         nginx_1:
           ansible_host: targetIP
+    acc:
+      hosts:
+        acc_1:
+          ansible_host: targetIP
     adw:
       hosts:
         adw_1:

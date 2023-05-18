@@ -1,5 +1,5 @@
 server {
-        listen {{ adw_port }};
+        listen {{ acc_port }};
         client_max_body_size 0;
 
         set  $allowOriginSite *;
@@ -7,7 +7,7 @@ server {
         proxy_pass_header Set-Cookie;
 
         location / {
-              root {{ nginx_folder }}/{{ adw_context }}/;
+              root {{ nginx_default_vhost_docroot }}/{{ acc_context }}/;
             index index.html index.htm;
         }
     }

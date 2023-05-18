@@ -24,6 +24,7 @@ platforms:
       - repository
       - trusted_resource_consumers
       - syncservice
+      - acc
       - adw
       - nginx
 

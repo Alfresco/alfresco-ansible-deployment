@@ -9,4 +9,4 @@ utils:
 utils_selinux:
   - python3-libselinux
   - python3-libsemanage
-  - policycoreutils
+  - python3-policycoreutils
