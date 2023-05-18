@@ -10,7 +10,7 @@
       {{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}
     build: >-
       {{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
-    aws_base_resource_name: "{{ ['molecule', it_platform, repo_branch, build] | join('_') }}"
+    aws_base_resource_name: "{{ [it_platform, repo_branch, build] | join('_') }}"
     domain_name: >-
       {{ aws_base_resource_name | ansible.builtin.regex_replace('[^a-zA-Z0-9]','-') | lower | truncate(28, True, '') }}
   tasks:
