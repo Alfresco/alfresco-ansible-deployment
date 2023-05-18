@@ -88,10 +88,10 @@
           security_groups: "{{ ec2_sg | unique }}"
           subnets: "{{ ec2_subnet_ids | unique }}"
         tags:
-          Agent: molecule
-          ClientInstances: "{{ molecule_yml.platforms | map(attribute='name') | join('/') }}"
-          Owner: Ops Readiness Team
-          Department: Engineering
+          Creator: Alfresco/alfresco-ansible-deployment
+          Purpose: Molecule opensearch suite
+          Owner: Alfresco Ops Readiness
+          Department: Alfresco Engineering
           Production: false
 
     - name: Gather OpenSearch domain info
