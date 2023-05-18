@@ -47,6 +47,9 @@ all:
     nginx:
       hosts:
         proxy.infra.local:
+    acc:
+      hosts:
+        web.infra.local:
     adw:
       hosts:
         web.infra.local:

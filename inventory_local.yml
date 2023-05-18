@@ -29,6 +29,9 @@ all:
     nginx:
       children:
         repository:
+    acc:
+      children:
+        repository:
     adw:
       children:
         repository:

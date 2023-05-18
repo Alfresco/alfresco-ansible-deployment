@@ -10,4 +10,4 @@ utils:
 utils_selinux:
   - python3-selinux
   - python3-semanage
-  - policycoreutils
+  - policycoreutils-python-utils

@@ -5,8 +5,6 @@ nginx_vhosts:
     filename: "alfresco.conf"
   - listen: "443"
     server_name: "{{ fqdn_alfresco }}" # this should be an input from the client
-    root: "/usr/share/nginx/html"
-    index: "index.html index.htm"
     filename: "ssl.{{ fqdn_alfresco }}.conf"
     cert_crt: "{{ fqdn_alfresco }}.crt"
     cert_key: "{{ fqdn_alfresco }}.key"

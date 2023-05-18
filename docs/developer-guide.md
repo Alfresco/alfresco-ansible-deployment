@@ -123,6 +123,17 @@ molecule/default/vars-scenario.yml` parameter:
 molecule -e molecule/default/vars-rhel8.yml test
 ```
 
+#### Docker integration test
+
+There is also a `local` molecule scenario that use the same approach of roles
+molecule tests, using the docker driver.
+
+You can run it with:
+
+```sh
+molecule -s local test
+```
+
 ## Adding support for a new distribution
 
 We expect distribution support to be added using mostly roles `vars` files. If

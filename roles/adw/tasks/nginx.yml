@@ -44,3 +44,11 @@
         state: true
         persistent: true
       when: ansible_selinux.status == "enabled"
+
+    - name: Allow web-server to listen on tcp port {{ adw_port }}
+      community.general.seport:
+        ports: "{{ adw_port }}"
+        proto: tcp
+        setype: http_port_t
+        state: present
+      when: ansible_selinux.status == "enabled"
