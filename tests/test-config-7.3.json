@@ -12,7 +12,7 @@
         "modules": [
           {
             "id": "org.alfresco.integrations.google.docs",
-            "version": "3.3.0",
+            "version": "3.3.1",
             "installed": true
           },
           {
@@ -26,9 +26,6 @@
             "installed": true
           }
         ]
-      },
-      "acc": {
-        "version": "8.0.0"
       },
       "adw": {
         "version": "2.9.0"
