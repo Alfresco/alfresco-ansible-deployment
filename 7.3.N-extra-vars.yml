@@ -29,7 +29,7 @@ search:
   repository: "{{ nexus_repository.releases }}"
   version: 2.0.6.1
 transform:
-  artifact_name: alfresco-transform-core-aio-boot
+  artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
   version: 3.0.0
 trouter:
