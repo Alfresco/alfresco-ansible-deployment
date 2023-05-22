@@ -169,7 +169,7 @@ use_custom_keystores: false
 dependencies_version:
   postgresql_connector: 42.2.19
   postgres_major_version: 14
-  activemq: 5.16.4
+  activemq: 5.17.4
   java: 17.0.3
   java_build: 7
   tomcat: 9.0.59
