@@ -9,7 +9,7 @@ on:
       - '*.md'
 
 env:
-  DTAS_VERSION: v1.2.0
+  DTAS_VERSION: v1.2.1
   BUILD_NUMBER: ${{ github.run_id }}
   PY_COLORS: 1
   PYTHONUNBUFFERED: 1
@@ -139,11 +139,11 @@ jobs:
             vars: vars-ubuntu20-72.yml
             desc: EC2 ACS 7.2 (Ubuntu 20.04)
           - name: default
+            vars: vars-ubuntu20-73.yml
+            desc: EC2 ACS 7.3 (Ubuntu 20.04)
+          - name: default
             vars: vars-ubuntu22-community.yml
             desc: EC2 ACS 7.4 Community (Ubuntu 22.04)
-          - name: default
-            vars: vars-ubuntu20.yml
-            desc: EC2 ACS 7.4 (Ubuntu 20.04)
           - name: default
             vars: vars-rocky8.yml
             desc: EC2 ACS 7.4 (Rocky Linux 8)

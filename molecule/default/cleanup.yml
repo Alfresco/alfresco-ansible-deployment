@@ -9,6 +9,7 @@
       amazon.aws.ec2_metadata_facts:
       delegate_to: "{{ groups['nginx'] | first }}"
       failed_when: false
+      ignore_unreachable: true
 
     - name: Set hostname fact from EC2 or localhost
       ansible.builtin.set_fact:

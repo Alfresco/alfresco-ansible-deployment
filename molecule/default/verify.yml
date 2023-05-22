@@ -31,7 +31,7 @@
             chdir: "{{ dtas_dir }}"
             cmd: |
               export REQUESTS_CA_BUNDLE={{ selfsigned_cert_path }}
-              pytest --tb=line --configuration {{ test_config_file }} tests/ -s
+              pytest --tb=line --color=no --configuration {{ test_config_file }} tests/ -s
       rescue:
         - name: Print multiline pytest stdout as best as we can
           debug:

@@ -23,10 +23,10 @@ searchEnterprise:
   version: "3.2"
 
 transform:
-  version: "3"
+  version: "3.0"
 
 trouter:
-  version: "2"
+  version: "2.0"
 
 target_file: 7.3.N-extra-vars.yml
 version_pattern: '(-M\d*)?$'
