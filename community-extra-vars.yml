@@ -1,21 +1,18 @@
----
 acs:
   artifact_name: alfresco-content-services-community-distribution
   repository: "{{ nexus_repository.releases }}"
-  version: 7.3.0
+  version: 7.4.0.1
   edition: Community
-
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
-    version: 1.5.0
+    version: 1.6.0
   googledrive_repo:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-repo-community"
-    version: 3.3.0
+    version: 3.4.0
   googledrive_share:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-repo-community"
-    version: 3.3.0
-
+    version: 3.4.0
 amp_downloads:
   - url: "{{ amps.aos_module.repository }}/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     sha1_checksum_url: "{{ amps.aos_module.repository }}/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp.sha1"
