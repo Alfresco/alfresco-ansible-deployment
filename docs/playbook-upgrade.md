@@ -2,6 +2,8 @@
 
 ## Unreleased version
 
+## v2.1.0
+
 ### Secrets management
 
 Playbook has been enhanced to ease the adoption of Ansible Vault or third-party
