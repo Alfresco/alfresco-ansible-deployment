@@ -1,4 +1,4 @@
-MOLECULE_IT_IMAGE_ID: ami-026842e3469000168
+MOLECULE_IT_IMAGE_ID: ami-03c212e8567b3fbb4 # Rocky Linux 8 (Official) By Rocky Linux on AWS Marketplace
 MOLECULE_IT_EXTRA_VARS: tests/test-extra-vars.yml
 MOLECULE_IT_TEST_CONFIG: tests/test-config.json
 MOLECULE_IT_PLATFORM: rocky8
