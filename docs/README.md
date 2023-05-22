@@ -58,7 +58,7 @@ the status of supported OS.
 
 Legend:
 
-* :heavy_check_mark: platform supported and tested on this playbook
+* :white_check_mark: platform supported and tested on this playbook
 * :ballot_box_with_check: platform supported but not automatically tested on this playbook
 * :x: platform NOT supported by this playbook even if officially supported by Alfresco
 * `-` platform not officially supported by Alfresco
@@ -67,16 +67,16 @@ Legend:
 |---------------------|-------------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
 | Amazon Linux (v2)   | :x:                     | :x:                | :x:                | :x:                | :x:                | :x:                |
 | Amazon Linux (v1)   | :x:                     | :x:                | :x:                | :x:                | :x:                | :x:                |
-| RHEL 8.6            | :heavy_check_mark:      | :heavy_check_mark: | -                  | -                  | -                  | :heavy_check_mark: |
-| RHEL 8.5            | :ballot_box_with_check: | :heavy_check_mark: | :heavy_check_mark: | -                  | -                  | :heavy_check_mark: |
-| RHEL 8.4            | -                       | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| RHEL 8.2            | -                       | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| RHEL 7.7            | -                       | -                  | -                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| RHEL 7.6            | -                       | -                  | -                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| CentOS 7 x64        | :ballot_box_with_check: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| Ubuntu 22.04        | :heavy_check_mark:      | :heavy_check_mark: | -                  | -                  | -                  | :heavy_check_mark: |
-| Ubuntu 20.04        | :heavy_check_mark:      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| Ubuntu 18.04        | -                       | -                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| RHEL 8.6            | :white_check_mark:      | :white_check_mark: | -                  | -                  | -                  | :white_check_mark: |
+| RHEL 8.5            | :ballot_box_with_check: | :white_check_mark: | :white_check_mark: | -                  | -                  | :white_check_mark: |
+| RHEL 8.4            | -                       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| RHEL 8.2            | -                       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| RHEL 7.7            | -                       | -                  | -                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| RHEL 7.6            | -                       | -                  | -                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| CentOS 7 x64        | :ballot_box_with_check: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Ubuntu 22.04        | :white_check_mark:      | :white_check_mark: | -                  | -                  | -                  | :white_check_mark: |
+| Ubuntu 20.04        | :white_check_mark:      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Ubuntu 18.04        | -                       | -                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | SUSE 15.0           | -                       | -                  | -                  | -                  | :x:                | :x:                |
 | SUSE 12.0 SP1 x64   | -                       | -                  | -                  | -                  | :x:                | :x:                |
 
