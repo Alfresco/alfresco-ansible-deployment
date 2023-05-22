@@ -143,6 +143,15 @@ and possibly added in separate task files.
 The OS support table in `docs/README.md` must be updates and so does the
 `supported_os` variable in the `group_vars/all.yml` file.
 
+## Release
+
+Follow this quick checklist:
+
+* copy the versions inside the group_vars/all.yml to a new X.X.N-extra-vars.yml
+* run updatecli against the latest and supported versions (one for each extra-vars file)
+* ensure that the [tables in the main readme](README.md) has been updated
+* ensure that AMI id for the root molecule tests are not outdated (e.g. [default suite](../molecule/default/vars-rhel8.yml))
+
 ### Bumping ACS version via updatecli
 
 This repo provide experimental support for updatecli to keep ACS components
@@ -164,4 +173,27 @@ automatically modified with the latest available versions:
 
 * `groups_vars/all.yml`
 
-Commit and push them on a new `next/acs-XX` branch.
+Commit and push them on a new `next/acs-XX` branch, if you are starting to the the new pre-release versions.
+If you are at release time, just raise a PR to merge in `master`.
+
+### Tag and release
+
+To start the actual release process, just create a tag and push it.
+
+If you have GPG setup, use `git tag -s` otherwise `git tag -a`.
+
+Tag name must have `v` prefix.
+
+Example with GPG sign enabled:
+
+```bash
+git tag -s v2.x.x -m v2.x.x
+```
+
+Then push the tag with:
+
+```bash
+git push origin v2.x.x
+```
+
+Check that the triggered [Release workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml) go green.
