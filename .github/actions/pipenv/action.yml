@@ -4,9 +4,9 @@ description: 'Install python packages with pipenv'
 runs:
   using: "composite"
   steps:
-  - name: Install pipenv
+  - name: Install pipenv dependency
     shell: bash
-    run: pip install --user pipenv==2022.10.12
-  - name: Install packages from Pipfile
+    run: pip install -r ${{ github.action_path }}/requirements.txt
+  - name: Prepare pipenv virtualenv
     shell: bash
-    run: pipenv install --deploy --dev
+    run: pipenv install --deploy --dev --python $(cat .python-version)
