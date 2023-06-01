@@ -613,6 +613,24 @@ amp_downloads:
 
 > Be careful not to override the value for `dest` key
 
+### Firewall configuration
+
+By default, the `acs.yml` playbook will deploy Alfresco and expect the firewall to be already configured as per the table containing the [ports configuration](#tcp-port-configuration). You can add the flag '-e skip_fw_config=false' if you want the playbook to also install, enable and configure the firewall rules, e.g.:
+
+```bash
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e skip_fw_config=false
+```
+
+It is also possible to execute the firewall specific playbook `firewall.yml` before and/or after the Alfresco deployment, e.g.:
+
+```bash
+pipenv run ansible-playbook playbooks/firewall.yml -i inventory_ssh.yml
+```
+
+> Note: If you are planning to execute the firewall specific playbook after, make sure that the ports marked as required for deployment are opened before deploying Alfresco
+
+> Note: The firewall playbook will install, enable and configure the default firewall for each OS (e.g.: `firewalld` for RedHat and `ufw` for Debian)
+
 ## Localhost Deployment
 
 The diagram below shows the result of a localhost deployment.
@@ -637,7 +655,7 @@ Or to deploy ACS Community use the following command:
 pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@community-extra-vars.yml"
 ```
 
-By default, the ACS playbook will now also check compatibility of OS if it is  fully supported.
+By default, the ACS playbook will now also check compatibility of OS if it is fully supported.
 You can add flag '-e skip_os_test=true' if you want to deploy on not supported OS distribution.
 
 > NOTE: The playbook takes around 30 minutes to complete.
@@ -950,7 +968,7 @@ If you are using a multi-machine deployment and the playbook fails with an error
 > TASK [../roles/repository : Notify alfresco content service] *****************
 > fatal: [repository_1]: FAILED! => {"changed": false, "elapsed": 300, "msg": "Timeout when waiting for 192.168.0.126:5432"}
 
-Either disable the firewall completely or refer to the [ports configuration](#tcp-port-configuration) section for what ports need to be accessible.
+Either disable the firewall completely or refer to the [firewall](firewall-configuration) and [ports configuration](#tcp-port-configuration) sections for what ports need to be accessible.
 
 Presuming you are using `firewalld` the following example commands can be used to open a port, replacing `<port-number>` with the approriate number or replacing `<service-name>` with a well know service name e.g. "http".
 

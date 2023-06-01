@@ -34,6 +34,7 @@
 
 - name: Make sure the firewall is setup properly
   ansible.builtin.import_playbook: firewall.yml
+  when: not (skip_fw_config | default(true) | bool)
 
 - name: Database Role
   hosts: database
