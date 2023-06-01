@@ -261,12 +261,12 @@ Several roles setup services that listen on TCP ports and several roles wait for
 |:----------------------------|:------------|:---------------------------------------------------------|:------------------------|
 | activemq                    | 61616       | repository, syncservice, transformers, search enterprise | Yes                     |
 | database                    | 5432        | repository, syncservice                                  | Yes                     |
-| repository                  | 8080        | nginx, search, syncservice                               | Yes                     |
+| repository                  | 8080        | nginx, search, syncservice, acc, adw                     | Yes                     |
 | search                      | 8983        | repository                                               | No                      |
 | transformers (aio t-engine) | 8090        | repository                                               | No                      |
 | transformers (router)       | 8095        | repository                                               | No                      |
 | transformers (sfs)          | 8099        | repository                                               | No                      |
-| syncservice                 | 9090        | nginx                                                    | No                      |
+| syncservice                 | 9090        | repository, nginx                                        | No                      |
 | acc                         | 8881        | nginx                                                    | No                      |
 | adw                         | 8880        | nginx                                                    | No                      |
 | nginx                       | 80          | `<client-ips>`                                           | No                      |

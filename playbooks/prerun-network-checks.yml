@@ -95,6 +95,14 @@
   roles:
     - role: '../roles/helper_modules'
   tasks:
+  - name: Check db connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.database | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.database[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "{{ ports_cfg.postgres.sql }}"
+      delegate_target: "{{ groups.database | first }}"
+    when: repo_db_url == ""
+
   - name: Check repo connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
@@ -109,6 +117,19 @@
       checked_port: "{{ ports_cfg.activemq[activemq_protocol] }}"
       delegate_target: "{{ groups.activemq | first }}"
     when: groups.activemq | default([]) | length > 0
+
+- name: Run preliminary network checks for acc hosts
+  hosts: acc
+  become: yes
+  roles:
+    - role: '../roles/helper_modules'
+  tasks:
+  - name: Check repo connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.repository | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.repository[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "{{ ports_cfg.repository.http }}"
+      delegate_target: "{{ groups.repository | first }}"
 
 - name: Run preliminary network checks for adw hosts
   hosts: adw
@@ -144,6 +165,16 @@
       delegate_target: "{{ groups.syncservice | first }}"
     when:
       - groups.syncservice | default([]) | length > 0
+      - acs.edition == "Enterprise"
+
+  - name: Check acc connection
+    include_tasks: "../roles/helper_modules/tasks/check_port.yml"
+    vars:
+      checked_host: "{% if groups.acc | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.acc[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
+      checked_port: "{{ ports_cfg.acc.http }}"
+      delegate_target: "{{ groups.acc | first }}"
+    when:
+      - groups.acc | default([]) | length > 0
       - acs.edition == "Enterprise"
 
   - name: Check adw connection
