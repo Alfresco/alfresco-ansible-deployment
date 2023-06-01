@@ -1,9 +1,10 @@
 ---
-- name: Configure and enable the firewall on activemq
+- name: Configure and enable the firewall on activemq hosts
   hosts: activemq
   become: true
   tasks:
-  - include_tasks: "../roles/common/tasks/firewall.yml"
+  - name: Include firewall task
+    include_tasks: "../roles/common/tasks/firewall.yml"
     vars:
       firewall_ports:
         - "{{ ports_cfg.activemq[activemq_protocol] }}"
@@ -13,11 +14,12 @@
         - "{{ trans_hosts_list }}"
         - "{{ search_ent_hosts_list }}"
 
-- name: Configure and enable the firewall on database
+- name: Configure and enable the firewall on database hosts
   hosts: database
   become: true
   tasks:
-  - include_tasks: "../roles/common/tasks/firewall.yml"
+  - name: Include firewall task
+    include_tasks: "../roles/common/tasks/firewall.yml"
     vars:
       firewall_ports:
         - "{{ ports_cfg.postgres.sql }}"
@@ -26,11 +28,12 @@
         - "{{ sync_hosts_list }}"
     when: repo_db_url == ""
 
-- name: Configure and enable the firewall on repository
+- name: Configure and enable the firewall on repository hosts
   hosts: repository
   become: true
   tasks:
-  - include_tasks: "../roles/common/tasks/firewall.yml"
+  - name: Include firewall task
+    include_tasks: "../roles/common/tasks/firewall.yml"
     vars:
       firewall_ports:
         - "{{ ports_cfg.repository.http }}"
@@ -40,22 +43,24 @@
         - "{{ search_hosts_list }}"
         - "{{ sync_hosts_list }}"
 
-- name: Configure and enable the firewall on search
+- name: Configure and enable the firewall on search hosts
   hosts: search
   become: true
   tasks:
-  - include_tasks: "../roles/common/tasks/firewall.yml"
+  - name: Include firewall task
+    include_tasks: "../roles/common/tasks/firewall.yml"
     vars:
       firewall_ports:
         - "{{ ports_cfg.search.http }}"
       firewall_sources:
         - "{{ repo_hosts_list }}"
 
-- name: Configure and enable the firewall on transformers
+- name: Configure and enable the firewall on transformers hosts
   hosts: transformers
   become: true
   tasks:
-  - include_tasks: "../roles/common/tasks/firewall.yml"
+  - name: Include firewall task
+    include_tasks: "../roles/common/tasks/firewall.yml"
     vars:
       firewall_ports:
         - "{{ ports_cfg.transformers.tengine }}"
@@ -63,11 +68,12 @@
         - "{{ repo_hosts_list }}"
     when: acs.edition != "Enterprise"
 
-- name: Configure and enable the firewall on transformers
+- name: Configure and enable the firewall on transformers hosts
   hosts: transformers
   become: true
   tasks:
-  - include_tasks: "../roles/common/tasks/firewall.yml"
+  - name: Include firewall task
+    include_tasks: "../roles/common/tasks/firewall.yml"
     vars:
       firewall_ports:
         - "{{ ports_cfg.transformers.tengine }}"
@@ -77,11 +83,12 @@
         - "{{ repo_hosts_list }}"
     when: acs.edition == "Enterprise"
 
-- name: Configure and enable the firewall on syncservice
+- name: Configure and enable the firewall on syncservice hosts
   hosts: syncservice
   become: true
   tasks:
-  - include_tasks: "../roles/common/tasks/firewall.yml"
+  - name: Include firewall task
+    include_tasks: "../roles/common/tasks/firewall.yml"
     vars:
       firewall_ports:
         - "{{ ports_cfg.sync.http }}"
@@ -89,11 +96,12 @@
         - "{{ nginx_hosts_list }}"
     when: acs.edition == "Enterprise"
 
-- name: Configure and enable the firewall on adw
+- name: Configure and enable the firewall on adw hosts
   hosts: adw
   become: true
   tasks:
-  - include_tasks: "../roles/common/tasks/firewall.yml"
+  - name: Include firewall task
+    include_tasks: "../roles/common/tasks/firewall.yml"
     vars:
       firewall_ports:
         - "{{ ports_cfg.adw.http }}"
@@ -101,11 +109,12 @@
         - "{{ nginx_hosts_list }}"
     when: acs.edition == "Enterprise"
 
-- name: Configure and enable the firewall on nginx
+- name: Configure and enable the firewall on nginx hosts
   hosts: nginx
   become: true
   tasks:
-  - include_tasks: "../roles/common/tasks/firewall.yml"
+  - name: Include firewall task
+    include_tasks: "../roles/common/tasks/firewall.yml"
     vars:
       firewall_ports:
         - "{{ ports_cfg.nginx.http }}"
