@@ -178,6 +178,7 @@ An ACS inventory file has the following groups a host can belong to:
   role](https://github.com/buluma/ansible-role-elasticsearch) but instead use an
   ElasticSearch cluster of yours which matches your hosting standards.
 * `nginx`: a single host on which the playbook will deploy an NGINX reverse proxy configured for the numerous http based service in the platform.
+* `acc`: a single host where you want the Alfresco Control Center UI to be installed
 * `adw`: a single host where you want the Alfresco Digital Workspace UI to be installed
 * `transformers`: a single host where the playbook will deploy the Alfresco Transformation Services components
 * `syncservice`: a single host where the Alfresco Device Sync service will be deployed
@@ -266,11 +267,12 @@ Several roles setup services that listen on TCP ports and several roles wait for
 | transformers (router)       | 8095        | repository                                               | No                      |
 | transformers (sfs)          | 8099        | repository                                               | No                      |
 | syncservice                 | 9090        | nginx                                                    | No                      |
+| acc                         | 8881        | nginx                                                    | No                      |
 | adw                         | 8880        | nginx                                                    | No                      |
 | nginx                       | 80          | `<client-ips>`                                           | No                      |
 | nginx                       | 443         | `<client-ips>`                                           | No                      |
 
-> NOTE: When using the ACS Community, some of these ports do not need to be opened (e.g. transform router/sfs, adw).
+> NOTE: When using the ACS Community, some of these ports do not need to be opened (e.g. transform router/sfs, acc, adw).
 
 ## Configure Your Deployment
 
@@ -648,6 +650,7 @@ Once the playbook is complete Ansible will display a play recap to let you know 
 
 ```bash
 PLAY RECAP *******************************************************************************************************
+acc_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
 adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
 database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
@@ -664,6 +667,8 @@ Once ACS has initialized access the system using the following URLs with a brows
 * Share: `http://<control-node-public-ip>/share`
 * Repository: `http://<control-node-public-ip>/alfresco`
 * API Explorer: `http://<control-node-public-ip>/api-explorer`
+* Control Center: `http://<control-node-public-ip>/control-center` (Enterprise Only)
+* Sync Service: `http://<control-node-public-ip>/syncservice` (Enterprise Only)
 
 ## SSH Deployment
 
@@ -721,6 +726,7 @@ Once the playbook is complete Ansible will display a play recap to let you know 
 
 ```bash
 PLAY RECAP *******************************************************************************************************
+acc_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
 adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
 database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
@@ -737,6 +743,8 @@ Once ACS has initialized access the system using the following URLs with a brows
 * Share: `http://<target-host-ip>/share`
 * Repository: `http://<target-host-ip>/alfresco`
 * API Explorer: `http://<target-host-ip>/api-explorer`
+* Control Center: `http://<target-host-ip>/control-center` (Enterprise Only)
+* Sync Service: `http://<target-host-ip>/syncservice` (Enterprise Only)
 
 ### Multi Machine Deployment
 
@@ -776,6 +784,7 @@ Once the playbook is complete Ansible will display a play recap to let you know 
 
 ```bash
 PLAY RECAP *******************************************************************************************************
+acc_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
 activemq_1                 : ok=24   changed=0    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
 adw_1                      : ok=24   changed=6    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0
 database_1                 : ok=20   changed=0    unreachable=0    failed=0    skipped=11   rescued=0    ignored=0
@@ -792,6 +801,8 @@ Once ACS has initialized access the system using the following URLs with a brows
 * Share: `http://<nginx-host-ip>/share`
 * Repository: `http://<nginx-host-ip>/alfresco`
 * API Explorer: `http://<nginx-host-ip>/api-explorer`
+* Control Center: `http://<nginx-host-ip>/control-center` (Enterprise Only)
+* Sync Service: `http://<nginx-host-ip>/syncservice` (Enterprise Only)
 
 ### Additional command switches for ansible-playbook
 
