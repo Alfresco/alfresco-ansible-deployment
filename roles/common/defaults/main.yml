@@ -51,6 +51,8 @@ ports_cfg:
   nginx:
     http: 80
     https: 443
+  adw:
+    http: 8880
   activemq:
     openwire: >-
       {% if groups.external_activemq | default(False) %}

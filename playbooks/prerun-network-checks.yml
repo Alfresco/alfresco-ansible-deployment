@@ -1,133 +1,157 @@
 ---
-- name: prerequisite checks
+- name: Run preliminary network checks for repository hosts
   hosts: repository
   become: yes
   roles:
     - role: '../roles/helper_modules'
   tasks:
-  - name: check db connection
+  - name: Check db connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.database | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.database[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
       checked_port: "{{ ports_cfg.postgres.sql }}"
       delegate_target: "{{ groups.database | first }}"
     when: repo_db_url == ""
-  - name: check activemq connection
+
+  - name: Check activemq connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.activemq | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.activemq[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
       checked_port: "{{ ports_cfg.activemq[activemq_protocol] }}"
       delegate_target: "{{ groups.activemq | first }}"
-  - name: check search connection
+    when: groups.activemq | default([]) | length > 0
+
+  - name: Check search connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.search | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.search[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
       checked_port: "{{ ports_cfg.search.http }}"
       delegate_target: "{{ groups.search | first }}"
-  - name: check sync connection
+    when: groups.search | default([]) | length > 0
+
+  - name: Check sync connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.syncservice | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.syncservice[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
       checked_port: "{{ ports_cfg.sync.http }}"
       delegate_target: "{{ groups.syncservice | first }}"
-  - name: check sfs connection
+    when:
+      - groups.syncservice | default([]) | length > 0
+      - acs.edition == "Enterprise"
+
+  - name: Check sfs connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.transformers[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
       checked_port: "{{ ports_cfg.sfs.http }}"
       delegate_target: "{{ groups.transformers | first }}"
-  - name: check trouter connection
+    when: acs.edition == "Enterprise"
+
+  - name: Check trouter connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.transformers[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
       checked_port: "{{ ports_cfg.transformers.trouter }}"
       delegate_target: "{{ groups.transformers | first }}"
-  - name: check tengine connection
+    when: acs.edition == "Enterprise"
+
+  - name: Check tengine connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.transformers | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.transformers[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
       checked_port: "{{ ports_cfg.transformers.tengine }}"
       delegate_target: "{{ groups.transformers | first }}"
 
-- name: prerequisite checks
+- name: Run preliminary network checks for search hosts
   hosts: search
   become: yes
   roles:
     - role: '../roles/helper_modules'
   tasks:
-  - name: check repo connection
+  - name: Check repo connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.repository | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.repository[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
       checked_port: "{{ ports_cfg.repository.http }}"
       delegate_target: "{{ groups.repository | first }}"
 
-- name: prerequisite checks
+- name: Run preliminary network checks for transformers hosts
   hosts: transformers
   become: yes
   roles:
     - role: '../roles/helper_modules'
   tasks:
-  - name: check activemq connection
+  - name: Check activemq connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.activemq | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.activemq[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
       checked_port: "{{ ports_cfg.activemq[activemq_protocol] }}"
       delegate_target: "{{ groups.activemq | first }}"
+    when: groups.activemq | default([]) | length > 0
 
-- name: prerequisite checks
+- name: Run preliminary network checks for syncservice hosts
   hosts: syncservice
   become: yes
   roles:
     - role: '../roles/helper_modules'
   tasks:
-  - name: check repo connection
+  - name: Check repo connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.repository | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.repository[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
       checked_port: "{{ ports_cfg.repository.http }}"
       delegate_target: "{{ groups.repository | first }}"
-  - name: check activemq connection
+
+  - name: Check activemq connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.activemq | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.activemq[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
       checked_port: "{{ ports_cfg.activemq[activemq_protocol] }}"
       delegate_target: "{{ groups.activemq | first }}"
+    when: groups.activemq | default([]) | length > 0
 
-- name: prerequisite checks
+- name: Run preliminary network checks for adw hosts
   hosts: adw
   become: yes
   roles:
     - role: '../roles/helper_modules'
   tasks:
-  - name: check repo connection
+  - name: Check repo connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.repository | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.repository[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
       checked_port: "{{ ports_cfg.repository.http }}"
       delegate_target: "{{ groups.repository | first }}"
 
-- name: prerequisite checks
+- name: Run preliminary network checks for nginx hosts
   hosts: nginx
   become: yes
   roles:
     - role: '../roles/helper_modules'
   tasks:
-  - name: check repo connection
+  - name: Check repo connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.repository | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.repository[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
       checked_port: "{{ ports_cfg.repository.http }}"
       delegate_target: "{{ groups.repository | first }}"
-  - name: check sync connection
+
+  - name: Check sync connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.syncservice | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.syncservice[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
       checked_port: "{{ ports_cfg.sync.http }}"
       delegate_target: "{{ groups.syncservice | first }}"
-  - name: check adw connection
+    when:
+      - groups.syncservice | default([]) | length > 0
+      - acs.edition == "Enterprise"
+
+  - name: Check adw connection
     include_tasks: "../roles/helper_modules/tasks/check_port.yml"
     vars:
       checked_host: "{% if groups.adw | length == 0 %}127.0.0.1{% else %}{{ hostvars[groups.adw[0]].ansible_host | default('127.0.0.1') }}{% endif %}"
-      checked_port: "8880"
+      checked_port: "{{ ports_cfg.adw.http }}"
       delegate_target: "{{ groups.adw | first }}"
+    when:
+      - groups.adw | default([]) | length > 0
+      - acs.edition == "Enterprise"
