@@ -15,6 +15,7 @@ node "Target Host" as "host" #LightGrey {
     component "Common" as common #4d9cea
     component "NGINX Proxy" as proxy #4d9cea
     component "Repository & Share" as repo #4d9cea
+    component "Control Center" as acc #4d9cea
     component "Digital Workspace" as adw #4d9cea
     component "Search Service" as search #4d9cea
     component "AIO Transform Engine" as tengine #4d9cea
@@ -39,9 +40,11 @@ playbook -down-> trouter
 playbook -down-> sfs
 playbook -down-> sync
 playbook -down-> proxy
+playbook -down-> acc
 playbook -down-> adw
 
 amq .down.> java
+acc .down.> common
 adw .down.> common
 java .down.> common
 proxy .down.> common
