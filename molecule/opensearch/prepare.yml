@@ -26,7 +26,11 @@
       {{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
     ec2_resource_name: "{{ ['molecule', it_platform, repo_branch, build] | join('_') }}"
     domain_name: >-
-      {{ ['molecule', it_platform, build, repo_branch] | join('-') | lower | truncate(28, True, '') }}
+      {{ ['molecule', it_platform, build, repo_branch]
+      | join('-')
+      | ansible.builtin.regex_replace('[^a-zA-Z0-9]', build[-1])
+      | lower
+      | truncate(28, True, '') }}
     domain_admin: admin
   tasks:
     - name: Gather caller info
