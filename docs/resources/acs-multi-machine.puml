@@ -16,6 +16,11 @@ node "nginx" as nginxnode #lightgrey {
     component "Common" as nginxcommon #4d9cea
 }
 
+node "acc" as accnode #lightgrey {
+    component "Control Center" as acc #4d9cea
+    component "Common" as acccommon #4d9cea
+}
+
 node "adw" as adwnode #lightgrey {
     component "Digital Workspace" as adw #4d9cea
     component "Common" as adwcommon #4d9cea
@@ -71,9 +76,11 @@ playbook -down-> trouter
 playbook -down-> sfs
 playbook -down-> sync
 playbook -down-> proxy
+playbook -down-> acc
 playbook -down-> adw
 
 amq .down.> amqjava
+acc .down.> acccommon
 adw .down.> adwcommon
 proxy .down.> nginxcommon
 psql .down.> dbcommon

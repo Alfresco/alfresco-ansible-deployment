@@ -14,6 +14,7 @@ actor Client
 
 node "ingress" as ingressnode #lightgrey {
     component "NGINX Proxy" as proxy #4d9cea
+    component "Control Center" as acc #4d9cea
     component "Digital Workspace" as adw #4d9cea
 }
 
@@ -117,6 +118,7 @@ this with Nginx Plus and use its
 HA features.
 end note
 
+acc .. proxy
 adw .. proxy
 repo1 .. tomcat1
 share1 .. tomcat1
@@ -134,6 +136,7 @@ sync2 .. syncjava2
 Client --> proxy
 
 proxy --> repolb
+proxy --> acc
 proxy --> adw
 
 repolb -down-> repo1
@@ -149,6 +152,7 @@ synclb -down-> sync2
 
 share1 --> repolb
 share2 --> repolb
+acc --> repolb
 adw --> repolb
 
 repo1 --> psql
