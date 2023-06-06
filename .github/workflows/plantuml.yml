@@ -1,0 +1,34 @@
+name: Generate PlantUML Diagrams
+on:
+  push:
+    paths:
+      - "**.puml"
+    branches:
+      - "**"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get changed puml
+        id: changed-files
+        uses: tj-actions/changed-files@v36
+        with:
+          files: "**.puml"
+
+      - name: Generate PNG diagrams
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: cloudbees/plantuml-github-action@929b064eb53747773f132e1170c54733019ff24e
+        with:
+          args: -v -tpng ${{ steps.changed-files.outputs.all_changed_files }}
+
+      - name: Push updated diagrams
+        uses: stefanzweifel/git-auto-commit-action@v4.16.0
+        with:
+          commit_message: "Update PNG images for PlantUML diagrams"
