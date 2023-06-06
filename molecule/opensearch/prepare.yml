@@ -24,9 +24,13 @@
       {{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}
     build: >-
       {{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}
-    aws_base_resource_name: "{{ ['molecule', it_platform, repo_branch, build] | join('_') }}"
+    ec2_resource_name: "{{ ['molecule', it_platform, repo_branch, build] | join('_') }}"
     domain_name: >-
-      {{ aws_base_resource_name | ansible.builtin.regex_replace('[^a-zA-Z0-9]','-') | lower | truncate(28, True, '') }}
+      {{ ['molecule', it_platform, build, repo_branch]
+      | join('-')
+      | ansible.builtin.regex_replace('[^a-zA-Z0-9]', build[-1])
+      | lower
+      | truncate(28, True, '') }}
     domain_admin: admin
   tasks:
     - name: Gather caller info
@@ -37,8 +41,13 @@
       amazon.aws.ec2_instance_info:
         filters:
           instance-state-name: running
-          "tag:Name": "{{ aws_base_resource_name }}"
+          "tag:Name": "{{ ec2_resource_name }}"
       register: meta_ec2
+
+    - name: Ensure {{ ec2_resource_name }} EC2 instance present and running
+      ansible.builtin.assert:
+        that: meta_ec2.instances | length == 1
+        fail_msg: "Instances matching filters found: {{ meta_ec2.instances | length }}"
 
     - name: Early secrets loading from vault
       include_vars: ../../vars/secrets.yml
@@ -55,7 +64,7 @@
         wait_timeout: 1800
         cluster_config:
           instance_type: c6g.large.search
-          instance_count: 2
+          instance_count: 1
           zone_awareness: false
           dedicated_master: false
         ebs_options:
@@ -88,9 +97,11 @@
           security_groups: "{{ ec2_sg | unique }}"
           subnets: "{{ ec2_subnet_ids | unique }}"
         tags:
-          ClientInstances: "{{ molecule_yml.platforms | map(attribute='name') | join('/') }}"
-          Owner: Ops Readiness Team
-          Department: Engineering
+          Name: "{{ ec2_resource_name }}"
+          Creator: Alfresco/alfresco-ansible-deployment
+          Purpose: Molecule opensearch suite
+          Owner: Alfresco Ops Readiness
+          Department: Alfresco Engineering
           Production: false
 
     - name: Gather OpenSearch domain info
