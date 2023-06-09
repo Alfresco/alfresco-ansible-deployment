@@ -1,7 +1,7 @@
 ---
 # tasks file for base-tomcat
 - name: Download Tomcat
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ dependencies_url.tomcat }}"
     checksum: sha512:{{ dependencies_url.tomcat_sha512_checksum_url }}
     dest: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
@@ -11,7 +11,7 @@
   become: true
   block:
     - name: Unarchive a file with extra options
-      unarchive:
+      ansible.builtin.unarchive:
         src: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
         dest: "{{ tomcat_home | dirname }}"
         remote_src: true
@@ -20,19 +20,19 @@
         owner: "{{ username }}"
 
     - name: Add {{ binaries_folder }}/tomcat.sh
-      template:
+      ansible.builtin.template:
         src: tomcat.sh
         dest: "{{ binaries_folder }}/tomcat.sh"
         group: "{{ group_name }}"
         owner: "{{ username }}"
         mode: "0750"
       tags:
-        - molecule-idempotence-notest # Files is dealt with outside this role
+        - molecule-idempotence-notest  # Files is dealt with outside this role
 
     - name: Prepare Tomcat config
       block:
         - name: Copy files from "{{ tomcat_home }} to {{ tomcat_config_dir }}"
-          copy:
+          ansible.builtin.copy:
             remote_src: true
             src: "{{ tomcat_home }}/{{ item.src }}"
             dest: "{{ item.dest }}"
@@ -47,7 +47,7 @@
               dest: "{{ tomcat_working }}"
       rescue:
         - name: Check Unix FHS dirs
-          stat:
+          ansible.builtin.stat:
             path: "{{ item }}"
           register: tcat_dest_dirs
           loop:
@@ -57,17 +57,24 @@
         - name: Handle missing sources
           ansible.builtin.debug:
             msg: Looks like the FHS directory structure is already in place
-          when: not tcat_dest_dirs.results | map(attribute='stat.exists') | difference([True])
+          when: >-
+            not tcat_dest_dirs.results
+            | map(attribute='stat.exists')
+            | difference([True])
         - name: Fail on unexcepted FHS inconsistency
           ansible.builtin.fail:
             msg: >
               Oh oh that should not happen...
-              Looks like the FHS directory structure is broken and can't be re-created.
+              Looks like the FHS directory structure is broken and can't be
+              re-created.
               Please reinstall from scratch :(
-          when: tcat_dest_dirs.results | map(attribute='stat.exists') | difference([True])
+          when: >-
+            tcat_dest_dirs.results
+            | map(attribute='stat.exists')
+            | difference([True])
 
     - name: Remove old files from {{ tomcat_home }}
-      file:
+      ansible.builtin.file:
         path: "{{ tomcat_home }}/{{ item }}"
         state: absent
       loop:
@@ -78,7 +85,7 @@
         - webapps
 
     - name: Add "{{ tomcat_config_dir }}/conf/server.xml"
-      template:
+      ansible.builtin.template:
         src: server.xml
         dest: "{{ tomcat_config_dir }}/conf/server.xml"
         group: "{{ group_name }}"
@@ -86,7 +93,7 @@
         mode: "0640"
 
     - name: Create a symbolic link {{ tomcat_config_dir }}/logs
-      file:
+      ansible.builtin.file:
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
         group: "{{ group_name }}"
@@ -100,17 +107,17 @@
           dest: "{{ tomcat_config_dir }}/work"
 
     - name: Add TOMCAT_HOME to setenv script
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: "{{ config_folder }}/setenv.sh"
         line: "export TOMCAT_HOME={{ tomcat_home }}"
         group: "{{ group_name }}"
         owner: "{{ username }}"
 
     - name: Add alfresco-content.service
-      template:
-          src: alfresco-content.service
-          dest: /etc/systemd/system/alfresco-content.service
-          owner: "{{ username }}"
-          group: "{{ group_name }}"
+      ansible.builtin.template:
+        src: alfresco-content.service
+        dest: /etc/systemd/system/alfresco-content.service
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
       notify:
-        - enable-alfresco-content
+        - Enable-alfresco-content
