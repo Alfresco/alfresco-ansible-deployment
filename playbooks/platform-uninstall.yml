@@ -15,7 +15,8 @@
   become: yes
   ignore_unreachable: yes
   handlers:
-    - ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
+    - name: Load Handlers
+      ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: Stopping activemq service
       ignore_errors: yes
@@ -43,7 +44,8 @@
   become: yes
   ignore_unreachable: yes
   handlers:
-    - ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
+    - name: Load Handlers
+      ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: Stopping transform
       ignore_errors: yes
@@ -85,7 +87,8 @@
   become: yes
   ignore_unreachable: yes
   handlers:
-    - ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
+    - name: Load Handlers
+      ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: Stopping Search
       ignore_errors: yes
@@ -112,7 +115,8 @@
   become: yes
   ignore_unreachable: yes
   handlers:
-    - ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
+    - name: Load Handlers
+      ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: Stopping Sync
       ignore_errors: yes
@@ -150,7 +154,8 @@
   become: yes
   ignore_unreachable: yes
   handlers:
-    - ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
+    - name: Load Handlers
+      ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: Stopping content services
       ignore_errors: yes
