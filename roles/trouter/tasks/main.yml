@@ -34,10 +34,10 @@
         dest: "{{ ats_home }}/atr-mtls.properties"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 0600
+        mode: "0600"
       when: ats_keystore
       notify:
-        - restart-trouter
+        - Restart-trouter
 
     - name: Add T-Router startup script
       template:
@@ -47,9 +47,9 @@
         group: "{{ group_name }}"
         mode: "0755"
       notify:
-        - restart-trouter
+        - Restart-trouter
 
-    - name: copy BSSRF enabled pipeline transformers
+    - name: Copy BSSRF enabled pipeline transformers
       copy:
         content: "{{ bssrf_pipelines | to_nice_json }}"
         dest: "{{ ats_home }}/pipelines/0200-html-via-txt.json"
@@ -58,7 +58,7 @@
         mode: "0640"
       when: bssrf_protection_enabled
       notify:
-        - restart-trouter
+        - Restart-trouter
 
     - name: Add paths to setenv file
       blockinfile:
@@ -80,9 +80,9 @@
         group: "{{ group_name }}"
         mode: "0644"
       notify:
-        - wait-for-aio
-        - enable-trouter
-        - restart-trouter
+        - Wait-for-aio
+        - Enable-trouter
+        - Restart-trouter
 
 - name: Download {{ trouter.artifact_name }}.jar
   become: true
