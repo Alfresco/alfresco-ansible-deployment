@@ -1,11 +1,11 @@
 ---
-- name: restart-postgresql
+- name: Restart-postgresql
   become: true
   service:
     name: "{{ postgresql_service }}"
     state: restarted
 
-- name: enable-postgresql
+- name: Enable-postgresql
   become: true
   service:
     name: "{{ postgresql_service }}"
