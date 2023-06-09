@@ -1,6 +1,6 @@
 ---
-#### This playbook will uninstall ACS
-- hosts: database
+- name: Clean Database
+  hosts: database
   become: yes
   ignore_unreachable: yes
   tasks:
@@ -10,7 +10,8 @@
         state: absent
         autoremove: yes
 
-- hosts: activemq
+- name: Clean activeMQ
+  hosts: activemq
   become: yes
   ignore_unreachable: yes
   handlers:
@@ -37,7 +38,8 @@
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
       notify: Reload systemd
 
-- hosts: transformers
+- name: Clean ATS
+  hosts: transformers
   become: yes
   ignore_unreachable: yes
   handlers:
@@ -78,7 +80,8 @@
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
       notify: Reload systemd
 
-- hosts: search
+- name: Clean Search Service
+  hosts: search
   become: yes
   ignore_unreachable: yes
   handlers:
@@ -104,7 +107,8 @@
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
       notify: Reload systemd
 
-- hosts: syncservice
+- name: Clean SyncService
+  hosts: syncservice
   become: yes
   ignore_unreachable: yes
   handlers:
@@ -130,7 +134,8 @@
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
       notify: Reload systemd
 
-- hosts: nginx
+- name: Clean proxy
+  hosts: nginx
   become: yes
   ignore_unreachable: yes
   tasks:
@@ -140,7 +145,8 @@
         state: absent
         autoremove: yes
 
-- hosts: repository
+- name: Clean ACS
+  hosts: repository
   become: yes
   ignore_unreachable: yes
   handlers:
