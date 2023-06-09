@@ -1,15 +1,16 @@
 ---
 - name: Configure web virtual hosts
   become: true
+  notify: Reload-nginx
   block:
     - name: Remove default nginx vhost config file (if configured).
-      file:
+      ansible.builtin.file:
         path: "{{ nginx_default_vhost_path }}"
         state: absent
       when: nginx_remove_default_vhost | bool
 
     - name: Ensure nginx_vhost_path exists.
-      file:
+      ansible.builtin.file:
         path: "{{ nginx_vhost_path }}"
         state: directory
 
@@ -18,7 +19,7 @@
       when: use_ssl
 
     - name: Add ssl key
-      template:
+      ansible.builtin.template:
         src: "{{ role_path }}/../../configuration_files/ssl_certificates/{{ item.cert_key }}"
         dest: "/etc/nginx/{{ item.cert_key }}"
         force: true
@@ -27,7 +28,7 @@
       when: item.listen == '443'
 
     - name: Add ssl cert
-      template:
+      ansible.builtin.template:
         src: "{{ role_path }}/../../configuration_files/ssl_certificates/{{ item.cert_crt }}"
         dest: "/etc/nginx/{{ item.cert_crt }}"
         force: true
@@ -35,27 +36,26 @@
       with_items: "{{ nginx_vhosts }}"
       when: item.listen == '443'
 
-    - name:  Add managed vhost config files.
-      template:
+    - name: Add managed vhost config files.
+      ansible.builtin.template:
         src: "{{ item.template | default(nginx_vhost_template) }}"
         dest: "{{ nginx_vhost_path }}/{{ item.filename }}"
         force: true
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
       with_items: "{{ nginx_vhosts }}"
       when: item.state|default('present') != 'absent'
 
     - name: Add required proxy config
-      template:
+      ansible.builtin.template:
         src: alfresco_proxy.j2
         dest: "{{ nginx_vhost_path }}/alfresco_proxy.include"
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
 
     - name: Remove legacy vhosts.conf file.
-      file:
+      ansible.builtin.file:
         path: "{{ nginx_vhost_path }}/vhosts.conf"
         state: absent
-  notify: reload-nginx

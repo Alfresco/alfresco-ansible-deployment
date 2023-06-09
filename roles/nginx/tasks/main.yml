@@ -7,31 +7,31 @@
   become: true
   block:
     - name: Enable EPEL repository
-      yum_repository:
+      ansible.builtin.yum_repository:
         name: epel
         description: EPEL YUM repo
         metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch&infra=$infra&content=$contentdir
-        gpgcheck: yes
+        gpgcheck: true
         gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
       when: ansible_distribution in [ 'RedHat', 'CentOS' ] and ansible_distribution_major_version == '7'
 
     - name: Ensure nginx is installed.
-      package:
+      ansible.builtin.package:
         name: "{{ nginx_package_name }}"
         state: present
-      notify: enable-nginx
+      notify: Enable-nginx
 
     - name: Copy nginx configuration in place.
-      template:
+      ansible.builtin.template:
         src: "{{ nginx_conf_template }}"
         dest: "{{ nginx_conf_file_path }}"
         owner: root
         group: root
         mode: "0644"
-      notify: restart-nginx
+      notify: Restart-nginx
 
     - name: Set httpd_can_network_connect flag on and keep it persistent across reboots
-      seboolean:
+      ansible.posix.seboolean:
         name: httpd_can_network_connect
         state: true
         persistent: true
@@ -44,7 +44,7 @@
         state: present
       when: ansible_selinux.status == "enabled"
       notify:
-      - Apply new SELinux file contexts
+        - Apply new SELinux file contexts
 
 - name: Vhosts configuration
   ansible.builtin.include_tasks: vhosts.yml
