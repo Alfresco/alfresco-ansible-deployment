@@ -146,7 +146,7 @@
   handlers:
     - ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
-    - name: stopping content services
+    - name: Stopping content services
       ignore_errors: yes
       ansible.builtin.service:
         name: alfresco-content
