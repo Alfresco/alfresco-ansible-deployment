@@ -119,6 +119,11 @@
           export ATS_SHARED_FS_HOST={{ sfs_host }}
         insertafter: EOF
     - name: Add ats dependencies vars to setenv file
+      vars:
+        im_lib: >-
+          {% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/lib/x86_64-linux-gnu/{% else %}/usr/lib64/{% endif %}
+        im_cfg: >-
+          {% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] -}}{% else %}${IMAGEMAGICK_HOME}{% endif %}
       blockinfile:
         path: "{{ config_folder }}/setenv.sh"
         marker: "# {mark} ATS DEPENDENCIES ENV VARS"
@@ -127,9 +132,9 @@
         block: |
           export LIBREOFFICE_HOME={{ libreoffice_home }}
           export IMAGEMAGICK_HOME={{ imagemagick_home }}
-          export IMAGEMAGICK_DYN={% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/lib/x86_64-linux-gnu{% else %}/usr/lib64{% endif %}/
-          export IMAGEMAGICK_CONFIG={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/config-Q16HDRI
-          export IMAGEMAGICK_CODERS={% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] }}{% else %}${IMAGEMAGICK_HOME}{% endif %}/modules-Q16HDRI/coders
+          export IMAGEMAGICK_DYN={{ im_lib }}
+          export IMAGEMAGICK_CONFIG={{ im_cfg }}/config-Q16HDRI
+          export IMAGEMAGICK_CODERS={{ im_cfg }}/modules-Q16HDRI/coders
           export IMAGEMAGICK_EXE="{% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/bin/{% endif %}convert"
         insertafter: EOF
 
@@ -148,11 +153,11 @@
         dest: "{{ binaries_folder }}/transform-service/tengine-mtls.properties"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 0600
+        mode: "0600"
       when: ats_keystore
       notify:
-        - wait-for-activemq
-        - restart-aio
+        - Wait-for-activemq
+        - Restart-aio
 
     - name: Add AIO startup script
       template:
@@ -163,8 +168,8 @@
         mode: 'u=rwx,g=rwx,o=rx'
         force: true
       notify:
-        - wait-for-activemq
-        - restart-aio
+        - Wait-for-activemq
+        - Restart-aio
 
     - name: Add alfresco-tengine-aio service
       template:
@@ -175,9 +180,9 @@
         mode: 'u=rw,g=rw,o=r'
         force: true
       notify:
-        - wait-for-activemq
-        - enable-aio
-        - restart-aio
+        - Wait-for-activemq
+        - Enable-aio
+        - Restart-aio
 
 - name: Verifying if libreoffice finished downloading
   async_status:
@@ -190,13 +195,15 @@
     - molecule-idempotence-notest
 
 - name: Extract libreoffice-dist-linux.gz
+  vars:
+    lo_arch: >-
+      {{ ansible_system }}_{{ ansible_architecture | replace('_', '-') }}_{{ pkg_format }}
   unarchive:
     src: "{{ download_location }}/libreoffice.tar.gz"
     dest: "{{ download_location }}/"
     remote_src: true
     creates: >-
-      {{ download_location }}/LibreOffice_{{ dependencies_version.libreoffice }}_{{ ansible_system }}_
-      {{- ansible_architecture | replace('_','-') }}_{{ pkg_format }}/{{ pkg_format | upper }}S/
+      {{ download_location }}/LibreOffice_{{ dependencies_version.libreoffice }}_{{ lo_arch }}/{{ pkg_format | upper }}S/
 
 - name: Install LibreOffice & imageMagick
   include_tasks: "dependencies-{{ pkg_format }}.yml"

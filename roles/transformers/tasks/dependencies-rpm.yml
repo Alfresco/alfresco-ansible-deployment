@@ -3,13 +3,17 @@
   become: true
   block:
     - name: Install imagemagick
-      yum:
-        name: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}.{{ pkg_format }}"
+      ansible.builtin.yum:
         state: present
+        name: >-
+          {{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}.{{ pkg_format }}
         disable_gpg_check: true
       loop: "{{  imagemagick_packages }}"
 
     - name: Install LibreOffice RPMs
-      shell:
-        cmd: "yum localinstall -y {{ download_location }}/LibreOffice_{{ dependencies_version.libreoffice }}_Linux_{{ ansible_architecture | replace('_','-') }}_rpm/RPMS/*.rpm"
-        creates: /opt/libreoffice{{ dependencies_version.libreoffice | regex_search('^[0-9]+.[0-9]+') }}/program/soffice.bin
+      ansible.builtin.shell:
+        cmd: yum localinstall -y RPMS/*.rpm
+        chdir: >-
+          {{ download_location }}/LibreOffice_{{ dependencies_version.libreoffice }}_Linux_{{ ansible_architecture | replace('_', '-') }}_rpm/
+        creates: >-
+          /opt/libreoffice{{ dependencies_version.libreoffice | regex_search('^[0-9]+.[0-9]+') }}/program/soffice.bin

@@ -9,8 +9,13 @@
       loop: "{{  imagemagick_packages }}"
 
     - name: Install LibreOffice
-      shell:
+      vars:
+        lo_arch: >-
+          {{ ansible_system }}_{{ ansible_architecture | replace('_', '-') }}
+      ansible.builtin.shell:
         cmd: |
           yes | \
-          dpkg -i {{ download_location }}/LibreOffice_{{ dependencies_version.libreoffice }}_{{ ansible_system }}_{{ ansible_architecture | replace('_','-') }}_deb/DEBS/*.deb
+          dpkg -i DEBS/*.deb
         creates: /opt/libreoffice{{ dependencies_version.libreoffice | regex_search('^[0-9]+.[0-9]+') }}/program/soffice.bin
+        chdir: >-
+          {{ download_location }}/LibreOffice_{{ dependencies_version.libreoffice }}_{{ lo_arch }}_deb
