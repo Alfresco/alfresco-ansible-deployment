@@ -43,7 +43,7 @@
         group: "{{ group_name }}"
         mode: "0755"
       notify:
-        - restart-sfs
+        - Restart-sfs
 
     - name: Add AIO config mTLS config file
       template:
@@ -51,10 +51,10 @@
         dest: "{{ ats_home }}/sfs-mtls.properties"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 0600
+        mode: "0600"
       when: ats_keystore
       notify:
-        - restart-sfs
+        - Restart-sfs
 
     - name: Add paths to setenv file
       blockinfile:
@@ -76,5 +76,5 @@
         group: "{{ group_name }}"
         mode: "0644"
       notify:
-        - enable-sfs
-        - restart-sfs
+        - Enable-sfs
+        - Restart-sfs
