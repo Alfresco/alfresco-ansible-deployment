@@ -1,11 +1,11 @@
 ---
 # handlers file for repository
-- name: systemd-reload
+- name: Systemd-reload
   become: true
   service:
     daemon_reload: true
 
-- name: restart-alfresco-content
+- name: Restart-alfresco-content
   vars:
     svc: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
   throttle: 1

@@ -1,7 +1,8 @@
 ---
 - name: Include OS specific variables
-  include_vars: "{{ item }}"
-  loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
+  ansible.builtin.include_vars: "{{ item }}"
+  loop: >-
+    {{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}
 
 - name: Instanciate Java keystore
   ansible.builtin.include_role:
@@ -14,25 +15,28 @@
 - name: Handle secure properties
   block:
     - name: Initialize temporary accumulator
-      set_fact:
+      ansible.builtin.set_fact:
         temp_array: []
 
     - name: Set solr.sharedSecret property
-      set_fact:
-        temp_array: "{{ temp_array + [ '-Dsolr.sharedSecret=' ~ reposearch_shared_secret | quote ] }}"
+      ansible.builtin.set_fact:
+        temp_array: >-
+          {{ temp_array + [ '-Dsolr.sharedSecret=' ~ reposearch_shared_secret | quote ] }}
       when: acs.version is version('7.2.0', '>=')
 
     - name: Set metadata-keystore.password and related properties
-      set_fact:
+      ansible.builtin.set_fact:
         temp_array: "{{ temp_array + [
           '-Dmetadata-keystore.password=' ~ repo_custom_keystore_password | quote,
           '-Dmetadata-keystore.aliases=metadata',
           '-Dmetadata-keystore.metadata.password=' ~ repo_custom_keystore_metadata_password | quote
           ] }}"
-      when: repo_custom_keystore_password is defined and repo_custom_keystore_metadata_password is defined
+      when:
+        - repo_custom_keystore_password is defined
+        - repo_custom_keystore_metadata_password is defined
 
     - name: Combine secure acs environment
-      set_fact:
+      ansible.builtin.set_fact:
         acs_secure_environment:
           JAVA_TOOL_OPTIONS: "{{ temp_array }}"
       when: temp_array|length > 0
@@ -45,7 +49,7 @@
 
 - name: Create folders
   become: true
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     owner: "{{ username }}"
@@ -68,12 +72,12 @@
     - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
 
 - name: Proceed with Shared contentstore tasks
-  include_tasks: sharedcs.yml
+  ansible.builtin.include_tasks: sharedcs.yml
 
 - name: Download war files
   become: true
   loop: "{{ war_downloads }}"
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ item.url }}"
     checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }}
     dest: "{{ item.dest }}"
@@ -90,7 +94,7 @@
     - molecule-idempotence-notest
 
 - name: Download {{ acs.artifact_name }}.zip
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ downloads.acs_zip_url }}"
     dest: "{{ download_location }}/{{ acs.artifact_name }}.zip"
     url_username: "{{ nexus_user }}"
@@ -105,7 +109,7 @@
 - name: Download AMPS
   become: true
   loop: "{{ amp_downloads }}"
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ item.url }}"
     checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }}
     dest: "{{ item.dest }}"
@@ -122,7 +126,7 @@
 
 - name: Download postgresql jar
   become: true
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ dependencies_url.postgresql_connector }}"
     checksum: sha1:{{ lookup('url', dependencies_url.postgresql_connector_sha1_checksum_url) }}
     dest: "{{ tomcat_config_dir }}/lib/postgresql.jar"
@@ -137,7 +141,7 @@
     - molecule-idempotence-notest
 
 - name: Verifying if the distribution zip finished downloading
-  async_status:
+  ansible.builtin.async_status:
     jid: "{{ distribution_download_result.ansible_job_id }}"
   until: job_result.finished
   delay: 10
@@ -148,7 +152,7 @@
 
 - name: Extract {{ acs.artifact_name }}.zip into {{ content_folder }}
   become: true
-  unarchive:
+  ansible.builtin.unarchive:
     src: "{{ download_location }}/{{ acs.artifact_name }}.zip"
     dest: "{{ content_folder }}"
     remote_src: true
@@ -160,7 +164,7 @@
   become: true
   block:
     - name: Add ACS home to setenv.sh
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: "{{ config_folder }}/setenv.sh"
         insertafter: EOF
         line: "export ACS_HOME={{ binaries_folder }}/content-services-{{ acs.version }}"
@@ -168,26 +172,32 @@
         group: "{{ group_name }}"
 
     - name: Add ACS home to tomcat.sh
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: "{{ binaries_folder }}/tomcat.sh"
         insertafter: 'CATALINA_OPTS'
         line: >-
-          export CATALINA_OPTS="${CATALINA_OPTS} -Dacs.home=${ACS_HOME}
-          -Dats-tengine-aio.host={{ ats_tengine_aio_host }} -Dats-shared-fs.host={{ sfs_host }}"
+          export CATALINA_OPTS="${CATALINA_OPTS}
+          -Dacs.home=${ACS_HOME}
+          -Dats-tengine-aio.host={{ ats_tengine_aio_host }}
+          -Dats-shared-fs.host={{ sfs_host }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
 
     - name: Add additional env vars to tomcat.sh
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: "{{ binaries_folder }}/tomcat.sh"
         insertafter: 'CATALINA_OPTS'
         line: export {{ item.key }}="{{ item.value | join(' ') }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-      loop: "{{ acs_environment | combine(acs_secure_environment | default(None), list_merge='prepend') | dict2items }}"
+      loop: >-
+        {{ acs_environment
+        | combine(acs_secure_environment
+        | default(None), list_merge='prepend')
+        | dict2items }}
 
     - name: Create apply_amps.sh
-      template:
+      ansible.builtin.template:
         owner: "{{ username }}"
         group: "{{ group_name }}"
         src: apply_amps.sh
@@ -197,7 +207,7 @@
     - name: Install ACS data files to Linux FHS destinations
       block:
         - name: Copy Alfresco data files
-          copy:
+          ansible.builtin.copy:
             remote_src: true
             src: "{{ item.src }}"
             dest: "{{ item.dest }}"
@@ -213,7 +223,7 @@
               dest: "{{ settings_folder }}/classpath/"
       rescue:
         - name: Check Unix FHS dirs
-          stat:
+          ansible.builtin.stat:
             path: "{{ item }}"
           register: alf_dest_dirs
           loop:
@@ -223,17 +233,24 @@
         - name: Handle missing sources
           ansible.builtin.debug:
             msg: Looks like the FHS directory structure is already in place
-          when: not alf_dest_dirs.results | map(attribute='stat.exists') | difference([True])
+          when: >-
+            not alf_dest_dirs.results
+            | map(attribute='stat.exists')
+            | difference([True])
         - name: Fail on unexcepted FHS inconsistency
           ansible.builtin.fail:
-            msg: >
+            msg: |-
               Oh oh that should not happen...
-              Looks like the FHS directory structure is broken and can't be re-created.
+              Looks like the FHS directory structure is broken and can't be
+              re-created.
               Please reinstall from scratch :(
-          when: alf_dest_dirs.results | map(attribute='stat.exists') | difference([True])
+          when: >-
+            alf_dest_dirs.results
+            | map(attribute='stat.exists')
+            | difference([True])
 
     - name: Remove Alfresco data source files
-      file:
+      ansible.builtin.file:
         path: "{{ item }}"
         state: absent
       loop:
@@ -244,20 +261,21 @@
 - name: Configure ACS
   become: true
   notify:
-    - restart-alfresco-content
+    - Restart-alfresco-content
   block:
     - name: Add the configuration templates
-      template:
+      ansible.builtin.template:
         owner: "{{ username }}"
         group: "{{ group_name }}"
         src: "{{ item }}.j2"
-        dest: "{{ settings_folder }}/classpath/alfresco/web-extension/{{ item }}"
+        dest: >-
+          {{ settings_folder }}/classpath/alfresco/web-extension/{{ item }}
         mode: "0644"
       loop: "{{ share_templates }}"
 
     - name: Add Hazelcast cluster config for Share
       become: true
-      template:
+      ansible.builtin.template:
         owner: "{{ username }}"
         group: "{{ group_name }}"
         src: custom-slingshot-application-context.xml
@@ -266,7 +284,7 @@
       when: groups['repository'] | length > 1 and not cluster_keepoff
 
     - name: Copy db_connector_repo to {{ tomcat_config_dir }}/lib/ folder
-      copy:
+      ansible.builtin.copy:
         src: "{{ inventory_dir }}/configuration_files/db_connector_repo/"
         dest: "{{ tomcat_config_dir }}/lib/"
         owner: "{{ username }}"
@@ -275,15 +293,15 @@
       when: repo_db_url != ""
 
     - name: Copy user provided license file
-      copy:
+      ansible.builtin.copy:
         src: "{{ role_path }}/../../configuration_files/licenses/"
         dest: "{{ settings_folder }}/licenses/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0640"
 
-    - name: copy BSSRF enabled pipaline transformers
-      copy:
+    - name: Copy BSSRF enabled pipaline transformers
+      ansible.builtin.copy:
         content: "{{ bssrf_pipelines | to_nice_json }}"
         dest: "{{ settings_folder }}/classpath/alfresco/extension/transform/pipelines/0200-html-via-txt.json"
         owner: "{{ username }}"
@@ -291,8 +309,8 @@
         mode: "0640"
       when: bssrf_protection_enabled
 
-    - name: copy custom keystore file
-      copy:
+    - name: Copy custom keystore file
+      ansible.builtin.copy:
         src: "{{ role_path }}/../../configuration_files/keystores/"
         dest: "{{ content_data_folder }}/keystore/"
         owner: "{{ username }}"
@@ -301,20 +319,20 @@
       when: use_custom_keystores
 
     - name: Create config folders
-      file:
+      ansible.builtin.file:
         state: directory
         path: "{{ tomcat_config_dir }}/conf/Catalina/localhost/"
-        mode: 0755
+        mode: "0755"
         owner: "{{ username }}"
         group: "{{ group_name }}"
 
     - name: Create config files
-      template:
+      ansible.builtin.template:
         src: "{{ item }}.xml"
         dest: "{{ tomcat_config_dir }}/conf/Catalina/localhost/{{ item }}.xml"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        mode: 0644
+        mode: "0644"
       loop:
         - alfresco
         - share
@@ -322,25 +340,27 @@
         - _vti_bin
         - api-explorer
     - name: Remove conf files
-      file:
+      ansible.builtin.file:
         path: "{{ content_folder }}/web-server/conf"
         state: absent
-      notify: []
 
     - name: Create alfresco-global.properties
       vars:
-        merged_repository_properties: "{{ default_repository_properties | combine(repository_properties | default(None)) }}"
-      template:
+        merged_repository_properties: >-
+          {{ default_repository_properties
+          | combine(repository_properties
+          | default(None)) }}"
+      ansible.builtin.template:
         owner: "{{ username }}"
         group: "{{ group_name }}"
         src: alfresco-global.properties.j2
         dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
         mode: "0640"
       tags:
-        - molecule-idempotence-notest # see OPSEXP-1280
+        - molecule-idempotence-notest  # see OPSEXP-1280
 
     - name: Setup common loader
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: "{{ tomcat_config_dir }}/conf/catalina.properties"
         regexp: ^\s*common.loader\s*=
         line: >
@@ -350,22 +370,25 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
 
-    - name: Insert or Update custom properties added through configuration_files/alfresco-global.properties
-      blockinfile:
+    - name: >-
+        Insert or Update custom properties added through
+        configuration_files/alfresco-global.properties
+      ansible.builtin.blockinfile:
         path: "{{ settings_folder }}/classpath/alfresco-global.properties"
         marker: "{mark} - ANSIBLE MANAGED BLOCK"
         marker_begin: "### Begin - Custom user properties"
         marker_end: "### End - Custom user properties"
         insertafter: EOF
-        block: "{{ lookup('file', role_path + '/../../configuration_files/alfresco-global.properties') }}"
+        block: >-
+          {{ lookup('file', role_path + '/../../configuration_files/alfresco-global.properties') }}
         owner: "{{ username }}"
         group: "{{ group_name }}"
       tags:
-        - molecule-idempotence-notest # see OPSEXP-1280
+        - molecule-idempotence-notest  # see OPSEXP-1280
 
 - name: Check on amp download async task
   become: true
-  async_status:
+  ansible.builtin.async_status:
     jid: "{{ item.ansible_job_id }}"
   register: job_result
   until: job_result.finished
@@ -377,7 +400,7 @@
 
 - name: Install amps on alfresco and share war files
   become: true
-  shell: '{{ content_folder }}/apply_amps.sh -nobackup -force'
+  ansible.builtin.shell: '{{ content_folder }}/apply_amps.sh -nobackup -force'
   register: mmt_install
   changed_when: mmt_install.rc != 0
   tags:
@@ -385,7 +408,7 @@
 
 - name: Check on postgres download async task
   become: true
-  async_status:
+  ansible.builtin.async_status:
     jid: "{{ postgresql_download.ansible_job_id }}"
   register: job_result
   until: job_result.finished
@@ -397,7 +420,7 @@
 
 - name: Check on war download async task
   become: true
-  async_status:
+  ansible.builtin.async_status:
     jid: "{{ item.ansible_job_id }}"
   register: job_result
   until: job_result.finished
@@ -411,38 +434,38 @@
   become: true
   vars:
     systemd_root: /etc/systemd/system/
+  notify:
+    - Systemd-reload
   block:
     - name: Create systemd overrides folder
-      file:
+      ansible.builtin.file:
         path: "{{ systemd_root }}/alfresco-content.service.d"
         state: directory
         owner: root
         group: root
-        mode: 0700
+        mode: "0700"
     - name: Systemd Overrides for the tomcat unit
       ansible.builtin.template:
         src: alfresco-content-unit-overrides.j2
         dest: "{{ systemd_root }}/alfresco-content.service.d/environment.conf"
-        mode: 0600
+        mode: "0600"
         owner: root
         group: root
     - name: Create monitoring start up service
-      template:
+      ansible.builtin.template:
         src: alfresco-content-monitored-startup.sh.j2
         dest: "{{ binaries_folder }}/alfresco-content-monitored-startup.sh"
-        mode: 0750
+        mode: "0750"
     - name: Create monitored start up service
-      template:
+      ansible.builtin.template:
         src: alfresco-content-monitored-startup.service.j2
         dest: "{{ systemd_root }}/alfresco-content-monitored-startup.service"
-        mode: 0644
+        mode: "0644"
         owner: root
         group: root
-  notify:
-    - systemd-reload
 
-- name: wait-for-db
-  wait_for:
+- name: Wait-for-db
+  ansible.builtin.wait_for:
     host: "{{ db_host }}"
     port: "{{ ports_cfg.postgres.sql }}"
   when: not repo_db_url | default(false)

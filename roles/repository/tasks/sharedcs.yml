@@ -4,7 +4,7 @@
   when: cs_storage.device is defined
   block:
     - name: Create contentstore folders
-      file:
+      ansible.builtin.file:
         path: "{{ content_data_folder }}/content"
         state: directory
     - name: Mount ACS ContentStore
@@ -12,7 +12,7 @@
         mnt_options:
           - "{{ cs_storage.options | default('defaults') }}"
           - _netdev
-      mount:
+      ansible.posix.mount:
         state: mounted
         path: "{{ content_data_folder }}/content"
         src: "{{ cs_storage.device }}"
