@@ -38,7 +38,7 @@
             dest: "{{ item.dest }}"
             owner: "{{ username }}"
             group: "{{ group_name }}"
-            mode: 0755
+            mode: "0755"
           loop:
             - src: "{{ activemq_home }}/conf"
               dest: "{{ config_folder }}/activemq"
@@ -76,7 +76,7 @@
 
     - name: Configure ActiveMQ authentication
       community.general.xml:
-        pretty_print: yes
+        pretty_print: true
         path: "{{ activemq_conf }}/activemq.xml"
         xpath: /s:beans/a:broker/a:plugins/a:jaasAuthenticationPlugin[@configuration="activemq"]
         namespaces:
@@ -125,13 +125,13 @@
         group: "{{ group_name }}"
         mode: 'u=rwx,go=rx'
       notify:
-        - restart-activemq
+        - Restart-activemq
 
     - name: Add activemq.service
       template:
         src: activemq.service.j2
         dest: /etc/systemd/system/activemq.service
-        mode: 0644
+        mode: "0644"
       notify:
-        - enable-activemq
-        - restart-activemq
+        - Enable-activemq
+        - Restart-activemq
