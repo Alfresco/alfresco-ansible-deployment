@@ -35,7 +35,7 @@
         - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
         - "{{ binaries_folder | default('/opt/alfresco') }}"
         - "{{ data_folder | default('/var/opt/alfresco') }}"
-        - "{{ logs_folder | default('/var/log/alfresco')  }}"
+        - "{{ logs_folder | default('/var/log/alfresco') }}"
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
       notify: Reload systemd
 
@@ -78,7 +78,7 @@
         - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
         - "{{ binaries_folder | default('/opt/alfresco') }}"
         - "{{ data_folder | default('/var/opt/alfresco') }}"
-        - "{{ logs_folder | default('/var/log/alfresco')  }}"
+        - "{{ logs_folder | default('/var/log/alfresco') }}"
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
       notify: Reload systemd
 
@@ -106,7 +106,7 @@
         - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
         - "{{ binaries_folder | default('/opt/alfresco') }}"
         - "{{ data_folder | default('/var/opt/alfresco') }}"
-        - "{{ logs_folder | default('/var/log/alfresco')  }}"
+        - "{{ logs_folder | default('/var/log/alfresco') }}"
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
       notify: Reload systemd
 
@@ -134,7 +134,7 @@
         - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
         - "{{ binaries_folder | default('/opt/alfresco') }}"
         - "{{ data_folder | default('/var/opt/alfresco') }}"
-        - "{{ logs_folder | default('/var/log/alfresco')  }}"
+        - "{{ logs_folder | default('/var/log/alfresco') }}"
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"
       notify: Reload systemd
 

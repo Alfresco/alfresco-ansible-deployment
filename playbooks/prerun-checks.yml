@@ -5,7 +5,7 @@
     - name: Fail if Ansible version is too old
       ansible.builtin.fail:
         msg:
-          - "Installed Ansible version ({{ ansible_version.major }}.{{ ansible_version.minor  }}) is too old. Upgrade to at least 2.12."
+          - "Installed Ansible version ({{ ansible_version.major }}.{{ ansible_version.minor }}) is too old. Upgrade to at least 2.12."
           - "Please refer to https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/deployment-guide.md#setup-a-control-node for detailed instructions."
       when: (ansible_version.major < 2) or
             (ansible_version.major == 2 and ansible_version.minor < 12)
