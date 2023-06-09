@@ -180,7 +180,7 @@
         enabled: no
 
     - name: Unmount Alfresco Content
-      mount:
+      ansible.posix.mount:
         path: /var/opt/alfresco/content-services/content
         state: absent
 
