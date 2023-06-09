@@ -19,7 +19,10 @@
       ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: Stopping activemq service
-      ignore_errors: yes
+      register: svc_stop
+      failed_when: >-
+        svc_stop.failed
+        and 'Could not find the requested service' not in svc_stop.msg
       ansible.builtin.service:
         name: activemq
         state: stopped
@@ -48,7 +51,10 @@
       ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: Stopping transform
-      ignore_errors: yes
+      register: svc_stop
+      failed_when: >-
+        svc_stop.failed
+        and 'Could not find the requested service' not in svc_stop.msg
       ansible.builtin.service:
         name: "{{ item }}"
         state: stopped
@@ -91,7 +97,10 @@
       ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: Stopping Search
-      ignore_errors: yes
+      register: svc_stop
+      failed_when: >-
+        svc_stop.failed
+        and 'Could not find the requested service' not in svc_stop.msg
       ansible.builtin.service:
         name: alfresco-search
         state: stopped
@@ -119,7 +128,10 @@
       ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: Stopping Sync
-      ignore_errors: yes
+      register: svc_stop
+      failed_when: >-
+        svc_stop.failed
+        and 'Could not find the requested service' not in svc_stop.msg
       ansible.builtin.service:
         name: alfresco-sync
         state: stopped
@@ -158,7 +170,10 @@
       ansible.builtin.import_tasks: "handlers/uninstall-handlers.yml"
   tasks:
     - name: Stopping content services
-      ignore_errors: yes
+      register: svc_stop
+      failed_when: >-
+        svc_stop.failed
+        and 'Could not find the requested service' not in svc_stop.msg
       ansible.builtin.service:
         name: alfresco-content
         state: stopped
