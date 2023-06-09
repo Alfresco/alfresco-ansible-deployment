@@ -3,31 +3,33 @@
   become: true
   block:
     - name: Enable EPEL repository
-      yum_repository:
+      ansible.builtin.yum_repository:
         name: epel
         description: EPEL YUM repo
         metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch&infra=$infra&content=$contentdir
-        gpgcheck: yes
+        gpgcheck: true
         gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
-      when: ansible_distribution in [ 'RedHat', 'CentOS' ] and ansible_distribution_major_version == '7'
+      when: >-
+        ansible_distribution in [ 'RedHat', 'CentOS' ]
+        and ansible_distribution_major_version == '7'
 
     - name: Ensure nginx in adw.
-      package:
+      ansible.builtin.package:
         name: "{{ nginx_package_name }}"
         state: present
 
     - name: Ensure nginx_vhost_path exists.
-      file:
+      ansible.builtin.file:
         path: "{{ nginx_vhost_path }}"
         state: directory
 
     - name: Remove legacy vhosts.conf file.
-      file:
+      ansible.builtin.file:
         path: "{{ nginx_vhost_path }}/vhosts.conf"
         state: absent
 
     - name: Add managed vhost config files.
-      template:
+      ansible.builtin.template:
         src: alfresco_adw.conf
         dest: "{{ nginx_vhost_path }}/alfresco_adw.conf"
         force: true
@@ -35,11 +37,11 @@
         group: root
         mode: 'u=rw,g=r,o=r'
       notify:
-        - enable-nginx
-        - restart-nginx
+        - Enable-nginx
+        - Restart-nginx
 
     - name: Set nis_enabled flag on and keep it persistent across reboots
-      seboolean:
+      ansible.posix.seboolean:
         name: nis_enabled
         state: true
         persistent: true

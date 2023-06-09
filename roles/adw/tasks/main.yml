@@ -29,4 +29,5 @@
     remote_src: true
     creates: "{{ nginx_folder }}/{{ adw_context }}/app.config.json"
 
-- include_tasks: nginx.yml
+- name: Configure NGINX
+  include_tasks: nginx.yml

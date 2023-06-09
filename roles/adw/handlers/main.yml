@@ -1,13 +1,13 @@
 ---
 # handlers file for adw
-- name: enable-nginx
+- name: Enable-nginx
   become: true
   service:
     name: nginx
     enabled: true
     daemon_reload: true
 
-- name: restart-nginx
+- name: Restart-nginx
   become: true
   service:
     name: nginx
