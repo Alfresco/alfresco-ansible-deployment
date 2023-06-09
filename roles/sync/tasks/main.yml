@@ -2,7 +2,8 @@
 # tasks file for sync
 - name: Include OS specific variables
   include_vars: "{{ item }}"
-  loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
+  loop: >-
+    {{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}
 
 - name: Download Sync service artefact
   get_url:
@@ -74,9 +75,9 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx'
-        force: yes
+        force: true
       notify:
-        - restart-sync
+        - Restart-sync
 
     - name: Add paths to setenv file
       blockinfile:
@@ -97,7 +98,7 @@
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx'
       notify:
-        - restart-sync
+        - Restart-sync
 
     - name: Add alfresco-sync.service service
       template:
@@ -107,5 +108,5 @@
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx'
       notify:
-      - enable-sync
-      - restart-sync
+        - Enable-sync
+        - Restart-sync
