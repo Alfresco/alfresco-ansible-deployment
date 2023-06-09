@@ -46,7 +46,7 @@
 
     - name: Configure Solr Replication Handler
       community.general.xml:
-        pretty_print: yes
+        pretty_print: true
         path: "{{ config_dir }}/solrhome/{{ item }}/conf/solrconfig.xml"
         xpath: /config/requestHandler[@name="/replication"]
         attribute: class
@@ -72,7 +72,7 @@
           {{ master_xml if inventory_hostname == search_master else slave_xml }}
       community.general.xml:
         input_type: xml
-        pretty_print: yes
+        pretty_print: true
         path: "{{ config_dir }}/solrhome/{{ item }}/conf/solrconfig.xml"
         xpath: /config/requestHandler[@name="/replication"]
         set_children:

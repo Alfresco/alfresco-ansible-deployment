@@ -1,6 +1,7 @@
 ---
 # vars file for search
-product_dir: "{{ search_flavor | regex_search('alfresco-(.*)','\\1') | first }}"
+product_dir: >-
+  {{ search_flavor | regex_search('alfresco-(.*)', '\\1') | first }}
 binaries_dir: "{{ binaries_folder }}/{{ product_dir }}-{{ search_version }}"
 config_dir: "{{ config_folder }}/{{ product_dir }}"
 data_dir: "{{ data_folder }}/{{ product_dir }}"
