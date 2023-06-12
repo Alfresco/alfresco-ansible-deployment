@@ -57,7 +57,7 @@
     group: root
     mode: 'u=rw,g=r,o=r'
   notify:
-    - restart-nginx
+    - Restart-nginx
 
 - name: Allow web-server to listen on tcp port {{ acc_port }}
   become: true
