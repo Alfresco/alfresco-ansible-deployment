@@ -14,18 +14,18 @@
   when: ansible_components_status.msg is undefined
 
 - name: Check for invalid components upgrades
+  any_errors_fatal: true
   block:
     - name: Fail on unsupported ACS upgrade
       ansible.builtin.fail:
-      when: |
-        installed_components.acs is defined and
-        installed_components.api_explorer is defined and
-        (
+      when:
+        - installed_components.acs is defined
+        - installed_components.api_explorer is defined
+        - |
           acs.edition != installed_components.acs.edition or
           acs.version.split('.')[:3] | join('.') != installed_components.acs.version.split('.')[:3] | join('.') or
           acs.version is version(installed_components.acs.version, 'lt') or
           api_explorer.version != installed_components.api_explorer.version
-        )
 
     - name: Fail on unsupported AMPS upgrades
       ansible.builtin.fail:
@@ -71,7 +71,6 @@
       when:
         - installed_components.sync is defined
         - sync.version != installed_components.sync.version
-  any_errors_fatal: true
   module_defaults:
     ansible.builtin.fail:
       msg: >
