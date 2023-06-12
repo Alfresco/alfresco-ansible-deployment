@@ -15,6 +15,12 @@
 
 - name: Check for invalid components upgrades
   any_errors_fatal: true
+  module_defaults:
+    ansible.builtin.fail:
+      msg: >
+        You're trying to upgrade in an unsupported manner!
+        Please read our documentation for more informations on what's supported and what isn't.
+        https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/components-upgrade.md
   block:
     - name: Fail on unsupported ACS upgrade
       ansible.builtin.fail:
@@ -71,9 +77,3 @@
       when:
         - installed_components.sync is defined
         - sync.version != installed_components.sync.version
-  module_defaults:
-    ansible.builtin.fail:
-      msg: >
-        You're trying to upgrade in an unsupported manner!
-        Please read our documentation for more informations on what's supported and what isn't.
-        https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/components-upgrade.md
