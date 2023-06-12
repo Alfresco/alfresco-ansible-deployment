@@ -2,13 +2,13 @@
 - name: Fetch status file with installed versions
   ansible.builtin.fetch:
     src: "{{ ansible_installation_status_file }}"
-    fail_on_missing: no
+    fail_on_missing: false
     dest: /tmp/
   register: ansible_components_status
   changed_when: false
 
 - name: Read installed versions from status file when available
-  include_vars:
+  ansible.builtin.include_vars:
     file: /tmp/{{ inventory_hostname }}/{{ ansible_installation_status_file }}
     name: installed_components
   when: ansible_components_status.msg is undefined
@@ -16,7 +16,7 @@
 - name: Check for invalid components upgrades
   block:
     - name: Fail on unsupported ACS upgrade
-      fail:
+      ansible.builtin.fail:
       when: |
         installed_components.acs is defined and
         installed_components.api_explorer is defined and
@@ -28,7 +28,7 @@
         )
 
     - name: Fail on unsupported AMPS upgrades
-      fail:
+      ansible.builtin.fail:
       when: |
           installed_components is defined and
           installed_components.amps is defined and
@@ -37,43 +37,43 @@
       loop: "{{ installed_components.amps | list }}"
 
     - name: Fail on unsupported ADW upgrades
-      fail:
+      ansible.builtin.fail:
       when:
-          - installed_components.adw is defined
-          - adw.version != installed_components.adw.version
+        - installed_components.adw is defined
+        - adw.version != installed_components.adw.version
 
     - name: Fail on unsupported Transformers upgrades
-      fail:
+      ansible.builtin.fail:
       when:
         - installed_components.transform is defined
         - transform.version != installed_components.transform.version
 
     - name: Fail on unsupported Trouter upgrades
-      fail:
+      ansible.builtin.fail:
       when:
         - installed_components.trouter is defined
         - trouter.version != installed_components.trouter.version
 
     - name: Fail on unsupported SFS upgrades
-      fail:
+      ansible.builtin.fail:
       when:
         - installed_components.sfs is defined
         - sfs.version != installed_components.sfs.version
 
     - name: Fail on unsupported Search upgrades
-      fail:
+      ansible.builtin.fail:
       when:
-          - installed_components.search is defined
-          - search.version != installed_components.search.version
+        - installed_components.search is defined
+        - search.version != installed_components.search.version
 
     - name: Fail on unsupported Sync upgrades
-      fail:
+      ansible.builtin.fail:
       when:
-          - installed_components.sync is defined
-          - sync.version != installed_components.sync.version
+        - installed_components.sync is defined
+        - sync.version != installed_components.sync.version
   any_errors_fatal: true
   module_defaults:
-    fail:
+    ansible.builtin.fail:
       msg: >
         You're trying to upgrade in an unsupported manner!
         Please read our documentation for more informations on what's supported and what isn't.

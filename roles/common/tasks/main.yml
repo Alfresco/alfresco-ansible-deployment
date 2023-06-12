@@ -5,13 +5,14 @@
 
 - name: Include OS specific variables
   include_vars: "{{ item }}"
-  loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
+  loop: >-
+    {{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}
 
 - name: Ensure apt indices are up-to-date
   become: true
   apt:
-    update_cache: yes
-    cache_valid_time: 3600 # 1 hour
+    update_cache: true
+    cache_valid_time: 3600  # 1 hour
   when: ansible_pkg_mgr == 'apt'
 
 - name: Ensure a list of packages installed
@@ -32,8 +33,8 @@
   block:
     - name: Create {{ group_name }} group
       group:
-          name: "{{ group_name }}"
-          system: true
+        name: "{{ group_name }}"
+        system: true
 
     - name: Create {{ username }} user
       user:
