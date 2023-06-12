@@ -349,7 +349,7 @@
         merged_repository_properties: >-
           {{ default_repository_properties
           | combine(repository_properties
-          | default(None)) }}"
+          | default(None)) }}
       ansible.builtin.template:
         owner: "{{ username }}"
         group: "{{ group_name }}"
