@@ -156,7 +156,7 @@
         mode: "0600"
       when: ats_keystore
       notify:
-        - Wait-for-activemq
+        - wait-for-activemq
         - Restart-aio
 
     - name: Add AIO startup script
@@ -168,7 +168,7 @@
         mode: 'u=rwx,g=rwx,o=rx'
         force: true
       notify:
-        - Wait-for-activemq
+        - wait-for-activemq
         - Restart-aio
 
     - name: Add alfresco-tengine-aio service
@@ -180,7 +180,7 @@
         mode: 'u=rw,g=rw,o=r'
         force: true
       notify:
-        - Wait-for-activemq
+        - wait-for-activemq
         - Enable-aio
         - Restart-aio
 
