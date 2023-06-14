@@ -1,16 +1,4 @@
 # This file contains ignores rule violations for ansible-lint
-playbooks/platform-restart.yml jinja[spacing]
-playbooks/platform-uninstall.yml fqcn[action]
-playbooks/platform-uninstall.yml ignore-errors
-playbooks/platform-uninstall.yml jinja[spacing]
-playbooks/platform-uninstall.yml name[casing]
-playbooks/platform-uninstall.yml name[missing]
-playbooks/platform-uninstall.yml name[play]
-playbooks/prerequisite-checks.yml name[casing]
-playbooks/prerun-checks.yml jinja[spacing]
-playbooks/secrets-init.yml jinja[spacing]
-playbooks/secrets-init.yml name[play]
-playbooks/secrets.yml name[play]
 roles/activemq/handlers/main.yml name[casing]
 roles/activemq/tasks/main.yml name[casing]
 roles/adw/handlers/main.yml name[casing]
