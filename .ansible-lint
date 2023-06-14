@@ -1,6 +1,7 @@
 warn_list:
   - experimental
 skip_list:
+  - galaxy
   - risky-file-permissions
   - no-changed-when
   - command-instead-of-module
@@ -14,6 +15,6 @@ skip_list:
   - name[template]
   # Workaround for Role name buluma.elasticsearch does not match ``^[a-z][a-z0-9_]*$`` pattern.
   - role-name
-kinds:
-  - yaml: "**/molecule/**/vars*.yml"
-  - yaml: "**/molecule/**/hosts.yml"
+exclude_paths:
+ - molecule/
+ - roles/helper_module/
