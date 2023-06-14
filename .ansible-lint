@@ -4,9 +4,6 @@ skip_list:
   - galaxy
   - risky-file-permissions
   - risky-shell-pipe
-  - no-handler
-  - no-tabs
-  - empty-string-compare
   - fqcn-builtins
   # Allow Jinja templating inside task and play names
   - name[template]
