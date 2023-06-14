@@ -18,6 +18,7 @@ jobs:
   docker:
     name: ${{ matrix.role.name }} on ${{ matrix.molecule_distro.image }}
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'Alfresco'
     strategy:
       fail-fast: true
       matrix:
