@@ -1,7 +1,4 @@
 # This file contains ignores rule violations for ansible-lint
-roles/adw/handlers/main.yml name[casing]
-roles/adw/tasks/main.yml name[missing]
-roles/adw/tasks/nginx.yml fqcn[action]
 roles/common/defaults/main.yml jinja[spacing]
 roles/common/tasks/check_upgrades.yml key-order[task]
 roles/nginx/handlers/main.yml name[casing]
