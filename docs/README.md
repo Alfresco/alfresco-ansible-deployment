@@ -32,6 +32,7 @@ The ACS playbook can be found in the _playbooks_ directory. Because the project 
 
 The playbook uses the following roles:
 
+* **acc** - deploys and configures Alfresco Control Center
 * **activemq** - deploys and configures Apache ActiveMQ
 * **adw** - deploys and configures Alfresco Digital Workspace
 * **common** - contains a set of common tasks that prepares the specified host for other roles (creates user and group, common directories)
