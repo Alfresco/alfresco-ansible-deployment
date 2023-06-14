@@ -1,8 +1,0 @@
-# This file contains ignores rule violations for ansible-lint
-roles/common/defaults/main.yml jinja[spacing]
-roles/common/tasks/check_upgrades.yml key-order[task]
-roles/repository/handlers/main.yml args[module]
-roles/repository/handlers/main.yml name[casing]
-roles/repository/tasks/main.yml key-order[task]
-roles/repository/tasks/main.yml name[casing]
-roles/repository/tasks/sharedcs.yml fqcn[action]
