@@ -14,6 +14,7 @@
           {{ ansible_system }}_{{ ansible_architecture | replace('_', '-') }}
       ansible.builtin.shell:
         cmd: |
+          set -o pipefail
           yes | \
           dpkg -i DEBS/*.deb
         creates: /opt/libreoffice{{ dependencies_version.libreoffice | regex_search('^[0-9]+.[0-9]+') }}/program/soffice.bin

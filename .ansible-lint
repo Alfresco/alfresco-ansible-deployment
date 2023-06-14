@@ -1,14 +1,10 @@
 warn_list:
-  - experimental
+  - experimental  # make sure new rule are returned as warnings for progressive updates
+  - role-name[path]  # https://alfresco.atlassian.net/browse/OPSEXP-2157
 skip_list:
-  - galaxy
-  - risky-file-permissions
-  - risky-shell-pipe
+  - galaxy  # To remove when/if we push to Ansible galaxy
   - fqcn-builtins
-  # Allow Jinja templating inside task and play names
-  - name[template]
-  # Workaround for Role name buluma.elasticsearch does not match ``^[a-z][a-z0-9_]*$`` pattern.
-  - role-name
+  - name[template]  # Allow Jinja templating inside task and play names
 exclude_paths:
  - molecule/
  - roles/helper_module/

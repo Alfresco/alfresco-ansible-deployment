@@ -4,6 +4,7 @@
     url: "{{ dependencies_url.activemq }}"
     checksum: sha512:{{ dependencies_url.activemq_sha512_checksum_url }}
     dest: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
+    mode: "0644"
   register: activemq_download
   async: 900
   poll: 0

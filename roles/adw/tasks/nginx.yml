@@ -22,6 +22,7 @@
       ansible.builtin.file:
         path: "{{ nginx_vhost_path }}"
         state: directory
+        mode: "0755"
 
     - name: Remove legacy vhosts.conf file.
       ansible.builtin.file:

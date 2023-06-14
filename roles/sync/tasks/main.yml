@@ -12,6 +12,7 @@
     checksum: sha1:{{ lookup('url', downloads.sync_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
+    mode: "0644"
 
 - name: Extract Sync service to {{ sync_home }}
   unarchive:
@@ -35,6 +36,7 @@
         dest: "{{ sync_home }}/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
+        mode: preserve
 
     - name: Create Sync service configuration folder
       file:

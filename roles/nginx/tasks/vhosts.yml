@@ -13,6 +13,7 @@
       ansible.builtin.file:
         path: "{{ nginx_vhost_path }}"
         state: directory
+        mode: "0755"
 
     - name: Include ssl vhost if enabled
       include_vars: ssl.yml
@@ -24,6 +25,7 @@
         dest: "/etc/nginx/{{ item.cert_key }}"
         force: true
         owner: root
+        mode: "0640"
       with_items: "{{ nginx_vhosts }}"
       when: item.listen == '443'
 
@@ -33,6 +35,7 @@
         dest: "/etc/nginx/{{ item.cert_crt }}"
         force: true
         owner: root
+        mode: "0644"
       with_items: "{{ nginx_vhosts }}"
       when: item.listen == '443'
 

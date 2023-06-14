@@ -65,6 +65,7 @@
             dest: "{{ item.dest }}"
             owner: "{{ username }}"
             group: "{{ group_name }}"
+            mode: preserve
           loop:
             - src: "{{ search_flavor }}/solr.in.sh"
               dest: "{{ config_dir }}/"

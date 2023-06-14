@@ -7,6 +7,7 @@
       ansible.builtin.file:
         path: "{{ content_data_folder }}/content"
         state: directory
+        mode: "0755"
     - name: Mount ACS ContentStore
       vars:
         mnt_options:

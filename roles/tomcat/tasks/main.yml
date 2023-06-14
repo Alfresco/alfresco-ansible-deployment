@@ -6,6 +6,7 @@
     checksum: sha512:{{ dependencies_url.tomcat_sha512_checksum_url }}
     dest: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
     timeout: 600
+    mode: "0644"
 
 - name: Install Tomcat {{ dependencies_version.tomcat }}
   become: true
@@ -38,6 +39,7 @@
             dest: "{{ item.dest }}"
             group: "{{ group_name }}"
             owner: "{{ username }}"
+            mode: preserve
           loop:
             - src: conf
               dest: "{{ tomcat_config_dir }}"
@@ -117,7 +119,8 @@
       ansible.builtin.template:
         src: alfresco-content.service
         dest: /etc/systemd/system/alfresco-content.service
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
+        owner: root
+        group: root
+        mode: "0644"
       notify:
         - Enable-alfresco-content

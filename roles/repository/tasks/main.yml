@@ -100,6 +100,7 @@
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     checksum: sha1:{{ lookup('url', downloads.acs_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
+    mode: "0644"
   register: distribution_download_result
   async: 1800
   poll: 0

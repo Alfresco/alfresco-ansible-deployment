@@ -38,6 +38,7 @@
     url: "{{ libreoffice_archive_url }}"
     checksum: sha1:{{ lookup('url', libreoffice_archive_sha1_checksum_url) }}
     dest: "{{ download_location }}/libreoffice.tar.gz"
+    mode: "0644"
   register: libreoffice_download
   async: 3600
   poll: 0
