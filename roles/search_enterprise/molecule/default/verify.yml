@@ -15,6 +15,7 @@
     - name: Get errors in the journal of Elasticsearch Connector service
       become: true
       ansible.builtin.shell: journalctl -u elasticsearch-connector.service
+      changed_when: false
       register: error_log
 
     - name: Check logs for errors, warning and expected patterns
