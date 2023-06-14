@@ -90,16 +90,17 @@
       ats_keystore: "{{ transformers_keystore | default({}) }}"
   post_tasks:
     - name: Update installation status file with Transformers
-      become: yes
+      become: true
       vars:
         transform_components:
           transform: "{{ transform }}"
       ansible.builtin.blockinfile:
         block: "{{ transform_components | to_nice_yaml(indent=2) }}"
-        create: yes
+        create: true
         path: "{{ ansible_installation_status_file }}"
         marker_begin: TRANSFORM_BEGIN
         marker_end: TRANSFORM_END
+        mode: "0755"
   tags:
     - transformers
 
@@ -123,21 +124,22 @@
         {%- endif %}
   post_tasks:
     - name: Make sure Solr is running
-      become: yes
+      become: true
       service:
         name: alfresco-search
         state: started
     - name: Update installation status file with  Search
-      become: yes
+      become: true
       vars:
         search_components:
           search: "{{ search }}"
       ansible.builtin.blockinfile:
         block: "{{ search_components | to_nice_yaml(indent=2) }}"
-        create: yes
+        create: true
         path: "{{ ansible_installation_status_file }}"
         marker_begin: SEARCH_BEGIN
         marker_end: SEARCH_END
+        mode: "0755"
   tags:
     - search
 
@@ -167,7 +169,7 @@
       repo_keystore: "{{ repository_keystore | default({}) }}"
   post_tasks:
     - name: Update installation status file with ACS
-      become: yes
+      become: true
       vars:
         acs_components:
           acs: "{{ acs }}"
@@ -175,10 +177,11 @@
           api_explorer: "{{ api_explorer }}"
       ansible.builtin.blockinfile:
         block: "{{ acs_components | to_nice_yaml(indent=2) }}"
-        create: yes
+        create: true
         path: "{{ ansible_installation_status_file }}"
         marker_begin: ACS_BEGIN
         marker_end: ACS_END
+        mode: "0755"
   tags:
     - repository
 
@@ -209,16 +212,17 @@
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Trouter
-      become: yes
+      become: true
       vars:
         trouter_components:
           trouter: "{{ trouter }}"
       ansible.builtin.blockinfile:
         block: "{{ trouter_components | to_nice_yaml(indent=2) }}"
-        create: yes
+        create: true
         path: "{{ ansible_installation_status_file }}"
         marker_begin: TROUTER_BEGIN
         marker_end: TROUTER_END
+        mode: "0755"
   tags:
     - trouter
 
@@ -249,16 +253,17 @@
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with SFS
-      become: yes
+      become: true
       vars:
         sfs_components:
           sfs: "{{ sfs }}"
       ansible.builtin.blockinfile:
         block: "{{ sfs_components | to_nice_yaml(indent=2) }}"
-        create: yes
+        create: true
         path: "{{ ansible_installation_status_file }}"
         marker_begin: SFS_BEGIN
         marker_end: SFS_END
+        mode: "0755"
   tags:
     - sfs
 
@@ -270,16 +275,17 @@
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Enterprise Search
-      become: yes
+      become: true
       vars:
         search_enterprise_components:
           search_enterprise: "{{ search_enterprise }}"
       ansible.builtin.blockinfile:
         block: "{{ search_enterprise_components | to_nice_yaml(indent=2) }}"
-        create: yes
+        create: true
         path: "{{ ansible_installation_status_file }}"
         marker_begin: SEARCH_ENTERPRISE_BEGIN
         marker_end: SEARCH_ENTERPRISE_END
+        mode: "0755"
   tags:
     - search_enterprise
 
@@ -294,16 +300,17 @@
   post_tasks:
     - name: Update installation status file with ACC
       when: acs_version_requirement
-      become: yes
+      become: true
       vars:
         acc_components:
           acc: "{{ acc }}"
       ansible.builtin.blockinfile:
         block: "{{ acc_components | to_nice_yaml(indent=2) }}"
-        create: yes
+        create: true
         path: "{{ ansible_installation_status_file }}"
         marker_begin: ACC_BEGIN
         marker_end: ACC_END
+        mode: "0755"
   tags:
     - acc
 
@@ -315,16 +322,17 @@
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with ADW
-      become: yes
+      become: true
       vars:
         adw_components:
           adw: "{{ adw }}"
       ansible.builtin.blockinfile:
         block: "{{ adw_components | to_nice_yaml(indent=2) }}"
-        create: yes
+        create: true
         path: "{{ ansible_installation_status_file }}"
         marker_begin: ADW_BEGIN
         marker_end: ADW_END
+        mode: "0755"
   tags:
     - adw
 
@@ -335,7 +343,7 @@
     - role: "../roles/nginx"
   post_tasks:
     - name: Make sure NGINX is running
-      become: yes
+      become: true
       service:
         name: nginx
         state: started
@@ -350,15 +358,16 @@
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Sync
-      become: yes
+      become: true
       vars:
         sync_components:
           sync: "{{ sync }}"
       ansible.builtin.blockinfile:
         block: "{{ sync_components | to_nice_yaml(indent=2) }}"
-        create: yes
+        create: true
         path: "{{ ansible_installation_status_file }}"
         marker_begin: SYNC_BEGIN
         marker_end: SYNC_END
+        mode: "0755"
   tags:
     - sync

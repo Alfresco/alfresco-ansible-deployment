@@ -12,6 +12,7 @@
 
     - name: Check Jinja2 version
       ansible.builtin.shell: |
+        set -o pipefail
         JINJA_VERSION=$(pip3 freeze | grep Jinja2 | sed 's/Jinja2==//g')
         echo $JINJA_VERSION
       register: jinja2_version
