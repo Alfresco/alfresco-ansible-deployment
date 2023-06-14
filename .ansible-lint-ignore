@@ -1,6 +1,4 @@
 # This file contains ignores rule violations for ansible-lint
-roles/activemq/handlers/main.yml name[casing]
-roles/activemq/tasks/main.yml name[casing]
 roles/adw/handlers/main.yml name[casing]
 roles/adw/tasks/main.yml name[missing]
 roles/adw/tasks/nginx.yml fqcn[action]
