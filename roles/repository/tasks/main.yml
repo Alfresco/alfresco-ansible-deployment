@@ -400,9 +400,10 @@
 
 - name: Install amps on alfresco and share war files
   become: true
-  ansible.builtin.shell: '{{ content_folder }}/apply_amps.sh -nobackup -force'
+  ansible.builtin.command:
+    cmd: "{{ content_folder }}/apply_amps.sh -nobackup -force"
   register: mmt_install
-  changed_when: mmt_install.rc != 0
+  changed_when: true
   tags:
     - molecule-idempotence-notest
 
