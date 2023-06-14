@@ -3,7 +3,6 @@ warn_list:
 skip_list:
   - galaxy
   - risky-file-permissions
-  - command-instead-of-module
   - command-instead-of-shell
   - risky-shell-pipe
   - no-handler
