@@ -121,7 +121,7 @@
         - noRerank
 
     - name: Add solr home to setenv.sh
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: "{{ config_folder }}/setenv.sh"
         insertafter: EOF
         line: "export SOLR_HOME={{ binaries_dir }}"
