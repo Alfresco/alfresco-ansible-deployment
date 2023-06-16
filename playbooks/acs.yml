@@ -40,7 +40,7 @@
       when: repo_db_url == "" or sync_db_url == ""
   post_tasks:
     - name: Make sure PostgreSQL is running
-      service:
+      ansible.builtin.service:
         name: "{{ postgresql_service }}"
         state: started
   tags:
@@ -66,14 +66,14 @@
 
 - name: Transformers Role
   hosts: transformers
-  gather_facts: no
+  gather_facts: false
   pre_tasks:
     - name: Check wether we want mTLS for Tengines
-      set_fact:
+      ansible.builtin.set_fact:
         tengine_mtls_required: >-
           {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
-      set_fact:
+      ansible.builtin.set_fact:
         transformers_keystore:
           path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
@@ -125,7 +125,7 @@
   post_tasks:
     - name: Make sure Solr is running
       become: true
-      service:
+      ansible.builtin.service:
         name: alfresco-search
         state: started
     - name: Update installation status file with  Search
@@ -148,11 +148,11 @@
   gather_facts: no
   pre_tasks:
     - name: Check wether we want mTLS for Repostory
-      set_fact:
+      ansible.builtin.set_fact:
         repo_mtls_required: >-
           {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
-      set_fact:
+      ansible.builtin.set_fact:
         repository_keystore:
           path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
@@ -190,11 +190,11 @@
   gather_facts: no
   pre_tasks:
     - name: Check wether we want mTLS for Tengines
-      set_fact:
+      ansible.builtin.set_fact:
         trouter_mtls_required: >-
           {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
-      set_fact:
+      ansible.builtin.set_fact:
         trouter_keystore:
           path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
@@ -231,11 +231,11 @@
   gather_facts: no
   pre_tasks:
     - name: Check wether we want mTLS for Tengines
-      set_fact:
+      ansible.builtin.set_fact:
         sfs_mtls_required: >-
           {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
-      set_fact:
+      ansible.builtin.set_fact:
         sfs_keystore:
           path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
@@ -344,7 +344,7 @@
   post_tasks:
     - name: Make sure NGINX is running
       become: true
-      service:
+      ansible.builtin.service:
         name: nginx
         state: started
   tags:
