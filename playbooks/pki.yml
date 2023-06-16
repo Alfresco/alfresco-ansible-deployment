@@ -21,7 +21,7 @@
         quiet: true
 
     - name: Prepare PKI directory structure
-      file:
+      ansible.builtin.file:
         path: "{{ actual_pki_dir }}/{{ item.name }}"
         state: directory
         mode: "{{ item.mode | default(omit) }}"
@@ -85,7 +85,7 @@
               and its passphrase.
 
         - name: Set CA variables
-          set_fact:
+          ansible.builtin.set_fact:
             ca_cert_path: "{{ ca_cert_stat.stat.path }}"
             ca_key_path: "{{ ca_key_stat.stat.path }}"
 
@@ -129,12 +129,12 @@
             provider: selfsigned
 
         - name: Set CA variables
-          set_fact:
+          ansible.builtin.set_fact:
             ca_cert_path: "{{ ownca_cert_path }}"
             ca_key_path: "{{ ownca_key_path }}"
 
     - name: Set PKI variables
-      set_fact:
+      ansible.builtin.set_fact:
         pki_dir: "{{ actual_pki_dir }}"
 
 - name: Request and sign certificates for hosts
@@ -152,7 +152,7 @@
       block:
         - name: Create host's PKI directory
           become: true
-          file:
+          ansible.builtin.file:
             path: "{{ item.name }}"
             state: directory
             mode: "{{ item.mode | default(omit) }}"
@@ -163,7 +163,7 @@
 
         - name: Install PKI required packages
           become: true
-          package:
+          ansible.builtin.package:
             name: >-
               {{ 'python2-cryptography' if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' else 'python3-cryptography' }}
             update_cache: true
