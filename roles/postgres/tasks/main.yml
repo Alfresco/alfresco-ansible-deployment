@@ -53,7 +53,7 @@
         mode: 'u=rw'
 
 - name: Always flush after Configure PostgreSQL RDBMS block
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Configure PostgreSQL RDBMS
   become: true

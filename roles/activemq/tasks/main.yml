@@ -22,7 +22,7 @@
   become: true
   block:
     - name: Extract apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz
-      unarchive:
+      ansible.builtin.unarchive:
         src: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
         dest: "{{ activemq_home | dirname }}"
         remote_src: true
