@@ -1,13 +1,13 @@
 ---
 - name: Create "{{ nginx_default_vhost_docroot }}/{{ acc_context }}/" dir
   become: true
-  file:
+  ansible.builtin.file:
     path: "{{ nginx_default_vhost_docroot }}/{{ acc_context }}/"
     state: directory
     mode: "0755"
 
 - name: Download alfresco-control-center-{{ acc.version }}.zip
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ downloads.acc_zip_url }}"
     dest: "{{ download_location }}/alfresco-control-center-{{ acc.version }}.zip"
     checksum: sha1:{{ downloads.acc_zip_sha1_checksum_url }}
@@ -27,7 +27,7 @@
     - Extract alfresco-control-center zip
 
 - name: Flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Replace placeholders in app.config.json
   become: true
@@ -50,7 +50,7 @@
 
 - name: Add acc vhost config
   become: true
-  template:
+  ansible.builtin.template:
     src: default_server.conf.j2
     dest: "{{ nginx_vhost_path }}/alfresco_acc.conf"
     force: true
