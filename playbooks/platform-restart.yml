@@ -1,8 +1,8 @@
 ---
 - name: Stop Alfresco Digital Workspace
   hosts: adw
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Stop nginx service
       ansible.builtin.service:
@@ -14,8 +14,8 @@
 
 - name: Stop Reverse Proxy
   hosts: nginx
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Stop nginx service
       ansible.builtin.service:
@@ -27,8 +27,8 @@
 
 - name: Stop Alfresco Sync services
   hosts: syncservice
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Stop alfresco-sync service
       ansible.builtin.service:
@@ -40,8 +40,8 @@
 
 - name: Stop Alfresco Search services
   hosts: search
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Stop alfresco-search service
       ansible.builtin.service:
@@ -53,8 +53,8 @@
 
 - name: Stop Alfresco Content services
   hosts: repository
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   vars:
     service_name: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
   tasks:
@@ -68,8 +68,8 @@
 
 - name: Stop Alfresco Transformation services
   hosts: transformers
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Stop {{ item }} service
       ansible.builtin.service:
@@ -85,7 +85,7 @@
 
 - name: Stop PostgreSQL
   hosts: database
-  become: yes
+  become: true
   vars:
     service_name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
   tasks:
@@ -99,8 +99,8 @@
 
 - name: Stop ActiveMQ
   hosts: activemq
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Stop activemq service
       ansible.builtin.service:
@@ -112,8 +112,8 @@
 
 - name: Start ActiveMQ
   hosts: activemq
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Start activemq service
       ansible.builtin.service:
@@ -125,7 +125,7 @@
 
 - name: Start PostgreSQL
   hosts: database
-  become: yes
+  become: true
   vars:
     service_name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
   tasks:
@@ -139,8 +139,8 @@
 
 - name: Start Alfresco Transformation services
   hosts: transformers
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Start {{ item }} service
       ansible.builtin.service:
@@ -156,8 +156,8 @@
 
 - name: Start Alfresco Content services
   hosts: repository
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   vars:
     service_name: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
   tasks:
@@ -171,8 +171,8 @@
 
 - name: Start Alfresco Search services
   hosts: search
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Start alfresco-search service
       ansible.builtin.service:
@@ -184,8 +184,8 @@
 
 - name: Start Alfresco Sync services
   hosts: syncservice
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Start alfresco-sync service
       ansible.builtin.service:
@@ -197,8 +197,8 @@
 
 - name: Start Reverse Proxy
   hosts: nginx
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Start nginx service
       ansible.builtin.service:
@@ -210,8 +210,8 @@
 
 - name: Start Alfresco Digital Workspace
   hosts: adw
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Start nginx service
       ansible.builtin.service:

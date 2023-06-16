@@ -8,7 +8,7 @@
 ---
 - name: Check if current OS version is in the supported matrix
   hosts: all:!external
-  gather_facts: yes
+  gather_facts: true
   tasks:
   - name: Compare host OS with supported matrix
     vars:
