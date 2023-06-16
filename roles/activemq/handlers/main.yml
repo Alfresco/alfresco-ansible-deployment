@@ -2,7 +2,7 @@
 # handlers file for activemq
 - name: Enable-activemq
   become: true
-  service:
+  ansible.builtin.service:
     name: activemq
     enabled: true
     state: started
@@ -10,7 +10,7 @@
 
 - name: Restart-activemq
   become: true
-  service:
+  ansible.builtin.service:
     name: activemq
     state: restarted
     daemon_reload: true
