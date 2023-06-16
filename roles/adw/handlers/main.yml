@@ -2,14 +2,14 @@
 # handlers file for adw
 - name: Enable-nginx
   become: true
-  service:
+  ansible.builtin.service:
     name: nginx
     enabled: true
     daemon_reload: true
 
 - name: Restart-nginx
   become: true
-  service:
+  ansible.builtin.service:
     name: nginx
     state: restarted
     daemon_reload: true
