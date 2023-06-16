@@ -6,7 +6,7 @@
   become: no
   tasks:
     - name: To display warning
-      debug:
+      ansible.builtin.debug:
         msg: '[WARNING]: This will remove the downloaded artifacts from your system'
 
     - name: Removing "{{ artifacts_path }}"

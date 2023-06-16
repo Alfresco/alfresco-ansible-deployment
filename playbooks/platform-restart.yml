@@ -5,7 +5,7 @@
   become: yes
   tasks:
     - name: Stop nginx service
-      service:
+      ansible.builtin.service:
         name: nginx
         state: stopped
       tags:
@@ -18,7 +18,7 @@
   become: yes
   tasks:
     - name: Stop nginx service
-      service:
+      ansible.builtin.service:
         name: nginx
         state: stopped
       tags:
@@ -31,7 +31,7 @@
   become: yes
   tasks:
     - name: Stop alfresco-sync service
-      service:
+      ansible.builtin.service:
         name: alfresco-sync
         state: stopped
       tags:
@@ -44,7 +44,7 @@
   become: yes
   tasks:
     - name: Stop alfresco-search service
-      service:
+      ansible.builtin.service:
         name: alfresco-search
         state: stopped
       tags:
@@ -59,7 +59,7 @@
     service_name: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
   tasks:
     - name: Stop {{ service_name }} service
-      service:
+      ansible.builtin.service:
         name: "{{ service_name }}"
         state: stopped
       tags:
@@ -72,7 +72,7 @@
   become: yes
   tasks:
     - name: Stop {{ item }} service
-      service:
+      ansible.builtin.service:
         name: "{{ item }}"
         state: stopped
       loop:
@@ -90,7 +90,7 @@
     service_name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
   tasks:
     - name: Stop {{ service_name }} service
-      service:
+      ansible.builtin.service:
         name: "{{ service_name }}"
         state: stopped
       tags:
@@ -103,7 +103,7 @@
   become: yes
   tasks:
     - name: Stop activemq service
-      service:
+      ansible.builtin.service:
         name: activemq
         state: stopped
       tags:
@@ -116,7 +116,7 @@
   become: yes
   tasks:
     - name: Start activemq service
-      service:
+      ansible.builtin.service:
         name: activemq
         state: started
       tags:
@@ -130,7 +130,7 @@
     service_name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
   tasks:
     - name: Start {{ service_name }} service
-      service:
+      ansible.builtin.service:
         name: "{{ service_name }}"
         state: started
       tags:
@@ -143,7 +143,7 @@
   become: yes
   tasks:
     - name: Start {{ item }} service
-      service:
+      ansible.builtin.service:
         name: "{{ item }}"
         state: started
       loop:
@@ -162,7 +162,7 @@
     service_name: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
   tasks:
     - name: Start {{ service_name }} service
-      service:
+      ansible.builtin.service:
         name: "{{ service_name }}"
         state: started
       tags:
@@ -175,7 +175,7 @@
   become: yes
   tasks:
     - name: Start alfresco-search service
-      service:
+      ansible.builtin.service:
         name: alfresco-search
         state: started
       tags:
@@ -188,7 +188,7 @@
   become: yes
   tasks:
     - name: Start alfresco-sync service
-      service:
+      ansible.builtin.service:
         name: alfresco-sync
         state: started
       tags:
@@ -201,7 +201,7 @@
   become: yes
   tasks:
     - name: Start nginx service
-      service:
+      ansible.builtin.service:
         name: nginx
         state: started
       tags:
@@ -214,7 +214,7 @@
   become: yes
   tasks:
     - name: Start nginx service
-      service:
+      ansible.builtin.service:
         name: nginx
         state: started
       tags:
