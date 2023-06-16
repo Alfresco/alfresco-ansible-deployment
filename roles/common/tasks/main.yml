@@ -1,29 +1,29 @@
 ---
 # tasks file for common
 - name: Check for upgrades
-  import_tasks: check_upgrades.yml
+  ansible.builtin.import_tasks: check_upgrades.yml
 
 - name: Include OS specific variables
-  include_vars: "{{ item }}"
+  ansible.builtin.include_vars: "{{ item }}"
   loop: >-
     {{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}
 
 - name: Ensure apt indices are up-to-date
   become: true
-  apt:
+  ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600  # 1 hour
   when: ansible_pkg_mgr == 'apt'
 
 - name: Ensure a list of packages installed
   become: true
-  package:
+  ansible.builtin.package:
     name: "{{ utils }}"
     state: present
 
 - name: Ensure a SELinux related packages are installed
   become: true
-  package:
+  ansible.builtin.package:
     name: "{{ utils_selinux }}"
     state: present
   when: ansible_selinux.status == 'enabled'
@@ -32,19 +32,19 @@
   become: true
   block:
     - name: Create {{ group_name }} group
-      group:
+      ansible.builtin.group:
         name: "{{ group_name }}"
         system: true
 
     - name: Create {{ username }} user
-      user:
+      ansible.builtin.user:
         name: "{{ username }}"
         comment: "{{ username }} user"
         system: true
         group: "{{ group_name }}"
 
     - name: Create folder hierarchy
-      file:
+      ansible.builtin.file:
         path: "{{ item.folder }}"
         state: directory
         owner: "{{ username }}"
