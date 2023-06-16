@@ -3,12 +3,12 @@
   hosts: all
   tasks:
     - name: "Include activemq"
-      include_role:
+      ansible.builtin.include_role:
         name: "activemq"
     - name: Flush Handlers
-      meta: flush_handlers
+      ansible.builtin.meta: flush_handlers
     - name: "Include transformers"
-      include_role:
+      ansible.builtin.include_role:
         name: "transformers"
       vars:
         tengine_environment:

@@ -3,7 +3,7 @@
   hosts: all
   tasks:
     - name: "Include sfs"
-      include_role:
+      ansible.builtin.include_role:
         name: "sfs"
       vars:
         sfs_environment:

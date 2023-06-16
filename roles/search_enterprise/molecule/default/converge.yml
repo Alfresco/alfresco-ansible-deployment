@@ -3,17 +3,17 @@
   hosts: all
   tasks:
     - name: "Include activemq"
-      include_role:
+      ansible.builtin.include_role:
         name: "activemq"
     - name: "Include sfs"
-      include_role:
+      ansible.builtin.include_role:
         name: "sfs"
     - name: "Include transformers"
-      include_role:
+      ansible.builtin.include_role:
         name: "transformers"
     - name: "Include t-router"
-      include_role:
+      ansible.builtin.include_role:
         name: "trouter"
     - name: "Include search_enterprise"
-      include_role:
+      ansible.builtin.include_role:
         name: "search_enterprise"

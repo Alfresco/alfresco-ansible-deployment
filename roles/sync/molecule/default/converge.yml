@@ -3,21 +3,21 @@
   hosts: all
   tasks:
     - name: "Include postgres"
-      include_role:
+      ansible.builtin.include_role:
         name: "postgres"
     - name: "Include repository"
-      include_role:
+      ansible.builtin.include_role:
         name: "repository"
     - name: Flush Handlers
-      meta: flush_handlers
+      ansible.builtin.meta: flush_handlers
     - name: "Include activemq"
-      include_role:
+      ansible.builtin.include_role:
         name: "activemq"
     - name: "Include NGINX"
-      include_role:
+      ansible.builtin.include_role:
         name: "nginx"
     - name: "Include sync"
-      include_role:
+      ansible.builtin.include_role:
         name: "sync"
       vars:
         sync_environment:

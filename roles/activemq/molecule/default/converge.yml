@@ -7,7 +7,7 @@
   hosts: all
   tasks:
     - name: "Include roles/activemq"
-      include_role:
+      ansible.builtin.include_role:
         name: "activemq"
       vars:
         activemq_environment:

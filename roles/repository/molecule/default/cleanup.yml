@@ -4,7 +4,7 @@
   connection: local
   tasks:
     - name: Add custom global properties settings
-      blockinfile:
+      ansible.builtin.blockinfile:
         state: absent
         path: "{{ playbook_dir }}/../../../../configuration_files/alfresco-global.properties"
         block: |
@@ -13,6 +13,6 @@
           index.recovery.mode=NONE
           index.subsystem.name=noindex
     - name: Create keystore
-      file:
+      ansible.builtin.file:
         state: absent
         path: "{{ playbook_dir }}/../../../../configuration_files/keystores/keystest"
