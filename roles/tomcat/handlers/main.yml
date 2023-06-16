@@ -2,7 +2,7 @@
 # handlers file for tomcat (alfresco-content)
 - name: Enable-alfresco-content
   become: true
-  service:
+  ansible.builtin.service:
     name: "alfresco-content"
     enabled: true
     daemon_reload: true
