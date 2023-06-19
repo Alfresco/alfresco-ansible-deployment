@@ -2,7 +2,8 @@
 # tasks file for sync
 - name: Include OS specific variables
   include_vars: "{{ item }}"
-  loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
+  loop: >-
+    {{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}
 
 - name: Download Sync service artefact
   get_url:
@@ -11,6 +12,7 @@
     checksum: sha1:{{ lookup('url', downloads.sync_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
+    mode: "0644"
 
 - name: Extract Sync service to {{ sync_home }}
   unarchive:
@@ -34,6 +36,7 @@
         dest: "{{ sync_home }}/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
+        mode: preserve
 
     - name: Create Sync service configuration folder
       file:
@@ -74,9 +77,9 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx'
-        force: yes
+        force: true
       notify:
-        - restart-sync
+        - Restart-sync
 
     - name: Add paths to setenv file
       blockinfile:
@@ -97,7 +100,7 @@
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx'
       notify:
-        - restart-sync
+        - Restart-sync
 
     - name: Add alfresco-sync.service service
       template:
@@ -107,5 +110,5 @@
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx'
       notify:
-      - enable-sync
-      - restart-sync
+        - Enable-sync
+        - Restart-sync

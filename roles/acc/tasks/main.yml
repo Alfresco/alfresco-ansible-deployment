@@ -22,6 +22,7 @@
   ansible.builtin.copy:
     content: "{{ app_default_configuration | to_json }}"
     dest: "{{ download_location }}/alfresco-control-center-config.json"
+    mode: "0644"
   notify:
     - Extract alfresco-control-center zip
 
@@ -57,7 +58,7 @@
     group: root
     mode: 'u=rw,g=r,o=r'
   notify:
-    - restart-nginx
+    - Restart-nginx
 
 - name: Allow web-server to listen on tcp port {{ acc_port }}
   become: true

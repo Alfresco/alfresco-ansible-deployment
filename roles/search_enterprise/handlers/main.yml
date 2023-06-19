@@ -1,13 +1,13 @@
 ---
 # handlers file for search_enterprise
-- name: enable elasticsearch-connector service
+- name: Enable elasticsearch-connector service
   become: true
   service:
     name: elasticsearch-connector
     enabled: true
     daemon_reload: true
 
-- name: restart elasticsearch-connector service
+- name: Restart elasticsearch-connector service
   become: true
   service:
     name: elasticsearch-connector

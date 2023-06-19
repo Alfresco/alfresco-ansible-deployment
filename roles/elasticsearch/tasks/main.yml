@@ -22,6 +22,7 @@
           [Service]
           Environment="ES_TMPDIR={{ elasticsearch_tmp_path }}"
         dest: "{{ elasticsearch_systemd_service_path }}/tmpdir.conf"
+        mode: "0644"
 
     - name: Enable elasticsearch repository
       ansible.builtin.include_role:

@@ -142,7 +142,7 @@
   gather_facts: no
   become: yes
   tasks:
-    - name: Start {{ item  }} service
+    - name: Start {{ item }} service
       service:
         name: "{{ item }}"
         state: started

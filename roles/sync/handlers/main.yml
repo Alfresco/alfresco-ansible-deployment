@@ -1,22 +1,22 @@
 ---
 # handlers file for sync
-- name: enable-sync
+- name: Enable-sync
   become: true
   service:
     name: alfresco-sync
     enabled: true
     daemon_reload: true
 
-- name: restart-sync
+- name: Restart-sync
   become: true
   service:
     name: alfresco-sync
     state: restarted
     daemon_reload: true
   notify:
-   - wait-alfresco-sync-ready
+    - Wait-alfresco-sync-ready
 
-- name: wait-alfresco-sync-ready
+- name: Wait-alfresco-sync-ready
   uri:
     url: "http://127.0.0.1:{{ ports_cfg.sync.http }}/alfresco/healthcheck"
   register: result

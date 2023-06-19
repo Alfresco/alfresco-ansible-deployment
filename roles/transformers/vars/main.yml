@@ -7,7 +7,10 @@ libreoffice_archive_url: "{{ libreoffice_repo }}/{{ libreoffice_repo_path }}/{{ 
 libreoffice_archive_sha1_checksum_url: "{{ libreoffice_archive_url }}.sha1"
 libreoffice_home: "/opt/libreoffice{{ dependencies_version.libreoffice[0:3] }}/"
 
-alfresco_pdf_renderer: "{{ nexus_repository.releases }}/alfresco-pdf-renderer/{{ dependencies_version.pdf_renderer }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
+alfresco_pdf_base_url: >-
+  {{ nexus_repository.releases }}/alfresco-pdf-renderer/{{ dependencies_version.pdf_renderer }}
+alfresco_pdf_renderer: >-
+  {{ alfresco_pdf_base_url }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz
 alfresco_pdf_renderer_sha1_checksum_url: "{{ alfresco_pdf_renderer }}.sha1"
 
 ghostscript_packages:

@@ -1,6 +1,8 @@
 ---
 # tasks file for search_enterprise
-- name: Download elasticsearch connector distribution {{ search_enterprise.version }}
+- name: >-
+    Download elasticsearch connector distribution
+    {{ search_enterprise.version }}
   get_url:
     url: "{{ downloads.search_enterprise_zip_url }}"
     dest: "{{ download_location }}/{{ search_enterprise.artifact_name }}-{{ search_enterprise.version }}.zip"
@@ -49,5 +51,5 @@
         group: root
         mode: "0640"
       notify:
-        - enable elasticsearch-connector service
-        - restart elasticsearch-connector service
+        - Enable elasticsearch-connector service
+        - Restart elasticsearch-connector service

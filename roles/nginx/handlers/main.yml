@@ -1,18 +1,18 @@
 ---
 # handlers file for nginx
-- name: enable-nginx
+- name: Enable-nginx
   become: true
   service:
     name: nginx
     enabled: true
 
-- name: restart-nginx
+- name: Restart-nginx
   become: true
   service:
     name: nginx
     state: restarted
 
-- name: reload-nginx
+- name: Reload-nginx
   become: true
   service:
     name: nginx
@@ -20,6 +20,5 @@
 
 - name: Apply new SELinux file contexts
   become: true
-  ansible.builtin.command: "restorecon -irv {{ item }}"
-  with_items:
-    - "{{ logs_folder }}"
+  ansible.builtin.command: restorecon -irv {{ logs_folder }}
+  changed_when: true

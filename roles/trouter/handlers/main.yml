@@ -1,18 +1,18 @@
 ---
 # handlers file for trouter
-- name: wait-for-aio
+- name: Wait-for-aio
   wait_for:
     host: "{{ ats_tengine_aio_host }}"
     port: "{{ ports_cfg.transformers.tengine }}"
 
-- name: enable-trouter
+- name: Enable-trouter
   become: true
   service:
     name: alfresco-transform-router
     enabled: true
     daemon_reload: true
 
-- name: restart-trouter
+- name: Restart-trouter
   become: true
   service:
     name: alfresco-transform-router

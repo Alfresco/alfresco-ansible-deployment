@@ -1,7 +1,8 @@
 ---
 - name: Include OS specific variables
   include_vars: "{{ item }}"
-  loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
+  loop: >-
+    {{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}
 
 - name: Install PostgreSQL RDBMS
   become: true
@@ -13,9 +14,9 @@
       package:
         name: "{{ postgresql_packages }}"
         state: present
-        update_cache: yes
+        update_cache: true
       notify:
-        - enable-postgresql
+        - Enable-postgresql
 
     - name: Initialize the system database
       command:
@@ -25,6 +26,8 @@
 
 - name: Configure PostgreSQL RDBMS
   become: true
+  notify:
+    - Restart-postgresql
   block:
     - name: Configure postgresql to listen on all IP interfaces
       lineinfile:
@@ -48,18 +51,15 @@
         owner: postgres
         group: postgres
         mode: 'u=rw'
-  notify:
-    - restart-postgresql
 
-# This meta must always follow previous block
-- name: flush Handlers
+- name: Always flush after Configure PostgreSQL RDBMS block
   meta: flush_handlers
 
 - name: Configure PostgreSQL RDBMS
   become: true
   become_user: postgres
   vars:
-    ansible_ssh_pipelining: yes
+    ansible_ssh_pipelining: true
   block:
     - name: Create necessary databases
       community.postgresql.postgresql_db:
@@ -113,7 +113,9 @@
         - db: "{{ sync_db_name }}"
           user: "{{ sync_db_username }}"
 
-    - name: "Revoke {{ repo_db_username }} user access to {{ sync_db_name }} database due to previous bug"
+    - name: >-
+        Revoke {{ repo_db_username }} user access to
+        {{ sync_db_name }} database due to previous bug
       community.postgresql.postgresql_user:
         db: "{{ sync_db_name }}"
         name: "{{ repo_db_username }}"

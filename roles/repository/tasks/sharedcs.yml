@@ -4,15 +4,20 @@
   when: cs_storage.device is defined
   block:
     - name: Create contentstore folders
-      file:
+      ansible.builtin.file:
         path: "{{ content_data_folder }}/content"
         state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      tags:
+        - molecule-idempotence-notest
     - name: Mount ACS ContentStore
       vars:
         mnt_options:
           - "{{ cs_storage.options | default('defaults') }}"
           - _netdev
-      mount:
+      ansible.posix.mount:
         state: mounted
         path: "{{ content_data_folder }}/content"
         src: "{{ cs_storage.device }}"

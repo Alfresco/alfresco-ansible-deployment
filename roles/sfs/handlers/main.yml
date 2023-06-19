@@ -1,13 +1,13 @@
 ---
 # handlers file for sfs
-- name: enable-sfs
+- name: Enable-sfs
   become: true
   service:
     name: alfresco-shared-fs
     enabled: true
     daemon_reload: true
 
-- name: restart-sfs
+- name: Restart-sfs
   become: true
   service:
     name: alfresco-shared-fs

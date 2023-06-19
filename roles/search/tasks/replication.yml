@@ -22,7 +22,7 @@
         state: absent
       loop: "{{ search_cores }}"
       notify:
-        - restart-search
+        - Restart-search
 
     - name: Tweak Solr config based on assumed role
       vars:
@@ -35,7 +35,7 @@
       loop: "{{ search_cores }}"
       when: inventory_hostname == ansible_play_hosts_all | first
       notify:
-        - restart-search
+        - Restart-search
 
     - name: Set low swapiness on read-replicas
       ansible.posix.sysctl:
@@ -46,14 +46,14 @@
 
     - name: Configure Solr Replication Handler
       community.general.xml:
-        pretty_print: yes
+        pretty_print: true
         path: "{{ config_dir }}/solrhome/{{ item }}/conf/solrconfig.xml"
         xpath: /config/requestHandler[@name="/replication"]
         attribute: class
         value: solr.ReplicationHandler
       loop: "{{ search_cores }}"
       notify:
-        - restart-search
+        - Restart-search
 
     - name: Configure solrconfig.xml for Solr Replication
       vars:
@@ -72,11 +72,11 @@
           {{ master_xml if inventory_hostname == search_master else slave_xml }}
       community.general.xml:
         input_type: xml
-        pretty_print: yes
+        pretty_print: true
         path: "{{ config_dir }}/solrhome/{{ item }}/conf/solrconfig.xml"
         xpath: /config/requestHandler[@name="/replication"]
         set_children:
           - "{{ replication_xml }}"
       loop: "{{ search_cores }}"
       notify:
-        - restart-search
+        - Restart-search
