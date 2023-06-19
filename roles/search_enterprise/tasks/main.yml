@@ -3,7 +3,7 @@
 - name: >-
     Download elasticsearch connector distribution
     {{ search_enterprise.version }}
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ downloads.search_enterprise_zip_url }}"
     dest: "{{ download_location }}/{{ search_enterprise.artifact_name }}-{{ search_enterprise.version }}.zip"
     checksum: sha1:{{ lookup('url', downloads.search_enterprise_zip_sha1_url, username=nexus_user, password=nexus_password) }}
@@ -15,7 +15,7 @@
   become: true
   block:
     - name: Create search binaries, config and data directories
-      file:
+      ansible.builtin.file:
         path: "{{ item }}"
         state: directory
         owner: "{{ username }}"
@@ -27,7 +27,7 @@
         - "{{ search_enterprise_data_dir }}"
 
     - name: Extract distribution zip in binaries
-      unarchive:
+      ansible.builtin.unarchive:
         src: "{{ download_location }}/{{ search_enterprise.artifact_name }}-{{ search_enterprise.version }}.zip"
         dest: "{{ search_enterprise_binaries_dir }}"
         remote_src: true
@@ -36,7 +36,7 @@
         group: "{{ group_name }}"
 
     - name: Add elasticsearch-connector reindex service
-      template:
+      ansible.builtin.template:
         src: elasticsearch-connector-reindex.service.j2
         dest: /etc/systemd/system/elasticsearch-connector-reindex.service
         owner: root
@@ -44,7 +44,7 @@
         mode: "0640"
 
     - name: Add elasticsearch-connector service
-      template:
+      ansible.builtin.template:
         src: elasticsearch-connector.service.j2
         dest: /etc/systemd/system/elasticsearch-connector.service
         owner: root

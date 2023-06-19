@@ -1,6 +1,6 @@
 ---
 - name: Download activemq tar
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ dependencies_url.activemq }}"
     checksum: sha512:{{ dependencies_url.activemq_sha512_checksum_url }}
     dest: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
@@ -11,7 +11,7 @@
   changed_when: false
 
 - name: Check on activemq download async task
-  async_status:
+  ansible.builtin.async_status:
     jid: "{{ activemq_download.ansible_job_id }}"
   register: job_result
   until: job_result.finished
@@ -22,7 +22,7 @@
   become: true
   block:
     - name: Extract apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz
-      unarchive:
+      ansible.builtin.unarchive:
         src: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
         dest: "{{ activemq_home | dirname }}"
         remote_src: true
@@ -33,7 +33,7 @@
     - name: Install ActiveMQ in Unix Filesystem Hierarchy Standard structure
       block:
         - name: Copy data & config files to Unix FHS dirs
-          copy:
+          ansible.builtin.copy:
             remote_src: true
             src: "{{ item.src }}"
             dest: "{{ item.dest }}"
@@ -47,7 +47,7 @@
               dest: "{{ data_folder }}/activemq"
       rescue:
         - name: Check Unix FHS dirs
-          stat:
+          ansible.builtin.stat:
             path: "{{ item }}"
           register: amq_dest_dirs
           loop:
@@ -59,7 +59,7 @@
           when: not amq_dest_dirs.results | map(attribute='stat.exists') | difference([True])
 
     - name: Remove data & configuration folder from binaries folder
-      file:
+      ansible.builtin.file:
         path: "{{ activemq_home }}/{{ item }}"
         state: absent
       loop:
@@ -100,7 +100,7 @@
       no_log: true
 
     - name: Change location of ActiveMQ logs
-      replace:
+      ansible.builtin.replace:
         path: "{{ activemq_conf }}/log4j.properties"
         regexp: "activemq.data"
         replace: "activemq.log"
@@ -108,7 +108,7 @@
         group: "{{ group_name }}"
 
     - name: Add activemq_home and host to setenv script
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: "{{ config_folder }}/setenv.sh"
         marker: "# {mark} ACTIVEMQ ENV VARS"
         owner: "{{ username }}"
@@ -119,7 +119,7 @@
 
     - name: Add activemq wrapper script
       become: true
-      template:
+      ansible.builtin.template:
         src: activemq.sh.j2
         dest: "{{ binaries_folder }}/activemq.sh"
         owner: "{{ username }}"
@@ -129,7 +129,7 @@
         - Restart-activemq
 
     - name: Add activemq.service
-      template:
+      ansible.builtin.template:
         src: activemq.service.j2
         dest: /etc/systemd/system/activemq.service
         mode: "0644"

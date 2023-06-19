@@ -1,11 +1,11 @@
 ---
 # tasks file for transformers
 - name: Include OS family variables
-  include_vars:
+  ansible.builtin.include_vars:
     file: "{{ os_family_yml }}"
 
 - name: Include OS version variables
-  include_vars:
+  ansible.builtin.include_vars:
     file: "{{ os_version_yml }}"
 
 - name: Instanciate Java keystore
@@ -23,7 +23,7 @@
     epel_gpg_base: https://dl.fedoraproject.org/pub/epel
     epel_meta_base: https://mirrors.fedoraproject.org/metalink
     epel_meta_args: "&arch=$basearch&infra=$infra&content=$contentdir"
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: epel
     description: EPEL YUM repo
     metalink: >-
@@ -34,7 +34,7 @@
   when: pkg_format == 'rpm'
 
 - name: Download libreoffice package archive
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ libreoffice_archive_url }}"
     checksum: sha1:{{ lookup('url', libreoffice_archive_sha1_checksum_url) }}
     dest: "{{ download_location }}/libreoffice.tar.gz"
@@ -49,7 +49,7 @@
   vars:
     pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}.{{ pkg_format }}"
     pkg_url: "{{ nexus_repository.releases }}/../imagemagick/imagemagick-distribution/{{ imagemagick_version }}/{{ pkg_name }}"
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ pkg_url }}"
     checksum: "sha1:{{ lookup('url', pkg_url + '.sha1') }}"
     dest: "{{ download_location }}/{{ pkg_name }}"
@@ -60,18 +60,18 @@
   become: true
   block:
     - name: Ensure a list of packages installed
-      package:
+      ansible.builtin.package:
         name: "{{ utils_transform }}"
         state: present
 
     - name: Install optional ghostscript packages (AGPL)
-      package:
+      ansible.builtin.package:
         name: "{{ ghostscript_packages }}"
         state: present
       when: include_ghostscript
 
     - name: Create transform-services folder
-      file:
+      ansible.builtin.file:
         path: "{{ ats_home }}"
         state: directory
         mode: "0755"
@@ -79,7 +79,7 @@
         group: "{{ group_name }}"
 
     - name: Download alfresco-pdf-renderer-linux.tgz
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ alfresco_pdf_renderer }}"
         checksum: sha1:{{ lookup('url', alfresco_pdf_renderer_sha1_checksum_url) }}
         dest: "{{ download_location }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
@@ -88,7 +88,7 @@
         mode: "0644"
 
     - name: Extract alfresco-pdf-renderer-linux.tgz
-      unarchive:
+      ansible.builtin.unarchive:
         src: "{{ download_location }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
         dest: "{{ ats_home }}"
         remote_src: true
@@ -98,7 +98,7 @@
 
 
     - name: Download {{ transform.artifact_name }}-{{ transform.version }}.jar
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ downloads.transform_jar_url }}"
         dest: "{{ binaries_folder }}/transform-service/{{ transform.artifact_name }}-{{ transform.version }}.jar"
         checksum: sha1:{{ lookup('url', downloads.transform_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
@@ -109,7 +109,7 @@
         url_password: "{{ nexus_password }}"
 
     - name: Add ats common vars to setenv file
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: "{{ config_folder }}/setenv.sh"
         marker: "# {mark} ATS COMMON ENV VARS"
         owner: "{{ username }}"
@@ -125,7 +125,7 @@
           {% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/lib/x86_64-linux-gnu/{% else %}/usr/lib64/{% endif %}
         im_cfg: >-
           {% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] -}}{% else %}${IMAGEMAGICK_HOME}{% endif %}
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: "{{ config_folder }}/setenv.sh"
         marker: "# {mark} ATS DEPENDENCIES ENV VARS"
         owner: "{{ username }}"
@@ -140,7 +140,7 @@
         insertafter: EOF
 
     - name: Create log file with correct permissions
-      file:
+      ansible.builtin.file:
         path: "{{ logs_folder }}/ats-ate-aio.log"
         state: touch
         mode: u=rwx,g=rw,o-rwx
@@ -149,7 +149,7 @@
       changed_when: false
 
     - name: Add AIO config mTLS config file
-      template:
+      ansible.builtin.template:
         src: mtls.properties.j2
         dest: "{{ binaries_folder }}/transform-service/tengine-mtls.properties"
         owner: "{{ username }}"
@@ -161,7 +161,7 @@
         - Restart-aio
 
     - name: Add AIO startup script
-      template:
+      ansible.builtin.template:
         src: ats-ate-aio.sh.j2
         dest: "{{ binaries_folder }}/ats-ate-aio.sh"
         owner: "{{ username }}"
@@ -173,7 +173,7 @@
         - Restart-aio
 
     - name: Add alfresco-tengine-aio service
-      template:
+      ansible.builtin.template:
         src: alfresco-tengine-aio.service
         dest: "/etc/systemd/system/alfresco-tengine-aio.service"
         owner: "{{ username }}"
@@ -186,7 +186,7 @@
         - Restart-aio
 
 - name: Verifying if libreoffice finished downloading
-  async_status:
+  ansible.builtin.async_status:
     jid: "{{ libreoffice_download.ansible_job_id }}"
   register: job_result
   until: job_result.finished
@@ -199,7 +199,7 @@
   vars:
     lo_arch: >-
       {{ ansible_system }}_{{ ansible_architecture | replace('_', '-') }}_{{ pkg_format }}
-  unarchive:
+  ansible.builtin.unarchive:
     src: "{{ download_location }}/libreoffice.tar.gz"
     dest: "{{ download_location }}/"
     remote_src: true
@@ -207,4 +207,4 @@
       {{ download_location }}/LibreOffice_{{ dependencies_version.libreoffice }}_{{ lo_arch }}/{{ pkg_format | upper }}S/
 
 - name: Install LibreOffice & imageMagick
-  include_tasks: "dependencies-{{ pkg_format }}.yml"
+  ansible.builtin.include_tasks: "dependencies-{{ pkg_format }}.yml"

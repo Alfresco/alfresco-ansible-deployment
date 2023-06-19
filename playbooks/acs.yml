@@ -1,7 +1,7 @@
 ---
 - name: Check if current OS version is in the supported matrix
   hosts: all:!external
-  gather_facts: yes
+  gather_facts: true
   tasks:
   - name: Compare host OS with supported matrix
     vars:
@@ -27,20 +27,20 @@
 
 - name: Gather facts from all hosts
   hosts: all:!external
-  gather_facts: no
+  gather_facts: false
   tasks:
     - name: Setup
       ansible.builtin.setup:
 
 - name: Database Role
   hosts: database
-  gather_facts: no
+  gather_facts: false
   roles:
     - role: "../roles/postgres"
       when: repo_db_url == "" or sync_db_url == ""
   post_tasks:
     - name: Make sure PostgreSQL is running
-      service:
+      ansible.builtin.service:
         name: "{{ postgresql_service }}"
         state: started
   tags:
@@ -48,7 +48,7 @@
 
 - name: Activemq Role
   hosts: activemq
-  gather_facts: no
+  gather_facts: false
   roles:
     - role: "../roles/activemq"
       when: not groups.external_activemq | default([])
@@ -57,7 +57,7 @@
 
 - name: Elasticsearch Role
   hosts: elasticsearch
-  gather_facts: no
+  gather_facts: false
   roles:
     - role: "../roles/elasticsearch"
       when: acs.edition == "Enterprise" and not groups.external_elasticsearch | default([])
@@ -66,14 +66,14 @@
 
 - name: Transformers Role
   hosts: transformers
-  gather_facts: no
+  gather_facts: false
   pre_tasks:
     - name: Check wether we want mTLS for Tengines
-      set_fact:
+      ansible.builtin.set_fact:
         tengine_mtls_required: >-
           {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
-      set_fact:
+      ansible.builtin.set_fact:
         transformers_keystore:
           path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
@@ -125,7 +125,7 @@
   post_tasks:
     - name: Make sure Solr is running
       become: true
-      service:
+      ansible.builtin.service:
         name: alfresco-search
         state: started
     - name: Update installation status file with  Search
@@ -145,14 +145,14 @@
 
 - name: Alfresco Repository Role
   hosts: repository
-  gather_facts: no
+  gather_facts: false
   pre_tasks:
     - name: Check wether we want mTLS for Repostory
-      set_fact:
+      ansible.builtin.set_fact:
         repo_mtls_required: >-
           {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
-      set_fact:
+      ansible.builtin.set_fact:
         repository_keystore:
           path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
@@ -187,14 +187,14 @@
 
 - name: T-Router Role
   hosts: transformers
-  gather_facts: no
+  gather_facts: false
   pre_tasks:
     - name: Check wether we want mTLS for Tengines
-      set_fact:
+      ansible.builtin.set_fact:
         trouter_mtls_required: >-
           {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
-      set_fact:
+      ansible.builtin.set_fact:
         trouter_keystore:
           path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
@@ -228,14 +228,14 @@
 
 - name: Shared File Store Role
   hosts: transformers
-  gather_facts: no
+  gather_facts: false
   pre_tasks:
     - name: Check wether we want mTLS for Tengines
-      set_fact:
+      ansible.builtin.set_fact:
         sfs_mtls_required: >-
           {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
-      set_fact:
+      ansible.builtin.set_fact:
         sfs_keystore:
           path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
@@ -269,7 +269,7 @@
 
 - name: Enterprise Search Role
   hosts: search_enterprise
-  gather_facts: no
+  gather_facts: false
   roles:
     - role: "../roles/search_enterprise"
       when: acs.edition == "Enterprise"
@@ -291,7 +291,7 @@
 
 - name: Alfresco Control Center Role
   hosts: acc
-  gather_facts: no
+  gather_facts: false
   vars:
     acs_version_requirement: "{{ acs.version is version('7.4', 'ge') }}"
   roles:
@@ -316,7 +316,7 @@
 
 - name: Alfresco Digital Workspace Role
   hosts: adw
-  gather_facts: no
+  gather_facts: false
   roles:
     - role: "../roles/adw"
       when: acs.edition == "Enterprise"
@@ -338,13 +338,13 @@
 
 - name: Nginx Role
   hosts: nginx
-  gather_facts: no
+  gather_facts: false
   roles:
     - role: "../roles/nginx"
   post_tasks:
     - name: Make sure NGINX is running
       become: true
-      service:
+      ansible.builtin.service:
         name: nginx
         state: started
   tags:
@@ -352,7 +352,7 @@
 
 - name: Sync Service Role
   hosts: syncservice
-  gather_facts: no
+  gather_facts: false
   roles:
     - role: "../roles/sync"
       when: acs.edition == "Enterprise"

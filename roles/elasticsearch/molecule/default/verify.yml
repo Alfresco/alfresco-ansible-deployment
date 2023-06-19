@@ -4,7 +4,7 @@
   tasks:
 
     - name: Stat the tmp folder for elasticsearch
-      stat:
+      ansible.builtin.stat:
         path: "/usr/share/elasticsearch/tmp"
       register: tmp_path_stat
 
@@ -18,7 +18,7 @@
           - tmp_path_stat.stat.gid == 0
 
     - name: Check if port 9200/tcp is listening
-      wait_for:
+      ansible.builtin.wait_for:
         port: 9200
         timeout: 30
         connect_timeout: 1

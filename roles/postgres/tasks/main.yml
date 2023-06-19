@@ -1,6 +1,6 @@
 ---
 - name: Include OS specific variables
-  include_vars: "{{ item }}"
+  ansible.builtin.include_vars: "{{ item }}"
   loop: >-
     {{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}
 
@@ -8,10 +8,10 @@
   become: true
   block:
     - name: Prepare package manager
-      include_tasks: "{{ ansible_pkg_mgr }}_repo.yml"
+      ansible.builtin.include_tasks: "{{ ansible_pkg_mgr }}_repo.yml"
 
     - name: Install packages
-      package:
+      ansible.builtin.package:
         name: "{{ postgresql_packages }}"
         state: present
         update_cache: true
@@ -19,7 +19,7 @@
         - Enable-postgresql
 
     - name: Initialize the system database
-      command:
+      ansible.builtin.command:
         cmd: "{{ postgresql_setup_path }} initdb"
         creates: "{{ postgresql_data_path }}/PG_VERSION"
       when: ansible_os_family == 'RedHat'
@@ -30,13 +30,13 @@
     - Restart-postgresql
   block:
     - name: Configure postgresql to listen on all IP interfaces
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: "{{ postgresql_conf_path }}/postgresql.conf"
         regexp: ^\s*listen_addresses\s*=
         line: "listen_addresses = '{{ postgres_listen_addresses }}'"
 
     - name: Custom postgresql Configuration
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: "{{ postgresql_conf_path }}/postgresql.conf"
         regexp: "^{{ item['line'] }}"
         line: "{{ item['line'] }}"
@@ -45,7 +45,7 @@
       with_items: "{{ postgres_config }}"
 
     - name: Configure postgresql client auth
-      template:
+      ansible.builtin.template:
         src: "pg_hba.conf.j2"
         dest: "{{ postgresql_conf_path }}/pg_hba.conf"
         owner: postgres
@@ -53,7 +53,7 @@
         mode: 'u=rw'
 
 - name: Always flush after Configure PostgreSQL RDBMS block
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Configure PostgreSQL RDBMS
   become: true

@@ -3,11 +3,11 @@
   hosts: all
   tasks:
     - name: "Include tomcat"
-      include_role:
+      ansible.builtin.include_role:
         name: "tomcat"
 
     - name: Ensure tomcat service is started and enabled on boot
       become: true
-      service:
+      ansible.builtin.service:
         name: alfresco-content.service
         state: started

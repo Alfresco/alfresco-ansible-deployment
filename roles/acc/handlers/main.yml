@@ -2,7 +2,7 @@
 # handlers file for acc
 - name: Extract alfresco-control-center zip
   become: true
-  unarchive:
+  ansible.builtin.unarchive:
     src: "{{ download_location }}/alfresco-control-center-{{ acc.version }}.zip"
     dest: "{{ nginx_default_vhost_docroot }}/{{ acc_context }}/"
     remote_src: true

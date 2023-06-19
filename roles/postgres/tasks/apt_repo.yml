@@ -2,7 +2,7 @@
 # Ansible module apt_repository rely on unmaintained python libs so using
 # template instead
 - name: Install PostgreSQL deb repository
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/apt/sources.list.d/pgdg.list
     line: >-
       deb http://apt.postgresql.org/pub/repos/apt
@@ -13,6 +13,6 @@
     mode: "0644"
 
 - name: Install repository's GPG key
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
     state: present

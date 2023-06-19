@@ -11,12 +11,12 @@
   become: true
   block:
     - name: Ensure a list of packages installed
-      package:
+      ansible.builtin.package:
         name: "{{ utils_sfs }}"
         state: present
 
     - name: Create transform services folder
-      file:
+      ansible.builtin.file:
         path: "{{ ats_home }}"
         state: directory
         owner: "{{ username }}"
@@ -24,7 +24,7 @@
         mode: "0755"
 
     - name: Download {{ sfs.artifact_name }}.jar
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ downloads.sfs_jar_url }}"
         dest: "{{ ats_home }}/{{ sfs.artifact_name }}-{{ sfs.version }}.jar"
         checksum: sha1:{{ lookup('url', downloads.sfs_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
@@ -36,7 +36,7 @@
         timeout: 570
 
     - name: Add sfs startup script
-      template:
+      ansible.builtin.template:
         src: ats-shared-fs.sh.j2
         dest: "{{ binaries_folder }}/ats-shared-fs.sh"
         owner: "{{ username }}"
@@ -46,7 +46,7 @@
         - Restart-sfs
 
     - name: Add AIO config mTLS config file
-      template:
+      ansible.builtin.template:
         src: mtls.properties.j2
         dest: "{{ ats_home }}/sfs-mtls.properties"
         owner: "{{ username }}"
@@ -57,7 +57,7 @@
         - Restart-sfs
 
     - name: Add paths to setenv file
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: "{{ config_folder }}/setenv.sh"
         marker: "# {mark} ATS COMMON ENV VARS"
         owner: "{{ username }}"
@@ -69,7 +69,7 @@
         insertafter: EOF
 
     - name: Add alfresco-shared-fs service
-      template:
+      ansible.builtin.template:
         src: alfresco-shared-fs.service
         dest: "/etc/systemd/system/alfresco-shared-fs.service"
         owner: "{{ username }}"

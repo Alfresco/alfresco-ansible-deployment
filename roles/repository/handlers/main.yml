@@ -2,7 +2,7 @@
 # handlers file for repository
 - name: Systemd-reload
   become: true
-  service:
+  ansible.builtin.service:
     daemon_reload: true
 
 - name: Restart-alfresco-content
@@ -10,7 +10,7 @@
     svc: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
   throttle: 1
   become: true
-  service:
+  ansible.builtin.service:
     name: "{{ svc }}"
     state: restarted
     daemon_reload: true

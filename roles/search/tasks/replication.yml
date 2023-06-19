@@ -1,12 +1,12 @@
 ---
 - name: Flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Solr Replication
   become: true
   block:
     - name: Wait for core creation to complete
-      wait_for:
+      ansible.builtin.wait_for:
         path: "{{ config_dir }}/solrhome/{{ search_cores | first }}/conf/solrconfig.xml"
       timeout: 30
       delay: 3

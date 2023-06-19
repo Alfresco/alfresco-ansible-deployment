@@ -1,11 +1,11 @@
 ---
 - name: Stop Alfresco Digital Workspace
   hosts: adw
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Stop nginx service
-      service:
+      ansible.builtin.service:
         name: nginx
         state: stopped
       tags:
@@ -14,11 +14,11 @@
 
 - name: Stop Reverse Proxy
   hosts: nginx
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Stop nginx service
-      service:
+      ansible.builtin.service:
         name: nginx
         state: stopped
       tags:
@@ -27,11 +27,11 @@
 
 - name: Stop Alfresco Sync services
   hosts: syncservice
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Stop alfresco-sync service
-      service:
+      ansible.builtin.service:
         name: alfresco-sync
         state: stopped
       tags:
@@ -40,11 +40,11 @@
 
 - name: Stop Alfresco Search services
   hosts: search
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Stop alfresco-search service
-      service:
+      ansible.builtin.service:
         name: alfresco-search
         state: stopped
       tags:
@@ -53,13 +53,13 @@
 
 - name: Stop Alfresco Content services
   hosts: repository
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   vars:
     service_name: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
   tasks:
     - name: Stop {{ service_name }} service
-      service:
+      ansible.builtin.service:
         name: "{{ service_name }}"
         state: stopped
       tags:
@@ -68,11 +68,11 @@
 
 - name: Stop Alfresco Transformation services
   hosts: transformers
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Stop {{ item }} service
-      service:
+      ansible.builtin.service:
         name: "{{ item }}"
         state: stopped
       loop:
@@ -85,12 +85,12 @@
 
 - name: Stop PostgreSQL
   hosts: database
-  become: yes
+  become: true
   vars:
     service_name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
   tasks:
     - name: Stop {{ service_name }} service
-      service:
+      ansible.builtin.service:
         name: "{{ service_name }}"
         state: stopped
       tags:
@@ -99,11 +99,11 @@
 
 - name: Stop ActiveMQ
   hosts: activemq
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Stop activemq service
-      service:
+      ansible.builtin.service:
         name: activemq
         state: stopped
       tags:
@@ -112,11 +112,11 @@
 
 - name: Start ActiveMQ
   hosts: activemq
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Start activemq service
-      service:
+      ansible.builtin.service:
         name: activemq
         state: started
       tags:
@@ -125,12 +125,12 @@
 
 - name: Start PostgreSQL
   hosts: database
-  become: yes
+  become: true
   vars:
     service_name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
   tasks:
     - name: Start {{ service_name }} service
-      service:
+      ansible.builtin.service:
         name: "{{ service_name }}"
         state: started
       tags:
@@ -139,11 +139,11 @@
 
 - name: Start Alfresco Transformation services
   hosts: transformers
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Start {{ item }} service
-      service:
+      ansible.builtin.service:
         name: "{{ item }}"
         state: started
       loop:
@@ -156,13 +156,13 @@
 
 - name: Start Alfresco Content services
   hosts: repository
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   vars:
     service_name: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
   tasks:
     - name: Start {{ service_name }} service
-      service:
+      ansible.builtin.service:
         name: "{{ service_name }}"
         state: started
       tags:
@@ -171,11 +171,11 @@
 
 - name: Start Alfresco Search services
   hosts: search
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Start alfresco-search service
-      service:
+      ansible.builtin.service:
         name: alfresco-search
         state: started
       tags:
@@ -184,11 +184,11 @@
 
 - name: Start Alfresco Sync services
   hosts: syncservice
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Start alfresco-sync service
-      service:
+      ansible.builtin.service:
         name: alfresco-sync
         state: started
       tags:
@@ -197,11 +197,11 @@
 
 - name: Start Reverse Proxy
   hosts: nginx
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Start nginx service
-      service:
+      ansible.builtin.service:
         name: nginx
         state: started
       tags:
@@ -210,11 +210,11 @@
 
 - name: Start Alfresco Digital Workspace
   hosts: adw
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: Start nginx service
-      service:
+      ansible.builtin.service:
         name: nginx
         state: started
       tags:

@@ -1,6 +1,6 @@
 ---
 - name: Include OS specific variables
-  include_vars: "{{ item }}"
+  ansible.builtin.include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
 - name: Install & configure NGINX reverse proxy

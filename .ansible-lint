@@ -3,7 +3,6 @@ warn_list:
   - role-name[path]  # https://alfresco.atlassian.net/browse/OPSEXP-2157
 skip_list:
   - galaxy  # To remove when/if we push to Ansible galaxy
-  - fqcn-builtins
   - name[template]  # Allow Jinja templating inside task and play names
 exclude_paths:
  - molecule/

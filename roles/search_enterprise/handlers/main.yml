@@ -2,14 +2,14 @@
 # handlers file for search_enterprise
 - name: Enable elasticsearch-connector service
   become: true
-  service:
+  ansible.builtin.service:
     name: elasticsearch-connector
     enabled: true
     daemon_reload: true
 
 - name: Restart elasticsearch-connector service
   become: true
-  service:
+  ansible.builtin.service:
     name: elasticsearch-connector
     state: restarted
     daemon_reload: true

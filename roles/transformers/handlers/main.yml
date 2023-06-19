@@ -12,14 +12,14 @@
 
 - name: Enable-aio
   become: true
-  service:
+  ansible.builtin.service:
     name: alfresco-tengine-aio
     enabled: true
     daemon_reload: true
 
 - name: Restart-aio
   become: true
-  service:
+  ansible.builtin.service:
     name: alfresco-tengine-aio
     state: restarted
     daemon_reload: true

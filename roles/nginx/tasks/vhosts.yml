@@ -16,7 +16,7 @@
         mode: "0755"
 
     - name: Include ssl vhost if enabled
-      include_vars: ssl.yml
+      ansible.builtin.include_vars: ssl.yml
       when: use_ssl
 
     - name: Add ssl key

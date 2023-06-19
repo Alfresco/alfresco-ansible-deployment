@@ -3,17 +3,17 @@
   hosts: all
   tasks:
     - name: "Include activemq"
-      include_role:
+      ansible.builtin.include_role:
         name: "activemq"
     - name: Flush Handlers
-      meta: flush_handlers
+      ansible.builtin.meta: flush_handlers
     - name: "Include AIO"
-      include_role:
+      ansible.builtin.include_role:
         name: "transformers"
     - name: Flush Handlers
-      meta: flush_handlers
+      ansible.builtin.meta: flush_handlers
     - name: "Include trouter"
-      include_role:
+      ansible.builtin.include_role:
         name: "trouter"
       vars:
         trouter_environment:

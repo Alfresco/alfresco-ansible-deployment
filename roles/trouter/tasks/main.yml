@@ -1,7 +1,7 @@
 ---
 # tasks file for Transformation Router
 - name: Include OS specific variables
-  include_vars: "{{ item }}"
+  ansible.builtin.include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
 - name: Instanciate Java keystore
@@ -16,12 +16,12 @@
   become: true
   block:
     - name: Ensure a list of packages installed
-      package:
+      ansible.builtin.package:
         name: "{{ utils_trouter }}"
         state: present
 
     - name: Create transform services folder
-      file:
+      ansible.builtin.file:
         path: "{{ ats_home }}/pipelines"
         state: directory
         owner: "{{ username }}"
@@ -29,7 +29,7 @@
         mode: "0755"
 
     - name: Add AIO config mTLS config file
-      template:
+      ansible.builtin.template:
         src: mtls.properties.j2
         dest: "{{ ats_home }}/atr-mtls.properties"
         owner: "{{ username }}"
@@ -40,7 +40,7 @@
         - Restart-trouter
 
     - name: Add T-Router startup script
-      template:
+      ansible.builtin.template:
         src: ats-atr.sh.j2
         dest: "{{ binaries_folder }}/ats-atr.sh"
         owner: "{{ username }}"
@@ -50,7 +50,7 @@
         - Restart-trouter
 
     - name: Copy BSSRF enabled pipeline transformers
-      copy:
+      ansible.builtin.copy:
         content: "{{ bssrf_pipelines | to_nice_json }}"
         dest: "{{ ats_home }}/pipelines/0200-html-via-txt.json"
         owner: "{{ username }}"
@@ -61,7 +61,7 @@
         - Restart-trouter
 
     - name: Add paths to setenv file
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: "{{ config_folder }}/setenv.sh"
         owner: "{{ username }}"
         group: "{{ group_name }}"
@@ -73,7 +73,7 @@
         insertafter: EOF
 
     - name: Add alfresco-transform-router service
-      template:
+      ansible.builtin.template:
         src: alfresco-transform-router.service
         dest: "/etc/systemd/system/alfresco-transform-router.service"
         owner: "{{ username }}"
@@ -86,7 +86,7 @@
 
 - name: Download {{ trouter.artifact_name }}.jar
   become: true
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ downloads.trouter_jar_url }}"
     dest: "{{ ats_home }}/{{ trouter.artifact_name }}-{{ trouter.version }}.jar"
     checksum: sha1:{{ lookup('url', downloads.trouter_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
