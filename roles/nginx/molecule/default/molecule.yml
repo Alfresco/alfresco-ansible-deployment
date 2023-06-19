@@ -5,7 +5,7 @@ driver:
   name: docker
 platforms:
   - name: nginx-instance
-    image: ${MOLECULE_ROLE_IMAGE:-rockylinux:8.7}
+    image: $MOLECULE_ROLE_IMAGE
     dockerfile: ../../../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
     privileged: true
