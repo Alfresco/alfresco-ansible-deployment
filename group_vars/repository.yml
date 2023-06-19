@@ -20,8 +20,6 @@ acs_play_proto: "{{ 'https' if use_ssl | bool else 'http' }}"
 acs_play_port: >-
   {{ ports_cfg.nginx.https if use_ssl | bool else ports_cfg.nginx.http }}
 global_properties:
-  deployment:
-    method: ANSIBLE
   db:
     url: >-
       {{ repo_db_url | default('jdbc:postgresql://' + db_host + ':' + ports_cfg.postgres.sql + '/' + repo_db_name) }}
@@ -33,15 +31,11 @@ global_properties:
     port: "{{ acs_play_port }}"
     protocol: "{{ acs_play_proto }}"
     cluster:
-      enabled: "{{ if groups['repository'] | length > 1 and not cluster_keepoff | bool }}"
+      enabled: "{{ groups['repository'] | length > 1 and not cluster_keepoff | bool | lower }}"
   share:
     host: "{{ fqdn_alfresco | default(known_urls[0]) | default(nginx_host) }}"
     port: "{{ acs_play_port }}"
     protocol: "{{ acs_play_proto }}"
-  dir:
-    root: "{{ data_folder }}/content-services"
-    license:
-      external: "{{ config_folder }}/content-services/licenses"
   messaging:
     broker:
       url: failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})?timeout=3000
