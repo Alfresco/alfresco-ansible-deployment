@@ -33,5 +33,3 @@ provisioner:
       host_vars: host_vars
 verifier:
   name: testinfra
-  env:
-    TEST_IMAGE: $MOLECULE_ROLE_IMAGE

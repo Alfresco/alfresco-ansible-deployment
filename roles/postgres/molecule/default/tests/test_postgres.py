@@ -6,7 +6,7 @@ from hamcrest import assert_that, contains_string
 def test_postgresql_service(host):
     """Ensure postgres is up and basic functionality is working"""
     pghost = host.ansible.get_variables()['inventory_hostname']
-    if os.environ['TEST_IMAGE'].startswith('ubuntu'):
+    if not host.file('/etc/redhat-release').exists:
         service_name = 'postgresql'
     else:
         postgres_version = host.ansible.get_variables()['dependencies_version']['postgres_major_version']
