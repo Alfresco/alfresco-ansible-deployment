@@ -50,6 +50,8 @@ elasticsearch_protocol: >-
 nginx_hosts_list: "{{ groups.nginx | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
 repo_hosts_list: "{{ groups.repository | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
 trans_hosts_list: "{{ groups.transformers | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
+acc_hosts_list: "{{ groups.acc | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
+adw_hosts_list: "{{ groups.adw | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
 sync_hosts_list: "{{ groups.syncservice | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
 search_hosts_list: "{{ groups.search | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
 search_ent_hosts_list: "{{ groups.search_enterprise | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
