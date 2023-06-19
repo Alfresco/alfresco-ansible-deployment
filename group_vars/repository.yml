@@ -39,9 +39,9 @@ global_properties:
     port: "{{ acs_play_port }}"
     protocol: "{{ acs_play_proto }}"
   dir:
-    root: "{{ content_data_folder }}/content"
+    root: "{{ data_folder }}/content-services"
     license:
-      external: "{{ settings_folder }}/licenses"
+      external: "{{ config_folder }}/content-services/licenses"
   messaging:
     broker:
       url: failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})?timeout=3000
