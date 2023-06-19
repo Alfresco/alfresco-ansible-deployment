@@ -17,9 +17,6 @@ all:
         database_1:
           ansible_host: targetIP
     repository:
-      vars:
-        # Add at least the Share url bellow
-        known_urls: []
       hosts:
         repository_1:
           ansible_host: targetIP
