@@ -3,6 +3,13 @@ argument_specs:
   main:
     short_description: Main entrypoint for the repository role
     options:
+      repository_properties:
+        type: dict
+        required: false
+        description: |
+          A YAML data structure containing all the properties you want to set
+          in the alfresco-global.properties file. YAML of each leaf node is
+          expanded as a path separated by '.' (e.g. alfresco.cluster.enabled)
       repo_keystore:
         type: dict
         required: false
