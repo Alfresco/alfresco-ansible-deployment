@@ -5,7 +5,7 @@ driver:
   name: docker
 platforms:
   - name: postgres-instance
-    image: ${MOLECULE_ROLE_IMAGE:-rockylinux:8}
+    image: $MOLECULE_ROLE_IMAGE
     dockerfile: ../../../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
     privileged: true
@@ -33,5 +33,3 @@ provisioner:
       host_vars: host_vars
 verifier:
   name: testinfra
-  env:
-    TEST_IMAGE: ${MOLECULE_ROLE_IMAGE:-rockylinux:8}
