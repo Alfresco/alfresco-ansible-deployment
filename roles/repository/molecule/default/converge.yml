@@ -1,13 +1,8 @@
 ---
 - name: Converge
   hosts: all
-  tasks:
-    - name: "Include postgres"
-      ansible.builtin.include_role:
-        name: "postgres"
-    - name: "Include activemq"
-      ansible.builtin.include_role:
-        name: "activemq"
-    - name: "Include repository"
-      ansible.builtin.include_role:
-        name: "repository"
+  roles:
+    - role: postgres
+    - role: activemq
+    - role: repository
+      repository_properties: "{{ global_properties }}"
