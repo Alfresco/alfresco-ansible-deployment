@@ -3,6 +3,14 @@ argument_specs:
   main:
     short_description: Main entrypoint for the repository role
     options:
+      raw_properties:
+        type: list
+        required: false
+        default: []
+        elements: str
+        description: |
+          a list of file path containing properties to include as-is in the
+          alfresco-global.properties.
       repository_properties:
         type: dict
         required: false

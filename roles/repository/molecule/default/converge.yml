@@ -6,3 +6,5 @@
     - role: activemq
     - role: repository
       repository_properties: "{{ global_properties }}"
+      raw_properties:
+        - ../../configuration_files/alfresco-global.properties

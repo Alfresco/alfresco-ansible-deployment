@@ -65,6 +65,7 @@ default_repository_properties:
     root: "{{ content_data_folder }}/content"
     license:
       external: "{{ settings_folder }}/licenses"
+raw_properties: []
 
 utils_repo: []
 utils_storage:
