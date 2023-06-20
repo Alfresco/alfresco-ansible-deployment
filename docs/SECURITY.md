@@ -13,21 +13,14 @@ the expanding usage of single pages applications and setups where such an
 application is hosted on a domain name which do not match the backend server.
 
 In such circumstances, you can tell the playbook which are these applications
-by using adding the client application to your inventory file as shown below:
+by using adding the client application URL as a repository group variable in the
+`group_vars/repository.yaml` file:
 
 ```yaml
-all:
-  chidren:
-    other_repo_clients:
-      hosts:
-        my_custom_app:
-          known_urls:
-            - http://app.domain.local/legit
-            - https://app.domain.local/legit
+known_urls:
+  - http://app.domain.local/legit
+  - https://app.domain.local/legit
 ```
-
-Note the `known_urls` variable. It needs to be defined as a list of URLs where
-the client application is hosted.
 
 ## Configure CSRF
 
@@ -111,18 +104,13 @@ role), and as a consequence will always try to access the repo through the
 `localhost` interface. That means from the repo's point of view - unless Share
 itself is accessed using [http://localhost/share/](http://localhost/share/) -
 it is breaking CORS protection. For that reason in order for Share to work, it
-is mandatory to add the URL Share will be accessed from as `known_urls`. One
-way to do it is to add this variable to the `repository` group as shown bellow:
+is mandatory to add the URL Share will be accessed from as a `known_urls`.
+We recommand doing it via the `repository` group variables in
+`group_vars/repository.yml`:
 
 ```yaml
-all:
-  chidren:
-    repository:
-      vars:
-        known_urls:
-          - https://ecm.domain.local/share
-      hosts:
-        repository_1:
+known_urls:
+  - https://ecm.domain.local/share
 ```
 
 ## Transformations security

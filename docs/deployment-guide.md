@@ -816,29 +816,40 @@ There are some useful argument you can use with `ansible-playbook` command in ma
 
 ## ACS cluster
 
-Due to load or high availability needs, you might want to deploy a cluster of several repository nodes. This can be achieved rather simply by:
+Due to load or high availability needs, you might want to deploy a cluster of
+several repository nodes. This can be achieved rather simply by:
 
-* Giving the playbook the location of the shared storage used for the ACS contentstore (See [Shared storage documentation](shared-contentstore.md) for details).
+* Giving the playbook the location of the shared storage used for the ACS
+  contentstore (See [Shared storage documentation](shared-contentstore.md) for
+  details).
 * Specifying several hosts within the repository hosts group
 
-> :warning: as mention in the [Alfresco official documentation](https://docs.alfresco.com/content-services/latest/admin/cluster/#scenarioredundancycluster), "All the servers in a cluster should have static IP addresses assigned to them".
-> Not meeting this pre-requisite won't prevent the playbook from working but the cluster might will most likely stop working in case one of the server in the architecture changes IP address.
+> :warning: as mention in the
+> [Alfresco official documentation](https://docs.alfresco.com/content-services/latest/admin/cluster/#scenarioredundancycluster),
+> "All the servers in a cluster should have static IP addresses assigned to
+> them".
 
-For example:
+For example in the inventory file:
 
 ```yaml
 ...
     repository:
-      vars:
-        cs_storage:
-          type: nfs
-          device: nas.infra.local:/exports/contentstore
-          options: _netdev,noatime,nodiratim
       hosts:
         ecm1.infra.local:
         ecm2.infra.local:
         ingester.infra.local:
           cluster_keepoff: true
+...
+```
+
+In the `group_vars/repository.yml` file:
+
+```yaml
+...
+cs_storage:
+  type: nfs
+  device: nas.infra.local:/exports/contentstore
+  options: _netdev,noatime,nodiratim
 ...
 ```
 

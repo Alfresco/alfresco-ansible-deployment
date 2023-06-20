@@ -12,9 +12,9 @@ contentstore
 └── 2022
     └── 2
         ├── 17
-        │   └── 18
-        │       ├── 54
-        │       └── 55
+        │   └── 18
+        │       ├── 54
+        │       └── 55
         └── 18
             └── 2
                 ├── 22
@@ -55,17 +55,20 @@ cs_storage:
   options:
 ```
 
-Given this variable defines a chunk of the deployment architecture we recommend you set it in the ansible inventory file. The file `inventory_ha.yml` gives an example of how to use that feature.
-
 #### Typical clusters
 
-For most clusters setting the `cs_storage` variable under the `repository` group is sensible as it makes that config available to all cluster nodes without repeating the config in different places. This is what is done in the example file `inventory_ha.yml` and match most case such as those shown below:
+For most clusters setting the `cs_storage` variable ath the `repository` group
+level is sensible as it makes that config available to all cluster nodes in a
+single declaration. An example snippet is available in the
+`group_vars/repository.yml` file and match most case such as those shown below:
 
 ![ACS basic cluster storage](resources/acs-ha-contentstore.png)
 
 #### Advanced use cases
 
-There may be cases where the configuration required to mount the filesystem on each host might differ. In this case the configuration can be repeated for each repository node, as shown below:
+There may be cases where the configuration required to mount the filesystem on
+each host differs. In this case the configuration can be repeated for each
+repository node, as shown below:
 
 ```yaml
 ---
@@ -84,7 +87,11 @@ all:
               options: _netdev,noatime,nodiratime,tcp,soft,intr
 ```
 
-> The example above could be used in case of sites replicated real-time through low latency links between sites. That's a feature high storage vendors can offer.
+It is also possible to leverage the inventory's `host_vars` file
+
+> The example above could be used in case of sites replicated real-time through
+> low latency links between sites. That's a feature high storage vendors can
+> offer.
 
 ## Dealing with permissions
 
