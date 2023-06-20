@@ -1,4 +1,5 @@
 # project specifics
+configuration_files/db_connector_repo/
 configuration_files/ssl_certificates/
 configuration_files/keystores/
 configuration_files/pki/
