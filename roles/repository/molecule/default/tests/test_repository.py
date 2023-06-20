@@ -36,7 +36,7 @@ def brute_lock_admin(host):
     login_api_endpoint = '/alfresco/api/-default-/public/authentication/versions/1/tickets'
     api_headers = 'Content-Type: application/json'
     repovars = host.ansible.get_variables()
-    iternum = int(repovars['repository_properties']['authentication']['protection']['limit'])
+    iternum = int(repovars['global_properties']['authentication']['protection']['limit'])
     for _ in range(iternum):
         login_payload = '{"userId":"admin","password":"' + ''.join(random.choice(string.ascii_lowercase) for i in range(3)) + '"}'
         host.run("curl http://{}:8080{} -H '{}' -d '{}'".format(
@@ -60,7 +60,7 @@ def test_bruteforce_mitigation(host):
     cmd = host.run("curl http://{}:8080{} -H '{}' -d '{}'".format(test_host,
                    login_api_endpoint, api_headers, login_payload))
     assert_that(json.loads(cmd.stdout)['error']['errorKey'] == 'Login failed')
-    time.sleep(repovars['repository_properties']['authentication']['protection']['periodSeconds'])
+    time.sleep(repovars['global_properties']['authentication']['protection']['periodSeconds'])
     cmd = host.run("curl http://{}:8080{} -H '{}' -d '{}'".format(test_host,
                    login_api_endpoint, api_headers, login_payload))
     assert_that(json.loads(cmd.stdout)['entry']['userId'] == 'admin')

@@ -34,8 +34,8 @@ acs_play_port: >-
 global_properties:
   authentication:
     protection:
-      limit: 5
-      periodSeconds: 60
+      limit: 3
+      periodSeconds: 20
   db:
     url: jdbc:postgresql://localhost/alfresco
     driver: org.postgresql.Driver
