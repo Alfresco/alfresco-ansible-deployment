@@ -22,7 +22,7 @@ acs_play_port: >-
 global_properties:
   db:
     url: >-
-      {{ repo_db_url | default('jdbc:postgresql://' + db_host + ':' + ports_cfg.postgres.sql + '/' + repo_db_name) }}
+      {{ repo_db_url if repo_db_url else 'jdbc:postgresql://' + db_host + ':' + ports_cfg.postgres.sql | string + '/' + repo_db_name }}
     driver: "{{ repo_db_driver }}"
     username: "{{ repo_db_username }}"
     password: "{{ repo_db_password }}"
