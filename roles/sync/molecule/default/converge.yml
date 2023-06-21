@@ -1,24 +1,13 @@
 ---
 - name: Converge
   hosts: all
-  tasks:
-    - name: "Include postgres"
-      ansible.builtin.include_role:
-        name: "postgres"
-    - name: "Include repository"
-      ansible.builtin.include_role:
-        name: "repository"
-    - name: Flush Handlers
-      ansible.builtin.meta: flush_handlers
-    - name: "Include activemq"
-      ansible.builtin.include_role:
-        name: "activemq"
-    - name: "Include NGINX"
-      ansible.builtin.include_role:
-        name: "nginx"
-    - name: "Include sync"
-      ansible.builtin.include_role:
-        name: "sync"
+  roles:
+    - role: postgres
+    - role: activemq
+    - role: repository
+      repository_properties: "{{ global_properties }}"
+    - role: nginx
+    - role: sync
       vars:
         sync_environment:
           JAVA_OPTS:
