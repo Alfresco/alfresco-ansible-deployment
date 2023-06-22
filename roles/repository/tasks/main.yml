@@ -355,7 +355,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         src: alfresco-global.properties.j2
-        dest: "{{ download_location }}/assemble_snippets_{{ ansible_role_name }}_00-repository.properties"
+        dest: "{{ download_location }}/assemble_snippets_{{ ansible_role_name | basename }}_00-repository.properties"
         mode: "0640"
       notify: []
 
@@ -369,7 +369,7 @@
     - name: Add snippet from custom config files {{ raw_properties | join(',') }}
       ansible.builtin.copy:
         src: "{{ item }}"
-        dest: "{{ download_location }}/assemble_snippets_{{ ansible_role_name }}_{{ item | basename }}"
+        dest: "{{ download_location }}/assemble_snippets_{{ ansible_role_name | basename }}_{{ item | basename }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0640"
@@ -379,7 +379,7 @@
     - name: Assemble alfresco-global.properties snippets
       ansible.builtin.assemble:
         src: "{{ download_location }}"
-        regexp: assemble_snippets_{{ ansible_role_name }}_.*
+        regexp: assemble_snippets_{{ ansible_role_name | basename }}_.*
         dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
         owner: "{{ username }}"
         group: "{{ group_name }}"
