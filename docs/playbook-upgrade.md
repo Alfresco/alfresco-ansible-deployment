@@ -2,6 +2,23 @@
 
 ## Unreleased version
 
+### Passing Alfresco global properties
+
+In previous version we provided an empty `alfresco-global.properties` file to
+conveniently pass static configuration for ACS repository. We're deprecating
+this.
+Instead we now accept a list of file(s) that can be passed to the `repository`
+role as a role argument. Within the role the default value of the argument
+(`raw_properties`) is empty, but the playbook sets a values for it using
+`repository` group vars. This ensure backward compatibility for now, but be
+aware that we will remove this from next major version.
+
+The newer approach is just to use the `global_properties` in the `repository`
+group var as much as possible, and if you really need to include a snippet of
+properties from a file, reference this file in the `properties_snippets` in
+the same `repository` group vars (which will be passed automatically by the
+playbook to the `raw_properties` role argument).
+
 ## v2.1.0
 
 ### Secrets management

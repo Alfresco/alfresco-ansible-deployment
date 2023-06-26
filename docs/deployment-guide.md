@@ -410,9 +410,19 @@ And then edit `vars/secrets.yml` to fill all the required arguments for the plug
 
 ### Alfresco Global Properties
 
-You can provide your [repository configuration](https://github.com/Alfresco/acs-deployment/blob/master/docs/properties-reference.md) by editing the `configuration_files/alfresco-global.properties` file.
+You can provide your [repository
+configuration](https://github.com/Alfresco/acs-deployment/blob/master/docs/properties-reference.md)
+by editing the `configuration_files/alfresco-global.properties` file.
 
-The properties defined in this file will be appended to the generated "alfresco-global.properties" located in "/etc/opt/alfresco/content-services/classpath".
+> This approach is now discoraged and you should prefer using the [`repository`
+> group vars](../configuration_files/alfresco-global.properties)
+> `global_properties` as much as possible otherwise reference you own snippets
+> of properties file using either the new `repository` group var
+> `properties_snippets` or directly the `repository` role argument
+> `raw_properties`.
+
+`alfresco-global.properties` will be located in
+`/etc/opt/alfresco/content-services/classpath`.
 
 ### Enable SSL
 
