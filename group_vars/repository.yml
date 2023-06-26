@@ -44,5 +44,5 @@ global_properties:
   aos:
     baseUrlOverwrite: >-
       {{ acs_play_proto }}://{{ fqdn_alfresco | default(nginx_host) }}:{{ acs_play_port }}/alfresco/aos
-properties_snitppets:
+properties_snippets:
   - ../../configuration_files/alfresco-global.properties

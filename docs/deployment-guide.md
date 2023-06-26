@@ -414,7 +414,7 @@ You can provide your [repository
 configuration](https://github.com/Alfresco/acs-deployment/blob/master/docs/properties-reference.md)
 by editing the `configuration_files/alfresco-global.properties` file.
 
-> This approach is now discoraged and you should prefer using the [`repository`
+> This approach is now discouraged and you should prefer using the [`repository`
 > group vars](../configuration_files/alfresco-global.properties)
 > `global_properties` as much as possible otherwise reference you own snippets
 > of properties file using either the new `repository` group var
