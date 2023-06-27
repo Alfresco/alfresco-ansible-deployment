@@ -16,12 +16,15 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v4
+        id: setup-python
         with:
           python-version-file: .python-version
           cache: pipenv
 
       - name: Install python packages
-        uses: ./.github/actions/pipenv
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v2.4.0
+        with:
+          python-version: ${{ steps.setup-python.outputs.python-version }}
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
