@@ -53,7 +53,7 @@ the target machines, and SSH into the machine:
 
 ```bash
 scp  alfresco-ansible-deployment-<version>.zip user@controlnode:
-scp  -i ~/.ssh/ansible_rsa user@controlnode:.ssh
+ssh-copy-id  -i ~/.ssh/ansible_rsa user@controlnode
 ssh  user@controlnode
 unzip alfresco-ansible-deployment-<version>.zip
 cd alfresco-ansible-deployment
