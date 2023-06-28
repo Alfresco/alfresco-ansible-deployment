@@ -167,6 +167,8 @@
   roles:
     - role: "../roles/repository"
       repo_keystore: "{{ repository_keystore | default({}) }}"
+      repository_properties: "{{ global_properties }}"
+      raw_properties: "{{ properties_snippets }}"
   post_tasks:
     - name: Update installation status file with ACS
       become: true

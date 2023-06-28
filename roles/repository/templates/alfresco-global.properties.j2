@@ -1,29 +1,6 @@
-{% if acs.version is version('7.0.0', '>=') %}
-deployment.method=ANSIBLE
-{% endif %}
-
-{% if repo_db_url == "" %}
-db.url=jdbc:postgresql://${db.host}:{{ ports_cfg.postgres.sql }}/{{ repo_db_name }}
-db.host={{ db_host }}
-{% else %}
-db.url={{ repo_db_url }}
-{% endif %}
-
-db.driver={{ repo_db_driver }}
-db.username={{ repo_db_username }}
-db.password={{ repo_db_password }}
-
-alfresco.host={% if fqdn_alfresco %}{{ fqdn_alfresco }}{% else %}{{ nginx_host }}{% endif %}
-
-alfresco.port={% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_cfg.nginx.http }}{% endif %}
-
-alfresco.protocol={% if use_ssl | bool %}https{% else %}http{% endif %}
-
-share.host={% if fqdn_alfresco %}{{ fqdn_alfresco }}{% else %}{{ nginx_host }}{% endif %}
-
-share.port={% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_cfg.nginx.http }}{% endif %}
-
-share.protocol={% if use_ssl | bool %}https{% else %}http{% endif %}
+{% for prop in lookup('ansible.utils.to_paths', merged_repository_properties) | dict2items %}
+{{ prop.key }}={{ prop.value }}
+{% endfor %}
 
 {% if groups['search'] | default([]) | length >= 1 %}
 index.subsystem.name=solr6
@@ -42,9 +19,6 @@ elasticsearch.password={{ elasticsearch_password | default('') }}
 {% else %}
 index.subsystem.name=noindex
 {% endif %}
-
-dir.root={{ content_data_folder }}/content
-dir.license.external={{ settings_folder }}/licenses
 
 # KEYSTORES
 
@@ -65,8 +39,6 @@ httpclient.config.transform.mTLSEnabled=true
 httpclient.config.transform.hostnameVerificationDisabled=true
 {% endif %}
 
-alfresco.cluster.enabled={% if groups['repository'] | length > 1 and not cluster_keepoff %}true{% else %}false{% endif %}
-
 {%- macro ats_proto() -%}
 http
 {%- if repo_keystore.cert_containers | default([]) | length > 0 -%}
@@ -82,13 +54,7 @@ transform.service.url={{ ats_proto() }}://{{ trouter_host }}:{{ ports_cfg.transf
 sfs.url={{ ats_proto() }}://{{ sfs_host }}:{{ ports_cfg.sfs.http }}
 {% endif %}
 
-messaging.broker.url=failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})?timeout=3000
-messaging.broker.username={{ activemq_username }}
-messaging.broker.password={{ activemq_password }}
-
 dsync.service.uris={% if use_ssl | bool %}https{% else %}http{% endif %}://{% if fqdn_alfresco %}{{ fqdn_alfresco }}{% else %}{{ nginx_host }}{% endif %}:{% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_cfg.nginx.http }}{% endif %}/alfresco
-
-aos.baseUrlOverwrite={% if use_ssl | bool %}https{% else %}http{% endif %}://{% if fqdn_alfresco %}{{ fqdn_alfresco }}{% else %}{{ nginx_host }}{% endif %}:{% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_cfg.nginx.http }}{% endif %}/alfresco/aos
 
 # CSRF filter overrides
 {% import 'xorigins_macros.j2' as _xorigins_protection %}
@@ -116,7 +82,3 @@ cors.preflight.maxage={{ cors.preflight_maxage | default('10') }}
 {% else -%}
   false
 {% endif %}
-
-{% for prop in lookup('ansible.utils.to_paths', merged_repository_properties) | dict2items %}
-{{ prop.key }}={{ prop.value }}
-{% endfor %}

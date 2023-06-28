@@ -345,7 +345,7 @@
         path: "{{ content_folder }}/web-server/conf"
         state: absent
 
-    - name: Create alfresco-global.properties
+    - name: Create alfresco-global.properties main snippet
       vars:
         merged_repository_properties: >-
           {{ default_repository_properties
@@ -355,10 +355,35 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         src: alfresco-global.properties.j2
-        dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
+        dest: "{{ download_location }}/assemble_snippets_{{ ansible_role_name | basename }}_00-repository.properties"
         mode: "0640"
-      tags:
-        - molecule-idempotence-notest  # see OPSEXP-1280
+      notify: []
+
+    - name: Check raw snippet can be parsed
+      any_errors_fatal: true
+      ansible.builtin.assert:
+        that: lookup('ansible.builtin.ini', '', type='properties',  file=item) is string
+      notify: []
+      loop: "{{ raw_properties }}"
+
+    - name: Add snippet from custom config files {{ raw_properties | join(',') }}
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ download_location }}/assemble_snippets_{{ ansible_role_name | basename }}_{{ item | basename }}"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0640"
+      notify: []
+      loop: "{{ raw_properties }}"
+
+    - name: Assemble alfresco-global.properties snippets
+      ansible.builtin.assemble:
+        src: "{{ download_location }}"
+        regexp: assemble_snippets_{{ ansible_role_name | basename }}_.*
+        dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0640"
 
     - name: Setup common loader
       ansible.builtin.lineinfile:
@@ -370,22 +395,6 @@
           "{{ content_folder }}/web-server/lib/*.jar","${catalina.home}/lib","${catalina.home}/lib/*.jar"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-
-    - name: >-
-        Insert or Update custom properties added through
-        configuration_files/alfresco-global.properties
-      ansible.builtin.blockinfile:
-        path: "{{ settings_folder }}/classpath/alfresco-global.properties"
-        marker: "{mark} - ANSIBLE MANAGED BLOCK"
-        marker_begin: "### Begin - Custom user properties"
-        marker_end: "### End - Custom user properties"
-        insertafter: EOF
-        block: >-
-          {{ lookup('file', role_path + '/../../configuration_files/alfresco-global.properties') }}
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-      tags:
-        - molecule-idempotence-notest  # see OPSEXP-1280
 
 - name: Check on amp download async task
   become: true

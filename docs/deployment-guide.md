@@ -410,9 +410,19 @@ And then edit `vars/secrets.yml` to fill all the required arguments for the plug
 
 ### Alfresco Global Properties
 
-You can provide your [repository configuration](https://github.com/Alfresco/acs-deployment/blob/master/docs/properties-reference.md) by editing the `configuration_files/alfresco-global.properties` file.
+You can provide your [repository
+configuration](https://github.com/Alfresco/acs-deployment/blob/master/docs/properties-reference.md)
+by editing the `configuration_files/alfresco-global.properties` file.
 
-The properties defined in this file will be appended to the generated "alfresco-global.properties" located in "/etc/opt/alfresco/content-services/classpath".
+> This approach is now discouraged and you should prefer using the [`repository`
+> group vars](../configuration_files/alfresco-global.properties)
+> `global_properties` as much as possible otherwise reference you own snippets
+> of properties file using either the new `repository` group var
+> `properties_snippets` or directly the `repository` role argument
+> `raw_properties`.
+
+`alfresco-global.properties` will be located in
+`/etc/opt/alfresco/content-services/classpath`.
 
 ### Enable SSL
 
@@ -816,29 +826,40 @@ There are some useful argument you can use with `ansible-playbook` command in ma
 
 ## ACS cluster
 
-Due to load or high availability needs, you might want to deploy a cluster of several repository nodes. This can be achieved rather simply by:
+Due to load or high availability needs, you might want to deploy a cluster of
+several repository nodes. This can be achieved rather simply by:
 
-* Giving the playbook the location of the shared storage used for the ACS contentstore (See [Shared storage documentation](shared-contentstore.md) for details).
+* Giving the playbook the location of the shared storage used for the ACS
+  contentstore (See [Shared storage documentation](shared-contentstore.md) for
+  details).
 * Specifying several hosts within the repository hosts group
 
-> :warning: as mention in the [Alfresco official documentation](https://docs.alfresco.com/content-services/latest/admin/cluster/#scenarioredundancycluster), "All the servers in a cluster should have static IP addresses assigned to them".
-> Not meeting this pre-requisite won't prevent the playbook from working but the cluster might will most likely stop working in case one of the server in the architecture changes IP address.
+> :warning: as mention in the
+> [Alfresco official documentation](https://docs.alfresco.com/content-services/latest/admin/cluster/#scenarioredundancycluster),
+> "All the servers in a cluster should have static IP addresses assigned to
+> them".
 
-For example:
+For example in the inventory file:
 
 ```yaml
 ...
     repository:
-      vars:
-        cs_storage:
-          type: nfs
-          device: nas.infra.local:/exports/contentstore
-          options: _netdev,noatime,nodiratim
       hosts:
         ecm1.infra.local:
         ecm2.infra.local:
         ingester.infra.local:
           cluster_keepoff: true
+...
+```
+
+In the `group_vars/repository.yml` file:
+
+```yaml
+...
+cs_storage:
+  type: nfs
+  device: nas.infra.local:/exports/contentstore
+  options: _netdev,noatime,nodiratim
 ...
 ```
 

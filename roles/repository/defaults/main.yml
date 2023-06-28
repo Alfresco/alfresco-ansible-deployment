@@ -45,10 +45,14 @@ cors:
   support.credentials: true
   preflight_maxage: 10
 
-# default_repository_properties: properties to be added to the alfresco-global.properties file
-# e.g: alfresco.authentication.allowGuestLogin is disabled by default
-# To add more or override existing defaults, use repository_properties data structure instead of this one.
+# default_repository_properties: properties to be added to the
+# alfresco-global.properties file, e.g: alfresco.authentication.allowGuestLogin
+# is disabled by default.
+# To add more properties or override existing defaults, use the date structure
+# named repository_properties data structure instead of this one.
 default_repository_properties:
+  deployment:
+    method: ANSIBLE
   authentication:
     protection:
       enabled: "true"
@@ -57,6 +61,11 @@ default_repository_properties:
   alfresco:
     authentication:
       allowGuestLogin: "false"
+  dir:
+    root: "{{ content_data_folder }}/content"
+    license:
+      external: "{{ settings_folder }}/licenses"
+raw_properties: []
 
 utils_repo: []
 utils_storage:

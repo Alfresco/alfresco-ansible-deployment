@@ -1,3 +1,4 @@
+---
 ansible_user: ansible
 bssrf_protection_enabled: true
 known_urls:
@@ -26,8 +27,32 @@ acs_environment:
     - -Dmetadata-keystore.metadata.password=mp6yc0UD9e
     - -Dmetadata-keystore.metadata.algorithm=AES
     - $JAVA_TOOL_OPTIONS
-repository_properties:
+
+acs_play_proto: "{{ 'https' if use_ssl | bool else 'http' }}"
+acs_play_port: >-
+  {{ ports_cfg.nginx.https if use_ssl | bool else ports_cfg.nginx.http }}
+global_properties:
   authentication:
     protection:
-      limit: 5
-      periodSeconds: 60
+      limit: 3
+      periodSeconds: 20
+  db:
+    url: jdbc:postgresql://localhost/alfresco
+    driver: org.postgresql.Driver
+    username: "{{ repo_db_username }}"
+    password: "{{ repo_db_password }}"
+  alfresco:
+    host: localhost
+    port: 8080
+    protocol: http
+    cluster:
+      enabled: false
+  share:
+    host: localhost
+    port: 8080
+    protocol: http
+  messaging:
+    broker:
+      url: failover:(tcp://localhost:61616)?timeout=3000
+  aos:
+    baseUrlOverwrite: http://localhost/alfresco/aos

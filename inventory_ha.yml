@@ -17,15 +17,6 @@ all:
       hosts:
         db.infra.local:
     repository:
-      vars:
-        # Add at least Share URL bellow
-        known_urls: []
-        # Every storage that can be enabled via `mount` on hosts is supported
-        cs_storage:
-          type: nfs
-          device: nas.infra.local:/exports/contentstore
-          # as in `mount -o` options
-          options: _netdev,noatime,nodiratime
       hosts:
         ecm1.infra.local:
         ecm2.infra.local:
