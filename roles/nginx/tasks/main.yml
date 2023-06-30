@@ -43,8 +43,7 @@
         setype: httpd_log_t
         state: present
       when: ansible_selinux.status == "enabled"
-      notify:
-        - Apply new SELinux file contexts
+      notify: Apply new SELinux file contexts
 
 - name: Vhosts configuration
   ansible.builtin.include_tasks: vhosts.yml
