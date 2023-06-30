@@ -143,7 +143,7 @@
   tasks:
     - name: Check for provided host's PKCS12 container
       ansible.builtin.stat:
-        path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
+        path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname | ansible.builtin.hash }}.p12"
       register: host_p12
       delegate_to: localhost
 
@@ -173,7 +173,7 @@
           no_log: true
           become: true
           community.crypto.openssl_privatekey:
-            path: /etc/pki/{{ inventory_hostname }}_{{ cert_key_type | default('') }}.key
+            path: /etc/pki/{{ inventory_hostname | ansible.builtin.hash }}_{{ cert_key_type | default('') }}.key
             mode: 0600
             size: "{{ cert_key_size | default(omit) }}"
             type: "{{ cert_key_type | default(omit) }}"
@@ -212,16 +212,16 @@
             ownca_privatekey_passphrase: "{{ secret_ca_passphrase }}"
             ownca_not_after: "{{ cert_days_valid_for | default(omit) }}"
             ownca_not_before: "+0s"
-            path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.crt"
+            path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname | ansible.builtin.hash }}.crt"
           delegate_to: localhost
 
         - name: Generate PKCS12 keystores
           community.crypto.openssl_pkcs12:
             action: export
-            path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
+            path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname | ansible.builtin.hash }}.p12"
             passphrase: "{{ p12_passphrase }}"
-            friendly_name: "{{ inventory_hostname }}"
+            friendly_name: "{{ inventory_hostname | ansible.builtin.hash }}"
             privatekey_content: "{{ srvkey.privatekey }}"
-            certificate_path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.crt"
+            certificate_path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname | ansible.builtin.hash }}.crt"
             ca_certificates: "{{ hostvars.localhost.ca_cert_path }}"
           delegate_to: localhost

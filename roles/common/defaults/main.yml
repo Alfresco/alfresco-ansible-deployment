@@ -21,7 +21,7 @@ repo_hosts: |
   | map('extract', hostvars)
   | json_query('[].
     {
-      inventory_name: inventory_hostname ,
+      inventory_name: inventory_hostname,
       local_addr: ansible_default_ipv4.address,
       cluster_keepoff: cluster_keepoff
     }')

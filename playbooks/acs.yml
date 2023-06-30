@@ -75,11 +75,11 @@
     - name: Build keystore role argument
       ansible.builtin.set_fact:
         transformers_keystore:
-          path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
+          path: "{{ config_folder }}/pki/{{ inventory_hostname | ansible.builtin.hash }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
           type: JCEKS
           cert_containers:
-            - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
+            - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname | ansible.builtin.hash }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
       when:
@@ -154,11 +154,11 @@
     - name: Build keystore role argument
       ansible.builtin.set_fact:
         repository_keystore:
-          path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
+          path: "{{ config_folder }}/pki/{{ inventory_hostname | ansible.builtin.hash }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
           type: JCEKS
           cert_containers:
-            - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
+            - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname | ansible.builtin.hash }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
       when:
@@ -198,11 +198,11 @@
     - name: Build keystore role argument
       ansible.builtin.set_fact:
         trouter_keystore:
-          path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
+          path: "{{ config_folder }}/pki/{{ inventory_hostname | ansible.builtin.hash }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
           type: JCEKS
           cert_containers:
-            - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
+            - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname | ansible.builtin.hash }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
       when:
@@ -239,11 +239,11 @@
     - name: Build keystore role argument
       ansible.builtin.set_fact:
         sfs_keystore:
-          path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
+          path: "{{ config_folder }}/pki/{{ inventory_hostname | ansible.builtin.hash }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
           type: JCEKS
           cert_containers:
-            - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
+            - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname | ansible.builtin.hash }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
       when:
