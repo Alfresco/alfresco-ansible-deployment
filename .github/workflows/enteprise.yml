@@ -156,7 +156,7 @@ jobs:
             desc: EC2 ACS 7.4 (Rocky Linux 8)
           - name: multimachine
             vars: vars.yml
-            desc: EC2 ACS 7.4 clustered (Rocky Linux 8.7)
+            desc: EC2 ACS 7.4 clustered (Rocky Linux 8.8)
           - name: opensearch
             vars: vars.yml
             desc: EC2 ACS 7.4 opensearch (RHEL8)
