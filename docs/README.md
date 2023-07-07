@@ -68,7 +68,7 @@ Legend:
 |---------------------|--------------------------|--------------------|--------------------|--------------------|--------------------|
 | Amazon Linux (v2)   | :x:                      | :x:                | :x:                | :x:                | :x:                |
 | Amazon Linux (v1)   | :x:                      | :x:                | :x:                | :x:                | :x:                |
-| RHEL 8.7            | :ballot_box_with_check:  | -                  | -                  | -                  | -                  |
+| RHEL 8.7            | :white_check_mark:       | -                  | -                  | -                  | -                  |
 | RHEL 8.6            | :white_check_mark:       | :white_check_mark: | -                  | -                  | -                  |
 | RHEL 8.5            | :ballot_box_with_check:  | :white_check_mark: | :white_check_mark: | -                  | -                  |
 | RHEL 8.4            | -                        | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
