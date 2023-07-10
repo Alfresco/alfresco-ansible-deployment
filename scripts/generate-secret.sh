@@ -39,7 +39,7 @@ done
 if [ "$MODE" == 'plaintext' ]; then
     echo "${SECRET_KEY}: \"$RANDOM_STRING\""
 elif [ "$MODE" == 'plugin' ]; then
-    echo "${SECRET_KEY}: \"{{ lookup('') }}\""
+    echo "${SECRET_KEY}: \"{{ lookup('$LOOKUP_SECRET_PLUGIN_NAME', '$LOOKUP_SECRET_PLUGIN_SECRET_NAME_PREFIX-$SECRET_KEY') }}\""
 elif [ "$MODE" == 'encrypt_string' ]; then
     ansible-vault encrypt_string "$RANDOM_STRING" --name "${SECRET_KEY}" | grep -v 'Encryption successful'
 else
