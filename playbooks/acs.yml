@@ -13,6 +13,16 @@
       - not (skip_os_test | default(false) | bool)
       - ansible_distribution_version | float not in os_versions
 
+- name: Load override vars when an override*.yml is present
+  hosts: all:!external
+  gather_facts: false
+  tasks:
+    - name: Include override vars
+      ansible.builtin.include_vars:
+        dir: "{{ playbook_dir }}/../vars"
+        files_matching: "override"
+        hash_behaviour: merge
+
 - name: Run preliminary checks
   ansible.builtin.import_playbook: prerun-checks.yml
 
