@@ -1,0 +1,6 @@
+- name: Restart service affected by keystore changes
+  become: true
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: restarted
+  loop: "{{ java_keystore_affected_services }}"
