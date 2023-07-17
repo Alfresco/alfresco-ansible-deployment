@@ -483,6 +483,7 @@
 
 - name: Check if service restart is needed
   ansible.builtin.debug:
-    msg: noop
+    msg: triggering service restart
   when: java_needs_restart
+  changed_when: true
   notify: Restart-alfresco-content
