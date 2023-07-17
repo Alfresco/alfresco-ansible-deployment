@@ -480,3 +480,9 @@
     host: "{{ db_host }}"
     port: "{{ ports_cfg.postgres.sql }}"
   when: not repo_db_url | default(false)
+
+- name: Check if service restart is needed
+  ansible.builtin.debug:
+    msg: noop
+  when: java_needs_restart
+  notify: Restart-alfresco-content

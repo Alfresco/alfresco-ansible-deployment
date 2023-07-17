@@ -1,7 +1,4 @@
-- name: Restart service affected by keystore changes for {{ caller_name }}
-  become: true
-  vars:
-    caller_name: "{{ ansible_parent_role_names.first() }}"
-  ansible.builtin.include_role:
-    name: ../roles/{{ caller_name }}
-    tasks_from: svc_restart
+- name: Set fact to notify that java processes needs to be restarted
+  ansible.builtin.set_fact:
+    java_needs_restart: true
+  listen: restart-java-services
