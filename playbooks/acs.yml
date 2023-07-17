@@ -82,7 +82,6 @@
             - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
-        java_keystore_affected_services: "{{ java_keystore_affected_services }} + [ 'alfresco-tengine-aio' ]"
       when:
         - tengine_mtls_required
         - ats_mtls_capable
@@ -162,7 +161,6 @@
             - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
-        java_keystore_affected_services: "{{ java_keystore_affected_services }} + [ 'alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}' ]"
       when:
         - repo_mtls_required
         - ats_mtls_capable
@@ -207,7 +205,6 @@
             - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
-        java_keystore_affected_services: "{{ java_keystore_affected_services }} + [ 'alfresco-transform-router' ]"
       when:
         - trouter_mtls_required
         - ats_mtls_capable
@@ -249,7 +246,6 @@
             - path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname }}.p12"
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
-        java_keystore_affected_services: "{{ java_keystore_affected_services }} + [ 'alfresco-shared-fs' ]"
       when:
         - sfs_mtls_required
         - ats_mtls_capable

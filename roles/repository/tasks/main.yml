@@ -4,7 +4,7 @@
   loop: >-
     {{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}
 
-- name: Instanciate Java keystore
+- name: Configure Java keystore
   ansible.builtin.include_role:
     name: ../roles/java
     tasks_from: keystores

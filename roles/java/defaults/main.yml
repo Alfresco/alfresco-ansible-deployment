@@ -6,4 +6,3 @@ java_folder: >-
 java_home: /opt/openjdk-{{ dependencies_version.java }}
 java_truststore: "{{ java_home }}/lib/security/cacerts"
 java_truststore_pass: changeit
-java_keystore_affected_services: []

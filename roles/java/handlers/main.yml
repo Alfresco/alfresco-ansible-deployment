@@ -1,6 +1,7 @@
-- name: Restart service affected by keystore changes
+- name: Restart service affected by keystore changes for {{ caller_name }}
   become: true
-  ansible.builtin.service:
-    name: "{{ item }}"
-    state: restarted
-  loop: "{{ java_keystore_affected_services }}"
+  vars:
+    caller_name: "{{ ansible_parent_role_names.first() }}"
+  ansible.builtin.include_role:
+    name: ../roles/{{ caller_name }}
+    tasks_from: svc_restart
