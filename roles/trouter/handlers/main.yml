@@ -13,8 +13,5 @@
     daemon_reload: true
 
 - name: Restart-trouter
-  become: true
-  ansible.builtin.service:
-    name: alfresco-transform-router
-    state: restarted
-    daemon_reload: true
+  ansible.builtin.include_tasks:
+    file: restart.yml
