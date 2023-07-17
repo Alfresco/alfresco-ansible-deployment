@@ -8,7 +8,7 @@
   ansible.builtin.include_vars:
     file: "{{ os_version_yml }}"
 
-- name: Instanciate Java keystore
+- name: Configure Java keystore
   ansible.builtin.include_role:
     name: ../roles/java
     tasks_from: keystores
@@ -208,3 +208,9 @@
 
 - name: Install LibreOffice & imageMagick
   ansible.builtin.include_tasks: "dependencies-{{ pkg_format }}.yml"
+
+- name: Check if service restart is needed
+  ansible.builtin.debug:
+    msg: noop
+  when: java_needs_restart
+  notify: Restart-aio
