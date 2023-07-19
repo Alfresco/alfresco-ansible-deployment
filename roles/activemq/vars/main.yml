@@ -7,3 +7,4 @@ activemq_log_config_file: >-
   {% else %}
     "{{ activemq_conf }}/log4j2.properties"
   {% endif %}
+  | trim
