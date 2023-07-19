@@ -1,0 +1,6 @@
+- name: Restart trouter
+  become: true
+  ansible.builtin.service:
+    name: alfresco-transform-router
+    state: restarted
+    daemon_reload: true

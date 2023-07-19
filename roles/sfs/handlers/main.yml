@@ -8,8 +8,5 @@
     daemon_reload: true
 
 - name: Restart-sfs
-  become: true
-  ansible.builtin.service:
-    name: alfresco-shared-fs
-    state: restarted
-    daemon_reload: true
+  ansible.builtin.include_tasks:
+    file: restart.yml

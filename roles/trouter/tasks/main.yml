@@ -96,3 +96,10 @@
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
+
+- name: Check if service restart is needed
+  ansible.builtin.debug:
+    msg: triggering service restart
+  when: java_needs_restart
+  changed_when: true
+  notify: Restart-trouter

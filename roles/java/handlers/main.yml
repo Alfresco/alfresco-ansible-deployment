@@ -1,0 +1,4 @@
+- name: Set fact to notify that java processes needs to be restarted
+  ansible.builtin.set_fact:
+    java_needs_restart: true
+  listen: restart-java-services

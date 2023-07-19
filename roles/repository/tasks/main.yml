@@ -4,7 +4,7 @@
   loop: >-
     {{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}
 
-- name: Instanciate Java keystore
+- name: Configure Java keystore
   ansible.builtin.include_role:
     name: ../roles/java
     tasks_from: keystores
@@ -480,3 +480,10 @@
     host: "{{ db_host }}"
     port: "{{ ports_cfg.postgres.sql }}"
   when: not repo_db_url | default(false)
+
+- name: Check if service restart is needed
+  ansible.builtin.debug:
+    msg: triggering service restart
+  when: java_needs_restart
+  changed_when: true
+  notify: Restart-alfresco-content
