@@ -1,10 +1,4 @@
 ---
 # vars file for roles/activemq
 activemq_home: "/opt/apache-activemq-{{ dependencies_version.activemq }}"
-activemq_log_config_file: >-
-  {% if dependencies_version.activemq == "5.16.4" %}
-    "{{ activemq_conf }}/log4j.properties"
-  {% else %}
-    "{{ activemq_conf }}/log4j2.properties"
-  {% endif %}
-  | trim
+activemq_log_config_file: "{% if dependencies_version.activemq == '5.16.4' %}{{ activemq_conf }}/log4j.properties{% else %}{{ activemq_conf }}/log4j2.properties{% endif %}"
