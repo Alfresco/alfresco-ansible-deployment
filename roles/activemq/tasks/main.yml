@@ -101,7 +101,7 @@
 
     - name: Change location of ActiveMQ logs
       vars:
-        activemq_log_config: "{{ 'log4j2' if activemq_version >= '5.17.0' else 'log4j' }}"
+        activemq_log_config: "{% if activemq_version is version('5.17.0', '>=') %}log4j2{% else %}log4j{% endif %}"
       ansible.builtin.replace:
         path: "{{ activemq_conf }}/{{ activemq_log_config }}.properties"
         regexp: "activemq.data"
