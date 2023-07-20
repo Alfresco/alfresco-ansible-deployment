@@ -101,7 +101,7 @@
 
     - name: Change location of ActiveMQ logs
       ansible.builtin.replace:
-        path: "{{ activemq_conf }}/{{ activemq_log_config }}.properties""
+        path: "{{ activemq_conf }}/{{ activemq_log_config }}.properties"
         regexp: "activemq.data"
         replace: "activemq.log"
         owner: "{{ username }}"
