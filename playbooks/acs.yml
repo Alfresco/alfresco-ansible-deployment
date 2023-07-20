@@ -53,7 +53,7 @@
     - role: "../roles/activemq"
       activemq_version: "{{ dependencies_version.activemq }}"
       activemq_log_config: >-
-          {{ 'log4j2.properties' if dependencies_version.activemq >= '5.17.0' else 'log4j.properties' }}
+          {{ 'log4j2' if dependencies_version.activemq >= '5.17.0' else 'log4j' }}
       when: not groups.external_activemq | default([])
   tags:
     - activemq
