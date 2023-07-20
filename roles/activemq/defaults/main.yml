@@ -9,3 +9,5 @@ activemq_environment:
     - -Xms128m
     - -Xmx1g
     - $ACTIVEMQ_OPTS
+activemq_version: 5.17.4
+activemq_log_config: log4j2
