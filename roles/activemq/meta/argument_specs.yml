@@ -6,10 +6,12 @@ argument_specs:
     options:
         activemq_version:
           description: activemq version to use for deployment.
-          default: "5.17.6"
           required: false
-          type: "str"
+          default: "5.17.4"
         activemq_log_config:
           description: activemq log4j and log4j2 config file.
-          default: "{% if activemq_version >= '5.17.0' %}log4j2.properties{% else %}log4j.properties{% endif %}"
-          type: "str"
+          required: false
+          default: log4j2.properties
+        choices:
+          - log4j2.properties
+          - log4j.properties
