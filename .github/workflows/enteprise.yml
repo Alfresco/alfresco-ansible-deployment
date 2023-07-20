@@ -45,7 +45,7 @@ jobs:
           cache: pipenv
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v2.4.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v2.8.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -100,7 +100,7 @@ jobs:
           cache: pipenv
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v2.4.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v2.8.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -178,7 +178,7 @@ jobs:
           cache: pipenv
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v2.4.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v2.8.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -188,7 +188,7 @@ jobs:
           cache-name: enterprise
 
       - name: Set BRANCH_NAME
-        uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@v2.2.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@v2.8.0
         with:
           sanitize: true
           max-length: 20
