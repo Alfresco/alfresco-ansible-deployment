@@ -11,5 +11,5 @@ argument_specs:
           type: "str"
         activemq_log_config:
           description: activemq log4j and log4j2 config file.
-          default: {% if activemq_version >= '5.17.0' %}log4j2.properties{% else %}log4j.properties{% endif %}"
+          default: "{% if activemq_version >= '5.17.0' %}log4j2.properties{% else %}log4j.properties{% endif %}"
           type: "str"
