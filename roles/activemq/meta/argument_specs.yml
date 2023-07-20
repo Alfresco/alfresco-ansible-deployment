@@ -1,0 +1,14 @@
+---
+argument_specs:
+  main:
+    short_description: Activemq
+    author: Alfresco
+    options:
+        activemq_version:
+          description: activemq version to use for deployment.
+          default: 5.17.6
+          type: "str"
+        activemq_log_config:
+          description: activemq log4j to use for deployment
+          default: "{{ 'log4j2.properties' if activemq_version is version_compare('5.17.0', '>=') else 'log4j.properties' }}"
+          type: "str"

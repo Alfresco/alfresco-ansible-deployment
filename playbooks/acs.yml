@@ -51,6 +51,7 @@
   gather_facts: false
   roles:
     - role: "../roles/activemq"
+      activemq_version: "{{ dependencies_version.activemq }}"
       when: not groups.external_activemq | default([])
   tags:
     - activemq
