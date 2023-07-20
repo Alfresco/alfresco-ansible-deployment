@@ -21,9 +21,9 @@
 - name: Install ActiveMQ
   become: true
   block:
-    - name: Extract apache-activemq-{{ activemq_version }}-bin.tar.gz
+    - name: Extract apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz
       ansible.builtin.unarchive:
-        src: "{{ download_location }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
+        src: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
         dest: "{{ activemq_home | dirname }}"
         remote_src: true
         owner: "{{ username }}"
@@ -101,7 +101,7 @@
 
     - name: Change location of ActiveMQ logs
       ansible.builtin.replace:
-        path: "{{ activemq_conf }}/{{ activemq_log_config }}.properties"
+        path: "{{ activemq_conf }}/{{ activemq_log_config }}.properties""
         regexp: "activemq.data"
         replace: "activemq.log"
         owner: "{{ username }}"

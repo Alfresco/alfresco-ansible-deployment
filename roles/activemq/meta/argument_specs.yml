@@ -4,11 +4,11 @@ argument_specs:
     short_description: Activemq
     author: Alfresco
     options:
-        activemq_version:
-          description: activemq version to use for deployment.
-          required: false
-          default: 5.17.4
-        activemq_log_config:
-          description: activemq log4j and log4j2 config file.
-          required: false
-          default: log4j2
+      activemq_version:
+        description: activemq version to use for deployment.
+        required: false
+        default: 5.17.4
+      activemq_log_config:
+        description: activemq log4j and log4j2 config file.
+        required: false
+        default: log4j2
