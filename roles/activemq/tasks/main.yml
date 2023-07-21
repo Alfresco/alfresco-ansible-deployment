@@ -3,7 +3,7 @@
   ansible.builtin.get_url:
     url: "{{ dependencies_url.activemq }}"
     checksum: sha512:{{ dependencies_url.activemq_sha512_checksum_url }}
-    dest: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
+    dest: "{{ download_location }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
     mode: "0644"
   register: activemq_download
   async: 900
@@ -21,9 +21,9 @@
 - name: Install ActiveMQ
   become: true
   block:
-    - name: Extract apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz
+    - name: Extract apache-activemq-{{ activemq_version }}-bin.tar.gz
       ansible.builtin.unarchive:
-        src: "{{ download_location }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
+        src: "{{ download_location }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
         dest: "{{ activemq_home | dirname }}"
         remote_src: true
         owner: "{{ username }}"
@@ -100,8 +100,10 @@
       no_log: true
 
     - name: Change location of ActiveMQ logs
+      vars:
+        activemq_log_config: "{% if activemq_version is version('5.17.0', '>=') %}log4j2{% else %}log4j{% endif %}"
       ansible.builtin.replace:
-        path: "{{ activemq_conf }}/log4j.properties"
+        path: "{{ activemq_conf }}/{{ activemq_log_config }}.properties"
         regexp: "activemq.data"
         replace: "activemq.log"
         owner: "{{ username }}"

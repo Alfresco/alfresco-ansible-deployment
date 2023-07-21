@@ -1,0 +1,10 @@
+---
+argument_specs:
+  main:
+    short_description: Activemq
+    author: Alfresco
+    options:
+      activemq_version:
+        description: activemq version to use for deployment.
+        required: false
+        default: 5.17.4
