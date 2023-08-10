@@ -22,7 +22,7 @@ jobs:
           cache: pipenv
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v3.0.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v3.0.2
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
