@@ -1,0 +1,9 @@
+- name: Restart {{ svc }}
+  become: true
+  throttle: 1
+  vars:
+    svc: alfresco-content{% if groups.repository | length > 1 %}-monitored-startup{% endif %}
+  ansible.builtin.service:
+    name: "{{ svc }}"
+    state: restarted
+    daemon_reload: true

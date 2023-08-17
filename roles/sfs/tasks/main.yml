@@ -1,6 +1,6 @@
 ---
 # tasks file for sfs
-- name: Instanciate Java keystore
+- name: Create Java keystore
   ansible.builtin.include_role:
     name: ../roles/java
     tasks_from: keystores
@@ -78,3 +78,10 @@
       notify:
         - Enable-sfs
         - Restart-sfs
+
+- name: Check if service restart is needed
+  ansible.builtin.debug:
+    msg: triggering service restart
+  when: java_needs_restart
+  changed_when: true
+  notify: Restart-sfs

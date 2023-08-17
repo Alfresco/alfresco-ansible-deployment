@@ -18,8 +18,5 @@
     daemon_reload: true
 
 - name: Restart-aio
-  become: true
-  ansible.builtin.service:
-    name: alfresco-tengine-aio
-    state: restarted
-    daemon_reload: true
+  ansible.builtin.include_tasks:
+    file: restart.yml

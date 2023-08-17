@@ -76,6 +76,7 @@ acc:
 supported_os:
   RedHat:
     versions:
+      - 8.7
       - 8.6
       - 8.5
       - 8.4
@@ -170,7 +171,7 @@ use_custom_keystores: false
 dependencies_version:
   postgresql_connector: 42.2.19
   postgres_major_version: 14
-  activemq: 5.16.6
+  activemq: 5.17.4
   java: 17.0.3
   java_build: 7
   tomcat: 9.0.59

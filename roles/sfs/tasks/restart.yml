@@ -1,0 +1,6 @@
+- name: Restart sfs
+  become: true
+  ansible.builtin.service:
+    name: alfresco-shared-fs
+    state: restarted
+    daemon_reload: true

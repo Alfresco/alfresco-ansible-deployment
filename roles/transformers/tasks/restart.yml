@@ -1,0 +1,6 @@
+- name: Restart ATS All-In-One
+  become: true
+  ansible.builtin.service:
+    name: alfresco-tengine-aio
+    state: restarted
+    daemon_reload: true

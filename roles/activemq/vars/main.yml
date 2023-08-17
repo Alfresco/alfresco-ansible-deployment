@@ -1,3 +1,3 @@
 ---
 # vars file for roles/activemq
-activemq_home: "/opt/apache-activemq-{{ dependencies_version.activemq }}"
+activemq_home: "/opt/apache-activemq-{{ activemq_version }}"
