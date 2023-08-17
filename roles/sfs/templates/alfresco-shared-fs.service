@@ -1,12 +1,14 @@
 [Unit]
 Description=Alfresco Shared File Store
-After=syslog.socket network.target
+After=syslog.socket network.target local-fs.target remote-fs.target
 
 [Service]
 Type=simple
 User={{ username }}
 ExecStart={{ binaries_folder }}/ats-shared-fs.sh
 WorkingDirectory={{ ats_home }}
+Restart=on-failure
+RestartSec=60
 
 [Install]
 WantedBy=multi-user.target

@@ -1,12 +1,14 @@
 [Unit]
 Description=Alfresco Content Services
-After=syslog.socket network.target
+After=syslog.socket network.target local-fs.target remote-fs.target
 
 [Service]
 Type=forking
 User={{ username }}
 ExecStart={{ binaries_folder }}/tomcat.sh start
 ExecStop={{ binaries_folder }}/tomcat.sh stop
+Restart=on-failure
+RestartSec=60
 
 [Install]
 WantedBy=multi-user.target
