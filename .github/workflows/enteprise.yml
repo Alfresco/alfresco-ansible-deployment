@@ -35,7 +35,7 @@ jobs:
           - name: trouter
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -87,7 +87,7 @@ jobs:
           - name: pki
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           # avoid auth conflict when cloning DTAS during verify step
           persist-credentials: false
@@ -165,7 +165,7 @@ jobs:
       MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           # avoid auth conflict when cloning DTAS during verify step
           persist-credentials: false
