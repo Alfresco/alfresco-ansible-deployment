@@ -23,10 +23,10 @@ searchEnterprise:
   version: "4.0"
 
 transform:
-  version: "3"
+  version: "4.1"
 
 trouter:
-  version: "2"
+  version: "3.1"
 
 target_file: group_vars/all.yml
 version_pattern: '(-A\d*)?$'
