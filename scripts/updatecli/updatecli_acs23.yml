@@ -4,6 +4,9 @@ acs:
 adw:
   version: "4.1"  # to be updated to 4.2
 
+acc:
+  version: "8.1"  # to be updated to 8.2
+
 aos:
   version: "1.6"
 
