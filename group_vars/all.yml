@@ -1,7 +1,7 @@
 artifacts_repositories:
   enterprise:
     base_url: "https://artifacts.alfresco.com/nexus/content"
-    repository: "groups/private"
+    repository: "groups/internal"
     group_id: "org/alfresco"
   community:
     base_url: "https://artifacts.alfresco.com/nexus/content"
@@ -20,47 +20,47 @@ acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 7.4.0.1
+  version: 23.1.0-A39
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
-    version: 1.6.0
+    version: 2.0.0-A1
   device_sync:
     repository: >-
       {{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo
-    version: 3.9.0
+    version: 4.0.0-A16
   googledrive_repo:
     repository: >-
       {{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise
-    version: 3.4.0
+    version: 4.0.0-A1
   googledrive_share:
     repository: >-
       {{ nexus_repository.releases }}/integrations/alfresco-googledrive-share
-    version: 3.4.0
+    version: 4.0.0-A1
 api_explorer:
   artifact_name: api-explorer
   repository: "{{ nexus_repository.releases }}"
-  version: 7.4.0
+  version: 23.1.0-A1
 search_enterprise:
   artifact_name: alfresco-elasticsearch-connector-distribution
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 3.3.0
+  version: 4.0.0-A1
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
-  version: 2.0.6.1
+  version: 2.0.8.1
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
-  version: 3.1.0
+  version: 4.1.0-A1
 trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.1.0
+  version: 3.1.0-A1
 sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.1.0
+  version: 3.1.0-A1
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
@@ -68,7 +68,7 @@ adw:
 sync:
   repository: >-
     {{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x
-  version: 3.9.0
+  version: 4.0.0-M10
 acc:
   artifact_name: alfresco-control-center
   repository: "{{ nexus_repository.releases }}"
@@ -171,10 +171,10 @@ use_custom_keystores: false
 dependencies_version:
   postgresql_connector: 42.2.19
   postgres_major_version: 14
-  activemq: 5.17.4
+  activemq: 5.18.2
   java: 17.0.3
   java_build: 7
-  tomcat: 9.0.59
+  tomcat: 10.1.13
   libreoffice: 7.2.5.1
   pdf_renderer: 1.1
   imagemagick: 7.1.0-16-ci-2
@@ -196,9 +196,9 @@ dependencies_url:
   java_sha256_checksum: >-
     https://github.com/adoptium/temurin{{ java_major }}-binaries/releases/download/jdk-{{ dependencies_version.java }}%2B{{ dependencies_version.java_build }}/OpenJDK{{ java_major }}U-jdk_x64_linux_hotspot_{{ dependencies_version.java }}_{{ dependencies_version.java_build }}.tar.gz.sha256.txt
   tomcat: >-
-    {{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz
+    {{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat.split('.')[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz
   tomcat_sha512_checksum_url: >-
-    {{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz.sha512
+    {{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat.split('.')[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz.sha512
 repo_db_url: ""
 repo_db_driver: org.postgresql.Driver
 repo_db_name: "alfresco"

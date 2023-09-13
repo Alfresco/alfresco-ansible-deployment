@@ -11,7 +11,7 @@ apiExplorer:
   version: "7.4"
 
 dsync:
-  version: "3.9"
+  version: "3.10"
 
 googleDrive:
   version: "3.4"
@@ -28,5 +28,5 @@ transform:
 trouter:
   version: "2"
 
-target_file: group_vars/all.yml
-version_pattern: '(-M\d*)?$'
+target_file: 7.4.N-extra-vars.yml
+version_pattern: '$'
