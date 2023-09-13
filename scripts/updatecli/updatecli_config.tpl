@@ -13,12 +13,18 @@ scms:
         url: git@github.com:Alfresco/alfresco-enterprise-repo.git
         branch: master
         directory: '/tmp/updatecli/acsEnt'
+  accRepo:
+    kind: git
+    spec:
+      url: git@github.com:Alfresco/alfresco-applications.git
+      branch: develop
+      directory: '/tmp/updatecli/acc'
   adwRepo:
     kind: git
     spec:
-        url: https://github.com/Alfresco/alfresco-content-app.git
-        branch: master
-        directory: '/tmp/updatecli/adw'
+      url: https://github.com/Alfresco/alfresco-content-app.git
+      branch: master
+      directory: '/tmp/updatecli/adw'
   aosAmpRepo:
     kind: git
     spec:
@@ -78,6 +84,16 @@ sources:
       versionFilter:
         kind: regex
         pattern: '{{ .acs.version }}(.(\d+))+{{ .version_pattern }}'
+  {{- if and .acc .acc.version }}
+  acc:
+    name: ACC {{ .acc.version }}
+    kind: gittag
+    scmid: accRepo
+    spec:
+      versionFilter:
+        kind: regex
+        pattern: '{{ .acc.version }}(.(\d+))+{{ .version_pattern }}'
+  {{- end }}
   adw:
     name: ADW {{ .adw.version }}
     kind: gittag
@@ -86,7 +102,7 @@ sources:
       versionFilter:
         kind: regex
         pattern: '{{ .adw.version }}(.(\d+))+{{ .version_pattern }}'
-  {{- if index . "ags" "version" }}
+  {{- if and .ags .ags.version }}
   agsAmp:
     name: AGS AMP {{ .ags.version }}.x
     kind: gittag
@@ -172,6 +188,15 @@ targets:
     spec:
       key: acs.version
       file: '{{ .target_file }}'
+  {{- if and .acc .acc.version }}
+  acc:
+    name: Bump acc
+    kind: yaml
+    sourceid: acc
+    spec:
+      key: acc.version
+      file: '{{ .target_file }}'
+  {{- end }}
   adw:
     name: Bump adw
     kind: yaml

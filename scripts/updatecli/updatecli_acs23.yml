@@ -1,0 +1,35 @@
+acs:
+  version: "23.1"
+
+adw:
+  version: "4.1"  # to be updated to 4.2
+
+acc:
+  version: "8.1"  # to be updated to 8.2
+
+aos:
+  version: "2.0"
+
+apiExplorer:
+  version: "23.1"
+
+dsync:
+  version: "4.0"
+
+googleDrive:
+  version: "4.0"
+
+search:
+  version: "2.0"
+
+searchEnterprise:
+  version: "4.0"
+
+transform:
+  version: "4.1"
+
+trouter:
+  version: "3.1"
+
+target_file: group_vars/all.yml
+version_pattern: '(-A\d*)?$'
