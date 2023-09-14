@@ -8,7 +8,7 @@ acc:
   version: "8.1"  # to be updated to 8.2
 
 aos:
-  version: "1.6"
+  version: "2.0"
 
 apiExplorer:
   version: "23.1"
@@ -17,7 +17,7 @@ dsync:
   version: "3.11"
 
 googleDrive:
-  version: "3.4"
+  version: "4.0"
 
 search:
   version: "2.0"
