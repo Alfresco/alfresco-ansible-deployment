@@ -171,10 +171,10 @@ use_custom_keystores: false
 dependencies_version:
   postgresql_connector: 42.2.19
   postgres_major_version: 14
-  activemq: 5.17.4
+  activemq: 5.18.2
   java: 17.0.3
   java_build: 7
-  tomcat: 9.0.59
+  tomcat: 10.1.13
   libreoffice: 7.2.5.1
   pdf_renderer: 1.1
   imagemagick: 7.1.0-16-ci-2
@@ -196,9 +196,9 @@ dependencies_url:
   java_sha256_checksum: >-
     https://github.com/adoptium/temurin{{ java_major }}-binaries/releases/download/jdk-{{ dependencies_version.java }}%2B{{ dependencies_version.java_build }}/OpenJDK{{ java_major }}U-jdk_x64_linux_hotspot_{{ dependencies_version.java }}_{{ dependencies_version.java_build }}.tar.gz.sha256.txt
   tomcat: >-
-    {{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz
+    {{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat.split('.')[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz
   tomcat_sha512_checksum_url: >-
-    {{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz.sha512
+    {{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat.split('.')[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz.sha512
 repo_db_url: ""
 repo_db_driver: org.postgresql.Driver
 repo_db_name: "alfresco"
