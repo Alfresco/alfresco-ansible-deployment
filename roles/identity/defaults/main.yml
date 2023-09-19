@@ -3,4 +3,4 @@
 identity_admin_username: admin
 identity_admin_password: alfrescoalfrescoadmin
 
-keycloak_quarkus_version: 21.1.2
+identity_keycloak_quarkus_version: 21.1.2

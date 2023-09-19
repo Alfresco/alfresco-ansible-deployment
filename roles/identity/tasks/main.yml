@@ -3,7 +3,7 @@
 - name: Install Keycloak
   vars:
     keycloak_quarkus_admin_pass: "{{ identity_admin_password }}"
-    keycloak_quarkus_version: "{{ keycloak_quarkus_version }}"
+    keycloak_quarkus_version: "{{ identity_keycloak_quarkus_version }}"
     keycloak_quarkus_start_dev: true
     keycloak_quarkus_proxy_mode: none
     keycloak_quarkus_host: localhost

@@ -4,7 +4,7 @@
     alfresco_theme_version: 0.3.5
   ansible.builtin.unarchive:
     src: https://github.com/Alfresco/alfresco-keycloak-theme/releases/download/{{ alfresco_theme_version }}/alfresco-keycloak-theme-{{ alfresco_theme_version }}.zip
-    dest: /opt/keycloak/keycloak-{{ keycloak_quarkus_version }}/themes
+    dest: /opt/keycloak/keycloak-{{ identity_keycloak_quarkus_version }}/themes
     remote_src: yes
 
 - name: Configure Alfresco Keycloak realm
