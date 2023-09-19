@@ -25,6 +25,7 @@ jobs:
           - name: activemq
           - name: common
           - name: elasticsearch
+          - name: identity
           - name: java
           - name: nginx
           - name: postgres
