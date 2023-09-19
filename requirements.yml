@@ -2,7 +2,7 @@
 # Install with ansible-galaxy coillection install -vr requirements.yml
 collections:
   - name: community.general
-    version: 4.4.0
+    version: 7.4.0
   - name: community.postgresql
     version: 2.1.0
   - name: ansible.posix

@@ -1,0 +1,40 @@
+- name: Fetch Alfresco theme
+  become: true
+  vars:
+    alfresco_theme_version: 0.3.5
+  ansible.builtin.unarchive:
+    src: https://github.com/Alfresco/alfresco-keycloak-theme/releases/download/{{ alfresco_theme_version }}/alfresco-keycloak-theme-{{ alfresco_theme_version }}.zip
+    dest: /opt/keycloak/keycloak-{{ keycloak_quarkus_version }}/themes
+    remote_src: yes
+
+- name: Configure Alfresco Keycloak realm
+  community.general.keycloak_realm:
+    auth_client_id: admin-cli
+    auth_keycloak_url: http://localhost:8080
+    auth_realm: master
+    auth_username: "{{ identity_admin_username }}"
+    auth_password: "{{ identity_admin_password }}"
+    id: alfresco
+    realm: alfresco
+    state: present
+    access_token_lifespan: 300
+    default_locale: en
+    enabled: true
+    internationalization_enabled: true
+    login_theme: alfresco
+    ssl_required: none
+    supported_locales:
+      - ca
+      - de
+      - en
+      - es
+      - fr
+      - it
+      - ja
+      - lt
+      - nl
+      - 'no'
+      - pt-BR
+      - ru
+      - sv
+      - zh-CN

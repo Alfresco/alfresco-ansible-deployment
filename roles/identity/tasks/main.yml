@@ -2,7 +2,11 @@
 # tasks file for identity
 - name: Install Keycloak
   vars:
-    keycloak_quarkus_admin_pass: "alfrescoalfrescoadmin"
-    keycloak_quarkus_version: 21.1.2
+    keycloak_quarkus_admin_pass: "{{ identity_admin_password }}"
+    keycloak_quarkus_version: "{{ keycloak_quarkus_version }}"
+    keycloak_quarkus_start_dev: true
+    keycloak_quarkus_proxy_mode: none
+    keycloak_quarkus_host: localhost
+    keycloak_quarkus_http_relative_path: ''
   ansible.builtin.include_role:
     name: middleware_automation.keycloak.keycloak_quarkus
