@@ -1,5 +1,5 @@
 ---
-# Install with ansible-galaxy coillection install -vr requirements.yml
+# Install with ansible-galaxy install -vr requirements.yml
 collections:
   - name: community.general
     version: 7.4.0
@@ -22,7 +22,6 @@ collections:
   - name: community.docker
     version: 2.1.1
 
-# Install with ansible-galaxy role install -vr requirements.yml
 roles:
   - name: buluma.elastic_repo
     version: v0.1.2
