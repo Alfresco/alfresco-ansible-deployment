@@ -95,6 +95,11 @@ elasticsearch_host: "{% if groups.external_elasticsearch | default(False) %}\
   {% endif %}"
 elasticsearch_protocol: >-
   {{- groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_protocol']) | first | default('http') -}}
+identity_host: "{% if groups.external_identity | default(False) %}\
+  {{- groups.external_identity | first -}}\
+  {% else %}\
+  {{- groups.identity | default([]) | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | first | default('127.0.0.1') -}}\
+  {% endif %}"
 
 ports_cfg:
   nginx:
