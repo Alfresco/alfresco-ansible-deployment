@@ -39,3 +39,17 @@
       - ru
       - sv
       - zh-CN
+
+- name: Configure basic alfresco client
+  community.general.keycloak_client:
+    auth_client_id: admin-cli
+    auth_keycloak_url: http://localhost:8080
+    auth_realm: master
+    auth_username: "{{ identity_admin_username }}"
+    auth_password: "{{ identity_admin_password }}"
+    realm: alfresco
+    client_id: alfresco
+    enabled: true
+    redirect_uris: "{{ known_urls | map('regex_replace', '(.*)$', '\\1*') | list }}"
+    web_origins: "{{ known_urls }}"
+    state: present
