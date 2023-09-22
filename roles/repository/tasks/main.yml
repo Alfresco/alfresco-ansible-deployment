@@ -351,8 +351,8 @@
         sso_repository_properties:
           authentication.chain: identity-service1:identity-service,alfrescoNtlm1:alfrescoNtlm
           identity-service.auth-server-url: "http://{{ identity_host }}:8080/auth" # FIXME
-          identity-service.resource: "{{ identity_client_id }}"
-          identity-service.credentials.secret: "{{ identity_client_secret }}" # required only if client is not set to public
+          identity-service.resource: "{{ repository_identity_client_id }}"
+          identity-service.credentials.secret: "{{ repository_identity_client_secret }}"
       ansible.builtin.set_fact:
         repository_properties: "{{ repository_properties | ansible.builtin.combine(sso_repository_properties) }}"
 
