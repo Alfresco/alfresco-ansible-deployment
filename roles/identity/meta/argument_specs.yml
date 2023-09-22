@@ -1,0 +1,16 @@
+---
+argument_specs:
+  main:
+    short_description: Main entrypoint for the identity role
+    options:
+      identity_admin_username:
+        type: str
+        required: true
+        default: admin
+        description: |
+          Username of the keycloak instance admin user
+      identity_admin_password:
+        type: str
+        required: true
+        description: |
+          Password of the keycloak instance admin user

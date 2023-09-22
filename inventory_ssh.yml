@@ -35,6 +35,8 @@ all:
     elasticsearch:
       hosts:
     # Enterprise Search section end
+    identity:
+      hosts:
     nginx:
       hosts:
         nginx_1:
@@ -67,8 +69,11 @@ all:
       hosts:
     external_elasticsearch:
       hosts:
+    external_identity:
+      hosts:
     external:
       children:
         external_activemq:
         external_elasticsearch:
+        external_identity:
         other_repo_clients:

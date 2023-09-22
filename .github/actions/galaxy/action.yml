@@ -19,9 +19,9 @@ runs:
         path: |
           ~/.ansible/collections
           ~/.ansible/roles
-        key: ${{ runner.os }}-ansible-v${{ inputs.cache-version }}-${{ inputs.cache-name }}-${{ hashFiles('requirements.yml') }}
+        key: ansible-galaxy-v${{ inputs.cache-version }}-${{ inputs.cache-name }}-${{ hashFiles('requirements.yml') }}
 
     - name: Fetch dependencies from Ansible Galaxy
-      run: ansible-galaxy install -r requirements.yml
+      run: ansible-galaxy install -r requirements.yml --force
       if: steps.collections-cache.outputs.cache-hit != 'true'
       shell: bash

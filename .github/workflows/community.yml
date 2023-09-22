@@ -25,12 +25,17 @@ jobs:
           - name: activemq
           - name: common
           - name: elasticsearch
+          - name: identity
           - name: java
           - name: nginx
           - name: postgres
           - name: search
           - name: tomcat
           - name: transformers
+        exclude:
+          # Keycloak collection doesn't support ubuntu
+          - name: identity
+            image: ubuntu:20.04
     env:
       PY_COLORS: 1
       PYTHONUNBUFFERED: 1
