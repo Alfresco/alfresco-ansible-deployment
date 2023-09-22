@@ -629,7 +629,7 @@ pipenv run ansible-playbook playbooks/firewall.yml -i inventory_ssh.yml
 
 > Note: If you are planning to execute the firewall specific playbook after, make sure that the ports marked as required for deployment are opened before deploying Alfresco
 
-> Note: The firewall playbook will install, enable and configure the default firewall for each OS (e.g.: `firewalld` for RedHat and `ufw` for Debian)
+> Note: The firewall playbook will install, enable and configure the default firewall for each OS (e.g.: `firewalld` for RedHat family and `ufw` for Debian family)
 
 ## Localhost Deployment
 
@@ -768,10 +768,10 @@ To check your inventory file is configured correctly and the control node is abl
 ansible all -m ping -i inventory_ssh.yml
 ```
 
-**Optional** To check if the required ports for the deployment are available on the target machine and we also have connectivity between nodes (ex. repository connecting to the db on 5432) please run the prerequisite-checks playbook before you deploy ACS. If there are any firewalls blocking connectivity this playbook will discover them.
+**Optional** To check if the required ports for the deployment are available on the target machine and we also have connectivity between nodes (ex. repository connecting to the db on 5432) the prerun-network-checks playbook can be executed before you deploy ACS. If there are any firewalls blocking connectivity this playbook will discover them.
 
 ```bash
-pipenv run ansible-playbook playbooks/prerequisite-checks.yml -i inventory_ssh.yml
+pipenv run ansible-playbook playbooks/prerun-network-checks.yml -i inventory_ssh.yml [-e "@community-extra-vars.yml"]
 ```
 
 To deploy ACS 7 Enterprise on the target hosts execute the playbook as the current user using the following command:

@@ -15,7 +15,7 @@ repo_hosts: |
   {{ groups['repository'] | map('extract', hostvars)
   | json_query('[].
     {
-      inventory_name: inventory_hostname ,
+      inventory_name: inventory_hostname,
       local_addr: ansible_default_ipv4.address,
       cluster_keepoff: cluster_keepoff
     }')
@@ -35,6 +35,7 @@ solr_host: "{{ groups['search'] | default([]) | map('extract', hostvars, ['ansib
 ats_tengine_aio_host: "{{ groups['transformers'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
 sfs_host: "{{ groups['transformers'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
 trouter_host: "{{ groups['transformers'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
+acc_host: "{{ groups['acc'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
 adw_host: "{{ groups['adw'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
 sync_host: "{{ groups['syncservice'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) | first | default('127.0.0.1') }}"
 elasticsearch_host: >-
@@ -47,14 +48,14 @@ elasticsearch_protocol: >-
   {{- groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_protocol']) | first | default('http') -}}
 
 # List of all hosts for Firewall
-nginx_hosts_list: "{{ groups.nginx | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
-repo_hosts_list: "{{ groups.repository | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
-trans_hosts_list: "{{ groups.transformers | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
-acc_hosts_list: "{{ groups.acc | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
-adw_hosts_list: "{{ groups.adw | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
-sync_hosts_list: "{{ groups.syncservice | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
-search_hosts_list: "{{ groups.search | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
-search_ent_hosts_list: "{{ groups.search_enterprise | default([]) | map('extract', hostvars) | map(attribute='ansible_host') }}"
+nginx_hosts_list: "{{ groups['nginx'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) }}"
+repo_hosts_list: "{{ groups['repository'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) }}"
+trans_hosts_list: "{{ groups['transformers'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) }}"
+acc_hosts_list: "{{ groups['acc'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) }}"
+adw_hosts_list: "{{ groups['adw'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) }}"
+sync_hosts_list: "{{ groups['syncservice'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) }}"
+search_hosts_list: "{{ groups['search'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) }}"
+search_ent_hosts_list: "{{ groups['search_enterprise'] | default([]) | map('extract', hostvars, ['ansible_default_ipv4','address']) }}"
 
 ports_cfg:
   nginx:

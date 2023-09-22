@@ -1,4 +1,11 @@
 ---
+- name: Gather facts from all hosts
+  hosts: all:!external
+  gather_facts: false
+  tasks:
+    - name: Setup
+      ansible.builtin.setup:
+
 - name: Configure and enable the firewall on activemq hosts
   hosts: activemq
   become: true
