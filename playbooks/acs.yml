@@ -70,6 +70,8 @@
   gather_facts: false
   roles:
     - role: "../roles/identity"
+      identity_admin_username: admin
+      identity_admin_pasword: "{{ hostvars.localhost.identity_admin_password }}"
       when: acs.edition == "Enterprise" and not groups.external_identity | default([])
   tags:
     - identity
