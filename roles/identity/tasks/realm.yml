@@ -1,10 +1,10 @@
 - name: Fetch Alfresco theme
   become: true
   vars:
-    alfresco_theme_version: 0.3.5
+    theme_version: "{{ identity_alfresco_theme_version }}"
   ansible.builtin.unarchive:
     src: "https://github.com/Alfresco/alfresco-keycloak-theme/releases/download/
-      {{ alfresco_theme_version }}/alfresco-keycloak-theme-{{ alfresco_theme_version }}.zip"
+      {{ theme_version }}/alfresco-keycloak-theme-{{ theme_version }}.zip"
     dest: /opt/keycloak/keycloak-{{ identity_keycloak_quarkus_version }}/themes
     remote_src: true
 
