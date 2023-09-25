@@ -13,3 +13,8 @@ argument_specs:
         required: true
         description: |
           Password of the keycloak instance admin user
+      identity_keycloak_http_port:
+        type: int
+        default: 8080
+        description: |
+          Port where to expose the keycloak instance

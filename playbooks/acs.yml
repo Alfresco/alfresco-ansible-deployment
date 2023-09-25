@@ -72,6 +72,7 @@
     - role: "../roles/identity"
       identity_admin_username: admin
       identity_admin_password: "{{ hostvars.localhost.identity_admin_password }}"
+      identity_keycloak_http_port: 8081
       when: acs.edition == "Enterprise" and not groups.external_identity | default([])
   tags:
     - identity

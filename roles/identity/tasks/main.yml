@@ -7,6 +7,7 @@
     keycloak_quarkus_start_dev: true
     keycloak_quarkus_proxy_mode: none
     keycloak_quarkus_host: localhost
+    keycloak_quarkus_http_port: "{{ identity_keycloak_http_port }}"
     keycloak_quarkus_http_relative_path: ''
   ansible.builtin.include_role:
     name: middleware_automation.keycloak.keycloak_quarkus
