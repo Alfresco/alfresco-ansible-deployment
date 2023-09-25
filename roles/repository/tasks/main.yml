@@ -345,23 +345,31 @@
         path: "{{ content_folder }}/web-server/conf"
         state: absent
 
+    - name: Initialize accumulator for dynamic properties
+      ansible.builtin.set_fact:
+        dynamic_properties: {}
+
     - name: Configure identity service when available
-      when: groups.identity | default([]) # FIXME and external?
+      when: groups.identity | default([]) # FIXME move to role argument
       vars:
         sso_repository_properties:
-          authentication.chain: identity-service1:identity-service,alfrescoNtlm1:alfrescoNtlm
-          identity-service.auth-server-url: "http://{{ identity_host }}:8080/auth" # FIXME
-          identity-service.resource: "{{ repository_identity_client_id }}"
-          identity-service.credentials.secret: "{{ repository_identity_client_secret }}"
+          please: help
+          authentication:
+            chain: identity-service1:identity-service,alfrescoNtlm1:alfrescoNtlm
+          identity-service:
+            resource: "{{ repository_identity_client_id }}"
+            credentials:
+              secret: "{{ repository_identity_client_secret }}"
+          identity-service.auth-server-url: "http://{{ identity_host }}:8080/" # FIXME hardcoded port
       ansible.builtin.set_fact:
-        repository_properties: "{{ repository_properties | ansible.builtin.combine(sso_repository_properties) }}"
+        dynamic_properties: "{{ dynamic_properties | ansible.builtin.combine(sso_repository_properties) }}"
 
     - name: Create alfresco-global.properties main snippet
       vars:
         merged_repository_properties: >-
           {{ default_repository_properties
-          | combine(repository_properties
-          | default(None)) }}
+          | combine(repository_properties | default(None))
+          | combine(dynamic_properties) }}
       ansible.builtin.template:
         owner: "{{ username }}"
         group: "{{ group_name }}"
