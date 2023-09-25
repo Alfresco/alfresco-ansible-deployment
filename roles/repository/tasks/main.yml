@@ -360,7 +360,7 @@
             resource: "{{ repository_identity_client_id }}"
             credentials:
               secret: "{{ repository_identity_client_secret }}"
-          identity-service.auth-server-url: "http://{{ identity_host }}:8080/" # FIXME hardcoded port
+          identity-service.auth-server-url: "http://{{ identity_host }}:8081/" # FIXME hardcoded port
       ansible.builtin.set_fact:
         dynamic_properties: "{{ dynamic_properties | ansible.builtin.combine(sso_repository_properties) }}"
 
