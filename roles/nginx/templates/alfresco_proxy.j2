@@ -73,7 +73,7 @@
     }
 
     location /auth/ {
-        proxy_pass http://{{ identity_host }}:8081/;
+        proxy_pass http://{{ identity_host }}:{{ ports_cfg.identity.http }}/;
         proxy_redirect off;
         proxy_buffering off;
         proxy_set_header Host              $host:$server_port;

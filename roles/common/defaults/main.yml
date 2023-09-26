@@ -133,6 +133,8 @@ ports_cfg:
     admin: 9093
   elasticsearch:
     http: "{{- groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_port']) | first | default('9200') -}}"
+  identity:
+    http: "{{- groups.external_identity | default([]) | map('extract', hostvars, ['identity_port']) | first | default('8082') -}}"
 
 # Default download location of necessary artefacts
 download_location: /tmp/ansible_artefacts

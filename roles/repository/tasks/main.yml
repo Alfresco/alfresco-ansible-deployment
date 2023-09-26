@@ -353,14 +353,14 @@
       when: groups.identity | default([]) # FIXME move to role argument
       vars:
         sso_repository_properties:
-          please: help
           authentication:
             chain: identity-service1:identity-service,alfrescoNtlm1:alfrescoNtlm
           identity-service:
             resource: "{{ repository_identity_client_id }}"
             credentials:
               secret: "{{ repository_identity_client_secret }}"
-          identity-service.auth-server-url: "http://{{ identity_host }}:8081/" # FIXME hardcoded port
+          # Do not try to merge with the previous `identity-service` or you will regret it
+          identity-service.auth-server-url: "http://{{ identity_host }}:{{ ports_cfg.identity.http }}/"
       ansible.builtin.set_fact:
         dynamic_properties: "{{ dynamic_properties | ansible.builtin.combine(sso_repository_properties) }}"
 
