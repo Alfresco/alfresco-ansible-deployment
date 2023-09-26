@@ -34,8 +34,10 @@ jobs:
           - name: transformers
         exclude:
           # Keycloak collection doesn't support ubuntu
-          - name: identity
-            image: ubuntu:20.04
+          - role:
+              name: identity
+            molecule_distro:
+              image: ubuntu:20.04
     env:
       PY_COLORS: 1
       PYTHONUNBUFFERED: 1
