@@ -1,0 +1,34 @@
+---
+- name: Verify Identity
+  hosts: identity
+  gather_facts: true
+  tasks:
+    - name: Populate services facts
+      ansible.builtin.service_facts:
+
+    - name: Check services up
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['alfresco-content.service'].state == "running"
+          - ansible_facts.services['keycloak.service'].state == "running"
+
+    - name: Retrieve contents of alfresco-global.properties
+      become: true
+      ansible.builtin.slurp:
+        src: /etc/opt/alfresco/content-services/classpath/alfresco-global.properties
+      register: slurp_global_properties
+
+    - name: Check reindex service contains the expected ExecStart line
+      vars:
+        global_properties_content: "{{ slurp_global_properties['content'] | b64decode }}"
+        expected_auth_chain: "authentication.chain=identity-service1:identity-service,alfrescoNtlm1:alfrescoNtlm"
+        expected_service_resource: "identity-service.resource=alfresco"
+        expected_service_credentials: "identity-service.credentials.secret="
+        expected_auth_url: "identity-service.auth-server-url=http://172.17.0.2:8082/"
+      ansible.builtin.assert:
+        that:
+          - "expected_auth_chain in global_properties_content"
+          - "expected_service_resource in global_properties_content"
+          - "expected_service_credentials in global_properties_content"
+          - "expected_auth_url in global_properties_content"
+        msg: "{{ global_properties_content }}"
