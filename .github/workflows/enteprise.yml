@@ -85,8 +85,10 @@ jobs:
           - name: elasticsearch
           - name: pki
         include:
-          - name: identity
-            image: rockylinux:8.7
+          - scenario:
+              name: identity
+            molecule_distro:
+              image: rockylinux:8
     steps:
       - name: Checkout
         uses: actions/checkout@v4
