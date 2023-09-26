@@ -41,5 +41,7 @@ provisioner:
     links:
       group_vars: ../../group_vars
       host_vars: host_vars
+  playbooks:
+    prepare: ../default/prepare.yml
 verifier:
   name: ansible
