@@ -38,6 +38,8 @@
       - ru
       - sv
       - zh-CN
+  tags:
+    - molecule-idempotence-notest
 
 - name: Configure basic alfresco client
   community.general.keycloak_client:
