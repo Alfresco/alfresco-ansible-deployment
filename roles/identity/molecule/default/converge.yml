@@ -1,6 +1,8 @@
 ---
 - name: Converge
   hosts: all
+  vars:
+    identity_admin_password: keycloak12345
   tasks:
     - name: "Include identity"
       ansible.builtin.include_role:
