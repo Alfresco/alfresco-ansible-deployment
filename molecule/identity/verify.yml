@@ -32,3 +32,19 @@
           - "expected_service_credentials in global_properties_content"
           - "expected_auth_url in global_properties_content"
         msg: "{{ global_properties_content }}"
+
+    - name: Fetch realm
+      community.general.keycloak_realm_info:
+        auth_keycloak_url: "http://localhost:8082"
+        realm: alfresco
+      register: result_realm_info
+
+    - ansible.builtin.debug:
+        var: result_realm_info
+
+    - name: Assert that realm is consistent
+      ansible.builtin.assert:
+        that:
+          - result_realm_info.realm_info['realm'] == "alfresco"
+          - result_realm_info.realm_info['account-service'] == "http://localhost/auth/realms/alfresco/account"
+          - result_realm_info.realm_info['public_key'] is defined
