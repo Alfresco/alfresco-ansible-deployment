@@ -73,7 +73,16 @@
       identity_admin_username: admin
       identity_admin_password: "{{ hostvars.localhost.identity_admin_password }}"
       identity_keycloak_http_port: 8081
-      when: acs.edition == "Enterprise" and not groups.external_identity | default([])
+      when: not groups.external_identity | default([])
+  tasks:
+    - name: Configure Realm
+      vars:
+        identity_admin_username: admin
+        identity_admin_password: "{{ hostvars.localhost.identity_admin_password }}"
+        identity_keycloak_http_port: 8081
+      ansible.builtin.include_role:
+        name: "../roles/identity"
+        tasks_from: realm
   tags:
     - identity
 
