@@ -85,6 +85,7 @@ keystore_src: >-
 repo_keystore: {}
 repository_monitored_startup_timeout_seconds: 300
 
+# Identity service arguments
+repository_identity_url: null
 repository_identity_client_id: alfresco
-# required only if keycloak client is not set to public
 repository_identity_client_secret: null

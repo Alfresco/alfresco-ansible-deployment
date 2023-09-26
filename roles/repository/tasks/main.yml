@@ -349,8 +349,8 @@
       ansible.builtin.set_fact:
         dynamic_properties: {}
 
-    - name: Configure identity service when available
-      when: groups.identity | default([]) # FIXME move to role argument
+    - name: Configure identity service when provided
+      when: repository_identity_url
       vars:
         sso_repository_properties:
           authentication:
@@ -360,7 +360,7 @@
             credentials:
               secret: "{{ repository_identity_client_secret }}"
           # Do not try to merge with the previous `identity-service` or you will regret it
-          identity-service.auth-server-url: "http://{{ identity_host }}:{{ ports_cfg.identity.http }}/"
+          identity-service.auth-server-url: "{{ repository_identity_url }}"
       ansible.builtin.set_fact:
         dynamic_properties: "{{ dynamic_properties | ansible.builtin.combine(sso_repository_properties) }}"
 

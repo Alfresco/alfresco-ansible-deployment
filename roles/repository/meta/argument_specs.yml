@@ -27,3 +27,21 @@ argument_specs:
           Check the java role's argument specification for details.
           Pay special attention to using the same passphrase for the keystore
           than the one used in the source PKCS12 certificate container.
+      repository_identity_url:
+        type: str
+        required: false
+        description: |
+          If set, enable that host as identity service url
+      repository_identity_client_id:
+        type: str
+        required: false
+        default: alfresco
+        description: |
+          The name of the oauth client to be used when contacting the identity
+          service
+      repository_identity_client_secret:
+        type: str
+        required: false
+        description: |
+          The secret for the oauth client to be used when contacting the
+          identity service - can be left blank if the oauth client is public
