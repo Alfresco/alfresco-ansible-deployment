@@ -18,3 +18,9 @@ argument_specs:
         default: 8080
         description: |
           Port where to expose the keycloak instance
+      identity_known_urls:
+        type: list
+        elements: str
+        default: []
+        description: |
+          A list of possible origin URLs which are allowed to interact with the configured realm

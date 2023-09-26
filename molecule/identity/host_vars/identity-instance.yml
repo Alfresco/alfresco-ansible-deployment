@@ -1,1 +1,3 @@
 ansible_user: ansible
+known_urls:
+  - http://localhost/
