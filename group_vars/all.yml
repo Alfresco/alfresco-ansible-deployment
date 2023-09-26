@@ -76,7 +76,6 @@ acc:
 supported_os:
   RedHat:
     versions:
-      - 8.8
       - 8.7
       - 8.6
       - 8.5
@@ -87,7 +86,6 @@ supported_os:
       - 7.6
   Rocky:
     versions:
-      - 8.8
       - 8.7
       - 8.6
   CentOS:
