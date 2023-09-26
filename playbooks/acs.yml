@@ -187,7 +187,7 @@
         - repo_mtls_required
         - ats_mtls_capable
     - name: Enable identity service
-      when: groups.identity + groups.external_identity | length > 0
+      when: ((groups.identity | default([])) + (groups.external_identity | default([]))) | length > 0
       ansible.builtin.set_fact:
         identity_url: "http://{{ identity_host }}:{{ ports_cfg.identity.http }}/"
   roles:
@@ -195,7 +195,7 @@
       repo_keystore: "{{ repository_keystore | default({}) }}"
       repository_properties: "{{ global_properties }}"
       raw_properties: "{{ properties_snippets }}"
-      repository_identity_url: "{{ identity_url | default('') }}"
+      repository_identity_url: "{{ identity_url | default(omit) }}"
   post_tasks:
     - name: Update installation status file with ACS
       become: true
