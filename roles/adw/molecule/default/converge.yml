@@ -1,7 +1,0 @@
----
-- name: Converge
-  hosts: all
-  tasks:
-    - name: "Include adw"
-      ansible.builtin.include_role:
-        name: "adw"

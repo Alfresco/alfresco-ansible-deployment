@@ -1,3 +1,0 @@
----
-nginx_user: "www-data"
-nginx_folder: "/var/www/html"

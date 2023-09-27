@@ -1,5 +1,5 @@
 server {
-        listen {{ acc_port }};
+        listen {{ webapp_port }};
         client_max_body_size 0;
 
         set  $allowOriginSite *;
@@ -7,7 +7,7 @@ server {
         proxy_pass_header Set-Cookie;
 
         location / {
-              root {{ nginx_default_vhost_docroot }}/{{ acc_context }}/;
+              root {{ nginx_default_vhost_docroot }}/{{ webapp_context }}/;
             index index.html index.htm;
         }
     }

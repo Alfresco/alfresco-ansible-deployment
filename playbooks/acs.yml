@@ -309,8 +309,13 @@
   vars:
     acs_version_requirement: "{{ acs.version is version('7.4', 'ge') }}"
   roles:
-    - role: "../roles/acc"
+    - role: "../roles/webapp"
       when: acs_version_requirement
+      webapp_context: alfresco-control-center
+      webapp_port: 8881
+      webapp_src_archive: "{{ downloads.acc_zip_url }}"
+      webapp_src_checksum: "{{ downloads.acc_zip_sha1_checksum_url }}"
+      webapp_version: "{{ acc.version }}"
   post_tasks:
     - name: Update installation status file with ACC
       when: acs_version_requirement
@@ -332,8 +337,13 @@
   hosts: adw
   gather_facts: false
   roles:
-    - role: "../roles/adw"
+    - role: "../roles/webapp"
       when: acs.edition == "Enterprise"
+      webapp_context: alfresco-digital-workspace
+      webapp_port: 8880
+      webapp_src_archive: "{{ downloads.adw_zip_url }}"
+      webapp_src_checksum: "{{ lookup('url', downloads.adw_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}"
+      webapp_version: "{{ adw.version }}"
   post_tasks:
     - name: Update installation status file with ADW
       become: true

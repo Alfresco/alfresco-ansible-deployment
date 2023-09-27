@@ -1,0 +1,8 @@
+---
+# handlers file for webapp
+- name: Unpack {{ webapp_context }}
+  become: true
+  ansible.builtin.unarchive:
+    src: "{{ download_location }}/{{ webapp_context }}-{{ webapp_version }}.zip"
+    dest: "{{ nginx_default_vhost_docroot }}/{{ webapp_context }}/"
+    remote_src: true

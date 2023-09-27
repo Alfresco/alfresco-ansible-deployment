@@ -1,30 +1,34 @@
 ---
-- name: Create "{{ nginx_default_vhost_docroot }}/{{ acc_context }}/" dir
+- name: Create "{{ nginx_default_vhost_docroot }}/{{ webapp_context }}/" dir
   become: true
   ansible.builtin.file:
-    path: "{{ nginx_default_vhost_docroot }}/{{ acc_context }}/"
+    path: "{{ nginx_default_vhost_docroot }}/{{ webapp_context }}/"
     state: directory
     mode: "0755"
 
-- name: Download alfresco-control-center-{{ acc.version }}.zip
+- name: Download {{ webapp_context }} {{ webapp_version }}
   ansible.builtin.get_url:
-    url: "{{ downloads.acc_zip_url }}"
-    dest: "{{ download_location }}/alfresco-control-center-{{ acc.version }}.zip"
-    checksum: sha1:{{ downloads.acc_zip_sha1_checksum_url }}
+    url: "{{ webapp_src_archive }}"
+    dest: "{{ download_location }}/{{ webapp_context }}-{{ webapp_version }}.zip"
+    checksum: sha1:{{ webapp_src_checksum }}
     mode: 'u=r,g=r,o=r'
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
   notify:
-    - Extract alfresco-control-center zip
+    - Unpack {{ webapp_context }}
+
+- name: Merge configuration
+  ansible.builtin.set_fact:
+    webapp_merged_configuration: "{{ webapp_default_configuration | ansible.builtin.combine(webapp_configuration) }}"
 
 - name: Dump current app configuration to disk
   ansible.builtin.copy:
-    content: "{{ app_default_configuration | to_json }}"
-    dest: "{{ download_location }}/alfresco-control-center-config.json"
+    content: "{{ webapp_merged_configuration | to_json }}"
+    dest: "{{ download_location }}/{{ webapp_context }}.json"
     mode: "0644"
   notify:
-    - Extract alfresco-control-center zip
+    - Unpack {{ webapp_context }}
 
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
@@ -32,14 +36,14 @@
 - name: Replace placeholders in app.config.json
   become: true
   ansible.builtin.replace:
-    path: "{{ app_config_json_path }}"
+    path: "{{ webapp_config_json_path }}"
     regexp: "{{ '\\${' }}{{ item.key }}{{ '}' }}"
     replace: "{{ (item.value is boolean) | ternary(item.value | to_json, item.value) }}"
-  with_items: "{{ app_default_configuration | dict2items }}"
+  with_items: "{{ webapp_merged_configuration | dict2items }}"
 
 - name: Retrieve the current app.config.json contents
   ansible.builtin.slurp:
-    src: "{{ app_config_json_path }}"
+    src: "{{ webapp_config_json_path }}"
   register: app_config_json
 
 - name: Ensure that app.config.json is actually a valid json
@@ -48,11 +52,11 @@
       - app_config_json['content'] | b64decode | from_json
     quiet: true
 
-- name: Add acc vhost config
+- name: Add webapp vhost config
   become: true
   ansible.builtin.template:
     src: default_server.conf.j2
-    dest: "{{ nginx_vhost_path }}/alfresco_acc.conf"
+    dest: "{{ nginx_vhost_path }}/{{ webapp_context }}.conf"
     force: true
     owner: root
     group: root
@@ -60,10 +64,10 @@
   notify:
     - Restart-nginx
 
-- name: Allow web-server to listen on tcp port {{ acc_port }}
+- name: Allow web-server to listen on tcp port {{ webapp_port }}
   become: true
   community.general.seport:
-    ports: "{{ acc_port }}"
+    ports: "{{ webapp_port }}"
     proto: tcp
     setype: http_port_t
     state: present
