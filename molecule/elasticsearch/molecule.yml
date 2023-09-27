@@ -33,6 +33,9 @@ platforms:
       - trusted_resource_consumers
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      pipelining: True
   ansible_args:
     - -e
     - "@tests/test-ssl.yml"
