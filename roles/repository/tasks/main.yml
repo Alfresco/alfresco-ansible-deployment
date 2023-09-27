@@ -350,7 +350,7 @@
         dynamic_properties: {}
 
     - name: Configure identity service when provided
-      when: repository_identity_url
+      when: repository_identity_url | length > 0
       vars:
         sso_repository_properties:
           authentication:

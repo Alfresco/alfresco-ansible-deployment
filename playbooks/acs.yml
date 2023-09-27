@@ -195,7 +195,7 @@
       repo_keystore: "{{ repository_keystore | default({}) }}"
       repository_properties: "{{ global_properties }}"
       raw_properties: "{{ properties_snippets }}"
-      repository_identity_url: "{{ identity_url | default(omit) }}"
+      repository_identity_url: "{{ identity_url | default('') }}"
   post_tasks:
     - name: Update installation status file with ACS
       become: true
