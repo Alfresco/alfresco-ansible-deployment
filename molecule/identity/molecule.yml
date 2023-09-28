@@ -23,9 +23,7 @@ platforms:
       - identity
       - nginx
     published_ports:
-      - 80/tcp
       - 0.0.0.0:443:443/tcp
-      - 0.0.0.0:8080:8080/tcp
 
 provisioner:
   name: ansible

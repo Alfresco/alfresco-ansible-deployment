@@ -9,7 +9,6 @@ platforms:
     dockerfile: ../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
     published_ports:
-      - 80/tcp
       - 0.0.0.0:443:443/tcp
     privileged: true
     tmpfs:
