@@ -1,0 +1,63 @@
+---
+- name: Read Alfresco Sync service shipped config file
+  ansible.builtin.slurp:
+    path: "{{ download_location }}/sync/service-sync/config.yml"
+  register: sync_config_file
+
+- name: Merge Alfresco Sync service configuration data structures
+  vars:
+    local_db_url: >-
+      {{ sync_db_url or "jdbc:postgresql://{}:{}/{}".format(db_host, ports_cfg.postgres.sql, sync_db_name) }}
+    local_config:
+      version: "{{ sync.version }}"
+      messaging:
+        username: "{{ activemq_username }}"
+        password: "{{ activemq_password }}"
+        broker:
+          host: "{{ activemq_host }}"
+          port: "{{ ports_cfg.activemq[activemq_protocol] }}"
+          protocol: "{{ activemq_transport }}"
+      sql:
+        db:
+          url: "{{ local_db_url }}"
+          driver: "{{ sync_db_driver }}"
+          username: "{{ sync_db_username }}"
+          password: "{{ sync_db_password }}"
+      server:
+        applicationConnectors:
+          - type: http
+            port: "{{ ports_cfg.sync.http }}"
+            keyStorePath: ./sync.p12
+            keyStorePassword: N9SnIgrcAx7zWr
+            keyStoreType: PKCS12
+            validateCerts: false
+        adminConnectors:
+          - type: http
+            port: "{{ ports_cfg.sync.admin }}"
+      repo:
+        hostname: "{{ nginx_host }}"
+        port: "{{ ports_cfg.nginx.http }}"
+      logging:
+        appenders:
+          - type: console
+            threshold: ALL
+            timeZone: UTC
+            target: stdout
+            logFormat: "%-5level [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] %logger - %msg%n"
+          - type: file
+            threshold: ALL
+            timeZone: UTC
+            currentLogFilename: "{{ logs_folder }}/sync-service.log"
+            archive: true
+            archivedLogFilenamePattern: "{{ logs_folder }}/sync-service-%d.log.gz"
+            archivedFileCount: 5
+            logFormat: "%-5level [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] %logger - %msg%n"
+  ansible.builtin.copy:
+    dest: "{{ config_folder }}/sync-service/config.yml"
+    content: >-
+      {{ sync_config_file.content | b64decode | from_yaml | ansible.builtin.combine(local_config, recursive=true) | to_nice_yaml }}
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: "0640"
+  notify:
+    - Restart-sync
