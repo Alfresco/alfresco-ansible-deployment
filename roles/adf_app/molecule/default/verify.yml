@@ -2,7 +2,11 @@
   hosts: all
   gather_facts: true
   vars:
-    verify_base_url: http://localhost:8881
+    sites:
+      - url: http://localhost:8881
+        expected_content: Alfresco Digital Workspace
+      - url: http://localhost:8882
+        expected_content: Alfresco Control Center
   tasks:
     - name: Populate service facts
       ansible.builtin.service_facts:
@@ -15,13 +19,15 @@
 
     - name: Check that the home contains the expected contents
       ansible.builtin.uri:
-        url: "{{ verify_base_url }}/"
+        url: "{{ item.url }}/"
         return_content: true
       register: this
-      failed_when: "'Alfresco Control Center' not in this.content"
+      failed_when: "item.expected_content not in this.content"
+      loop: "{{ sites }}"
 
     - name: Check that the config contains the expected contents
       ansible.builtin.uri:
-        url: "{{ verify_base_url }}/app.config.json"
+        url: "{{ item.url }}/app.config.json"
       register: this
       failed_when: "this.json.authType != 'BASIC'"
+      loop: "{{ sites }}"

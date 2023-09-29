@@ -4,7 +4,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: adw-instance
+  - name: adf_app-instance
     image: $MOLECULE_ROLE_IMAGE
     dockerfile: ../../../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
@@ -22,8 +22,4 @@ provisioner:
       host_vars: host_vars
       group_vars: ../../../../group_vars
 verifier:
-  name: testinfra
-  env:
-    TEST_HOST: "localhost"
-  options:
-    verbose: true
+  name: ansible
