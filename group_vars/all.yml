@@ -68,7 +68,7 @@ adw:
 sync:
   repository: >-
     {{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x
-  version: 4.0.0-M10
+  version: 4.0.0-M11
 acc:
   artifact_name: alfresco-control-center
   repository: "{{ nexus_repository.releases }}"
