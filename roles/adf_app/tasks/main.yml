@@ -1,34 +1,34 @@
 ---
-- name: Create "{{ nginx_default_vhost_docroot }}/{{ adfapp_name }}/" dir
+- name: Create "{{ nginx_default_vhost_docroot }}/{{ adf_app_name }}/" dir
   become: true
   ansible.builtin.file:
-    path: "{{ nginx_default_vhost_docroot }}/{{ adfapp_name }}/"
+    path: "{{ nginx_default_vhost_docroot }}/{{ adf_app_name }}/"
     state: directory
     mode: "0755"
 
-- name: Download {{ adfapp_name }} {{ adfapp_version }}
+- name: Download {{ adf_app_name }} {{ adf_app_version }}
   ansible.builtin.get_url:
-    url: "{{ adfapp_src_archive }}"
-    dest: "{{ download_location }}/{{ adfapp_name }}-{{ adfapp_version }}.zip"
-    checksum: sha1:{{ adfapp_src_checksum }}
+    url: "{{ adf_app_src_archive }}"
+    dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
+    checksum: sha1:{{ adf_app_src_checksum }}
     mode: 'u=r,g=r,o=r'
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
   notify:
-    - Unpack {{ adfapp_name }}
+    - Unpack {{ adf_app_name }}
 
 - name: Merge configuration
   ansible.builtin.set_fact:
-    adfapp_merged_configuration: "{{ adfapp_default_configuration | ansible.builtin.combine(adfapp_configuration) }}"
+    adf_app_merged_configuration: "{{ adf_app_default_configuration | ansible.builtin.combine(adf_app_configuration) }}"
 
 - name: Dump current app configuration to disk
   ansible.builtin.copy:
-    content: "{{ adfapp_merged_configuration | to_json }}"
-    dest: "{{ download_location }}/{{ adfapp_name }}.json"
+    content: "{{ adf_app_merged_configuration | to_json }}"
+    dest: "{{ download_location }}/{{ adf_app_name }}.json"
     mode: "0644"
   notify:
-    - Unpack {{ adfapp_name }}
+    - Unpack {{ adf_app_name }}
 
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
@@ -36,14 +36,14 @@
 - name: Replace placeholders in app.config.json
   become: true
   ansible.builtin.replace:
-    path: "{{ adfapp_config_json_path }}"
+    path: "{{ adf_app_config_json_path }}"
     regexp: "{{ '\\${' }}{{ item.key }}{{ '}' }}"
     replace: "{{ (item.value is boolean) | ternary(item.value | to_json, item.value) }}"
-  with_items: "{{ adfapp_merged_configuration | dict2items }}"
+  with_items: "{{ adf_app_merged_configuration | dict2items }}"
 
 - name: Retrieve the current app.config.json contents
   ansible.builtin.slurp:
-    src: "{{ adfapp_config_json_path }}"
+    src: "{{ adf_app_config_json_path }}"
   register: app_config_json
 
 - name: Ensure that app.config.json is actually a valid json
@@ -52,11 +52,11 @@
       - app_config_json['content'] | b64decode | from_json
     quiet: true
 
-- name: Add adfapp vhost config
+- name: Add adf_app vhost config
   become: true
   ansible.builtin.template:
     src: default_server.conf.j2
-    dest: "{{ nginx_vhost_path }}/{{ adfapp_name }}.conf"
+    dest: "{{ nginx_vhost_path }}/{{ adf_app_name }}.conf"
     force: true
     owner: root
     group: root
@@ -64,10 +64,10 @@
   notify:
     - Restart-nginx
 
-- name: Allow web-server to listen on tcp port {{ adfapp_port }}
+- name: Allow web-server to listen on tcp port {{ adf_app_port }}
   become: true
   community.general.seport:
-    ports: "{{ adfapp_port }}"
+    ports: "{{ adf_app_port }}"
     proto: tcp
     setype: http_port_t
     state: present

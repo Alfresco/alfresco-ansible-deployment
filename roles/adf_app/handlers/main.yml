@@ -1,0 +1,8 @@
+---
+# handlers file for adf_app
+- name: Unpack {{ adf_app_name }}
+  become: true
+  ansible.builtin.unarchive:
+    src: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
+    dest: "{{ nginx_default_vhost_docroot }}/{{ adf_app_name }}/"
+    remote_src: true
