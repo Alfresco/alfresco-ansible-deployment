@@ -7,7 +7,7 @@ server {
         proxy_pass_header Set-Cookie;
 
         location / {
-              root {{ nginx_default_vhost_docroot }}/{{ adfapp_context }}/;
+              root {{ nginx_default_vhost_docroot }}/{{ adfapp_name }}/;
             index index.html index.htm;
         }
     }

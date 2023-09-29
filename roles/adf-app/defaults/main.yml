@@ -2,7 +2,7 @@
 # defaults file for adf-app
 
 # Role arguments
-adfapp_context: null
+adfapp_name: null
 adfapp_port: 8080
 adfapp_src_archive: null
 adfapp_src_checksum: null
@@ -10,7 +10,7 @@ adfapp_version: null
 adfapp_configuration: {}
 
 # Other defaults
-adfapp_config_json_path: "{{ nginx_default_vhost_docroot }}/{{ adfapp_context }}/app.config.json"
+adfapp_config_json_path: "{{ nginx_default_vhost_docroot }}/{{ adfapp_name }}/app.config.json"
 adfapp_default_configuration:
   APP_CONFIG_PROVIDER: ECM
   APP_CONFIG_ECM_HOST: "{protocol}//{hostname}{:port}"

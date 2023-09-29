@@ -1,22 +1,22 @@
 ---
-- name: Create "{{ nginx_default_vhost_docroot }}/{{ adfapp_context }}/" dir
+- name: Create "{{ nginx_default_vhost_docroot }}/{{ adfapp_name }}/" dir
   become: true
   ansible.builtin.file:
-    path: "{{ nginx_default_vhost_docroot }}/{{ adfapp_context }}/"
+    path: "{{ nginx_default_vhost_docroot }}/{{ adfapp_name }}/"
     state: directory
     mode: "0755"
 
-- name: Download {{ adfapp_context }} {{ adfapp_version }}
+- name: Download {{ adfapp_name }} {{ adfapp_version }}
   ansible.builtin.get_url:
     url: "{{ adfapp_src_archive }}"
-    dest: "{{ download_location }}/{{ adfapp_context }}-{{ adfapp_version }}.zip"
+    dest: "{{ download_location }}/{{ adfapp_name }}-{{ adfapp_version }}.zip"
     checksum: sha1:{{ adfapp_src_checksum }}
     mode: 'u=r,g=r,o=r'
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
     timeout: 570
   notify:
-    - Unpack {{ adfapp_context }}
+    - Unpack {{ adfapp_name }}
 
 - name: Merge configuration
   ansible.builtin.set_fact:
@@ -25,10 +25,10 @@
 - name: Dump current app configuration to disk
   ansible.builtin.copy:
     content: "{{ adfapp_merged_configuration | to_json }}"
-    dest: "{{ download_location }}/{{ adfapp_context }}.json"
+    dest: "{{ download_location }}/{{ adfapp_name }}.json"
     mode: "0644"
   notify:
-    - Unpack {{ adfapp_context }}
+    - Unpack {{ adfapp_name }}
 
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
@@ -56,7 +56,7 @@
   become: true
   ansible.builtin.template:
     src: default_server.conf.j2
-    dest: "{{ nginx_vhost_path }}/{{ adfapp_context }}.conf"
+    dest: "{{ nginx_vhost_path }}/{{ adfapp_name }}.conf"
     force: true
     owner: root
     group: root

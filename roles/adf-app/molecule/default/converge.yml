@@ -4,7 +4,7 @@
   tasks:
     - name: "Install alfresco-digital-workspace"
       vars:
-        adfapp_context: alfresco-digital-workspace
+        adfapp_name: alfresco-digital-workspace
         adfapp_port: 8881
         adfapp_src_archive: "{{ downloads.adw_zip_url }}"
         adfapp_src_checksum: "{{ lookup('url', downloads.adw_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}"
@@ -14,7 +14,7 @@
 
     - name: "Install alfresco-control-center"
       vars:
-        adfapp_context: alfresco-control-center
+        adfapp_name: alfresco-control-center
         adfapp_port: 8882
         adfapp_src_archive: "{{ downloads.acc_zip_url }}"
         adfapp_src_checksum: "{{ downloads.acc_zip_sha1_checksum_url }}"
