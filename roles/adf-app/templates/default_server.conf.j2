@@ -1,5 +1,5 @@
 server {
-        listen {{ webapp_port }};
+        listen {{ adfapp_port }};
         client_max_body_size 0;
 
         set  $allowOriginSite *;
@@ -7,7 +7,7 @@ server {
         proxy_pass_header Set-Cookie;
 
         location / {
-              root {{ nginx_default_vhost_docroot }}/{{ webapp_context }}/;
+              root {{ nginx_default_vhost_docroot }}/{{ adfapp_context }}/;
             index index.html index.htm;
         }
     }

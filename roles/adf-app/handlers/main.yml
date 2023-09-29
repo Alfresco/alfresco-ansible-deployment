@@ -1,0 +1,8 @@
+---
+# handlers file for adfapp
+- name: Unpack {{ adfapp_context }}
+  become: true
+  ansible.builtin.unarchive:
+    src: "{{ download_location }}/{{ adfapp_context }}-{{ adfapp_version }}.zip"
+    dest: "{{ nginx_default_vhost_docroot }}/{{ adfapp_context }}/"
+    remote_src: true
