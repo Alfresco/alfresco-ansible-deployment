@@ -165,6 +165,22 @@
   tags:
     - search
 
+- name: Populate identity service configuration
+  hosts: localhost
+  gather_facts: false
+  vars:
+    identity_enabled: "{{ ((groups.identity | default([])) + (groups.external_identity | default([]))) | length > 0 }}"
+  tasks:
+    - name: Populate identity_url
+      when: identity_enabled
+      ansible.builtin.set_fact:
+        identity_url: "http://{{ identity_host }}:{{ ports_cfg.identity.http }}/"
+    - name: Populate adf app config
+      when: identity_enabled
+      ansible.builtin.set_fact:
+        adf_app_oauth_configuration:
+          APP_CONFIG_AUTH_TYPE: oauth
+
 - name: Alfresco Repository Role
   hosts: repository
   gather_facts: false
@@ -186,16 +202,12 @@
       when:
         - repo_mtls_required
         - ats_mtls_capable
-    - name: Enable identity service
-      when: ((groups.identity | default([])) + (groups.external_identity | default([]))) | length > 0
-      ansible.builtin.set_fact:
-        identity_url: "http://{{ identity_host }}:{{ ports_cfg.identity.http }}/"
   roles:
     - role: "../roles/repository"
       repo_keystore: "{{ repository_keystore | default({}) }}"
       repository_properties: "{{ global_properties }}"
       raw_properties: "{{ properties_snippets }}"
-      repository_identity_url: "{{ identity_url | default('') }}"
+      repository_identity_url: "{{ hostvars.localhost.identity_url | default('') }}"
   post_tasks:
     - name: Update installation status file with ACS
       become: true
@@ -331,6 +343,7 @@
       adf_app_src_archive: "{{ downloads.acc_zip_url }}"
       adf_app_src_checksum: "{{ downloads.acc_zip_sha1_checksum_url }}"
       adf_app_version: "{{ acc.version }}"
+      adf_app_configuration: "{{ hostvars.localhost.adf_app_oauth_configuration | default({}) }}"
   post_tasks:
     - name: Update installation status file with ACC
       when: acs_version_requirement
@@ -359,6 +372,7 @@
       adf_app_src_archive: "{{ downloads.adw_zip_url }}"
       adf_app_src_checksum: "{{ lookup('url', downloads.adw_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}"
       adf_app_version: "{{ adw.version }}"
+      adf_app_configuration: "{{ hostvars.localhost.adf_app_oauth_configuration | default({}) }}"
   post_tasks:
     - name: Update installation status file with ADW
       become: true
