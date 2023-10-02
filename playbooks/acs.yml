@@ -73,7 +73,7 @@
       identity_admin_username: admin
       identity_admin_password: "{{ hostvars.localhost.identity_admin_password }}"
       identity_keycloak_http_port: "{{ ports_cfg.identity.http }}"
-      identity_keycloak_host: "{{ fqdn_alfresco | default(known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"
+      identity_keycloak_host: "{{ fqdn_alfresco }}"
       when: not groups.external_identity | default([])
   tasks:
     - name: Configure Realm
