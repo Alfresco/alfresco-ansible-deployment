@@ -33,7 +33,7 @@
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
 
-- name: Replace placeholders in app.config.json
+- name: Replace $placeholders in packaged app.config.json
   become: true
   ansible.builtin.replace:
     path: "{{ adf_app_config_json_path }}"
@@ -51,6 +51,13 @@
     that:
       - app_config_json['content'] | b64decode | from_json
     quiet: true
+
+- name: Ensure app.config.json is merged with current configuration
+  become: true
+  ansible.builtin.copy:
+    content: "{{ app_config_json['content'] | b64decode | from_json | ansible.builtin.combine(adf_app_merged_configuration) | to_nice_json }}"
+    dest: "{{ adf_app_config_json_path }}"
+    mode: "0644"
 
 - name: Add adf_app vhost config
   become: true

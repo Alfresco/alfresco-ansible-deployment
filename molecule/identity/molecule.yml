@@ -20,6 +20,8 @@ platforms:
       - activemq
       - repository
       - trusted_resource_consumers
+      - adw
+      - acc
       - identity
       - nginx
     published_ports:
