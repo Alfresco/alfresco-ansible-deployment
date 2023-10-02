@@ -33,7 +33,7 @@ global_properties:
     cluster:
       enabled: "{{ (groups['repository'] | length > 1 and not (cluster_keepoff | bool)) | lower }}"
   share:
-    host: "{{ fqdn_alfresco | default(known_urls[0]) | default(nginx_host) }}"
+    host: "{{ fqdn_alfresco | default(known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"
     port: "{{ acs_play_port }}"
     protocol: "{{ acs_play_proto }}"
   messaging:
