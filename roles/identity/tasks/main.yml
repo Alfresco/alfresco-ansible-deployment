@@ -4,9 +4,10 @@
   vars:
     keycloak_quarkus_admin_pass: "{{ identity_admin_password }}"
     keycloak_quarkus_version: "{{ identity_keycloak_quarkus_version }}"
-    keycloak_quarkus_start_dev: true
-    keycloak_quarkus_proxy_mode: none
-    keycloak_quarkus_host: localhost
-    keycloak_quarkus_http_relative_path: ''
+    keycloak_quarkus_start_dev: "{{ identity_keycloak_start_dev }}"
+    keycloak_quarkus_proxy_mode: "{{ identity_keycloak_proxy_mode }}"
+    keycloak_quarkus_host: "{{ identity_keycloak_host }}"
+    keycloak_quarkus_http_port: "{{ identity_keycloak_http_port }}"
+    keycloak_quarkus_http_relative_path: auth
   ansible.builtin.include_role:
     name: middleware_automation.keycloak.keycloak_quarkus

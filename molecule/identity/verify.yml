@@ -1,0 +1,51 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Populate services facts
+      ansible.builtin.service_facts:
+
+    - name: Check services up
+      ansible.builtin.assert:
+        quiet: true
+        that:
+          - ansible_facts.services['alfresco-content.service'].state == "running"
+          - ansible_facts.services['keycloak.service'].state == "running"
+
+    - name: Retrieve contents of alfresco-global.properties
+      become: true
+      ansible.builtin.slurp:
+        src: /etc/opt/alfresco/content-services/classpath/alfresco-global.properties
+      register: slurp_global_properties
+
+    - name: Check alfresco-global.properties contains expected identity properties
+      vars:
+        global_properties_content: "{{ slurp_global_properties['content'] | b64decode }}"
+        expected_auth_chain: "authentication.chain=identity-service1:identity-service,alfrescoNtlm1:alfrescoNtlm"
+        expected_service_resource: "identity-service.resource=alfresco"
+        expected_service_credentials: "identity-service.credentials.secret="
+        expected_auth_url_regex: 'identity-service\.auth-server-url=http:\/\/.*\/'
+      ansible.builtin.assert:
+        quiet: true
+        that:
+          - "expected_auth_chain in global_properties_content"
+          - "expected_service_resource in global_properties_content"
+          - "expected_service_credentials in global_properties_content"
+          - "global_properties_content | regex_search(expected_auth_url_regex)"
+        fail_msg: "{{ global_properties_content }}"
+
+    - name: Fetch realm
+      community.general.keycloak_realm_info:
+        auth_keycloak_url: "http://localhost:8082"
+        realm: alfresco
+      register: result_realm_info
+
+    - name: Assert that realm is consistent
+      ansible.builtin.assert:
+        quiet: true
+        that:
+          - result_realm_info.realm_info['realm'] == "alfresco"
+          - result_realm_info.realm_info['account-service'] == "http://localhost/auth/realms/alfresco/account"
+          - result_realm_info.realm_info['public_key'] is defined
+        fail_msg: "Realm contents doesn't meet expectations: {{ result_realm_info }}"

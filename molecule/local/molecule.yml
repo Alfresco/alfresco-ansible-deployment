@@ -27,11 +27,13 @@ platforms:
       - acc
       - nginx
     published_ports:
-      - 80/tcp
       - 0.0.0.0:443:443/tcp
 
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      pipelining: true
   ansible_args:
     - -e
     - "@tests/test-extra-vars.yml"

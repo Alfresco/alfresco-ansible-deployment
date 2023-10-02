@@ -84,3 +84,8 @@ keystore_src: >-
   {%- endif %}
 repo_keystore: {}
 repository_monitored_startup_timeout_seconds: 300
+
+# Identity service arguments
+repository_identity_url: ''
+repository_identity_client_id: alfresco
+repository_identity_client_secret: ''

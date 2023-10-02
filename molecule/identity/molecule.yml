@@ -4,12 +4,10 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: search-enteprise-integration-instance
+  - name: identity-instance
     image: $MOLECULE_ROLE_IMAGE
     dockerfile: ../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
-    published_ports:
-      - 0.0.0.0:443:443/tcp
     privileged: true
     tmpfs:
       - /run
@@ -18,24 +16,23 @@ platforms:
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
-      - activemq
-      - acc
-      - adw
       - database
-      - elasticsearch
-      - nginx
+      - activemq
       - repository
-      - search_enterprise
-      - sfs
-      - syncservice
-      - transformers
       - trusted_resource_consumers
+      - identity
+      - nginx
+    published_ports:
+      - 0.0.0.0:443:443/tcp
+
 provisioner:
   name: ansible
   config_options:
     defaults:
       pipelining: True
   ansible_args:
+    - -e
+    - "@tests/test-extra-vars.yml"
     - -e
     - "@tests/test-ssl.yml"
   inventory:

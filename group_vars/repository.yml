@@ -27,13 +27,13 @@ global_properties:
     username: "{{ repo_db_username }}"
     password: "{{ repo_db_password }}"
   alfresco:
-    host: "{{ fqdn_alfresco | default(nginx_host) }}"
+    host: "{{ fqdn_alfresco | default(known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"
     port: "{{ acs_play_port }}"
     protocol: "{{ acs_play_proto }}"
     cluster:
       enabled: "{{ (groups['repository'] | length > 1 and not (cluster_keepoff | bool)) | lower }}"
   share:
-    host: "{{ fqdn_alfresco | default(known_urls[0]) | default(nginx_host) }}"
+    host: "{{ fqdn_alfresco | default(known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"
     port: "{{ acs_play_port }}"
     protocol: "{{ acs_play_proto }}"
   messaging:
