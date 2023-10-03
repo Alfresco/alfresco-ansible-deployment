@@ -166,7 +166,7 @@
     - search
 
 - name: Populate common facts
-  hosts: all
+  hosts: repository:acc:adw
   gather_facts: false
   tasks:
     - name: Populate identity_enabled
