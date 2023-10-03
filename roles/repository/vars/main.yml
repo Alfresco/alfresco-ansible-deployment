@@ -14,6 +14,7 @@ share_folders:
 share_templates:
   - share-config-custom.xml
   - smartfolders-amp-actions-config.xml
+  - share-config.properties
 
 repository:
   protocol: "{{ 'https' if use_ssl | bool else 'http' }}"

@@ -45,3 +45,9 @@ argument_specs:
         description: |
           The secret for the oauth client to be used when contacting the
           identity service - can be left blank if the oauth client is public
+      repository_identity_realm:
+        type: str
+        required: false
+        default: alfresco
+        description: |
+          The realm to be used when contacting the identity service

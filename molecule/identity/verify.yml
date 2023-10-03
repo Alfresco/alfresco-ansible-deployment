@@ -73,3 +73,25 @@
       loop_control:
         loop_var: item_index
         label: "{{ adf_apps[item_index] }}"
+
+    - name: Retrieve contents of share-config.properties
+      become: true
+      ansible.builtin.slurp:
+        src: /etc/opt/alfresco/content-services/classpath/alfresco/web-extension/share-config.properties
+      register: slurp_share_config_properties
+
+    - name: Check share-config.properties contains expected identity properties
+      vars:
+        share_config_properties: "{{ slurp_share_config_properties['content'] | b64decode }}"
+        expected_aims_enabled: "aims.enabled=true"
+        expected_aims_realm: "aims.realm=alfresco"
+        expected_aims_resource: "aims.resource=alfresco"
+        expected_aims_authserverurl: 'aims\.authServerUrl=http:\/\/.*\/'
+      ansible.builtin.assert:
+        quiet: true
+        that:
+          - "expected_aims_enabled in share_config_properties"
+          - "expected_aims_realm in share_config_properties"
+          - "expected_aims_resource in share_config_properties"
+          - "share_config_properties | regex_search(expected_aims_authserverurl)"
+        fail_msg: "{{ share_config_properties }}"
