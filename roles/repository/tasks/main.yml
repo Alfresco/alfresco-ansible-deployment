@@ -264,7 +264,7 @@
   notify:
     - Restart-alfresco-content
   block:
-    - name: Include share.yml task
+    - name: Include share tasks
       ansible.builtin.include_tasks:
         file: share.yml
 
