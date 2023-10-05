@@ -1,0 +1,23 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Install alfresco-digital-workspace"
+      vars:
+        adf_app_name: alfresco-digital-workspace
+        adf_app_port: 8881
+        adf_app_src_archive: "{{ downloads.adw_zip_url }}"
+        adf_app_src_checksum: "{{ lookup('url', downloads.adw_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}"
+        adf_app_version: "{{ adw.version }}"
+      ansible.builtin.include_role:
+        name: "adf_app"
+
+    - name: "Install alfresco-control-center"
+      vars:
+        adf_app_name: alfresco-control-center
+        adf_app_port: 8882
+        adf_app_src_archive: "{{ downloads.acc_zip_url }}"
+        adf_app_src_checksum: "{{ downloads.acc_zip_sha1_checksum_url }}"
+        adf_app_version: "{{ acc.version }}"
+      ansible.builtin.include_role:
+        name: "adf_app"

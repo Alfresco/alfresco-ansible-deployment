@@ -71,8 +71,18 @@
   roles:
     - role: "../roles/identity"
       identity_admin_username: admin
-      identity_admin_pasword: "{{ hostvars.localhost.identity_admin_password }}"
-      when: acs.edition == "Enterprise" and not groups.external_identity | default([])
+      identity_admin_password: "{{ hostvars.localhost.identity_admin_password }}"
+      identity_keycloak_http_port: "{{ ports_cfg.identity.http }}"
+      when: not groups.external_identity | default([])
+  tasks:
+    - name: Configure Realm
+      vars:
+        identity_admin_username: admin
+        identity_admin_password: "{{ hostvars.localhost.identity_admin_password }}"
+        identity_keycloak_http_port: "{{ ports_cfg.identity.http }}"
+      ansible.builtin.include_role:
+        name: "../roles/identity"
+        tasks_from: realm
   tags:
     - identity
 
@@ -155,6 +165,14 @@
   tags:
     - search
 
+- name: Populate common facts
+  hosts: repository:acc:adw
+  gather_facts: false
+  tasks:
+    - name: Populate identity_enabled
+      ansible.builtin.set_fact:
+        identity_enabled: "{{ ((groups.identity | default([])) + (groups.external_identity | default([]))) | length > 0 }}"
+
 - name: Alfresco Repository Role
   hosts: repository
   gather_facts: false
@@ -162,7 +180,7 @@
     - name: Check wether we want mTLS for Repostory
       ansible.builtin.set_fact:
         repo_mtls_required: >-
-          {{ groups.repository | difference(groups.transformers) | length > 0 }}
+          {{ groups.repository | difference(groups.transformers | default([])) | length > 0 }}
     - name: Build keystore role argument
       ansible.builtin.set_fact:
         repository_keystore:
@@ -176,11 +194,16 @@
       when:
         - repo_mtls_required
         - ats_mtls_capable
+    - name: Populate identity_url when available
+      when: identity_enabled
+      ansible.builtin.set_fact:
+        identity_url: "http://{{ identity_host }}:{{ ports_cfg.identity.http }}/"
   roles:
     - role: "../roles/repository"
       repo_keystore: "{{ repository_keystore | default({}) }}"
       repository_properties: "{{ global_properties }}"
       raw_properties: "{{ properties_snippets }}"
+      repository_identity_url: "{{ identity_url | default('') }}"
   post_tasks:
     - name: Update installation status file with ACS
       become: true
@@ -303,14 +326,33 @@
   tags:
     - search_enterprise
 
+- name: Populate adf app facts
+  hosts: acc:adw
+  gather_facts: false
+  tasks:
+    - name: Populate adf app config when identity available
+      when: identity_enabled
+      ansible.builtin.set_fact:
+        adf_app_oauth_configuration:
+          APP_CONFIG_AUTH_TYPE: oauth
+          APP_CONFIG_IDENTITY_HOST: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
+          APP_CONFIG_OAUTH2_HOST: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
+          APP_CONFIG_OAUTH2_CLIENTID: alfresco
+
 - name: Alfresco Control Center Role
   hosts: acc
   gather_facts: false
   vars:
     acs_version_requirement: "{{ acs.version is version('7.4', 'ge') }}"
   roles:
-    - role: "../roles/acc"
+    - role: "../roles/adf_app"
       when: acs_version_requirement
+      adf_app_name: alfresco-control-center
+      adf_app_port: 8881
+      adf_app_src_archive: "{{ downloads.acc_zip_url }}"
+      adf_app_src_checksum: "{{ downloads.acc_zip_sha1_checksum_url }}"
+      adf_app_version: "{{ acc.version }}"
+      adf_app_configuration: "{{ adf_app_oauth_configuration | default({}) }}"
   post_tasks:
     - name: Update installation status file with ACC
       when: acs_version_requirement
@@ -332,8 +374,14 @@
   hosts: adw
   gather_facts: false
   roles:
-    - role: "../roles/adw"
+    - role: "../roles/adf_app"
       when: acs.edition == "Enterprise"
+      adf_app_name: alfresco-digital-workspace
+      adf_app_port: 8880
+      adf_app_src_archive: "{{ downloads.adw_zip_url }}"
+      adf_app_src_checksum: "{{ lookup('url', downloads.adw_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}"
+      adf_app_version: "{{ adw.version }}"
+      adf_app_configuration: "{{ adf_app_oauth_configuration | default({}) }}"
   post_tasks:
     - name: Update installation status file with ADW
       become: true

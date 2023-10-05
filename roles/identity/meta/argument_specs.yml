@@ -13,3 +13,29 @@ argument_specs:
         required: true
         description: |
           Password of the keycloak instance admin user
+      identity_keycloak_http_port:
+        type: int
+        default: 8080
+        description: |
+          Port where to expose the keycloak instance
+      identity_keycloak_start_dev:
+        type: bool
+        default: true
+        description: |
+          If keycloak should be started in development mode. Not suitable for production
+      identity_keycloak_proxy_mode:
+        type: str
+        default: edge
+        description: |
+          Fine tune specific behaviour when running keycloak behind a proxy
+      identity_keycloak_host:
+        type: str
+        default: localhost
+        description: |
+          Hostname where clients can reach the keycloak instance
+      identity_known_urls:
+        type: list
+        elements: str
+        default: []
+        description: |
+          A list of possible origin URLs which are allowed to interact with the configured realm

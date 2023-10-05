@@ -1,0 +1,26 @@
+---
+# defaults file for adf_app
+
+# Role arguments
+adf_app_name: null
+adf_app_port: 8080
+adf_app_src_archive: null
+adf_app_src_checksum: null
+adf_app_version: null
+adf_app_configuration: {}
+
+# Other defaults
+adf_app_config_json_path: "{{ nginx_default_vhost_docroot }}/{{ adf_app_name }}/app.config.json"
+adf_app_default_configuration:
+  APP_CONFIG_PROVIDER: ECM
+  APP_CONFIG_ECM_HOST: "{protocol}//{hostname}{:port}"
+  APP_CONFIG_BPM_HOST: "{protocol}//{hostname}{:port}"
+  APP_CONFIG_AUTH_TYPE: BASIC
+  APP_CONFIG_IDENTITY_HOST: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
+  APP_CONFIG_OAUTH2_HOST: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
+  APP_CONFIG_OAUTH2_CLIENTID: alfresco
+  APP_CONFIG_OAUTH2_IMPLICIT_FLOW: true
+  APP_CONFIG_OAUTH2_SILENT_LOGIN: true
+  APP_CONFIG_OAUTH2_REDIRECT_SILENT_IFRAME_URI: "{protocol}//{hostname}{:port}/assets/silent-refresh.html"
+  APP_CONFIG_OAUTH2_REDIRECT_LOGIN: "/"
+  APP_CONFIG_OAUTH2_REDIRECT_LOGOUT: "/"

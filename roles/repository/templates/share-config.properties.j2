@@ -1,0 +1,3 @@
+{% for prop in lookup('ansible.utils.to_paths', merged_share_properties) | dict2items %}
+{{ prop.key }}={{ prop.value }}
+{% endfor %}
