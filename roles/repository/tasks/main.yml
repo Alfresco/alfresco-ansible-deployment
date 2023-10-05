@@ -193,7 +193,7 @@
         group: "{{ group_name }}"
       loop: >-
         {{ acs_environment
-        | combine(acs_secure_environment
+        | ansible.builtin.combine(acs_secure_environment
         | default(None), list_merge='prepend')
         | dict2items }}
 
@@ -334,7 +334,7 @@
         dynamic_properties: {}
 
     - name: Configure identity service when available
-      when: repository_identity_url | length > 0
+      when: repository_identity_url
       vars:
         sso_repository_properties:
           authentication:
@@ -352,8 +352,8 @@
       vars:
         merged_repository_properties: >-
           {{ default_repository_properties
-          | combine(repository_properties | default(None))
-          | combine(dynamic_properties) }}
+          | ansible.builtin.combine(repository_properties | default(None))
+          | ansible.builtin.combine(dynamic_properties) }}
       ansible.builtin.template:
         owner: "{{ username }}"
         group: "{{ group_name }}"

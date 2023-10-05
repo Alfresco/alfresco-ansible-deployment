@@ -4,7 +4,7 @@
     dynamic_share_properties: {}
 
 - name: Configure identity service properties when available
-  when: repository_identity_url | length > 0
+  when: repository_identity_url
   vars:
     sso_share_properties:
       aims:
@@ -18,7 +18,7 @@
 
 - name: Prepare final structure for share properties
   ansible.builtin.set_fact:
-    merged_share_properties: "{{ default_share_properties | combine(dynamic_share_properties) }}"
+    merged_share_properties: "{{ default_share_properties | ansible.builtin.combine(dynamic_share_properties) }}"
 
 - name: Add the configuration templates
   ansible.builtin.template:
