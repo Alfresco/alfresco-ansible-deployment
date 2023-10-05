@@ -24,7 +24,7 @@ acs:
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
-    version: 2.0.0-A1
+    version: 2.0.0-M1
   device_sync:
     repository: >-
       {{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo
