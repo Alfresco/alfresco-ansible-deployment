@@ -193,7 +193,7 @@
         group: "{{ group_name }}"
       loop: >-
         {{ acs_environment
-        | combine(acs_secure_environment
+        | ansible.builtin.combine(acs_secure_environment
         | default(None), list_merge='prepend')
         | dict2items }}
 
@@ -264,25 +264,9 @@
   notify:
     - Restart-alfresco-content
   block:
-    - name: Add the configuration templates
-      ansible.builtin.template:
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        src: "{{ item }}.j2"
-        dest: >-
-          {{ settings_folder }}/classpath/alfresco/web-extension/{{ item }}
-        mode: "0644"
-      loop: "{{ share_templates }}"
-
-    - name: Add Hazelcast cluster config for Share
-      become: true
-      ansible.builtin.template:
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        src: custom-slingshot-application-context.xml
-        dest: "{{ settings_folder }}/classpath/alfresco/web-extension/custom-slingshot-application-context.xml"
-        mode: 'u=rw,g=,o='
-      when: groups['repository'] | length > 1 and not cluster_keepoff
+    - name: Include share tasks
+      ansible.builtin.include_tasks:
+        file: share.yml
 
     - name: Copy db_connector_repo to {{ tomcat_config_dir }}/lib/ folder
       ansible.builtin.copy:
@@ -301,7 +285,7 @@
         group: "{{ group_name }}"
         mode: "0640"
 
-    - name: Copy BSSRF enabled pipaline transformers
+    - name: Copy BSSRF enabled pipeline transformers
       ansible.builtin.copy:
         content: "{{ bssrf_pipelines | to_nice_json }}"
         dest: "{{ settings_folder }}/classpath/alfresco/extension/transform/pipelines/0200-html-via-txt.json"
@@ -349,8 +333,8 @@
       ansible.builtin.set_fact:
         dynamic_properties: {}
 
-    - name: Configure identity service when provided
-      when: repository_identity_url | length > 0
+    - name: Configure identity service when available
+      when: repository_identity_url
       vars:
         sso_repository_properties:
           authentication:
@@ -368,8 +352,8 @@
       vars:
         merged_repository_properties: >-
           {{ default_repository_properties
-          | combine(repository_properties | default(None))
-          | combine(dynamic_properties) }}
+          | ansible.builtin.combine(repository_properties | default(None))
+          | ansible.builtin.combine(dynamic_properties) }}
       ansible.builtin.template:
         owner: "{{ username }}"
         group: "{{ group_name }}"

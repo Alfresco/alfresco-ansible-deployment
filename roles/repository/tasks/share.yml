@@ -1,0 +1,41 @@
+---
+- name: Initialize accumulator for dynamic share properties
+  ansible.builtin.set_fact:
+    dynamic_share_properties: {}
+
+- name: Configure identity service properties when available
+  when: repository_identity_url
+  vars:
+    sso_share_properties:
+      aims:
+        enabled: "true"
+        realm: "{{ repository_identity_realm }}"
+        resource: "{{ repository_identity_client_id }}"
+        secret: "{{ repository_identity_client_secret }}"
+        authServerUrl: "{{ repository_identity_url }}"
+  ansible.builtin.set_fact:
+    dynamic_share_properties: "{{ dynamic_share_properties | ansible.builtin.combine(sso_share_properties) }}"
+
+- name: Prepare final structure for share properties
+  ansible.builtin.set_fact:
+    merged_share_properties: "{{ default_share_properties | ansible.builtin.combine(dynamic_share_properties) }}"
+
+- name: Add the configuration templates
+  ansible.builtin.template:
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    src: "{{ item }}.j2"
+    dest: >-
+      {{ settings_folder }}/classpath/alfresco/web-extension/{{ item }}
+    mode: "0644"
+  loop: "{{ share_templates }}"
+
+- name: Add Hazelcast cluster config for Share
+  become: true
+  ansible.builtin.template:
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    src: custom-slingshot-application-context.xml
+    dest: "{{ settings_folder }}/classpath/alfresco/web-extension/custom-slingshot-application-context.xml"
+    mode: 'u=rw,g=,o='
+  when: groups['repository'] | length > 1 and not cluster_keepoff
