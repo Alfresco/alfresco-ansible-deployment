@@ -37,6 +37,8 @@ encryption.ssl.truststore.location={{ java_truststore | default(java_home + '/li
 encryption.ssl.keystore.location={{ repo_keystore.path }}
 httpclient.config.transform.mTLSEnabled=true
 httpclient.config.transform.hostnameVerificationDisabled=true
+httpclient.config.sharedfilestore.mTLSEnabled=true
+httpclient.config.sharedfilestore.hostnameVerificationDisabled=true
 {% endif %}
 
 {%- macro ats_proto() -%}

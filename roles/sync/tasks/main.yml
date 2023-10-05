@@ -70,17 +70,6 @@
         mode: "0644"
       when: sync_db_url != ""
 
-    - name: Add config.yml file to {{ config_folder }}
-      ansible.builtin.template:
-        src: "config.yml.j2"
-        dest: "{{ config_folder }}/sync-service/config.yml"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx'
-        force: true
-      notify:
-        - Restart-sync
-
     - name: Add paths to setenv file
       ansible.builtin.blockinfile:
         path: "{{ config_folder }}/setenv.sh"
@@ -112,3 +101,6 @@
       notify:
         - Enable-sync
         - Restart-sync
+
+    - name: Import Alfresco Sync service configurations tasks
+      ansible.builtin.import_tasks: configure.yml
