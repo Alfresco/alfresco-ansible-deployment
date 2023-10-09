@@ -15,13 +15,13 @@
         gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
       when: ansible_distribution in [ 'RedHat', 'CentOS' ] and ansible_distribution_major_version == '7'
 
-    - name: Ensure nginx is installed.
+    - name: Ensure nginx is installed
       ansible.builtin.package:
         name: "{{ nginx_package_name }}"
         state: present
       notify: Enable-nginx
 
-    - name: Copy nginx configuration in place.
+    - name: Copy nginx configuration in place
       ansible.builtin.template:
         src: "{{ nginx_conf_template }}"
         dest: "{{ nginx_conf_file_path }}"
