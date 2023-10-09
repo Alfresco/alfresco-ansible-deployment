@@ -5,7 +5,7 @@ nginx_mime_file_path: /etc/nginx/mime.types
 nginx_pidfile: /run/nginx.pid
 nginx_remove_default_vhost: true
 nginx_package_name: "nginx"
-nginx_conf_template: "nginx.conf"
+nginx_conf_template: "nginx.conf.j2"
 nginx_yum_repo_enabled: true
 nginx_service_state: started
 nginx_service_enabled: true
