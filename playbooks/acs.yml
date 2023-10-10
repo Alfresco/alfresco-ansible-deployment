@@ -25,15 +25,13 @@
     secret_ca_passphrase: "{{ hostvars.localhost.ca_signing_key_passphrase }}"
   ansible.builtin.import_playbook: pki.yml
 
-- name: Gather facts from all hosts
+- name: Setup facts
   hosts: all:!external
   gather_facts: false
   roles:
     - role: "../roles/common"
   tasks:
-    - name: Setup
-      ansible.builtin.setup:
-    - name: Set fqdn fact
+    - name: Set alfresco url from fqdn_alfresco if available or localhost
       ansible.builtin.set_fact:
         alfresco_url: "{% if use_ssl | bool %}https{% else %}http{% endif %}://{% if fqdn_alfresco %}{{ fqdn_alfresco }}{% else %}localhost{% endif %}"
 
