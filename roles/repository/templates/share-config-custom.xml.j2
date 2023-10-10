@@ -714,7 +714,7 @@
       </cookie>
    </config>
    -->
-{% if share_aims_properties %}
+{% if share_aims_properties is defined %}
    <config evaluator="string-compare" condition="AIMS">
       {% for key, value in share_aims_properties.items() %}
       <{{ key }}>{{ value }}</{{ key }}>
