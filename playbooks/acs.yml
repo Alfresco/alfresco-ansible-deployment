@@ -25,8 +25,8 @@
     secret_ca_passphrase: "{{ hostvars.localhost.ca_signing_key_passphrase }}"
   ansible.builtin.import_playbook: pki.yml
 
-- name: Setup facts
-  hosts: all:!external
+- name: Setup common facts
+  hosts: repository:identity
   gather_facts: false
   roles:
     - role: "../roles/common"
