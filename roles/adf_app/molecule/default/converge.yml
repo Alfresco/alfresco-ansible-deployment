@@ -9,6 +9,10 @@
         adf_app_src_archive: "{{ downloads.adw_zip_url }}"
         adf_app_src_checksum: "{{ lookup('url', downloads.adw_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}"
         adf_app_version: "{{ adw.version }}"
+        adf_app_configuration:
+          authType:
+            value: OAUTH
+            placeholder: APP_CONFIG_AUTH_TYPE
       ansible.builtin.include_role:
         name: "adf_app"
 
@@ -19,5 +23,9 @@
         adf_app_src_archive: "{{ downloads.acc_zip_url }}"
         adf_app_src_checksum: "{{ downloads.acc_zip_sha1_checksum_url }}"
         adf_app_version: "{{ acc.version }}"
+        adf_app_configuration:
+          authType:
+            value: OAUTH
+            placeholder: APP_CONFIG_AUTH_TYPE
       ansible.builtin.include_role:
         name: "adf_app"
