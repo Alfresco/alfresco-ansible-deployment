@@ -33,7 +33,7 @@
   tasks:
     - name: Set alfresco url from fqdn_alfresco if available or localhost
       ansible.builtin.set_fact:
-        alfresco_url: "{% if use_ssl | bool %}https{% else %}http{% endif %}://{% if fqdn_alfresco %}{{ fqdn_alfresco }}{% else %}localhost{% endif %}"
+        alfresco_url: "{{ known_urls | first | default('http://' ~ nginx_host) }}"
 
 - name: Database Role
   hosts: database
