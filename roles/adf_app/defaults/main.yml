@@ -12,39 +12,15 @@ adf_app_configuration: {}
 # Other defaults
 adf_app_config_json_path: "{{ nginx_default_vhost_docroot }}/{{ adf_app_name }}/app.config.json"
 adf_app_default_configuration:
-  providers:
-    value: ECM
-    placeholder: APP_CONFIG_PROVIDER
-  ecmHost:
-    value: "{protocol}//{hostname}{:port}"
-    placeholder: APP_CONFIG_ECM_HOST
-  bpmHost:
-    placeholder: APP_CONFIG_BPM_HOST
-    value: "{protocol}//{hostname}{:port}"
-  authType:
-    value: BASIC
-    placeholder: APP_CONFIG_AUTH_TYPE
-  identityHost:
-    value: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
-    placeholder: APP_CONFIG_IDENTITY_HOST
-  host:
-    value: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
-    placeholder: APP_CONFIG_OAUTH2_HOST
-  clientId:
-    value: alfresco
-    placeholder: APP_CONFIG_OAUTH2_CLIENTID
-  implicitFlow:
-    value: true
-    placeholder: APP_CONFIG_OAUTH2_IMPLICIT_FLOW
-  silentLogin:
-    value: true
-    placeholder: APP_CONFIG_OAUTH2_SILENT_LOGIN
-  redirectSilentIframeUri:
-    value: "{protocol}//{hostname}{:port}/assets/silent-refresh.html"
-    placeholder: APP_CONFIG_OAUTH2_REDIRECT_SILENT_IFRAME_URI
-  redirectUri:
-    value: "/"
-    placeholder: APP_CONFIG_OAUTH2_REDIRECT_LOGIN
-  redirectUriLogout:
-    value: "/"
-    placeholder: APP_CONFIG_OAUTH2_REDIRECT_LOGOUT
+  providers: ECM
+  ecmHost: "{protocol}//{hostname}{:port}"
+  bpmHost: "{protocol}//{hostname}{:port}"
+  authType: BASIC
+  identityHost: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
+  host: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
+  clientId: alfresco
+  implicitFlow: true
+  silentLogin: true
+  redirectSilentIframeUri: "{protocol}//{hostname}{:port}/assets/silent-refresh.html"
+  redirectUri: "/"
+  redirectUriLogout: "/"

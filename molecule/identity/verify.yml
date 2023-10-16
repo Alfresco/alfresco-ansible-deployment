@@ -67,7 +67,7 @@
       ansible.builtin.assert:
         quiet: true
         that:
-          - app_config_json['APP_CONFIG_AUTH_TYPE'] == 'oauth'
+          - app_config_json['authType'] == 'OAUTH'
         fail_msg: "not expected {{ app_config_json }}"
       loop: "{{ range(0, adf_apps | length) | list }}"
       loop_control:

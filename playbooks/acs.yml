@@ -334,18 +334,10 @@
       when: identity_enabled
       ansible.builtin.set_fact:
         adf_app_oauth_configuration:
-          authType:
-            value: OAUTH
-            placeholder: APP_CONFIG_AUTH_TYPE
-          identityHost:
-            value: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
-            placeholder: APP_CONFIG_IDENTITY_HOST
-          host:
-            value: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
-            placeholder: APP_CONFIG_OAUTH2_HOST
-          clientId:
-            value: alfresco
-            placeholder: APP_CONFIG_OAUTH2_CLIENTID
+          authType: OAUTH
+          identityHost: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
+          host: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
+          clientId: alfresco
 
 - name: Alfresco Control Center Role
   hosts: acc
