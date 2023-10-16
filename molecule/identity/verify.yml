@@ -16,6 +16,7 @@
         that:
           - ansible_facts.services['alfresco-content.service'].state == "running"
           - ansible_facts.services['keycloak.service'].state == "running"
+          - ansible_facts.services['nginx.service'].state == "running"
 
     - name: Retrieve contents of alfresco-global.properties
       become: true
@@ -99,3 +100,20 @@
           - "not share_config_xml['results'][3]['matches'][0]['secret']"
           - "share_config_xml['results'][4]['matches'][0]['authServerUrl'] == 'http://localhost/auth'"
           - "share_config_xml['results'][5]['matches'][0]['publicClient'] == 'true'"
+
+    - name: Retrieve share login page
+      ansible.builtin.uri:
+        url: "http://localhost/share"
+        return_content: true
+      register: this
+
+    - name: Assert keycloak login redirect
+      vars:
+        expected_url_prefix: http://localhost/auth/realms/alfresco/protocol/openid-connect/auth?response_type=code&client_id=alfresco&scope=openid
+        expected_login_submit: http://localhost/auth/realms/alfresco/login-actions/authenticate
+      ansible.builtin.assert:
+        quiet: true
+        that:
+          - this.redirected
+          - expected_url_prefix in this.url
+          - expected_login_submit in this.content
