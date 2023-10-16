@@ -33,15 +33,7 @@
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
 
-- name: Replace $placeholders in packaged app.config.json
-  become: true
-  ansible.builtin.replace:
-    path: "{{ adf_app_config_json_path }}"
-    regexp: "{{ '\\${' }}{{ item.key }}{{ '}' }}"
-    replace: "{{ (item.value is boolean) | ternary(item.value | to_json, item.value) }}"
-  with_items: "{{ adf_app_merged_configuration | dict2items }}"
-
-- name: Retrieve the current app.config.json contents
+- name: Retrieve the app.config.json in the packaged application
   ansible.builtin.slurp:
     src: "{{ adf_app_config_json_path }}"
   register: app_config_json
