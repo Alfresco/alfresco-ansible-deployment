@@ -1,0 +1,24 @@
+- name: Prepare remote hosts
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Make sure python3 is installed
+      package:
+        name: python3
+        state: present
+      become: true
+
+- name: Prepare localhost
+  hosts: localhost
+  gather_facts: false
+  vars:
+  tasks:
+    - name: Set localhost as known_urls
+      ansible.builtin.blockinfile:
+        marker: >-
+          # {mark} KNOWN_URLS VAR
+        block: |
+          known_urls:
+            - http://localhost
+        path: ../{{ lookup('env', 'MOLECULE_SCENARIO_NAME') }}/host_vars/{{ item }}.yml
+      loop: "{{ groups.repository }}"

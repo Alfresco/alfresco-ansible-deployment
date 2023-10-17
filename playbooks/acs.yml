@@ -25,12 +25,15 @@
     secret_ca_passphrase: "{{ hostvars.localhost.ca_signing_key_passphrase }}"
   ansible.builtin.import_playbook: pki.yml
 
-- name: Gather facts from all hosts
-  hosts: all:!external
+- name: Setup common facts
+  hosts: repository:identity
   gather_facts: false
+  roles:
+    - role: "../roles/common"
   tasks:
-    - name: Setup
-      ansible.builtin.setup:
+    - name: Set alfresco url from fqdn_alfresco if available or localhost
+      ansible.builtin.set_fact:
+        alfresco_url: "{{ known_urls | first | default('http://' ~ nginx_host) }}"
 
 - name: Database Role
   hosts: database
@@ -65,6 +68,20 @@
   tags:
     - elasticsearch
 
+- name: Nginx Role
+  hosts: nginx
+  gather_facts: false
+  roles:
+    - role: "../roles/nginx"
+  post_tasks:
+    - name: Make sure NGINX is running
+      become: true
+      ansible.builtin.service:
+        name: nginx
+        state: started
+  tags:
+    - nginx
+
 - name: Identity Role
   hosts: identity
   gather_facts: false
@@ -80,6 +97,8 @@
         identity_admin_username: admin
         identity_admin_password: "{{ hostvars.localhost.identity_admin_password }}"
         identity_keycloak_http_port: "{{ ports_cfg.identity.http }}"
+        identity_known_urls:
+          - "{{ alfresco_url }}"
       ansible.builtin.include_role:
         name: "../roles/identity"
         tasks_from: realm
@@ -197,7 +216,7 @@
     - name: Populate identity_url when available
       when: identity_enabled
       ansible.builtin.set_fact:
-        identity_url: "http://{{ identity_host }}:{{ ports_cfg.identity.http }}/"
+        identity_url: "{{ alfresco_url }}/auth"
   roles:
     - role: "../roles/repository"
       repo_keystore: "{{ repository_keystore | default({}) }}"
@@ -397,20 +416,6 @@
         mode: "0755"
   tags:
     - adw
-
-- name: Nginx Role
-  hosts: nginx
-  gather_facts: false
-  roles:
-    - role: "../roles/nginx"
-  post_tasks:
-    - name: Make sure NGINX is running
-      become: true
-      ansible.builtin.service:
-        name: nginx
-        state: started
-  tags:
-    - nginx
 
 - name: Sync Service Role
   hosts: syncservice
