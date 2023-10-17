@@ -68,7 +68,9 @@
       ansible.builtin.assert:
         quiet: true
         that:
-          - app_config_json['authType'] == 'OAUTH'
+          - app_config_json.authType == 'OAUTH'
+          - app_config_json.oauth2.clientId == 'alfresco'
+          - app_config_json.oauth2.host == '{protocol}//{hostname}{:port}/auth/realms/alfresco'
         fail_msg: "not expected {{ app_config_json }}"
       loop: "{{ range(0, adf_apps | length) | list }}"
       loop_control:

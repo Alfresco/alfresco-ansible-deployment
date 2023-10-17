@@ -355,8 +355,9 @@
         adf_app_oauth_configuration:
           authType: OAUTH
           identityHost: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
-          host: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
-          clientId: alfresco
+          oauth2:
+            host: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
+            clientId: alfresco
 
 - name: Alfresco Control Center Role
   hosts: acc
