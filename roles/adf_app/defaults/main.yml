@@ -15,12 +15,13 @@ adf_app_default_configuration:
   providers: ECM
   ecmHost: "{protocol}//{hostname}{:port}"
   bpmHost: "{protocol}//{hostname}{:port}"
-  authType: BASIC
   identityHost: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
-  host: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
-  clientId: alfresco
-  implicitFlow: true
-  silentLogin: true
-  redirectSilentIframeUri: "{protocol}//{hostname}{:port}/assets/silent-refresh.html"
-  redirectUri: "/"
-  redirectUriLogout: "/"
+  authType: BASIC
+  oauth2:
+    host: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
+    clientId: alfresco
+    implicitFlow: true
+    silentLogin: true
+    redirectSilentIframeUri: "{protocol}//{hostname}{:port}/assets/silent-refresh.html"
+    redirectUri: "/"
+    redirectUriLogout: "/"

@@ -47,7 +47,7 @@
 - name: Ensure app.config.json is merged with current configuration
   become: true
   ansible.builtin.copy:
-    content: "{{ app_config_json['content'] | b64decode | from_json | ansible.builtin.combine(adf_app_merged_configuration) | to_nice_json }}"
+    content: "{{ app_config_json['content'] | b64decode | from_json | ansible.builtin.combine(adf_app_merged_configuration, recursive=true) | to_nice_json }}"
     dest: "{{ adf_app_config_json_path }}"
     mode: "0644"
 
