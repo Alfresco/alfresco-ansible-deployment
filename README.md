@@ -35,4 +35,4 @@ Please use [this guide](CONTRIBUTING.md) to make a contribution to the project a
 ## Release
 
 See the [dedication section in developer guide](docs/developer-guide.md#release).
-Update [Adding support for a new distribution] (docs/developer-guide.md#adding-support-for-a-new-distribution).
+Update [adding support for a new distribution](docs/developer-guide.md#adding-support-for-a-new-distribution).
