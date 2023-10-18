@@ -5,7 +5,6 @@ utils:
   - tar
   - python3-lxml
   - gpg
-  - curl
 utils_selinux:
   - python3-libselinux
   - python3-libsemanage
