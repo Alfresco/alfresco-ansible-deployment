@@ -35,21 +35,28 @@ The playbook uses the following roles:
 * **acc** - deploys and configures Alfresco Control Center
 * **activemq** - deploys and configures Apache ActiveMQ
 * **adw** - deploys and configures Alfresco Digital Workspace
-* **common** - contains a set of common tasks that prepares the specified host for other roles (creates user and group, common directories)
-* **elasticsearch** - deploys and configures ElasticSearch cluster required by Alfresco Search Enterprise
+* **common** - contains a set of common tasks that prepares the specified host
+  for other roles (creates user and group, common directories)
+* **elasticsearch** - deploys and configures ElasticSearch cluster required by
+  Alfresco Search Enterprise
+* **identity** - deploys and configures Keycloak to enable SSO
+  capabilities(optional)
 * **java** - deploys OpenJDK
 * **nginx** - deploys and configures Nginx as a proxy
 * **postgres** - deploys and configures PostgreSQL
 * **repository** - deploys and configures Alfresco Repository and Alfresco Share
 * **search** - deploys and configures Alfresco Search Services
-* **search_enteprise** - deploys and configures Alfresco Search Enterprise
+* **search_enteprise** - deploys and configures Alfresco Search Enterprise (as
+  an alternative to Alfresco Search Services)
 * **sfs** - deploys and configures Alfresco Shared File Store
 * **sync** - deploys and configures Alfresco Sync Service
 * **tomcat** - deploys and configures Apache Tomcat
 * **transformers** - deploys and configures Alfresco Transform Service
 * **trouter** - deploys and configures the Transform Router
 
-The same playbook can be run to deploy the system in several different ways, please refer to the [deployment guide](./deployment-guide.md) for a step by step set of instructions.
+The same playbook can be run to deploy the system in several different ways,
+please refer to the [deployment guide](./deployment-guide.md) for a step by step
+set of instructions.
 
 ## Versioning
 

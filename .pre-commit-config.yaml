@@ -20,7 +20,7 @@ repos:
       - id: djlint-jinja
 
   - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.6
+    rev: v0.9.13.4
     hooks:
       - id: pymarkdown
         files: (README\.md$|docs/.*\.md)
