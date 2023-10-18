@@ -1,2 +1,2 @@
 # variables for molecule tests - inventory_hostname: repository_neutron
-cluster_keepoff: yes
+cluster_keepoff: false
