@@ -610,10 +610,6 @@ automatically to use it (share, adw, acc).
 * The [upstream playbook][ansible-middleware/keycloak] currently supports only
 * RHEL derivatives (e.g.
   Rockylinux) and not Debian based systems (internal ref: OPSEXP-2355)
-* The [upstream playbook][ansible-middleware/keycloak] doesn't allow to
-  configure properly for hostname-url and hostname-admin-url in keycloak.conf
-  which are necessary to expose the main service and admin console behind our
-  nginx reverse proxy (internal ref: OPSEXP-2329)
 
 [ansible-middleware/keycloak]: https://github.com/ansible-middleware/keycloak/
 
