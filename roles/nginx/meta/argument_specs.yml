@@ -10,3 +10,11 @@ argument_specs:
         description: If the nginx reverse proxy vhosts should be enabled
         type: bool
         default: true
+      nginx_set_proxy_headers:
+        description: Useful to disable when nginx node is behind another reverse proxy (e.g. AWS ELB)
+        type: bool
+        default: true
+      nginx_absolute_redirect:
+        description: Useful to disable when nginx node is behind another reverse proxy (e.g. AWS ELB)
+        type: bool
+        default: true
