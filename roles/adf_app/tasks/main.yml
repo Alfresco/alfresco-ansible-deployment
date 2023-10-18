@@ -33,15 +33,7 @@
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
 
-- name: Replace $placeholders in packaged app.config.json
-  become: true
-  ansible.builtin.replace:
-    path: "{{ adf_app_config_json_path }}"
-    regexp: "{{ '\\${' }}{{ item.key }}{{ '}' }}"
-    replace: "{{ (item.value is boolean) | ternary(item.value | to_json, item.value) }}"
-  with_items: "{{ adf_app_merged_configuration | dict2items }}"
-
-- name: Retrieve the current app.config.json contents
+- name: Retrieve the app.config.json in the packaged application
   ansible.builtin.slurp:
     src: "{{ adf_app_config_json_path }}"
   register: app_config_json
@@ -55,7 +47,7 @@
 - name: Ensure app.config.json is merged with current configuration
   become: true
   ansible.builtin.copy:
-    content: "{{ app_config_json['content'] | b64decode | from_json | ansible.builtin.combine(adf_app_merged_configuration) | to_nice_json }}"
+    content: "{{ app_config_json['content'] | b64decode | from_json | ansible.builtin.combine(adf_app_merged_configuration, recursive=true) | to_nice_json }}"
     dest: "{{ adf_app_config_json_path }}"
     mode: "0644"
 

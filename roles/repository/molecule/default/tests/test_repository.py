@@ -191,4 +191,4 @@ def test_share_CSRF_config(host):
     referer = share_xml.findall('{}/referer'.format(xmlpath))
     origin = share_xml.findall('{}/origin'.format(xmlpath))
     assert_that(referer[0].text == 'http://localhost:8080/share/.*|https://someotherapp/.*')
-    assert_that(origin[0].text == 'http://localhost:8080,https://someotherapp')
+    assert_that(origin[0].text == 'http://localhost:8080|https://someotherapp')

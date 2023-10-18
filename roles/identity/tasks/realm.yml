@@ -51,6 +51,7 @@
     realm: alfresco
     client_id: alfresco
     enabled: true
-    redirect_uris: "{{ identity_known_urls | map('regex_replace', '(.*)$', '\\1*') | list }}"
+    implicit_flow_enabled: true
+    redirect_uris: "{{ identity_known_urls | map('regex_replace', '(.+)', '\\1/*') | list }}"
     web_origins: "{{ identity_known_urls }}"
     state: present

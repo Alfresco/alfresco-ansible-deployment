@@ -19,10 +19,20 @@ A clear and concise description of the problem you are facing and what you expec
 The operating system against playbook is running
 -->
 
+#### Host OS
+
+<!--
+The operating system against playbook is running
+-->
+
+#### Playbook version
+
+<!-- semver release or `git rev-parse HEAD` sha -->
+
 #### Ansible error
 
 <!--
-Copy and paste the Ansible error message while running this playbook (inside below code fences)
+Copy and paste the failed Ansible task while running this playbook (inside below code fences)
 -->
 
 ```shell
@@ -31,7 +41,9 @@ Copy and paste the Ansible error message while running this playbook (inside bel
 
 #### Ansible context
 
-Paste the output of the following commands:
+<!--
+Paste the output of the following commands (prefix by `pipenv run` or run within `pipenv shell`)
+-->
 
 ##### ansible --version
 
@@ -46,6 +58,12 @@ Paste the output of the following commands:
 ```
 
 ##### ansible-inventory -i your_inventory_file --graph
+
+```shell
+
+```
+
+##### pip list
 
 ```shell
 

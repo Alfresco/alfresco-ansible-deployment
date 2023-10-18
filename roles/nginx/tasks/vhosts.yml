@@ -3,13 +3,13 @@
   become: true
   notify: Reload-nginx
   block:
-    - name: Remove default nginx vhost config file (if configured).
+    - name: Remove default nginx vhost config file (if configured)
       ansible.builtin.file:
         path: "{{ nginx_default_vhost_path }}"
         state: absent
       when: nginx_remove_default_vhost | bool
 
-    - name: Ensure nginx_vhost_path exists.
+    - name: Ensure nginx_vhost_path exists
       ansible.builtin.file:
         path: "{{ nginx_vhost_path }}"
         state: directory
@@ -39,7 +39,7 @@
       with_items: "{{ nginx_vhosts }}"
       when: item.listen == '443'
 
-    - name: Add managed vhost config files.
+    - name: Add managed vhost config files
       ansible.builtin.template:
         src: "{{ item.template | default(nginx_vhost_template) }}"
         dest: "{{ nginx_vhost_path }}/{{ item.filename }}"
@@ -52,13 +52,16 @@
 
     - name: Add required proxy config
       ansible.builtin.template:
-        src: alfresco_proxy.j2
-        dest: "{{ nginx_vhost_path }}/alfresco_proxy.include"
+        src: "{{ item }}.j2"
+        dest: "{{ nginx_vhost_path }}/{{ item }}"
         owner: root
         group: root
         mode: "0644"
+      loop:
+        - alfresco_proxy.include
+        - alfresco_proxy_headers.include
 
-    - name: Remove legacy vhosts.conf file.
+    - name: Remove legacy vhosts.conf file
       ansible.builtin.file:
         path: "{{ nginx_vhost_path }}/vhosts.conf"
         state: absent

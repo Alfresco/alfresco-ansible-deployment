@@ -25,7 +25,7 @@ platforms:
       - identity
       - nginx
     published_ports:
-      - 0.0.0.0:443:443/tcp
+      - 0.0.0.0:80:80/tcp
 
 provisioner:
   name: ansible
@@ -35,13 +35,9 @@ provisioner:
   ansible_args:
     - -e
     - "@tests/test-extra-vars.yml"
-    - -e
-    - "@tests/test-ssl.yml"
   inventory:
     links:
       group_vars: ../../group_vars
       host_vars: host_vars
-  playbooks:
-    prepare: ../default/prepare.yml
 verifier:
   name: ansible

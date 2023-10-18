@@ -1,6 +1,6 @@
 ---
 - name: Prepare remote hosts
-  hosts: all:!external
+  hosts: all
   gather_facts: false
   tasks:
     - name: Make sure python3 is installed

@@ -76,15 +76,15 @@
             does not rewrite the Referer header.
          -->
 
-	 {# Compute referers & origins -#}
+    {# Compute referers & origins -#}
          {% import 'xorigins_macros.j2' as _xorigins_protection %}
-	 <referer>{{ _xorigins_protection.compute(inventory_hostname, 'referer', csrf.urls)}}</referer>
+    <referer>{{ _xorigins_protection.compute(inventory_hostname, 'referer', csrf.urls, '|')}}</referer>
 
          <!--
             Override and set this property with a regexp that if you have placed Share behind a proxy that
             does not rewrite the Origin header.
          -->
-	 <origin>{{ _xorigins_protection.compute(inventory_hostname, 'origin', csrf.urls)}}</origin>
+    <origin>{{ _xorigins_protection.compute(inventory_hostname, 'origin', csrf.urls, '|')}}</origin>
       </properties>
 
       <!--
@@ -714,4 +714,11 @@
       </cookie>
    </config>
    -->
+{% if share_aims_properties is defined %}
+   <config evaluator="string-compare" condition="AIMS">
+      {% for key, value in share_aims_properties.items() %}
+      <{{ key }}>{{ value }}</{{ key }}>
+      {% endfor %}
+   </config>
+{% endif %}
 </alfresco-config>

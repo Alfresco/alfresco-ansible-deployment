@@ -7,10 +7,11 @@
   block:
     - name: Wait for core creation to complete
       ansible.builtin.wait_for:
-        path: "{{ config_dir }}/solrhome/{{ search_cores | first }}/conf/solrconfig.xml"
+        path: "{{ config_dir }}/solrhome/{{ item }}/conf/solrconfig.xml"
       timeout: 30
       delay: 3
       retries: 3
+      loop: "{{ search_cores }}"
 
     - name: Make sure host do not assume a previous role
       vars:
