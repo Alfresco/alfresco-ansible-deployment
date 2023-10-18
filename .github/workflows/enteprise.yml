@@ -7,6 +7,7 @@ on:
     paths-ignore:
       - 'docs/**'
       - '*.md'
+      - .pre-commit-config.yaml
 
 env:
   DTAS_VERSION: v1.2.1
@@ -14,9 +15,13 @@ env:
   PY_COLORS: 1
   PYTHONUNBUFFERED: 1
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: false
+
 jobs:
   docker:
-    name: ${{ matrix.role.name }} on ${{ matrix.molecule_distro.image }}
+    name: Test ${{ matrix.role.name }} role on ${{ matrix.molecule_distro.image }}
     runs-on: ubuntu-latest
     if: github.repository_owner == 'Alfresco'
     strategy:
@@ -69,7 +74,7 @@ jobs:
           command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
 
   docker_integration:
-    name: ${{ matrix.scenario.name }} on ${{ matrix.molecule_distro.image }}
+    name: Test ${{ matrix.scenario.name }} scenario on ${{ matrix.molecule_distro.image }}
     if: github.actor != 'dependabot[bot]'
     needs:
       - docker
