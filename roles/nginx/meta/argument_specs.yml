@@ -11,10 +11,10 @@ argument_specs:
         type: bool
         default: true
       nginx_set_proxy_headers:
-        description: Useful to disable when nginx node is behind another reverse proxy (e.g. AWS ELB)
+        description: Useful when nginx node is behind another reverse proxy (e.g. should be disabled when behind an AWS ELB)
         type: bool
         default: true
       nginx_absolute_redirect:
-        description: Useful to disable when nginx node is behind another reverse proxy (e.g. AWS ELB)
+        description: Useful when nginx node is behind another reverse proxy (e.g. should be disabled when behind an AWS ELB)
         type: bool
         default: true
