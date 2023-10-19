@@ -44,9 +44,9 @@
 - name: Ensure a list of packages installed
   become: true
   ansible.builtin.package:
-    name:
+    name: 
       - "{{ utils_repo + utils_storage[cs_storage.type | default('tmpfs')] }}"
-      - curl
+      - "curl"
     state: present
 
 - name: Create folders
