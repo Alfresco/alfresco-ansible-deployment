@@ -46,7 +46,7 @@ If it's your first time with Ansible, please have a read at [Ansible concepts](h
   * [ACS cluster](#acs-cluster)
   * [Maintenance](#maintenance)
     * [Search Enterprise Reindexing](#search-enterprise-reindexing)
-  * [Cleanup and uninstal ACS](#cleanup-and-uninstal-acs)
+  * [Cleanup and uninstall ACS](#cleanup-and-uninstall-acs)
     * [Cleanup](#cleanup)
     * [Uninstallation](#uninstallation)
   * [Known Issues](#known-issues)
@@ -960,7 +960,7 @@ You can trigger the reindexing of existing content in Search Enterprise using a 
 pipenv run ansible-playbook playbooks/search-enterprise-reindex.yml -i <inventory_file>.yml
 ```
 
-## Cleanup and uninstal ACS
+## Cleanup and uninstall ACS
 
 What needs to be removed from a system will depend on your inventory configuration. The steps below presume a cleanup and uninstallation of Alfresco content service after deployment of ansible artifacts by using platform-cleanup.yml playbook and platform-uninstall.yml playbook respectively.
 
