@@ -38,6 +38,8 @@
       ansible.builtin.assert:
         that:
           - this.results[idx].json.authType == 'OAUTH'
+          - this.results[idx].json.oauth2.clientId == 'alfresco'
+          - this.results[idx].json.oauth2.scope == 'openid profile email'
         quiet: true
       loop: "{{ sites }}"
       loop_control:

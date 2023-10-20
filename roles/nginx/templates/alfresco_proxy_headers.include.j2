@@ -1,5 +1,6 @@
 proxy_redirect off;
-proxy_buffering off;
+proxy_buffer_size                  16k;
+proxy_buffers                      8 16k;
 proxy_set_header Host              $host;
 {% if nginx_set_proxy_headers %}
 proxy_set_header X-Real-IP         $remote_addr;

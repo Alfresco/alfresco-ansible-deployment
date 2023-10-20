@@ -2,7 +2,7 @@ acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 7.2.1.11
+  version: 7.2.1.12
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
@@ -27,7 +27,7 @@ search_enterprise:
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
-  version: 2.0.6.1
+  version: 2.0.8.1
 transform:
   artifact_name: alfresco-transform-core-aio-boot
   repository: "{{ nexus_repository.releases }}"

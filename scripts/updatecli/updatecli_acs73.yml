@@ -29,4 +29,4 @@ trouter:
   version: "2.0"
 
 target_file: 7.3.N-extra-vars.yml
-version_pattern: '(-M\d*)?$'
+version_pattern: '$'
