@@ -41,6 +41,12 @@
           JAVA_TOOL_OPTIONS: "{{ temp_array }}"
       when: temp_array|length > 0
 
+- name: Install the 'curl' package
+  ansible.builtin.package:
+    name: curl
+    state: present
+  when: "ansible_facts['ansible_os_family'] == 'RedHat'"
+
 - name: Ensure a list of packages installed
   become: true
   ansible.builtin.package:
