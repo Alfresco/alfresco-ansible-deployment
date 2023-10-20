@@ -1,7 +1,7 @@
 map $remote_addr $rogue_repo_clients {
-    default		1;
-    ::1			0;
-    127.0.0.1		0;
+    default     1;
+    ::1         0;
+    127.0.0.1   0;
 {% for trusted_repo_client in (repo_hosts | map(attribute='local_addr') + [ solr_host, sync_host ]) | unique | reject('equalto', '127.0.0.1') %}
     {{ trusted_repo_client }}	0;
 {% endfor %}
