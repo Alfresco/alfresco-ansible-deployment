@@ -520,7 +520,9 @@ When overriding the default env vars you should make sure you're not retiring im
 
 ### Single Sign On (Keycloak)
 
-> We are providing this integration as a preview and is currently not supported.
+> We are providing an `identity` role as an easy way to evaluate SSO features in
+> Alfresco and is not meant to be used in production (see [External
+> Identity](#external-identity))
 
 When defining a node into the `identity` group, the [identity
 role](../roles/identity/) which wraps the upstream
@@ -614,7 +616,7 @@ playbook and is required in the inventory just for the sake of architecture desc
 
 ### External Identity
 
-Not implemented yet.
+Support for external Identity service will be implemented in a future playbook release (internal ref: OPSEXP-2353).
 
 ### Custom Keystore
 
