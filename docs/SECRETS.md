@@ -42,6 +42,11 @@ as an input.
 Generated certificates and keys are contained in a PKCS12 container which needs
 a passphrase to be read. This secret holds this passphrase.
 
+### identity_admin_password
+
+The password to use to login in the Keycloak console (master realm) with the
+default `admin` user.
+
 ## Secrets not yet handled
 
 The `acs_environment` ansible variable holds environment variables for the JVM
