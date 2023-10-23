@@ -48,7 +48,7 @@
     state: present
   when:
     - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version is not version('9', '>=')
+    - ansible_distribution_major_version is version('9', '<')
 
 - name: Ensure a list of packages installed
   become: true
