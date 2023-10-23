@@ -29,7 +29,7 @@ jobs:
       matrix:
         molecule_distro:
           - image: ubuntu:20.04
-          - image: rockylinux:8.7
+          - image: rockylinux:9.2
         role:
           - name: adf_app
           - name: search_enterprise
@@ -85,7 +85,7 @@ jobs:
         molecule_distro:
           - image: ubuntu:20.04
           - image: ubuntu:22.04
-          - image: rockylinux:8.7
+          - image: rockylinux:9.2
         scenario:
           - name: elasticsearch
           - name: pki
@@ -93,7 +93,7 @@ jobs:
           - scenario:
               name: identity
             molecule_distro:
-              image: rockylinux:8.7
+              image: rockylinux:9.2
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -163,6 +163,9 @@ jobs:
           - name: default
             vars: vars-rocky8.yml
             desc: EC2 ACS 7.4 (Rocky Linux 8)
+          - name: default
+            vars: vars-rocky9.yml
+            desc: EC2 ACS 23.1 (Rocky Linux 9)
           - name: multimachine
             vars: vars.yml
             desc: EC2 ACS 7.4 clustered (RHEL 8.7)

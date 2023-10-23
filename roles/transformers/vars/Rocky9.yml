@@ -1,0 +1,19 @@
+---
+imagemagick_version: "{{ dependencies_version.imagemagick }}"
+imagemagick_packages:
+  - imagemagick-distribution-el9-libs
+  - imagemagick-distribution-el9
+
+utils_transform:
+  - libX11-xcb
+  - cairo
+  - cups-libs
+  - libSM
+  - unzip
+  - which
+  - fontconfig
+  - fontpackages-filesystem
+  - freetype
+  - libpng
+  - dejavu-sans-fonts
+  - perl-Image-ExifTool
