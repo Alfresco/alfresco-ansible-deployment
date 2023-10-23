@@ -41,13 +41,22 @@
           JAVA_TOOL_OPTIONS: "{{ temp_array }}"
       when: temp_array|length > 0
 
-- name: Install the 'curl' package
-  ansible.builtin.package:
+- name: Install 'curl' on RedHat 8 & Redhat 9
+  ansible.builtin.dnf:
     name: curl
     state: present
-  when: ansible_os_family == 'RedHat'
-  register: curl_result
-  failed_when: "'conflicting requests' in curl_result.msg"
+    allowerasing: true
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version in ['8', '9']
+
+- name: Install 'curl' on RedHat 7
+  ansible.builtin.yum:
+    name: curl
+    state: present
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version == '7'
 
 - name: Ensure a list of packages installed
   become: true
