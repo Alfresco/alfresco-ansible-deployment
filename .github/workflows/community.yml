@@ -21,7 +21,7 @@ jobs:
       matrix:
         molecule_distro:
           - image: ubuntu:20.04
-          - image: rockylinux:8.7
+          - image: rockylinux:9.2
         role:
           - name: activemq
           - name: common
