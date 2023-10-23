@@ -82,6 +82,8 @@ Legend:
 | RHEL 8.2            | -                        | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | RHEL 7.7            | -                        | -                  | -                  | :white_check_mark: | :white_check_mark: |
 | RHEL 7.6            | -                        | -                  | -                  | :white_check_mark: | :white_check_mark: |
+| Rockylinux 9.2      | :white_check_mark:       | -                  | -                  | -                  | -                  |
+| Rockylinux 8.7      | :white_check_mark:       | -                  | -                  | -                  | -                  |
 | CentOS 7 x64        | :ballot_box_with_check:  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Ubuntu 22.04        | :white_check_mark:       | :white_check_mark: | -                  | -                  | -                  |
 | Ubuntu 20.04        | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |

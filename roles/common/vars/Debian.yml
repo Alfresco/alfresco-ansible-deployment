@@ -6,7 +6,6 @@ utils:
   - xz-utils
   - python3-lxml
   - gpg
-  - curl
 utils_selinux:
   - python3-selinux
   - python3-semanage

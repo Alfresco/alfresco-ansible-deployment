@@ -6,7 +6,6 @@ utils_repo:
   - unzip
   - which
   - fontconfig
-  - dejavu-fonts-common
   - fontpackages-filesystem
   - freetype
   - libpng
