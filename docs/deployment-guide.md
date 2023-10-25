@@ -7,6 +7,56 @@ If it's your first time with Ansible, then a read of [Ansible concepts](https://
 A basic understanding of Ansible concepts is highly recommended to successfully complete the deployment and better understand all the steps documented in this guide.
 If it's your first time with Ansible, please have a read at [Ansible concepts](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html) for a brief introduction.
 
+* [Deployment Guide](#deployment-guide)
+  * [Getting started quickly with Vagrant](#getting-started-quickly-with-vagrant)
+  * [Getting started](#getting-started)
+    * [Get the playbook](#get-the-playbook)
+    * [Setup runtime environment](#setup-runtime-environment)
+  * [Understanding the playbook](#understanding-the-playbook)
+    * [The control node](#the-control-node)
+    * [Understanding the inventory file](#understanding-the-inventory-file)
+    * [Folder Structure](#folder-structure)
+    * [Service Configuration](#service-configuration)
+    * [TCP Port Configuration](#tcp-port-configuration)
+  * [Configure Your Deployment](#configure-your-deployment)
+    * [License](#license)
+    * [Secrets management](#secrets-management)
+      * [Enable Ansible Vault support](#enable-ansible-vault-support)
+      * [Populate secrets with Ansible Vault](#populate-secrets-with-ansible-vault)
+        * [Encrypted variables](#encrypted-variables)
+        * [Encrypted files](#encrypted-files)
+      * [Third-party lookup plugins](#third-party-lookup-plugins)
+    * [Alfresco Global Properties](#alfresco-global-properties)
+    * [Enable SSL](#enable-ssl)
+    * [AMPs](#amps)
+    * [JVM Options](#jvm-options)
+    * [Single Sign On (Keycloak)](#single-sign-on-keycloak)
+      * [SSO known issues and limitations](#sso-known-issues-and-limitations)
+    * [External Databases](#external-databases)
+    * [External ActiveMQ](#external-activemq)
+    * [External ElasticSearch](#external-elasticsearch)
+    * [External Identity](#external-identity)
+    * [Custom Keystore](#custom-keystore)
+    * [Specifying a different component repository](#specifying-a-different-component-repository)
+  * [Localhost Deployment](#localhost-deployment)
+  * [SSH Deployment](#ssh-deployment)
+    * [Single Machine Deployment](#single-machine-deployment)
+    * [Multi Machine Deployment](#multi-machine-deployment)
+    * [Additional command switches for ansible-playbook](#additional-command-switches-for-ansible-playbook)
+  * [ACS cluster](#acs-cluster)
+  * [Maintenance](#maintenance)
+    * [Search Enterprise Reindexing](#search-enterprise-reindexing)
+  * [Cleanup and uninstall ACS](#cleanup-and-uninstall-acs)
+    * [Cleanup](#cleanup)
+    * [Uninstallation](#uninstallation)
+  * [Known Issues](#known-issues)
+  * [Troubleshooting](#troubleshooting)
+    * [Failed Downloads](#failed-downloads)
+    * [Nginx Failure](#nginx-failure)
+    * [Communication Failures](#communication-failures)
+    * [Playbook Failures](#playbook-failures)
+    * [Alfresco Failures](#alfresco-failures)
+
 ## Getting started quickly with Vagrant
 
 The quickest way to get started and experiment with the playbook is by leveraging Vagrant to create a Virtualbox virtual machine to act as the control node **and** the target host.
@@ -182,6 +232,8 @@ An ACS inventory file has the following groups a host can belong to:
 * `adw`: a single host where you want the Alfresco Digital Workspace UI to be installed
 * `transformers`: a single host where the playbook will deploy the Alfresco Transformation Services components
 * `syncservice`: a single host where the Alfresco Device Sync service will be deployed
+* `identity`: a single host where the playbook will deploy Keycloak with local storage
+* `external_identity`: an alternative group to `identity` in case you want to provide your already existing keycloak installation (not yet implemented)
 
 > Ansible also ships a default group called `all` which all hosts always belongs to
 
@@ -247,6 +299,7 @@ The following systemd services are deployed and can be used to stop and start Al
 | `elasticsearch-connector.service`         | Alfresco Search Enterprise Service                                                      |
 | `elasticsearch-connector-reindex.service` | Alfresco Search Enterprise job to force the reindexing of all the contents of the store |
 | `elasticsearch.service`                   | ElasticSearch Service                                                                   |
+| `keycloak.service`                        | Keycloak Service                                                                        |
 
 Please be aware that some configuration changes (e.g. postgres pg_hba,
 properties files, ...) can trigger a service restart and a consequent
@@ -271,6 +324,7 @@ Several roles setup services that listen on TCP ports and several roles wait for
 | adw                         | 8880        | nginx                                                    | No                      |
 | nginx                       | 80          | `<client-ips>`                                           | No                      |
 | nginx                       | 443         | `<client-ips>`                                           | No                      |
+| keycloak                    | 8082        | nginx, repository                                        | No                      |
 
 > NOTE: When using the ACS Community, some of these ports do not need to be opened (e.g. transform router/sfs, acc, adw).
 
@@ -464,6 +518,30 @@ all:
 All the `_environment` variables defined in roles are dictionaries, and all their keys are added to the relevant components start script thus allowing you to define any number of environment variables. Key values are a list of strings to allow for easier manipulation.
 When overriding the default env vars you should make sure you're not retiring important ones so always take a look at the ``roles/ROLE_NAME/defaults/main.yml` file first.
 
+### Single Sign On (Keycloak)
+
+> We are providing an `identity` role as an easy way to evaluate SSO features in
+> Alfresco and is not meant to be used in production (see [External
+> Identity](#external-identity))
+
+When defining a node into the `identity` group, the [identity
+role](../roles/identity/) which wraps the upstream
+[ansible-middleware/keycloak][ansible-middleware/keycloak] will automatically
+configure a Keycloak installation and all the components will be configured
+automatically to use it (share, adw, acc).
+
+#### SSO known issues and limitations
+
+* The [upstream playbook][ansible-middleware/keycloak] currently supports only
+* RHEL derivatives (e.g.
+  Rockylinux) and not Debian based systems (internal ref: OPSEXP-2355)
+* The [upstream playbook][ansible-middleware/keycloak] doesn't allow to
+  configure properly for hostname-url and hostname-admin-url in keycloak.conf
+  which are necessary to expose the main service and admin console behind our
+  nginx reverse proxy (internal ref: OPSEXP-2329)
+
+[ansible-middleware/keycloak]: https://github.com/ansible-middleware/keycloak/
+
 ### External Databases
 
 By default the playbook will deploy and configure a Postgres server for you. That server is a basic PostgreSQL setup with no specific optimization or features. For example, it doesn't provide any high availability mechanism.
@@ -536,6 +614,10 @@ all:
 Every hosts under the `external` group is not directly managed by the acs
 playbook and is required in the inventory just for the sake of architecture description.
 
+### External Identity
+
+Support for external Identity service will be implemented in a future playbook release (internal ref: OPSEXP-2353).
+
 ### Custom Keystore
 
 By default the playbook deploys a default keystore to ease the installation process, however, we recommend you [generate your own keystore](https://docs.alfresco.com/content-services/latest/admin/security/#managealfkeystores) following the [instructions here](https://docs.alfresco.com/content-services/latest/admin/security/#keystore-configuration).
@@ -569,7 +651,7 @@ repository:
         - -Dmetadata-keystore.metadata.algorithm=AES"
 ```
 
-### Specifing a different component repository
+### Specifying a different component repository
 
 In case you want to use a different server/repository for a specific artifact to further customize your deployment, you can override the default URL in two ways:
 
@@ -880,7 +962,7 @@ You can trigger the reindexing of existing content in Search Enterprise using a 
 pipenv run ansible-playbook playbooks/search-enterprise-reindex.yml -i <inventory_file>.yml
 ```
 
-## Cleanup & Uninstallation of ACS
+## Cleanup and uninstall ACS
 
 What needs to be removed from a system will depend on your inventory configuration. The steps below presume a cleanup and uninstallation of Alfresco content service after deployment of ansible artifacts by using platform-cleanup.yml playbook and platform-uninstall.yml playbook respectively.
 
