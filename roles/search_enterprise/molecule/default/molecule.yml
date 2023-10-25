@@ -24,7 +24,7 @@ provisioner:
   name: ansible
   ansible_args:
     - -e
-    - "@../../tests/molecule/secrets.yml"
+    - "@../../../../tests/molecule/secrets.yml"
   inventory:
     links:
       group_vars: ../../../../group_vars

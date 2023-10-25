@@ -11,9 +11,9 @@ test_host = os.environ.get('TEST_HOST')
 def get_ansible_vars(host):
     """Define get_ansible_vars"""
     java_role = "file=../roles/java/vars/main.yml name=java_role"
-    common_vars = "file=../common/vars/main.yml name=common_vars"
-    common_defaults = "file=../common/defaults/main.yml name=common_defaults"
-    common_hosts = "file=../common/vars/hosts.yml name=common_hosts"
+    common_vars = "file=../../../common/vars/main.yml name=common_vars"
+    common_defaults = "file=../../../common/defaults/main.yml name=common_defaults"
+    common_hosts = "file=../../../common/vars/hosts.yml name=common_hosts"
     ansible_vars = host.ansible("include_vars", java_role)["ansible_facts"]["java_role"]
     ansible_vars.update(host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"])
     ansible_vars.update(host.ansible("include_vars", common_hosts)["ansible_facts"]["common_hosts"])

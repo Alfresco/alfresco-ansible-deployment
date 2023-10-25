@@ -6,8 +6,8 @@ from hamcrest import assert_that, equal_to
 @pytest.fixture(scope="module")
 def get_ansible_vars(host):
     """Define get_ansible_vars"""
-    common_role = "file=./vars/main.yml name=common_role"
-    common_role_defaults = "file=./defaults/main.yml name=common_role_defaults"
+    common_role = "file=../../vars/main.yml name=common_role"
+    common_role_defaults = "file=../../defaults/main.yml name=common_role_defaults"
     ansible_vars = host.ansible("include_vars", common_role)["ansible_facts"]["common_role"]
     ansible_vars = host.ansible("include_vars", common_role_defaults)["ansible_facts"]["common_role_defaults"]
     ansible_vars.update(host.ansible("include_vars", common_role)["ansible_facts"]["common_role"])

@@ -10,11 +10,9 @@ jmespath = "==1.0.1"
 typing-extensions = "==4.6.3"
 
 [dev-packages]
-ansible-compat = "<4"
-ansible-lint = ">=6.14.3"
-molecule = "==4.0.3"
-molecule-docker = "==2.0.0"
-molecule-ec2 = "==0.4"
+ansible-lint = "==6.14.3"
+molecule = "==6.0.2"
+molecule-plugins = {extras = ["docker","ec2"], version = "23.5.0 "}
 boto3 = "==1.26.9"
 pyhamcrest = "==2.0.4"
 pylint = "==2.17.4"
