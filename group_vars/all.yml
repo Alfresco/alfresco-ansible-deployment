@@ -72,7 +72,7 @@ sync:
 acc:
   artifact_name: alfresco-control-center
   repository: "{{ nexus_repository.releases }}"
-  version: 8.1.0
+  version: 8.0.0
 supported_os:
   RedHat:
     versions:
