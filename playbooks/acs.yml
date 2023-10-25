@@ -399,7 +399,12 @@
       adf_app_name: alfresco-digital-workspace
       adf_app_port: 8880
       adf_app_src_archive: "{{ downloads.adw_zip_url }}"
-      adf_app_src_checksum: "{{ lookup('url', downloads.adw_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}"
+      adf_app_src_checksum: >-
+        {% if adw.version is version('4.1.0','ge') -%}
+        {{ downloads.adw_zip_sha1_checksum_url }}
+        {% else -%}
+        {{ lookup('url', downloads.adw_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
+        {%- endif %}
       adf_app_version: "{{ adw.version }}"
       adf_app_configuration: "{{ adf_app_oauth_configuration | default({}) }}"
   post_tasks:
