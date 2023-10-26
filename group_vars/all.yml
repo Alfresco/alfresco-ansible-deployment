@@ -76,6 +76,7 @@ acc:
 supported_os:
   RedHat:
     versions:
+      - 9.2
       - 8.7
       - 8.6
       - 8.5
