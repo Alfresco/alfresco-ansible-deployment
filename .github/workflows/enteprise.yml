@@ -28,7 +28,7 @@ jobs:
       fail-fast: true
       matrix:
         molecule_distro:
-          - image: ubuntu:20.04
+          - image: ubuntu:22.04
           - image: rockylinux:9.2
         role:
           - name: adf_app
@@ -83,7 +83,6 @@ jobs:
       fail-fast: false
       matrix:
         molecule_distro:
-          - image: ubuntu:20.04
           - image: ubuntu:22.04
           - image: rockylinux:9.2
         scenario:
