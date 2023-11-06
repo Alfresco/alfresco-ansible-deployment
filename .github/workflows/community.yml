@@ -28,7 +28,7 @@ jobs:
       fail-fast: true
       matrix:
         molecule_distro:
-          - image: ubuntu:20.04
+          - image: ubuntu:22.04
           - image: rockylinux:9.2
         role:
           - name: activemq
@@ -46,7 +46,7 @@ jobs:
           - role:
               name: identity
             molecule_distro:
-              image: ubuntu:20.04
+              image: ubuntu:22.04
     env:
       PY_COLORS: 1
       PYTHONUNBUFFERED: 1

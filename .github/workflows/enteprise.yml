@@ -158,19 +158,19 @@ jobs:
             desc: EC2 ACS 7.3 (Ubuntu 20.04)
           - name: default
             vars: vars-ubuntu22-community.yml
-            desc: EC2 ACS 7.4 Community (Ubuntu 22.04)
+            desc: EC2 ACS 23.x Community (Ubuntu 22.04)
           - name: default
             vars: vars-rocky8.yml
             desc: EC2 ACS 7.4 (Rocky Linux 8)
           - name: default
             vars: vars-rocky9.yml
-            desc: EC2 ACS 23.1 (Rocky Linux 9)
+            desc: EC2 ACS 23.x (Rocky Linux 9)
           - name: multimachine
             vars: vars.yml
-            desc: EC2 ACS 23.1 clustered (RHEL 9.2)
+            desc: EC2 ACS 23.x clustered (RHEL 9.2)
           - name: opensearch
             vars: vars.yml
-            desc: EC2 ACS 23.1 opensearch (RHEL 9.2)
+            desc: EC2 ACS 23.x opensearch (RHEL 9.2)
     env:
       AWS_REGION: eu-west-1
       MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
