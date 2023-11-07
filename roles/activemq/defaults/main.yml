@@ -9,4 +9,4 @@ activemq_environment:
     - -Xms128m
     - -Xmx1g
     - $ACTIVEMQ_OPTS
-activemq_version: 5.18.2
+activemq_version: 5.18.3
