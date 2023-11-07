@@ -71,47 +71,47 @@ Legend:
 * :x: platform not supported by this playbook (despite officially supported by Alfresco)
 * `-` platform not officially supported by Alfresco
 
-| OS Flavor / version | 7.4 Enterprise/Community | 7.3 Enterprise     | 7.2 Enterprise     | 7.1 Enterprise     | 7.0 Enterprise     |
-|---------------------|--------------------------|--------------------|--------------------|--------------------|--------------------|
-| Amazon Linux (v2)   | :x:                      | :x:                | :x:                | :x:                | :x:                |
-| Amazon Linux (v1)   | :x:                      | :x:                | :x:                | :x:                | :x:                |
-| RHEL 9.2            | :white_check_mark:       | -                  | -                  | -                  | -                  |
-| RHEL 8.7            | :white_check_mark:       | -                  | -                  | -                  | -                  |
-| RHEL 8.6            | :white_check_mark:       | :white_check_mark: | -                  | -                  | -                  |
-| RHEL 8.5            | :ballot_box_with_check:  | :white_check_mark: | :white_check_mark: | -                  | -                  |
-| RHEL 8.4            | -                        | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| RHEL 8.2            | -                        | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| RHEL 7.7            | -                        | -                  | -                  | :white_check_mark: | :white_check_mark: |
-| RHEL 7.6            | -                        | -                  | -                  | :white_check_mark: | :white_check_mark: |
-| Rockylinux 9.2      | :white_check_mark:       | -                  | -                  | -                  | -                  |
-| Rockylinux 8.7      | :white_check_mark:       | -                  | -                  | -                  | -                  |
-| CentOS 7 x64        | :ballot_box_with_check:  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Ubuntu 22.04        | :white_check_mark:       | :white_check_mark: | -                  | -                  | -                  |
-| Ubuntu 20.04        | :white_check_mark:       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Ubuntu 18.04        | -                        | -                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| SUSE 15.0           | -                        | -                  | -                  | -                  | :x:                |
-| SUSE 12.0 SP1 x64   | -                        | -                  | -                  | -                  | :x:                |
+| OS Flavor / version | 23.1 Enterprise/Community | 7.4 Enterprise          | 7.3 Enterprise     | 7.2 Enterprise     | 7.1 Enterprise     | 7.0 Enterprise     |
+|---------------------|---------------------------|-------------------------|--------------------|--------------------|--------------------|--------------------|
+| Amazon Linux (v2)   | :x:                       | :x:                     | :x:                | :x:                | :x:                | :x:                |
+| Amazon Linux (v1)   | :x:                       | :x:                     | :x:                | :x:                | :x:                | :x:                |
+| RHEL 9.2            | :white_check_mark:        | :x:                     | -                  | -                  | -                  | -                  |
+| RHEL 8.7            | :white_check_mark:        | :white_check_mark:      | -                  | -                  | -                  | -                  |
+| RHEL 8.6            | :white_check_mark:        | :white_check_mark:      | :white_check_mark: | -                  | -                  | -                  |
+| RHEL 8.5            | :white_check_mark:        | :white_check_mark:      | :white_check_mark: | :white_check_mark: | -                  | -                  |
+| RHEL 8.4            | -                         | -                       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| RHEL 8.2            | -                         | -                       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| RHEL 7.7            | -                         | -                       | -                  | -                  | :white_check_mark: | :white_check_mark: |
+| RHEL 7.6            | -                         | -                       | -                  | -                  | :white_check_mark: | :white_check_mark: |
+| Rockylinux 9.2      | :white_check_mark:        | :x:                     | -                  | -                  | -                  | -                  |
+| Rockylinux 8.7      | :white_check_mark:        | :white_check_mark:      | -                  | -                  | -                  | -                  |
+| CentOS 7 x64        | :x:                       | :white_check_mark:      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Ubuntu 22.04        | :white_check_mark:        | :white_check_mark:      | :white_check_mark: | -                  | -                  | -                  |
+| Ubuntu 20.04        | :white_check_mark:        | :white_check_mark:      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Ubuntu 18.04        | -                         | -                       | -                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| SUSE 15.0           | -                         | -                       | -                  | -                  | -                  | :x:                |
+| SUSE 12.0 SP1 x64   | -                         | -                       | -                  | -                  | -                  | :x:                |
 
 > Ansible version used for testing this playbook can be retrieved [here](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/Pipfile#L7).
 
-The table below shows the version of the components deployed by the playbook for ACS 7.x.
+The table below shows the version of the components deployed by the playbook for ACS 7.x onward.
 
-| Component           | 7.4 Enterprise | 7.3 Enterprise | 7.2 Enterprise | 7.1 Enterprise | 7.0 Enterprise | 7.4 Community |
-|---------------------|----------------|----------------|----------------|----------------|----------------|---------------|
-| OpenJDK             | 17.0.3         | 17.0.3         | 11.0.15        | 11.0.15        | 11.0.15        | 17.0.3        |
-| Apache Tomcat       | 9.0.59         | 9.0.59         | 9.0.59         | 9.0.59         | 8.5.76         | 9.0.59        |
-| PostgreSQL          | 14.x           | 14.x           | 13.x           | 13.x           | 13.x           | 14.x          |
-| Apache ActiveMQ     | 5.16.6         | 5.16.6         | 5.16.6         | 5.16.6         | 5.16.6         | 5.16.6        |
-| Repository          | 7.4.0          | 7.3.0          | 7.2.1          | 7.1.1          | 7.0.1.4        | 7.4.0         |
-| Share               | 7.4.0          | 7.3.0          | 7.2.1          | 7.1.1          | 7.0.1.4        | 7.4.0         |
-| Search Services     | 2.0.6.1        | 2.0.5          | 2.0.4          | 2.0.2          | 2.0.1.1        | 2.0.6.1       |
-| Search Enterprise   | 3.3.0          | 3.2.0          | 3.1.1          | 3.1.1          | -              | N/A           |
-| All-In-One T-Engine | 3.1.0          | 3.0.0          | 2.5.7          | 2.5.6          | 2.3.10         | 3.1.0         |
-| AOS                 | 1.6.0          | 1.5.0          | 1.4.1          | 1.4.0          | 1.4.0          | 1.6.0         |
-| Google Docs         | 3.4.0          | 3.3.0          | 3.2.2          | 3.2.1          | 3.2.1          | 3.4.0         |
-| Digital Workspace   | 4.0.0          | 3.1.0          | 2.9.0          | 2.6.0          | 2.1.0          | N/A           |
-| Transform Router    | 2.1.0          | 2.0.0          | 1.5.3          | 1.5.1          | 1.3.2          | N/A           |
-| Shared File Store   | 2.1.0          | 2.0.0          | 0.16.1         | 0.16.1         | 0.13.0         | N/A           |
-| Sync Service        | 3.9.0          | 3.8.0          | 3.6.0          | 3.5.0          | 3.4.0          | N/A           |
+| Component           | 23.1 Enterprise (Community) | 7.4 Enterprise | 7.3 Enterprise | 7.2 Enterprise | 7.1 Enterprise | 7.0 Enterprise |
+|---------------------|-----------------------------|----------------|----------------|----------------|----------------|----------------|
+| OpenJDK             | 17.0.9                      | 17.0.3         | 17.0.3         | 11.0.15        | 11.0.15        | 11.0.15        |
+| Apache Tomcat       | 10.1.13                     | 9.0.59         | 9.0.59         | 9.0.59         | 9.0.59         | 8.5.76         |
+| PostgreSQL          | 14.x                        | 14.x           | 14.x           | 13.x           | 13.x           | 13.x           |
+| Apache ActiveMQ     | 5.18.3                      | 5.16.6         | 5.16.6         | 5.16.6         | 5.16.6         | 5.16.6         |
+| Repository          | 23.1.0                      | 7.4.0          | 7.3.0          | 7.2.1          | 7.1.1          | 7.0.1.4        |
+| Share               | 23.1.0                      | 7.4.0          | 7.3.0          | 7.2.1          | 7.1.1          | 7.0.1.4        |
+| Search Services     | 2.0.8.2                     | 2.0.6.1        | 2.0.5          | 2.0.4          | 2.0.2          | 2.0.1.1        |
+| Search Enterprise   | 4.0.0 (n/a)                 | 3.3.0          | 3.2.0          | 3.1.1          | 3.1.1          | -              |
+| All-In-One T-Engine | 5.0.0                       | 3.1.0          | 3.0.0          | 2.5.7          | 2.5.6          | 2.3.10         |
+| AOS                 | 2.0.0                       | 1.6.0          | 1.5.0          | 1.4.1          | 1.4.0          | 1.4.0          |
+| Google Docs         | 4.0.0                       | 3.4.0          | 3.3.0          | 3.2.2          | 3.2.1          | 3.2.1          |
+| Digital Workspace   | 4.3.0 (n/a)                 | 4.0.0          | 3.1.0          | 2.9.0          | 2.6.0          | 2.1.0          |
+| Transform Router    | 4.0.0 (n/a)                 | 2.1.0          | 2.0.0          | 1.5.3          | 1.5.1          | 1.3.2          |
+| Shared File Store   | 4.0.0 (n/a)                 | 2.1.0          | 2.0.0          | 0.16.1         | 0.16.1         | 0.13.0         |
+| Sync Service        | 4.0.0 (n/a)                 | 3.9.0          | 3.8.0          | 3.6.0          | 3.5.0          | 3.4.0          |
 
 > Support for ACS 6.2 has been deprecated since November 2022, but you can still use the latest playbook that supported it ([v2.2.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v2.2.0))
