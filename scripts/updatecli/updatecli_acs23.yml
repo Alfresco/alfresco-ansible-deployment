@@ -31,5 +31,8 @@ transform:
 trouter:
   version: "4.0"
 
+sfs:
+  version: "4.0"
+
 target_file: group_vars/all.yml
 version_pattern: '(-A\d*)?$'
