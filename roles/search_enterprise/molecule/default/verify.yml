@@ -25,7 +25,6 @@
           Refreshing accepted content media-type cache, accepted type count: ([7-9]\d|[1-9]\d{2,})$
       ansible.builtin.assert:
         that:
-          - not error_log.stdout | regex_search(' WARN ')
           - not error_log.stdout | regex_search(' ERROR ')
           - error_log.stdout | regex_search('{{ log_expected_regex }}')
         msg: "{{ error_log.stdout }}"

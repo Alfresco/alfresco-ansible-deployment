@@ -94,6 +94,7 @@ sources:
         kind: regex
         pattern: '{{ .acc.version }}(.(\d+))+{{ .version_pattern }}'
   {{- end }}
+  {{- if and .adw .adw.version }}
   adw:
     name: ADW {{ .adw.version }}
     kind: gittag
@@ -102,6 +103,7 @@ sources:
       versionFilter:
         kind: regex
         pattern: '{{ .adw.version }}(.(\d+))+{{ .version_pattern }}'
+  {{- end }}
   {{- if and .ags .ags.version }}
   agsAmp:
     name: AGS AMP {{ .ags.version }}.x
@@ -138,6 +140,7 @@ sources:
       versionFilter:
         kind: regex
         pattern: '{{ .apiExplorer.version }}(.(\d+))+{{ .version_pattern }}'
+  {{- if and .dsync .dsync.version }}
   dsync:
     name: Desktop Sync {{ .dsync.version }}
     kind: gittag
@@ -146,6 +149,7 @@ sources:
       versionFilter:
         kind: regex
         pattern: '{{ .dsync.version }}(.(\d+))+{{ .version_pattern }}'
+  {{- end }}
   search:
     name: InsightEngine {{ .search.version }}
     kind: gittag
@@ -154,6 +158,7 @@ sources:
       versionFilter:
         kind: regex
         pattern: '{{ .search.version }}(.(\d+))+{{ .version_pattern }}'
+  {{- if and .searchEnterprise .searchEnterprise.version }}
   searchEnterprise:
     name: Search Enterprise {{ .searchEnterprise.version }}
     kind: gittag
@@ -162,6 +167,7 @@ sources:
       versionFilter:
         kind: regex
         pattern: '{{ .searchEnterprise.version }}(.(\d+))+{{ .version_pattern }}'
+  {{- end }}
   transform:
     name: Transform Core {{ .transform.version }}
     kind: gittag
@@ -170,6 +176,7 @@ sources:
       versionFilter:
         kind: regex
         pattern: '{{ .transform.version }}(.(\d+))+{{ .version_pattern }}'
+  {{- if and .trouter .trouter.version }}
   trouter:
     name: ATS Transform Service {{ .trouter.version }}
     kind: gittag
@@ -178,6 +185,7 @@ sources:
       versionFilter:
         kind: regex
         pattern: '{{ .trouter.version }}(.(\d+))+{{ .version_pattern }}'
+  {{- end }}
 
 targets:
   {{- if index . "targets" "main" }}
@@ -197,6 +205,7 @@ targets:
       key: acc.version
       file: '{{ .target_file }}'
   {{- end }}
+  {{- if and .adw.version }}
   adw:
     name: Bump adw
     kind: yaml
@@ -204,6 +213,7 @@ targets:
     spec:
       key: adw.version
       file: '{{ .target_file }}'
+  {{- end }}
   apiExplorer:
     name: Bump api-explorer
     kind: yaml
@@ -211,6 +221,7 @@ targets:
     spec:
       key: api_explorer.version
       file: '{{ .target_file }}'
+  {{- if and .dsync .dsync.version }}
   dsync:
     name: Bump sync
     kind: yaml
@@ -218,6 +229,7 @@ targets:
     spec:
       key: sync.version
       file: '{{ .target_file }}'
+  {{- end }}
   search:
     name: Bump InsightEngine
     kind: yaml
@@ -225,6 +237,7 @@ targets:
     spec:
       key: search.version
       file: '{{ .target_file }}'
+  {{- if and .searchEnterprise .searchEnterprise.version }}
   searchEnterprise:
     name: Bump Search Enterprise
     kind: yaml
@@ -232,6 +245,7 @@ targets:
     spec:
       key: search_enterprise.version
       file: '{{ .target_file }}'
+  {{- end }}
   transform:
     name: Bump Transform Core
     kind: yaml
@@ -239,6 +253,7 @@ targets:
     spec:
       key: transform.version
       file: '{{ .target_file }}'
+  {{- if and .trouter .trouter.version }}
   trouter:
     name: Bump ATS Transform Service
     kind: yaml
@@ -246,6 +261,8 @@ targets:
     spec:
       key: trouter.version
       file: '{{ .target_file }}'
+  {{- end }}
+  {{- if and .sfs .sfs.version }}
   sfs:
     name: Bump Shared File Store
     kind: yaml
@@ -254,8 +271,10 @@ targets:
       key: sfs.version
       file: '{{ .target_file }}'
   {{- end }}
+  {{- end }}
   {{ range $index, $element := index . "targets" "amps" }}
   {{ $indexAmp := printf "%s%s" $index "Amp"}}
+  {{- if index $ $index }}
   {{ $indexAmp }}:
     name: Bump {{ $index }} AMP
     kind: yaml
@@ -263,4 +282,5 @@ targets:
     spec:
       key: amps.{{ $element.key_selector }}.version
       file: {{ $.target_file }}
+  {{- end }}
   {{- end }}
