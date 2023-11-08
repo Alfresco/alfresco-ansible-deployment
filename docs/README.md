@@ -67,7 +67,6 @@ the status of supported OS.
 Legend:
 
 * :white_check_mark: platform supported and tested on this playbook
-* :ballot_box_with_check: platform supported but not automatically tested on this playbook
 * :x: platform not supported by this playbook (despite officially supported by Alfresco)
 * `-` platform not officially supported by Alfresco
 
