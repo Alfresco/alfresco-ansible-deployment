@@ -1,0 +1,23 @@
+acs:
+  version: "23.1"
+
+acc:
+  version: "8.3"
+
+aos:
+  version: "2.0"
+
+apiExplorer:
+  version: "23.1"
+
+googleDrive:
+  version: "4.0"
+
+search:
+  version: "2.0"
+
+transform:
+  version: "5.0"
+
+target_file: community-extra-vars.yml
+version_pattern: '(\d*)?$'

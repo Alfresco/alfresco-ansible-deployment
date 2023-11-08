@@ -4,9 +4,7 @@
 - name: Install PostgreSQL deb repository
   ansible.builtin.lineinfile:
     path: /etc/apt/sources.list.d/pgdg.list
-    line: >-
-      deb http://apt.postgresql.org/pub/repos/apt
-      {{ ansible_lsb.codename }}-pgdg main
+    line: deb {{ postgresql_package_repo }}/pub/repos/apt {{ ansible_lsb.codename }}-pgdg main
     create: true
     owner: root
     group: root

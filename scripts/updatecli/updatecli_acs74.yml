@@ -28,5 +28,8 @@ transform:
 trouter:
   version: "2"
 
+sfs:
+  version: "2"
+
 target_file: 7.4.N-extra-vars.yml
 version_pattern: '$'

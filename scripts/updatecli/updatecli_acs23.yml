@@ -2,10 +2,10 @@ acs:
   version: "23.1"
 
 adw:
-  version: "4.1"  # to be updated to 4.2
+  version: "4.3"
 
 acc:
-  version: "8.1"  # to be updated to 8.2
+  version: "8.3"
 
 aos:
   version: "2.0"
@@ -26,10 +26,13 @@ searchEnterprise:
   version: "4.0"
 
 transform:
-  version: "4.1"
+  version: "5.0"
 
 trouter:
-  version: "3.1"
+  version: "4.0"
+
+sfs:
+  version: "4.0"
 
 target_file: group_vars/all.yml
 version_pattern: '(-A\d*)?$'

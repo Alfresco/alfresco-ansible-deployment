@@ -105,7 +105,7 @@
             --deployment-mode SINGLE_INSTANCE
             --engine-type ACTIVEMQ
             --host-instance-type mq.t3.micro
-            --engine-version 5.15.15
+            --engine-version 5.17.6
             --users Password={{ activemq_password | quote }},Username=alfresco
             --security-groups {{ ec2_groups_lookup.security_groups[0].group_id }}
             --publicly-accessible
