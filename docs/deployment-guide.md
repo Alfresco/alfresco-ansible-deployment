@@ -715,16 +715,16 @@ The diagram below shows the result of a localhost deployment.
 
 ![Localhost Deployment](./resources/acs-localhost.png)
 
-To deploy ACS 7.1 Enterprise on the local machine navigate to the folder you extracted the ZIP to and execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
+To deploy ACS 23.1 Enterprise on the local machine navigate to the folder you extracted the ZIP to and execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
 
 ```bash
 pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml
 ```
 
-Alternatively, to deploy an ACS Enterprise 7.0 system use the following command:
+Alternatively, to deploy an ACS Enterprise 7.4 system use the following command:
 
 ```bash
-pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@7.0.N-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@7.4.N-extra-vars.yml"
 ```
 
 Or to deploy ACS Community use the following command:
