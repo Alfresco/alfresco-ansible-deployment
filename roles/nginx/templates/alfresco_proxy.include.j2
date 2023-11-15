@@ -49,6 +49,11 @@
         include {{ nginx_vhost_path }}/alfresco_proxy_headers.include;
     }
 
+    location /control-center/ {
+        proxy_pass http://{{ acc_host }}:8881/;
+        include {{ nginx_vhost_path }}/alfresco_proxy_headers.include;
+    }
+
 {% if acs.edition == "Enterprise" %}
     location /syncservice/ {
         proxy_pass http://{{ sync_host }}:{{ ports_cfg.sync.http }}/alfresco/;
@@ -57,11 +62,6 @@
 
     location /workspace/ {
         proxy_pass http://{{ adw_host }}:8880/;
-        include {{ nginx_vhost_path }}/alfresco_proxy_headers.include;
-    }
-
-    location /control-center/ {
-        proxy_pass http://{{ acc_host }}:8881/;
         include {{ nginx_vhost_path }}/alfresco_proxy_headers.include;
     }
 {% endif %}
