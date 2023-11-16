@@ -13,8 +13,8 @@
           - p12_passphrase
           - secret_ca_passphrase
         fail_msg: |
-          this playbook do not generate passwords. You must generate then and
-          store them securely, and pass them as varaiables for the plybook to
+          this playbook do not generate passwords. You must generate them and
+          store them securely, and pass them as varaiables for the playbook to
           generate private keys, certificates and containers.
           expected varaibles are p12_passphrase, secret_ca_passphrase and
           key_password
@@ -30,6 +30,7 @@
         - name: certificates
         - name: private
           mode: "0700"
+
     - name: Check for provided CA signing certificate
       ansible.builtin.stat:
         path: "{{ ca_file }}"
@@ -80,16 +81,16 @@
               - ca_cert_valid.valid_at.tomorrow
               - ca_key_valid.can_parse_key
             fail_msg: |
-              We could not pearse your provided CA! Please check the files:
+              We could not parse your provided CA! Please check the files
               {{ ca_cert_stat.stat.path }} & {{ ca_key_stat.stat.path }}
-              and its passphrase.
+              and their passphrases.
 
         - name: Set CA variables
           ansible.builtin.set_fact:
             ca_cert_path: "{{ ca_cert_stat.stat.path }}"
             ca_key_path: "{{ ca_key_stat.stat.path }}"
 
-    - name: Generate out own CA
+    - name: Generate our own CA
       vars:
         ownca_key_path: "{{ actual_pki_dir }}/private/alfresco_platform_CA.key"
         ownca_cert_path: "{{ actual_pki_dir }}/ca/alfresco_platform_CA.crt"
@@ -157,7 +158,7 @@
             state: directory
             mode: "{{ item.mode | default(omit) }}"
           loop:
-            - name: /etc/pki
+            - name: /etc/pki/{{ inventory_hostname | dirname }}
             - name: /etc/pki/private
               mode: "0600"
 
@@ -201,6 +202,12 @@
             subject_alt_name: "{{ alt_names | unique }}"
           register: csr
           changed_when: false
+
+        - name: Create localhost PKI directory
+          ansible.builtin.file:
+            path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname | dirname }}"
+            state: directory
+          delegate_to: localhost
 
         - name: Sign certificate with our CA
           no_log: true
