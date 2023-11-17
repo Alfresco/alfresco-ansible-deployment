@@ -91,6 +91,7 @@ jobs:
           - image: ubuntu:22.04
           - image: rockylinux:9.2
         scenario:
+          - name: pki
           - name: elasticsearch
         include:
           - scenario:
