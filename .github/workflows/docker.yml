@@ -13,6 +13,11 @@ on:
         description: OS image to use for the container
         required: false
         default: rockylinux:9
+      galaxy_cache:
+        type: string
+        description: an identifier for the Ansible galaxy cache (e.g. calling workflow name)
+        required: false
+        default: ansible-galaxy
       dtas_version:
         type: string
         description: git ref to use when cloning DTAS repo
@@ -58,7 +63,7 @@ jobs:
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
         with:
-          cache-name: enterprise
+          cache-name: ${{ inputs.galaxy_cache }}
 
       - name: Setup workspace
         uses: ./.github/actions/setup-workspace

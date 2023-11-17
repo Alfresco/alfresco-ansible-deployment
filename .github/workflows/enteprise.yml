@@ -102,6 +102,7 @@ jobs:
     with:
       scenario: ${{ matrix.scenario.name }}
       os_distribution: ${{ matrix.molecule_distro.image }}
+      galaxy_cache: enterprise
       dtas_version: ${{ needs.docker.outputs.dtas_version }}
     secrets:
       nexus_username: ${{ secrets.NEXUS_USERNAME }}

@@ -99,3 +99,4 @@ jobs:
     with:
       scenario: ${{ matrix.scenario.name }}
       os_distribution: ${{ matrix.molecule_distro.image }}
+      galaxy_cache: community
