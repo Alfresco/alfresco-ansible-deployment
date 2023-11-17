@@ -24,6 +24,8 @@ jobs:
     name: Test ${{ matrix.role.name }} role on ${{ matrix.molecule_distro.image }}
     runs-on: ubuntu-latest
     if: github.repository_owner == 'Alfresco'
+    outputs:
+      dtas_version: ${{ steps.jobvars.outputs.dtas_version }}
     strategy:
       fail-fast: true
       matrix:
@@ -38,6 +40,10 @@ jobs:
           - name: sync
           - name: trouter
     steps:
+      - name: Share var with further reusable workflows
+        id: jobvars
+        run: echo "dtas_version=$DTAS_VERSION" >> $GITHUB_OUTPUT
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -78,7 +84,6 @@ jobs:
     if: github.actor != 'dependabot[bot]'
     needs:
       - docker
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -87,46 +92,20 @@ jobs:
           - image: rockylinux:9.2
         scenario:
           - name: elasticsearch
-          - name: pki
         include:
           - scenario:
               name: identity
             molecule_distro:
               image: rockylinux:9.2
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          # avoid auth conflict when cloning DTAS during verify step
-          persist-credentials: false
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        id: setup-python
-        with:
-          python-version-file: '.python-version'
-          cache: pipenv
-
-      - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v3.4.0
-        with:
-          python-version: ${{ steps.setup-python.outputs.python-version }}
-
-      - name: Install and cache ansible galaxy dependencies
-        uses: ./.github/actions/galaxy
-        with:
-          cache-name: enterprise
-
-      - name: Setup workspace
-        uses: ./.github/actions/setup-workspace
-
-      - name: Run tests
-        env:
-          MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
-          NEXUS_USERNAME: ${{ secrets.nexus_username }}
-          NEXUS_PASSWORD: ${{ secrets.nexus_password }}
-          CLONE_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
-        run: pipenv run molecule test -s ${{ matrix.scenario.name }}
+    uses: ./.github/workflows/docker.yml
+    with:
+      scenario: ${{ matrix.scenario.name }}
+      os_distribution: ${{ matrix.molecule_distro.image }}
+      dtas_version: ${{ needs.docker.outputs.dtas_version }}
+    secrets:
+      nexus_username: ${{ secrets.NEXUS_USERNAME }}
+      nexus_password: ${{ secrets.NEXUS_PASSWORD }}
+      dtas_token: ${{ secrets.CLONE_GITHUB_TOKEN }}
 
   ec2:
     name: ${{ matrix.molecule_scenario.desc }}
