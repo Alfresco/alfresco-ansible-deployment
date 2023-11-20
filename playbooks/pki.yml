@@ -171,13 +171,15 @@
             state: present
 
         - name: Create private key for new certificate
+          vars:
+            key_type: "{{ cert_key_type | default('RSA') }}"
           no_log: true
           become: true
           community.crypto.openssl_privatekey:
-            path: /etc/pki/private/{{ inventory_hostname | basename }}_{{ cert_key_type | default('') }}.key
+            path: /etc/pki/private/{{ inventory_hostname | basename }}_{{ key_type }}.key
             mode: 0600
             size: "{{ cert_key_size | default(omit) }}"
-            type: "{{ cert_key_type | default(omit) }}"
+            type: "{{ key_type }}"
             return_content: true
           register: srvkey
 
