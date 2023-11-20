@@ -45,6 +45,7 @@
       ansible.builtin.service_facts:
 
     - name: Check in logs a client did connect
+      when: item.edition == acs.edition
       ansible.builtin.slurp:
         src: /var/log/alfresco/{{ item.file }}.log
       register: ats_log
@@ -56,10 +57,13 @@
       loop:
         - file: ats-ate-aio
           pattern: GET Transform Config version
+          edition: Community
         - file: ats-atr
           pattern: GET Transform Config version
+          edition: Enterprise
         - file: ats-shared-fs
           pattern: TLS virtual host
+          edition: Enterprise
 
     - name: Copy cert as PEM
       ansible.builtin.copy:
@@ -81,7 +85,12 @@
       ansible.builtin.assert:
         that:
           - ansible_facts.services['alfresco-tengine-aio.service'].state == "running"
-          - ansible_facts.services['alfresco-shared-fs.service'].state == "running"
-          - ansible_facts.services['alfresco-transform-router.service'].state == "running"
           - "'SSL: CERTIFICATE_VERIFY_FAILED' in response.results[0].msg"
           - response.results[1].status == 200
+
+    - name: Check Assertions (Enterprise)
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['alfresco-shared-fs.service'].state == "running"
+          - ansible_facts.services['alfresco-transform-router.service'].state == "running"
+      when: acs.edition == 'Enterprise'

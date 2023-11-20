@@ -81,3 +81,22 @@ jobs:
           max_attempts: 3
           retry_wait_seconds: 10
           command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
+
+  docker_integration:
+    name: Test ${{ matrix.scenario.name }} scenario on ${{ matrix.molecule_distro.image }}
+    if: github.actor != 'dependabot[bot]'
+    needs:
+      - docker
+    strategy:
+      fail-fast: false
+      matrix:
+        molecule_distro:
+          - image: ubuntu:22.04
+          - image: rockylinux:9.2
+        scenario:
+          - name: pki
+    uses: ./.github/workflows/docker.yml
+    with:
+      scenario: ${{ matrix.scenario.name }}
+      os_distribution: ${{ matrix.molecule_distro.image }}
+      galaxy_cache: community
