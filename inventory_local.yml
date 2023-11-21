@@ -4,10 +4,6 @@ all:
     ansible_connection: local
   children:
     repository:
-      vars:
-        known_urls:
-          - http://localhost/share
-          - https://localhost/share
       hosts:
         localhost:
     database:

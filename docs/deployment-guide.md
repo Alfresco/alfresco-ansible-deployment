@@ -59,7 +59,9 @@ If it's your first time with Ansible, please have a read at [Ansible concepts](h
 
 ## Getting started quickly with Vagrant
 
-The quickest way to get started and experiment with the playbook is by leveraging Vagrant to create a Virtualbox virtual machine to act as the control node **and** the target host.
+The quickest way to get started and experiment with the playbook is by
+leveraging Vagrant to create a Virtualbox virtual machine to act as the control
+node **and** the target host.
 
 1. Ensure your local machine has a minimum of 10G of memory and 4 CPUs
 2. Clone via Git or Download this repository to your local machine
@@ -67,20 +69,32 @@ The quickest way to get started and experiment with the playbook is by leveragin
 4. Install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
 5. Open Virtualbox application to make sure it startup correctly
 6. In a terminal, navigate to where you cloned or unpacked the repository
-7. Set environment variables to hold your Nexus credentials as shown below (replacing the values appropriately):
+7. Set environment variables to hold your Nexus credentials as shown below
+   (replacing the values appropriately):
 
     ```bash
     export NEXUS_USERNAME="<your-username>"
     export NEXUS_PASSWORD="<your-password>"
     ```
 
-8. Run the main vagrant:
+8. Make sure to add the `known_urls` variables in the file `group_vars/repository.yml`.
+   It should contain any URL which is allowed to query the repository and the
+   first entry MUST be set to the dmain URL used to access Alfresco.
+   For example if your VM listens on 192.168.023:
+
+    ```yaml
+    known_urls:
+      - http://192.168.0.23/share
+    ```
+
+9. Run the main vagrant:
 
     ```bash
     vagrant up
     ```
 
-    > NOTE: The playbook takes around 30 minutes to complete and mostly depends on your internet connection speed.
+    > NOTE: The playbook takes around 30 minutes to complete and mostly depends
+    > on your internet connection speed.
 
 Once ACS has initialized access the system using the following URLs using a browser:
 
@@ -93,7 +107,8 @@ To access the machine vagrant created and ran the playbook on use `vagrant ssh`.
 
 ## Getting started
 
-If you have access to a pristine host running one of the supported Linux distributions, you can follow this quickstart for a localhost deployment.
+If you have access to a pristine host running one of the supported Linux
+distributions, you can follow this quickstart for a localhost deployment.
 
 ### Get the playbook
 
@@ -109,7 +124,8 @@ unzip alfresco-ansible-deployment-<version>.zip
 cd alfresco-ansible-deployment
 ```
 
-You can also use Git to fetch latest sources (or a specific release for example by adding `-b v2.1.0`) on the control node with:
+You can also use Git to fetch latest sources (or a specific release for example
+by adding `-b v2.4.0`) on the control node with:
 
 ```bash
 git clone https://github.com/Alfresco/alfresco-ansible-deployment.git
@@ -174,9 +190,13 @@ export NEXUS_USERNAME="<your-username>"
 export NEXUS_PASSWORD="<your-password>"
 ```
 
-Now you have the control node setup you can [configure](#configure-your-deployment) your deployment and decide what kind of deployment you would like.
+Now you have the control node setup you can
+[configure](#configure-your-deployment) your deployment and decide what kind of
+deployment you would like.
 
-To deploy everything on the control node follow the steps in the [Localhost Deployment](#localhost-deployment) section or to deploy to one or more other machines follow the steps in the [SSH Deployment](#ssh-deployment) section.
+To deploy everything on the control node follow the steps in the [Localhost
+Deployment](#localhost-deployment) section or to deploy to one or more other
+machines follow the steps in the [SSH Deployment](#ssh-deployment) section.
 
 If you are going to do a production deployment, please take a look at the
 mandatory [Secrets management](#secrets-management) section.
@@ -185,34 +205,70 @@ Alternatively, you can add the parameter `-e autogen_unsecure_secrets=true` to
 the `ansible-playbook` command to just autogenerate secrets before running the
 playbook for the first time (remove it for the next runs).
 
+## Minimal configuration
+
+In order to run the playbook successfully you least to provide *AT LEAST* the
+domain name where the Alfresco applications will be served. The `known_urls` is
+used for that purpose.  It should contain any URL which is allowed to query the
+repository and the first entry MUST be set to the domain URL used to access
+Alfresco. For example if you plan on using ecm.acme.com as your main domain on
+both https & http, you should set the `group_vars/repository.yml` file to:
+
+```yaml
+known_urls:
+  - https://ecm.acme.com/share
+  - http://ecm.acme.com/share
+```
+
+> the `known_urls` variable serves a larger purpose. Check the [SECURITY
+> README](./SECURITY.md) for more detailed information.
+
 ## Understanding the playbook
 
-Let's take a step back to learn more about Ansible and the playbook before moving to more advanced topics.
+Let's take a step back to learn more about Ansible and the playbook before
+moving to more advanced topics.
 
 ### The control node
 
-The machine the playbook is run from is known as the control node. Ansible has some prerequisites for this control node. The main one is that it needs to run on a POSIX compliant system, meaning Linux or others Unix (including MacOSX) but not Windows.
-On windows please make see the provided `Vagrantfile` in order to kick start a local Linux VM where to deploy the playbook.
+The machine the playbook is run from is known as the control node. Ansible has
+some prerequisites for this control node. The main one is that it needs to run
+on a POSIX compliant system, meaning Linux or others Unix (including MacOSX)
+but not Windows.
+On windows please make see the provided `Vagrantfile` in order to kick start a
+local Linux VM where to deploy the playbook.
 
-More info on [control node](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html#control-node)
+More info on [control
+node](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html#control-node)
 
 ### Understanding the inventory file
 
-An inventory file is used to describe the architecture or environment where you want to deploy the ACS platform. Each machine taking part in the environment needs to be described with at least:
+An inventory file is used to describe the architecture or environment where you
+want to deploy the ACS platform. Each machine taking part in the environment
+needs to be described with at least:
 
-* an `inventory_name`: a name which, in most cases can be anything (It is though a good practice to use a name or address which all target machines can resolve and reach from their local network).
+* An `inventory_name`: a name which, in most cases can be anything (It is
+  though a good practice to use a name or address which all target machines can
+  resolve and reach from their local network).
 
 And optionally:
 
-* an `ansible_user` variable: if the host requires a unique and specific user to login to.
-* an `ansible_host` variable; if the host needs to be reached through an address that's different from the `inventory_hostname` (e.g. machine is only reachable through a bastion host or some sort of NAT).
-* an `ansible_private_key_file` in case your hosts needs a specific SSH key in order to login to it.
+* An `ansible_user` variable: if the host requires a unique and specific user
+  to login to.
+* An `ansible_host` variable; if the host needs to be reached through an
+  address that's different from the `inventory_hostname` (e.g. machine is only
+  reachable through a bastion host or some sort of NAT).
+* An `ansible_private_key_file` in case your hosts needs a specific SSH key in
+  order to login to it.
 
 An ACS inventory file has the following groups a host can belong to:
 
-* `repository`: the list of one or more hosts which will get an Alfresco repo deployed on (see [the deployment guide](#acs-cluster) for details on repository clustering).
+* `repository`: the list of one or more hosts which will get an Alfresco repo
+  deployed on (see [the deployment guide](#acs-cluster) for details on
+  repository clustering).
 
-* `database`: a host on which the playbook will deploy PostgreSQL. See  [the deployment guide](./deployment-guide.md) for details on how to use another external RDBMS.
+* `database`: a host on which the playbook will deploy PostgreSQL. See the
+  [deployment guide](./deployment-guide.md) for details on how to use another
+  external RDBMS.
 * `activemq`: the host on which the playbook will deploy the message queue
   component required by ACS.
 * `external_activemq`: an alternative group to `activemq` in case you don't want
@@ -227,18 +283,24 @@ An ACS inventory file has the following groups a host can belong to:
   don't want to deploy ElasticSearch using the [community ElasticSearch
   role](https://github.com/buluma/ansible-role-elasticsearch) but instead use an
   ElasticSearch cluster of yours which matches your hosting standards.
-* `nginx`: a single host on which the playbook will deploy an NGINX reverse proxy configured for the numerous http based service in the platform.
+* `nginx`: a single host on which the playbook will deploy an NGINX reverse
+  proxy configured for the numerous http based service in the platform.
 * `acc`: a single host where you want the Alfresco Control Center UI to be installed
 * `adw`: a single host where you want the Alfresco Digital Workspace UI to be installed
-* `transformers`: a single host where the playbook will deploy the Alfresco Transformation Services components
+* `transformers`: a single host where the playbook will deploy the Alfresco
+  Transformation Services components
 * `syncservice`: a single host where the Alfresco Device Sync service will be deployed
 * `identity`: a single host where the playbook will deploy Keycloak with local storage
-* `external_identity`: an alternative group to `identity` in case you want to provide your already existing keycloak installation (not yet implemented)
+* `external_identity`: an alternative group to `identity` in case you want to
+  provide your already existing keycloak installation (not yet implemented)
 
-> Ansible also ships a default group called `all` which all hosts always belongs to
+> Ansible also ships a default group called `all` which all hosts always
+> belongs to
 
-Inventory files provided as example in this playbook are all YAML written. Groups are always children items of the `all` group it self or of other groups. Hosts are mentioned after a `hosts` key under any group (including the `all` group).
-So a generic example would be:
+Inventory files provided as example in this playbook are all YAML written.
+Groups are always children items of the `all` group it self or of other groups.
+Hosts are mentioned after a `hosts` key under any group (including the `all`
+group). So a generic example would be:
 
 ```yaml
 ---
@@ -249,30 +311,40 @@ all:
         inventory_nameA:
 ```
 
-An inventory file can also be used to set variable within a specific scope. Variables can be specified at the host, groups or all levels, thus affecting the scope in which that variable is available.
-So if one variable (like `ansible_user` for example) is valid for all hosts, you'd better set it once under the `all` group.
+An inventory file can also be used to set variable within a specific scope.
+Variables can be specified at the host, groups or all levels, thus affecting
+the scope in which that variable is available.
+So if one variable (like `ansible_user` for example) is valid for all hosts,
+you'd better set it once under the `all` group.
 
-See [Ansible variable precedence documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#understanding-variable-precedence) to better understand how precedence works.
+See [Ansible variable precedence
+documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#understanding-variable-precedence)
+to better understand how precedence works.
 
-In most cases we recommend you use your inventory to place the configuration variables you may need to tweak the playbook to your needs.
+In most cases we recommend you use your inventory to place the configuration
+variables you may need to tweak the playbook to your needs.
 
 In this project you'll find 3 example inventory files:
 
-The `inventory_local.yml` which is ready to use in order to deploy all components on the local machine.
+The `inventory_local.yml` which is ready to use in order to deploy all
+components on the local machine.
 
 ![Local Deployment Type](./resources/deployment-type-local.png)
 
-The `inventory_ssh.yml` which provides s skeleton for you to update and match your architecture so each component can be deployed on a dedicated node.
+The `inventory_ssh.yml` which provides s skeleton for you to update and match
+your architecture so each component can be deployed on a dedicated node.
 
 ![SSH Deployment Type](./resources/deployment-type-ssh.png)
 
-The `inventory_ha.yml` which is very similar to the previous one but also provides s skeleton for repository clustering (see [the deployment guide](./deployment-guide.md) for details on repository clustering).
+The `inventory_ha.yml` which is very similar to the previous one but also
+provides s skeleton for repository clustering (see [the deployment guide](./deployment-guide.md) for details on repository clustering).
 
 A complete documentation about inventory file is available at [inventory file](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#intro-inventory)
 
 ### Folder Structure
 
-Regardless of role and connection type, a consistent folder structure is used. You will find the deployed files in the following locations:
+Regardless of role and connection type, a consistent folder structure is used.
+You will find the deployed files in the following locations:
 
 | Path                | Purpose       |
 |:--------------------|:--------------|
@@ -308,7 +380,10 @@ during a scheduled maintenance window.
 
 ### TCP Port Configuration
 
-Several roles setup services that listen on TCP ports and several roles wait for TCP ports to be listening before continuing execution (indicated by `Yes` in the "Required For Deployment" column). The table below shows the communication paths and port numbers used.
+Several roles setup services that listen on TCP ports and several roles wait
+for TCP ports to be listening before continuing execution (indicated by `Yes`
+in the "Required For Deployment" column). The table below shows the
+communication paths and port numbers used.
 
 | Target Host                 | Target Port | Source Hosts                                             | Required For Deployment |
 |:----------------------------|:------------|:---------------------------------------------------------|:------------------------|
