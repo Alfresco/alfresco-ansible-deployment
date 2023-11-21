@@ -38,11 +38,14 @@
 - name: Database Role
   hosts: database
   gather_facts: false
+  vars:
+    test_env: "{{ repo_db_url == '' or (groups.syncservice and sync_db_url == '') }}"
   roles:
     - role: "../roles/postgres"
-      when: repo_db_url == "" or sync_db_url == ""
+      when: test_env
   post_tasks:
     - name: Make sure PostgreSQL is running
+      when: test_env
       ansible.builtin.service:
         name: "{{ postgresql_service }}"
         state: started
@@ -268,6 +271,7 @@
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Trouter
+      when: acs.edition == "Enterprise"
       become: true
       vars:
         trouter_components:
@@ -309,6 +313,7 @@
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with SFS
+      when: acs.edition == "Enterprise"
       become: true
       vars:
         sfs_components:
@@ -331,6 +336,7 @@
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Enterprise Search
+      when: acs.edition == "Enterprise"
       become: true
       vars:
         search_enterprise_components:
@@ -409,6 +415,7 @@
       adf_app_configuration: "{{ adf_app_oauth_configuration | default({}) }}"
   post_tasks:
     - name: Update installation status file with ADW
+      when: acs.edition == "Enterprise"
       become: true
       vars:
         adw_components:
@@ -431,6 +438,7 @@
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Sync
+      when: acs.edition == "Enterprise"
       become: true
       vars:
         sync_components:
