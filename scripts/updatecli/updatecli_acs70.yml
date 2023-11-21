@@ -1,0 +1,32 @@
+acs:
+  version: "7.0"
+
+adw:
+  version: "2.6"
+
+aos:
+  version: "1.4"
+
+apiExplorer:
+  version: "7.0"
+
+dsync:
+  version: "3.7"
+
+googleDrive:
+  version: "3.2"
+
+search:
+  version: "2.0.2"
+
+transform:
+  version: "2.5"
+
+trouter:
+  version: "1.4"
+
+sfs:
+  version: "0.16"
+
+target_file: 7.0.N-extra-vars.yml
+version_pattern: '$'
