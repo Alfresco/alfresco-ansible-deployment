@@ -11,7 +11,7 @@ apiExplorer:
   version: "7.4"
 
 dsync:
-  version: "3.10"
+  version: "3.11"
 
 googleDrive:
   version: "3.4"
