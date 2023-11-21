@@ -27,7 +27,7 @@
       when: (jinja2_version.stdout.split('.')[0] | int < 3)
 
 - name: Repository pre-requisites
-  hosts: repository:!localhost
+  hosts: repository
   gather_facts: false
   tasks:
     - name: Check Share security setup

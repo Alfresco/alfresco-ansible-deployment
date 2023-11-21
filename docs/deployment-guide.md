@@ -80,11 +80,11 @@ node **and** the target host.
 8. Make sure to add the `known_urls` variables in the file `group_vars/repository.yml`.
    It should contain any URL which is allowed to query the repository and the
    first entry MUST be set to the dmain URL used to access Alfresco.
-   For example if your VM listens on 192.168.023:
+   For example with the default vagrant config:
 
     ```yaml
     known_urls:
-      - http://192.168.0.23/share
+      - http://192.168.56.100/
     ```
 
 9. Run the main vagrant:
