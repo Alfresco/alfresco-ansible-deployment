@@ -20,7 +20,7 @@ search:
   version: "2.0"
 
 searchEnterprise:
-  version: "3.1"
+  version: "3.1.1"
 
 transform:
   version: "2.5"
