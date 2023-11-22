@@ -1,4 +1,4 @@
-title: ACS update pipeline
+name: ACS update pipeline
 
 scms:
   acsRepo:

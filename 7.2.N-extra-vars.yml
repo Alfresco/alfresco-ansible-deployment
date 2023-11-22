@@ -2,7 +2,7 @@ acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 7.2.1.12
+  version: 7.2.1.13
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
@@ -23,7 +23,7 @@ api_explorer:
 search_enterprise:
   artifact_name: alfresco-elasticsearch-connector-distribution
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 3.1.1
+  version: 3.1.1.1
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
@@ -50,7 +50,7 @@ sync:
 dependencies_version:
   postgresql_connector: 42.2.19
   postgres_major_version: 13
-  activemq: 5.16.6
+  activemq: 5.16.7
   java: 11.0.15
   java_build: 10
   tomcat: 9.0.59

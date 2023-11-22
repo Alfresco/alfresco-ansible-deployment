@@ -2,7 +2,7 @@ acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 7.4.1.2
+  version: 7.4.1.3
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
@@ -10,7 +10,7 @@ amps:
   device_sync:
     repository: >-
       {{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo
-    version: 3.10.0
+    version: 3.10.1
   googledrive_repo:
     repository: >-
       {{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise
@@ -26,7 +26,7 @@ api_explorer:
 search_enterprise:
   artifact_name: alfresco-elasticsearch-connector-distribution
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 3.3.1
+  version: 3.3.1.1
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
@@ -34,15 +34,15 @@ search:
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
-  version: 3.1.0
+  version: 3.1.1
 trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.1.0
+  version: 2.1.1
 sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.1.0
+  version: 2.1.1
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
@@ -50,7 +50,7 @@ adw:
 sync:
   repository: >-
     {{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x
-  version: 3.10.0
+  version: 3.10.1
 acc:
   artifact_name: alfresco-control-center
   repository: "{{ nexus_repository.releases }}"
@@ -58,7 +58,7 @@ acc:
 dependencies_version:
   postgresql_connector: 42.2.19
   postgres_major_version: 14
-  activemq: 5.17.4
+  activemq: 5.17.6
   java: 17.0.3
   java_build: 7
   tomcat: 9.0.59
