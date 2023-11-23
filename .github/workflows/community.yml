@@ -85,8 +85,6 @@ jobs:
   docker_integration:
     name: Test ${{ matrix.scenario.name }} scenario on ${{ matrix.molecule_distro.image }}
     if: github.actor != 'dependabot[bot]'
-    needs:
-      - docker
     strategy:
       fail-fast: false
       matrix:
