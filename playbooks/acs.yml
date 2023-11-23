@@ -268,6 +268,7 @@
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Trouter
+      when: acs.edition == "Enterprise"
       become: true
       vars:
         trouter_components:
@@ -309,6 +310,7 @@
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with SFS
+      when: acs.edition == "Enterprise"
       become: true
       vars:
         sfs_components:
@@ -331,6 +333,7 @@
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Enterprise Search
+      when: acs.edition == "Enterprise"
       become: true
       vars:
         search_enterprise_components:
@@ -409,6 +412,7 @@
       adf_app_configuration: "{{ adf_app_oauth_configuration | default({}) }}"
   post_tasks:
     - name: Update installation status file with ADW
+      when: acs.edition == "Enterprise"
       become: true
       vars:
         adw_components:
@@ -431,6 +435,7 @@
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Sync
+      when: acs.edition == "Enterprise"
       become: true
       vars:
         sync_components:
