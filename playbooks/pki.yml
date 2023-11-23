@@ -209,6 +209,7 @@
           ansible.builtin.file:
             path: "{{ hostvars.localhost.pki_dir }}/certificates/{{ inventory_hostname | dirname }}"
             state: directory
+            mode: "0750"
           delegate_to: localhost
 
         - name: Sign certificate with our CA
