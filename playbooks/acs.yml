@@ -25,15 +25,24 @@
     secret_ca_passphrase: "{{ hostvars.localhost.ca_signing_key_passphrase }}"
   ansible.builtin.import_playbook: pki.yml
 
-- name: Setup common facts
-  hosts: repository:identity
+- name: Populate common facts
+  hosts: repository:identity:acc:adw
   gather_facts: false
   roles:
     - role: "../roles/common"
   tasks:
-    - name: Set alfresco url from fqdn_alfresco if available or localhost
+    - name: Set alfresco_url from first entry of known_urls
+      vars:
+        first_known_url: "{{ known_urls | first | default('http://' ~ nginx_host) }}"
       ansible.builtin.set_fact:
-        alfresco_url: "{{ known_urls | first | default('http://' ~ nginx_host) }}"
+        alfresco_url: "{{ first_known_url | urlsplit('scheme') }}://{{ first_known_url | urlsplit('hostname') }}"
+    - name: Populate identity_enabled
+      ansible.builtin.set_fact:
+        identity_enabled: "{{ ((groups.identity | default([])) + (groups.external_identity | default([]))) | length > 0 }}"
+    - name: Populate identity_url when available
+      when: identity_enabled
+      ansible.builtin.set_fact:
+        identity_url: "{{ alfresco_url }}/auth"
 
 - name: Database Role
   hosts: database
@@ -184,14 +193,6 @@
   tags:
     - search
 
-- name: Populate common facts
-  hosts: repository:acc:adw
-  gather_facts: false
-  tasks:
-    - name: Populate identity_enabled
-      ansible.builtin.set_fact:
-        identity_enabled: "{{ ((groups.identity | default([])) + (groups.external_identity | default([]))) | length > 0 }}"
-
 - name: Alfresco Repository Role
   hosts: repository
   gather_facts: false
@@ -213,10 +214,6 @@
       when:
         - repo_mtls_required
         - ats_mtls_capable
-    - name: Populate identity_url when available
-      when: identity_enabled
-      ansible.builtin.set_fact:
-        identity_url: "{{ alfresco_url }}/auth"
   roles:
     - role: "../roles/repository"
       repo_keystore: "{{ repository_keystore | default({}) }}"

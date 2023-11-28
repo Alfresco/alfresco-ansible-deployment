@@ -33,9 +33,20 @@ argument_specs:
         default: localhost
         description: |
           Hostname where clients can reach the keycloak instance
+      identity_keycloak_http_relative_path:
+        type: str
+        default: /auth
+        description:
+          Path relative to / for serving keycloak resources
       identity_known_urls:
         type: list
         elements: str
         default: []
         description: |
           A list of possible origin URLs which are allowed to interact with the configured realm
+      identity_url:
+        type: str
+        default:
+        description:
+          Set the base URL for frontend URL and admin console, including scheme, host, port and path.
+          Will override identity_keycloak_host, identity_keycloak_http_port.

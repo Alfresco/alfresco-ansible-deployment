@@ -42,7 +42,7 @@
 
     - name: Fetch realm
       community.general.keycloak_realm_info:
-        auth_keycloak_url: "http://localhost:8082"
+        auth_keycloak_url: "http://localhost:8082/auth" # pragma: allowlist secret
         realm: alfresco
       register: result_realm_info
 

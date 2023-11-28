@@ -12,9 +12,9 @@ browser which are the applications that can be trusted. This is largely due to
 the expanding usage of single pages applications and setups where such an
 application is hosted on a domain name which do not match the backend server.
 
-In such circumstances, you can tell the playbook which are these applications
-by using adding the client application URL as a repository group variable in the
-`group_vars/repository.yaml` file:
+In such circumstances, you can tell the playbook which are these applications by
+ adding the client application URL as a group variable in the
+`group_vars/all.yaml` file:
 
 ```yaml
 known_urls:
@@ -102,11 +102,10 @@ cors:
 Share is **always** deployed together with the repo (it's part of the same
 role), and as a consequence will always try to access the repo through the
 `localhost` interface. That means from the repo's point of view - unless Share
-itself is accessed using [http://localhost/share/](http://localhost/share/) -
-it is breaking CORS protection. For that reason in order for Share to work, it
-is mandatory to add the URL Share will be accessed from as a `known_urls`.
-We recommand doing it via the `repository` group variables in
-`group_vars/repository.yml`:
+itself is accessed using [http://localhost/share/](http://localhost/share/) - it
+is breaking CORS protection. For that reason in order for Share to work, it is
+mandatory to add the URL Share will be accessed from as a `known_urls`. We
+recommand doing it via the `all` group variables in `group_vars/all.yml`:
 
 ```yaml
 known_urls:

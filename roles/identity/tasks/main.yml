@@ -8,6 +8,8 @@
     keycloak_quarkus_proxy_mode: "{{ identity_keycloak_proxy_mode }}"
     keycloak_quarkus_host: "{{ identity_keycloak_host }}"
     keycloak_quarkus_http_port: "{{ identity_keycloak_http_port }}"
-    keycloak_quarkus_http_relative_path: auth
+    keycloak_quarkus_http_relative_path: "{{ identity_keycloak_http_relative_path }}"
+    keycloak_quarkus_frontend_url: "{{ identity_url }}"
+    keycloak_quarkus_admin_url: "{{ identity_url }}"
   ansible.builtin.include_role:
     name: middleware_automation.keycloak.keycloak_quarkus

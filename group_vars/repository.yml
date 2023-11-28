@@ -1,9 +1,4 @@
 ---
-# Add at least the Share url bellow
-# For more information please have a look at the
-# [security_doc](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/SECURITY.md#specify-trustworthy-applications)
-known_urls: []
-
 # To enable clustering you need to describe the shared contentstore.
 # Any storage type can be used as long as it can be mounted by the target hosts
 # using the mount(8) command.  # For more details about configuring a shared

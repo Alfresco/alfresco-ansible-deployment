@@ -10,7 +10,7 @@
 - name: Configure Alfresco Keycloak realm
   community.general.keycloak_realm:
     auth_client_id: admin-cli
-    auth_keycloak_url: "http://localhost:{{ identity_keycloak_http_port }}"
+    auth_keycloak_url: "http://localhost:{{ identity_keycloak_http_port }}{{ identity_keycloak_http_relative_path }}" # pragma: allowlist secret
     auth_realm: master
     auth_username: "{{ identity_admin_username }}"
     auth_password: "{{ identity_admin_password }}"
@@ -44,7 +44,7 @@
 - name: Configure basic alfresco client
   community.general.keycloak_client:
     auth_client_id: admin-cli
-    auth_keycloak_url: "http://localhost:{{ identity_keycloak_http_port }}"
+    auth_keycloak_url: "http://localhost:{{ identity_keycloak_http_port }}{{ identity_keycloak_http_relative_path }}" # pragma: allowlist secret
     auth_realm: master
     auth_username: "{{ identity_admin_username }}"
     auth_password: "{{ identity_admin_password }}"
