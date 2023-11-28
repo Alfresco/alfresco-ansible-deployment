@@ -13,7 +13,7 @@ the expanding usage of single pages applications and setups where such an
 application is hosted on a domain name which do not match the backend server.
 
 In such circumstances, you can tell the playbook which are these applications by
-using adding the client application URL as a group variable in the
+ adding the client application URL as a group variable in the
 `group_vars/all.yaml` file:
 
 ```yaml
