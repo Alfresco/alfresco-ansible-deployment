@@ -7,7 +7,7 @@ amps:
     version: 3.7.2
   googledrive_repo:
     repository: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise"
-    version: 3.2.1
+    version: 3.11.1
   googledrive_share:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share"
     version: 3.2.1
