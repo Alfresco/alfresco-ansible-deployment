@@ -32,15 +32,15 @@ search:
 transform:
   artifact_name: alfresco-transform-core-aio-boot
   repository: "{{ nexus_repository.releases }}"
-  version: 2.5.7
+  version: 3.1.1
 trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 1.5.3
+  version: 2.1.1
 sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 1.5.3
+  version: 2.1.1
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
