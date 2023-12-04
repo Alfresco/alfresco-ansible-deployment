@@ -106,7 +106,7 @@ jobs:
     secrets:
       nexus_username: ${{ secrets.NEXUS_USERNAME }}
       nexus_password: ${{ secrets.NEXUS_PASSWORD }}
-      dtas_token: ${{ secrets.BOT_GITHUB_TOKEN }}
+      dtas_token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.DEPENDABOT_GITHUB_TOKEN }}
 
   ec2:
     name: ${{ matrix.molecule_scenario.desc }}
