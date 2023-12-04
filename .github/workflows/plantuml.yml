@@ -37,6 +37,6 @@ jobs:
           args: -v -tpng ${{ steps.changed-files.outputs.all_changed_files }}
 
       - name: Push updated diagrams
-        uses: stefanzweifel/git-auto-commit-action@v4.16.0
+        uses: stefanzweifel/git-auto-commit-action@v5.0.0
         with:
           commit_message: "Update PNG images for PlantUML diagrams"
