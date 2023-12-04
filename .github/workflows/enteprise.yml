@@ -137,11 +137,11 @@ jobs:
             vars: vars-ubuntu20-73.yml
             desc: EC2 ACS 7.3 (Ubuntu 20.04)
           - name: default
-            vars: vars-ubuntu22-community.yml
-            desc: EC2 ACS 23.x Community (Ubuntu 22.04)
-          - name: default
             vars: vars-rocky8.yml
             desc: EC2 ACS 7.4 (Rocky Linux 8)
+          - name: default
+            vars: vars-ubuntu22-community.yml
+            desc: EC2 ACS 23.x Community (Ubuntu 22.04)
           - name: default
             vars: vars-rocky9.yml
             desc: EC2 ACS 23.x (Rocky Linux 9)

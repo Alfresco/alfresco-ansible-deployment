@@ -1,0 +1,34 @@
+{
+    "config": {
+      "host": "TEST_URL",
+      "username": "admin",
+      "password": "admin"
+    },
+    "assertions": {
+      "acs": {
+        "edition": "Enterprise",
+        "version": "7.4.1",
+        "identity": false,
+        "modules": [
+          {
+            "id": "org.alfresco.integrations.google.docs",
+            "version": "3.4.2",
+            "installed": true
+          },
+          {
+            "id": "alfresco-aos-module",
+            "version": "1.6.2",
+            "installed": true
+          },
+          {
+            "id": "org_alfresco_device_sync_repo",
+            "version": "3.10.1",
+            "installed": true
+          }
+        ]
+      },
+      "adw": {
+        "version": "4.0.0"
+      }
+    }
+  }
