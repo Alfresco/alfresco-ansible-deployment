@@ -11,7 +11,7 @@ apiExplorer:
   version: "7.4"
 
 dsync:
-  version: "3.10"
+  version: "3.11"
 
 googleDrive:
   version: "3.4"
@@ -23,13 +23,13 @@ searchEnterprise:
   version: "3.3.1"
 
 transform:
-  version: "3"
+  version: "4"
 
 trouter:
-  version: "2"
+  version: "3"
 
 sfs:
-  version: "2"
+  version: "3"
 
 target_file: 7.4.N-extra-vars.yml
 version_pattern: '$'

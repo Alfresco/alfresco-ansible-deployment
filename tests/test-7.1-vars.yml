@@ -1,50 +1,17 @@
+---
+# this is a copy of 7.1.N-extra-vars with AGS amps (and relative amps_downloads)
 acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 7.1.1
-
-search_enterprise:
-  artifact_name: alfresco-elasticsearch-connector-distribution
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 3.1.1
-
-search:
-  artifact_name: alfresco-insight-engine-distribution
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.0.2
-
-transform:
-  artifact_name: alfresco-transform-core-aio-boot
-  repository: "{{ nexus_repository.releases }}"
-  version: 2.5.6
-
-trouter:
-  artifact_name: alfresco-transform-router
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 1.5.1
-
-sfs:
-  artifact_name: alfresco-shared-file-store-controller
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 0.16.1
-
-adw:
-  artifact_name: alfresco-digital-workspace
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.6.0
-
-sync:
-  repository: "{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x"
-  version: 3.5.0
-
+  version: 7.1.1.10
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
-    version: 1.4.0
+    version: 1.4.1
   device_sync:
     repository: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo"
-    version: 3.5.0
+    version: 3.11.1
   googledrive_repo:
     repository: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise"
     version: 3.2.1
@@ -76,7 +43,38 @@ amp_downloads:
   - url: "{{ amps.ags_share.repository }}/{{ amps.ags_share.version }}/alfresco-governance-services-enterprise-share-{{ amps.ags_share.version }}.amp"
     sha1_checksum_url: "{{ amps.ags_share.repository }}/{{ amps.ags_share.version }}/alfresco-governance-services-enterprise-share-{{ amps.ags_share.version }}.amp.sha1"
     dest: "{{ content_folder }}/amps_share/ags-share.amp"
-
+api_explorer:
+  artifact_name: api-explorer
+  repository: "{{ nexus_repository.releases }}"
+  version: 7.1.1
+search_enterprise:
+  artifact_name: alfresco-elasticsearch-connector-distribution
+  repository: "{{ nexus_repository.enterprise_releases }}"
+  version: 3.1.1.1
+search:
+  artifact_name: alfresco-search-services
+  repository: "{{ nexus_repository.releases }}"
+  version: 2.0.2.2
+transform:
+  artifact_name: alfresco-transform-core-aio
+  repository: "{{ nexus_repository.releases }}"
+  version: 3.1.1
+trouter:
+  artifact_name: alfresco-transform-router
+  repository: "{{ nexus_repository.enterprise_releases }}"
+  version: 2.1.1
+sfs:
+  artifact_name: alfresco-shared-file-store-controller
+  repository: "{{ nexus_repository.enterprise_releases }}"
+  version: 2.1.1
+adw:
+  artifact_name: alfresco-digital-workspace
+  repository: "{{ nexus_repository.enterprise_releases }}"
+  version: 2.6.1
+sync:
+  repository: "{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x"
+  version: 3.11.1
+# this overwrites (and not merge) the same structure in group_vars/all.yml
 dependencies_version:
   postgresql_connector: 42.2.19
   postgres_major_version: 13
@@ -86,4 +84,4 @@ dependencies_version:
   tomcat: 9.0.59
   libreoffice: 7.0.6.2
   pdf_renderer: 1.1
-  imagemagick: 7.1.0-16-ci-1
+  imagemagick: 7.1.0-16-ci-6

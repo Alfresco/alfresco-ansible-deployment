@@ -3,61 +3,51 @@ acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 7.1.1
-
+  version: 7.1.1.10
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
-    version: 1.4.0
+    version: 1.4.1
   device_sync:
     repository: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo"
-    version: 3.5.0
+    version: 3.11.1
   googledrive_repo:
     repository: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise"
     version: 3.2.1
   googledrive_share:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share"
     version: 3.2.1
-
 api_explorer:
   artifact_name: api-explorer
   repository: "{{ nexus_repository.releases }}"
   version: 7.1.1
-
 search_enterprise:
   artifact_name: alfresco-elasticsearch-connector-distribution
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 3.1.1
-
+  version: 3.1.1.1
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
-  version: 2.0.2
-
+  version: 2.0.2.2
 transform:
-  artifact_name: alfresco-transform-core-aio-boot
+  artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
-  version: 2.5.6
-
+  version: 3.1.1
 trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 1.5.1
-
+  version: 2.1.1
 sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 0.16.1
-
+  version: 2.1.1
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.6.0
-
+  version: 2.6.1
 sync:
   repository: "{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x"
-  version: 3.5.0
-
+  version: 3.11.1
 # this overwrites (and not merge) the same structure in group_vars/all.yml
 dependencies_version:
   postgresql_connector: 42.2.19

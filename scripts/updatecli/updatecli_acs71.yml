@@ -1,14 +1,14 @@
 acs:
-  version: "7.2"
+  version: "7.1.1"
 
 adw:
-  version: "3.0"
+  version: "2.6"
 
 aos:
   version: "1.4"
 
 apiExplorer:
-  version: "7.2"
+  version: "7.1"
 
 dsync:
   version: "3.11"
@@ -17,7 +17,7 @@ googleDrive:
   version: "3.2"
 
 search:
-  version: "2.0"
+  version: "2.0.2"
 
 searchEnterprise:
   version: "3.1.1"
@@ -31,5 +31,5 @@ trouter:
 sfs:
   version: "2.1"
 
-target_file: 7.2.N-extra-vars.yml
+target_file: 7.1.N-extra-vars.yml
 version_pattern: '$'

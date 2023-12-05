@@ -10,7 +10,7 @@ api_explorer:
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
-  version: 5.0.0
+  version: 5.0.1
 acc:
   artifact_name: alfresco-control-center
   repository: "{{ nexus_repository.releases }}"

@@ -9,7 +9,7 @@ amps:
     version: 1.5.0
   device_sync:
     repository: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo"
-    version: 3.8.0
+    version: 3.11.1
   googledrive_repo:
     repository: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise"
     version: 3.3.1
@@ -31,22 +31,22 @@ search:
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
-  version: 3.0.0
+  version: 3.1.1
 trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.0.0
+  version: 2.1.1
 sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.0.0
+  version: 2.1.1
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 3.1.0
 sync:
   repository: "{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x"
-  version: 3.8.0
+  version: 3.11.1
 dependencies_version:
   postgresql_connector: 42.2.19
   postgres_major_version: 13
