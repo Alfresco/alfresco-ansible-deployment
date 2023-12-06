@@ -279,7 +279,7 @@
 
     - name: Copy db_connector_repo to {{ tomcat_config_dir }}/lib/ folder
       ansible.builtin.copy:
-        src: "{{ inventory_dir }}/configuration_files/db_connector_repo/"
+        src: "{{ role_path }}/../../configuration_files/db_connector_repo/"
         dest: "{{ tomcat_config_dir }}/lib/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
