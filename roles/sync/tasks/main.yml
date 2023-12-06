@@ -63,7 +63,7 @@
 
     - name: Copy db_connector to {{ sync_home }}/service-sync/connectors folder
       ansible.builtin.copy:
-        src: "{{ inventory_dir }}/configuration_files/db_connector_sync/"
+        src: "{{ role_path }}/../../configuration_files/db_connector_sync/"
         dest: "{{ sync_home }}/service-sync/connectors/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
