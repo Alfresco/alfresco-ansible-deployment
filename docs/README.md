@@ -60,37 +60,13 @@ set of instructions.
 
 ## Versioning
 
-While ACS supports a wide range of OS, the playbook is only known to work and is
-supported for a subset of them. The table below gives detailed information on
-the status of supported OS.
+To understand which Operating System the Alfresco Ansible playbook can work
+against (on the target nodes), please refer to the [Supported
+platform doc](https://docs.alfresco.com/content-services/latest/support/) (pick
+the right Alfresco version).
 
-Legend:
-
-* :white_check_mark: platform supported and tested on this playbook
-* :x: platform not supported by this playbook (despite officially supported by Alfresco)
-* `-` platform not officially supported by Alfresco
-
-| OS Flavor / version | 23.1 Enterprise/Community | 7.4 Enterprise     | 7.3 Enterprise     | 7.2 Enterprise     | 7.1 Enterprise     | 7.0 Enterprise     |
-|---------------------|---------------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
-| Amazon Linux (v2)   | :x:                       | :x:                | :x:                | :x:                | :x:                | :x:                |
-| Amazon Linux (v1)   | -                         | -                  | :x:                | -                  | :x:                | :x:                |
-| RHEL 9              | :white_check_mark:        | -                  | -                  | -                  | -                  | -                  |
-| RHEL 8.8            | :white_check_mark:        | -                  | -                  | -                  | -                  | -                  |
-| RHEL 8.7            | -                         | :white_check_mark: | -                  | -                  | -                  | -                  |
-| RHEL 8.6            | -                         | :white_check_mark: | :white_check_mark: | -                  | -                  | -                  |
-| RHEL 8.5            | -                         | -                  | :white_check_mark: | :white_check_mark: | -                  | -                  |
-| RHEL 8.4            | -                         | -                  | -                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| RHEL 8.2            | -                         | -                  | -                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| RHEL 7.7            | -                         | -                  | -                  | -                  | :white_check_mark: | :white_check_mark: |
-| RHEL 7.6            | -                         | -                  | -                  | -                  | :white_check_mark: | :white_check_mark: |
-| Rockylinux 9        | :white_check_mark:        | :x:                | -                  | -                  | -                  | -                  |
-| Rockylinux 8.7      | -                         | :white_check_mark: | -                  | -                  | -                  | -                  |
-| CentOS 7 x64        | -                         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Ubuntu 22.04        | :white_check_mark:        | :white_check_mark: | :white_check_mark: | -                  | -                  | -                  |
-| Ubuntu 20.04        | -                         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Ubuntu 18.04        | -                         | -                  | -                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| SUSE 15.0           | -                         | -                  | -                  | -                  | -                  | :x:                |
-| SUSE 12.0 SP1 x64   | -                         | -                  | -                  | -                  | -                  | :x:                |
+We aim to support these stacks **with the exception of** Amazon Linux & Suse
+distributions.
 
 > Ansible version used for testing this playbook can be retrieved [here](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/Pipfile#L7).
 
