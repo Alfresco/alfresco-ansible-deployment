@@ -83,6 +83,9 @@ supported_os:
   RedHat:
     versions:
       - 9.2
+      - 9.1
+      - 9.0
+      - 8.8
       - 8.7
       - 8.6
       - 8.5
@@ -94,6 +97,9 @@ supported_os:
   Rocky:
     versions:
       - 9.2
+      - 9.1
+      - 9.0
+      - 8.8
       - 8.7
       - 8.6
   CentOS:
