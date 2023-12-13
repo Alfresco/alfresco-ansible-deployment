@@ -73,20 +73,21 @@ Legend:
 | OS Flavor / version | 23.1 Enterprise/Community | 7.4 Enterprise     | 7.3 Enterprise     | 7.2 Enterprise     | 7.1 Enterprise     | 7.0 Enterprise     |
 |---------------------|---------------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
 | Amazon Linux (v2)   | :x:                       | :x:                | :x:                | :x:                | :x:                | :x:                |
-| Amazon Linux (v1)   | :x:                       | :x:                | :x:                | :x:                | :x:                | :x:                |
-| RHEL 9.2            | :white_check_mark:        | :x:                | -                  | -                  | -                  | -                  |
-| RHEL 8.7            | :white_check_mark:        | :white_check_mark: | -                  | -                  | -                  | -                  |
-| RHEL 8.6            | :white_check_mark:        | :white_check_mark: | :white_check_mark: | -                  | -                  | -                  |
-| RHEL 8.5            | :white_check_mark:        | :white_check_mark: | :white_check_mark: | :white_check_mark: | -                  | -                  |
-| RHEL 8.4            | -                         | -                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| RHEL 8.2            | -                         | -                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Amazon Linux (v1)   | -                         | -                  | :x:                | -                  | :x:                | :x:                |
+| RHEL 9              | :white_check_mark:        | -                  | -                  | -                  | -                  | -                  |
+| RHEL 8.8            | :white_check_mark:        | -                  | -                  | -                  | -                  | -                  |
+| RHEL 8.7            | -                         | :white_check_mark: | -                  | -                  | -                  | -                  |
+| RHEL 8.6            | -                         | :white_check_mark: | :white_check_mark: | -                  | -                  | -                  |
+| RHEL 8.5            | -                         | -                  | :white_check_mark: | :white_check_mark: | -                  | -                  |
+| RHEL 8.4            | -                         | -                  | -                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| RHEL 8.2            | -                         | -                  | -                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | RHEL 7.7            | -                         | -                  | -                  | -                  | :white_check_mark: | :white_check_mark: |
 | RHEL 7.6            | -                         | -                  | -                  | -                  | :white_check_mark: | :white_check_mark: |
-| Rockylinux 9.2      | :white_check_mark:        | :x:                | -                  | -                  | -                  | -                  |
-| Rockylinux 8.7      | :white_check_mark:        | :white_check_mark: | -                  | -                  | -                  | -                  |
-| CentOS 7 x64        | :x:                       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Rockylinux 9        | :white_check_mark:        | :x:                | -                  | -                  | -                  | -                  |
+| Rockylinux 8.7      | -                         | :white_check_mark: | -                  | -                  | -                  | -                  |
+| CentOS 7 x64        | -                         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Ubuntu 22.04        | :white_check_mark:        | :white_check_mark: | :white_check_mark: | -                  | -                  | -                  |
-| Ubuntu 20.04        | :white_check_mark:        | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Ubuntu 20.04        | -                         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Ubuntu 18.04        | -                         | -                  | -                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | SUSE 15.0           | -                         | -                  | -                  | -                  | -                  | :x:                |
 | SUSE 12.0 SP1 x64   | -                         | -                  | -                  | -                  | -                  | :x:                |
