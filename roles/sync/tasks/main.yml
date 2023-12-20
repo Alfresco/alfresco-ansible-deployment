@@ -59,7 +59,7 @@
         mode: "0644"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-      when: sync_db_url == ""
+      when: not sync_db_url or sync_db_url is regex('jdbc:postgresql://')
 
     - name: Copy db_connector to {{ sync_home }}/service-sync/connectors folder
       ansible.builtin.copy:
@@ -68,7 +68,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0644"
-      when: sync_db_url != ""
+      when: sync_db_url and sync_db_url is not regex('jdbc:postgresql://')
 
     - name: Add paths to setenv file
       ansible.builtin.blockinfile:
