@@ -31,7 +31,7 @@ jobs:
       matrix:
         molecule_distro:
           - image: ubuntu:22.04
-          - image: rockylinux:9.2
+          - image: rockylinux:9.3
         role:
           - name: adf_app
           - name: search_enterprise
@@ -88,7 +88,7 @@ jobs:
       matrix:
         molecule_distro:
           - image: ubuntu:22.04
-          - image: rockylinux:9.2
+          - image: rockylinux:9.3
         scenario:
           - name: pki
           - name: elasticsearch
@@ -96,7 +96,7 @@ jobs:
           - scenario:
               name: identity
             molecule_distro:
-              image: rockylinux:9.2
+              image: rockylinux:9.3
     uses: ./.github/workflows/docker.yml
     with:
       scenario: ${{ matrix.scenario.name }}
