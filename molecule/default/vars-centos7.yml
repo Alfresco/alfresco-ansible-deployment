@@ -1,4 +1,4 @@
-MOLECULE_IT_IMAGE_ID: ami-0c1f3a8058fde8814 # CentOS 7 (x86_64) - with Updates HVM (search on AWS Marketplace)
+MOLECULE_IT_IMAGE_ID: ami-0c1f3a8058fde8814 # CentOS-7-2111-20220825_1.x86_64-d9a3032a-921c-4c6d-b150-bde168105e42
 MOLECULE_IT_EXTRA_VARS: 7.0.N-extra-vars.yml
 MOLECULE_IT_TEST_CONFIG: tests/test-config-7.0.json
 MOLECULE_IT_PLATFORM: centos7
