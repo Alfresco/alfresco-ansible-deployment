@@ -30,7 +30,7 @@ provisioner:
   name: ansible
   ansible_args:
     - -e
-    - "@../../tests/molecule/secrets.yml"
+    - "@../../../../tests/molecule/secrets.yml"
   config_options:
     defaults:
       pipelining: True

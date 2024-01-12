@@ -1,7 +1,9 @@
 ---
+default_language_version:
+  python: python3.9
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.2.0
+    rev: v4.5.0
     hooks:
       - id: check-yaml
         args: [--allow-multiple-documents]
@@ -15,12 +17,12 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/Riverside-Healthcare/djLint
-    rev: v1.19.3
+    rev: v1.34.1
     hooks:
       - id: djlint-jinja
 
   - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.13.4
+    rev: v0.9.15
     hooks:
       - id: pymarkdown
         files: (README\.md$|docs/.*\.md)
@@ -29,7 +31,7 @@ repos:
           - scan
 
   - repo: https://github.com/PyCQA/prospector
-    rev: v1.8.2
+    rev: v1.10.3
     hooks:
       - id: prospector
 
@@ -46,7 +48,7 @@ repos:
         name: detect aws secrets
 
   - repo: https://github.com/milin/giticket
-    rev: v1.3
+    rev: v1.4
     hooks:
       - id: giticket
         args:

@@ -78,13 +78,13 @@
 
     {# Compute referers & origins -#}
          {% import 'xorigins_macros.j2' as _xorigins_protection %}
-    <referer>{{ _xorigins_protection.compute(inventory_hostname, 'referer', csrf.urls, '|')}}</referer>
+    <referer>{{ _xorigins_protection.compute(inventory_hostname, 'referer', csrf.urls, '|') }}</referer>
 
          <!--
             Override and set this property with a regexp that if you have placed Share behind a proxy that
             does not rewrite the Origin header.
          -->
-    <origin>{{ _xorigins_protection.compute(inventory_hostname, 'origin', csrf.urls, '|')}}</origin>
+    <origin>{{ _xorigins_protection.compute(inventory_hostname, 'origin', csrf.urls, '|') }}</origin>
       </properties>
 
       <!--

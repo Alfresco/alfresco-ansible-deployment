@@ -36,9 +36,9 @@ provisioner:
       pipelining: true
   ansible_args:
     - -e
-    - "@tests/test-extra-vars.yml"
+    - "@../../tests/test-extra-vars.yml"
     - -e
-    - "@tests/test-ssl.yml"
+    - "@../../tests/test-ssl.yml"
   inventory:
     links:
       group_vars: ../../group_vars

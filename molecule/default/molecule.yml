@@ -35,9 +35,9 @@ provisioner:
       pipelining: True
   ansible_args:
     - -e
-    - "@${MOLECULE_IT_EXTRA_VARS}"
+    - "@../../${MOLECULE_IT_EXTRA_VARS}"
     - -e
-    - "@tests/test-ssl.yml"
+    - "@../../tests/test-ssl.yml"
   inventory:
     links:
       group_vars: ../../group_vars
