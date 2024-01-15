@@ -13,6 +13,11 @@ collections:
     version: 2.10.0
   - name: middleware_automation.keycloak
     version: 2.0.1
+  # molecule ec2 tests
+  - name: amazon.aws
+    version: 7.2.0
+  - name: community.aws
+    version: 7.1.0
 
 roles:
   - name: buluma.elastic_repo
