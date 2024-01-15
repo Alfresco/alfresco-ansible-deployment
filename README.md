@@ -44,6 +44,6 @@ and information to report any issues.
 
 ## Release
 
-See the [dedication section in developer guide](docs/developer-guide.md#release).
+See the [dedicated section in developer guide](docs/developer-guide.md#release).
 
 Update [adding support for a new distribution](docs/developer-guide.md#adding-support-for-a-new-distribution).
