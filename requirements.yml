@@ -10,7 +10,7 @@ collections:
   - name: ansible.utils
     version: 2.12.0
   - name: community.crypto
-    version: 2.10.0
+    version: 2.16.2
   - name: middleware_automation.keycloak
     version: 2.0.1
   # molecule ec2 tests
