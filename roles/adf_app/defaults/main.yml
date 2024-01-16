@@ -25,3 +25,6 @@ adf_app_default_configuration:
     redirectSilentIframeUri: "{protocol}//{hostname}{:port}/assets/silent-refresh.html"
     redirectUri: "/"
     redirectUriLogout: "/"
+  plugins:
+    processService: false
+    microsoftOnline: false
