@@ -3,6 +3,7 @@
   hosts: localhost
   gather_facts: false
   vars:
+    adf_apps: alfresco-digital-workspace
     project_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}"
     dtas_dir: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/dtas"
     test_config_file: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/{{ lookup('ansible.builtin.env', 'MOLECULE_IT_TEST_CONFIG') | default('tests/test-config.json', True) }}"
