@@ -38,3 +38,24 @@
             msg: "{{ ansible_failed_result.stdout_lines }}"
         - name: Explicit failure after printing failure debug
           fail: msg="Aborting due to pytest failure"
+
+    - name: Retrieve contents of app.config.json
+      become: true
+      ansible.builtin.slurp:
+        src: "/usr/share/nginx/html/{{ item }}/app.config.json"
+      loop: "{{ adf_apps }}"
+      register: slurp_app_config_json
+
+    - name: Assert that app.config.json contains expected values
+      vars:
+        app_config_json: "{{ slurp_app_config_json['results'][item_index]['content'] | b64decode | from_json }}"
+      ansible.builtin.assert:
+        quiet: true
+        that:
+          - app_config_json.plugins.processService == 'false'
+          - app_config_json.plugins.microsoftOnline == 'false'
+        fail_msg: "not expected {{ app_config_json }}"
+      loop: "{{ range(0, adf_apps | length) | list }}"
+      loop_control:
+        loop_var: item_index
+        label: "{{ adf_apps[item_index] }}"
