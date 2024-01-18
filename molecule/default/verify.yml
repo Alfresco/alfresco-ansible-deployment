@@ -39,6 +39,10 @@
         - name: Explicit failure after printing failure debug
           fail: msg="Aborting due to pytest failure"
 
+- name: Verify adw plugins state
+  hosts: adw
+  gather_facts: true
+  tasks:
     - name: Populate services facts
       ansible.builtin.service_facts:
 
