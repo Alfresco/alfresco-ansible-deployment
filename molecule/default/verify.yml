@@ -53,7 +53,7 @@
         nginx_html_path_redhat: "/usr/share/nginx/html/{{ adf_apps }}/app.config.json"
         nginx_html_path_ubuntu: "/var/www/html/{{ adf_apps }}/app.config.json"
       ansible.builtin.slurp:
-        src: "{{ nginx_html_path_redhat if ansible_distribution == 'RedHat' else nginx_html_path_ubuntu }}"
+        src: "{{ nginx_html_path_redhat if ansible_os_family == 'RedHat' else nginx_html_path_ubuntu }}"
       register: slurp_app_config_json
 
     - name: Assert that app.config.json contains expected values
