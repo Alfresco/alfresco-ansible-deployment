@@ -60,6 +60,6 @@
       ansible.builtin.assert:
         quiet: true
         that:
-          - app_config_json.plugins.processService == 'false'
-          - app_config_json.plugins.microsoftOnline == 'false'
+          - app_config_json.plugins.processService == False
+          - app_config_json.plugins.microsoftOnline == False
         fail_msg: "not expected {{ app_config_json }}"
