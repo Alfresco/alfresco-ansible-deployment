@@ -56,7 +56,7 @@
 
     - name: Assert that app.config.json contains expected values
       vars:
-        app_config_json: "{{ slurp_app_config_json['results'][0]['content'] | b64decode | from_json }}"
+        app_config_json: "{{ slurp_app_config_json['content'] | b64decode | from_json }}"
       ansible.builtin.assert:
         quiet: true
         that:
