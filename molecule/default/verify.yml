@@ -42,7 +42,6 @@
 - name: Verify adw plugins state
   hosts: adw
   gather_facts: true
-  when: acs.edition == "Enterprise"
   tasks:
     - name: Populate services facts
       ansible.builtin.service_facts:
