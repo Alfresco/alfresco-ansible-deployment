@@ -45,6 +45,7 @@
   tasks:
     - name: Populate services facts
       ansible.builtin.service_facts:
+      when: acs.edition == "Enterprise"
 
     - name: Retrieve contents of app.config.json
       become: true
@@ -55,6 +56,7 @@
       ansible.builtin.slurp:
         src: "{{ nginx_html_path_redhat if ansible_os_family == 'RedHat' else nginx_html_path_ubuntu }}"
       register: slurp_app_config_json
+      when: acs.edition == "Enterprise"
 
     - name: Assert that app.config.json contains expected values
       vars:
@@ -65,3 +67,4 @@
           - app_config_json.plugins.processService == false
           - app_config_json.plugins.microsoftOnline == false
         fail_msg: "not expected {{ app_config_json }}"
+      when: acs.edition == "Enterprise"
