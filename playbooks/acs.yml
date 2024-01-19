@@ -393,6 +393,11 @@
 - name: Alfresco Digital Workspace Role
   hosts: adw
   gather_facts: false
+  vars:
+    adf_plugins_configuration:
+      plugins:
+        processService: false
+        microsoftOnline: false
   roles:
     - role: "../roles/adf_app"
       when: acs.edition == "Enterprise"
@@ -406,7 +411,7 @@
         {{ lookup('url', downloads.adw_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
         {%- endif %}
       adf_app_version: "{{ adw.version }}"
-      adf_app_configuration: "{{ adf_app_oauth_configuration | default({}) }}"
+      adf_app_configuration: "{{ adf_app_oauth_configuration | default({}) | ansible.builtin.combine(adf_plugins_configuration) }}"
   post_tasks:
     - name: Update installation status file with ADW
       when: acs.edition == "Enterprise"
