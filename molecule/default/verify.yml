@@ -43,10 +43,6 @@
   hosts: adw
   gather_facts: true
   tasks:
-    - name: Populate services facts
-      ansible.builtin.service_facts:
-      when: acs.edition == "Enterprise"
-
     - name: Retrieve contents of app.config.json
       become: true
       vars:
