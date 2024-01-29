@@ -21,6 +21,6 @@ collections:
 
 roles:
   - name: buluma.elastic_repo
-    version: v0.3.0
+    version: v0.4.0
   - name: buluma.elasticsearch
     version: 1.1.0
