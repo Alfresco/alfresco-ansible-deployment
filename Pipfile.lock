@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3fe0e4c7b278a9e3b8d9b5b3f03d4dafeceb770e9d24270177b2fac8901118d8"
+            "sha256": "a58d61f5163b30a234bbd5299aec29970435e5c1762926b5eb28632b800068b7"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -594,11 +594,11 @@
         },
         "dill": {
             "hashes": [
-                "sha256:76b122c08ef4ce2eedcd4d1abd8e641114bfc6c2867f49f3c41facf65bf19f5e",
-                "sha256:cc1c8b182eb3013e24bd475ff2e9295af86c1a38eb1aff128dac8962a9ce3c03"
+                "sha256:3ebe3c479ad625c4553aca177444d89b486b1d84982eeacded644afc0cf797ca",
+                "sha256:c36ca9ffb54365bdd2f8eb3eff7d2a21237f8452b57ace88b1ac615b7e815bd7"
             ],
             "markers": "python_version < '3.11'",
-            "version": "==0.3.7"
+            "version": "==0.3.8"
         },
         "dnspython": {
             "hashes": [
@@ -1004,12 +1004,12 @@
         },
         "pylint": {
             "hashes": [
-                "sha256:5dcf1d9e19f41f38e4e85d10f511e5b9c35e1aa74251bf95cdd8cb23584e2db1",
-                "sha256:7a1145fb08c251bdb5cca11739722ce64a63db479283d10ce718b2460e54123c"
+                "sha256:27a8d4c7ddc8c2f8c18aa0050148f89ffc09838142193fdbe98f172781a3ff87",
+                "sha256:f4fcac7ae74cfe36bc8451e931d8438e4a476c20314b1101c458ad0f05191fad"
             ],
             "index": "pypi",
             "markers": "python_full_version >= '3.7.2'",
-            "version": "==2.17.4"
+            "version": "==2.17.7"
         },
         "pylint-celery": {
             "hashes": [
