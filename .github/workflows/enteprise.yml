@@ -72,7 +72,7 @@ jobs:
           MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
           NEXUS_USERNAME: ${{ secrets.nexus_username }}
           NEXUS_PASSWORD: ${{ secrets.nexus_password }}
-        uses: nick-fields/retry@v2
+        uses: nick-fields/retry@v3
         with:
           timeout_minutes: 60
           max_attempts: 3
@@ -214,7 +214,7 @@ jobs:
           MOLECULE_IT_CONFIG: ${{ matrix.molecule_scenario.vars }}
           AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
-        uses: nick-fields/retry@v2
+        uses: nick-fields/retry@v3
         with:
           timeout_minutes: 30
           max_attempts: 3
