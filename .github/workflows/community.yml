@@ -93,6 +93,7 @@ jobs:
           - image: rockylinux:9.3
         scenario:
           - name: pki
+          - name: docker_community
     uses: ./.github/workflows/docker.yml
     with:
       scenario: ${{ matrix.scenario.name }}
