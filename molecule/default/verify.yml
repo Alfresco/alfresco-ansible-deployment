@@ -10,21 +10,26 @@
     - name: Detect ec2 hostname
       ansible.builtin.include_tasks: "tasks/detect_ec2_node_hostname.yml"
 
-    - name: Install pytest requirements
-      pip:
-        chdir: "{{ dtas_dir }}"
-        requirements: requirements.txt
-
-    - name: Configure {{ node_hostname }} as target host for tests in {{ test_config_file }}
-      ansible.builtin.replace:
-        path: "{{ test_config_file }}"
-        regexp: 'TEST_URL'
-        replace: "https://{{ node_hostname }}"
+    - name: Stat to see if dtas_dir exists
+      ansible.builtin.stat:
+        path: "{{ dtas_dir }}"
+      register: dtas_dir_stat
 
     - name: Run tests
+      when: dtas_dir_stat.stat.exists
       block:
+        - name: Install pytest requirements
+          pip:
+            chdir: "{{ dtas_dir }}"
+            requirements: requirements.txt
+
+        - name: Configure {{ node_hostname }} as target host for tests in {{ test_config_file }}
+          ansible.builtin.replace:
+            path: "{{ test_config_file }}"
+            regexp: 'TEST_URL'
+            replace: "https://{{ node_hostname }}"
+
         - name: Run pytest
-          delegate_to: localhost
           vars:
               selfsigned_cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.crt"
           ansible.builtin.shell:

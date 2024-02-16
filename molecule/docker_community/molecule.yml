@@ -4,7 +4,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: base-integration-instance
+  - name: instance
     image: $MOLECULE_ROLE_IMAGE
     dockerfile: ../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
@@ -22,8 +22,6 @@ platforms:
       - search
       - repository
       - trusted_resource_consumers
-      - syncservice
-      - adw
       - acc
       - nginx
     published_ports:
@@ -36,9 +34,7 @@ provisioner:
       pipelining: true
   ansible_args:
     - -e
-    - "@../../tests/test-extra-vars.yml"
-    - -e
-    - "@../../tests/test-ssl.yml"
+    - "@../../community-extra-vars.yml"
   inventory:
     links:
       group_vars: ../../group_vars

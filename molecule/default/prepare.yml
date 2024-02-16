@@ -61,13 +61,8 @@
         regexp: "TEST_FQDN"
         replace: "{{ certificate_domain }}"
 
-    - name: Ensure that clone_github_token is correctly set
-      ansible.builtin.assert:
-        that:
-          - clone_github_token is defined
-          - clone_github_token.startswith('ghp_')
-
-    - name: Git checkout
+    - name: Clone DTAS when clone_github_token is available
+      when: clone_github_token is defined and clone_github_token.startswith('ghp_')
       ansible.builtin.git:
         repo: "https://{{ clone_github_token }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
         dest: "{{ dtas_dir }}"
