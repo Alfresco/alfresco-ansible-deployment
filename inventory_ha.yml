@@ -16,59 +16,76 @@ all:
     database:
       hosts:
         db.infra.local:
+
     repository:
       hosts:
         ecm1.infra.local:
         ecm2.infra.local:
         ingester.infra.local:
           cluster_keepoff: true
+
     activemq:
       hosts:
         mq.infra.local:
+
+    # Solr search engine (alternative to Enterprise Search)
     search:
       hosts:
-        fts.infra.local:
-    # Enterprise Search section start
-    # alternative to `search` group
+
+    # Enterprise Search (default search engine)
     search_enterprise:
       hosts:
+        fts.infra.local:
     elasticsearch:
       hosts:
-    # Enterprise Search section end
+        fts.infra.local:
+
+    # Keycloak SSO support (optional)
     identity:
       hosts:
+
     nginx:
       hosts:
         proxy.infra.local:
+
     acc:
       hosts:
         web.infra.local:
+
     adw:
       hosts:
         web.infra.local:
+
     transformers:
       hosts:
         render.infra.local:
+
     syncservice:
       hosts:
         sync.infra.local:
+
     other_repo_clients:
       hosts:
-    external_activemq:
-      hosts:
-    external_elasticsearch:
-      hosts:
-    external_identity:
-      hosts:
-    external:
-      children:
-        external_activemq:
-        external_elasticsearch:
-        external_identity:
-        other_repo_clients:
+
     trusted_resource_consumers:
       children:
         repository:
         nginx:
         adw:
+        other_repo_clients:
+
+    external_activemq:
+      hosts:
+
+    external_elasticsearch:
+      hosts:
+
+    external_identity:
+      hosts:
+
+    external:
+      children:
+        external_activemq:
+        external_elasticsearch:
+        external_identity:
         other_repo_clients:
