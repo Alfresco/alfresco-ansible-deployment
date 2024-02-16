@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "bf90554a74d1e71d611000b5be4e12786587a510524de65d39574ca0b72ad46d"
+            "sha256": "823a43e00888d4c1892b123a85fb738433222157766a531fab0b4ce8c8e06523"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -613,12 +613,12 @@
         },
         "dnspython": {
             "hashes": [
-                "sha256:224e32b03eb46be70e12ef6d64e0be123a64e621ab4c0822ff6d450d52a540b9",
-                "sha256:89141536394f909066cabd112e3e1a37e4e654db00a25308b0f130bc3152eb46"
+                "sha256:6facdf76b73c742ccf2d07add296f178e629da60be23ce4b0a9c927b1e02c3a6",
+                "sha256:a0034815a59ba9ae888946be7ccca8f7c157b286f8455b379c692efb51022a15"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.7' and python_version < '4.0'",
-            "version": "==2.3.0"
+            "markers": "python_version >= '3.8'",
+            "version": "==2.5.0"
         },
         "docker": {
             "hashes": [
