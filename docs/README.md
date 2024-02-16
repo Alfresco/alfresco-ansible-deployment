@@ -45,9 +45,9 @@ The playbook uses the following roles:
 * **nginx** - deploys and configures Nginx as a proxy
 * **postgres** - deploys and configures PostgreSQL
 * **repository** - deploys and configures Alfresco Repository and Alfresco Share
-* **search** - deploys and configures Alfresco Search Services
-* **search_enteprise** - deploys and configures Alfresco Search Enterprise (as
-  an alternative to Alfresco Search Services)
+* **search** - deploys and configures Alfresco Search Services (as
+  an alternative to Search Enterprise)
+* **search_enterprise** - deploys and configures Alfresco Search Enterprise
 * **sfs** - deploys and configures Alfresco Shared File Store
 * **sync** - deploys and configures Alfresco Sync Service
 * **tomcat** - deploys and configures Apache Tomcat

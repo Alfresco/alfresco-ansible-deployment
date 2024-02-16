@@ -12,6 +12,7 @@ If it's your first time with Ansible, please have a read at [Ansible concepts](h
   * [Getting started](#getting-started)
     * [Get the playbook](#get-the-playbook)
     * [Setup runtime environment](#setup-runtime-environment)
+  * [Minimal configuration](#minimal-configuration)
   * [Understanding the playbook](#understanding-the-playbook)
     * [The control node](#the-control-node)
     * [Understanding the inventory file](#understanding-the-inventory-file)
@@ -274,9 +275,9 @@ An ACS inventory file has the following groups a host can belong to:
 * `external_activemq`: an alternative group to `activemq` in case you don't want
   to deploy ActiveMQ using our basic activemq role but instead use an ActiveMQ
   instance of yours which matches your hosting standards.
-* `search`: a single host on which to deploy Alfresco Search services.
-* `search_enterprise`: one or more hosts on which deploy Search Enterprise, as
-  an alternative to Alfresco Search.
+* `search`: a single host on which to deploy Alfresco Search services, as an
+  alternative to Search Enterprise.
+* `search_enterprise`: one or more hosts on which deploy Search Enterprise.
 * `elasticsearch`: one or more hosts on which deploy the ElasticSearch cluster
   backing Search Enterprise.
 * `external_elasticsearch`: an alternative group to `elasticsearch` in case you
