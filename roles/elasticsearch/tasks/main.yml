@@ -29,8 +29,8 @@
       ansible.builtin.copy:
         content: |
           [Service]
-          Environment="discovery.type=single-node"
-          Environment="xpack.security.enabled=false"
+          Environment=ES_SETTING_DISCOVERY_TYPE=single-node
+          Environment=ES_SETTING_XPACK_SECURITY_ENABLED=false
         dest: "{{ elasticsearch_systemd_service_path }}/single-node.conf"
         mode: "0644"
 
