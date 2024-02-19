@@ -20,7 +20,8 @@ platforms:
       - database
       - activemq
       - transformers
-      - search
+      - search_enterprise
+      - elasticsearch
       - repository
       - trusted_resource_consumers
       - syncservice
