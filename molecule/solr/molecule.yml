@@ -43,6 +43,7 @@ provisioner:
       host_vars: host_vars
   playbooks:
     prepare: ../default/prepare.yml
+    converge: ../../playbooks/acs.yml
     verify: ../default/verify.yml
 verifier:
   name: ansible
