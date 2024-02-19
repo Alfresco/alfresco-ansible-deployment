@@ -24,6 +24,16 @@
         dest: "{{ elasticsearch_systemd_service_path }}/tmpdir.conf"
         mode: "0644"
 
+    - name: Set override for single node boostrap
+      ansible.builtin.file:
+        content: |
+          [Service]
+          Environment="discovery.type=single-node"
+          Environment="xpack.security.enabled=false"
+        dest: "{{ elasticsearch_systemd_service_path }}/single-node.conf"
+        mode: "0644"
+        state: "{{ 'present' if elasticsearch_single_node else 'absent' }}"
+
     - name: Enable elasticsearch repository
       ansible.builtin.include_role:
         name: buluma.elastic_repo
