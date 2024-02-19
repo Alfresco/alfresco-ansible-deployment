@@ -22,10 +22,9 @@ platforms:
       - acc
       - adw
       - database
-      - elasticsearch
       - nginx
       - repository
-      - search_enterprise
+      - search
       - sfs
       - syncservice
       - transformers
