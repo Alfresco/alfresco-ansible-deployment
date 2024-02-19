@@ -147,6 +147,5 @@ provisioner:
       hosts: ./hosts.yml
   playbooks:
     create: ../default/create.yml
-    converge: ../../playbooks/acs.yml
     verify: ../default/verify.yml
     destroy: ../default/destroy.yml
