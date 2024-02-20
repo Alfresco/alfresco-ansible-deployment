@@ -23,6 +23,13 @@
           Environment="ES_TMPDIR={{ elasticsearch_tmp_path }}"
         dest: "{{ elasticsearch_systemd_service_path }}/tmpdir.conf"
         mode: "0644"
+
     - name: Install elasticsearch
       ansible.builtin.include_role:
         name: geerlingguy.elasticsearch
+      vars:
+        elasticsearch_network_host: "{{ ansible_hostname }}"
+        elasticsearch_heap_size_min: 1g
+        elasticsearch_heap_size_max: 1g
+        elasticsearch_extra_options: |
+          cluster.initial_master_nodes: ["{{ ansible_hostname }}"]
