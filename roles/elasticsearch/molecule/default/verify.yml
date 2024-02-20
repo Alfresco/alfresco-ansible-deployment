@@ -17,8 +17,12 @@
           - tmp_path_stat.stat.uid == 0
           - tmp_path_stat.stat.gid == 0
 
-    - name: Check if port 9200/tcp is listening
+    - name: Gather facts
+      ansible.builtin.setup:
+
+    - name: "Check if port 9200/tcp is listening on {{ ansible_hostname }}"
       ansible.builtin.wait_for:
+        host: "{{ ansible_hostname }}"
         port: 9200
         timeout: 30
         connect_timeout: 1
