@@ -282,8 +282,8 @@ An ACS inventory file has the following groups a host can belong to:
   backing Search Enterprise.
 * `external_elasticsearch`: an alternative group to `elasticsearch` in case you
   don't want to deploy ElasticSearch using the [community ElasticSearch
-  role](https://github.com/buluma/ansible-role-elasticsearch) but instead use an
-  ElasticSearch cluster of yours which matches your hosting standards.
+  role](https://github.com/geerlingguy/ansible-role-elasticsearch) but instead
+  use an ElasticSearch cluster of yours which matches your hosting standards.
 * `nginx`: a single host on which the playbook will deploy an NGINX reverse
   proxy configured for the numerous http based service in the platform.
 * `acc`: a single host where you want the Alfresco Control Center UI to be installed

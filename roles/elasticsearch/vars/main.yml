@@ -1,3 +1,2 @@
 ---
 # vars file for elasticsearch
-elasticsearch_single_node: true

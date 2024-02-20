@@ -3,7 +3,7 @@
 - name: Install elasticsearch
   become: true
   block:
-    # https://github.com/buluma/ansible-role-elasticsearch/issues/25
+    # https://github.com/elastic/elasticsearch/issues/57018
     - name: Create alternative tmp directory for elasticsearch
       ansible.builtin.file:
         path: "{{ elasticsearch_tmp_path }}"
@@ -23,27 +23,6 @@
           Environment="ES_TMPDIR={{ elasticsearch_tmp_path }}"
         dest: "{{ elasticsearch_systemd_service_path }}/tmpdir.conf"
         mode: "0644"
-
-    - name: Set override for single node boostrap
-      when: elasticsearch_single_node
-      ansible.builtin.copy:
-        content: |
-          [Service]
-          Environment=ES_SETTING_DISCOVERY_TYPE=single-node
-          Environment=ES_SETTING_XPACK_SECURITY_ENABLED=false
-        dest: "{{ elasticsearch_systemd_service_path }}/single-node.conf"
-        mode: "0644"
-
-    - name: Disable override for single node bootstrap when requested
-      when: not elasticsearch_single_node
-      ansible.builtin.file:
-        path: "{{ elasticsearch_systemd_service_path }}/single-node.conf"
-        state: absent
-
-    - name: Enable elasticsearch repository
-      ansible.builtin.include_role:
-        name: buluma.elastic_repo
-
     - name: Install elasticsearch
       ansible.builtin.include_role:
-        name: buluma.elasticsearch
+        name: geerlingguy.elasticsearch
