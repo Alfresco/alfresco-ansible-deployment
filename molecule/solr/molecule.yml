@@ -37,6 +37,8 @@ provisioner:
   ansible_args:
     - -e
     - "@../../tests/test-ssl.yml"
+    - -e
+    - autogen_unsecure_secrets=true
   inventory:
     links:
       group_vars: ../../group_vars
