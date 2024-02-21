@@ -1,7 +1,4 @@
 ---
-- name: Default verify
-  import_playbook: ../default/verify.yml
-
 - name: Verify search enterprise
   hosts: search_enterprise
   gather_facts: false
@@ -53,3 +50,6 @@
       retries: 6
       delay: 10
       until: error_log.stdout | regex_search('reindexByIds.*COMPLETED.*')
+
+- name: Default verify
+  import_playbook: ../default/verify.yml
