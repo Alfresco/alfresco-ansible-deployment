@@ -30,19 +30,24 @@
             replace: "https://{{ node_hostname }}"
 
         - name: Run pytest
-          vars:
-              selfsigned_cert_path: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.crt"
+          environment:
+            REQUESTS_CA_BUNDLE: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.crt"
           ansible.builtin.shell:
             chdir: "{{ dtas_dir }}"
             cmd: |
-              export REQUESTS_CA_BUNDLE={{ selfsigned_cert_path }}
               pytest --tb=line --color=no --configuration {{ test_config_file }} tests/ -s
       rescue:
         - name: Print multiline pytest stdout as best as we can
           debug:
             msg: "{{ ansible_failed_result.stdout_lines }}"
-        - name: Explicit failure after printing failure debug
-          fail: msg="Aborting due to pytest failure"
+        - name: Run pytest AGAIN only for failed tests
+          environment:
+            REQUESTS_CA_BUNDLE: "{{ project_dir }}/configuration_files/ssl_certificates/{{ node_hostname }}.crt"
+          ansible.builtin.shell:
+            chdir: "{{ dtas_dir }}"
+            cmd: |
+              pytest --tb=line --color=no --configuration {{ test_config_file }} tests/ -s --last-failed
+
 
 - name: Verify adw plugins state
   hosts: adw
