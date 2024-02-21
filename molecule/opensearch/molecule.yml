@@ -41,4 +41,4 @@ provisioner:
     create: ../default/create.yml
     converge: ../../playbooks/acs.yml
     destroy: ../default/destroy.yml
-    verify: ../default/verify.yml
+    verify: ../multimachine/verify.yml
