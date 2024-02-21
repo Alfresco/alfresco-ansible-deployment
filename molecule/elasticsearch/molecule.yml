@@ -24,7 +24,8 @@ platforms:
       - database
       - nginx
       - repository
-      - search
+      - search_enterprise
+      - elasticsearch
       - sfs
       - syncservice
       - transformers
