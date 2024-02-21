@@ -91,7 +91,7 @@ jobs:
           - image: rockylinux:9.3
         scenario:
           - name: pki
-          - name: solr
+          - name: elasticsearch
         include:
           - scenario:
               name: identity

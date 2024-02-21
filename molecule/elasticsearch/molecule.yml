@@ -46,6 +46,6 @@ provisioner:
   playbooks:
     prepare: ../default/prepare.yml
     converge: ../../playbooks/acs.yml
-    verify: ../default/verify.yml
+    verify: ../multimachine/verify.yml
 verifier:
   name: ansible
