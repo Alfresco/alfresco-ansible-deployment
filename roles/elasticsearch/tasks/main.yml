@@ -32,4 +32,5 @@
         elasticsearch_heap_size_min: 1g
         elasticsearch_heap_size_max: 1g
         elasticsearch_extra_options: |
-          cluster.initial_master_nodes: ["{{ ansible_hostname }}"]
+          xpack.security.enabled: false
+          discovery.type: single-node
