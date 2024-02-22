@@ -19,14 +19,13 @@ platforms:
       Department: Engineering
       Production: false
 
-  - name: search_enterprise_instance
+  - name: search_instance
     image: ${MOLECULE_IT_IMAGE_ID}
     instance_type: t3.medium
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
     region: ${AWS_REGION}
     groups:
-      - search_enterprise
-      - elasticsearch
+      - search
     tags:
       Name: molecule_${MOLECULE_IT_PLATFORM}_search_${BRANCH_NAME}_${BUILD_NUMBER}
       Owner: Ops Readiness Team
@@ -149,3 +148,4 @@ provisioner:
     create: ../default/create.yml
     converge: ../../playbooks/acs.yml
     destroy: ../default/destroy.yml
+    verify: ../default/verify.yml
