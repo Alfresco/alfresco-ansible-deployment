@@ -10,7 +10,7 @@ on:
       - .pre-commit-config.yaml
 
 env:
-  DTAS_VERSION: OPSEXP-2450-fix-search-ise
+  DTAS_VERSION: v1.5.3
   BUILD_NUMBER: ${{ github.run_id }}
   PY_COLORS: 1
   PYTHONUNBUFFERED: 1
