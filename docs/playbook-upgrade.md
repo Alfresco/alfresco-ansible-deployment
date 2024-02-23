@@ -4,7 +4,7 @@
 
 ### Search Enterprise is the new default search engine
 
-The example inventories has been updated to default to Search Enterprise /
+The example inventories have been updated to default to Search Enterprise /
 ElasticSearch (`search_enterprise` and `elasticsearch` groups) as the preferred
 search engine from Enterprise since ACS 23.1.1.
 
