@@ -56,7 +56,7 @@ acc:
   repository: "{{ nexus_repository.releases }}"
   version: 8.0.0
 dependencies_version:
-  postgresql_connector: 42.2.19
+  postgresql_connector: 42.6.1
   postgres_major_version: 14
   activemq: 5.17.6
   java: 17.0.3
