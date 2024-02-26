@@ -118,10 +118,6 @@
   hosts: transformers
   gather_facts: false
   pre_tasks:
-    - name: Check wether we want mTLS for Tengines
-      ansible.builtin.set_fact:
-        tengine_mtls_required: >-
-          {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
       ansible.builtin.set_fact:
         transformers_keystore:
@@ -133,7 +129,7 @@
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
       when:
-        - tengine_mtls_required
+        - ats_mtls_required
         - ats_mtls_capable
   roles:
     - role: "../roles/transformers"
@@ -197,10 +193,6 @@
   hosts: repository
   gather_facts: false
   pre_tasks:
-    - name: Check wether we want mTLS for Repostory
-      ansible.builtin.set_fact:
-        repo_mtls_required: >-
-          {{ groups.repository | difference(groups.transformers | default([])) | length > 0 }}
     - name: Build keystore role argument
       ansible.builtin.set_fact:
         repository_keystore:
@@ -212,7 +204,7 @@
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
       when:
-        - repo_mtls_required
+        - ats_mtls_required
         - ats_mtls_capable
   roles:
     - role: "../roles/repository"
@@ -242,10 +234,6 @@
   hosts: transformers
   gather_facts: false
   pre_tasks:
-    - name: Check wether we want mTLS for Tengines
-      ansible.builtin.set_fact:
-        trouter_mtls_required: >-
-          {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
       ansible.builtin.set_fact:
         trouter_keystore:
@@ -257,7 +245,7 @@
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
       when:
-        - trouter_mtls_required
+        - ats_mtls_required
         - ats_mtls_capable
   roles:
     - role: "../roles/trouter"
@@ -284,10 +272,6 @@
   hosts: transformers
   gather_facts: false
   pre_tasks:
-    - name: Check wether we want mTLS for Tengines
-      ansible.builtin.set_fact:
-        sfs_mtls_required: >-
-          {{ groups.repository | difference(groups.transformers) | length > 0 }}
     - name: Build keystore role argument
       ansible.builtin.set_fact:
         sfs_keystore:
@@ -299,7 +283,7 @@
               pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
               add_to_trusted_ca: true
       when:
-        - sfs_mtls_required
+        - ats_mtls_required
         - ats_mtls_capable
   roles:
     - role: "../roles/sfs"

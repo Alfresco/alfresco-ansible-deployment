@@ -20,7 +20,5 @@ collections:
     version: 7.1.0
 
 roles:
-  - name: buluma.elastic_repo
-    version: v0.4.0
-  - name: buluma.elasticsearch
-    version: 1.2.0
+  - name: geerlingguy.elasticsearch
+    version: 5.1.2

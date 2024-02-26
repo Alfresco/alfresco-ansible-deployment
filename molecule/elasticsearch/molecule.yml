@@ -4,7 +4,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: search-enteprise-integration-instance
+  - name: instance
     image: $MOLECULE_ROLE_IMAGE
     dockerfile: ../../tests/molecule/Dockerfile-noprivs.j2
     command: "/lib/systemd/systemd"
@@ -22,10 +22,10 @@ platforms:
       - acc
       - adw
       - database
-      - elasticsearch
       - nginx
       - repository
       - search_enterprise
+      - elasticsearch
       - sfs
       - syncservice
       - transformers
@@ -38,11 +38,15 @@ provisioner:
   ansible_args:
     - -e
     - "@../../tests/test-ssl.yml"
+    - -e
+    - autogen_unsecure_secrets=true
   inventory:
     links:
       group_vars: ../../group_vars
       host_vars: host_vars
   playbooks:
     prepare: ../default/prepare.yml
+    converge: ../../playbooks/acs.yml
+    verify: ../multimachine/verify.yml
 verifier:
   name: ansible

@@ -3,7 +3,7 @@
 - name: Install elasticsearch
   become: true
   block:
-    # https://github.com/buluma/ansible-role-elasticsearch/issues/25
+    # https://github.com/elastic/elasticsearch/issues/57018
     - name: Create alternative tmp directory for elasticsearch
       ansible.builtin.file:
         path: "{{ elasticsearch_tmp_path }}"
@@ -24,10 +24,13 @@
         dest: "{{ elasticsearch_systemd_service_path }}/tmpdir.conf"
         mode: "0644"
 
-    - name: Enable elasticsearch repository
-      ansible.builtin.include_role:
-        name: buluma.elastic_repo
-
     - name: Install elasticsearch
       ansible.builtin.include_role:
-        name: buluma.elasticsearch
+        name: geerlingguy.elasticsearch
+      vars:
+        elasticsearch_network_host: "{{ ansible_hostname }}"
+        elasticsearch_heap_size_min: 1g
+        elasticsearch_heap_size_max: 1g
+        elasticsearch_extra_options: |
+          xpack.security.enabled: false
+          discovery.type: single-node

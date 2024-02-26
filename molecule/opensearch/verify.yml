@@ -1,4 +1,5 @@
-- name: Verify
+---
+- name: Verify search enterprise
   hosts: search_enterprise
   gather_facts: false
   vars:
@@ -22,7 +23,7 @@
       until: error_log.stdout | regex_search('Started LiveIndexingApp')
 
 - name: Verify Reindex before first run
-  hosts: search_enterprise
+  hosts: search_enterprise[0]
   gather_facts: false
   vars:
     job_name: elasticsearch-connector-reindex.service
@@ -32,16 +33,11 @@
         that:
           - ansible_facts.services[job_name] is defined
           - ansible_facts.services[job_name].state == 'inactive'
-
-- name: Run the Elasticsearch Connector Reindex
-  import_playbook: ../../playbooks/search-enterprise-reindex.yml
-
-- name: Verify Reindex after first run
-  hosts: search_enterprise[0]
-  gather_facts: false
-  vars:
-    job_name: elasticsearch-connector-reindex.service
-  tasks:
+    - name: Run the Elasticsearch Connector Reindex
+      become: true
+      ansible.builtin.systemd:
+        state: started
+        name: elasticsearch-connector-reindex
     - name: "Check that {{ job_name }} is really up and running"
       become: true
       ansible.builtin.shell: journalctl -u {{ job_name }}
@@ -50,5 +46,5 @@
       delay: 10
       until: error_log.stdout | regex_search('reindexByIds.*COMPLETED.*')
 
-- name: Run default verify
+- name: Default verify
   import_playbook: ../default/verify.yml

@@ -40,3 +40,19 @@
       when:
         - known_urls | default([]) | length == 0
         - cors.enabled | default(True)
+
+- name: Ensure mTLS requirements are met
+  hosts: repository:transformers
+  gather_facts: false
+  tasks:
+    - name: Check wether we want to enable mTLS for ATS deployment
+      ansible.builtin.set_fact:
+        ats_mtls_required: >-
+          {{ groups.repository | difference(groups.transformers | default([])) | length > 0 }}
+
+    - name: Assert that search-enterprise group is empty when ATS mTLS is required
+      ansible.builtin.assert:
+        that:
+          - groups.search_enterprise | default([]) | length == 0
+        fail_msg: mTLS enabled but not yet supported for search_enterprise
+      when: ats_mtls_required
