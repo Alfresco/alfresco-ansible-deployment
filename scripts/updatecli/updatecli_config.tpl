@@ -194,7 +194,7 @@ targets:
     kind: yaml
     sourceid: acs
     spec:
-      key: acs.version
+      key: $.acs.version
       file: '{{ .target_file }}'
   {{- if and .acc .acc.version }}
   acc:
@@ -202,7 +202,7 @@ targets:
     kind: yaml
     sourceid: acc
     spec:
-      key: acc.version
+      key: $.acc.version
       file: '{{ .target_file }}'
   {{- end }}
   {{- if and .adw.version }}
@@ -211,7 +211,7 @@ targets:
     kind: yaml
     sourceid: adw
     spec:
-      key: adw.version
+      key: $.adw.version
       file: '{{ .target_file }}'
   {{- end }}
   apiExplorer:
@@ -219,7 +219,7 @@ targets:
     kind: yaml
     sourceid: apiExplorer
     spec:
-      key: api_explorer.version
+      key: $.api_explorer.version
       file: '{{ .target_file }}'
   {{- if and .dsync .dsync.version }}
   dsync:
@@ -227,7 +227,7 @@ targets:
     kind: yaml
     sourceid: dsync
     spec:
-      key: sync.version
+      key: $.sync.version
       file: '{{ .target_file }}'
   {{- end }}
   search:
@@ -235,7 +235,7 @@ targets:
     kind: yaml
     sourceid: search
     spec:
-      key: search.version
+      key: $.search.version
       file: '{{ .target_file }}'
   {{- if and .searchEnterprise .searchEnterprise.version }}
   searchEnterprise:
@@ -243,7 +243,7 @@ targets:
     kind: yaml
     sourceid: searchEnterprise
     spec:
-      key: search_enterprise.version
+      key: $.search_enterprise.version
       file: '{{ .target_file }}'
   {{- end }}
   transform:
@@ -251,7 +251,7 @@ targets:
     kind: yaml
     sourceid: transform
     spec:
-      key: transform.version
+      key: $.transform.version
       file: '{{ .target_file }}'
   {{- if and .trouter .trouter.version }}
   trouter:
@@ -259,7 +259,7 @@ targets:
     kind: yaml
     sourceid: trouter
     spec:
-      key: trouter.version
+      key: $.trouter.version
       file: '{{ .target_file }}'
   {{- end }}
   {{- if and .sfs .sfs.version }}
@@ -268,7 +268,7 @@ targets:
     kind: yaml
     sourceid: trouter
     spec:
-      key: sfs.version
+      key: $.sfs.version
       file: '{{ .target_file }}'
   {{- end }}
   {{- end }}
@@ -280,7 +280,7 @@ targets:
     kind: yaml
     sourceid: {{ $element.sourceid }}
     spec:
-      key: amps.{{ $element.key_selector }}.version
+      key: $.amps.{{ $element.key_selector }}.version
       file: {{ $.target_file }}
   {{- end }}
   {{- end }}
