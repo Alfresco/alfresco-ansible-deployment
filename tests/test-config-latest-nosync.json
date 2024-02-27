@@ -7,7 +7,7 @@
     "assertions": {
       "acs": {
         "edition": "Enterprise",
-        "version": "23.1.1",
+        "version": "23.2.0",
         "identity": false,
         "modules": [
           {
@@ -17,7 +17,7 @@
           },
           {
             "id": "alfresco-aos-module",
-            "version": "2.0.0",
+            "version": "3.0.0",
             "installed": true
           }
         ]
