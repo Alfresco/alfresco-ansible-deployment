@@ -1,12 +1,17 @@
 name: "enterprise"
 
 on:
-  push:
-    branches:
-      - '**'
+  pull_request:
+    branches: [master]
     paths-ignore:
-      - 'docs/**'
-      - '*.md'
+      - "docs/**"
+      - "*.md"
+      - .pre-commit-config.yaml
+  push:
+    branches: [master]
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
       - .pre-commit-config.yaml
 
 env:
