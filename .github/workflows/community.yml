@@ -22,7 +22,7 @@ jobs:
     name: Test ${{ matrix.role.name }} role on ${{ matrix.molecule_distro.image }}
     # -A* and -M* are not available without nexus credentials
     if: |
-      ! startsWith(github.head_ref, 'next/')
+      ! startsWith(github.head_ref, 'next/') && ! contains(github.event.pull_request.labels.*.name, 'ci-prerelease')
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
