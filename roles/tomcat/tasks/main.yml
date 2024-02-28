@@ -22,7 +22,7 @@
 
     - name: Add {{ binaries_folder }}/tomcat.sh
       ansible.builtin.template:
-        src: tomcat.sh
+        src: tomcat.sh.j2
         dest: "{{ binaries_folder }}/tomcat.sh"
         group: "{{ group_name }}"
         owner: "{{ username }}"
