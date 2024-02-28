@@ -7,7 +7,6 @@ fi
 . {{ config_folder }}/setenv.sh
 export CATALINA_HOME=${TOMCAT_HOME}
 export CATALINA_BASE={{ config_folder }}/tomcat
-export CATALINA_OPTS="-Djava.net.preferIPv4Stack=true"
 export CATALINA_TMPDIR={{ data_folder }}/tomcat/temp
 export CATALINA_PID={{ data_folder }}/tomcat.pid
 export LOG_BASE={{ logs_folder }}
