@@ -35,4 +35,4 @@ sfs:
   version: "4.1"
 
 target_file: group_vars/all.yml
-version_pattern: '(-A\d*)?$'
+version_pattern: '$'
