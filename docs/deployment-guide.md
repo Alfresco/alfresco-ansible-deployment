@@ -388,19 +388,22 @@ communication paths and port numbers used.
 
 | Target Host                 | Target Port | Source Hosts                                             | Required For Deployment |
 |:----------------------------|:------------|:---------------------------------------------------------|:------------------------|
-| activemq                    | 61616       | repository, syncservice, transformers, search enterprise | Yes                     |
-| database                    | 5432        | repository, syncservice                                  | Yes                     |
-| repository                  | 8080        | nginx, search, syncservice, acc, adw                     | Yes                     |
+| activemq                    | 61616       | repository, syncservice, transformers, search_enterprise | Yes                     |
+| database                    | 5432        | repository, syncservice, search_enterprise (reindex)     | Yes                     |
+| database                    | 5432        | search_enterprise (reindex)                              | No                      |
+| repository                  | 8080        | nginx, share (loopbacl only)                             | Yes                     |
+| repository                  | 80          | search, syncservice                                      | Yes                     |
 | search                      | 8983        | repository                                               | No                      |
 | transformers (aio t-engine) | 8090        | repository                                               | No                      |
 | transformers (router)       | 8095        | repository                                               | No                      |
 | transformers (sfs)          | 8099        | repository                                               | No                      |
-| syncservice                 | 9090        | repository, nginx                                        | No                      |
+| syncservice                 | 9090        | nginx                                                    | No                      |
 | acc                         | 8881        | nginx                                                    | No                      |
 | adw                         | 8880        | nginx                                                    | No                      |
-| nginx                       | 80          | `<client-ips>`                                           | No                      |
-| nginx                       | 443         | `<client-ips>`                                           | No                      |
-| keycloak                    | 8082        | nginx, repository                                        | No                      |
+| nginx                       | 80,443      | `<client-ips>` (e.g. api clients such as acc or adw)     | No                      |
+| elasticsearch               | 9200        | repository                                               | No                      |
+| keycloak                    | 8082        | nginx                                                    | No                      |
+| keycloak                    | 443         | repository                                               | No                      |
 
 > NOTE: When using the ACS Community, some of these ports do not need to be opened (e.g. transform router/sfs, acc, adw).
 
