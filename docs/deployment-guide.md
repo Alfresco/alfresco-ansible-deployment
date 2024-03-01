@@ -391,7 +391,7 @@ communication paths and port numbers used.
 | activemq                    | 61616       | repository, syncservice, transformers, search_enterprise | Yes                     |
 | database                    | 5432        | repository, syncservice, search_enterprise (reindex)     | Yes                     |
 | database                    | 5432        | search_enterprise (reindex)                              | No                      |
-| repository                  | 8080        | nginx, share (loopbacl only)                             | Yes                     |
+| repository                  | 8080        | nginx, share (loopback only)                             | Yes                     |
 | repository                  | 80          | search, syncservice                                      | Yes                     |
 | search                      | 8983        | repository                                               | No                      |
 | transformers (aio t-engine) | 8090        | repository                                               | No                      |
