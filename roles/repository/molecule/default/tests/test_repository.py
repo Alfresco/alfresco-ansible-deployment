@@ -102,6 +102,10 @@ def test_alfresco_api(host):
         # Remove optional -Ax suffix in acs version
         acs_version_split = acs_version.split('-')
         acs_version = acs_version_split[:-1][0]
+    if acs_version.startswith('23.'):
+        # Remove patch version which is missing from acs version since 23.2.1
+        acs_version_split = acs_version.split('.')
+        acs_version = acs_version_split[0] + '.' + acs_version_split[1]
     assert_that(response['entry']['repository']['version']['display'], contains_string(acs_version))
 
 
