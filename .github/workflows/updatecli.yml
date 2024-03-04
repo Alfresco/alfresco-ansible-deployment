@@ -43,7 +43,7 @@ jobs:
         env:
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
           UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME}}
-          UPDATECLI_MODE: ${{ github.event_name == 'pull_request' && 'diff' || 'apply' }}
+          UPDATECLI_MODE: apply
 
       - name: Git Auto Commit
         uses: stefanzweifel/git-auto-commit-action@v5.0.0
