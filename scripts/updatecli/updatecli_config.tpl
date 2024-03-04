@@ -7,72 +7,84 @@ scms:
         url: https://github.com/Alfresco/acs-packaging.git
         branch: master
         directory: '/tmp/updatecli/acs'
+        token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   acsEntRepo:
     kind: git
     spec:
         url: git@github.com:Alfresco/alfresco-enterprise-repo.git
         branch: master
         directory: '/tmp/updatecli/acsEnt'
+        token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   accRepo:
     kind: git
     spec:
       url: git@github.com:Alfresco/alfresco-applications.git
       branch: develop
       directory: '/tmp/updatecli/acc'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   adwRepo:
     kind: git
     spec:
       url: https://github.com/Alfresco/alfresco-content-app.git
       branch: master
       directory: '/tmp/updatecli/adw'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   aosAmpRepo:
     kind: git
     spec:
       url: git@github.com:Alfresco/alfresco-aos-module.git
       branch: master
       directory: '/tmp/updatecli/aos-amp'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   googleDriveAmpRepo:
     kind: git
     spec:
       url: git@github.com:Alfresco/googledrive.git
       branch: master
       directory: '/tmp/updatecli/googledrive'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   apiExplorerRepo:
     kind: git
     spec:
         url: https://github.com/Alfresco/rest-api-explorer.git
         branch: master
         directory: '/tmp/updatecli/api-explorer'
+        token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   dsyncRepo:
     kind: git
     spec:
       url: git@github.com:Alfresco/dsync-services.git
       branch: master
       directory: '/tmp/updatecli/dsync'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   searchRepo:
     kind: git
     spec:
       url: git@github.com:Alfresco/InsightEngine.git
       branch: master
       directory: '/tmp/updatecli/search'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   searchEnterpriseRepo:
     kind: git
     spec:
       url: git@github.com:Alfresco/alfresco-elasticsearch-connector.git
       branch: master
       directory: '/tmp/updatecli/search_enterprise'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   transformRepo:
     kind: git
     spec:
       url: git@github.com:Alfresco/alfresco-transform-core.git
       branch: master
       directory: '/tmp/updatecli/transform'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   trouterRepo:
     kind: git
     spec:
       url: git@github.com:Alfresco/alfresco-transform-service.git
       branch: master
       directory: '/tmp/updatecli/trouter'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
 
 # Available selectors: https://github.com/Masterminds/semver#basic-comparisons
 sources:
