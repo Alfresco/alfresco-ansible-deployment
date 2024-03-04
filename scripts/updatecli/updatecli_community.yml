@@ -21,3 +21,16 @@ transform:
 
 target_file: community-extra-vars.yml
 version_pattern: '(\d*)?$'
+
+targets:
+  main: true
+  amps:
+    aos:
+      sourceid: aosAmp
+      key_selector: aos_module
+    googleDriveRepo:
+      sourceid: googleDriveAmp
+      key_selector: googledrive_repo
+    googleDriveShare:
+      sourceid: googleDriveAmp
+      key_selector: googledrive_share

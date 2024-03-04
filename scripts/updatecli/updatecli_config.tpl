@@ -298,7 +298,6 @@ targets:
   {{- end }}
   {{ range $index, $element := index . "targets" "amps" }}
   {{ $indexAmp := printf "%s%s" $index "Amp"}}
-  {{- if index $ $index }}
   {{ $indexAmp }}:
     name: Bump {{ $index }} AMP
     kind: yaml
@@ -306,5 +305,4 @@ targets:
     spec:
       key: $.amps.{{ $element.key_selector }}.version
       file: {{ $.target_file }}
-  {{- end }}
   {{- end }}
