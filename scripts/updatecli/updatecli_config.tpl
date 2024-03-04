@@ -8,6 +8,7 @@ scms:
       repository: acs-packaging
       branch: master
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   acsEntRepo:
     kind: github
     spec:
@@ -15,6 +16,7 @@ scms:
       repository: alfresco-enterprise-repo
       branch: master
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   accRepo:
     kind: github
     spec:
@@ -22,6 +24,7 @@ scms:
       repository: alfresco-applications
       branch: develop
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   adwRepo:
     kind: github
     spec:
@@ -29,6 +32,7 @@ scms:
       repository: alfresco-content-app
       branch: master
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   aosAmpRepo:
     kind: github
     spec:
@@ -36,6 +40,7 @@ scms:
       repository: alfresco-aos-module
       branch: master
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   googleDriveAmpRepo:
     kind: github
     spec:
@@ -43,6 +48,7 @@ scms:
       repository: googledrive
       branch: master
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   apiExplorerRepo:
     kind: github
     spec:
@@ -50,6 +56,7 @@ scms:
       repository: rest-api-explorer
       branch: master
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   dsyncRepo:
     kind: github
     spec:
@@ -57,6 +64,7 @@ scms:
       repository: dsync-services
       branch: master
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   searchRepo:
     kind: github
     spec:
@@ -64,6 +72,7 @@ scms:
       repository: InsightEngine
       branch: master
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   searchEnterpriseRepo:
     kind: github
     spec:
@@ -71,6 +80,7 @@ scms:
       repository: alfresco-elasticsearch-connector
       branch: master
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   transformRepo:
     kind: github
     spec:
@@ -78,6 +88,7 @@ scms:
       repository: alfresco-transform-core
       branch: master
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   trouterRepo:
     kind: github
     spec:
@@ -85,6 +96,7 @@ scms:
       repository: alfresco-transform-service
       branch: master
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
 
 # Available selectors: https://github.com/Masterminds/semver#basic-comparisons
 sources:

@@ -43,7 +43,6 @@ jobs:
         env:
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
           UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME}}
-          UPDATECLI_GITHUB_EMAIL: ${{ vars.BOT_GITHUB_EMAIL }}
           UPDATECLI_MODE: ${{ github.event_name == 'pull_request' && 'diff' || 'apply' }}
 
       - name: Git Auto Commit
