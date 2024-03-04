@@ -27,6 +27,7 @@ jobs:
       matrix:
         values-file:
           - updatecli_acs23.yml
+          - updatecli_community.yml
           - updatecli_acs74.yml
           - updatecli_acs73.yml
           - updatecli_acs72.yml
