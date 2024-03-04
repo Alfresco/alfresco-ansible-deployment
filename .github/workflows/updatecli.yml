@@ -52,6 +52,6 @@ jobs:
             🛠 Updatecli pipeline bump
           commit_user_name: ${{ vars.BOT_GITHUB_USERNAME }}
           commit_user_email: ${{ vars.BOT_GITHUB_EMAIL }}
-          branch: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME && 'updatecli-bump-acs' }}
+          branch: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME && 'updatecli-bump-acs' || '' }}
           create_branch: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME }}
           push_options: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME && '--force' || '' }}
