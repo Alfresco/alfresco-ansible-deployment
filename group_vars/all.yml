@@ -37,11 +37,11 @@ amps:
   googledrive_repo:
     repository: >-
       {{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise
-    version: 4.0.0
+    version: 4.1.0
   googledrive_share:
     repository: >-
       {{ nexus_repository.releases }}/integrations/alfresco-googledrive-share
-    version: 4.0.0
+    version: 4.1.0
 api_explorer:
   artifact_name: api-explorer
   repository: "{{ nexus_repository.releases }}"
