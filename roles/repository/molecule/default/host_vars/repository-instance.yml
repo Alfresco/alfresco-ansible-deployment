@@ -54,5 +54,8 @@ global_properties:
   messaging:
     broker:
       url: failover:(tcp://localhost:61616)?timeout=3000
+      username: "{{ activemq_username }}"
+      password: "{{ activemq_password }}"
+
   aos:
     baseUrlOverwrite: http://localhost/alfresco/aos

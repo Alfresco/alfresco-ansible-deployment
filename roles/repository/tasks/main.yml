@@ -184,7 +184,8 @@
     - name: Add ACS home to tomcat.sh
       ansible.builtin.lineinfile:
         path: "{{ binaries_folder }}/tomcat.sh"
-        insertafter: 'CATALINA_OPTS'
+        insertbefore: /catalina.sh
+        firstmatch: true
         line: >-
           export CATALINA_OPTS="${CATALINA_OPTS}
           -Dacs.home=${ACS_HOME}

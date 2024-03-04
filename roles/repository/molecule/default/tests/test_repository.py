@@ -79,6 +79,12 @@ def test_alfresco_log_exists(host):
         assert_that(host.file("/var/log/alfresco/alfresco.log").exists)
 
 
+def test_activemq_log_ok(host):
+    "Check that activemq repo client authenticates properly"
+    with host.sudo():
+        assert_that("password is invalid." not in host.file("/var/log/alfresco/activemq.log").content_string)
+
+
 def test_alfresco_context_200(host):
     "Check that /alfresco context is available and returns a HTTP 200 status code"
     with host.sudo():
