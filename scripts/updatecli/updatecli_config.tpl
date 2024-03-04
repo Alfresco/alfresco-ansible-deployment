@@ -2,86 +2,98 @@ name: ACS update pipeline
 
 scms:
   acsRepo:
-    kind: git
+    kind: github
     spec:
-        url: https://github.com/Alfresco/acs-packaging.git
-        branch: master
-        directory: '/tmp/updatecli/acs'
-        token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      owner: Alfresco
+      repository: acs-packaging
+      branch: master
+      directory: '/tmp/updatecli/acs'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   acsEntRepo:
-    kind: git
+    kind: github
     spec:
-        url: git@github.com:Alfresco/alfresco-enterprise-repo.git
-        branch: master
-        directory: '/tmp/updatecli/acsEnt'
-        token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      owner: Alfresco
+      repository: alfresco-enterprise-repo
+      branch: master
+      directory: '/tmp/updatecli/acsEnt'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   accRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/alfresco-applications.git
+      owner: Alfresco
+      repository: alfresco-applications
       branch: develop
       directory: '/tmp/updatecli/acc'
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   adwRepo:
-    kind: git
+    kind: github
     spec:
-      url: https://github.com/Alfresco/alfresco-content-app.git
+      owner: Alfresco
+      repository: alfresco-content-app
       branch: master
       directory: '/tmp/updatecli/adw'
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   aosAmpRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/alfresco-aos-module.git
+      owner: Alfresco
+      repository: alfresco-aos-module
       branch: master
       directory: '/tmp/updatecli/aos-amp'
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   googleDriveAmpRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/googledrive.git
+      owner: Alfresco
+      repository: googledrive
       branch: master
       directory: '/tmp/updatecli/googledrive'
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   apiExplorerRepo:
-    kind: git
+    kind: github
     spec:
-        url: https://github.com/Alfresco/rest-api-explorer.git
-        branch: master
-        directory: '/tmp/updatecli/api-explorer'
-        token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      owner: Alfresco
+      repository: rest-api-explorer
+      branch: master
+      directory: '/tmp/updatecli/api-explorer'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   dsyncRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/dsync-services.git
+      owner: Alfresco
+      repository: dsync-services
       branch: master
       directory: '/tmp/updatecli/dsync'
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   searchRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/InsightEngine.git
+      owner: Alfresco
+      repository: InsightEngine
       branch: master
       directory: '/tmp/updatecli/search'
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   searchEnterpriseRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/alfresco-elasticsearch-connector.git
+      owner: Alfresco
+      repository: alfresco-elasticsearch-connector
       branch: master
       directory: '/tmp/updatecli/search_enterprise'
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   transformRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/alfresco-transform-core.git
+      owner: Alfresco
+      repository: alfresco-transform-core
       branch: master
       directory: '/tmp/updatecli/transform'
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
   trouterRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/alfresco-transform-service.git
+      owner: Alfresco
+      repository: alfresco-transform-service
       branch: master
       directory: '/tmp/updatecli/trouter'
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
