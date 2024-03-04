@@ -35,7 +35,7 @@ jobs:
         uses: updatecli/updatecli-action@e1b709789a409521fd9a1fc0f143c5f2cfaa2644 # v2.55.0
 
       - name: Run Updatecli in ${{ env.UPDATECLI_MODE }} mode
-        run : >-
+        run: >-
           updatecli ${{ env.UPDATECLI_MODE }}
           --config scripts/updatecli/updatecli_config.tpl
           --values scripts/updatecli/updatecli_base.yml
