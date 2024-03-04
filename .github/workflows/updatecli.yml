@@ -30,6 +30,7 @@ jobs:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           ref: ${{ github.head_ref }}
+          token: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Install Updatecli
         uses: updatecli/updatecli-action@e1b709789a409521fd9a1fc0f143c5f2cfaa2644 # v2.55.0
