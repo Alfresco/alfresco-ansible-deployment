@@ -14,7 +14,7 @@ transform:
 acc:
   artifact_name: alfresco-control-center
   repository: "{{ nexus_repository.releases }}"
-  version: 8.3.0
+  version: 8.4.0
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
@@ -25,10 +25,10 @@ amps:
     version: 3.0.0
   googledrive_repo:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-repo-community"
-    version: 4.0.0
+    version: 4.1.0
   googledrive_share:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-repo-community"
-    version: 4.0.0
+    version: 4.1.0
 amp_downloads:
   - url: "{{ amps.aos_module.repository }}/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     sha1_checksum_url: "{{ amps.aos_module.repository }}/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp.sha1"
