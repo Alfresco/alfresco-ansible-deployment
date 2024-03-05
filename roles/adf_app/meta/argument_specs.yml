@@ -7,7 +7,7 @@ argument_specs:
         type: str
         required: true
         description: |
-          Identifier for the app that will be served under this name
+          Unique identifier for the app that will be used to create config files and directories.
       adf_app_context:
         type: str
         required: true
