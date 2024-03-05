@@ -24,7 +24,6 @@
     p12_passphrase: "{{ hostvars.localhost.certs_p12_passphrase }}"
     secret_ca_passphrase: "{{ hostvars.localhost.ca_signing_key_passphrase }}"
   ansible.builtin.import_playbook: pki.yml
-  when: ((certs_p12_passphrase | default([])) | length > 0) and ((ca_signing_key_passphrase | default([])) | length > 0)
 
 - name: Populate common facts
   hosts: repository:identity:acc:adw
