@@ -348,11 +348,7 @@
   gather_facts: false
   vars:
     acs_version_requirement: "{{ acs.version is version('7.4', 'ge') }}"
-    adf_default_configuration:
-      oauth2:
-        redirectUri: /control-center/
-        redirectUriLogout: /control-center/
-        redirectSilentIframeUri: "{protocol}//{hostname}{:port}/control-center/assets/silent-refresh.html"
+    adf_default_configuration: {}
   roles:
     - role: "../roles/adf_app"
       when: acs_version_requirement
@@ -387,10 +383,6 @@
       plugins:
         processService: false
         microsoftOnline: false
-      oauth2:
-        redirectUri: /workspace/
-        redirectUriLogout: /workspace/
-        redirectSilentIframeUri: "{protocol}//{hostname}{:port}/workspace/assets/silent-refresh.html"
   roles:
     - role: "../roles/adf_app"
       when: acs.edition == "Enterprise"

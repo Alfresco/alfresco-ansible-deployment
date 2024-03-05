@@ -3,6 +3,7 @@
 
 # Role arguments
 adf_app_name: null
+adf_app_context: /
 adf_app_port: 8080
 adf_app_src_archive: null
 adf_app_src_checksum: null
@@ -22,6 +23,6 @@ adf_app_default_configuration:
     clientId: alfresco
     implicitFlow: true
     silentLogin: true
-    redirectSilentIframeUri: "{protocol}//{hostname}{:port}/assets/silent-refresh.html"
-    redirectUri: "/"
-    redirectUriLogout: "/"
+    redirectSilentIframeUri: "{protocol}//{hostname}{:port}{{ adf_app_context }}assets/silent-refresh.html"
+    redirectUri: "{{ adf_app_context }}"
+    redirectUriLogout: "{{ adf_app_context }}"
