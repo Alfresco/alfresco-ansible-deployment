@@ -3,7 +3,6 @@
 # For more information please have a look at the
 # [security_doc](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/SECURITY.md#specify-trustworthy-applications)
 known_urls: []
-
 artifacts_repositories:
   enterprise:
     base_url: "https://artifacts.alfresco.com/nexus/content"
@@ -26,11 +25,11 @@ acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 23.1.1
+  version: 23.2.1
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
-    version: 2.0.0
+    version: 3.0.0
   device_sync:
     repository: >-
       {{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo
@@ -38,15 +37,15 @@ amps:
   googledrive_repo:
     repository: >-
       {{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise
-    version: 4.0.0
+    version: 4.1.0
   googledrive_share:
     repository: >-
       {{ nexus_repository.releases }}/integrations/alfresco-googledrive-share
-    version: 4.0.0
+    version: 4.1.0
 api_explorer:
   artifact_name: api-explorer
   repository: "{{ nexus_repository.releases }}"
-  version: 23.1.0
+  version: 23.2.0
 search_enterprise:
   artifact_name: alfresco-elasticsearch-connector-distribution
   repository: "{{ nexus_repository.enterprise_releases }}"
@@ -54,23 +53,23 @@ search_enterprise:
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
-  version: 2.0.9
+  version: 2.0.9.1
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
-  version: 5.0.1
+  version: 5.1.0
 trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 4.0.1
+  version: 4.1.0
 sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 4.0.1
+  version: 4.1.0
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 4.3.0
+  version: 4.4.0
 sync:
   repository: >-
     {{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x
@@ -78,7 +77,7 @@ sync:
 acc:
   artifact_name: alfresco-control-center
   repository: "{{ nexus_repository.releases }}"
-  version: 8.3.0
+  version: 8.4.0
 supported_os:
   RedHat:
     versions:
@@ -186,11 +185,11 @@ use_custom_keystores: false
 # to default ansible merging behaviour
 dependencies_version:
   postgresql_connector: 42.6.1
-  postgres_major_version: 14
+  postgres_major_version: 15
   activemq: 5.18.3
   java: 17.0.9
   java_build: 9
-  tomcat: 10.1.13
+  tomcat: 10.1.19
   libreoffice: 7.2.5.1
   pdf_renderer: 1.1
   imagemagick: 7.1.0-16-ci-6

@@ -4,8 +4,8 @@ runs:
   using: "composite"
   steps:
     - name: Use internal nexus repository when branch is a future release
-      if: startsWith(github.ref_name, 'next/') || startsWith(github.head_ref, 'next/')
+      if: startsWith(github.ref_name, 'next/') || startsWith(github.head_ref, 'next/') || contains(github.event.pull_request.labels.*.name, 'ci-prerelease')
       run: |
         yq -i '.artifacts_repositories.enterprise.repository = "groups/internal"' group_vars/all.yml
-        echo "Looks like this is a release branch so we are overriding nexus enterprise repository to groups/internal"
+        echo "::warning title=pre-release branch::Nexus enterprise repository override enabled, using groups/internal as main repository"
       shell: bash

@@ -1,12 +1,17 @@
 name: "enterprise"
 
 on:
-  push:
-    branches:
-      - '**'
+  pull_request:
+    branches: [master]
     paths-ignore:
-      - 'docs/**'
-      - '*.md'
+      - "docs/**"
+      - "*.md"
+      - .pre-commit-config.yaml
+  push:
+    branches: [master]
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
       - .pre-commit-config.yaml
 
 env:
@@ -55,7 +60,7 @@ jobs:
           cache: pipenv
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.14.3
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.17.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -129,7 +134,7 @@ jobs:
             desc: EC2 ACS 7.1 (Ubuntu 18.04)
           - name: default
             vars: vars-rhel8.yml
-            desc: EC2 ACS 7.1 (RHEL 8.4)
+            desc: EC2 ACS 7.1 with AGS (RHEL 8.4)
           - name: default
             vars: vars-ubuntu20-72.yml
             desc: EC2 ACS 7.2 (Ubuntu 20.04)
@@ -169,7 +174,7 @@ jobs:
           cache: pipenv
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.14.3
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.17.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -179,7 +184,7 @@ jobs:
           cache-name: enterprise
 
       - name: Set BRANCH_NAME
-        uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@v5.14.3
+        uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@v5.17.0
         with:
           sanitize: true
           max-length: 20

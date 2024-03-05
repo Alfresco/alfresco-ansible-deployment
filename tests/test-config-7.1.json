@@ -2,7 +2,8 @@
     "config": {
       "host": "TEST_URL",
       "username": "admin",
-      "password": "admin"
+      "password": "admin",
+      "search_retry_interval_seconds": "30"
     },
     "assertions": {
       "acs": {
@@ -12,7 +13,7 @@
         "modules": [
           {
             "id": "org.alfresco.integrations.google.docs",
-            "version": "3.2.1",
+            "version": "3.2.2",
             "installed": true
           },
           {

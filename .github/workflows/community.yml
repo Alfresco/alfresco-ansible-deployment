@@ -2,6 +2,7 @@ name: "community"
 
 on:
   pull_request:
+    branches: [master]
     paths-ignore:
       - "docs/**"
       - "*.md"
@@ -22,7 +23,7 @@ jobs:
     name: Test ${{ matrix.role.name }} role on ${{ matrix.molecule_distro.image }}
     # -A* and -M* are not available without nexus credentials
     if: |
-      ! startsWith(github.head_ref, 'next/')
+      ! startsWith(github.head_ref, 'next/') && ! contains(github.event.pull_request.labels.*.name, 'ci-prerelease')
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -62,7 +63,7 @@ jobs:
           cache: pipenv
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.14.3
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.17.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 

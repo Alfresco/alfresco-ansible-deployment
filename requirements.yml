@@ -2,17 +2,17 @@
 # Install with ansible-galaxy install -vr requirements.yml
 collections:
   - name: community.general
-    version: 8.2.0
+    version: 8.4.0
   - name: community.postgresql
-    version: 3.3.0
+    version: 3.4.0
   - name: ansible.posix
     version: 1.5.4
   - name: ansible.utils
     version: 3.1.0
   - name: community.crypto
-    version: 2.17.1
+    version: 2.18.0
   - name: middleware_automation.keycloak
-    version: 2.0.2
+    version: 2.1.0
   # molecule ec2 tests
   - name: amazon.aws
     version: 7.3.0

@@ -13,10 +13,10 @@ amps:
     version: 3.11.1
   googledrive_repo:
     repository: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise"
-    version: 3.2.1
+    version: 3.2.2
   googledrive_share:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share"
-    version: 3.2.1
+    version: 3.2.2
 api_explorer:
   artifact_name: api-explorer
   repository: "{{ nexus_repository.releases }}"
@@ -32,15 +32,15 @@ search:
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
-  version: 3.1.1
+  version: 3.1.2
 trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.1.1
+  version: 2.1.2
 sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.1.1
+  version: 2.1.2
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
@@ -55,7 +55,7 @@ dependencies_version:
   activemq: 5.16.7
   java: 11.0.15
   java_build: 10
-  tomcat: 9.0.59
+  tomcat: 9.0.86
   libreoffice: 7.0.6.2
   pdf_renderer: 1.1
   imagemagick: 7.1.0-16-ci-6

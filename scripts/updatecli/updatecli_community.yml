@@ -1,23 +1,36 @@
 acs:
-  version: "23.1"
+  version: "23.2"
 
 acc:
-  version: "8.3"
+  version: "8.4"
 
 aos:
-  version: "2.0"
+  version: "3.0"
 
 apiExplorer:
-  version: "23.1"
+  version: "23.2"
 
 googleDrive:
-  version: "4.0"
+  version: "4.1"
 
 search:
   version: "2.0"
 
 transform:
-  version: "5.0"
+  version: "5.1"
 
 target_file: community-extra-vars.yml
 version_pattern: '(\d*)?$'
+
+targets:
+  main: true
+  amps:
+    aos:
+      sourceid: aosAmp
+      key_selector: aos_module
+    googleDriveRepo:
+      sourceid: googleDriveAmp
+      key_selector: googledrive_repo
+    googleDriveShare:
+      sourceid: googleDriveAmp
+      key_selector: googledrive_share
