@@ -1,23 +1,23 @@
 acs:
-  version: "23.1"
+  version: "23.2"
 
 adw:
-  version: "4.3"
+  version: "4.4"
 
 acc:
-  version: "8.3"
+  version: "8.4"
 
 aos:
-  version: "2.0"
+  version: "3.0"
 
 apiExplorer:
-  version: "23.1"
+  version: "23.2"
 
 dsync:
   version: "4.0"
 
 googleDrive:
-  version: "4.0"
+  version: "4.1"
 
 search:
   version: "2.0"
@@ -26,13 +26,13 @@ searchEnterprise:
   version: "4.0"
 
 transform:
-  version: "5.0"
+  version: "5.1"
 
 trouter:
-  version: "4.0"
+  version: "4.1"
 
 sfs:
-  version: "4.0"
+  version: "4.1"
 
 target_file: group_vars/all.yml
-version_pattern: '(-A\d*)?$'
+version_pattern: '$'

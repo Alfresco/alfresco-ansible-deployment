@@ -1,34 +1,34 @@
 acs:
   artifact_name: alfresco-content-services-community-distribution
   repository: "{{ nexus_repository.releases }}"
-  version: 23.1.0
+  version: 23.2.1
   edition: Community
 api_explorer:
   artifact_name: api-explorer
   repository: "{{ nexus_repository.releases }}"
-  version: 23.1.0
+  version: 23.2.0
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
-  version: 5.0.1
+  version: 5.1.0
 acc:
   artifact_name: alfresco-control-center
   repository: "{{ nexus_repository.releases }}"
-  version: 8.3.0
+  version: 8.4.0
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
-  version: 2.0.8.2
+  version: 2.0.9.1
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
-    version: 2.0.0
+    version: 3.0.0
   googledrive_repo:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-repo-community"
-    version: 4.0.0
+    version: 4.1.0
   googledrive_share:
-    repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-repo-community"
-    version: 4.0.0
+    repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share"
+    version: 4.1.0
 amp_downloads:
   - url: "{{ amps.aos_module.repository }}/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
     sha1_checksum_url: "{{ amps.aos_module.repository }}/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp.sha1"
@@ -36,6 +36,6 @@ amp_downloads:
   - url: "{{ amps.googledrive_repo.repository }}/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_repo.version }}.amp"
     sha1_checksum_url: "{{ amps.googledrive_repo.repository }}/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_repo.version }}.amp.sha1"
     dest: "{{ content_folder }}/amps_repo/alfresco-googledrive-repo-enterprise.amp"
-  - url: "{{ amps.googledrive_share.repository }}/{{ amps.googledrive_share.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_share.version }}.amp"
-    sha1_checksum_url: "{{ amps.googledrive_repo.repository }}/{{ amps.googledrive_share.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_share.version }}.amp.sha1"
+  - url: "{{ amps.googledrive_share.repository }}/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp"
+    sha1_checksum_url: "{{ amps.googledrive_share.repository }}/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp.sha1"
     dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"

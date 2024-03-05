@@ -2,77 +2,101 @@ name: ACS update pipeline
 
 scms:
   acsRepo:
-    kind: git
+    kind: github
     spec:
-        url: https://github.com/Alfresco/acs-packaging.git
-        branch: master
-        directory: '/tmp/updatecli/acs'
+      owner: Alfresco
+      repository: acs-packaging
+      branch: master
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   acsEntRepo:
-    kind: git
+    kind: github
     spec:
-        url: git@github.com:Alfresco/alfresco-enterprise-repo.git
-        branch: master
-        directory: '/tmp/updatecli/acsEnt'
+      owner: Alfresco
+      repository: alfresco-enterprise-repo
+      branch: master
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   accRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/alfresco-applications.git
+      owner: Alfresco
+      repository: alfresco-applications
       branch: develop
-      directory: '/tmp/updatecli/acc'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   adwRepo:
-    kind: git
+    kind: github
     spec:
-      url: https://github.com/Alfresco/alfresco-content-app.git
+      owner: Alfresco
+      repository: alfresco-content-app
       branch: master
-      directory: '/tmp/updatecli/adw'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   aosAmpRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/alfresco-aos-module.git
+      owner: Alfresco
+      repository: alfresco-aos-module
       branch: master
-      directory: '/tmp/updatecli/aos-amp'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   googleDriveAmpRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/googledrive.git
+      owner: Alfresco
+      repository: googledrive
       branch: master
-      directory: '/tmp/updatecli/googledrive'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   apiExplorerRepo:
-    kind: git
+    kind: github
     spec:
-        url: https://github.com/Alfresco/rest-api-explorer.git
-        branch: master
-        directory: '/tmp/updatecli/api-explorer'
+      owner: Alfresco
+      repository: rest-api-explorer
+      branch: master
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   dsyncRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/dsync-services.git
+      owner: Alfresco
+      repository: dsync-services
       branch: master
-      directory: '/tmp/updatecli/dsync'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   searchRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/InsightEngine.git
+      owner: Alfresco
+      repository: InsightEngine
       branch: master
-      directory: '/tmp/updatecli/search'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   searchEnterpriseRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/alfresco-elasticsearch-connector.git
+      owner: Alfresco
+      repository: alfresco-elasticsearch-connector
       branch: master
-      directory: '/tmp/updatecli/search_enterprise'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   transformRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/alfresco-transform-core.git
+      owner: Alfresco
+      repository: alfresco-transform-core
       branch: master
-      directory: '/tmp/updatecli/transform'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
   trouterRepo:
-    kind: git
+    kind: github
     spec:
-      url: git@github.com:Alfresco/alfresco-transform-service.git
+      owner: Alfresco
+      repository: alfresco-transform-service
       branch: master
-      directory: '/tmp/updatecli/trouter'
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
 
 # Available selectors: https://github.com/Masterminds/semver#basic-comparisons
 sources:
@@ -194,7 +218,7 @@ targets:
     kind: yaml
     sourceid: acs
     spec:
-      key: acs.version
+      key: $.acs.version
       file: '{{ .target_file }}'
   {{- if and .acc .acc.version }}
   acc:
@@ -202,7 +226,7 @@ targets:
     kind: yaml
     sourceid: acc
     spec:
-      key: acc.version
+      key: $.acc.version
       file: '{{ .target_file }}'
   {{- end }}
   {{- if and .adw.version }}
@@ -211,7 +235,7 @@ targets:
     kind: yaml
     sourceid: adw
     spec:
-      key: adw.version
+      key: $.adw.version
       file: '{{ .target_file }}'
   {{- end }}
   apiExplorer:
@@ -219,7 +243,7 @@ targets:
     kind: yaml
     sourceid: apiExplorer
     spec:
-      key: api_explorer.version
+      key: $.api_explorer.version
       file: '{{ .target_file }}'
   {{- if and .dsync .dsync.version }}
   dsync:
@@ -227,7 +251,7 @@ targets:
     kind: yaml
     sourceid: dsync
     spec:
-      key: sync.version
+      key: $.sync.version
       file: '{{ .target_file }}'
   {{- end }}
   search:
@@ -235,7 +259,7 @@ targets:
     kind: yaml
     sourceid: search
     spec:
-      key: search.version
+      key: $.search.version
       file: '{{ .target_file }}'
   {{- if and .searchEnterprise .searchEnterprise.version }}
   searchEnterprise:
@@ -243,7 +267,7 @@ targets:
     kind: yaml
     sourceid: searchEnterprise
     spec:
-      key: search_enterprise.version
+      key: $.search_enterprise.version
       file: '{{ .target_file }}'
   {{- end }}
   transform:
@@ -251,7 +275,7 @@ targets:
     kind: yaml
     sourceid: transform
     spec:
-      key: transform.version
+      key: $.transform.version
       file: '{{ .target_file }}'
   {{- if and .trouter .trouter.version }}
   trouter:
@@ -259,7 +283,7 @@ targets:
     kind: yaml
     sourceid: trouter
     spec:
-      key: trouter.version
+      key: $.trouter.version
       file: '{{ .target_file }}'
   {{- end }}
   {{- if and .sfs .sfs.version }}
@@ -268,19 +292,17 @@ targets:
     kind: yaml
     sourceid: trouter
     spec:
-      key: sfs.version
+      key: $.sfs.version
       file: '{{ .target_file }}'
   {{- end }}
   {{- end }}
   {{ range $index, $element := index . "targets" "amps" }}
   {{ $indexAmp := printf "%s%s" $index "Amp"}}
-  {{- if index $ $index }}
   {{ $indexAmp }}:
     name: Bump {{ $index }} AMP
     kind: yaml
     sourceid: {{ $element.sourceid }}
     spec:
-      key: amps.{{ $element.key_selector }}.version
+      key: $.amps.{{ $element.key_selector }}.version
       file: {{ $.target_file }}
-  {{- end }}
   {{- end }}

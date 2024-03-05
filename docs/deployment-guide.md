@@ -869,19 +869,19 @@ To check your inventory file is configured correctly and the control node is abl
 pipenv run ansible all -m ping -i inventory_ssh.yml
 ```
 
-To deploy ACS 7.1 Enterprise on the target host execute the playbook as the current user using the following command:
+To deploy latest ACS Enterprise on the target host execute the playbook as the current user using the following command:
 
 ```bash
 pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
 ```
 
-Alternatively, to deploy an ACS 7.0 Enterprise system use the following command:
+Alternatively, to deploy an ACS 7.4 Enterprise system use the following command:
 
 ```bash
-pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.0.N-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.4.N-extra-vars.yml"
 ```
 
-Or to deploy ACS Community use the following command:
+Or to deploy latest ACS Community use the following command:
 
 ```bash
 pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@community-extra-vars.yml"
@@ -933,13 +933,13 @@ ansible all -m ping -i inventory_ssh.yml
 pipenv run ansible-playbook playbooks/prerun-network-checks.yml -i inventory_ssh.yml [-e "@community-extra-vars.yml"]
 ```
 
-To deploy ACS 7 Enterprise on the target hosts execute the playbook as the current user using the following command:
+To deploy latest ACS Enterprise on the target hosts execute the playbook as the current user using the following command:
 
 ```bash
 pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
 ```
 
-Or to deploy ACS Community use the following command:
+Or to deploy latest ACS Community use the following command:
 
 ```bash
 pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@community-extra-vars.yml"

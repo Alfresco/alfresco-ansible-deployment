@@ -61,7 +61,7 @@ dependencies_version:
   activemq: 5.16.7
   java: 11.0.15
   java_build: 10
-  tomcat: 9.0.59
+  tomcat: 9.0.86
   libreoffice: 6.3.5.2
   pdf_renderer: 1.1
   imagemagick: 7.0.10-59-ci-2
