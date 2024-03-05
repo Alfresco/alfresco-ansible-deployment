@@ -348,6 +348,11 @@
   gather_facts: false
   vars:
     acs_version_requirement: "{{ acs.version is version('7.4', 'ge') }}"
+    adf_default_configuration:
+      oauth2:
+        redirectUri: /control-center/
+        redirectUriLogout: /control-center/
+        redirectSilentIframeUri: "{protocol}//{hostname}{:port}/control-center/assets/silent-refresh.html"
   roles:
     - role: "../roles/adf_app"
       when: acs_version_requirement
@@ -356,7 +361,7 @@
       adf_app_src_archive: "{{ downloads.acc_zip_url }}"
       adf_app_src_checksum: "{{ downloads.acc_zip_sha1_checksum_url }}"
       adf_app_version: "{{ acc.version }}"
-      adf_app_configuration: "{{ adf_app_oauth_configuration | default({}) }}"
+      adf_app_configuration: "{{ adf_app_oauth_configuration | default({}) | ansible.builtin.combine(adf_default_configuration) }}"
   post_tasks:
     - name: Update installation status file with ACC
       when: acs_version_requirement
@@ -378,10 +383,14 @@
   hosts: adw
   gather_facts: false
   vars:
-    adf_plugins_configuration:
+    adf_default_configuration:
       plugins:
         processService: false
         microsoftOnline: false
+      oauth2:
+        redirectUri: /workspace/
+        redirectUriLogout: /workspace/
+        redirectSilentIframeUri: "{protocol}//{hostname}{:port}/workspace/assets/silent-refresh.html"
   roles:
     - role: "../roles/adf_app"
       when: acs.edition == "Enterprise"
@@ -395,7 +404,7 @@
         {{ lookup('url', downloads.adw_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
         {%- endif %}
       adf_app_version: "{{ adw.version }}"
-      adf_app_configuration: "{{ adf_app_oauth_configuration | default({}) | ansible.builtin.combine(adf_plugins_configuration) }}"
+      adf_app_configuration: "{{ adf_app_oauth_configuration | default({}) | ansible.builtin.combine(adf_default_configuration) }}"
   post_tasks:
     - name: Update installation status file with ADW
       when: acs.edition == "Enterprise"
