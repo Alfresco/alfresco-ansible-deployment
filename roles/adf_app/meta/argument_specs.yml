@@ -10,7 +10,6 @@ argument_specs:
           Unique identifier for the app that will be used to create config files and directories.
       adf_app_context:
         type: str
-        required: true
         default: /
         description: |
           The context path where the app will be reachable by users once exposed
