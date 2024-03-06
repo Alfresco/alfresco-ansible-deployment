@@ -23,6 +23,3 @@ adf_app_default_configuration:
     clientId: alfresco
     implicitFlow: true
     silentLogin: true
-    redirectSilentIframeUri: "{protocol}//{hostname}{:port}{{ adf_app_context }}assets/silent-refresh.html"
-    redirectUri: "{{ adf_app_context }}"
-    redirectUriLogout: "{{ adf_app_context }}"

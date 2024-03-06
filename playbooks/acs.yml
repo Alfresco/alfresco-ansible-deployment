@@ -358,7 +358,11 @@
       adf_app_src_archive: "{{ downloads.acc_zip_url }}"
       adf_app_src_checksum: "{{ downloads.acc_zip_sha1_checksum_url }}"
       adf_app_version: "{{ acc.version }}"
-      adf_app_configuration: "{{ adf_app_oauth_configuration | default({}) | ansible.builtin.combine(adf_default_configuration) }}"
+      adf_app_configuration: >-
+        {{
+          adf_app_oauth_configuration | default({}) |
+          ansible.builtin.combine(adf_default_configuration, recursive=true)
+        }}
   post_tasks:
     - name: Update installation status file with ACC
       when: acs_version_requirement
@@ -398,7 +402,11 @@
         {{ lookup('url', downloads.adw_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
         {%- endif %}
       adf_app_version: "{{ adw.version }}"
-      adf_app_configuration: "{{ adf_app_oauth_configuration | default({}) | ansible.builtin.combine(adf_default_configuration) }}"
+      adf_app_configuration: >-
+        {{
+          adf_app_oauth_configuration | default({}) |
+          ansible.builtin.combine(adf_default_configuration, recursive=true)
+        }}
   post_tasks:
     - name: Update installation status file with ADW
       when: acs.edition == "Enterprise"

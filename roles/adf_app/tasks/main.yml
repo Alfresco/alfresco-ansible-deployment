@@ -28,9 +28,30 @@
   notify:
     - Unpack {{ adf_app_name }}
 
+- name: Set oauth2 redirects fact
+  ansible.builtin.set_fact:
+    adf_app_oauth_redirects:
+      oauth2:
+        redirectSilentIframeUri: "{protocol}//{hostname}{:port}{{ adf_app_context }}assets/silent-refresh.html"
+        redirectUri: "{{ adf_app_context }}"
+        redirectUriLogout: "{{ adf_app_context }}"
+
+- name: Debug oauth2 redirects
+  ansible.builtin.debug:
+    var: adf_app_oauth_redirects
+
 - name: Merge configuration
   ansible.builtin.set_fact:
-    adf_app_merged_configuration: "{{ adf_app_default_configuration | ansible.builtin.combine(adf_app_configuration) }}"
+    adf_app_merged_configuration: >-
+      {{
+        adf_app_default_configuration |
+        ansible.builtin.combine(adf_app_oauth_redirects, recursive=true) |
+        ansible.builtin.combine(adf_app_configuration, recursive=true)
+      }}
+
+- name: Debug adf_app_merged_configuration
+  ansible.builtin.debug:
+    var: adf_app_merged_configuration
 
 - name: Dump current app configuration to disk
   ansible.builtin.copy:
