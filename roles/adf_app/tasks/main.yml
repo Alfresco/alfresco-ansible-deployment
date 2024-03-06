@@ -36,10 +36,6 @@
         redirectUri: "{{ adf_app_context }}"
         redirectUriLogout: "{{ adf_app_context }}"
 
-- name: Debug oauth2 redirects
-  ansible.builtin.debug:
-    var: adf_app_oauth_redirects
-
 - name: Merge configuration
   ansible.builtin.set_fact:
     adf_app_merged_configuration: >-
@@ -48,10 +44,6 @@
         ansible.builtin.combine(adf_app_oauth_redirects, recursive=true) |
         ansible.builtin.combine(adf_app_configuration, recursive=true)
       }}
-
-- name: Debug adf_app_merged_configuration
-  ansible.builtin.debug:
-    var: adf_app_merged_configuration
 
 - name: Dump current app configuration to disk
   ansible.builtin.copy:
