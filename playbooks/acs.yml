@@ -353,6 +353,7 @@
     - role: "../roles/adf_app"
       when: acs_version_requirement
       adf_app_name: alfresco-control-center
+      adf_app_context: /control-center/
       adf_app_port: 8881
       adf_app_src_archive: "{{ downloads.acc_zip_url }}"
       adf_app_src_checksum: "{{ downloads.acc_zip_sha1_checksum_url }}"
@@ -387,6 +388,7 @@
     - role: "../roles/adf_app"
       when: acs.edition == "Enterprise"
       adf_app_name: alfresco-digital-workspace
+      adf_app_context: /workspace/
       adf_app_port: 8880
       adf_app_src_archive: "{{ downloads.adw_zip_url }}"
       adf_app_src_checksum: >-

@@ -1,16 +1,12 @@
 ---
-- name: Assert that role arguments are consistent
+- name: Extended validation of role arguments
   ansible.builtin.assert:
     that:
-      - adf_app_name is defined
-      - adf_app_context is defined and adf_app_version | length >= 1
       - adf_app_context.startswith('/')
       - adf_app_context.endswith('/')
       - adf_app_port | int > 80
       - adf_app_port | int < 65536
-      - adf_app_src_archive is defined
       - adf_app_src_archive is url
-      - adf_app_src_checksum is defined
       - adf_app_src_checksum is url or adf_app_src_checksum is match("^[a-fA-F0-9]{40}$")
 
 - name: Create "{{ nginx_default_vhost_docroot }}/{{ adf_app_name }}/" dir
