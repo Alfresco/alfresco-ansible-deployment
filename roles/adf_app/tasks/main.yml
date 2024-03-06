@@ -11,7 +11,7 @@
       - adf_app_src_archive is defined
       - adf_app_src_archive is url
       - adf_app_src_checksum is defined
-      - adf_app_src_checksum is url
+      - adf_app_src_checksum is url or adf_app_src_checksum is match("^[a-fA-F0-9]{40}$")
 
 - name: Create "{{ nginx_default_vhost_docroot }}/{{ adf_app_name }}/" dir
   become: true

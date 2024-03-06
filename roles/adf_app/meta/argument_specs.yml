@@ -31,7 +31,7 @@ argument_specs:
         type: str
         required: true
         description: |
-          URL of the checksum of the archive that contains the adf app.
+          URL of the checksum of the archive that contains the adf app or the sha1 checksum.
       adf_app_version:
         type: str
         required: true
