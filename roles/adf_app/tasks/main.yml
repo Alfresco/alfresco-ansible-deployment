@@ -4,7 +4,7 @@
     that:
       - adf_app_context.startswith('/')
       - adf_app_context.endswith('/')
-      - adf_app_port | int > 80
+      - adf_app_port | int >= 1024
       - adf_app_port | int < 65536
       - adf_app_src_archive is url
       - adf_app_src_checksum is url or adf_app_src_checksum is match("^[a-fA-F0-9]{40}$")
