@@ -151,34 +151,9 @@ doc](./README.md#versioning)
 Follow this quick checklist:
 
 * copy the versions inside the group_vars/all.yml to a new X.X.N-extra-vars.yml
-* run updatecli against the latest and supported versions (one for each extra-vars file)
-  * e.g. `updatecli apply --config scripts/updatecli/updatecli_config.tpl --values scripts/updatecli/updatecli_base.yml --values scripts/updatecli/updatecli_acs23.yml`
+* run [updatecli workflow](../.github/workflows/updatecli.yml)
 * ensure that the [tables in the main readme](README.md) has been updated
-* ensure that AMI id for the root molecule tests are not outdated (e.g. [default suite](../molecule/default/vars-rhel8.yml))
-
-### Bumping ACS version via updatecli
-
-This repo provide experimental support for updatecli to keep ACS components
-versions in sync with the latest ACS releases. Configurations files are in the
-`scripts/updatecli` folder.
-
-The `updatecli_config.tpl` file provides the main pipeline definition and there
-are multiple values files depending on which acs major version we want to check
-for any new minor release.
-
-Run updatecli with:
-
-```bash
-updatecli apply --config scripts/updatecli/updatecli_config.tpl --values scripts/updatecli/updatecli_base.yml --values scripts/updatecli/updatecli_acsXX.yml
-```
-
-Once the command completes successfully, you will find the target file
-automatically modified with the latest available versions:
-
-* `groups_vars/all.yml`
-
-Commit and push them on a new `next/acs-XX` branch, if you are starting to the the new pre-release versions.
-If you are at release time, just raise a PR to merge in `master`.
+* ensure that AMI id for the root molecule tests are not too outdated (e.g. [default suite](../molecule/default/))
 
 ### Tag and release
 
