@@ -151,7 +151,7 @@ doc](./README.md#versioning)
 Follow this quick checklist:
 
 * copy the versions inside the group_vars/all.yml to a new X.X.N-extra-vars.yml
-* run [updatecli workflow](../.github/workflows/updatecli.yml)
+* run [updatecli workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/updatecli.yml)
 * ensure that the [tables in the main readme](README.md) has been updated
 * ensure that AMI id for the root molecule tests are not too outdated (e.g. [default suite](../molecule/default/))
 
