@@ -7,34 +7,40 @@ argument_specs:
         type: str
         required: true
         description: |
-          Identifier for the app that will be served under this name (e.g.
-          http://yourdomain/adf_app_name/)
+          Unique identifier for the app that will be used to create config files and directories.
+      adf_app_context:
+        type: str
+        default: /
+        description: |
+          The context path where the app will be reachable by users once exposed
+          thru the reverse proxy. This is necessary to configure app.config.json
+          appropriately.
       adf_app_port:
         type: int
         default: 8080
         description: |
-          The port from where the adf_app will be reachable by the reverse proxy.
-          Make sure it's unique otherwise you can't install more than one adf_app
-          on the same host.
+          The port from where the app will be reachable by the reverse proxy.
+          Make sure it's unique otherwise you can't install more than one adf
+          app on the same host.
       adf_app_src_archive:
         type: str
         required: true
         description: |
-          URL of the archive that contains the adf_app.
+          URL of the archive that contains the adf app.
       adf_app_src_checksum:
         type: str
         required: true
         description: |
-          URL of the checksum of the archive that contains the adf_app.
+          URL of the checksum of the archive that contains the adf app or the sha1 checksum.
       adf_app_version:
         type: str
         required: true
         description: |
-          The version of the adf_app, mainly to detect when we need to redeploy
+          The version of the adf app, mainly to detect when we need to redeploy
           it.
       adf_app_configuration:
         type: dict
         required: false
         default: {}
         description: |
-          Optional adf_apps parameters to populate app.config.json
+          Optional adf apps parameters to populate app.config.json

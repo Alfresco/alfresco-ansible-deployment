@@ -1,4 +1,14 @@
 ---
+- name: Extended validation of role arguments
+  ansible.builtin.assert:
+    that:
+      - adf_app_context.startswith('/')
+      - adf_app_context.endswith('/')
+      - adf_app_port | int >= 1024
+      - adf_app_port | int < 65536
+      - adf_app_src_archive is url
+      - adf_app_src_checksum is url or adf_app_src_checksum is match("^[a-fA-F0-9]{40}$")
+
 - name: Create "{{ nginx_default_vhost_docroot }}/{{ adf_app_name }}/" dir
   become: true
   ansible.builtin.file:
@@ -18,9 +28,22 @@
   notify:
     - Unpack {{ adf_app_name }}
 
+- name: Set oauth2 redirects fact
+  ansible.builtin.set_fact:
+    adf_app_oauth_redirects:
+      oauth2:
+        redirectSilentIframeUri: "{protocol}//{hostname}{:port}{{ adf_app_context }}assets/silent-refresh.html"
+        redirectUri: "{{ adf_app_context }}"
+        redirectUriLogout: "{{ adf_app_context }}"
+
 - name: Merge configuration
   ansible.builtin.set_fact:
-    adf_app_merged_configuration: "{{ adf_app_default_configuration | ansible.builtin.combine(adf_app_configuration) }}"
+    adf_app_merged_configuration: >-
+      {{
+        adf_app_default_configuration |
+        ansible.builtin.combine(adf_app_oauth_redirects, recursive=true) |
+        ansible.builtin.combine(adf_app_configuration, recursive=true)
+      }}
 
 - name: Dump current app configuration to disk
   ansible.builtin.copy:

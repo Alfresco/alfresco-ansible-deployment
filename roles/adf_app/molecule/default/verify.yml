@@ -40,6 +40,9 @@
           - this.results[idx].json.authType == 'OAUTH'
           - this.results[idx].json.oauth2.clientId == 'alfresco'
           - this.results[idx].json.oauth2.scope == 'openid profile email'
+          - this.results[idx].json.oauth2.redirectUri == '/'
+          - this.results[idx].json.oauth2.redirectUriLogout == '/'
+          - this.results[idx].json.oauth2.redirectSilentIframeUri == '{protocol}//{hostname}{:port}/assets/silent-refresh.html'
         quiet: true
       loop: "{{ sites }}"
       loop_control:

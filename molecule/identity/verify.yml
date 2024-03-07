@@ -6,6 +6,9 @@
     adf_apps:
       - alfresco-digital-workspace
       - alfresco-control-center
+    adf_apps_contexts:
+      - /workspace/
+      - /control-center/
   tasks:
     - name: Populate services facts
       ansible.builtin.service_facts:
@@ -72,6 +75,9 @@
           - app_config_json.oauth2.clientId == 'alfresco'
           - app_config_json.oauth2.host == '{protocol}//{hostname}{:port}/auth/realms/alfresco'
           - app_config_json.oauth2.scope == 'openid profile email'
+          - app_config_json.oauth2.redirectUri == adf_apps_contexts[item_index]
+          - app_config_json.oauth2.redirectUriLogout == adf_apps_contexts[item_index]
+          - app_config_json.oauth2.redirectSilentIframeUri == '{protocol}//{hostname}{:port}' ~ adf_apps_contexts[item_index] ~ 'assets/silent-refresh.html'
         fail_msg: "not expected {{ app_config_json }}"
       loop: "{{ range(0, adf_apps | length) | list }}"
       loop_control:
