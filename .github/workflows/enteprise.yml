@@ -15,7 +15,7 @@ on:
       - .pre-commit-config.yaml
 
 env:
-  DTAS_VERSION: v1.5.3
+  DTAS_VERSION: v1.5.4
   BUILD_NUMBER: ${{ github.run_id }}
   PY_COLORS: 1
   PYTHONUNBUFFERED: 1
