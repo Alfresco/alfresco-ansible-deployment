@@ -55,4 +55,4 @@
         that:
           - groups.search_enterprise | default([]) | length == 0
         fail_msg: mTLS enabled but not yet supported for search_enterprise
-      when: ats_mtls_required
+      when: ats_mtls_required and ats_mtls_capable
