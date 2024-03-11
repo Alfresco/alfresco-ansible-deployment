@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "39f30b71cdeca9e16027847ca13b87602a8e584ac187694f3aa17cd371109006"
+            "sha256": "8cb9ad124a38c17a9266b0559c70f0ab3eaf7e571fab9f8df8f313fa94fbbde7"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -650,6 +650,14 @@
             "markers": "python_version >= '3.6'",
             "version": "==1.2.7"
         },
+        "exceptiongroup": {
+            "hashes": [
+                "sha256:4bfd3996ac73b41e9b9628b04e079f193850720ea5945fc96a08633c66912f14",
+                "sha256:91f5c769735f051a4290d52edd0858999b57e5876e9f85937691bd4c9fa3ed68"
+            ],
+            "markers": "python_version < '3.11'",
+            "version": "==1.2.0"
+        },
         "filelock": {
             "hashes": [
                 "sha256:521f5f56c50f8426f5e03ad3b281b490a87ef15bc6c526f168290f0c7148d44e",
@@ -919,11 +927,11 @@
         },
         "packaging": {
             "hashes": [
-                "sha256:048fb0e9405036518eaaf48a55953c750c11e1a1b68e0dd1a9d62ed0c092cfc5",
-                "sha256:8c491190033a9af7e1d931d0b5dacc2ef47509b34dd0de67ed209b5203fc88c7"
+                "sha256:2ddfb553fdf02fb784c234c7ba6ccc288296ceabec964ad2eae3777778130bc5",
+                "sha256:eb82c5e3e56209074766e6885bb04b8c38a0c015d0a30036ebe7ece34c9989e9"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==23.2"
+            "version": "==24.0"
         },
         "pathspec": {
             "hashes": [
@@ -1059,12 +1067,12 @@
         },
         "pytest": {
             "hashes": [
-                "sha256:1377bda3466d70b55e3f5cecfa55bb7cfcf219c7964629b967c37cf0bda818b7",
-                "sha256:4f365fec2dff9c1162f834d9f18af1ba13062db0c708bf7b946f8a5c76180c39"
+                "sha256:2a8386cfc11fa9d2c50ee7b2a57e7d898ef90470a7a34c4b949ff59662bb78b7",
+                "sha256:ac978141a75948948817d360297b7aae0fcb9d6ff6bc9ec6d514b85d5a65c044"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.7'",
-            "version": "==7.1.3"
+            "markers": "python_version >= '3.8'",
+            "version": "==8.1.1"
         },
         "pytest-testinfra": {
             "hashes": [
