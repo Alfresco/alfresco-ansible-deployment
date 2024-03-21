@@ -14,7 +14,7 @@ transform:
 acc:
   artifact_name: alfresco-control-center
   repository: "{{ nexus_repository.releases }}"
-  version: 8.4.0
+  version: 8.4.1
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
