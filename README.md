@@ -17,33 +17,27 @@ diagram below.
 
 ## Prerequisites
 
-* If you want to install the Enterprise version, Nexus credentials for [https://artifacts.alfresco.com](https://artifacts.alfresco.com)
+* If you want to install the Enterprise version, Nexus credentials for [https://artifacts.alfresco.com](https://artifacts.alfresco.com) are required.
 
 ## Documentation
 
-Please refer to the [Documentation](./docs/README.md) for an overview of the
-project and the playbook or go directly to the
-[deployment guide](./docs/deployment-guide.md) to learn how to run the playbook.
+Please start from the [Overview](overview.md) if you are getting started
+for the first time with this project and the playbook or go directly to the
+[deployment guide](deployment-guide.md) to learn how to run the playbook.
 
 Users upgrading from previous versions of the playbook may want to take a look
-to [Upgrade Notes](docs/playbook-upgrade.md).
+to [Upgrade Notes](playbook-upgrade.md).
 
 ## Development
 
-Developer's guide is available [here](docs/developer-guide.md).
+Developer's guide is available [here](developer-guide.md).
 
 ## License
 
 The code in this repository is released under the Apache License, see the
-[LICENSE](./LICENSE) file for details.
+[LICENSE](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/LICENSE) file for details.
 
 ## Contribution
 
 Please use [this guide](CONTRIBUTING.md) to make a contribution to the project
 and information to report any issues.
-
-## Release
-
-See the [dedicated section in developer guide](docs/developer-guide.md#release).
-
-Update [adding support for a new distribution](docs/developer-guide.md#adding-support-for-a-new-distribution).
