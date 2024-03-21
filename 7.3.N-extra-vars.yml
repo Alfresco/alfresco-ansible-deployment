@@ -23,7 +23,7 @@ api_explorer:
 search_enterprise:
   artifact_name: alfresco-elasticsearch-connector-distribution
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 3.2.0.2
+  version: 3.2.1
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
