@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Generate components version table in docs/README.md based on extra-vars.yml."""
+"""Generate components version table in docs/overview.md based on extra-vars.yml."""
 
 import sys
 import glob
@@ -111,12 +111,12 @@ def get_content_of_new_table():
     return end_table
 
 def modify_table():
-    """Delete old table from README.md, and put new one."""
+    """Delete old table from overview.md, and put new one."""
     delete_next_lines = False
-    with open("docs/README.md", "r", encoding="utf-8") as old_file:
+    with open("docs/overview.md", "r", encoding="utf-8") as old_file:
         lines = old_file.readlines()
 
-    with open("docs/README.md", "w", encoding="utf-8") as new_file:
+    with open("docs/overview.md", "w", encoding="utf-8") as new_file:
         for line in lines:
 
             if "| Sync Service | " in line.strip("\n"):
