@@ -81,7 +81,7 @@ The table below shows the version of the components deployed by the playbook for
 | Repository          | 23.2.1                      | 7.4.1.6        | 7.3.1.2        | 7.2.1.13       | 7.1.1.10       | 7.0.1.4        |
 | Share               | 23.2.1                      | 7.4.1.6        | 7.3.1.2        | 7.2.1.13       | 7.1.1.10       | 7.0.1.4        |
 | Search Services     | 2.0.9.1                     | 2.0.9.1        | 2.0.9.1        | 2.0.9.1        | 2.0.2.2        | 2.0.1.1        |
-| Search Enterprise   | 4.0.0.1 (n/a)               | 3.3.1.1        | 3.2.0.2        | 3.1.1.1        | 3.1.1.1        | n/a            |
+| Search Enterprise   | 4.0.1 (n/a)                 | 3.3.2          | 3.2.1          | 3.1.1.1        | 3.1.1.1        | n/a            |
 | All-In-One T-Engine | 5.1.0                       | 4.0.1          | 3.1.2          | 3.1.2          | 3.1.2          | 2.3.10         |
 | AOS                 | 3.0.0                       | 1.6.2          | 1.5.0          | 1.4.1          | 1.4.1          | 1.4.0          |
 | Google Docs         | 4.0.0                       | 3.4.2          | 3.3.1          | 3.2.2          | 3.2.1          | 3.2.1          |
