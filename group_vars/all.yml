@@ -49,7 +49,7 @@ api_explorer:
 search_enterprise:
   artifact_name: alfresco-elasticsearch-connector-distribution
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 4.0.0.1
+  version: 4.0.1
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
@@ -69,7 +69,7 @@ sfs:
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 4.4.0
+  version: 4.4.1
 sync:
   repository: >-
     {{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x
@@ -77,7 +77,7 @@ sync:
 acc:
   artifact_name: alfresco-control-center
   repository: "{{ nexus_repository.releases }}"
-  version: 8.4.0
+  version: 8.4.1
 supported_os:
   RedHat:
     versions:
