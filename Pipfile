@@ -15,7 +15,7 @@ molecule-plugins = {extras = ["docker","ec2"], version = "23.5.3"}
 boto3 = "==1.26.9"
 pyhamcrest = "==2.1.0"
 pylint = "==2.17.7"
-pytest = "==7.1.3"
+pytest = "==8.1.1"
 pytest-testinfra = "==8.1.0"
 requests = "==2.31.0"
 yamllint = "==1.35.1"
