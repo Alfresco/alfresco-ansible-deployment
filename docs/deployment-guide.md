@@ -2,10 +2,11 @@
 
 This page describes how to deploy Alfresco Content Services (ACS) using the Ansible playbook found in this project.
 
-If it's your first time with Ansible, then a read of [Ansible concepts](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html) is highly suggested.
-
-A basic understanding of Ansible concepts is highly recommended to successfully complete the deployment and better understand all the steps documented in this guide.
-If it's your first time with Ansible, please have a read at [Ansible concepts](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html) for a brief introduction.
+A basic understanding of Ansible concepts is highly recommended to successfully
+complete the deployment and better understand all the steps documented in this
+guide. If it's your first time with Ansible, please have a read at [Ansible
+concepts](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html)
+for a brief introduction.
 
 * [Deployment Guide](#deployment-guide)
   * [Getting started quickly with Vagrant](#getting-started-quickly-with-vagrant)

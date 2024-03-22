@@ -1,41 +1,62 @@
 # Developers guide
 
-This page is a developers guide for to popular commands used in the process of setting up environment for development and testing.
+This page is a developers guide for to popular commands used in the process of
+setting up environment for development, testing and release.
+
+* [Developers guide](#developers-guide)
+  * [Basic pipenv knowledge](#basic-pipenv-knowledge)
+  * [Basic pipenv commands and usage for developers](#basic-pipenv-commands-and-usage-for-developers)
+  * [Development](#development)
+    * [Roles tests](#roles-tests)
+    * [Integration tests](#integration-tests)
+      * [Docker integration test](#docker-integration-test)
+  * [Adding support for a new distribution](#adding-support-for-a-new-distribution)
+  * [Release](#release)
+    * [Tag and release](#tag-and-release)
 
 ## Basic pipenv knowledge
 
-The general purpose of pipenv is similar to that of Package installer for Python (PIP) and built-in venv.
-This is external python library, which handles package installing from either command line (with special pipenv prefix in shell, similar to pip install), requirements.txt or Pipfile.
-Whether we install one package or dependencies from requirements.txt, pipenv creates Pipfile, a special file for itself,
-and then installs packages we specified inside virtual environment, NOT globally.
-While specifying new package, pipenv adds that package name to Pipfile, installs it (while also generating hashcodes for .lock file)
-and installs it inside virtual environment. Then we can also use this package we have installed.
-The default virtual environment is created in our working directory. You may want to visit: <https://pipenv.pypa.io/en/latest/>
+The general purpose of pipenv is similar to that of Package installer for Python
+(PIP) and built-in venv. This is external python library, which handles package
+installing from either command line (with special pipenv prefix in shell,
+similar to pip install), requirements.txt or Pipfile. Whether we install one
+package or dependencies from requirements.txt, pipenv creates Pipfile, a special
+file for itself, and then installs packages we specified inside virtual
+environment, NOT globally. While specifying new package, pipenv adds that
+package name to Pipfile, installs it (while also generating hashcodes for .lock
+file) and installs it inside virtual environment. Then we can also use this
+package we have installed. The default virtual environment is created in our
+working directory. You may want to visit: <https://pipenv.pypa.io/en/latest/>
 
 > NOTE: Pipenv does not install packages globally but to virtual environment
 
 ## Basic pipenv commands and usage for developers
 
-Pipenv comes with bunch of commands, but the most important are highlighted below:
-The command with flag --dev installs packages from Pipfile needed for developing purposes.
+Pipenv comes with bunch of commands, but the most important are highlighted
+below: The command with flag --dev installs packages from Pipfile needed for
+developing purposes.
 
 ```bash
 pipenv install --dev --python $(cat .python-version)
 ```
 
-This command below is opening the virtual environment, that pipenv created while installing all packages.
-Once we are inside this environment, we can use all the packages which we specified in install command.
-This is the environment where it is highly recommended to develop python.
+This command below is opening the virtual environment, that pipenv created while
+installing all packages. Once we are inside this environment, we can use all the
+packages which we specified in install command. This is the environment where it
+is highly recommended to develop python.
 
-> NOTE: Right now it is not supported by pipenv to have two virtual environments in the same directory, so if you
-> try work with two different environments within same directory, you will overwrite the previously created virtual environment
+> NOTE: Right now it is not supported by pipenv to have two virtual environments
+> in the same directory, so if you try work with two different environments
+> within same directory, you will overwrite the previously created virtual
+> environment
 
 ```bash
 pipenv shell
 ```
 
-Otherwise, if you are not planning to use virtual environment and need to just simply use molecule (or any other package),
-you can use these commands which will execute them inside pipenv's virtual environment:
+Otherwise, if you are not planning to use virtual environment and need to just
+simply use molecule (or any other package), you can use these commands which
+will execute them inside pipenv's virtual environment:
 
 ```bash
 pipenv run command
@@ -49,9 +70,10 @@ pipenv run molecule test
 
 Which uses molecule package installed in virtual environment to execute test
 
-> NOTE: This command runs the script with the specified package and then specified script inside virtual environment.
-> You need to always be sure you are using pipenv run command inside directory where you have previously executed
-> pipenv install command.
+> NOTE: This command runs the script with the specified package and then
+> specified script inside virtual environment. You need to always be sure you
+> are using pipenv run command inside directory where you have previously
+> executed pipenv install command.
 
 ## Development
 
@@ -59,11 +81,14 @@ The roles developed for this playbook are tested with [Molecule](https://molecul
 
 ### Roles tests
 
-> NOTE: REMEMBER THESE COMMANDS NEED TO BE USED INSIDE VIRTUAL ENVIRONMENT, IF NOT YOU NEED TO ADD PREFIX PIPENV RUN
+> NOTE: REMEMBER THESE COMMANDS NEED TO BE USED INSIDE VIRTUAL ENVIRONMENT, IF
+> NOT YOU NEED TO ADD PREFIX PIPENV RUN
 
-You can run Molecule tests on your machine if you have a Docker Engine installed locally.
+You can run Molecule tests on your machine if you have a Docker Engine installed
+locally.
 
-Enter the role folder and run `molecule <action>` (see [official docs]\(<https://molecule.readthedocs.io/en/latest/getting-started>.html#run-test-sequence-commands)).
+Enter the role folder and run `molecule <action>` (see [official
+docs]\(<https://molecule.readthedocs.io/en/latest/getting-started>.html#run-test-sequence-commands)).
 
  To provision the `activemq` role run:
 
@@ -90,7 +115,8 @@ molecule login
 molecule destroy
 ```
 
- If you want to test a different operating system, set the `MOLECULE_ROLE_IMAGE` to a different docker base image before converging:
+ If you want to test a different operating system, set the `MOLECULE_ROLE_IMAGE`
+ to a different docker base image before converging:
 
 ```sh
 MOLECULE_ROLE_IMAGE=ubuntu:20.04 molecule converge
