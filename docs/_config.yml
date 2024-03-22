@@ -1,0 +1,17 @@
+title: Alfresco Ansible Deployment
+description: Deploy alfresco with Ansible
+theme: just-the-docs
+
+url: https://gionn.github.io/alfresco-ansible-deployment
+
+aux_links:
+  GitHub Repository: https://github.com/Alfresco/alfresco-ansible-deployment
+
+aux_links_new_tab: true
+
+gh_edit_link: true
+gh_edit_link_text: "Improve this page on GitHub"
+gh_edit_repository: https://github.com/Alfresco/alfresco-ansible-deployment
+gh_edit_branch: master
+gh_edit_source: docs
+gh_edit_view_mode: edit

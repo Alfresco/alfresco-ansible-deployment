@@ -21,15 +21,6 @@ repos:
     hooks:
       - id: djlint-jinja
 
-  - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.15
-    hooks:
-      - id: pymarkdown
-        files: (README\.md$|docs/.*\.md)
-        args:
-          - --config=.pymarkdown.json
-          - scan
-
   - repo: https://github.com/PyCQA/prospector
     rev: v1.10.3
     hooks:

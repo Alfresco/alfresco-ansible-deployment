@@ -1,4 +1,8 @@
-# Alfresco Ansible Deployment
+---
+title: Home
+layout: home
+nav_order: 1
+---
 
 [![release](https://img.shields.io/github/v/release/Alfresco/alfresco-ansible-deployment?display_name=release)](https://github.com/Alfresco/alfresco-ansible-deployment/releases/latest)
 [![community](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml)

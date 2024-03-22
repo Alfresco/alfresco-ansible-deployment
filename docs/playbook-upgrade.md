@@ -1,4 +1,7 @@
-# Upgrades notes for the playbook
+---
+title: Upgrading the playbook
+layout: default
+---
 
 ## Unreleased version
 

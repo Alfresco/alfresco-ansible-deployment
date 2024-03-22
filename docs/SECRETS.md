@@ -1,4 +1,7 @@
-# Secrets
+---
+title: Secrets
+layout: default
+---
 
 This page describe how secrets are securely managed in our playbook. It also
 serves as a comprehensive list of credentials in case you want to populated

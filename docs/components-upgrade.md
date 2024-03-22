@@ -1,4 +1,7 @@
-# Upgrading an environment
+---
+title: Upgrading an environment
+layout: default
+---
 
 The ACS installation is made of several components among which:
 

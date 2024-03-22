@@ -1,4 +1,8 @@
-# Documentation
+---
+title: Overview
+layout: default
+nav_order: 2
+---
 
 This page provides an overview of Ansible, the project structure and the components deployed.
 

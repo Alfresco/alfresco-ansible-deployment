@@ -1,4 +1,7 @@
-# Contributing
+---
+title: Contributing
+layout: default
+---
 
 Thanks for your interest in contributing to this project!
 
