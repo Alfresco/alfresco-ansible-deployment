@@ -13,7 +13,7 @@ application-deployment tool enabling infrastructure as code.
 A user runs a playbook that deploys to any number of hosts as shown in the
 diagram below.
 
-![Ansible Overview](./docs/resources/ansible-overview.png)
+![Ansible Overview](./resources/ansible-overview.png)
 
 ## Prerequisites
 
