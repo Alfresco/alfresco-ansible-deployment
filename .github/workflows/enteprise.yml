@@ -124,12 +124,6 @@ jobs:
       matrix:
         molecule_scenario:
           - name: default
-            vars: vars-centos7.yml
-            desc: EC2 ACS 7.0 (Centos7)
-          - name: default
-            vars: vars-rhel7.yml
-            desc: EC2 ACS 7.0 (RHEL 7.9)
-          - name: default
             vars: vars-ubuntu18.yml
             desc: EC2 ACS 7.1 (Ubuntu 18.04)
           - name: default

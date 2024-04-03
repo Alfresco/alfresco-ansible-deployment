@@ -91,9 +91,6 @@ supported_os:
       - 8.5
       - 8.4
       - 8.2
-      - 7.9
-      - 7.7
-      - 7.6
   Rocky:
     versions:
       - 9.3
@@ -106,7 +103,6 @@ supported_os:
   CentOS:
     versions:
       - 7.9
-      - 7.7
   Ubuntu:
     versions:
       - 22.04
