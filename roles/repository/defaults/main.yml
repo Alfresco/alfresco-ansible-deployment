@@ -78,7 +78,7 @@ cluster_keepoff: false
 tomcat_resource_cache_size: 20480
 
 # make sure to only ever copy contents not dir
-keystore_src: "{{ content_folder }}/alf_data/keystore/"
+keystore_src: "{{ content_folder }}/keystore/metadata-keystore/"
 repo_keystore: {}
 repository_monitored_startup_timeout_seconds: 300
 
