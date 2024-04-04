@@ -1,3 +1,7 @@
+---
+title: Upgrading an environment
+---
+
 # Upgrading an environment
 
 The ACS installation is made of several components among which:

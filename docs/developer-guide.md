@@ -1,3 +1,8 @@
+---
+title: Developers guide
+layout: default
+---
+
 # Developers guide
 
 This page is a developers guide for to popular commands used in the process of

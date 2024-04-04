@@ -1,3 +1,7 @@
+---
+title: Deploying Alfresco Search services
+---
+
 # Deploying Alfresco Search services
 
 Deploying Alfresco Search service or Insight Engine can be challenging at

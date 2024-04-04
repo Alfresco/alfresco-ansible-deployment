@@ -1,3 +1,7 @@
+---
+title: Contributing
+---
+
 # Contributing
 
 Thanks for your interest in contributing to this project!

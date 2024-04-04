@@ -1,3 +1,7 @@
+---
+title: Secrets
+---
+
 # Secrets
 
 This page describe how secrets are securely managed in our playbook. It also

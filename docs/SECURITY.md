@@ -1,4 +1,8 @@
-# SECURITY
+---
+title: Security
+---
+
+# Security
 
 This pages focuses on providing information on making the platform deployed
 with alfresco-ansible-deployment secure.
