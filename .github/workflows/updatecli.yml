@@ -39,7 +39,7 @@ jobs:
           token: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Install Updatecli
-        uses: updatecli/updatecli-action@e1b709789a409521fd9a1fc0f143c5f2cfaa2644 # v2.55.0
+        uses: updatecli/updatecli-action@9b35aa663a924d5d5faf89dac76594e3034bcf1f # v2.56.0
 
       - name: Run Updatecli in ${{ env.UPDATECLI_MODE }} mode
         run: >-
