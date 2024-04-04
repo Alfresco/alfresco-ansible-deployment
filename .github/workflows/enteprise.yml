@@ -168,7 +168,7 @@ jobs:
       MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
     steps:
       - name: Run tests on push
-        uses: .github/actions/ec2/ec2.yml
+        uses: ./.github/actions/ec2
         with:
           matrix_name: ${{ matrix.molecule_scenario.name }}
           matrix_vars: ${{ matrix.molecule_scenario.vars }}
@@ -198,7 +198,7 @@ jobs:
       MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
     steps:
       - name: Run tests on push
-        uses: .github/actions/ec2/ec2.yml
+        uses: ./.github/actions/ec2
         with:
           matrix_name: ${{ matrix.molecule_scenario.name }}
           matrix_vars: ${{ matrix.molecule_scenario.vars }}
