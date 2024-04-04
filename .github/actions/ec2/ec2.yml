@@ -1,0 +1,82 @@
+name: EC2 tests
+inputs:
+  matrix_name:
+    description: 'Name of a molecule scenario'
+    required: true
+    default: "default"
+  matrix_vars:
+    description: 'Variables file to use'
+    required: true
+    default: "vars-rocky9.yml"
+  matrix_desc:
+    description: 'Description used as a name for a job'
+    required: true
+    default: "EC2 ACS 23.x (Rocky Linux 9.3)"
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        # avoid auth conflict when cloning DTAS during verify step
+        persist-credentials: false
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      id: setup-python
+      with:
+        python-version-file: '.python-version'
+        cache: pipenv
+
+    - name: Install python packages
+      uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.17.0
+      with:
+        python-version: ${{ steps.setup-python.outputs.python-version }}
+
+    - name: Install and cache ansible galaxy dependencies
+      uses: ./.github/actions/galaxy
+      with:
+        cache-name: enterprise
+
+    - name: Set BRANCH_NAME
+      uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@v5.17.0
+      with:
+        sanitize: true
+        max-length: 20
+
+    - name: Setup workspace
+      uses: ./.github/actions/setup-workspace
+
+    - name: Generate unique id
+      run: echo "MOLECULE_IT_ID=$(date +%s%4N)" >> $GITHUB_ENV
+
+    - name: Set nexus credentials only when required
+      if: ${{ ! contains( inputs.matrix_desc, 'community' ) }}
+      run: |
+        echo "NEXUS_USERNAME=${{ secrets.nexus_username }}" >> $GITHUB_ENV
+        echo "NEXUS_PASSWORD=${{ secrets.nexus_password }}" >> $GITHUB_ENV
+
+    - name: Run tests
+      timeout-minutes: 120
+      env:
+        MOLECULE_IT_SCENARIO: ${{ inputs.matrix_name }}
+        MOLECULE_IT_CONFIG: ${{ inputs.matrix_vars }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+        CLONE_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+      run: ./tests/molecule_it/script.sh verify
+
+    - name: Cleanup tests
+      if: always()
+      timeout-minutes: 65
+      env:
+        MOLECULE_IT_SCENARIO: ${{ inputs.matrix_name }}
+        MOLECULE_IT_CONFIG: ${{ inputs.matrix_vars }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+      uses: nick-fields/retry@v3
+      with:
+        timeout_minutes: 30
+        max_attempts: 3
+        retry_wait_seconds: 60
+        command: ./tests/molecule_it/script.sh destroy
