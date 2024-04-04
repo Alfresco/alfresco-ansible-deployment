@@ -1,17 +1,19 @@
 name: EC2 tests
-inputs:
-  matrix_name:
-    description: 'Name of a molecule scenario'
-    required: true
-    default: "default"
-  matrix_vars:
-    description: 'Variables file to use'
-    required: true
-    default: "vars-rocky9.yml"
-  matrix_desc:
-    description: 'Description used as a name for a job'
-    required: true
-    default: "EC2 ACS 23.x (Rocky Linux 9.3)"
+on:
+  workflow_call:
+    inputs:
+      matrix_name:
+        description: 'Name of a molecule scenario'
+        required: true
+        default: "default"
+      matrix_vars:
+        description: 'Variables file to use'
+        required: true
+        default: "vars-rocky9.yml"
+      matrix_desc:
+        description: 'Description used as a name for a job'
+        required: true
+        default: "EC2 ACS 23.x (Rocky Linux 9.3)"
 runs:
   using: "composite"
   steps:
