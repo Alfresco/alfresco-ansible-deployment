@@ -124,15 +124,6 @@ jobs:
       matrix:
         molecule_scenario:
           - name: default
-            vars: vars-ubuntu18.yml
-            desc: EC2 ACS 7.1 (Ubuntu 18.04)
-          - name: default
-            vars: vars-rhel8.yml
-            desc: EC2 ACS 7.1 with AGS (RHEL 8.4)
-          - name: default
-            vars: vars-ubuntu20-72.yml
-            desc: EC2 ACS 7.2 (Ubuntu 20.04)
-          - name: default
             vars: vars-ubuntu20-73.yml
             desc: EC2 ACS 7.3 (Ubuntu 20.04)
           - name: default
@@ -141,6 +132,9 @@ jobs:
           - name: default
             vars: vars-rocky8.yml
             desc: EC2 ACS 7.4 (Rocky Linux 8.7)
+          - name: default
+            vars: vars-rhel8.yml
+            desc: EC2 ACS 7.4 (RHEL 8.6)
           - name: default
             vars: vars-ubuntu22-community.yml
             desc: EC2 ACS 23.x Community (Ubuntu 22.04)
