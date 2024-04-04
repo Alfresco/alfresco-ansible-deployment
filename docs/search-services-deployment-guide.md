@@ -1,7 +1,8 @@
 ---
 title: Deploying Alfresco Search services
-layout: default
 ---
+
+# Deploying Alfresco Search services
 
 Deploying Alfresco Search service or Insight Engine can be challenging at
 times. There are situations where you might want to deploy this service on its

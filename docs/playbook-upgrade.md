@@ -1,7 +1,8 @@
 ---
 title: Upgrading the playbook
-layout: default
 ---
+
+# Upgrading the playbook
 
 ## Unreleased version
 

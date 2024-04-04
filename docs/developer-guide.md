@@ -3,18 +3,21 @@ title: Developers guide
 layout: default
 ---
 
+# Developers guide
+
 This page is a developers guide for to popular commands used in the process of
 setting up environment for development, testing and release.
 
-* [Basic pipenv knowledge](#basic-pipenv-knowledge)
-* [Basic pipenv commands and usage for developers](#basic-pipenv-commands-and-usage-for-developers)
-* [Development](#development)
-  * [Roles tests](#roles-tests)
-  * [Integration tests](#integration-tests)
-    * [Docker integration test](#docker-integration-test)
-* [Adding support for a new distribution](#adding-support-for-a-new-distribution)
-* [Release](#release)
-  * [Tag and release](#tag-and-release)
+* [Developers guide](#developers-guide)
+  * [Basic pipenv knowledge](#basic-pipenv-knowledge)
+  * [Basic pipenv commands and usage for developers](#basic-pipenv-commands-and-usage-for-developers)
+  * [Development](#development)
+    * [Roles tests](#roles-tests)
+    * [Integration tests](#integration-tests)
+      * [Docker integration test](#docker-integration-test)
+  * [Adding support for a new distribution](#adding-support-for-a-new-distribution)
+  * [Release](#release)
+    * [Tag and release](#tag-and-release)
 
 ## Basic pipenv knowledge
 

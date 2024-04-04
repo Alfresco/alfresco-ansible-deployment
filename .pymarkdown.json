@@ -2,6 +2,9 @@
     "plugins": {
         "line-length": {
             "enabled": false
+        },
+        "single-h1": {
+            "enabled": false
         }
     },
     "extensions": {

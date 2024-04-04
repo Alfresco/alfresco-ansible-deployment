@@ -1,9 +1,10 @@
 ---
 title: Enterprise grade contentstore
-layout: default
 ---
 
-In enterprise environment, it's a common requirement to setup a platform so that data is stored on trusted device.
+# Enterprise grade contentstore
+
+In enterprise environments, it's a common requirement to setup a platform so that data is stored on trusted device.
 
 ## Use cases
 
