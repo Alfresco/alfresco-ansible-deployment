@@ -76,7 +76,6 @@ runs:
 
     - name: Run tests
       shell: bash
-      timeout-minutes: 120
       env:
         MOLECULE_IT_SCENARIO: ${{ inputs.matrix_name }}
         MOLECULE_IT_CONFIG: ${{ inputs.matrix_vars }}
@@ -87,7 +86,6 @@ runs:
 
     - name: Cleanup tests
       if: always()
-      timeout-minutes: 65
       env:
         MOLECULE_IT_SCENARIO: ${{ inputs.matrix_name }}
         MOLECULE_IT_CONFIG: ${{ inputs.matrix_vars }}
