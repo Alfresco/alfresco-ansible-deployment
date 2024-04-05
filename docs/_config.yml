@@ -22,7 +22,8 @@ logo: "resources/hyland-alfresco-logos.png"
 favicon_ico: "favicon.ico"
 
 defaults:
+  # apply the default layout to all markdown pages
   - scope:
-      path: "" # an empty string here means all files in the project
+      path: "*.md"
     values:
       layout: "default"
