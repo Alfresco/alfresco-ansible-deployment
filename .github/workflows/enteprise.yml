@@ -169,12 +169,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # avoid auth conflict when cloning DTAS during verify step
+          persist-credentials: false
       - name: Run tests on push
         uses: ./.github/actions/ec2
         with:
           matrix_name: ${{ matrix.molecule_scenario.name }}
           matrix_vars: ${{ matrix.molecule_scenario.vars }}
           matrix_desc: ${{ matrix.molecule_scenario.desc }}
+          nexus_username: ${{ secrets.NEXUS_USERNAME }}
+          nexus_password: ${{ secrets.NEXUS_PASSWORD }}
+          aws_access_key_id: ${{ secrets.aws_access_key_id }}
+          aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
+          BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
   ec2-manual:
     name: ${{ matrix.molecule_scenario.desc }}
@@ -201,9 +209,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # avoid auth conflict when cloning DTAS during verify step
+          persist-credentials: false
       - name: Run tests manaully
         uses: ./.github/actions/ec2
         with:
           matrix_name: ${{ matrix.molecule_scenario.name }}
           matrix_vars: ${{ matrix.molecule_scenario.vars }}
           matrix_desc: ${{ matrix.molecule_scenario.desc }}
+          nexus_username: ${{ secrets.NEXUS_USERNAME }}
+          nexus_password: ${{ secrets.NEXUS_PASSWORD }}
+          aws_access_key_id: ${{ secrets.aws_access_key_id }}
+          aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
+          BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
