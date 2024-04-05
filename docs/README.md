@@ -11,4 +11,4 @@
 
 Latest documentation is now available at [https://alfresco.github.io/alfresco-ansible-deployment/](https://alfresco.github.io/alfresco-ansible-deployment/)
 
-You can still browse the [docs](./docs/index.md) folder and access previous versions using the GitHub Tags selector in the top left side of the interface.
+You can still browse the [docs](./index.md) folder and access previous versions using the GitHub Tags selector in the top left side of the interface.
