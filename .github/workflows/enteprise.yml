@@ -28,7 +28,6 @@ concurrency:
 jobs:
   check-nexus-secrets:
     name: Ensure required nexus secrets are available
-    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     outputs:
       secrets-available: ${{ steps.check-secrets.outputs.secrets-available }}
@@ -192,8 +191,6 @@ jobs:
   ec2-manual:
     name: ${{ matrix.molecule_scenario.desc }}
     if: github.event_name == 'workflow_dispatch'
-    needs:
-      - docker
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
