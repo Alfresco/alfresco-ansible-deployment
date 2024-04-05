@@ -1,39 +1,37 @@
 name: EC2 tests
-on:
-  workflow_call:
-    inputs:
-      matrix_name:
-        description: 'Name of a molecule scenario'
-        required: true
-        default: "default"
-      matrix_vars:
-        description: 'Variables file to use'
-        required: true
-        default: "vars-rocky9.yml"
-      matrix_desc:
-        description: 'Description used as a name for a job'
-        required: true
-        default: "EC2 ACS 23.x (Rocky Linux 9.3)"
-      nexus_username:
-        description: 'Nexus username passed from secrets'
-        required: true
-        default: "username"
-      nexus_password:
-        description: 'Nexus password passed from secrets'
-        required: true
-        default: "password"
-      aws_access_key_id:
-        description: 'AWS access key id passed from secrets'
-        required: true
-        default: "id"
-      aws_secret_access_key:
-        description: 'AWS secret access key passed from secrets'
-        required: true
-        default: "key"
-      BOT_GITHUB_TOKEN:
-        description: 'Github token passed from secrets'
-        required: true
-        default: "token"
+inputs:
+  matrix_name:
+    description: 'Name of a molecule scenario'
+    required: true
+    default: "default"
+  matrix_vars:
+    description: 'Variables file to use'
+    required: true
+    default: "vars-rocky9.yml"
+  matrix_desc:
+    description: 'Description used as a name for a job'
+    required: true
+    default: "EC2 ACS 23.x (Rocky Linux 9.3)"
+  nexus_username:
+    description: 'Nexus username passed from secrets'
+    required: true
+    default: "username"
+  nexus_password:
+    description: 'Nexus password passed from secrets'
+    required: true
+    default: "password"
+  aws_access_key_id:
+    description: 'AWS access key id passed from secrets'
+    required: true
+    default: "id"
+  aws_secret_access_key:
+    description: 'AWS secret access key passed from secrets'
+    required: true
+    default: "key"
+  BOT_GITHUB_TOKEN:
+    description: 'Github token passed from secrets'
+    required: true
+    default: "token"
 runs:
   using: "composite"
   steps:
