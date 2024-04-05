@@ -188,7 +188,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
           BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
 
-  ec2-manual:
+  ec2-extended:
     name: ${{ matrix.molecule_scenario.desc }}
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
@@ -212,7 +212,7 @@ jobs:
           # avoid auth conflict when cloning DTAS during verify step
           persist-credentials: false
 
-      - name: Run tests manaully
+      - name: Run extended tests
         uses: ./.github/actions/ec2
         timeout-minutes: 185
         with:
