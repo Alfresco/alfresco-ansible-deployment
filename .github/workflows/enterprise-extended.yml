@@ -1,0 +1,67 @@
+name: "enterprise-extended"
+
+on:
+  workflow_dispatch:
+
+env:
+  DTAS_VERSION: v1.5.4
+  BUILD_NUMBER: ${{ github.run_id }}
+  PY_COLORS: 1
+  PYTHONUNBUFFERED: 1
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  check-nexus-secrets:
+    name: Ensure required nexus secrets are available
+    runs-on: ubuntu-latest
+    outputs:
+      secrets-available: ${{ steps.check-secrets.outputs.secrets-available }}
+    steps:
+      - name: Check secrets
+        id: check-secrets
+        run: | # pragma: allowlist secret
+          if [ -z "${{ secrets.nexus_username }}" ] || [-z "${{ secrets.nexus_password }}"]; then
+            echo "nexus_username or nexus_password is missing"
+            echo "secrets-available=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          echo "secrets-available=true" >> $GITHUB_OUTPUT
+
+  ec2-extended:
+    name: ${{ matrix.molecule_scenario.desc }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        molecule_scenario:
+          - name: default
+            vars: vars-ubuntu18.yml
+            desc: EC2 ACS 7.1 (Ubuntu 18.04)
+          - name: default
+            vars: vars-ubuntu20-72.yml
+            desc: EC2 ACS 7.2 (Ubuntu 20.04)
+    env:
+      AWS_REGION: eu-west-1
+      MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          # avoid auth conflict when cloning DTAS during verify step
+          persist-credentials: false
+
+      - name: Run extended tests
+        uses: ./.github/actions/molecule_integration_ec2
+        timeout-minutes: 185
+        with:
+          matrix_name: ${{ matrix.molecule_scenario.name }}
+          matrix_vars: ${{ matrix.molecule_scenario.vars }}
+          matrix_desc: ${{ matrix.molecule_scenario.desc }}
+          nexus_username: ${{ secrets.NEXUS_USERNAME }}
+          nexus_password: ${{ secrets.NEXUS_PASSWORD }}
+          aws_access_key_id: ${{ secrets.aws_access_key_id }}
+          aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
+          pat: ${{ secrets.BOT_GITHUB_TOKEN }}
