@@ -186,7 +186,7 @@ jobs:
           nexus_password: ${{ secrets.NEXUS_PASSWORD }}
           aws_access_key_id: ${{ secrets.aws_access_key_id }}
           aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
-          BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+          pat: ${{ secrets.BOT_GITHUB_TOKEN }}
 
   ec2-extended:
     name: ${{ matrix.molecule_scenario.desc }}
@@ -223,4 +223,4 @@ jobs:
           nexus_password: ${{ secrets.NEXUS_PASSWORD }}
           aws_access_key_id: ${{ secrets.aws_access_key_id }}
           aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
-          BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+          pat: ${{ secrets.BOT_GITHUB_TOKEN }}
