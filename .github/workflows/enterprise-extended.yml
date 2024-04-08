@@ -2,6 +2,12 @@ name: "enterprise-extended"
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [master]
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+      - .pre-commit-config.yaml
 
 env:
   DTAS_VERSION: v1.5.4

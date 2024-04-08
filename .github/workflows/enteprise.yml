@@ -13,7 +13,6 @@ on:
       - "docs/**"
       - "*.md"
       - .pre-commit-config.yaml
-  workflow_dispatch:
 
 env:
   DTAS_VERSION: v1.5.4
@@ -45,7 +44,7 @@ jobs:
     name: Test ${{ matrix.role.name }} role on ${{ matrix.molecule_distro.image }}
     runs-on: ubuntu-latest
     needs: check-nexus-secrets
-    if: (needs.check-nexus-secrets.outputs.secrets-available == 'true') && github.event_name != 'workflow_dispatch'
+    if: needs.check-nexus-secrets.outputs.secrets-available == 'true'
     outputs:
       dtas_version: ${{ steps.jobvars.outputs.dtas_version }}
     strategy:
@@ -103,7 +102,6 @@ jobs:
 
   docker_integration:
     name: Test ${{ matrix.scenario.name }} scenario on ${{ matrix.molecule_distro.image }}
-    if: github.event_name != 'workflow_dispatch'
     needs:
       - docker
     strategy:
@@ -133,7 +131,7 @@ jobs:
 
   ec2:
     name: ${{ matrix.molecule_scenario.desc }}
-    if: (github.actor != 'dependabot[bot]') && github.event_name != 'workflow_dispatch'
+    if: github.actor != 'dependabot[bot]'
     needs:
       - docker
     runs-on: ubuntu-latest
