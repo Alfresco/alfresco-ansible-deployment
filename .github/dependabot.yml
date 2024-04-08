@@ -19,6 +19,6 @@ updates:
       interval: "monthly"
 
   - package-ecosystem: "github-actions"
-    directory: "/.github/actions/ec2"
+    directory: "/.github/actions/molecule_integration_ec2"
     schedule:
       interval: "monthly"

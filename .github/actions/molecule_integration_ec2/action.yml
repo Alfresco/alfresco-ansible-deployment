@@ -36,14 +36,14 @@ runs:
   using: "composite"
   steps:
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
       id: setup-python
       with:
         python-version-file: '.python-version'
         cache: pipenv
 
     - name: Install python packages
-      uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.17.0
+      uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.22.3
       with:
         python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -53,7 +53,7 @@ runs:
         cache-name: enterprise
 
     - name: Set BRANCH_NAME
-      uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@v5.17.0
+      uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@v5.22.3
       with:
         sanitize: true
         max-length: 20

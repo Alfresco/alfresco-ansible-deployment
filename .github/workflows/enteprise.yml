@@ -67,10 +67,10 @@ jobs:
         run: echo "dtas_version=$DTAS_VERSION" >> $GITHUB_OUTPUT
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         id: setup-python
         with:
           python-version-file: .python-version
@@ -170,14 +170,14 @@ jobs:
       MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           # avoid auth conflict when cloning DTAS during verify step
           persist-credentials: false
 
       - name: Run tests on push
         timeout-minutes: 185
-        uses: ./.github/actions/ec2
+        uses: ./.github/actions/molecule_integration_ec2
         with:
           matrix_name: ${{ matrix.molecule_scenario.name }}
           matrix_vars: ${{ matrix.molecule_scenario.vars }}
@@ -207,13 +207,13 @@ jobs:
       MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           # avoid auth conflict when cloning DTAS during verify step
           persist-credentials: false
 
       - name: Run extended tests
-        uses: ./.github/actions/ec2
+        uses: ./.github/actions/molecule_integration_ec2
         timeout-minutes: 185
         with:
           matrix_name: ${{ matrix.molecule_scenario.name }}
