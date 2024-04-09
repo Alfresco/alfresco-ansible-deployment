@@ -14,22 +14,6 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  check-nexus-secrets:
-    name: Ensure required nexus secrets are available
-    runs-on: ubuntu-latest
-    outputs:
-      secrets-available: ${{ steps.check-secrets.outputs.secrets-available }}
-    steps:
-      - name: Check secrets
-        id: check-secrets
-        run: | # pragma: allowlist secret
-          if [ -z "${{ secrets.nexus_username }}" ] || [-z "${{ secrets.nexus_password }}"]; then
-            echo "nexus_username or nexus_password is missing"
-            echo "secrets-available=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-          echo "secrets-available=true" >> $GITHUB_OUTPUT
-
   ec2-extended:
     name: ${{ matrix.molecule_scenario.desc }}
     runs-on: ubuntu-latest
