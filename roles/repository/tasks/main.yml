@@ -18,11 +18,11 @@
       ansible.builtin.set_fact:
         temp_array: []
 
-    - name: Set solr.sharedSecret property
+    - name: Set solr.sharedSecret property when search is enabled
       ansible.builtin.set_fact:
         temp_array: >-
           {{ temp_array + [ '-Dsolr.sharedSecret=' ~ reposearch_shared_secret | quote ] }}
-      when: acs.version is version('7.2.0', '>=')
+      when: (acs.version is version('7.2.0', '>=')) and ((groups.search | default([])) | length > 0)
 
     - name: Set metadata-keystore.password and related properties
       ansible.builtin.set_fact:
