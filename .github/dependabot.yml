@@ -17,3 +17,8 @@ updates:
     directory: "/.github/actions/galaxy"
     schedule:
       interval: "monthly"
+
+  - package-ecosystem: "github-actions"
+    directory: "/.github/actions/molecule_integration_ec2"
+    schedule:
+      interval: "monthly"
