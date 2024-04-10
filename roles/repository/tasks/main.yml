@@ -18,7 +18,7 @@
       ansible.builtin.set_fact:
         temp_array: []
 
-    - name: Set solr.sharedSecret property when search is enabled
+    - name: Set solr.sharedSecret property when search secret is available
       ansible.builtin.set_fact:
         temp_array: >-
           {{ temp_array + [ '-Dsolr.sharedSecret=' ~ reposearch_shared_secret | quote ] }}
