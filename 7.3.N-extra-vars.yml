@@ -9,7 +9,7 @@ amps:
     version: 1.5.0
   device_sync:
     repository: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo"
-    version: 3.11.1
+    version: 3.11.2
   googledrive_repo:
     repository: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise"
     version: 3.3.1
@@ -46,7 +46,7 @@ adw:
   version: 3.1.0
 sync:
   repository: "{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x"
-  version: 3.11.1
+  version: 3.11.2
 dependencies_version:
   postgresql_connector: 42.6.1
   postgres_major_version: 13
