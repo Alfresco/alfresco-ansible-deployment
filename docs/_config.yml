@@ -3,7 +3,7 @@ description: Deploy alfresco with Ansible
 theme: just-the-docs
 color_scheme: alfresco
 
-url: https://gionn.github.io/alfresco-ansible-deployment
+url: https://alfresco.github.io/alfresco-ansible-deployment
 
 aux_links:
   Docs: https://docs.alfresco.com/
