@@ -14,6 +14,11 @@ on:
       - "docs/**"
       - ".github/workflows/docs.yml"
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   publish:
     uses: Alfresco/jekyll-build-tools/.github/workflows/jekyll-publish.yml@8005b9df0d121e530b3d5fdcefab8ae5885040b8
