@@ -181,7 +181,7 @@ use_custom_keystores: false
 # to default ansible merging behaviour
 dependencies_version:
   postgresql_connector: 42.6.1
-  postgres_major_version: 15
+  postgres_major_version: 14
   activemq: 5.18.4
   java: 17.0.9
   java_build: 9
