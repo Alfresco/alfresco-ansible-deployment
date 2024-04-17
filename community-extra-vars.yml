@@ -10,7 +10,7 @@ api_explorer:
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
-  version: 5.1.0
+  version: 5.1.1
 acc:
   artifact_name: alfresco-control-center
   repository: "{{ nexus_repository.releases }}"
@@ -18,7 +18,7 @@ acc:
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
-  version: 2.0.9.1
+  version: 2.0.10
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
