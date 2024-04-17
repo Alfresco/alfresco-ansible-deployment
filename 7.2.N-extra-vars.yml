@@ -2,14 +2,14 @@ acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 7.2.1.14
+  version: 7.2.1.15
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
     version: 1.4.1
   device_sync:
     repository: "{{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo"
-    version: 3.11.1
+    version: 3.11.3
   googledrive_repo:
     repository: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise"
     version: 3.2.2
@@ -27,7 +27,7 @@ search_enterprise:
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
-  version: 2.0.9.1
+  version: 2.0.10
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
@@ -46,7 +46,7 @@ adw:
   version: 3.0.0
 sync:
   repository: "{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x"
-  version: 3.11.1
+  version: 3.11.3
 dependencies_version:
   postgresql_connector: 42.6.1
   postgres_major_version: 13
