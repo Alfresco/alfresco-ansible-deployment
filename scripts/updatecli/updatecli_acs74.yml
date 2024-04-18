@@ -23,13 +23,13 @@ searchEnterprise:
   version: "3.3"
 
 transform:
-  version: "4"
+  version: "5.1"
 
 trouter:
-  version: "3"
+  version: "4.1"
 
 sfs:
-  version: "3"
+  version: "4.1"
 
 target_file: 7.4.N-extra-vars.yml
 version_pattern: '$'
