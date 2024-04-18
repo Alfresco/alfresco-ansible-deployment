@@ -23,7 +23,7 @@
           },
           {
             "id": "org_alfresco_device_sync_repo",
-            "version": "3.11.1",
+            "version": "3.11.3",
             "installed": true
           }
         ]
