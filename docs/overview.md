@@ -87,13 +87,13 @@ The table below shows the version of the components deployed by the playbook for
 | Share               | 23.2.1                      | 7.4.1.6        | 7.3.1.2        | 7.2.1.15       | 7.1.1.10       |
 | Search Services     | 2.0.10                      | 2.0.10         | 2.0.10         | 2.0.10         | 2.0.2.2        |
 | Search Enterprise   | 4.0.1 (n/a)                 | 3.3.3          | 3.2.1          | 3.1.1.1        | 3.1.1.1        |
-| All-In-One T-Engine | 5.1.1                       | 4.0.1          | 3.1.2          | 3.1.2          | 3.1.2          |
+| All-In-One T-Engine | 5.1.1                       | 5.1.1          | 3.1.2          | 3.1.2          | 3.1.2          |
 | AOS                 | 3.0.0                       | 1.6.2          | 1.5.0          | 1.4.1          | 1.4.1          |
 | Google Docs         | 4.0.0                       | 3.4.2          | 3.3.1          | 3.2.2          | 3.2.1          |
 | Digital Workspace   | 4.4.1 (n/a)                 | 4.0.0          | 3.1.0          | 3.0.0          | 2.6.1          |
 | Contro Center       | 8.4.1 (n/a)                 | 8.0.0          | n/a            | n/a            | n/a            |
-| Transform Router    | 4.1.1 (n/a)                 | 3.0.1          | 2.1.2          | 2.1.2          | 2.1.2          |
-| Shared File Store   | 4.1.1 (n/a)                 | 3.0.1          | 2.1.2          | 2.1.2          | 2.1.2          |
+| Transform Router    | 4.1.1 (n/a)                 | 4.1.1          | 2.1.2          | 2.1.2          | 2.1.2          |
+| Shared File Store   | 4.1.1 (n/a)                 | 4.1.1          | 2.1.2          | 2.1.2          | 2.1.2          |
 | Sync Service        | 5.0.0 (n/a)                 | 3.11.1         | 3.11.1         | 3.11.1         | 3.11.1         |
 
 > Support for ACS 7.0 has been deprecated since April 2024, but you can still use the latest playbook that supported it ([v2.6.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v2.6.0))
