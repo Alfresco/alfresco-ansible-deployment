@@ -181,6 +181,7 @@ doc](./README.md#versioning)
 
 Follow this quick checklist:
 
+* review currently open dependabot/renovate and merge them
 * copy the versions inside the group_vars/all.yml to a new XX.N-extra-vars.yml (in case of a new ACS major version)
 * run [updatecli workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/updatecli.yml)
 * run [enterprise-extended](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enterprise-extended.yml) and make sure it is green
