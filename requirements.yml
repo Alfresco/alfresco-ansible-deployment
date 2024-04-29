@@ -8,7 +8,7 @@ collections:
   - name: ansible.posix
     version: 1.5.4
   - name: ansible.utils
-    version: 4.0.0
+    version: 4.1.0
   - name: community.crypto
     version: 2.18.0
   - name: middleware_automation.keycloak
