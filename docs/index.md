@@ -39,8 +39,3 @@ Developer's guide is available on the
 
 The code in this repository is released under the Apache License, see the
 [LICENSE](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/LICENSE) file for details.
-
-## Contribution
-
-Please use [this guide](CONTRIBUTING.md) to make a contribution to the project
-and information to report any issues.
