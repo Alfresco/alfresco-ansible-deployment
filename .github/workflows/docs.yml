@@ -26,3 +26,4 @@ jobs:
       working-directory: docs
       publish: ${{ github.event_name == 'push' && github.ref_name == 'master'}}
       validate-html: true
+      build-tools-ref: OPSEXP-2662-validate-html
