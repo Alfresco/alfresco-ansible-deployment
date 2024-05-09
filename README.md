@@ -1,25 +1,36 @@
----
-title: Developers guide
-layout: default
----
+# Alfresco Ansible Deployment
 
-# Developers guide
+[![community](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml)
+[![enterprise](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml)
+[![enterprise-extended](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enterprise-extended.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enterprise-extended.yml)
+[![release](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml)
+[![pre-commit](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/precommit.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/precommit.yml)
+[![Publish docs](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/docs.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/docs.yml)
+[![Bump artifacts versions](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/updatecli.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/updatecli.yml)
+
+This project provides [Ansible](https://www.ansible.com) playbooks capable of
+deploying Alfresco Content Services (ACS) with different configuration flavours.
+
+The user documentation is available on [GitHub Pages](https://alfresco.github.io/alfresco-ansible-deployment/).
+
+## Developers guide
 
 This page is a developers guide for to popular commands used in the process of
 setting up environment for development, testing and release.
 
-* [Developers guide](#developers-guide)
-  * [Basic pipenv knowledge](#basic-pipenv-knowledge)
-  * [Basic pipenv commands and usage for developers](#basic-pipenv-commands-and-usage-for-developers)
+* [Alfresco Ansible Deployment](#alfresco-ansible-deployment)
+  * [Developers guide](#developers-guide)
+  * [Introduction to pipenv](#introduction-to-pipenv)
+  * [Basic pipenv usage](#basic-pipenv-usage)
   * [Development](#development)
     * [Roles tests](#roles-tests)
     * [Integration tests](#integration-tests)
-      * [Docker integration test](#docker-integration-test)
+      * [Docker based tests](#docker-based-tests)
   * [Adding support for a new distribution](#adding-support-for-a-new-distribution)
   * [Release](#release)
     * [Tag and release](#tag-and-release)
 
-## Basic pipenv knowledge
+## Introduction to pipenv
 
 The general purpose of pipenv is similar to that of Package installer for Python
 (PIP) and built-in venv. This is external python library, which handles package
@@ -33,9 +44,9 @@ file) and installs it inside virtual environment. Then we can also use this
 package we have installed. The default virtual environment is created in our
 working directory. You may want to visit: <https://pipenv.pypa.io/en/latest/>
 
-> NOTE: Pipenv does not install packages globally but to virtual environment
+> NOTE: Pipenv does not install packages globally but into a virtual environment
 
-## Basic pipenv commands and usage for developers
+## Basic pipenv usage
 
 Pipenv comes with bunch of commands, but the most important are highlighted
 below: The command with flag --dev installs packages from Pipfile needed for
@@ -154,7 +165,7 @@ molecule/default/vars-scenario.yml` parameter:
 molecule -e molecule/default/vars-rhel8.yml test
 ```
 
-#### Docker integration test
+#### Docker based tests
 
 There is also a `local` molecule scenario that use the same approach of roles
 molecule tests, using the docker driver.

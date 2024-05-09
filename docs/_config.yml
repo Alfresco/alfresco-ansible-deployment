@@ -1,5 +1,5 @@
 title: Alfresco Ansible Deployment
-description: Deploy alfresco with Ansible
+description: Deploy Alfresco with Ansible
 theme: just-the-docs
 color_scheme: alfresco
 
@@ -22,7 +22,7 @@ logo: "resources/hyland-alfresco-logos.png"
 favicon_ico: "favicon.ico"
 
 defaults:
-  # apply the default layout to all markdown pages
+  # apply the default layout to all markdown pages in the docs root folder
   - scope:
       path: "*.md"
     values:
