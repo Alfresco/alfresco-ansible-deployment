@@ -8,7 +8,7 @@ Thanks for your interest in contributing to this project!
 
 The following is a set of guidelines for contributing to this library. Most of them will make the life of the reviewer easier and therefore decrease the time required for the patch be included in the next version.
 
-Because this project forms a part of Alfresco Content Services, the guidelines are hosted in the [Alfresco Social Community](http://community.alfresco.com/community/ecm) where they can be referenced from multiple projects.
+Because this project forms a part of Alfresco Content Services, the guidelines are hosted in the [Alfresco Social Community](https://hub.alfresco.com/t5/alfresco-content-services-ecm/ct-p/ECM-software) where they can be referenced from multiple projects.
 
 Read an [overview on how this project is governed](https://community.alfresco.com/docs/DOC-6385-project-overview-repository).
 
@@ -20,8 +20,7 @@ You can also perform the following:
 
 Please follow the [coding standards](https://community.alfresco.com/docs/DOC-4658-coding-standards).
 
-Code of Conduct is adapted from the [Contributor Covenant][homepage], version 1.4,
-available at [http://contributor-covenant.org/version/1/4][version]
+Code of Conduct is adapted from the [Contributor Covenant][homepage], version [1.4][version].
 
 ## Contributing to this project
 
@@ -32,5 +31,5 @@ After these steps all passed your valuable contribution will e merged to the def
 
 Thank you for your openness!
 
-[homepage]: http://contributor-covenant.org
-[version]: http://contributor-covenant.org/version/1/4/
+[homepage]: https://contributor-covenant.org
+[version]: https://www.contributor-covenant.org/version/1/4/code-of-conduct/

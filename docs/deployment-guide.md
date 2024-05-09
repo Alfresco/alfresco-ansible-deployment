@@ -227,8 +227,8 @@ known_urls:
   - http://ecm.acme.com/share
 ```
 
-> the `known_urls` variable serves a larger purpose. Check the [SECURITY
-> README](./SECURITY.md) for more detailed information.
+> The `known_urls` variable serves a larger purpose, check the
+> [SECURITY README](SECURITY.md) for more details.
 
 ## Understanding the playbook
 
@@ -549,12 +549,11 @@ And then edit `vars/secrets.yml` to fill all the required arguments for the plug
 
 ### Alfresco Global Properties
 
-You can provide your [repository
-configuration](https://github.com/Alfresco/acs-deployment/blob/master/docs/properties-reference.md)
+You can provide your [repository configuration](https://docs.alfresco.com/content-services/latest/config/#using-alfresco-globalproperties)
 by editing the `configuration_files/alfresco-global.properties` file.
 
 > This approach is now discouraged and you should prefer using the [`repository`
-> group vars](../configuration_files/alfresco-global.properties)
+> group vars](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/configuration_files/alfresco-global.properties)
 > `global_properties` as much as possible otherwise reference you own snippets
 > of properties file using either the new `repository` group var
 > `properties_snippets` or directly the `repository` role argument
@@ -610,7 +609,8 @@ When overriding the default env vars you should make sure you're not retiring im
 > Identity](#external-identity))
 
 When defining a node into the `identity` group, the [identity
-role](../roles/identity/) which wraps the upstream
+role](https://github.com/Alfresco/alfresco-ansible-deployment/tree/master/roles/identity)
+which wraps the upstream
 [ansible-middleware/keycloak][ansible-middleware/keycloak] will automatically
 configure a Keycloak installation and all the components will be configured
 automatically to use it (share, adw, acc).

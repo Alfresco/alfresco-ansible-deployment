@@ -27,3 +27,7 @@ defaults:
       path: "*.md"
     values:
       layout: "default"
+      render_with_liquid: false
+
+plugins:
+  - jekyll-relative-links

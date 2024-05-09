@@ -6,8 +6,9 @@ title: Security
 
 This pages focuses on providing information on making the platform deployed
 with alfresco-ansible-deployment secure.
-In particular, for Share to work, Follow the
-[Share security setup](#Share security setup).
+
+In particular, for Share to work reliably, please follow the
+[Share security setup](#share-security-setup).
 
 ## Specify trustworthy applications
 
@@ -106,10 +107,10 @@ cors:
 Share is **always** deployed together with the repo (it's part of the same
 role), and as a consequence will always try to access the repo through the
 `localhost` interface. That means from the repo's point of view - unless Share
-itself is accessed using [http://localhost/share/](http://localhost/share/) - it
-is breaking CORS protection. For that reason in order for Share to work, it is
-mandatory to add the URL Share will be accessed from as a `known_urls`. We
-recommand doing it via the `all` group variables in `group_vars/all.yml`:
+itself is accessed using `http://localhost/share/` - it is breaking CORS
+protection. For that reason in order for Share to work, it is mandatory to add
+the URL Share will be accessed from as a `known_urls`. We recommand doing it via
+the `all` group variables in `group_vars/all.yml`:
 
 ```yaml
 known_urls:
