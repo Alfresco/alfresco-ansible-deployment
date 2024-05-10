@@ -21,7 +21,7 @@ permissions:
 
 jobs:
   publish:
-    uses: Alfresco/jekyll-build-tools/.github/workflows/jekyll-publish.yml@OPSEXP-2662-validate-html
+    uses: Alfresco/jekyll-build-tools/.github/workflows/jekyll-publish.yml@1d72b42497f317da83a6052631634932b48c5d08
     with:
       working-directory: docs
       publish: ${{ github.event_name == 'push' && github.ref_name == 'master'}}
