@@ -73,7 +73,8 @@ the right Alfresco version).
 We aim to support these stacks **with the exception of** Amazon Linux & Suse
 distributions.
 
-> Ansible version used for testing this playbook can be retrieved [here](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/Pipfile#L7).
+> Ansible version used for testing this playbooks can be retrieved from the
+> [Pipfile](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/Pipfile).
 
 The table below shows the version of the components deployed by the playbook for ACS 7.x onward.
 

@@ -21,7 +21,9 @@ permissions:
 
 jobs:
   publish:
-    uses: Alfresco/jekyll-build-tools/.github/workflows/jekyll-publish.yml@8005b9df0d121e530b3d5fdcefab8ae5885040b8
+    uses: Alfresco/jekyll-build-tools/.github/workflows/jekyll-publish.yml@1d72b42497f317da83a6052631634932b48c5d08
     with:
       working-directory: docs
       publish: ${{ github.event_name == 'push' && github.ref_name == 'master'}}
+      validate-html: true
+      validate-html-args: --ignore-urls "/linux.die.net/"

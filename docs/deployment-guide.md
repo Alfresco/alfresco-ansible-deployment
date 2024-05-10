@@ -158,17 +158,10 @@ We made mandatory the usage of [pipenv](https://pipenv.pypa.io/en/latest/) to
 make sure that you will run the playbook with the same set of python
 dependencies we are running our integration tests.
 
-Install pipenv via pip:
+Install pipenv via pip (alternate [install methods](https://pipenv.pypa.io/en/latest/installation.html)):
 
 ```bash
 pip install --user pipenv
-```
-
-If `pip` is not available, you can bootstrap pipenv using the [crude
-installation](https://pipenv.pypa.io/en/latest/install/#crude-installation-of-pipenv):
-
-```bash
-curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python3
 ```
 
 Now you are ready to install Ansible and required runtime dependencies in a dedicated
@@ -227,8 +220,8 @@ known_urls:
   - http://ecm.acme.com/share
 ```
 
-> the `known_urls` variable serves a larger purpose. Check the [SECURITY
-> README](./SECURITY.md) for more detailed information.
+> The `known_urls` variable serves a larger purpose, check the
+> [SECURITY README](SECURITY.md) for more details.
 
 ## Understanding the playbook
 
@@ -452,12 +445,12 @@ pipenv run ansible-playbook --ask-vault-pass playbooks/acs.yml
 ```
 
 While we recommend to refer to the official Ansible documentation to properly configure
-[Ansible vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html#managing-vault-passwords),
+[Ansible vault](https://docs.ansible.com/ansible/latest/vault_guide/vault_managing_passwords.html),
 below a basic configuration that will help you in quickly installing Alfresco
-without to having to input the Vault password everytime.
+without to having to input the Vault password every time.
 
 Configure a password in a file (e.g. `~/.vault_pass.txt`), optionally
-autogenerating it with:
+autogenerate it with:
 
 ```bash
 openssl rand -base64 21 > ~/.vault_pass.txt
@@ -476,8 +469,8 @@ Now you are ready to start using Ansible Vault.
 
 Ansible Vault provides two alternative ways to protect secrets:
 
-* [Encrypted variables](https://docs.ansible.com/ansible/latest/user_guide/vault.html#encrypting-individual-variables-with-ansible-vault)
-* [Encrypted files](https://docs.ansible.com/ansible/latest/user_guide/vault.html#encrypting-files-with-ansible-vault)
+* [Encrypted variables](https://docs.ansible.com/ansible/latest/vault_guide/vault_encrypting_content.html#encrypting-individual-variables-with-ansible-vault)
+* [Encrypted files](https://docs.ansible.com/ansible/latest/vault_guide/vault_encrypting_content.html#encrypting-files-with-ansible-vault)
 
 In the previous links you can read both advantages and disadvantages of the two approaches.
 
@@ -549,12 +542,11 @@ And then edit `vars/secrets.yml` to fill all the required arguments for the plug
 
 ### Alfresco Global Properties
 
-You can provide your [repository
-configuration](https://github.com/Alfresco/acs-deployment/blob/master/docs/properties-reference.md)
+You can provide your [repository configuration](https://docs.alfresco.com/content-services/latest/config/#using-alfresco-globalproperties)
 by editing the `configuration_files/alfresco-global.properties` file.
 
 > This approach is now discouraged and you should prefer using the [`repository`
-> group vars](../configuration_files/alfresco-global.properties)
+> group vars](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/configuration_files/alfresco-global.properties)
 > `global_properties` as much as possible otherwise reference you own snippets
 > of properties file using either the new `repository` group var
 > `properties_snippets` or directly the `repository` role argument
@@ -610,7 +602,8 @@ When overriding the default env vars you should make sure you're not retiring im
 > Identity](#external-identity))
 
 When defining a node into the `identity` group, the [identity
-role](../roles/identity/) which wraps the upstream
+role](https://github.com/Alfresco/alfresco-ansible-deployment/tree/master/roles/identity)
+which wraps the upstream
 [ansible-middleware/keycloak][ansible-middleware/keycloak] will automatically
 configure a Keycloak installation and all the components will be configured
 automatically to use it (share, adw, acc).
@@ -701,7 +694,7 @@ Support for external Identity service will be implemented in a future playbook r
 
 ### Custom Keystore
 
-By default the playbook deploys a default keystore to ease the installation process, however, we recommend you [generate your own keystore](https://docs.alfresco.com/content-services/latest/admin/security/#managealfkeystores) following the [instructions here](https://docs.alfresco.com/content-services/latest/admin/security/#keystore-configuration).
+By default the playbook deploys a default keystore to ease the installation process, however, we recommend you [generate your own keystore](https://docs.alfresco.com/content-services/latest/admin/security/#managealfkeystores) following the [instructions here](https://docs.alfresco.com/content-services/latest/admin/security/#keystore-generation).
 
 There are three steps required to use a custom keystore:
 

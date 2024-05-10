@@ -32,14 +32,10 @@ to [Upgrade Notes](playbook-upgrade.md).
 
 ## Development
 
-Developer's guide is available [here](developer-guide.md).
+Developer's guide is available on the
+[GitHub Repository](https://github.com/Alfresco/alfresco-ansible-deployment?tab=readme-ov-file#alfresco-ansible-deployment).
 
 ## License
 
 The code in this repository is released under the Apache License, see the
 [LICENSE](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/LICENSE) file for details.
-
-## Contribution
-
-Please use [this guide](CONTRIBUTING.md) to make a contribution to the project
-and information to report any issues.
