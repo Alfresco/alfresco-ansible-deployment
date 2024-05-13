@@ -66,7 +66,33 @@ level is sensible as it makes that config available to all cluster nodes in a
 single declaration. An example snippet is available in the
 `group_vars/repository.yml` file and match most case such as those shown below:
 
-![ACS basic cluster storage](resources/acs-ha-contentstore.png)
+```mermaid
+graph LR
+subgraph alfresco[Alfresco Components]
+  subgraph node_1
+    repository_1
+    share_1
+  end
+  subgraph node_2
+    repository_2
+    share_2
+  end
+end
+
+subgraph external[External components]
+  db[(Postgres)]
+  contentstore[(Content Store)]
+end
+
+share_1 -- share cluster domain --- share_2
+repository_1 -- repository cluster domain --- repository_2
+
+repository_1 --> db
+repository_2 --> db
+
+node_1 --> contentstore
+node_2 --> contentstore
+```
 
 #### Advanced use cases
 
