@@ -22,6 +22,7 @@
     file: restart.yml
 
 - name: Print-ats-ate-aio
+  become: true
   ansible.builtin.command: cat "{{ logs_folder }}/ats-ate-aio.log"
   changed_when: false
   ignore_errors: true
