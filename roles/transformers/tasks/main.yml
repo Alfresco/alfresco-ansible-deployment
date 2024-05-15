@@ -195,8 +195,6 @@
         - wait-for-activemq
         - Enable-aio
         - Restart-aio
-        - Print-ats-ate-aio
-        - Print-ats-ate-aio-log
 
 - name: Verifying if libreoffice finished downloading
   ansible.builtin.async_status:
