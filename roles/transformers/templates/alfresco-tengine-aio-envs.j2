@@ -4,7 +4,6 @@ http
 s
 {%- endif -%}
 {%- endmacro %}
-
 JAVA_OPTS="-DPDFRENDERER_EXE={{ ats_home }}/alfresco-pdf-renderer \
 -DLIBREOFFICE_HOME=${LIBREOFFICE_HOME} \
 -DIMAGEMAGICK_ROOT=${IMAGEMAGICK_HOME} \
@@ -18,7 +17,6 @@ JAVA_OPTS="-DPDFRENDERER_EXE={{ ats_home }}/alfresco-pdf-renderer \
 -DACTIVEMQ_PASSWORD={{ activemq_password }} \
 -DFILE_STORE_URL={{ ats_proto() }}://${ATS_SHARED_FS_HOST}:{{ ports_cfg.sfs.http }}/alfresco/api/-default-/private/sfs/versions/1/file"
 {% endif %}
-
 {% for key, value in tengine_environment.items() %}
 {{ key }}="{{ value | join(' ') }}"
 {% endfor %}

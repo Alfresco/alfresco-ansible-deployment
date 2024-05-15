@@ -6,6 +6,7 @@ After=syslog.socket network.target local-fs.target remote-fs.target
 Type=simple
 EnvironmentFile={{ binaries_folder }}/alfresco-tengine-aio-envs
 User={{ username }}
+ExecStartPre=/bin/bash {{ config_folder }}/setenv.sh
 ExecStart={{ binaries_folder }}/ats-ate-aio.sh
 WorkingDirectory={{ ats_home }}
 Restart=on-failure
