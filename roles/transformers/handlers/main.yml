@@ -20,3 +20,14 @@
 - name: Restart-aio
   ansible.builtin.include_tasks:
     file: restart.yml
+
+- name: Print-ats-ate-aio
+  ansible.builtin.command: cat "{{ logs_folder }}/ats-ate-aio.log"
+  changed_when: false
+  ignore_errors: true
+  register: ats_ate_aio_log
+
+- name: Print-ats-ate-aio-log
+  ansible.builtin.debug:
+    msg: "{{ ats_ate_aio_log.stdout }}"
+  when: ats_ate_aio_log.stdout is defined
