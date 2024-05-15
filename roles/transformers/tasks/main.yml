@@ -149,6 +149,7 @@
       changed_when: false
 
     - name: Run the script setting environment variables
+      become: true
       ansible.builtin.command: . {{ config_folder }}/setenv.sh
       register: ats_aio_output
       changed_when: false
