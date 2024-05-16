@@ -43,7 +43,7 @@ all:
 ## Role parameters
 
 Role's parameters are defined within the `roles/search/meta/argument_specs.yml`
-file. Bellow we'll just expose the most common ones that may be useful for the
+file. Below we'll just expose the most common ones that may be useful for the
 type of use-cases mentioned earlier.
 
 - `search_shared_secret`: This parameter is the only one that's required and
@@ -80,7 +80,7 @@ When running the example playbook you need to use the playbook variables.
 
 ## Using the Search replication playbook
 
-Assuming the example playbook above, the command bellow will deploy replicated
+Assuming the example playbook above, the command below will deploy replicated
 Search service platform on 3 hosts, the first of which will be used as the
 master (and is reachable by other hosts on the IP 192.168.0.56), and this
 same host will be tracking the repo located at 192.168.0.138.
@@ -102,4 +102,4 @@ There are more actions required at that point to complete the installation:
 
 - Configure ACS to use the load-balancer as the search host.
 
-> These actions bellow can be added to the playbook to match your own setup.
+> These actions below can be added to the playbook to match your own setup.

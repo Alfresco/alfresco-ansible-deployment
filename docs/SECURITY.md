@@ -67,7 +67,7 @@ mentioned in this variable will be automatically to the list of relaxed origins
 for CORS queries. By default they will be allowed tu use any following methods:
 DELETE, GET, HEAD, OPTIONS, POST, PUT. If you want to restrict methods or
 further tweak the CORS configuration, you can do so by overriding the whole
-`cors` variable as shown bellow:
+`cors` variable as shown below:
 
 ```yaml
 cors:
@@ -123,7 +123,7 @@ Renditions using the LibreOffice transformer to render HTML are subject to the
 BSSRF attacks. In order to mitigate this risk, you may decide to disable the
 optimal renditions and instead generate lower quality renditions (where
 basically images would not be rendered as part of the HTML).
-That is achieved by the variable bellow:
+That is achieved by the variable below:
 
 ```yaml
 bssrf_protection_enabled: true

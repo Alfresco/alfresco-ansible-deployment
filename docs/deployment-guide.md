@@ -1090,7 +1090,7 @@ Once ACS has initialized access the system using the following URLs with a brows
 
 ### Additional command switches for ansible-playbook
 
-There are some useful argument you can use with `ansible-playbook` command in many circumstances. Some are highlighted bellow but take a look at [The ansible-playbook documentation](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) for complete list of options.
+There are some useful argument you can use with `ansible-playbook` command in many circumstances. Some are highlighted below but take a look at [The ansible-playbook documentation](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) for complete list of options.
 
 * `-k` : Prompt for SSH password. Useful when no SSH keys have been deployed but needs to be th same on all hosts (prefer SSH whenever possible)
 * `-K` : Prompt for sudo password. Useful when the user used to connect to the machine is not root
