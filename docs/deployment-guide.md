@@ -816,7 +816,7 @@ amp_downloads:
 The diagram below shows the result of a localhost deployment.
 
 ```mermaid
-graph TD
+graph LR
 user[👤] --> playbook
 subgraph CN[Control Node]
   playbook(Playbooks)
@@ -913,7 +913,7 @@ If you want to deploy everything to a single machine follow the steps in the [Si
 The diagram below shows the result of a single machine deployment.
 
 ```mermaid
-graph TD
+graph LR
 user[👤] --> playbook
 subgraph CN[Control Node]
   playbook(Playbooks)
@@ -990,7 +990,7 @@ Once ACS has initialized access the system using the following URLs with a brows
 The diagram below shows the result of a multi machine deployment.
 
 ```mermaid
-graph TD
+graph LR
 user[👤] --> playbook
 subgraph CN[Control Node]
   playbook(Playbooks)
