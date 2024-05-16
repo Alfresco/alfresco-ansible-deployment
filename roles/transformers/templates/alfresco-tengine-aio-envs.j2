@@ -4,19 +4,36 @@ http
 s
 {%- endif -%}
 {%- endmacro %}
+
+{%- macro im_lib() -%}
+{%- if pkg_format == 'deb' -%}
+{{ imagemagick_home }}/lib/x86_64-linux-gnu/
+{%- else -%}
+/usr/lib64/
+{%- endif -%}
+{%- endmacro %}
+
+{%- macro im_cfg() -%}
+{%- if pkg_format == 'deb' -%}
+{{ imagemagick_home }}/lib/x86_64-linux-gnu/ImageMagick-{{ imagemagick_version.split('-')[0] -}}
+{%- else -%}
+{{ imagemagick_home }}
+{%- endif -%}
+{%- endmacro %}
+
 JAVA_OPTS="-DPDFRENDERER_EXE={{ ats_home }}/alfresco-pdf-renderer\
--DLIBREOFFICE_HOME=${LIBREOFFICE_HOME}\
--DIMAGEMAGICK_ROOT=${IMAGEMAGICK_HOME}\
--DIMAGEMAGICK_DYN=${IMAGEMAGICK_DYN}\
--DIMAGEMAGICK_EXE=${IMAGEMAGICK_EXE}\
--DIMAGEMAGICK_CONFIG=${IMAGEMAGICK_CONFIG}\
--DIMAGEMAGICK_CODERS=${IMAGEMAGICK_CODERS}\
+-DLIBREOFFICE_HOME={{ libreoffice_home }}\
+-DIMAGEMAGICK_ROOT={{ imagemagick_home }}\
+-DIMAGEMAGICK_DYN={{ im_lib() }}\
+-DIMAGEMAGICK_EXE={% if pkg_format == 'deb' %}{{ imagemagick_home }}/bin/{% endif %}convert\
+-DIMAGEMAGICK_CONFIG={{ im_cfg() }}/config-Q16HDRI\
+-DIMAGEMAGICK_CODERS={{ im_cfg() }}/modules-Q16HDRI/coders\
 {% if acs.edition == 'Enterprise' %}
 -DACTIVEMQ_URL=failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})?timeout=3000\
 -DACTIVEMQ_USER={{ activemq_username }}\
 -DACTIVEMQ_PASSWORD={{ activemq_password }}\
--DFILE_STORE_URL={{ ats_proto() }}://${ATS_SHARED_FS_HOST}:{{ ports_cfg.sfs.http }}/alfresco/api/-default-/private/sfs/versions/1/file"
+-DFILE_STORE_URL={{ ats_proto() }}://{{ sfs_host }}:{{ ports_cfg.sfs.http }}/alfresco/api/-default-/private/sfs/versions/1/file\
 {% endif %}
 {% for key, value in tengine_environment.items() %}
-{{ key }}="{{ value | join(' ') }}"
+{{ value | join(' ') }}"
 {% endfor %}
