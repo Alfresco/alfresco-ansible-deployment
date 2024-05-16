@@ -5,6 +5,5 @@ tengine_environment:
   JAVA_OPTS:
     - -Xms512m
     - -Xmx1536m
-    - $JAVA_OPTS
 ats_keystore: {}
 include_ghostscript: false
