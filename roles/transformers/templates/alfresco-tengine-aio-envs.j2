@@ -24,18 +24,18 @@ s
 JAVA_HOME="{{ java_home }}"
 PATH="{{ java_home }}/bin:${PATH}"
 
-JAVA_OPTS="-DPDFRENDERER_EXE={{ ats_home }}/alfresco-pdf-renderer\
--DLIBREOFFICE_HOME={{ libreoffice_home }}\
--DIMAGEMAGICK_ROOT={{ imagemagick_home }}\
--DIMAGEMAGICK_DYN={{ im_lib() }}\
--DIMAGEMAGICK_EXE={% if pkg_format == 'deb' %}{{ imagemagick_home }}/bin/{% endif %}convert\
--DIMAGEMAGICK_CONFIG={{ im_cfg() }}/config-Q16HDRI\
--DIMAGEMAGICK_CODERS={{ im_cfg() }}/modules-Q16HDRI/coders\
+JAVA_OPTS="-DPDFRENDERER_EXE={{ ats_home }}/alfresco-pdf-renderer \
+-DLIBREOFFICE_HOME={{ libreoffice_home }} \
+-DIMAGEMAGICK_ROOT={{ imagemagick_home }} \
+-DIMAGEMAGICK_DYN={{ im_lib() }} \
+-DIMAGEMAGICK_EXE={% if pkg_format == 'deb' %}{{ imagemagick_home }}/bin/{% endif %}convert \
+-DIMAGEMAGICK_CONFIG={{ im_cfg() }}/config-Q16HDRI \
+-DIMAGEMAGICK_CODERS={{ im_cfg() }}/modules-Q16HDRI/coders \
 {% if acs.edition == 'Enterprise' %}
--DACTIVEMQ_URL=failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})?timeout=3000\
--DACTIVEMQ_USER={{ activemq_username }}\
--DACTIVEMQ_PASSWORD={{ activemq_password }}\
--DFILE_STORE_URL={{ ats_proto() }}://{{ sfs_host }}:{{ ports_cfg.sfs.http }}/alfresco/api/-default-/private/sfs/versions/1/file\
+-DACTIVEMQ_URL=failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})?timeout=3000 \
+-DACTIVEMQ_USER={{ activemq_username }} \
+-DACTIVEMQ_PASSWORD={{ activemq_password }} \
+-DFILE_STORE_URL={{ ats_proto() }}://{{ sfs_host }}:{{ ports_cfg.sfs.http }}/alfresco/api/-default-/private/sfs/versions/1/file \
 {% endif %}
 {% for key, value in tengine_environment.items() %}
 {{ value | join(' ') }}"
