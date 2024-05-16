@@ -108,18 +108,6 @@
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
 
-    - name: Add ats common vars to setenv file
-      ansible.builtin.blockinfile:
-        path: "{{ config_folder }}/setenv.sh"
-        marker: "# {mark} ATS COMMON ENV VARS"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        block: |
-          export ATS_HOME={{ binaries_folder }}/transform-service
-          export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
-          export ATS_SHARED_FS_HOST={{ sfs_host }}
-        insertafter: EOF
-
     - name: Create log file with correct permissions
       ansible.builtin.file:
         path: "{{ logs_folder }}/ats-ate-aio.log"

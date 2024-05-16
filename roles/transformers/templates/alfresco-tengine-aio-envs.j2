@@ -21,6 +21,9 @@ s
 {%- endif -%}
 {%- endmacro %}
 
+JAVA_HOME="{{ java_home }}"
+PATH="{{ java_home }}/bin:${PATH}"
+
 JAVA_OPTS="-DPDFRENDERER_EXE={{ ats_home }}/alfresco-pdf-renderer\
 -DLIBREOFFICE_HOME={{ libreoffice_home }}\
 -DIMAGEMAGICK_ROOT={{ imagemagick_home }}\
@@ -37,3 +40,6 @@ JAVA_OPTS="-DPDFRENDERER_EXE={{ ats_home }}/alfresco-pdf-renderer\
 {% for key, value in tengine_environment.items() %}
 {{ value | join(' ') }}"
 {% endfor %}
+ATS_HOME={{ binaries_folder }}/transform-service
+ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
+ATS_SHARED_FS_HOST={{ sfs_host }}
