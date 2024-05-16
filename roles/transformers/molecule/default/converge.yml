@@ -15,3 +15,4 @@
           JAVA_OPTS:
             - -Xms512m
             - -Xmx900m
+            - $JAVA_OPTS
