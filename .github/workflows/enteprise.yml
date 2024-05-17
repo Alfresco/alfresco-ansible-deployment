@@ -42,100 +42,100 @@ jobs:
             exit 0
           fi
           echo "secrets-available=true" >> $GITHUB_OUTPUT
-  # docker:
-  #   name: Test ${{ matrix.role.name }} role on ${{ matrix.molecule_distro.image }}
-  #   runs-on: ubuntu-latest
-  #   needs: check-nexus-secrets
-  #   if: needs.check-nexus-secrets.outputs.secrets-available == 'true'
-  #   outputs:
-  #     dtas_version: ${{ steps.jobvars.outputs.dtas_version }}
-  #   strategy:
-  #     fail-fast: true
-  #     matrix:
-  #       molecule_distro:
-  #         - image: ubuntu:22.04
-  #         - image: rockylinux:9.3
-  #       role:
-  #         - name: adf_app
-  #         - name: search_enterprise
-  #         - name: repository
-  #         - name: sfs
-  #         - name: sync
-  #         - name: trouter
-  #   steps:
-  #     - name: Share var with further reusable workflows
-  #       id: jobvars
-  #       run: echo "dtas_version=$DTAS_VERSION" >> $GITHUB_OUTPUT
+  docker:
+    name: Test ${{ matrix.role.name }} role on ${{ matrix.molecule_distro.image }}
+    runs-on: ubuntu-latest
+    needs: check-nexus-secrets
+    if: needs.check-nexus-secrets.outputs.secrets-available == 'true'
+    outputs:
+      dtas_version: ${{ steps.jobvars.outputs.dtas_version }}
+    strategy:
+      fail-fast: true
+      matrix:
+        molecule_distro:
+          - image: ubuntu:22.04
+          - image: rockylinux:9.3
+        role:
+          - name: adf_app
+          - name: search_enterprise
+          - name: repository
+          - name: sfs
+          - name: sync
+          - name: trouter
+    steps:
+      - name: Share var with further reusable workflows
+        id: jobvars
+        run: echo "dtas_version=$DTAS_VERSION" >> $GITHUB_OUTPUT
 
-  #     - name: Checkout
-  #       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-  #     - name: Set up Python
-  #       uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
-  #       id: setup-python
-  #       with:
-  #         python-version-file: .python-version
-  #         cache: pipenv
+      - name: Set up Python
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
+        id: setup-python
+        with:
+          python-version-file: .python-version
+          cache: pipenv
 
-  #     - name: Install python packages
-  #       uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.22.3
-  #       with:
-  #         python-version: ${{ steps.setup-python.outputs.python-version }}
+      - name: Install python packages
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.22.3
+        with:
+          python-version: ${{ steps.setup-python.outputs.python-version }}
 
-  #     - name: Install and cache ansible galaxy dependencies
-  #       uses: ./.github/actions/galaxy
-  #       with:
-  #         cache-name: enterprise
+      - name: Install and cache ansible galaxy dependencies
+        uses: ./.github/actions/galaxy
+        with:
+          cache-name: enterprise
 
-  #     - name: Setup workspace
-  #       uses: ./.github/actions/setup-workspace
+      - name: Setup workspace
+        uses: ./.github/actions/setup-workspace
 
-  #     - name: Run tests
-  #       env:
-  #         MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
-  #         NEXUS_USERNAME: ${{ secrets.nexus_username }}
-  #         NEXUS_PASSWORD: ${{ secrets.nexus_password }}
-  #       uses: nick-fields/retry@v3
-  #       with:
-  #         timeout_minutes: 60
-  #         max_attempts: 3
-  #         retry_wait_seconds: 10
-  #         command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
+      - name: Run tests
+        env:
+          MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
+          NEXUS_USERNAME: ${{ secrets.nexus_username }}
+          NEXUS_PASSWORD: ${{ secrets.nexus_password }}
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 60
+          max_attempts: 3
+          retry_wait_seconds: 10
+          command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
 
-  # docker_integration:
-  #   name: Test ${{ matrix.scenario.name }} scenario on ${{ matrix.molecule_distro.image }}
-  #   needs:
-  #     - docker
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       molecule_distro:
-  #         - image: ubuntu:22.04
-  #         - image: rockylinux:9.3
-  #       scenario:
-  #         - name: pki
-  #         - name: elasticsearch
-  #       include:
-  #         - scenario:
-  #             name: identity
-  #           molecule_distro:
-  #             image: rockylinux:9.3
-  #   uses: ./.github/workflows/docker.yml
-  #   with:
-  #     scenario: ${{ matrix.scenario.name }}
-  #     os_distribution: ${{ matrix.molecule_distro.image }}
-  #     galaxy_cache: enterprise
-  #     dtas_version: ${{ needs.docker.outputs.dtas_version }}
-  #   secrets:
-  #     nexus_username: ${{ secrets.NEXUS_USERNAME }}
-  #     nexus_password: ${{ secrets.NEXUS_PASSWORD }}
-  #     dtas_token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.DEPENDABOT_GITHUB_TOKEN }}
+  docker_integration:
+    name: Test ${{ matrix.scenario.name }} scenario on ${{ matrix.molecule_distro.image }}
+    needs:
+      - docker
+    strategy:
+      fail-fast: false
+      matrix:
+        molecule_distro:
+          - image: ubuntu:22.04
+          - image: rockylinux:9.3
+        scenario:
+          - name: pki
+          - name: elasticsearch
+        include:
+          - scenario:
+              name: identity
+            molecule_distro:
+              image: rockylinux:9.3
+    uses: ./.github/workflows/docker.yml
+    with:
+      scenario: ${{ matrix.scenario.name }}
+      os_distribution: ${{ matrix.molecule_distro.image }}
+      galaxy_cache: enterprise
+      dtas_version: ${{ needs.docker.outputs.dtas_version }}
+    secrets:
+      nexus_username: ${{ secrets.NEXUS_USERNAME }}
+      nexus_password: ${{ secrets.NEXUS_PASSWORD }}
+      dtas_token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.DEPENDABOT_GITHUB_TOKEN }}
 
   ec2:
     name: ${{ matrix.molecule_scenario.desc }}
     if: github.actor != 'dependabot[bot]'
-    # needs:
-    #   - docker
+    needs:
+      - docker
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

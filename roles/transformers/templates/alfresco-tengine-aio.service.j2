@@ -6,7 +6,7 @@ After=syslog.socket network.target local-fs.target remote-fs.target
 Type=simple
 EnvironmentFile={{ binaries_folder }}/alfresco-tengine-aio-envs
 User={{ username }}
-ExecStart={{ binaries_folder }}/ats-ate-aio.sh
+ExecStart={{ java_home }}/bin/java ${JAVA_OPTS} -jar ${ATS_HOME}/{{ transform.artifact_name }}-{{ transform.version }}.jar --spring.config.additional-location=optional:tengine-mtls.properties > {{ logs_folder }}/ats-ate-aio.log
 WorkingDirectory={{ ats_home }}
 Restart=on-failure
 RestartSec=60

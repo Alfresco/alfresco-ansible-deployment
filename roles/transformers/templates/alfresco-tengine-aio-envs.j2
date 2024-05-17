@@ -21,9 +21,6 @@ s
 {%- endif -%}
 {%- endmacro %}
 
-JAVA_HOME="{{ java_home }}"
-PATH="{{ java_home }}/bin:${PATH}"
-
 JAVA_OPTS="-DPDFRENDERER_EXE={{ ats_home }}/alfresco-pdf-renderer \
 -DLIBREOFFICE_HOME={{ libreoffice_home }} \
 -DIMAGEMAGICK_ROOT={{ imagemagick_home }} \
