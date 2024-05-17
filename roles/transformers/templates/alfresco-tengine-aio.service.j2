@@ -47,7 +47,6 @@ After=syslog.socket network.target local-fs.target remote-fs.target
 
 [Service]
 Type=simple
-EnvironmentFile={{ binaries_folder }}/alfresco-tengine-aio-envs
 User={{ username }}
 ExecStart={{ java_home }}/bin/java {{ java_opts }} -jar {{ ats_home }}/{{ transform.artifact_name }}-{{ transform.version }}.jar --spring.config.additional-location=optional:tengine-mtls.properties > {{ logs_folder }}/ats-ate-aio.log
 WorkingDirectory={{ ats_home }}
