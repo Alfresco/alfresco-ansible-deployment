@@ -129,17 +129,6 @@
         - wait-for-activemq
         - Restart-aio
 
-    - name: Add AIO env file
-      ansible.builtin.template:
-        src: alfresco-tengine-aio-envs.j2
-        dest: "{{ binaries_folder }}/alfresco-tengine-aio-envs"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: "0600"
-      notify:
-        - wait-for-activemq
-        - Restart-aio
-
     - name: Add alfresco-tengine-aio service
       ansible.builtin.template:
         src: alfresco-tengine-aio.service.j2
