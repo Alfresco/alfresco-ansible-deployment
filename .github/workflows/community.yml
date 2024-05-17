@@ -1,104 +1,104 @@
-# name: "community"
+name: "community"
 
-# on:
-#   pull_request:
-#     branches: [master]
-#     paths-ignore:
-#       - "docs/**"
-#       - "*.md"
-#       - .github/workflows/docs.yml
-#       - .pre-commit-config.yaml
-#   push:
-#     branches: [master]
-#     paths-ignore:
-#       - "docs/**"
-#       - "*.md"
-#       - .github/workflows/docs.yml
-#       - .pre-commit-config.yaml
+on:
+  pull_request:
+    branches: [master]
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+      - .github/workflows/docs.yml
+      - .pre-commit-config.yaml
+  push:
+    branches: [master]
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+      - .github/workflows/docs.yml
+      - .pre-commit-config.yaml
 
-# concurrency:
-#   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
-#   cancel-in-progress: true
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
 
-# jobs:
-#   docker:
-#     name: Test ${{ matrix.role.name }} role on ${{ matrix.molecule_distro.image }}
-#     # -A* and -M* are not available without nexus credentials
-#     if: |
-#       ! startsWith(github.head_ref, 'next/') && ! contains(github.event.pull_request.labels.*.name, 'ci-prerelease')
-#     runs-on: ubuntu-latest
-#     strategy:
-#       fail-fast: true
-#       matrix:
-#         molecule_distro:
-#           - image: ubuntu:22.04
-#           - image: rockylinux:9.3
-#         role:
-#           - name: activemq
-#           - name: common
-#           - name: elasticsearch
-#           - name: identity
-#           - name: java
-#           - name: nginx
-#           - name: postgres
-#           - name: search
-#           - name: tomcat
-#           - name: transformers
-#         exclude:
-#           # Keycloak collection doesn't support ubuntu
-#           - role:
-#               name: identity
-#             molecule_distro:
-#               image: ubuntu:22.04
-#     env:
-#       PY_COLORS: 1
-#       PYTHONUNBUFFERED: 1
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v4
+jobs:
+  docker:
+    name: Test ${{ matrix.role.name }} role on ${{ matrix.molecule_distro.image }}
+    # -A* and -M* are not available without nexus credentials
+    if: |
+      ! startsWith(github.head_ref, 'next/') && ! contains(github.event.pull_request.labels.*.name, 'ci-prerelease')
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        molecule_distro:
+          - image: ubuntu:22.04
+          - image: rockylinux:9.3
+        role:
+          - name: activemq
+          - name: common
+          - name: elasticsearch
+          - name: identity
+          - name: java
+          - name: nginx
+          - name: postgres
+          - name: search
+          - name: tomcat
+          - name: transformers
+        exclude:
+          # Keycloak collection doesn't support ubuntu
+          - role:
+              name: identity
+            molecule_distro:
+              image: ubuntu:22.04
+    env:
+      PY_COLORS: 1
+      PYTHONUNBUFFERED: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-#       - name: Set up Python
-#         uses: actions/setup-python@v5
-#         id: setup-python
-#         with:
-#           python-version-file: .python-version
-#           cache: pipenv
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        id: setup-python
+        with:
+          python-version-file: .python-version
+          cache: pipenv
 
-#       - name: Install python packages
-#         uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.22.3
-#         with:
-#           python-version: ${{ steps.setup-python.outputs.python-version }}
+      - name: Install python packages
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.22.3
+        with:
+          python-version: ${{ steps.setup-python.outputs.python-version }}
 
-#       - name: Install and cache ansible galaxy dependencies
-#         uses: ./.github/actions/galaxy
+      - name: Install and cache ansible galaxy dependencies
+        uses: ./.github/actions/galaxy
 
-#       - name: Setup workspace
-#         uses: ./.github/actions/setup-workspace
+      - name: Setup workspace
+        uses: ./.github/actions/setup-workspace
 
-#       - name: Run tests
-#         env:
-#           MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
-#         uses: nick-fields/retry@v3
-#         with:
-#           timeout_minutes: 60
-#           max_attempts: 3
-#           retry_wait_seconds: 10
-#           command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
+      - name: Run tests
+        env:
+          MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 60
+          max_attempts: 3
+          retry_wait_seconds: 10
+          command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
 
-#   docker_integration:
-#     name: Test ${{ matrix.scenario.name }} scenario on ${{ matrix.molecule_distro.image }}
-#     if: github.actor != 'dependabot[bot]'
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         molecule_distro:
-#           - image: ubuntu:22.04
-#           - image: rockylinux:9.3
-#         scenario:
-#           - name: pki
-#           - name: docker_community
-#     uses: ./.github/workflows/docker.yml
-#     with:
-#       scenario: ${{ matrix.scenario.name }}
-#       os_distribution: ${{ matrix.molecule_distro.image }}
-#       galaxy_cache: community
+  docker_integration:
+    name: Test ${{ matrix.scenario.name }} scenario on ${{ matrix.molecule_distro.image }}
+    if: github.actor != 'dependabot[bot]'
+    strategy:
+      fail-fast: false
+      matrix:
+        molecule_distro:
+          - image: ubuntu:22.04
+          - image: rockylinux:9.3
+        scenario:
+          - name: pki
+          - name: docker_community
+    uses: ./.github/workflows/docker.yml
+    with:
+      scenario: ${{ matrix.scenario.name }}
+      os_distribution: ${{ matrix.molecule_distro.image }}
+      galaxy_cache: community
