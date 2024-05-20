@@ -21,6 +21,14 @@ s
 {%- endif -%}
 {%- endmacro %}
 
+{%- macro standrad_output_macro() -%}
+{%- if pkg_format == 'deb' -%}
+append:{{ logs_folder }}/ats-ate-aio.log
+{%- else -%}
+{{ logs_folder }}/ats-ate-aio.log
+{%- endif -%}
+{%- endmacro %}
+
 {% set java_opts = "-DPDFRENDERER_EXE=" + ats_home + "/alfresco-pdf-renderer \
 -DLIBREOFFICE_HOME=" + libreoffice_home + " \
 -DIMAGEMAGICK_ROOT=" + imagemagick_home + " \
@@ -51,7 +59,7 @@ ExecStart={{ java_home }}/bin/java {{ java_opts }} -jar {{ ats_home }}/{{ transf
 WorkingDirectory={{ ats_home }}
 Restart=on-failure
 RestartSec=60
-StandardOutput=append:{{ logs_folder }}/ats-ate-aio.log
+StandardOutput={{ standrad_output_macro() }}
 
 [Install]
 WantedBy=multi-user.target
