@@ -52,7 +52,7 @@ ExecStart={{ java_home }}/bin/java {{ java_opts }} -jar {{ ats_home }}/{{ transf
 WorkingDirectory={{ ats_home }}
 Restart=on-failure
 RestartSec=60
-StandardOutput={{ logs_folder }}/ats-ate-aio.log
+StandardOutput=append:{{ logs_folder }}/ats-ate-aio.log
 
 [Install]
 WantedBy=multi-user.target
