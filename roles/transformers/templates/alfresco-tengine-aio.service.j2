@@ -38,7 +38,6 @@ s
 {% set tengine_environment_temp = tengine_environment['JAVA_OPTS'] %}
 {% set java_opts = java_opts + " " + tengine_environment_temp|join(' ') %}
 {% set ats_home = binaries_folder + "/transform-service" %}
-{% set ats_tengine_aio_host = ats_tengine_aio_host %}
 {% set ats_shared_fs_host = sfs_host %}
 
 [Unit]
