@@ -55,11 +55,10 @@ After=syslog.socket network.target local-fs.target remote-fs.target
 [Service]
 Type=simple
 User={{ username }}
-ExecStart={{ java_home }}/bin/java {{ java_opts }} -jar {{ ats_home }}/{{ transform.artifact_name }}-{{ transform.version }}.jar --spring.config.additional-location=optional:tengine-mtls.properties
+ExecStart=/bin/bash -ce "exec {{ java_home }}/bin/java {{ java_opts }} -jar {{ ats_home }}/{{ transform.artifact_name }}-{{ transform.version }}.jar --spring.config.additional-location=optional:tengine-mtls.properties >> /var/log/agent.log 2>&1"
 WorkingDirectory={{ ats_home }}
 Restart=on-failure
 RestartSec=60
-StandardOutput={{ standrad_output_macro() }}
 
 [Install]
 WantedBy=multi-user.target
