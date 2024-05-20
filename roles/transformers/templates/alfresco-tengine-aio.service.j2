@@ -25,7 +25,7 @@ s
 {%- if pkg_format == 'deb' -%}
 append:{{ logs_folder }}/ats-ate-aio.log
 {%- else -%}
-{{ logs_folder }}/ats-ate-aio.log
+file:{{ logs_folder }}/ats-ate-aio.log
 {%- endif -%}
 {%- endmacro %}
 
@@ -55,10 +55,11 @@ After=syslog.socket network.target local-fs.target remote-fs.target
 [Service]
 Type=simple
 User={{ username }}
-ExecStart=/bin/bash -ce "exec {{ java_home }}/bin/java {{ java_opts }} -jar {{ ats_home }}/{{ transform.artifact_name }}-{{ transform.version }}.jar --spring.config.additional-location=optional:tengine-mtls.properties >> /var/log/agent.log 2>&1"
+ExecStart={{ java_home }}/bin/java {{ java_opts }} -jar {{ ats_home }}/{{ transform.artifact_name }}-{{ transform.version }}.jar --spring.config.additional-location=optional:tengine-mtls.properties
 WorkingDirectory={{ ats_home }}
 Restart=on-failure
 RestartSec=60
+StandardOutput={{ standrad_output_macro() }}
 
 [Install]
 WantedBy=multi-user.target
