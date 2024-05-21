@@ -39,15 +39,10 @@
       notify:
         - Restart-trouter
 
-    - name: Add T-Router startup script
-      ansible.builtin.template:
-        src: ats-atr.sh.j2
-        dest: "{{ binaries_folder }}/ats-atr.sh"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: "0755"
-      notify:
-        - Restart-trouter
+    - name: Delete T-Router startup script
+      ansible.builtin.file:
+        path: "{{ binaries_folder }}/ats-atr.sh"
+        state: absent
 
     - name: Copy BSSRF enabled pipeline transformers
       ansible.builtin.copy:
@@ -60,21 +55,9 @@
       notify:
         - Restart-trouter
 
-    - name: Add paths to setenv file
-      ansible.builtin.blockinfile:
-        path: "{{ config_folder }}/setenv.sh"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        marker: "# {mark} ATS COMMON ENV VARS"
-        block: |
-          export ATS_HOME={{ binaries_folder }}/transform-service
-          export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
-          export ATS_SHARED_FS_HOST={{ sfs_host }}
-        insertafter: EOF
-
     - name: Add alfresco-transform-router service
       ansible.builtin.template:
-        src: alfresco-transform-router.service
+        src: alfresco-transform-router.service.j2
         dest: "/etc/systemd/system/alfresco-transform-router.service"
         owner: "{{ username }}"
         group: "{{ group_name }}"
