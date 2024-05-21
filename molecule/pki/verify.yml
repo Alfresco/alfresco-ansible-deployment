@@ -46,7 +46,7 @@
 
     - name: Create log files based on journalctl
       ansible.builtin.shell:
-        cmd: journalctl -u {{ item }} > /var/log/alfresco/{{ item }}-journalctl.log
+        cmd: journalctl -u {{ item }} > /var/log/alfresco/{{ item }}.log
       loop:
         - alfresco-tengine-aio
         - alfresco-transform-router
@@ -64,13 +64,13 @@
       retries: 10
       delay: 3
       loop:
-        - file: ats-ate-aio-journalctl
+        - file: alfresco-tengine-aio
           pattern: GET Transform Config version
           edition: Community
-        - file: ats-atr-journalctl
+        - file: alfresco-transform-router
           pattern: GET Transform Config version
           edition: Enterprise
-        - file: ats-shared-fs-journalctl
+        - file: alfresco-shared-fs
           pattern: TLS virtual host
           edition: Enterprise
 
