@@ -42,9 +42,3 @@ RestartSec=60
 
 [Install]
 WantedBy=multi-user.target
-
-ExecStart=/opt/openjdk-17.0.9/bin/java -DCORE_AIO_URL=http://172.17.0.3:8090 -DCORE_AIO_QUEUE=org.alfresco.transform.engine.aio.acs -DACTIVEMQ_URL=failover:(tcp://172.17.0.3:61616)?timeout=3000 -DACTIVEMQ_USER=admin -DACTIVEMQ_PASSWORD=admin -DFILE_STORE_URL=http://172.17.0.3:8099/alfresco/api/-default-/private/sfs/versions/1/file -DTRANSFORMER_ROUTES_ADDITIONAL_HTML_VIA_TXT=/opt/alfresco/transform-service/pipelines/0200-html-via-txt.json -Xms800m -Xmx900m -jar /opt/alfresco/transform-service/alfresco-transform-router-4.1.1.jar --spring.config.additional-location=optional:atr-mtls.properties
-WorkingDirectory=/opt/alfresco/transform-service
-Restart=on-failure
-StandardOutput=/var/log/alfresco/ats-atr.log
-RestartSec=60
