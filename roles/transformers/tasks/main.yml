@@ -96,7 +96,6 @@
         group: "{{ group_name }}"
         creates: "{{ ats_home }}/alfresco-pdf-renderer"
 
-
     - name: Download {{ transform.artifact_name }}-{{ transform.version }}.jar
       ansible.builtin.get_url:
         url: "{{ downloads.transform_jar_url }}"
@@ -107,6 +106,16 @@
         mode: 'u=rwx,g=rwx,o=rx'
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
+
+    - name: Delete setenv file
+      ansible.builtin.file:
+        path: "{{ config_folder }}/setenv.sh"
+        state: absent
+
+    - name: Delete startup script
+      ansible.builtin.file:
+        path: "{{ binaries_folder }}/ats-ate-aio.sh"
+        state: absent
 
     - name: Create log file with correct permissions
       ansible.builtin.file:

@@ -45,6 +45,7 @@
       ansible.builtin.service_facts:
 
     - name: Create log files based on journalctl
+      when: ansible_os_family == 'RedHat'
       ansible.builtin.shell:
         cmd: journalctl -u {{ item }} > /var/log/alfresco/{{ item }}.log
       loop:
@@ -54,7 +55,7 @@
       become: true
 
     - name: Check in logs a client did connect
-      when: item.edition == acs.edition
+      when: item.edition == acs.edition and ansible_os_family == 'RedHat'
       ansible.builtin.slurp:
         src: /var/log/alfresco/{{ item.file }}.log
       register: ats_log
@@ -71,6 +72,27 @@
           pattern: GET Transform Config version
           edition: Enterprise
         - file: alfresco-shared-fs
+          pattern: TLS virtual host
+          edition: Enterprise
+
+    - name: Check in logs a client did connect
+      when: item.edition == acs.edition and ansible_os_family == 'Debian'
+      ansible.builtin.slurp:
+        src: /var/log/alfresco/{{ item.file }}.log
+      register: ats_log
+      become: true
+      until:
+        - item.pattern in ats_log.content | b64decode
+      retries: 10
+      delay: 3
+      loop:
+        - file: ats-ate-aio
+          pattern: GET Transform Config version
+          edition: Community
+        - file: ats-atr
+          pattern: GET Transform Config version
+          edition: Enterprise
+        - file: ats-shared-fs
           pattern: TLS virtual host
           edition: Enterprise
 
