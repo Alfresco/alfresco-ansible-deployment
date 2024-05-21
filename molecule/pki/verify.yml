@@ -44,11 +44,13 @@
     - name: Populate services facts
       ansible.builtin.service_facts:
 
-    - name: Check in logs a client did connect using journalctl
-      ansible.builtin.assert:
-        that:
-          - ansible_facts.services['alfresco-tengine-aio.service'].state == "running"
-          - "'GET Transform Config version' in ansible.builtin.shell.journalctl(_raw_args='--unit=alfresco-tengine-aio.service --no-pager')"
+    - name: Create log files based on journalctl
+      ansible.builtin.shell:
+        cmd: journalctl -u {{ item }} > /var/log/alfresco/{{ item }}-journalctl.log
+      loop:
+        - alfresco-tengine-aio
+        - alfresco-transform-router
+        - alfresco-shared-fs
       become: true
 
     - name: Check in logs a client did connect
@@ -62,13 +64,13 @@
       retries: 10
       delay: 3
       loop:
-        - file: ats-ate-aio
+        - file: ats-ate-aio-journalctl
           pattern: GET Transform Config version
           edition: Community
-        - file: ats-atr
+        - file: ats-atr-journalctl
           pattern: GET Transform Config version
           edition: Enterprise
-        - file: ats-shared-fs
+        - file: ats-shared-fs-journalctl
           pattern: TLS virtual host
           edition: Enterprise
 
