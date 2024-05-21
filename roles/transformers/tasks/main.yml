@@ -107,11 +107,6 @@
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
 
-    - name: Delete setenv file
-      ansible.builtin.file:
-        path: "{{ config_folder }}/setenv.sh"
-        state: absent
-
     - name: Delete startup script
       ansible.builtin.file:
         path: "{{ binaries_folder }}/ats-ate-aio.sh"

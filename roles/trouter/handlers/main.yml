@@ -1,12 +1,9 @@
 ---
 # handlers file for trouter
-- name: Wait-for-aio on {{ ats_tengine_aio_host }}:{{ ports_cfg.transformers.tengine }}
-  listen: Wait-for-aio
+- name: Wait-for-aio
   ansible.builtin.wait_for:
     host: "{{ ats_tengine_aio_host }}"
     port: "{{ ports_cfg.transformers.tengine }}"
-    timeout: 300
-    connect_timeout: 5
 
 - name: Enable-trouter
   become: true
