@@ -20,7 +20,7 @@ for a brief introduction.
     * [Setup runtime environment](#setup-runtime-environment)
   * [Minimal configuration](#minimal-configuration)
   * [Understanding the playbook](#understanding-the-playbook)
-    * [The control node](#the-control-node)
+    * [The Control Node](#the-control-node)
     * [Understanding the inventory file](#understanding-the-inventory-file)
     * [Folder Structure](#folder-structure)
     * [Service Configuration](#service-configuration)
@@ -228,9 +228,9 @@ known_urls:
 Let's take a step back to learn more about Ansible and the playbook before
 moving to more advanced topics.
 
-### The control node
+### The Control Node
 
-The machine the playbook is run from is known as the control node. Ansible has
+The machine the playbook is run from is known as the Control Node. Ansible has
 some prerequisites for this control node. The main one is that it needs to run
 on a POSIX compliant system, meaning Linux or others Unix (including MacOSX)
 but not Windows.
@@ -329,15 +329,43 @@ In this project you'll find 3 example inventory files:
 The `inventory_local.yml` which is ready to use in order to deploy all
 components on the local machine.
 
-![Local Deployment Type](./resources/deployment-type-local.png)
+```mermaid
+flowchart LR
+user[👤] --> Playbooks
+subgraph Control Node
+  Playbooks
+  Inventory
+  role1[[role1]]
+  roleN[[roleN]]
+end
+Playbooks --- Inventory
+Playbooks --> role1
+Playbooks --> roleN
+```
 
 The `inventory_ssh.yml` which provides s skeleton for you to update and match
 your architecture so each component can be deployed on a dedicated node.
 
-![SSH Deployment Type](./resources/deployment-type-ssh.png)
+```mermaid
+flowchart LR
+user[👤] --> Playbooks
+subgraph Control Node
+  Playbooks
+  Inventory
+end
+subgraph node1
+  role1[[role1]]
+end
+subgraph nodeN
+  roleN[[roleN]]
+end
+Playbooks --> node1
+Playbooks --> nodeN
+Inventory --- Playbooks
+```
 
 The `inventory_ha.yml` which is very similar to the previous one but also
-provides s skeleton for repository clustering (see [the deployment guide](./deployment-guide.md) for details on repository clustering).
+provides support for repository clustering (see [acs cluster section](#acs-cluster) for more details).
 
 A complete documentation about inventory file is available at [inventory file](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#intro-inventory)
 
@@ -787,7 +815,33 @@ amp_downloads:
 
 The diagram below shows the result of a localhost deployment.
 
-![Localhost Deployment](./resources/acs-localhost.png)
+```mermaid
+graph LR
+user[👤] --> playbook
+subgraph CN[Control Node]
+  playbook(Playbooks)
+  activemq[ActiveMQ]
+  elasticsearch[ElasticSearch]
+  nginx[Nginx]
+  repository[Repository]
+  postgres[Postgres]
+  search_enterprise[Search Enterprise]
+  sfs[Shared File Store]
+  sync[Sync Service]
+  transformers[AIO Transform Engine]
+  trouter(Transform Router)
+end
+playbook --> activemq
+playbook --> elasticsearch
+playbook --> nginx
+playbook --> repository
+playbook --> postgres
+playbook --> search_enterprise
+playbook --> sfs
+playbook --> sync
+playbook --> transformers
+playbook --> trouter
+```
 
 To deploy ACS 23.1 Enterprise on the local machine navigate to the folder you extracted the ZIP to and execute the playbook as the current user using the following command (the playbook will escalate privileges when required):
 
@@ -858,7 +912,26 @@ If you want to deploy everything to a single machine follow the steps in the [Si
 
 The diagram below shows the result of a single machine deployment.
 
-![Single Machine Deployment](./resources/acs-single-machine.png)
+```mermaid
+graph LR
+user[👤] --> playbook
+subgraph CN[Control Node]
+  playbook(Playbooks)
+end
+subgraph TN[Target Node]
+  activemq[ActiveMQ]
+  elasticsearch[ElasticSearch]
+  nginx[Nginx]
+  repository[Repository]
+  postgres[Postgres]
+  search_enterprise[Search Enterprise]
+  sfs[Shared File Store]
+  sync[Sync Service]
+  transformers[AIO Transform Engine]
+  trouter(Transform Router)
+end
+playbook --> TN
+```
 
 Once you have prepared the target host and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
@@ -916,7 +989,52 @@ Once ACS has initialized access the system using the following URLs with a brows
 
 The diagram below shows the result of a multi machine deployment.
 
-![Multi Machine Deployment](./resources/acs-multi-machine.png)
+```mermaid
+graph LR
+user[👤] --> playbook
+subgraph CN[Control Node]
+  playbook(Playbooks)
+end
+subgraph database_node
+  postgres[Postgres]
+end
+subgraph repository_node
+  repository[Repository]
+end
+subgraph activemq_node
+  activemq[ActiveMQ]
+end
+subgraph search_node
+  elasticsearch[ElasticSearch]
+  search_enterprise[Search Enterprise]
+end
+subgraph nginx_node
+  nginx[Nginx]
+end
+subgraph acc_node
+  acc[Control Center]
+end
+subgraph adw_node
+  adw[Digital Workspace]
+end
+subgraph sync_node
+  sync[Sync Service]
+end
+subgraph transformers_node
+  transformers[AIO Transform Engine]
+  trouter(Transform Router)
+  sfs[Shared File Store]
+end
+playbook --> database_node
+playbook --> repository_node
+playbook --> activemq_node
+playbook --> search_node
+playbook --> nginx_node
+playbook --> acc_node
+playbook --> adw_node
+playbook --> sync_node
+playbook --> transformers_node
+```
 
 Once you have prepared the target hosts (ensuring the [relevant ports](#tcp-port-configuration) are accessible) and configured the inventory_ssh.yaml file you are ready to run the playbook.
 
@@ -972,7 +1090,7 @@ Once ACS has initialized access the system using the following URLs with a brows
 
 ### Additional command switches for ansible-playbook
 
-There are some useful argument you can use with `ansible-playbook` command in many circumstances. Some are highlighted bellow but take a look at [The ansible-playbook documentation](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) for complete list of options.
+There are some useful argument you can use with `ansible-playbook` command in many circumstances. Some are highlighted below but take a look at [The ansible-playbook documentation](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) for complete list of options.
 
 * `-k` : Prompt for SSH password. Useful when no SSH keys have been deployed but needs to be th same on all hosts (prefer SSH whenever possible)
 * `-K` : Prompt for sudo password. Useful when the user used to connect to the machine is not root

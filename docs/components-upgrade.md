@@ -41,9 +41,9 @@ Alfresco also releases some hotfixes and an hotfix upgrade would be moving from 
 
 In order to apply a later hotfix, you need to first match the pre-requisites, then change the ACS version to point to the hotfix version in the appropriate file, and finally run the playbook again.
 
-In the example bellow we want to upgrade from the initial 7.0.1 installation to 7.0.1.4 hotfix:
+In the example below we want to upgrade from the initial 7.0.1 installation to 7.0.1.4 hotfix:
 
-Edit `7.0.N-extra-vars.yml` and changes the the bellow snippet:
+Edit `7.0.N-extra-vars.yml` and changes the the below snippet:
 
 ```yaml
 acs:
@@ -64,7 +64,7 @@ acs:
 > IMPORTANT: make sure you do not set the version to a version number that's not a hotfix (version number needs to be 4 digits and the 3 first ones needs to match the ones of the initially deployed version)
 > This is because, as explained earlier, "in-place" upgrades are only supported for hotfixes
 
-Once these changes are saved run the command bellow:
+Once these changes are saved run the command below:
 
 ```bash
 ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.0.N-extra-vars.yml"
@@ -77,7 +77,7 @@ After the playbook ran successfully your environment delivers the upgraded versi
 
 #### Rolling back a hotfix "in-place" upgrade
 
-If something goes wrong with the upgrade, or if tests are not successful after upgrade completed, rolling back the environment can be done by following the steps bellow:
+If something goes wrong with the upgrade, or if tests are not successful after upgrade completed, rolling back the environment can be done by following the steps below:
 
 - restoring Database and contentstore backup
 - reverting the version changes to previous state in the config file (either `group_vars/all` or version specific config files)
