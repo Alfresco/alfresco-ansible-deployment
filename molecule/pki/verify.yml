@@ -44,6 +44,16 @@
     - name: Populate services facts
       ansible.builtin.service_facts:
 
+    - name: Get logs from /var/log/alfresco/ats-ate-aio.log
+      ansible.builtin.slurp:
+        src: /var/log/alfresco/ats-ate-aio.log
+      register: ats_log
+      become: true
+
+    - name: Print logs
+      ansible.builtin.debug:
+        msg: "{{ ats_log.content | b64decode }}"
+
     - name: Check in logs a client did connect
       when: item.edition == acs.edition
       ansible.builtin.slurp:

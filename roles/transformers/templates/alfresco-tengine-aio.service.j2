@@ -25,7 +25,7 @@ s
 {%- if pkg_format == 'deb' -%}
 append:{{ logs_folder }}/ats-ate-aio.log
 {%- else -%}
-file:{{ logs_folder }}/ats-ate-aio.log
+{{ logs_folder }}/ats-ate-aio.log
 {%- endif -%}
 {%- endmacro %}
 
