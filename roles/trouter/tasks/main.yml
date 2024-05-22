@@ -62,7 +62,8 @@
         mode: u=rwx,g=rw,o-rwx
         owner: "{{ username }}"
         group: "{{ group_name }}"
-      changed_when: false
+        access_time: preserve
+        modification_time: preserve
 
     - name: Add alfresco-transform-router service
       ansible.builtin.template:
