@@ -55,6 +55,15 @@
       notify:
         - Restart-trouter
 
+    - name: Create log file with correct permissions
+      ansible.builtin.file:
+        path: "{{ logs_folder }}/ats-atr.log"
+        state: touch
+        mode: u=rwx,g=rw,o-rwx
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+      changed_when: false
+
     - name: Add alfresco-transform-router service
       ansible.builtin.template:
         src: alfresco-transform-router.service.j2
