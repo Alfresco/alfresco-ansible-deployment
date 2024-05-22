@@ -54,29 +54,21 @@
         - alfresco-shared-fs
       become: true
 
-    - name: Check in logs a client did connect
-      when: item.edition == acs.edition and ansible_os_family == 'RedHat'
-      ansible.builtin.slurp:
-        src: /var/log/alfresco/{{ item.file }}.log
-      register: ats_log
-      become: true
-      until:
-        - item.pattern in ats_log.content | b64decode
-      retries: 10
-      delay: 3
-      loop:
-        - file: alfresco-tengine-aio
-          pattern: GET Transform Config version
-          edition: Community
-        - file: alfresco-transform-router
-          pattern: GET Transform Config version
-          edition: Enterprise
-        - file: alfresco-shared-fs
-          pattern: TLS virtual host
-          edition: Enterprise
+    - name: Set log files names based on OS family
+      ansible.builtin.set_fact:
+        log_files_names:
+          - file: "{{ ansible_os_family == 'RedHat' ? 'alfresco-tengine-aio' : 'ats-ate-aio' }}"
+            pattern: GET Transform Config version
+            edition: Community
+          - file: "{{ ansible_os_family == 'RedHat' ? 'alfresco-transform-router' : 'ats-atr' }}"
+            pattern: GET Transform Config version
+            edition: Enterprise
+          - file: "{{ ansible_os_family == 'RedHat' ? 'alfresco-shared-fs' : 'ats-shared-fs' }}"
+            pattern: TLS virtual host
+            edition: Enterprise
 
     - name: Check in logs a client did connect
-      when: item.edition == acs.edition and ansible_os_family == 'Debian'
+      when: item.edition == acs.edition
       ansible.builtin.slurp:
         src: /var/log/alfresco/{{ item.file }}.log
       register: ats_log
@@ -85,16 +77,7 @@
         - item.pattern in ats_log.content | b64decode
       retries: 10
       delay: 3
-      loop:
-        - file: ats-ate-aio
-          pattern: GET Transform Config version
-          edition: Community
-        - file: ats-atr
-          pattern: GET Transform Config version
-          edition: Enterprise
-        - file: ats-shared-fs
-          pattern: TLS virtual host
-          edition: Enterprise
+      loop: "{{ log_files_names }}"
 
     - name: Copy cert as PEM
       ansible.builtin.copy:

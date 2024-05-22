@@ -107,11 +107,6 @@
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
 
-    - name: Delete startup script
-      ansible.builtin.file:
-        path: "{{ binaries_folder }}/ats-ate-aio.sh"
-        state: absent
-
     - name: Create log file with correct permissions
       ansible.builtin.file:
         path: "{{ logs_folder }}/ats-ate-aio.log"
@@ -132,6 +127,11 @@
       notify:
         - wait-for-activemq
         - Restart-aio
+
+    - name: Delete deprecated startup script
+      ansible.builtin.file:
+        path: "{{ binaries_folder }}/ats-ate-aio.sh"
+        state: absent
 
     - name: Add alfresco-tengine-aio service
       ansible.builtin.template:
