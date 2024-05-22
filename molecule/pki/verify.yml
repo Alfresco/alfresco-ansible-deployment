@@ -57,13 +57,13 @@
     - name: Set log files names based on OS family
       ansible.builtin.set_fact:
         log_files_names:
-          - file: "{{ ansible_os_family == 'RedHat' ? 'alfresco-tengine-aio' : 'ats-ate-aio' }}"
+          - file: "{% if ansible_os_family == 'RedHat' %}alfresco-tengine-aio{% else %}ats-ate-aio{% endif %}"
             pattern: GET Transform Config version
             edition: Community
-          - file: "{{ ansible_os_family == 'RedHat' ? 'alfresco-transform-router' : 'ats-atr' }}"
+          - file: "{% if ansible_os_family == 'RedHat' %}alfresco-transform-router{% else %}ats-atr{% endif %}"
             pattern: GET Transform Config version
             edition: Enterprise
-          - file: "{{ ansible_os_family == 'RedHat' ? 'alfresco-shared-fs' : 'ats-shared-fs' }}"
+          - file: "{% if ansible_os_family == 'RedHat' %}alfresco-shared-fs{% else %}ats-shared-fs{% endif %}"
             pattern: TLS virtual host
             edition: Enterprise
 
