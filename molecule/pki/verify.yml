@@ -47,7 +47,7 @@
     - name: Create log files based on journalctl
       when: ansible_os_family == 'RedHat'
       ansible.builtin.shell:
-        cmd: journalctl -u {{ item.service_name }} > /var/log/alfresco/{{ item.log_file }}.log
+        cmd: journalctl -u {{ item.service_name }} > /var/log/alfresco/{{ item.file_name }}.log
       loop:
         - service_name: alfresco-tengine-aio
           file_name: ats-ate-aio
