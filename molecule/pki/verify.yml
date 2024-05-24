@@ -44,19 +44,6 @@
     - name: Populate services facts
       ansible.builtin.service_facts:
 
-    - name: Create log files based on journalctl
-      when: ansible_os_family == 'RedHat'
-      ansible.builtin.shell:
-        cmd: journalctl -u {{ item.service_name }} > /var/log/alfresco/{{ item.file_name }}.log
-      loop:
-        - service_name: alfresco-tengine-aio
-          file_name: ats-ate-aio
-        - service_name: alfresco-transform-router
-          file_name: ats-atr
-        - service_name: alfresco-shared-fs
-          file_name: ats-shared-fs
-      become: true
-
     - name: Check in logs a client did connect
       when: item.edition == acs.edition
       ansible.builtin.slurp:
