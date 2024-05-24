@@ -22,7 +22,7 @@ s
 {%- endmacro %}
 
 {%- macro standard_output_macro() -%}
-{%- if ansible_os_family == 'Debian' -%}
+{%- if ansible_os_family == 'Debian' or (ansible_os_family == 'RedHat' and ansible_distribution_major_version in ['8','9']) -%}
 append:{{ logs_folder }}/ats-ate-aio.log
 {%- else -%}
 {{ logs_folder }}/ats-ate-aio.log
