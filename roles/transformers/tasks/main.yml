@@ -111,10 +111,11 @@
       ansible.builtin.file:
         path: "{{ logs_folder }}/ats-ate-aio.log"
         state: touch
-        mode: u=rwx,g=rw,o-rwx
+        mode: "0640"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-      changed_when: false
+        access_time: preserve
+        modification_time: preserve
 
     - name: Add AIO config mTLS config file
       ansible.builtin.template:
