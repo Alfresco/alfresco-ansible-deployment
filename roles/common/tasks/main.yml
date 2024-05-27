@@ -61,3 +61,11 @@
           mode: "0750"
         - folder: "{{ download_location }}"
           mode: "0777"
+
+    - name: Allow systemd services to write logs under {{ logs_folder }}
+      community.general.sefcontext:
+        target: "{{ logs_folder }}(/.*)?"
+        setype: var_log_t
+        state: present
+      when: ansible_selinux.status == "enabled"
+      notify: apply-selinux-logs-context

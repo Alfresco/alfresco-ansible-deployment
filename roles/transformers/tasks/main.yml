@@ -96,7 +96,6 @@
         group: "{{ group_name }}"
         creates: "{{ ats_home }}/alfresco-pdf-renderer"
 
-
     - name: Download {{ transform.artifact_name }}-{{ transform.version }}.jar
       ansible.builtin.get_url:
         url: "{{ downloads.transform_jar_url }}"
@@ -108,45 +107,15 @@
         url_username: "{{ nexus_user }}"
         url_password: "{{ nexus_password }}"
 
-    - name: Add ats common vars to setenv file
-      ansible.builtin.blockinfile:
-        path: "{{ config_folder }}/setenv.sh"
-        marker: "# {mark} ATS COMMON ENV VARS"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        block: |
-          export ATS_HOME={{ binaries_folder }}/transform-service
-          export ATS_TENGINE_AIO_HOST={{ ats_tengine_aio_host }}
-          export ATS_SHARED_FS_HOST={{ sfs_host }}
-        insertafter: EOF
-    - name: Add ats dependencies vars to setenv file
-      vars:
-        im_lib: >-
-          {% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/lib/x86_64-linux-gnu/{% else %}/usr/lib64/{% endif %}
-        im_cfg: >-
-          {% if pkg_format == 'deb' %}${IMAGEMAGICK_DYN}ImageMagick-{{ imagemagick_version.split('-')[0] -}}{% else %}${IMAGEMAGICK_HOME}{% endif %}
-      ansible.builtin.blockinfile:
-        path: "{{ config_folder }}/setenv.sh"
-        marker: "# {mark} ATS DEPENDENCIES ENV VARS"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        block: |
-          export LIBREOFFICE_HOME={{ libreoffice_home }}
-          export IMAGEMAGICK_HOME={{ imagemagick_home }}
-          export IMAGEMAGICK_DYN={{ im_lib }}
-          export IMAGEMAGICK_CONFIG={{ im_cfg }}/config-Q16HDRI
-          export IMAGEMAGICK_CODERS={{ im_cfg }}/modules-Q16HDRI/coders
-          export IMAGEMAGICK_EXE="{% if pkg_format == 'deb' %}${IMAGEMAGICK_HOME}/bin/{% endif %}convert"
-        insertafter: EOF
-
     - name: Create log file with correct permissions
       ansible.builtin.file:
         path: "{{ logs_folder }}/ats-ate-aio.log"
         state: touch
-        mode: u=rwx,g=rw,o-rwx
+        mode: "0640"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-      changed_when: false
+        access_time: preserve
+        modification_time: preserve
 
     - name: Add AIO config mTLS config file
       ansible.builtin.template:
@@ -160,21 +129,14 @@
         - wait-for-activemq
         - Restart-aio
 
-    - name: Add AIO startup script
-      ansible.builtin.template:
-        src: ats-ate-aio.sh.j2
-        dest: "{{ binaries_folder }}/ats-ate-aio.sh"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx,o=rx'
-        force: true
-      notify:
-        - wait-for-activemq
-        - Restart-aio
+    - name: Delete deprecated startup script
+      ansible.builtin.file:
+        path: "{{ binaries_folder }}/ats-ate-aio.sh"
+        state: absent
 
     - name: Add alfresco-tengine-aio service
       ansible.builtin.template:
-        src: alfresco-tengine-aio.service
+        src: alfresco-tengine-aio.service.j2
         dest: "/etc/systemd/system/alfresco-tengine-aio.service"
         owner: "{{ username }}"
         group: "{{ group_name }}"
