@@ -21,32 +21,24 @@ s
 {%- endif -%}
 {%- endmacro %}
 
-{%- macro standard_output_macro() -%}
-{%- if ansible_os_family == 'Debian' or (ansible_os_family == 'RedHat' and ansible_distribution_major_version in ['8','9']) -%}
-append:{{ logs_folder }}/ats-ate-aio.log
-{%- else -%}
-{{ logs_folder }}/ats-ate-aio.log
-{%- endif -%}
-{%- endmacro %}
-
-{% set java_opts = "-DPDFRENDERER_EXE=" + ats_home + "/alfresco-pdf-renderer \
+{%- set java_opts = "-DPDFRENDERER_EXE=" + ats_home + "/alfresco-pdf-renderer \
 -DLIBREOFFICE_HOME=" + libreoffice_home + " \
 -DIMAGEMAGICK_ROOT=" + imagemagick_home + " \
 -DIMAGEMAGICK_DYN=" + im_lib() + " \
 -DIMAGEMAGICK_EXE=" + (imagemagick_home + "/bin/convert" if pkg_format == 'deb' else 'convert') + " \
 -DIMAGEMAGICK_CONFIG=" + im_cfg() + "/config-Q16HDRI \
 -DIMAGEMAGICK_CODERS=" + im_cfg() + "/modules-Q16HDRI/coders" %}
-{% if acs.edition == 'Enterprise' %}
-{% set java_opts = java_opts + " \
+{%- if acs.edition == 'Enterprise' %}
+{%- set java_opts = java_opts + " \
 -DACTIVEMQ_URL=failover:(" + activemq_transport + "://" + activemq_host + ":" + ports_cfg.activemq[activemq_protocol] + ")?timeout=3000 \
 -DACTIVEMQ_USER=" + activemq_username + " \
 -DACTIVEMQ_PASSWORD=" + activemq_password + " \
 -DFILE_STORE_URL=" + ats_proto() + "://" + sfs_host + ":" + ports_cfg.sfs.http ~ "/alfresco/api/-default-/private/sfs/versions/1/file" %}
-{% endif %}
-{% set tengine_environment_temp = tengine_environment['JAVA_OPTS'] %}
-{% set java_opts = java_opts + " " + tengine_environment_temp|join(' ') %}
-{% set ats_home = binaries_folder + "/transform-service" %}
-{% set ats_shared_fs_host = sfs_host %}
+{%- endif %}
+{%- set tengine_environment_temp = tengine_environment['JAVA_OPTS'] %}
+{%- set java_opts = java_opts + " " + tengine_environment_temp|join(' ') %}
+{%- set ats_home = binaries_folder + "/transform-service" %}
+{%- set ats_shared_fs_host = sfs_host %}
 
 [Unit]
 Description=Alfresco Transform Service - AIO Transform Engine
@@ -59,7 +51,7 @@ ExecStart={{ java_home }}/bin/java {{ java_opts }} -jar {{ ats_home }}/{{ transf
 WorkingDirectory={{ ats_home }}
 Restart=on-failure
 RestartSec=60
-StandardOutput={{ standard_output_macro() }}
+StandardOutput=append:{{ logs_folder }}/ats-ate-aio.log
 
 [Install]
 WantedBy=multi-user.target
