@@ -1,2 +1,7 @@
 ---
 # handlers file for roles/common
+- name: Apply new SELinux file contexts
+  listen: apply-selinux-logs-context
+  become: true
+  ansible.builtin.command: restorecon -irv {{ logs_folder }}
+  changed_when: true

@@ -1,10 +1,5 @@
 ---
 # handlers file for nginx
-- name: Apply new SELinux file contexts
-  become: true
-  ansible.builtin.command: restorecon -irv {{ logs_folder }}
-  changed_when: true
-
 - name: Enable-nginx
   become: true
   ansible.builtin.service:
