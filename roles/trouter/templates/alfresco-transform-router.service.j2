@@ -1,0 +1,36 @@
+{%- macro ats_proto() -%}
+http
+{%- if ats_keystore.cert_containers | default([]) | length > 0 -%}
+s
+{%- endif -%}
+{%- endmacro %}
+
+{%- set java_opts = "-DCORE_AIO_URL=" + ats_proto() + "://" + ats_tengine_aio_host + ":" + ports_cfg.transformers.tengine ~ " \
+-DCORE_AIO_QUEUE=org.alfresco.transform.engine.aio.acs \
+-DACTIVEMQ_URL=failover:(" + activemq_transport + "://" + activemq_host + ":" + ports_cfg.activemq[activemq_protocol] + ")?timeout=3000 \
+-DACTIVEMQ_USER=" + activemq_username + " \
+-DACTIVEMQ_PASSWORD=" + activemq_password + " \
+-DFILE_STORE_URL=" + ats_proto() + "://" + sfs_host + ":" + ports_cfg.sfs.http ~ "/alfresco/api/-default-/private/sfs/versions/1/file" %}
+{%- if bssrf_protection_enabled %}
+{%- set java_opts = java_opts + " -DTRANSFORMER_ROUTES_ADDITIONAL_HTML_VIA_TXT=" + ats_home + "/pipelines/0200-html-via-txt.json" %}
+{%- endif %}
+{%- set trouter_environment_temp = trouter_environment['JAVA_OPTS'] %}
+{%- set java_opts = java_opts + " " + trouter_environment_temp|join(' ') %}
+
+{%- set ats_home = binaries_folder + '/transform-service' %}
+
+[Unit]
+Description=Alfresco Transform Router
+After=syslog.socket network.target local-fs.target remote-fs.target
+
+[Service]
+Type=simple
+User={{ username }}
+ExecStart={{ java_home }}/bin/java {{ java_opts }} -jar {{ ats_home }}/{{ trouter.artifact_name }}-{{ trouter.version }}.jar --spring.config.additional-location=optional:atr-mtls.properties
+WorkingDirectory={{ ats_home }}
+Restart=on-failure
+StandardOutput=append:{{ logs_folder }}/ats-atr.log
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target

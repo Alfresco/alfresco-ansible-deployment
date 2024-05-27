@@ -20,4 +20,3 @@
           JAVA_OPTS:
             - -Xms800m
             - -Xmx900m
-            - $JAVA_OPTS
