@@ -10,6 +10,11 @@
     timeout: 300
     connect_timeout: 5
 
+- name: Apply new SELinux file contexts
+  become: true
+  ansible.builtin.command: restorecon -irv {{ logs_folder }}
+  changed_when: true
+
 - name: Enable-aio
   become: true
   ansible.builtin.service:
