@@ -59,7 +59,7 @@
       ansible.builtin.file:
         path: "{{ logs_folder }}/ats-atr.log"
         state: touch
-        mode: u=rwx,g=rw,o-rwx
+        mode: "0640"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         access_time: preserve
