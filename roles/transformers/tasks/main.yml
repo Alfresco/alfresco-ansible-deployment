@@ -117,14 +117,6 @@
         access_time: preserve
         modification_time: preserve
 
-    - name: Allow transformers to write logs under {{ logs_folder }}
-      community.general.sefcontext:
-        target: "{{ logs_folder }}(/.*)?"
-        setype: var_log_t
-        state: present
-      when: ansible_selinux.status == "enabled"
-      notify: Apply new SELinux file contexts
-
     - name: Add AIO config mTLS config file
       ansible.builtin.template:
         src: mtls.properties.j2
