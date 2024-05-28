@@ -15,7 +15,7 @@ collections:
     version: 2.1.2
   # molecule ec2 tests
   - name: amazon.aws
-    version: 7.5.0
+    version: 7.6.0
   - name: community.aws
     version: 7.2.0
 
