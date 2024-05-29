@@ -32,7 +32,7 @@ jobs:
       matrix:
         molecule_distro:
           - image: ubuntu:22.04
-          - image: rockylinux:9.3
+          - image: rockylinux/rockylinux:9.4
         role:
           - name: activemq
           - name: common
@@ -93,7 +93,7 @@ jobs:
       matrix:
         molecule_distro:
           - image: ubuntu:22.04
-          - image: rockylinux:9.3
+          - image: rockylinux/rockylinux:9.4
         scenario:
           - name: pki
           - name: docker_community

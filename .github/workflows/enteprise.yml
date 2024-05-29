@@ -54,7 +54,7 @@ jobs:
       matrix:
         molecule_distro:
           - image: ubuntu:22.04
-          - image: rockylinux:9.3
+          - image: rockylinux/rockylinux:9.4
         role:
           - name: adf_app
           - name: search_enterprise
@@ -111,7 +111,7 @@ jobs:
       matrix:
         molecule_distro:
           - image: ubuntu:22.04
-          - image: rockylinux:9.3
+          - image: rockylinux/rockylinux:9.4
         scenario:
           - name: pki
           - name: elasticsearch
@@ -119,7 +119,7 @@ jobs:
           - scenario:
               name: identity
             molecule_distro:
-              image: rockylinux:9.3
+              image: rockylinux/rockylinux:9.4
     uses: ./.github/workflows/docker.yml
     with:
       scenario: ${{ matrix.scenario.name }}
@@ -149,22 +149,22 @@ jobs:
             desc: EC2 ACS 7.3 (Centos7)
           - name: default
             vars: vars-rocky8.yml
-            desc: EC2 ACS 7.4 (Rocky Linux 8.7)
+            desc: EC2 ACS 7.4 (Rocky Linux 8.9)
           - name: default
             vars: vars-rhel8.yml
-            desc: EC2 ACS 7.4 (RHEL 8.6)
+            desc: EC2 ACS 7.4 (RHEL 8.9)
           - name: default
-            vars: vars-ubuntu22-community.yml
+            vars: vars-ubuntu-community.yml
             desc: EC2 ACS 23.x Community (Ubuntu 22.04)
           - name: default
             vars: vars-rocky9.yml
-            desc: EC2 ACS 23.x (Rocky Linux 9.3)
+            desc: EC2 ACS 23.x (Rocky Linux 9.4)
           - name: multimachine
             vars: vars.yml
-            desc: EC2 ACS 23.x clustered (RHEL 9.3)
+            desc: EC2 ACS 23.x clustered (RHEL 9.4)
           - name: opensearch
             vars: vars.yml
-            desc: EC2 ACS 23.x opensearch (RHEL 9.3)
+            desc: EC2 ACS 23.x opensearch (RHEL 9.4)
     env:
       AWS_REGION: eu-west-1
       MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
