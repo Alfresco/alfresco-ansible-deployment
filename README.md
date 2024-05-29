@@ -196,8 +196,10 @@ Follow this quick checklist:
 * copy the versions inside the group_vars/all.yml to a new XX.N-extra-vars.yml (in case of a new ACS major version)
 * run [updatecli workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/updatecli.yml)
 * run [enterprise-extended](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enterprise-extended.yml) and make sure it is green
-* ensure that the [tables in the main readme](README.md) has been updated
-* ensure that AMI id for the root molecule tests are not too outdated (e.g. [default suite](../molecule/default/))
+* ensure that the [versions table in the main readme](docs/overview.md#versioning) has been updated
+* ensure that docker images and AMI id for the root molecule tests are
+  reflecting any eventual minor OS release (e.g. [default
+  suite](../molecule/default/))
 
 ### Tag and release
 
