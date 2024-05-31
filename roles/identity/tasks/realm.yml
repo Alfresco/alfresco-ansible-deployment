@@ -14,8 +14,8 @@
     auth_realm: master
     auth_username: "{{ identity_admin_username }}"
     auth_password: "{{ identity_admin_password }}"
-    id: alfresco
-    realm: alfresco
+    id: "{{ identity_default_realm_id }}"
+    realm: "{{ identity_default_realm_id }}"
     state: present
     access_token_lifespan: 300
     default_locale: en
@@ -48,10 +48,10 @@
     auth_realm: master
     auth_username: "{{ identity_admin_username }}"
     auth_password: "{{ identity_admin_password }}"
-    realm: alfresco
-    client_id: alfresco
+    realm: "{{ identity_default_realm_id }}"
+    client_id: "{{ identity_default_client_id }}"
     enabled: true
-    implicit_flow_enabled: true
+    implicit_flow_enabled: "{{ identity_default_client_implicit_flow_enabled }}"
     redirect_uris: "{{ identity_known_urls | map('regex_replace', '(.+)', '\\1/*') | list }}"
     web_origins: "{{ identity_known_urls }}"
     state: present
