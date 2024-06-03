@@ -15,3 +15,5 @@ alfresco_pdf_renderer_sha1_checksum_url: "{{ alfresco_pdf_renderer }}.sha1"
 
 ghostscript_packages:
   - ghostscript
+
+imagemagick_arch_extension: "{{ '-aarch64' if ansible_architecture == 'aarch64' else '' }}"
