@@ -8,7 +8,7 @@ identity_alfresco_theme_version: "0.3.5"
 
 identity_keycloak_http_port: 8080
 identity_keycloak_start_dev: true
-identity_keycloak_proxy_mode: edge
+identity_keycloak_quarkus_proxy_headers: xforwarded
 identity_keycloak_host: localhost
 identity_keycloak_http_relative_path: /auth
 

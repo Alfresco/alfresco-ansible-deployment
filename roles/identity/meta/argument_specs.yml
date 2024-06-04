@@ -23,9 +23,9 @@ argument_specs:
         default: true
         description: |
           If keycloak should be started in development mode. Not suitable for production
-      identity_keycloak_proxy_mode:
+      identity_keycloak_quarkus_proxy_headers:
         type: str
-        default: edge
+        default: xforwarded
         description: |
           Fine tune specific behaviour when running keycloak behind a proxy
       identity_keycloak_host:
