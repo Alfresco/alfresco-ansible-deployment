@@ -44,12 +44,6 @@ jobs:
           - name: search
           - name: tomcat
           - name: transformers
-        exclude:
-          # Keycloak collection doesn't support ubuntu
-          - role:
-              name: identity
-            molecule_distro:
-              image: ubuntu:22.04
     env:
       PY_COLORS: 1
       PYTHONUNBUFFERED: 1
