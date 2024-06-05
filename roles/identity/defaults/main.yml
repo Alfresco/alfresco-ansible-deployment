@@ -3,7 +3,7 @@
 identity_admin_username: admin
 identity_admin_password: null
 
-identity_keycloak_quarkus_version: "24.0.3"
+identity_keycloak_quarkus_version: "24.0.5"
 identity_alfresco_theme_version: "0.3.5"
 
 identity_keycloak_http_port: 8080
