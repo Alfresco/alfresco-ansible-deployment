@@ -6,22 +6,22 @@ on:
       - master
     paths:
       - "docs/**"
-      - ".github/workflows/docs.yml"
+      - .github/workflows/docs.yml
   pull_request:
     branches:
       - master
     paths:
       - "docs/**"
-      - ".github/workflows/docs.yml"
+      - .github/workflows/docs.yml
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
 jobs:
   publish:
-    uses: Alfresco/jekyll-build-tools/.github/workflows/jekyll-publish.yml@1d72b42497f317da83a6052631634932b48c5d08
+    uses: Alfresco/jekyll-build-tools/.github/workflows/jekyll-publish.yml@5ee00079dbc774857cafa61054385d98a6f52374
     with:
       working-directory: docs
       publish: ${{ github.event_name == 'push' && github.ref_name == 'master'}}
