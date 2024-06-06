@@ -21,7 +21,7 @@ permissions:
 
 jobs:
   publish:
-    uses: Alfresco/jekyll-build-tools/.github/workflows/jekyll-publish.yml@feat-rewrite-absolute-urls
+    uses: Alfresco/jekyll-build-tools/.github/workflows/jekyll-publish.yml@5ee00079dbc774857cafa61054385d98a6f52374
     with:
       working-directory: docs
       publish: ${{ github.event_name == 'push' && github.ref_name == 'master'}}
