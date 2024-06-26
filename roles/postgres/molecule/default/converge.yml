@@ -2,6 +2,15 @@
 - name: Converge
   hosts: all
   tasks:
-    - name: "Include roles/postgres"
+    - name: Install PostgreSQL
       ansible.builtin.include_role:
-        name: "postgres"
+        name: postgres
+    - name: Configure database
+      ansible.builtin.include_role:
+        name: postgres
+        tasks_from: setup_db
+      vars:
+        postgres_db_name: mydb
+        postgres_db_username: myuser
+        postgres_db_password: mypassword   # pragma: allowlist secret
+        postgres_db_clients: "{{ groups.syncservice }}"
