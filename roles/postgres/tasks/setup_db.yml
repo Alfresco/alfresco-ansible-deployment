@@ -1,0 +1,64 @@
+---
+- name: Include OS specific variables
+  ansible.builtin.include_vars: "{{ item }}"
+  loop: >-
+    {{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}
+
+- name: Configure postgresql client auth
+  become: true
+  notify:
+    - Restart-postgresql
+  ansible.builtin.blockinfile:
+    path: "{{ postgresql_conf_path }}/pg_hba.conf"
+    block: |
+      {% for host in postgres_db_clients | map('extract', hostvars, ['ansible_default_ipv4', 'address']) %}
+      host {{ postgres_db_name }} {{ postgres_db_username }} {{ host }}/32 md5
+      {% endfor %}
+    marker: |
+      # {mark} ANSIBLE MANAGED:
+      # allow {{ postgres_db_clients | join(", ") }} to connect to {{ postgres_db_name }} as {{ postgres_db_username }}
+    owner: postgres
+    group: postgres
+    mode: "u=rw"
+
+- name: Configure PostgreSQL database
+  become: true
+  become_user: postgres
+  vars:
+    ansible_ssh_pipelining: true
+  block:
+    - name: Create necessary databases
+      community.postgresql.postgresql_db:
+        name: "{{ postgres_db_name }}"
+
+    - name: Revoke default access to public schema
+      community.postgresql.postgresql_privs:
+        db: "{{ postgres_db_name }}"
+        privs: ALL
+        type: schema
+        objs: public
+        role: public
+        state: absent
+      tags:
+        - molecule-idempotence-notest
+
+    - name: Create unprivileged users
+      community.postgresql.postgresql_user:
+        db: "{{ postgres_db_name }}"
+        name: "{{ postgres_db_username }}"
+        password: "{{ postgres_db_password }}"
+        expires: infinity
+        role_attr_flags: NOSUPERUSER
+      no_log: true
+      tags:
+        - molecule-idempotence-notest
+
+    - name: Grant db privileges to users
+      community.postgresql.postgresql_privs:
+        db: "{{ postgres_db_name }}"
+        privs: ALL
+        type: schema
+        objs: public
+        role: "{{ postgres_db_username }}"
+      tags:
+        - molecule-idempotence-notest
