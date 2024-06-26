@@ -3,15 +3,15 @@
   hosts: all:!external
   gather_facts: true
   tasks:
-  - name: Compare host OS with supported matrix
-    vars:
-      os_versions: "{{ supported_os[ansible_distribution].versions | default([]) }}"
-    ansible.builtin.fail:
-      msg:
-        - "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS"
-    when:
-      - not (skip_os_test | default(false) | bool)
-      - ansible_distribution_version | float not in os_versions
+    - name: Compare host OS with supported matrix
+      vars:
+        os_versions: "{{ supported_os[ansible_distribution].versions | default([]) }}"
+      ansible.builtin.fail:
+        msg:
+          - "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS"
+      when:
+        - not (skip_os_test | default(false) | bool)
+        - ansible_distribution_version | float not in os_versions
 
 - name: Populate facts
   ansible.builtin.import_playbook: facts.yml
@@ -51,16 +51,41 @@
         identity_url: "{{ alfresco_url }}/auth"
 
 - name: Database Role
-  hosts: database
+  hosts: database[0]
   gather_facts: false
-  roles:
-    - role: "../roles/postgres"
-      when: repo_db_url == "" or sync_db_url == ""
+  vars:
+    pg_role: "roles/postgres"
+  tasks:
+    - name: Install Postgres
+      include_role:
+        name: "{{ pg_role }}"
+      when: repo_db_url != "" or (sync_db_url != "" and groups.syncservice | default([]) | length > 0)
+    - name: Setup repository database
+      include_role:
+        name: "{{ pg_role }}"
+        tasks_from: setup_db
+      vars:
+        postgres_db_name: "{{ repo_db_name }}"
+        postgres_db_username: "{{ repo_db_username }}"
+        postgres_db_password: "{{ repo_db_password }}"
+        postgres_db_clients: "{{ groups.repository }}"
+      when: repo_db_url != ""
+    - name: Setup sync database
+      include_role:
+        role: "{{ pg_role }}"
+        tasks_from: setup_db
+      vars:
+        postgres_db_name: "{{ sync_db_name }}"
+        postgres_db_username: "{{ sync_db_username }}"
+        postgres_db_password: "{{ sync_db_password }}"
+        postgres_db_clients: "{{ groups.syncservice }}"
+      when: sync_db_url != "" and groups.syncservice | default([]) | length > 0
   post_tasks:
     - name: Make sure PostgreSQL is running
       ansible.builtin.service:
         name: "{{ postgresql_service }}"
         state: started
+      when: repo_db_url != "" or (sync_db_url != "" and groups.syncservice | default([]) | length > 0)
   tags:
     - database
 
