@@ -49,6 +49,7 @@
       ansible.builtin.set_fact:
         ats_mtls_required: >-
           {{ groups.repository | difference(groups.transformers | default([])) | length > 0 }}
+      delegate_to: localhost
 
     - name: Assert that search-enterprise group is empty when ATS mTLS is required
       ansible.builtin.assert:
