@@ -25,7 +25,7 @@
     secret_ca_passphrase: "{{ hostvars.localhost.ca_signing_key_passphrase }}"
   ansible.builtin.import_playbook: pki.yml
   when:
-    - (groups.repository | difference(groups.transformers | default([]))) | length > 0
+    - ats_mtls_required
     - ats_mtls_capable
 
 - name: Populate common facts

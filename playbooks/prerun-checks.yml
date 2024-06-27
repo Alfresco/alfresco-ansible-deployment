@@ -42,7 +42,7 @@
         - cors.enabled | default(True)
 
 - name: Ensure mTLS requirements are met
-  hosts: repository:transformers
+  hosts: all
   gather_facts: false
   tasks:
     - name: Check wether we want to enable mTLS for ATS deployment
