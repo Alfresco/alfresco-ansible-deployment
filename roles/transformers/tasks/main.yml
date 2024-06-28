@@ -164,6 +164,11 @@
   when: ansible_architecture == 'x86_64'
   ansible.builtin.include_tasks: "dependencies-{{ pkg_format }}.yml"
 
+- name: Warning about lack of support for arm64 libreoffice
+  when: ansible_architecture == 'aarch64'
+  ansible.builtin.debug:
+    msg: "LibreOffice is not supported on arm64 architecture. Skipping installation."
+
 - name: Check if service restart is needed
   ansible.builtin.debug:
     msg: triggering service restart
