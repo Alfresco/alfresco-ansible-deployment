@@ -5,7 +5,7 @@
     - name: Check wether we want to enable mTLS for ATS deployment
       ansible.builtin.set_fact:
         ats_mtls_required: >-
-          {{ groups.repository | difference(groups.transformers | default([])) | length > 0 }}
+          {{ groups.repository | default([]) | difference(groups.transformers | default([])) | length > 0 }}
 
 - name: Assert search-enterprise condition
   hosts: localhost
