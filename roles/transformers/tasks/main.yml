@@ -45,17 +45,6 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Download ImageMagick distribution
-  vars:
-    pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}.{{ pkg_format }}"
-    pkg_url: "{{ nexus_repository.releases }}/../imagemagick/imagemagick-distribution/{{ imagemagick_version }}/{{ pkg_name }}"
-  ansible.builtin.get_url:
-    url: "{{ pkg_url }}"
-    checksum: "sha1:{{ lookup('url', pkg_url + '.sha1') }}"
-    dest: "{{ download_location }}/{{ pkg_name }}"
-    mode: "0644"
-  loop: "{{  imagemagick_packages }}"
-
 - name: ATS installation
   become: true
   block:
@@ -168,7 +157,11 @@
     creates: >-
       {{ download_location }}/LibreOffice_{{ dependencies_version.libreoffice }}_{{ lo_arch }}/{{ pkg_format | upper }}S/
 
-- name: Install LibreOffice & imageMagick
+- name: Install Imagemagick
+  ansible.builtin.include_tasks: imagemagick.yml
+
+- name: Install LibreOffice
+  when: ansible_architecture == 'x86_64'
   ansible.builtin.include_tasks: "dependencies-{{ pkg_format }}.yml"
 
 - name: Check if service restart is needed
