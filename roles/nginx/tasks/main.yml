@@ -6,15 +6,6 @@
 - name: Install & configure NGINX reverse proxy
   become: true
   block:
-    - name: Enable EPEL repository
-      ansible.builtin.yum_repository:
-        name: epel
-        description: EPEL YUM repo
-        metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch&infra=$infra&content=$contentdir
-        gpgcheck: true
-        gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
-      when: ansible_distribution in [ 'RedHat', 'CentOS' ] and ansible_distribution_major_version == '7'
-
     - name: Ensure nginx is installed
       ansible.builtin.package:
         name: "{{ nginx_package_name }}"

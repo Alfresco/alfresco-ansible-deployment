@@ -104,9 +104,6 @@ supported_os:
       - 8.8
       - 8.7
       - 8.6
-  CentOS:
-    versions:
-      - 7.9
   Ubuntu:
     versions:
       - 22.04
@@ -185,7 +182,7 @@ use_custom_keystores: false
 # to default ansible merging behaviour
 dependencies_version:
   postgresql_connector: 42.6.1
-  postgres_major_version: 14
+  postgres_major_version: 15
   activemq: 5.18.4
   java: 17.0.9
   java_build: 9
