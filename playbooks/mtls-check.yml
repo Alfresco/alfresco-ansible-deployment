@@ -1,7 +1,6 @@
 ---
 - name: Ensure mTLS requirements are met
   hosts: localhost
-  gather_facts: false
   tasks:
     - name: Check wether we want to enable mTLS for ATS deployment
       ansible.builtin.set_fact:
