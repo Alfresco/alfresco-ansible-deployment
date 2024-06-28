@@ -40,6 +40,3 @@
       when:
         - known_urls | default([]) | length == 0
         - cors.enabled | default(True)
-
-- name: Run mtls checks
-  ansible.builtin.import_playbook: mtls-check.yml

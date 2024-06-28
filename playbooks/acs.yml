@@ -16,6 +16,9 @@
 - name: Run preliminary checks
   ansible.builtin.import_playbook: prerun-checks.yml
 
+- name: Run mtls checks
+  ansible.builtin.import_playbook: mtls-check.yml
+
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
 
