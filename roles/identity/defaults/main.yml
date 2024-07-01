@@ -14,3 +14,8 @@ identity_keycloak_http_relative_path: /auth
 
 identity_url: null
 identity_known_urls: []
+
+identity_default_realm_id: alfresco
+
+identity_default_client_id: alfresco
+identity_default_client_implicit_flow_enabled: true
