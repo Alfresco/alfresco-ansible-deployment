@@ -1,5 +1,4 @@
 ---
-imagemagick_version: "{{ dependencies_version.imagemagick }}"
 imagemagick_packages:
   - imagemagick-distribution-el9-libs
   - imagemagick-distribution-el9

@@ -2,12 +2,6 @@
 - name: Install Dependencies packages
   become: true
   block:
-    - name: Install ImageMagick
-      ansible.builtin.apt:
-        deb: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}.{{ pkg_format }}"
-        state: present
-      loop: "{{  imagemagick_packages }}"
-
     - name: Install LibreOffice
       vars:
         lo_arch: >-
