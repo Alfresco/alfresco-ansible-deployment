@@ -13,6 +13,9 @@
       - not (skip_os_test | default(false) | bool)
       - ansible_distribution_version | float not in os_versions
 
+- name: Populate facts
+  ansible.builtin.import_playbook: facts.yml
+
 - name: Run preliminary checks
   ansible.builtin.import_playbook: prerun-checks.yml
 
@@ -24,6 +27,9 @@
     p12_passphrase: "{{ hostvars.localhost.certs_p12_passphrase }}"
     secret_ca_passphrase: "{{ hostvars.localhost.ca_signing_key_passphrase }}"
   ansible.builtin.import_playbook: pki.yml
+  when:
+    - ats_mtls_required
+    - ats_mtls_capable
 
 - name: Populate common facts
   hosts: repository:identity:acc:adw
