@@ -1,5 +1,5 @@
 ---
-- name: Ensure mTLS requirements are met
+- name: Populate common facts
   hosts: localhost:all:!external
   tasks:
     - name: Check wether we want to enable mTLS for ATS deployment
