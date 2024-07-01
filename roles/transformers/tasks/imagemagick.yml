@@ -3,14 +3,22 @@
   ansible.builtin.set_fact:
     imagemagick_package_arch: >-
       {%- if ansible_architecture == 'x86_64' -%}
-        amd64
+      {%- if ansible_os_family == 'Debian' -%}
+        -amd64
+      {%- else -%}
+        ''
+      {%- endif -%}
       {%- elif ansible_architecture == 'aarch64' -%}
-        arm64
+      {%- if ansible_os_family == 'Debian' -%}
+        -arm64
+      {%- else -%}
+        -aarch64
+      {%- endif -%}
       {%- endif -%}
 
 - name: Download ImageMagick distribution
   vars:
-    pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}-{{ imagemagick_package_arch }}.{{ pkg_format }}"
+    pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}"
     pkg_url: "{{ nexus_repository.releases }}/../imagemagick/imagemagick-distribution/{{ imagemagick_version }}/{{ pkg_name }}"
   ansible.builtin.get_url:
     url: "{{ pkg_url }}"
@@ -23,7 +31,7 @@
   become: true
   when: pkg_format == 'deb'
   ansible.builtin.apt:
-    deb: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}-{{ imagemagick_package_arch }}.{{ pkg_format }}"
+    deb: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}"
     state: present
   loop: "{{  imagemagick_packages }}"
 
@@ -33,6 +41,6 @@
   ansible.builtin.yum:
     state: present
     name: >-
-      {{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}.{{ pkg_format }}
+      {{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}
     disable_gpg_check: true
   loop: "{{  imagemagick_packages }}"
