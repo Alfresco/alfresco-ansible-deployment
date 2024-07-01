@@ -1,27 +1,28 @@
 ---
-setup_db:
-short_description: Configure PostgreSQL database
-options:
-  postgres_db_name:
-    type: str
-    required: true
-    description: |
-      Name of the database to be created
-  postgres_db_username:
-    type: str
-    required: true
-    description: |
-      Username of the database user
-  postgres_db_password:
-    type: str
-    required: true
-    description: |
-      Password of the database user
-  postgres_db_clients:
-    type: list
-    elements: dict
-    required: true
-    description: |
-      List of clients that are allowed to connect to the database
-      Each client should have the following keys:
-      - ansible_default_ipv4.address: IP address of the client
+argument_specs:
+  setup_db:
+    short_description: Configure PostgreSQL database
+    options:
+      postgres_db_name:
+        type: str
+        required: true
+        description: |
+          Name of the database to be created
+      postgres_db_username:
+        type: str
+        required: true
+        description: |
+          Username of the database user
+      postgres_db_password:
+        type: str
+        required: true
+        description: |
+          Password of the database user
+      postgres_db_clients:
+        type: list
+        elements: str
+        required: true
+        description: |
+          List of clients that are allowed to connect to the database
+          Each client must be an host inventory for which facts have been
+          gathered (in particular ansible_default_ipv4.address)

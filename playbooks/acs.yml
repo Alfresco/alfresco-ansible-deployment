@@ -57,12 +57,14 @@
     pg_role: "roles/postgres"
   tasks:
     - name: Install Postgres
-      include_role:
+      ansible.builtin.include_role:
         name: "{{ pg_role }}"
       when: repo_db_url != "" or (sync_db_url != "" and groups.syncservice | default([]) | length > 0)
+    - name: Flush handlers
+      ansible.builtin.meta: flush_handlers
     - name: Setup repository database
-      include_role:
-        name: "{{ pg_role }}"
+      ansible.builtin.include_role:
+        name: "{{ pg_role }}"
         tasks_from: setup_db
       vars:
         postgres_db_name: "{{ repo_db_name }}"
@@ -71,7 +73,7 @@
         postgres_db_clients: "{{ groups.repository }}"
       when: repo_db_url != ""
     - name: Setup sync database
-      include_role:
+      ansible.builtin.include_role:
         role: "{{ pg_role }}"
         tasks_from: setup_db
       vars:
