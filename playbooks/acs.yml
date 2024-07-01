@@ -69,7 +69,7 @@
         postgres_db_username: "{{ repo_db_username }}"
         postgres_db_password: "{{ repo_db_password }}"
         postgres_db_clients: "{{ groups.repository }}"
-      when: repo_db_url != ""
+      when: repo_db_url == ""
     - name: Setup sync database
       ansible.builtin.include_role:
         role: "{{ pg_role }}"
@@ -79,13 +79,13 @@
         postgres_db_username: "{{ sync_db_username }}"
         postgres_db_password: "{{ sync_db_password }}"
         postgres_db_clients: "{{ groups.syncservice }}"
-      when: sync_db_url != "" and groups.syncservice | default([]) | length > 0
+      when: sync_db_url == "" and groups.syncservice | default([]) | length > 0
   post_tasks:
     - name: Make sure PostgreSQL is running
       ansible.builtin.service:
         name: "{{ postgresql_service }}"
         state: started
-      when: repo_db_url != "" or (sync_db_url != "" and groups.syncservice | default([]) | length > 0)
+      when: repo_db_url == "" or (sync_db_url == "" and groups.syncservice | default([]) | length > 0)
   tags:
     - database
 
