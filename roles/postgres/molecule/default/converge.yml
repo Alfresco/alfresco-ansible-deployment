@@ -5,12 +5,21 @@
     - name: Install PostgreSQL
       ansible.builtin.include_role:
         name: postgres
-    - name: Configure database
+    - name: Configure repo database
       ansible.builtin.include_role:
         name: postgres
         tasks_from: setup_db
       vars:
-        postgres_db_name: mydb
-        postgres_db_username: myuser
-        postgres_db_password: mypassword   # pragma: allowlist secret
+        postgres_db_name: alfresco
+        postgres_db_username: alfresco
+        postgres_db_password: alfresco
+        postgres_db_clients: "{{ groups.syncservice }}"
+    - name: Configure sync database
+      ansible.builtin.include_role:
+        name: postgres
+        tasks_from: setup_db
+      vars:
+        postgres_db_name: alfresco-sync
+        postgres_db_username: alfresco-sync
+        postgres_db_password: alfresco
         postgres_db_clients: "{{ groups.syncservice }}"

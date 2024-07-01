@@ -44,16 +44,5 @@
         backup: true
       with_items: "{{ postgres_config }}"
 
-    - name: Configure basic postgresql client auth
-      ansible.builtin.blockinfile:
-        path: "{{ postgresql_conf_path }}/pg_hba.conf"
-        marker: "# {mark} local connections allowed - Ansible managed block"
-        block: |
-          local all postgres peer
-          host all all 127.0.0.1/32 md5
-        owner: postgres
-        group: postgres
-        mode: "u=rw"
-
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers

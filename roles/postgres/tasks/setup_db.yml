@@ -14,9 +14,8 @@
       {% for host in postgres_db_clients | map('extract', hostvars, ['ansible_default_ipv4', 'address']) %}
       host {{ postgres_db_name }} {{ postgres_db_username }} {{ host }}/32 md5
       {% endfor %}
-    marker: |
-      # {mark} ANSIBLE MANAGED:
-      # allow {{ postgres_db_clients | join(", ") }} to connect to {{ postgres_db_name }} as {{ postgres_db_username }}
+    marker: >-
+      # {mark} ANSIBLE MANAGED: allow {{ postgres_db_clients | join(", ") }} to connect to {{ postgres_db_name }} as {{ postgres_db_username }}
     owner: postgres
     group: postgres
     mode: "u=rw"
