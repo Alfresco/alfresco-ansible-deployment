@@ -1,0 +1,8 @@
+---
+- name: Ensure mTLS requirements are met
+  hosts: repository:transformers:localhost
+  tasks:
+    - name: Check wether we want to enable mTLS for ATS deployment
+      ansible.builtin.set_fact:
+        ats_mtls_required: >-
+          {{ groups.repository | default([]) | difference(groups.transformers | default([])) | length > 0 }}
