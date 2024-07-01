@@ -54,12 +54,12 @@
   hosts: database[0]
   gather_facts: false
   vars:
-    pg_role: "roles/postgres"
+    pg_role: "../roles/postgres"
   tasks:
     - name: Install Postgres
       ansible.builtin.include_role:
         name: "{{ pg_role }}"
-      when: repo_db_url != "" or (sync_db_url != "" and groups.syncservice | default([]) | length > 0)
+      when: repo_db_url == "" or (sync_db_url == "" and groups.syncservice | default([]) | length > 0)
     - name: Setup repository database
       ansible.builtin.include_role:
         name: "{{ pg_role }}"
