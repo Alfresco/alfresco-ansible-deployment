@@ -4,6 +4,10 @@
   loop: >-
     {{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}
 
+- name: Set postgreSQL service name as fact
+  ansible.builtin.set_fact:
+    postgresql_service: "{{ postgresql_service }}"
+
 - name: Install PostgreSQL RDBMS
   become: true
   block:
