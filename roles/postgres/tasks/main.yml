@@ -51,3 +51,6 @@
         owner: postgres
         group: postgres
         mode: "u=rw"
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

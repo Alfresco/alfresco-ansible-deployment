@@ -60,8 +60,6 @@
       ansible.builtin.include_role:
         name: "{{ pg_role }}"
       when: repo_db_url != "" or (sync_db_url != "" and groups.syncservice | default([]) | length > 0)
-    - name: Flush handlers
-      ansible.builtin.meta: flush_handlers
     - name: Setup repository database
       ansible.builtin.include_role:
         name: "{{ pg_role }}"
