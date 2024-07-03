@@ -8,8 +8,6 @@
     - name: Install PostgreSQL
       ansible.builtin.include_role:
         name: postgres
-    - name: Flush handlers
-      ansible.builtin.meta: flush_handlers
     - name: Setup repository database
       ansible.builtin.include_role:
         name: postgres
