@@ -26,7 +26,7 @@
   vars:
     ansible_ssh_pipelining: true
   block:
-    - name: Create necessary databases
+    - name: Create database
       community.postgresql.postgresql_db:
         name: "{{ postgres_db_name }}"
 
