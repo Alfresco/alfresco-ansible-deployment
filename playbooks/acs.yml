@@ -56,7 +56,7 @@
   vars:
     pg_role: "../roles/postgres"
     create_repo_db: >-
-      {{ repo_db_url == "" | ansible.builtin.bool }}
+      {{ (repo_db_url == "") | ansible.builtin.bool }}
     create_sync_db: >-
       {{ (sync_db_url == "" and groups.syncservice | default([]) | length > 0) | ansible.builtin.bool }}
   tasks:
