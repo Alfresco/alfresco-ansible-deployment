@@ -41,7 +41,7 @@
       tags:
         - molecule-idempotence-notest
 
-    - name: Create unprivileged users
+    - name: Create unprivileged user
       community.postgresql.postgresql_user:
         db: "{{ postgres_db_name }}"
         name: "{{ postgres_db_username }}"
@@ -52,7 +52,7 @@
       tags:
         - molecule-idempotence-notest
 
-    - name: Grant db privileges to users
+    - name: Grant db privileges to user
       community.postgresql.postgresql_privs:
         db: "{{ postgres_db_name }}"
         privs: ALL
