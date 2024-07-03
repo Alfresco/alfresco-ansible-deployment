@@ -4,7 +4,7 @@
   loop: >-
     {{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}
 
-- name: Set postgreSQL service name as fact
+- name: Set PostgreSQL service name as fact
   ansible.builtin.set_fact:
     postgresql_service: "{{ postgresql_service }}"
 
@@ -33,13 +33,13 @@
   notify:
     - Restart-postgresql
   block:
-    - name: Configure postgresql to listen on all IP interfaces
+    - name: Configure PostgreSQL to listen on all IP interfaces
       ansible.builtin.lineinfile:
         path: "{{ postgresql_conf_path }}/postgresql.conf"
         regexp: ^\s*listen_addresses\s*=
         line: "listen_addresses = '{{ postgres_listen_addresses }}'"
 
-    - name: Custom postgresql Configuration
+    - name: Custom PostgreSQL Configuration
       ansible.builtin.lineinfile:
         path: "{{ postgresql_conf_path }}/postgresql.conf"
         regexp: "^{{ item['line'] }}"

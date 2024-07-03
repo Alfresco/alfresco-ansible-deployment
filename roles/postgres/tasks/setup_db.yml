@@ -4,7 +4,7 @@
   loop: >-
     {{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}
 
-- name: Configure postgresql client auth
+- name: Configure PostgreSQL client auth
   become: true
   notify:
     - Restart-postgresql
