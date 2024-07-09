@@ -76,7 +76,7 @@
       when: create_repo_db
     - name: Setup sync database
       ansible.builtin.include_role:
-        role: "{{ pg_role }}"
+        name: "{{ pg_role }}"
         tasks_from: setup_db
       vars:
         postgres_db_name: "{{ sync_db_name }}"
