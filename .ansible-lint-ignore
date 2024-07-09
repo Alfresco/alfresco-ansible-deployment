@@ -1,6 +1,5 @@
-# OPSEXP-TODO
+# https://hyland.atlassian.net/browse/OPSEXP-2744
 playbooks/acs.yml var-naming[no-role-prefix]
-playbooks/acs.yml role-name[path]
 playbooks/search_replication.yml var-naming[no-role-prefix]
 roles/postgres/vars/Debian.yml var-naming[no-role-prefix]
 roles/postgres/vars/RedHat.yml var-naming[no-role-prefix]
