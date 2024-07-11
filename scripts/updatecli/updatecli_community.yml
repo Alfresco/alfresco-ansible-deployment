@@ -1,5 +1,6 @@
 acs:
   version: "23.2"
+  edition: community
 
 acc:
   version: "8.4"

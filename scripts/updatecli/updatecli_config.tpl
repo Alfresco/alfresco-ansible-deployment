@@ -1,7 +1,7 @@
 name: ACS update pipeline
 
 scms:
-  acsRepo:
+  acsEntRepo:
     kind: github
     spec:
       owner: Alfresco
@@ -9,7 +9,15 @@ scms:
       branch: master
       token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
       username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
-  acsEntRepo:
+  acsComRepo:
+    kind: github
+    spec:
+      owner: Alfresco
+      repository: acs-community-packaging
+      branch: master
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
+  agsAmpRepo:
     kind: github
     spec:
       owner: Alfresco
@@ -103,7 +111,7 @@ sources:
   acs:
     name: ACS {{ .acs.version }}.x
     kind: gittag
-    scmid: acsRepo
+    scmid: {{ eq .acs.edition "community" | ternary "acsComRepo" "acsEntRepo" }}
     spec:
       versionFilter:
         kind: regex
@@ -132,7 +140,7 @@ sources:
   agsAmp:
     name: AGS AMP {{ .ags.version }}.x
     kind: gittag
-    scmid: acsEntRepo
+    scmid: agsAmpRepo
     spec:
       versionFilter:
         kind: regex

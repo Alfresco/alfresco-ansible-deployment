@@ -198,8 +198,7 @@ Follow this quick checklist:
 * run [enterprise-extended](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enterprise-extended.yml) and make sure it is green
 * ensure that the [versions table in the main readme](docs/overview.md#versioning) has been updated
 * ensure that docker images and AMI id for the root molecule tests are
-  reflecting any eventual minor OS release (e.g. [default
-  suite](../molecule/default/))
+  reflecting any minor OS release (e.g. [default suite](../molecule/default/))
 
 ### Tag and release
 
