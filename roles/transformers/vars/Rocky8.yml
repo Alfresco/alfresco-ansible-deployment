@@ -1,6 +1,6 @@
 ---
 imagemagick_packages:
-  - imagemagick-distribution-el8-libs
+  - imagemagick-distribution-libs-el8
   - imagemagick-distribution-el8
 
 utils_transform:

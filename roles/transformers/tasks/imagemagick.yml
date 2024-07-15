@@ -6,7 +6,7 @@
       {%- if ansible_os_family == 'Debian' -%}
         -amd64
       {%- else -%}
-        ''
+
       {%- endif -%}
       {%- elif ansible_architecture == 'aarch64' -%}
       {%- if ansible_os_family == 'Debian' -%}
