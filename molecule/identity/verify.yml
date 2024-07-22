@@ -1,7 +1,7 @@
 ---
 - name: Verify
   hosts: all
-  gather_facts: false
+  gather_facts: true
   vars:
     adf_apps:
       - alfresco-digital-workspace
@@ -60,8 +60,11 @@
 
     - name: Retrieve contents of app.config.json
       become: true
+      vars:
+        nginx_html_path_redhat: "/usr/share/nginx/html/{{ item }}/app.config.json"
+        nginx_html_path_ubuntu: "/var/www/html/{{ item }}/app.config.json"
       ansible.builtin.slurp:
-        src: "/usr/share/nginx/html/{{ item }}/app.config.json"
+        src: "{{ nginx_html_path_redhat if ansible_os_family == 'RedHat' else nginx_html_path_ubuntu }}"
       loop: "{{ adf_apps }}"
       register: slurp_app_config_json
 
