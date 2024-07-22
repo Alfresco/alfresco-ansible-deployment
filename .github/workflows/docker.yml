@@ -53,12 +53,9 @@ jobs:
           # avoid auth conflict when cloning DTAS during verify step
           persist-credentials: false
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: ./.github/actions/setup-python
         id: setup-python
-        with:
-          python-version-file: '.python-version'
-          cache: pipenv
 
       - name: Install python packages
         uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.25.0

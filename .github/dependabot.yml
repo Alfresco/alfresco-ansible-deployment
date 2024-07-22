@@ -22,3 +22,8 @@ updates:
     directory: "/.github/actions/molecule_integration_ec2"
     schedule:
       interval: "monthly"
+
+  - package-ecosystem: "github-actions"
+    directory: "/.github/actions/setup-python"
+    schedule:
+      interval: "monthly"
