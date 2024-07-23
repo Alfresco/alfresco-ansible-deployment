@@ -70,6 +70,10 @@ jobs:
       - name: Setup workspace
         uses: ./.github/actions/setup-workspace
 
+      - name: Setup Docker Engine on ARM64 runner
+        if: runner.arch == 'ARM64'
+        uses: Alfresco/alfresco-build-tools/.github/actions/setup-docker@9558268b491821a4cfce1f11d4c8f6e56adc8496 # v5.30.0
+
       - name: Run tests
         env:
           MOLECULE_ROLE_IMAGE: ${{ inputs.os_distribution }}
