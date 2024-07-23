@@ -1,4 +1,5 @@
 ---
+# Inventory file for a high-availability deployment - only Enterprise edition
 # Run with ansible-playbook playbooks/acs.yml -i inventory_ha.yml
 all:
   vars:
@@ -31,6 +32,7 @@ all:
     # Solr search engine (alternative to Enterprise Search)
     search:
       hosts:
+        # fts.infra.local:
 
     # Enterprise Search (default search engine)
     search_enterprise:
@@ -43,6 +45,7 @@ all:
     # Keycloak SSO support (optional)
     identity:
       hosts:
+        # keycloak.infra.local:
 
     nginx:
       hosts:

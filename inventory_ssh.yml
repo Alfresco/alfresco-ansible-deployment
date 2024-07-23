@@ -27,11 +27,13 @@ all:
         activemq_1:
           ansible_host: targetIP
 
-    # Solr search engine (alternative to Enterprise Search)
+    # Solr search engine (an alternative to Enterprise Search, and the only available option for the Community edition)
     search:
       hosts:
+        # search_1:
+        #   ansible_host: targetIP
 
-    # Enterprise Search (default search engine)
+    # Enterprise Search (default search engine - not available in Community edition)
     search_enterprise:
       hosts:
         search_1:
