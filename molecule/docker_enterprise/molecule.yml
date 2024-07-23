@@ -34,7 +34,9 @@ provisioner:
   config_options:
     defaults:
       pipelining: true
-  ansible_args: []
+  ansible_args:
+    - -e
+    - "@../../tests/test-ssl.yml"
   inventory:
     links:
       group_vars: ../../group_vars
