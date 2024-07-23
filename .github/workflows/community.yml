@@ -49,14 +49,14 @@ jobs:
       PYTHONUNBUFFERED: 1
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
       - name: Set up Python
         uses: ./.github/actions/setup-python
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v5.25.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@553490b6434e1ec43ced9b321a04fadb91535d4c # v5.25.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -69,7 +69,7 @@ jobs:
       - name: Run tests
         env:
           MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # v3.0.0
         with:
           timeout_minutes: 60
           max_attempts: 3
