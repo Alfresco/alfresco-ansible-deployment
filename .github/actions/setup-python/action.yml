@@ -18,4 +18,4 @@ runs:
     - uses: actions/cache@v3
       with:
         path: ~/.local/share/virtualenvs
-        key: ${{ runner.os }}-python-${{ steps.read-python-version.outputs.python-version }}-pipenv-${{ hashFiles('Pipfile.lock') }}
+        key: ${{ runner.os }}-${{ runner.arch }}-python-${{ steps.read-python-version.outputs.python-version }}-pipenv-${{ hashFiles('Pipfile.lock') }}
