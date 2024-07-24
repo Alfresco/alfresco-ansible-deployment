@@ -23,6 +23,11 @@ on:
         description: git ref to use when cloning DTAS repo
         required: false
         default: master
+      dtas_additional_params:
+        type: string
+        description: additional parameters to pass to DTAS
+        required: false
+        default: ""
       runner:
         type: string
         description: runner to use for the job
@@ -38,6 +43,7 @@ on:
 
 env:
   DTAS_VERSION: ${{ inputs.dtas_version }}
+  DTAS_ADDITIONAL_PARAMS: ${{ inputs.dtas_additional_params }}
   BUILD_NUMBER: ${{ github.run_id }}
   PY_COLORS: 1
   PYTHONUNBUFFERED: 1

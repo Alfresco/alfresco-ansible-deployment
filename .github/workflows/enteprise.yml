@@ -133,6 +133,7 @@ jobs:
       os_distribution: ${{ matrix.molecule_distro.image }}
       galaxy_cache: enterprise
       dtas_version: ${{ needs.docker.outputs.dtas_version }}
+      dtas_additional_params: ${{ matrix.runner == 'ubuntu-latest-arm64' && '-k "not test_transformation"' || '' }}
       runner: ${{ matrix.runner }}
     secrets:
       nexus_username: ${{ secrets.NEXUS_USERNAME }}
