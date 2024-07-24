@@ -2,12 +2,8 @@
 - name: Set pkg_arch
   ansible.builtin.set_fact:
     imagemagick_package_arch: >-
-      {%- if ansible_architecture == 'x86_64' -%}
-      {%- if ansible_os_family == 'Debian' -%}
+      {%- if ansible_architecture == 'x86_64' and ansible_os_family == 'Debian' -%}
         -amd64
-      {%- else -%}
-
-      {%- endif -%}
       {%- elif ansible_architecture == 'aarch64' -%}
       {%- if ansible_os_family == 'Debian' -%}
         -arm64
