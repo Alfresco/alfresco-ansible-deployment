@@ -10,8 +10,8 @@ runs:
     - name: Apply workaround for pypa/setuptools#4519
       shell: bash
       run: |
-        echo "setuptools<72" > ${{ github.workspace }}/constraints.txt
-        echo "PIP_CONSTRAINT=${{ github.workspace }}/constraints.txt" >> $GITHUB_ENV
+        echo "setuptools<72" > ${{ runner.temp }}/python-constraints.txt
+        echo "PIP_CONSTRAINT=${{ runner.temp }}/python-constraints.txt" >> $GITHUB_ENV
 
     - name: Read python version from file
       id: read-python-version
