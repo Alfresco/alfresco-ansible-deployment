@@ -2,7 +2,7 @@
 # Install with ansible-galaxy install -vr requirements.yml
 collections:
   - name: community.general
-    version: 9.1.0
+    version: 9.2.0
   - name: community.postgresql
     version: 3.4.1
   - name: ansible.posix
