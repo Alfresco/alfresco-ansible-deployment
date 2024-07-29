@@ -3,7 +3,7 @@ default_language_version:
   python: python3.9
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
       - id: check-yaml
         args: [--allow-multiple-documents]
@@ -22,7 +22,7 @@ repos:
       - id: djlint-jinja
 
   - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.18
+    rev: v0.9.21
     hooks:
       - id: pymarkdown
         files: (README\.md$|docs/.*\.md)
@@ -36,7 +36,7 @@ repos:
       - id: prospector
 
   - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.4.0
+    rev: v1.5.0
     hooks:
       - id: detect-secrets
         args: ["--baseline", ".secrets.baseline"]

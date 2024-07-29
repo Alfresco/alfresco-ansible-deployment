@@ -33,4 +33,10 @@ jobs:
           path: ~/.cache/pre-commit
           key: ${{ runner.os }}-precommit-${{ hashFiles('.pre-commit-config.yaml') }}
 
+      - name: Apply workaround
+        shell: bash
+        run: |
+          echo "setuptools<72" > constraints.txt
+          echo "PIP_CONSTRAINT=${{ github.workspace}}/constraints.txt" >> $GITHUB_ENV
+
       - uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
