@@ -75,7 +75,7 @@ jobs:
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@553490b6434e1ec43ced9b321a04fadb91535d4c # v5.25.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@d80693a9b712067a73222c81ac6153a088956bc0 # v5.35.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
