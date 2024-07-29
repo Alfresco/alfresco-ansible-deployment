@@ -21,6 +21,7 @@ jobs:
   updatecli:
     runs-on: "ubuntu-latest"
     name: "${{ matrix.values-file }}"
+    if: github.actor != 'dependabot[bot]'
     strategy:
       fail-fast: false
       max-parallel: 1
