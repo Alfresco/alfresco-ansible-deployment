@@ -64,7 +64,7 @@ jobs:
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@553490b6434e1ec43ced9b321a04fadb91535d4c # v5.25.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@76affd16a4dd9a440cf66bf42656b1d826e8dfc2 # v5.34.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -78,7 +78,7 @@ jobs:
 
       - name: Setup Docker Engine on ARM64 runner
         if: runner.arch == 'ARM64'
-        uses: Alfresco/alfresco-build-tools/.github/actions/setup-docker@9558268b491821a4cfce1f11d4c8f6e56adc8496 # v5.30.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/setup-docker@76affd16a4dd9a440cf66bf42656b1d826e8dfc2 # v5.34.0
 
       - name: Run tests
         env:
