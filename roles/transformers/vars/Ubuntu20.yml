@@ -1,4 +1,3 @@
 ---
-imagemagick_version: "{{ dependencies_version.imagemagick }}"
 imagemagick_packages:
-  - imagemagick-distribution-ubuntu-20.04
+  - imagemagick-distribution-ub2004

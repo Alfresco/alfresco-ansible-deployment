@@ -1,8 +1,4 @@
 ---
-imagemagick_packages:
-  - imagemagick-distribution-libs-linux
-  - imagemagick-distribution-linux
-
 imagemagick_home: "/usr/lib64/ImageMagick-{{ imagemagick_version.split('-')[0] }}"
 
 utils_transform:

@@ -2,7 +2,7 @@ acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 7.2.2.1
+  version: 7.2.2.2
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
@@ -56,4 +56,4 @@ dependencies_version:
   tomcat: 9.0.91
   libreoffice: 7.2.5.1
   pdf_renderer: 1.1
-  imagemagick: 7.1.0-16-ci-7
+  imagemagick: 7.1.0-16-ci-10

@@ -1,0 +1,21 @@
+name: "Setup python"
+description: "Install python from .python-version file and cache with pipenv"
+outputs:
+  python-version:
+    description: "The python version that was installed"
+    value: ${{ steps.read-python-version.outputs.python-version }}
+runs:
+  using: "composite"
+  steps:
+    - name: Read python version from file
+      id: read-python-version
+      shell: bash
+      run: |
+        echo "python-version=$(cat .python-version)" >> $GITHUB_OUTPUT
+    - uses: deadsnakes/action@6c8b9b82fe0b4344f4b98f2775fcc395df45e494 # v3.1.0
+      with:
+        python-version: ${{ steps.read-python-version.outputs.python-version }}
+    - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+      with:
+        path: ~/.local/share/virtualenvs
+        key: ${{ runner.os }}-${{ runner.arch }}-python-${{ steps.read-python-version.outputs.python-version }}-pipenv-${{ hashFiles('Pipfile.lock') }}
