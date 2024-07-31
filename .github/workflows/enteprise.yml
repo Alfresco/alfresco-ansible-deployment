@@ -120,12 +120,12 @@ jobs:
               name: docker_enterprise
             molecule_distro:
               image: rockylinux/rockylinux:9.4
-            runner: ubuntu-latest-arm64
+            runner: ubuntu-latest-arm64-small
           - scenario:
               name: docker_enterprise
             molecule_distro:
               image: ubuntu:22.04
-            runner: ubuntu-latest-arm64
+            runner: ubuntu-latest-arm64-small
 
     uses: ./.github/workflows/docker.yml
     with:
@@ -133,7 +133,7 @@ jobs:
       os_distribution: ${{ matrix.molecule_distro.image }}
       galaxy_cache: enterprise
       dtas_version: ${{ needs.docker.outputs.dtas_version }}
-      dtas_additional_params: ${{ matrix.runner == 'ubuntu-latest-arm64' && '-k "not test_transformation"' || '' }}
+      dtas_additional_params: ${{ matrix.runner == 'ubuntu-latest-arm64-small' && '-k "not test_transformation"' || '' }}
       runner: ${{ matrix.runner }}
     secrets:
       nexus_username: ${{ secrets.NEXUS_USERNAME }}
