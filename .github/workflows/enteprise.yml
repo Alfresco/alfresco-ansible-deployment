@@ -15,6 +15,7 @@ on:
       - "*.md"
       - .github/workflows/docs.yml
       - .pre-commit-config.yaml
+  workflow_dispatch:
 
 env:
   DTAS_VERSION: v1.5.4
