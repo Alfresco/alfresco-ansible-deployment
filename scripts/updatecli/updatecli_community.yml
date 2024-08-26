@@ -1,15 +1,15 @@
 acs:
-  version: "23.2"
+  version: "23.3"
   edition: community
 
 acc:
-  version: "8.4"
+  version: "9.0"
 
 aos:
   version: "3.0"
 
 apiExplorer:
-  version: "23.2"
+  version: "23.3"
 
 googleDrive:
   version: "4.1"
