@@ -11,7 +11,7 @@ aos:
   version: "3.1"
 
 apiExplorer:
-  version: "23.3"
+  version: "23.2"
 
 dsync:
   version: "5.0"
