@@ -6,7 +6,7 @@ acs:
 api_explorer:
   artifact_name: api-explorer
   repository: "{{ nexus_repository.releases }}"
-  version: 23.2.0
+  version: 23.3.0
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
