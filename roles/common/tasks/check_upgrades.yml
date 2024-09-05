@@ -42,12 +42,6 @@
           amps[item].version != installed_components.amps[item].version
       loop: "{{ installed_components.amps | list }}"
 
-    - name: Fail on unsupported ADW upgrades
-      ansible.builtin.fail:
-      when:
-        - installed_components.adw is defined
-        - adw.version != installed_components.adw.version
-
     - name: Fail on unsupported Transformers upgrades
       ansible.builtin.fail:
       when:
