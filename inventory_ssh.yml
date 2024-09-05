@@ -6,42 +6,38 @@ all:
     # host. precedence; hosts_vars > groups_vars > global_vars. more details:
     # https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#adding-variables-to-inventory
     ansible_connection: ssh
-    ansible_user: root
+    ansible_user: rocky
     # Comment if no SSH key is in use and add `-k` on the command line instead
     # (or `-K`in case sudo requires a password)
-    ansible_private_key_file: "/path/to/ssh_key.rsa"
+    ansible_private_key_file: "~/.ssh/gha-cloud-infrastructure"
 
   children:
     database:
       hosts:
         database_1:
-          ansible_host: targetIP
+          ansible_host: 54.247.214.168
 
     repository:
       hosts:
         repository_1:
-          ansible_host: targetIP
+          ansible_host: 54.247.214.168
 
     activemq:
       hosts:
         activemq_1:
-          ansible_host: targetIP
+          ansible_host: 54.247.214.168
 
     # Solr search engine (an alternative to Enterprise Search, and the only available option for the Community edition)
     search:
       hosts:
-        # search_1:
-        #   ansible_host: targetIP
+        search_1:
+          ansible_host: 54.247.214.168
 
     # Enterprise Search (default search engine - not available in Community edition)
     search_enterprise:
       hosts:
-        search_1:
-          ansible_host: targetIP
     elasticsearch:
       hosts:
-        search_1:
-            ansible_host: targetIP
 
     # Keycloak SSO support (optional)
     identity:
@@ -50,27 +46,27 @@ all:
     nginx:
       hosts:
         nginx_1:
-          ansible_host: targetIP
+          ansible_host: 54.247.214.168
 
     acc:
       hosts:
         acc_1:
-          ansible_host: targetIP
+          ansible_host: 54.247.214.168
 
     adw:
       hosts:
         adw_1:
-          ansible_host: targetIP
+          ansible_host: 54.247.214.168
 
     transformers:
       hosts:
         transformers_1:
-          ansible_host: targetIP
+          ansible_host: 54.247.214.168
 
     syncservice:
       hosts:
         syncservice_1:
-          ansible_host: targetIP
+          ansible_host: 54.247.214.168
 
     other_repo_clients:
       hosts:

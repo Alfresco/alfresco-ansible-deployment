@@ -1,0 +1,71 @@
+- name: Run preliminary checks to ensure that components upgrades are supported
+  hosts: all
+  gather_facts: false
+  roles:
+    - role: '../roles/helper_modules'
+  tasks:
+    - name: Fetch status file with installed versions when available
+      ansible.builtin.fetch:
+        src: "{{ ansible_installation_status_file }}"
+        fail_on_missing: false
+        dest: /tmp/
+      changed_when: false
+
+- name: Run preliminary checks to ensure that components upgrades are supported
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Read installed versions from status file when available
+      ansible.builtin.include_vars:
+        file: /tmp/{{ item }}/{{ ansible_installation_status_file }}
+        name: installed_components
+      loop: "{{ groups['all'] }}"
+
+    - name: Check for invalid components upgrades
+      any_errors_fatal: true
+      module_defaults:
+        ansible.builtin.assert:
+          fail_msg: >
+            You're trying to upgrade in an unsupported manner!
+            Please read our documentation for more informations on what's supported and what isn't.
+            https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/components-upgrade.md
+          quiet: true
+      block:
+        - name: Fail on unsupported 23.x ACS upgrade
+          ansible.builtin.assert:
+            that:
+              - acs.version.split('.')[:2] | join('.') == installed_components.acs.version.split('.')[:2] | join('.')
+              - acs.version is version(installed_components.acs.version, '>=')
+          when: installed_components.acs is defined and acs.version.startswith('23')
+
+        - name: Fail on unsupported pre-23.x ACS upgrade
+          ansible.builtin.assert:
+            that:
+              - acs.version.split('.')[:3] | join('.') == installed_components.acs.version.split('.')[:3] | join('.')
+              - acs.version is version(installed_components.acs.version, '<')
+          when: installed_components.acs is defined and not acs.version.startswith('23')
+
+        - name: Fail on unsupported AMPS upgrades
+          ansible.builtin.assert:
+            that:
+              - amps[item].version.split('.')[:2] == installed_components.amps[item].version.split('.')[:2]
+              - amps[item].version is version(installed_components.amps[item].version, '>=')
+          when: |
+              installed_components is defined and
+              installed_components.amps is defined and
+              item in amps
+          loop: "{{ installed_components.amps | list }}"
+
+        - name: Fail on unsupported Search upgrades
+          ansible.builtin.assert:
+            that:
+              - search.version.split('.')[:2] == installed_components.search.version.split('.')[:2]
+              - search.version is version(installed_components.search.version, '>=')
+          when: installed_components.search is defined
+
+        - name: Fail on unsupported Sync upgrades
+          ansible.builtin.assert:
+            that:
+              - sync.version.split('.')[:2] == installed_components.sync.version.split('.')[:2]
+              - sync.version is version(installed_components.sync.version, '>=')
+          when: installed_components.sync is defined

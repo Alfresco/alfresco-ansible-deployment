@@ -1,8 +1,5 @@
 ---
 # tasks file for common
-- name: Check for upgrades
-  ansible.builtin.import_tasks: check_upgrades.yml
-
 - name: Include OS specific variables
   ansible.builtin.include_vars: "{{ item }}"
   loop: >-

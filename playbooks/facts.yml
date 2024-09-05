@@ -1,6 +1,7 @@
 ---
 - name: Populate common facts
   hosts: localhost:all:!external
+  gather_facts: false
   tasks:
     - name: Check wether we want to enable mTLS for ATS deployment
       ansible.builtin.set_fact:
