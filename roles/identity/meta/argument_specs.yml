@@ -50,6 +50,16 @@ argument_specs:
         description:
           Set the base URL for frontend URL and admin console, including scheme, host, port and path.
           Will override identity_keycloak_host, identity_keycloak_http_port.
+      identity_default_realm_id:
+        type: str
+        default: alfresco
+        description: |
+          The id of the default realm to be created
+      identity_default_client_id:
+        type: str
+        default: alfresco
+        description: |
+          The id of the default client to be created
       identity_default_client_implicit_flow_enabled:
         type: bool
         default: true
