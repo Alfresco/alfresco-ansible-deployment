@@ -52,8 +52,8 @@
       become: true
       until:
         - item.pattern in ats_log.content | b64decode
-      retries: 10
-      delay: 3
+      retries: 12
+      delay: 10
       loop:
         - file: ats-ate-aio
           pattern: GET Transform Config version
