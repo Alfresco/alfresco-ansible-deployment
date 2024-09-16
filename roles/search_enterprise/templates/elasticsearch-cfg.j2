@@ -3,7 +3,7 @@ Environment=ALFRESCO_ACCEPTED_CONTENT_MEDIA_TYPES_CACHE_BASE_URL=http://{{ trout
 Environment=ELASTICSEARCH_INDEXNAME=alfresco
 Environment=SPRING_ACTIVEMQ_BROKERURL=failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})
 Environment=SPRING_ACTIVEMQ_USER={{ activemq_username }}
-Environment=SPRING_ACTIVEMQ_PASSWORD={{ activemq_password | regex_replace(search_enterprise_unit_specifier_regex, '%%\1') }}
+Environment=SPRING_ACTIVEMQ_PASSWORD={{ activemq_password | replace('%', '%%') }}
 Environment=SPRING_ELASTICSEARCH_REST_URIS={{ elasticsearch_protocol }}://{{ elasticsearch_host }}:{{ ports_cfg.elasticsearch.http }}
 Environment=SPRING_ELASTICSEARCH_REST_USERNAME={{ elasticsearch_username }}
-Environment=SPRING_ELASTICSEARCH_REST_PASSWORD={{ elasticsearch_password | regex_replace(search_enterprise_unit_specifier_regex, '%%\1') }}
+Environment=SPRING_ELASTICSEARCH_REST_PASSWORD={{ elasticsearch_password | replace('%', '%%') }}
