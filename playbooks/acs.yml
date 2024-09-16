@@ -135,7 +135,6 @@
       identity_admin_username: admin
       identity_admin_password: "{{ hostvars.localhost.identity_admin_password }}"
       identity_keycloak_http_port: "{{ ports_cfg.identity.http }}"
-      identity_default_client_implicit_flow_enabled: "{{ not code_flow_pkce_supported }}"
       when: not groups.external_identity | default([])
   tasks:
     - name: Configure Realm
@@ -145,6 +144,7 @@
         identity_keycloak_http_port: "{{ ports_cfg.identity.http }}"
         identity_known_urls:
           - "{{ alfresco_url }}"
+        identity_default_client_implicit_flow_enabled: "{{ not code_flow_pkce_supported }}"
       ansible.builtin.include_role:
         name: "../roles/identity"
         tasks_from: realm
