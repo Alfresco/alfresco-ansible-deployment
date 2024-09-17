@@ -49,6 +49,7 @@
       when: identity_enabled
       ansible.builtin.set_fact:
         identity_url: "{{ alfresco_url }}/auth"
+        code_flow_pkce_supported: "{{ adw.version is version('4.5.0', 'ge') }}"
 
 - name: Database Role
   hosts: database[0]
@@ -143,6 +144,7 @@
         identity_keycloak_http_port: "{{ ports_cfg.identity.http }}"
         identity_known_urls:
           - "{{ alfresco_url }}"
+        identity_default_client_implicit_flow_enabled: "{{ not code_flow_pkce_supported }}"
       ansible.builtin.include_role:
         name: "../roles/identity"
         tasks_from: realm
@@ -377,6 +379,8 @@
           oauth2:
             host: "{protocol}//{hostname}{:port}/auth/realms/alfresco"
             clientId: alfresco
+            implicitFlow: "{{ not code_flow_pkce_supported }}"
+            codeFlow: "{{ code_flow_pkce_supported }}"
 
 - name: Alfresco Control Center Role
   hosts: acc

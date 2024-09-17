@@ -38,15 +38,33 @@ argument_specs:
         default: /auth
         description:
           Path relative to / for serving keycloak resources
-      identity_known_urls:
-        type: list
-        elements: str
-        default: []
-        description: |
-          A list of possible origin URLs which are allowed to interact with the configured realm
       identity_url:
         type: str
         default:
         description:
           Set the base URL for frontend URL and admin console, including scheme, host, port and path.
           Will override identity_keycloak_host, identity_keycloak_http_port.
+  realm:
+    short_description: Configure the keycloak realm
+    options:
+      identity_default_realm_id:
+        type: str
+        default: alfresco
+        description: |
+          The id of the default realm to be created
+      identity_default_client_id:
+        type: str
+        default: alfresco
+        description: |
+          The id of the default client to be created
+      identity_default_client_implicit_flow_enabled:
+        type: bool
+        default: true
+        description: |
+          Enable or disable the implicit flow for the default client inside the default realm
+      identity_known_urls:
+        type: list
+        elements: str
+        default: []
+        description: |
+          A list of possible origin URLs which are allowed to interact with the configured realm
