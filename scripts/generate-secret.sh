@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/bin/bash
+set -e
+set -o pipefail
 
 usage() {
     echo "Usage: $0 -s SECRET_KEY -m (plaintext|plugin|encrypt_string)" 1>&2
@@ -21,14 +23,16 @@ if [ -z "${SECRET_KEY}" ]; then
     exit_abnormal
 fi
 
+export ANSIBLE_FORCE_COLOR=False
+export ANSIBLE_NOCOLOR=True
+export ANSIBLE_INVENTORY_UNPARSED_WARNING=False
+
 while true; do
-    RANDOM_STRING=$(\
-        ANSIBLE_FORCE_COLOR=False \
-        ANSIBLE_NOCOLOR=True \
+    RANDOM_STRING=$(
         ansible -m ansible.builtin.command \
         -a "echo {{ lookup('password','/dev/null',chars=['ascii_letters','digits','+./#@^()[_'],length=33) }}" \
-        localhost -o 2>/dev/null \
-        | awk '{print $NF}' \
+        localhost -o \
+        | awk '{print $NF}'
     )
     # Ensure that the generated password meet simple complexity requirements
     if [[ $RANDOM_STRING =~ [A-Z] && $RANDOM_STRING =~ [a-z] && $RANDOM_STRING =~ [0-9] && $RANDOM_STRING =~ [^A-Za-z0-9] ]]; then
