@@ -3,6 +3,7 @@ name: "enterprise"
 on:
   pull_request:
     branches: [master]
+    types: [labeled, opened, synchronize, reopened]
     paths-ignore:
       - "docs/**"
       - "*.md"
@@ -143,9 +144,7 @@ jobs:
 
   ec2:
     name: ${{ matrix.molecule_scenario.desc }}
-    if: github.actor != 'dependabot[bot]'
-    needs:
-      - docker_integration
+    if: github.actor != 'dependabot[bot]' && (contains(github.event.pull_request.labels.*.name, 'ec2-test') || github.ref_name == 'master')
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
