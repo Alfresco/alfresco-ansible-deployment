@@ -1,0 +1,24 @@
+name: kics
+
+on:
+  pull_request:
+    branches: [master]
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+      - .github/workflows/docs.yml
+      - .pre-commit-config.yaml
+
+jobs:
+  kics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - name: run kics Scan
+        uses: checkmarx/kics-github-action@530ac1f8efe6202b0f12c9a6e952597ae707b755 # v2.1.2
+        with:
+          path: 'playbooks,roles,molecule'
+          ignore_on_exit: results
+          output_path: MyResults/
+          token: ${{ secrets.GITHUB_TOKEN }}
+          enable_comments: true
