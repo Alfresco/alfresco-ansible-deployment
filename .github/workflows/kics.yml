@@ -9,6 +9,9 @@ on:
       - .github/workflows/docs.yml
       - .pre-commit-config.yaml
 
+permissions:
+  pull-requests: write
+
 jobs:
   kics:
     runs-on: ubuntu-latest
