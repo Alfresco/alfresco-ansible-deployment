@@ -35,3 +35,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0755"
+
+- name: Show passwords
+  ansible.builtin.debug:
+    msg: "{{ password }}"
