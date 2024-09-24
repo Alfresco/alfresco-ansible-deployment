@@ -77,7 +77,7 @@
         - Enable-trouter
         - Restart-trouter
 
-- name: Download {{ trouter.artifact_name }}.jar
+- name: Download {{ trouter.artifact_name }}.jar test test
   become: true
   ansible.builtin.get_url:
     url: "{{ downloads.trouter_jar_url }}"
