@@ -15,7 +15,7 @@ on:
       - '.github/workflows/kics.yml'
 
 permissions:
-  contents: write
+  security-events: write
 
 jobs:
   kics:
