@@ -9,15 +9,10 @@ on:
       - '.github/workflows/kics.yml'
   push:
     branches: [master]
-    paths-ignore:
-      - "docs/**"
-      - "*.md"
-      - .github/workflows/docs.yml
-      - .pre-commit-config.yaml
-
-permissions:
-  pull-requests: write
-  contents: write
+    paths:
+      - 'playbooks/**'
+      - 'roles/**'
+      - '.github/workflows/kics.yml'
 
 jobs:
   kics:
