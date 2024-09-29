@@ -12,7 +12,7 @@ collections:
   - name: community.crypto
     version: 2.21.1
   - name: middleware_automation.keycloak
-    version: 2.4.1
+    version: 2.4.2
   # molecule ec2 tests
   - name: amazon.aws
     version: 8.2.1
