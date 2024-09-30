@@ -115,6 +115,7 @@ jobs:
           - name: pki
           - name: elasticsearch
           - name: identity
+          - name: prerun_network_checks
         runner:
           - ubuntu-latest
         include:

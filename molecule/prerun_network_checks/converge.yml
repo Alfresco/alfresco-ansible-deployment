@@ -1,0 +1,3 @@
+---
+- name: Run the playbook
+  ansible.builtin.import_playbook: ../../playbooks/prerun-network-checks.yml

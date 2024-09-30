@@ -1,8 +1,5 @@
-  - name: Include common defaults
-    ansible.builtin.include_vars: ../../common/defaults/main.yml
-
-  - name: Check connectivity
-    block:
+- name: Check connectivity
+  block:
     # This task needs to be retried in case a previous iteration still listens (default retry of 3 is fine as it aligns with async 10 of listen tasks)
     - name: Check if {{ checked_port }} already open on {{ delegate_target }}
       register: r_connect
@@ -21,7 +18,7 @@
       delegate_to: "{{ delegate_target }}"
       async: 10
       poll: 0
-    - name: Verify if {{ inventory_hostname }} can reach {{ delegate_target }}:{{ checked_port }}
+    - name: Verify if {{ delegate_target }} is reachable to {{ checked_host }}:{{ checked_port }}
       ansible.builtin.wait_for:
         host: "{{ checked_host }}"
         port: "{{ checked_port }}"
