@@ -26,3 +26,5 @@
         delay: 0
         timeout: 5
         msg: Port {{ checked_port }} on the {{ delegate_target }}/{{ checked_host }} machine cannot be reached, please check your firewall!
+  tags:
+    - molecule-idempotence-notest
