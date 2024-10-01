@@ -1,4 +1,6 @@
 - name: Check connectivity
+  tags:
+    - molecule-idempotence-notest
   block:
     # This task needs to be retried in case a previous iteration still listens (default retry of 3 is fine as it aligns with async 10 of listen tasks)
     - name: Check if {{ checked_port }} already open on {{ delegate_target }}
@@ -26,5 +28,3 @@
         delay: 0
         timeout: 5
         msg: Port {{ checked_port }} on the {{ delegate_target }}/{{ checked_host }} machine cannot be reached, please check your firewall!
-  tags:
-    - molecule-idempotence-notest
