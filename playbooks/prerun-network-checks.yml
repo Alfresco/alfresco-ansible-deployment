@@ -1,8 +1,16 @@
 ---
 # This playbook is used to run preliminary network checks for the hosts in the ACS deployment.
+- name: Gather facts on all the hosts
+  hosts: all:!external
+  gather_facts: false
+  tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+        gather_subset: all_ipv4_addresses
 - name: Run preliminary network checks for repository hosts
   hosts: repository
   become: true
+  gather_facts: false
   tasks:
     - name: Include common defaults
       ansible.builtin.include_vars: ../roles/common/defaults/main.yml
@@ -67,6 +75,7 @@
 - name: Run preliminary network checks for search hosts
   hosts: search
   become: true
+  gather_facts: false
   tasks:
     - name: Include common defaults
       ansible.builtin.include_vars: ../roles/common/defaults/main.yml
@@ -82,6 +91,7 @@
 - name: Run preliminary network checks for transformers hosts
   hosts: transformers
   become: true
+  gather_facts: false
   tasks:
     - name: Include common defaults
       ansible.builtin.include_vars: ../roles/common/defaults/main.yml
@@ -97,6 +107,7 @@
 - name: Run preliminary network checks for syncservice hosts
   hosts: syncservice
   become: true
+  gather_facts: false
   tasks:
     - name: Include common defaults
       ansible.builtin.include_vars: ../roles/common/defaults/main.yml
@@ -128,6 +139,7 @@
 - name: Run preliminary network checks for acc hosts
   hosts: acc
   become: true
+  gather_facts: false
   tasks:
     - name: Include common defaults
       ansible.builtin.include_vars: ../roles/common/defaults/main.yml
@@ -143,6 +155,7 @@
 - name: Run preliminary network checks for adw hosts
   hosts: adw
   become: true
+  gather_facts: false
   tasks:
     - name: Include common defaults
       ansible.builtin.include_vars: ../roles/common/defaults/main.yml
@@ -158,6 +171,7 @@
 - name: Run preliminary network checks for nginx hosts
   hosts: nginx
   become: true
+  gather_facts: false
   tasks:
     - name: Include common defaults
       ansible.builtin.include_vars: ../roles/common/defaults/main.yml
