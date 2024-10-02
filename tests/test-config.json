@@ -8,7 +8,7 @@
     "assertions": {
       "acs": {
         "edition": "Enterprise",
-        "version": "23.3.0",
+        "version": "23.3.1",
         "identity": false,
         "modules": [
           {
@@ -29,10 +29,10 @@
         ]
       },
       "acc": {
-        "version": "8.3.0"
+        "version": "9.1.0"
       },
       "adw": {
-        "version": "4.3.0"
+        "version": "5.1.0"
       }
     }
   }

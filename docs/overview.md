@@ -82,15 +82,15 @@ The table below shows the version of the components deployed by the playbook for
 | Apache Tomcat       | 10.1.25                     | 9.0.91         | 9.0.91         | 9.0.91         | 9.0.91         |
 | PostgreSQL          | 15.x                        | 14.x           | 14.x           | 13.x           | 13.x           |
 | Apache ActiveMQ     | 5.18.5                      | 5.17.6         | 5.17.6         | 5.16.7         | 5.16.7         |
-| Repository          | 23.3.0 (23.3.0)             | 7.4.2.1        | 7.3.2.1        | 7.2.2.1        | 7.1.1.10       |
-| Share               | 23.3.0 (23.3.0)             | 7.4.2.1        | 7.3.2.1        | 7.2.2.1        | 7.1.1.10       |
+| Repository          | 23.3.2 (23.3.0)             | 7.4.2.1        | 7.3.2.1        | 7.2.2.5        | 7.1.1.10       |
+| Share               | 23.3.2 (23.3.0)             | 7.4.2.1        | 7.3.2.1        | 7.2.2.5        | 7.1.1.10       |
 | Search Services     | 2.0.11                      | 2.0.11         | 2.0.11         | 2.0.11         | 2.0.2.2        |
 | Search Enterprise   | 4.1.0 (n/a)                 | 3.3.3          | 3.2.1          | 3.1.1.1        | 3.1.1.1        |
 | All-In-One T-Engine | 5.1.4                       | 5.1.4          | 3.1.2          | 3.1.2          | 3.1.2          |
 | AOS                 | 3.1.0                       | 1.6.2          | 1.5.0          | 1.4.1          | 1.4.1          |
 | Google Docs         | 4.0.0                       | 3.4.2          | 3.3.1          | 3.2.2          | 3.2.1          |
-| Digital Workspace   | 5.0.0 (n/a)                 | 4.0.0          | 3.1.0          | 3.0.0          | 2.6.1          |
-| Control Center      | 9.0.0                       | 8.0.0          | n/a            | n/a            | n/a            |
+| Digital Workspace   | 5.1.0 (n/a)                 | 4.0.0          | 3.1.0          | 3.0.0          | 2.6.1          |
+| Control Center      | 9.1.0                       | 8.0.0          | n/a            | n/a            | n/a            |
 | Transform Router    | 4.1.4 (n/a)                 | 4.1.4          | 2.1.2          | 2.1.2          | 2.1.2          |
 | Shared File Store   | 4.1.4 (n/a)                 | 4.1.4          | 2.1.2          | 2.1.2          | 2.1.2          |
 | Sync Service        | 5.0.0 (n/a)                 | 3.11.3         | 3.11.3         | 3.11.3         | 3.11.3         |

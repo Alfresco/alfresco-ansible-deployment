@@ -105,6 +105,9 @@ def test_alfresco_api(host):
     if acs_version.startswith('23.2.1'):
         # Known issue with discovery api in 23.2.1
         acs_version = '23.2.0'
+    if acs_version.startswith('23.3.2'):
+        # Known issue with discovery api in 23.3.2
+        acs_version = '23.3.1.2'
     assert_that(response['entry']['repository']['version']['display'], contains_string(acs_version))
 
 
