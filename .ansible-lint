@@ -6,4 +6,3 @@ skip_list:
   - name[template]  # Allow Jinja templating inside task and play names
 exclude_paths:
  - molecule/
- - roles/helper_module/
