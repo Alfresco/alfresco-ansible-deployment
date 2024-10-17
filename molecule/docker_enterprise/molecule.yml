@@ -18,9 +18,10 @@ platforms:
     groups:
       - database
       - activemq
+      - elasticsearch
       - transformers
-      - search
       - repository
+      - search_enterprise
       - trusted_resource_consumers
       - syncservice
       - acc
