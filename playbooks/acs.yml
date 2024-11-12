@@ -387,7 +387,6 @@
   gather_facts: false
   vars:
     acs_version_requirement: "{{ acs.version is version('7.4', 'ge') }}"
-    adf_default_configuration: {}
   roles:
     - role: "../roles/adf_app"
       when: acs_version_requirement
@@ -400,7 +399,7 @@
       adf_app_configuration: >-
         {{
           adf_app_oauth_configuration | default({}) |
-          ansible.builtin.combine(adf_default_configuration, recursive=true)
+          ansible.builtin.combine(acc_app_configuration, recursive=true)
         }}
   post_tasks:
     - name: Update installation status file with ACC
@@ -422,11 +421,6 @@
 - name: Alfresco Digital Workspace Role
   hosts: adw
   gather_facts: false
-  vars:
-    adf_default_configuration:
-      plugins:
-        processService: false
-        microsoftOnline: false
   roles:
     - role: "../roles/adf_app"
       when: acs.edition == "Enterprise"
@@ -444,7 +438,7 @@
       adf_app_configuration: >-
         {{
           adf_app_oauth_configuration | default({}) |
-          ansible.builtin.combine(adf_default_configuration, recursive=true)
+          ansible.builtin.combine(adw_app_configuration, recursive=true)
         }}
   post_tasks:
     - name: Update installation status file with ADW
