@@ -1,0 +1,4 @@
+adw_app_configuration:
+  plugins:
+    processService: false
+    microsoftOnline: false
