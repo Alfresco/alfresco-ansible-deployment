@@ -54,7 +54,7 @@ jobs:
     runs-on: ${{ inputs.runner }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           # avoid auth conflict when cloning DTAS during verify step
           persist-credentials: false
@@ -64,7 +64,7 @@ jobs:
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@bd803ea1bf16464eaf9726560c0496b41d15c03f # v7.1.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@a0837df06d10de2cae8a99319e8e101a6cbe9083 # v8.4.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
