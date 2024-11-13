@@ -6,7 +6,7 @@ collections:
   - name: community.postgresql
     version: 3.6.1
   - name: ansible.posix
-    version: 1.6.1
+    version: 1.6.2
   - name: ansible.utils
     version: 5.1.2
   - name: community.crypto
