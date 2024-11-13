@@ -21,10 +21,6 @@ updates:
     directory: "/.github/actions/galaxy"
     schedule:
       interval: "monthly"
-    groups:
-      github-actions-root:
-        patterns:
-          - "*"
 
   - package-ecosystem: "github-actions"
     directory: "/.github/actions/molecule_integration_ec2"
