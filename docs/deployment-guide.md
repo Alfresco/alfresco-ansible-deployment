@@ -1227,22 +1227,6 @@ fatal: [transformers_1]: FAILED! => {"msg": "An unhandled exception occurred whi
 Error was a <class 'ansible.errors.AnsibleError'>, original message: An unhandled exception occurred while running the lookup plugin 'url'. Error was a <class 'ansible.errors.AnsibleError'>, original message: Received HTTP error for https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-content-services-distribution/7.0.0/alfresco-content-services-distribution-7.0.0.zip.sha1 : HTTP Error 401: Unauthorized"}
 ```
 
-You can run the command shown below in the same terminal you're using to run the playbook to quickly test downloading a protected resource from Nexus.
-
-```bash
-wget -qO /dev/null --user=${NEXUS_USERNAME} --password=${NEXUS_PASSWORD} https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/alfresco-content-services-distribution/7.3.0/alfresco-content-services-distribution-7.3.0.pom
-```
-
-If everything is configured correctly you should see the following at the end of the output:
-
-```bash
-Saving to: ‘alfresco-content-services-distribution-7.3.0.pom’
-
-alfresco-content-services-distribution-7.3.0.pom      100%[=============================================>]   8.53K  --.-KB/s    in 0.003s
-
-2021-02-18 13:50:44 (2.54 MB/s) - ‘alfresco-content-services-distribution-7.3.0.pom’ saved [8739/8739]
-```
-
 ### Nginx Failure
 
 If the playbook fails not being able to start Nginx, make sure both ADW and Nginx point to the same host in the inventory file. Otherwise you'll encounter the error below:
