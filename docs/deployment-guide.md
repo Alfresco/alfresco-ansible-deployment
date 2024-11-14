@@ -1230,7 +1230,7 @@ Error was a <class 'ansible.errors.AnsibleError'>, original message: An unhandle
 You can run the command shown below in the same terminal you're using to run the playbook to quickly test downloading a protected resource from Nexus.
 
 ```bash
-wget -qO /dev/null --user=${NEXUS_USERNAME} --password=${NEXUS_PASSWORD} https://artifacts.alfresco.com/nexus/service/local/repositories/enterprise-releases/content/org/alfresco/alfresco-content-services-distribution/7.3.0/alfresco-content-services-distribution-7.3.0.pom
+wget -qO /dev/null --user=${NEXUS_USERNAME} --password=${NEXUS_PASSWORD} https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/alfresco-content-services-distribution/7.3.0/alfresco-content-services-distribution-7.3.0.pom
 ```
 
 If everything is configured correctly you should see the following at the end of the output:
