@@ -39,12 +39,14 @@ jobs:
           aws s3 cp alfresco-ansible-deployment-${VERSION}.zip s3://alfresco-artefacts-staging/enterprise/alfresco-ansible-deployment/
 
       - name: Publish on Nexus
+        uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@v8.4.0
         if: github.event_name != 'workflow_dispatch'
-        env:
-          NEXUS_USERNAME: ${{ secrets.nexus_username }}
-          NEXUS_PASSWORD: ${{ secrets.nexus_password }}
-        run: >-
-          curl -F "r=releases" -F "g=org.alfresco" -F "a=alfresco-ansible-deployment"
-          -F "v=${VERSION}" -F "p=zip" -F "file=@alfresco-ansible-deployment-${VERSION}.zip"
-          -u "$NEXUS_USERNAME:$NEXUS_PASSWORD"
-          https://artifacts.alfresco.com/nexus/service/local/artifact/maven/content
+        with:
+          group-id: org.alfresco
+          artifact-id: alfresco-ansible-deployment
+          repository-url: https://nexus.alfresco.com/nexus/content/repositories/releases/
+          version: ${{ env.VERSION }}
+          file: alfresco-ansible-deployment-${{ env.VERSION }}.zip
+          classifier: zip
+          maven-username: ${{ secrets.nexus_username }}
+          maven-password: ${{ secrets.nexus_password }}
