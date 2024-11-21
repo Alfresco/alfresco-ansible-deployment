@@ -148,7 +148,7 @@ cd alfresco-ansible-deployment
 
 ### Setup runtime environment
 
-Before starting using the playbook, make sure you are running at least python 3.9:
+Before starting using the playbook, make sure you are running at least python 3.11:
 
 ```bash
 python3 --version
