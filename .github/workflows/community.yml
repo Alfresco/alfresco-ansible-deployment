@@ -35,15 +35,25 @@ jobs:
           - image: rockylinux/rockylinux:9.4
         role:
           - name: activemq
+            path: roles
           - name: common
+            path: collections/alfresco/platform/roles
           - name: elasticsearch
+            path: roles
           - name: identity
+            path: roles
           - name: java
+            path: collections/alfresco/platform/roles
           - name: nginx
+            path: roles
           - name: postgres
+            path: roles
           - name: search
+            path: roles
           - name: tomcat
+            path: roles
           - name: transformers
+            path: roles
     env:
       PY_COLORS: 1
       PYTHONUNBUFFERED: 1
@@ -74,7 +84,7 @@ jobs:
           timeout_minutes: 60
           max_attempts: 3
           retry_wait_seconds: 10
-          command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
+          command: cd ${{ matrix.role.path }}/${{ matrix.role.name }} && pipenv run molecule test
 
   docker_integration:
     name: Test ${{ matrix.scenario.name }} scenario on ${{ matrix.molecule_distro.image }}

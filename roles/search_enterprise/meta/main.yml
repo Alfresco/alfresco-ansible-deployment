@@ -21,4 +21,4 @@ galaxy_info:
   galaxy_tags: []
 
 dependencies:
-  - role: java
+  - role: alfresco.platform.java

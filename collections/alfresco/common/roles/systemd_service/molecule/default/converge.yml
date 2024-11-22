@@ -1,0 +1,15 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Include role
+      ansible.builtin.include_role:
+        name: systemd_service
+      vars:
+        systemd_service_unit_name: my-test-service
+        systemd_service_unit_description: My very cool service
+        systemd_service_exec_start: /bin/sleep infinity
+        systemd_service_environment:
+          MY_ENV_VAR: my_value
+          ANOTHER_ENV_VAR: another_value
