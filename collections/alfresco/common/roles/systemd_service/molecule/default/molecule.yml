@@ -1,0 +1,15 @@
+---
+driver:
+  name: docker
+platforms:
+  - name: instance
+    dockerfile: ../../../../../tests/Dockerfile-noprivs.j2
+    image: rockylinux:9
+    command: "/lib/systemd/systemd"
+    privileged: true
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+    volume:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"

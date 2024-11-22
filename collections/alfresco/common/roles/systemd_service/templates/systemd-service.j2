@@ -1,0 +1,31 @@
+[Unit]
+Description={{ systemd_service_unit_description }}
+After={{ systemd_service_unit_after }}
+
+[Service]
+Type={{ systemd_service_type }}
+{% if systemd_service_type == 'oneshot' %}
+RemainAfterExit=yes
+{% endif %}
+
+User={{ systemd_service_user }}
+
+{% for key, value in systemd_service_environment.items() %}
+Environment="{{ key }}={{ value | replace('%', '%%') }}"
+{% endfor %}
+
+ExecStart={{ systemd_service_exec_start }}
+ExecStop={{ systemd_service_exec_stop }}
+
+Restart=on-failure
+RestartSec=60
+SuccessExitStatus=143
+
+WorkingDirectory={{ systemd_service_working_directory }}
+
+{% for key, value in systemd_service_additional_options.items() %}
+{{ key }}={{ value }}
+{% endfor %}
+
+[Install]
+WantedBy=multi-user.target
