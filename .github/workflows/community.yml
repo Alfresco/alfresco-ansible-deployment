@@ -43,7 +43,7 @@ jobs:
           - name: identity
             path: roles
           - name: java
-            path: roles
+            path: collections/alfresco/platform/roles
           - name: nginx
             path: roles
           - name: postgres

@@ -5,3 +5,14 @@ audit_storage_zip_url: https://nexus.alfresco.com/nexus/repository/enterprise-re
 audit_storage_zip_sha1_url: https://nexus.alfresco.com/nexus/repository/enterprise-releases/org/alfresco/alfresco-audit-storage-distribution/{{ audit_storage_version }}/alfresco-audit-storage-distribution-{{ audit_storage_version }}.zip.sha1
 
 audit_storage_artifact_name: audit-storage
+
+audit_storage_username: alfresco
+audit_storage_group_name: alfresco
+
+audit_storage_default_environment: {}
+audit_storage_environment: {}
+
+audit_storage_java_bin_path: /opt/openjdk-17.0.11/bin/java
+
+audit_storage_binaries_dir: "/opt/alfresco/audit-storage-{{ audit_storage_version }}"
+audit_storage_config_dir: "/etc/alfresco/audit-storage"

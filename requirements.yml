@@ -18,7 +18,7 @@ collections:
     version: 8.2.1
   - name: community.aws
     version: 8.0.0
-  # Import all local collections
+  # Import all local collections - bump the following number to invalidate gha cache: 2024112500
   - source: ./collections/alfresco/
     type: subdirs
 
