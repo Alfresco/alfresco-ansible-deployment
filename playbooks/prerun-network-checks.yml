@@ -12,8 +12,10 @@
   become: true
   gather_facts: false
   tasks:
-    - name: Include common defaults
-      ansible.builtin.include_vars: ../roles/common/defaults/main.yml
+    - name: Include common role
+      ansible.builtin.include_role:
+        name: alfresco.platform.common
+        public: true
 
     - name: Check db connection
       ansible.builtin.include_tasks: "tasks/check_port.yml"
@@ -77,8 +79,10 @@
   become: true
   gather_facts: false
   tasks:
-    - name: Include common defaults
-      ansible.builtin.include_vars: ../roles/common/defaults/main.yml
+    - name: Include common role
+      ansible.builtin.include_role:
+        name: alfresco.platform.common
+        public: true
 
     - name: Check repo connection
       ansible.builtin.include_tasks: "tasks/check_port.yml"
@@ -93,8 +97,10 @@
   become: true
   gather_facts: false
   tasks:
-    - name: Include common defaults
-      ansible.builtin.include_vars: ../roles/common/defaults/main.yml
+    - name: Include common role
+      ansible.builtin.include_role:
+        name: alfresco.platform.common
+        public: true
 
     - name: Check activemq connection
       ansible.builtin.include_tasks: "tasks/check_port.yml"
@@ -109,8 +115,10 @@
   become: true
   gather_facts: false
   tasks:
-    - name: Include common defaults
-      ansible.builtin.include_vars: ../roles/common/defaults/main.yml
+    - name: Include common role
+      ansible.builtin.include_role:
+        name: alfresco.platform.common
+        public: true
 
     - name: Check db connection
       ansible.builtin.include_tasks: "tasks/check_port.yml"
@@ -141,8 +149,10 @@
   become: true
   gather_facts: false
   tasks:
-    - name: Include common defaults
-      ansible.builtin.include_vars: ../roles/common/defaults/main.yml
+    - name: Include common role
+      ansible.builtin.include_role:
+        name: alfresco.platform.common
+        public: true
 
     - name: Check repo connection
       ansible.builtin.include_tasks: "tasks/check_port.yml"
@@ -157,8 +167,10 @@
   become: true
   gather_facts: false
   tasks:
-    - name: Include common defaults
-      ansible.builtin.include_vars: ../roles/common/defaults/main.yml
+    - name: Include common role
+      ansible.builtin.include_role:
+        name: alfresco.platform.common
+        public: true
 
     - name: Check repo connection
       ansible.builtin.include_tasks: "tasks/check_port.yml"
@@ -173,8 +185,10 @@
   become: true
   gather_facts: false
   tasks:
-    - name: Include common defaults
-      ansible.builtin.include_vars: ../roles/common/defaults/main.yml
+    - name: Include common role
+      ansible.builtin.include_role:
+        name: alfresco.platform.common
+        public: true
 
     - name: Check repo connection
       ansible.builtin.include_tasks: "tasks/check_port.yml"
