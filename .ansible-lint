@@ -1,6 +1,7 @@
 warn_list:
   - experimental  # make sure new rule are returned as warnings for progressive updates
-  - role-name[path]  # https://alfresco.atlassian.net/browse/OPSEXP-2157
+  - role-name[path]  # OPSEXP-2157
+  - var-naming[no-role-prefix] # OPSEXP-2744
 skip_list:
   - galaxy  # To remove when/if we push to Ansible galaxy
   - name[template]  # Allow Jinja templating inside task and play names
