@@ -12,8 +12,8 @@ def get_ansible_vars(host):
     """Define get_ansible_vars"""
     java_role = "file=../java/vars/main.yml name=java_role"
     activemq_role = "file=../../vars/main.yml name=activemq_role"
-    common_vars = "file=../../../common/vars/main.yml name=common_vars"
-    common_defaults = "file=../../../common/defaults/main.yml name=common_defaults"
+    common_vars = "file=../../../../collections/alfresco/platform/roles/common/vars/main.yml name=common_vars"
+    common_defaults = "file=../../../../collections/alfresco/platform/roles/common/defaults/main.yml name=common_defaults"
     group_vars = "file=../../../../group_vars/all.yml name=group_vars"
     secrets_vars = "file=../../../../vars/secrets.yml name=secrets_vars"
     ansible_vars = host.ansible("include_vars", java_role)["ansible_facts"]["java_role"]
