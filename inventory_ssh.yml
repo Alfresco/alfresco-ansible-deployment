@@ -72,6 +72,11 @@ all:
         syncservice_1:
           ansible_host: targetIP
 
+    audit_storage:
+      hosts:
+        audit_storage_1:
+          ansible_host: targetIP
+
     other_repo_clients:
       hosts:
 

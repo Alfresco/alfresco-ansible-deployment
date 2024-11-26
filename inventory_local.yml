@@ -53,6 +53,10 @@ all:
       children:
         repository:
 
+    audit_storage:
+      children:
+        repository:
+
     other_repo_clients:
       hosts:
 

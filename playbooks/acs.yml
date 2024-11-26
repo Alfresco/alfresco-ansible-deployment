@@ -479,3 +479,37 @@
         mode: "0755"
   tags:
     - sync
+
+- name: Audit Storage Role
+  hosts: audit_storage
+  gather_facts: false
+  roles:
+    - role: "../roles/audit_storage"
+      when: acs.edition == "Enterprise"
+      audit_storage_version: "{{ audit_storage.version }}"
+      audit_storage_zip_url: "{{ downloads.audit_storage_zip_url }}"
+      audit_storage_zip_sha1_url: "{{ downloads.audit_storage_zip_sha1_url }}"
+      audit_storage_username: "{{ username }}"
+      audit_storage_group_name: "{{ group_name }}"
+      audit_storage_broker_url: "failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})"
+      audit_storage_broker_username: "{{ activemq_username }}"
+      audit_storage_broker_password: "{{ activemq_password }}"
+      audit_storage_opensearch_url: "{{ elasticsearch_protocol }}://{{ elasticsearch_host }}:{{ ports_cfg.elasticsearch.http }}"
+      audit_storage_opensearch_username: "{{ elasticsearch_username }}"
+      audit_storage_opensearch_password: "{{ elasticsearch_password }}"
+  post_tasks:
+    - name: Update installation status file with Audit Storage
+      when: acs.edition == "Enterprise"
+      become: true
+      vars:
+        audit_storage_components:
+          audit_storage: "{{ audit_storage }}"
+      ansible.builtin.blockinfile:
+        block: "{{ audit_storage_components | to_nice_yaml(indent=2) }}"
+        create: true
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: AUDIT_STORAGE_BEGIN
+        marker_end: AUDIT_STORAGE_END
+        mode: "0755"
+  tags:
+    - audit_storage
