@@ -3,7 +3,7 @@ driver:
   name: docker
 platforms:
   - name: instance
-    dockerfile: ../../../../../tests/Dockerfile-noprivs.j2
+    dockerfile: ../../../../tests/molecule/Dockerfile-noprivs.j2
     image: rockylinux:9
     command: "/lib/systemd/systemd"
     privileged: true
