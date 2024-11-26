@@ -9,5 +9,6 @@
     - name: Check that service is up and running
       ansible.builtin.assert:
         that:
-          - ansible_facts.services['alfresco-audit-storage'] is defined
-          - ansible_facts.services['alfresco-audit-storage'].state == 'running'
+          - ansible_facts.services['alfresco-audit-storage.service'] is defined
+          - ansible_facts.services['alfresco-audit-storage.service'].state == 'running'
+        quiet: true
