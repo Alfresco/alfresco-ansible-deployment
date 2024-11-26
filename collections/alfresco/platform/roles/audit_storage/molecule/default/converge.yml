@@ -1,7 +1,7 @@
 ---
 - name: Converge
   hosts: all
-  tasks:
-    - name: "Include role"
-      ansible.builtin.include_role:
-        name: "audit_storage"
+  roles:
+    - role: '../../../../../../../roles/activemq'
+    - role: '../../../../../../../roles/elasticsearch'
+    - role: alfresco.platform.audit_storage

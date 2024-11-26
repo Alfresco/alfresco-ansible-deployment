@@ -17,6 +17,8 @@ platforms:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
       - audit_storage
+      - activemq
+      - elasticsearch
 provisioner:
   name: ansible
   ansible_args:
