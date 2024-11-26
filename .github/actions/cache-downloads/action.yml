@@ -1,0 +1,20 @@
+name: 'Cache downloads'
+description: 'Cache downloads to speed up the workflow'
+inputs:
+  cache-name:
+    description: 'A keyword to compose the cache final name'
+    required: true
+    default: 'default'
+  cache-version:
+    description: 'Increase to force recreating the cache'
+    required: true
+    default: "1"
+runs:
+  using: "composite"
+  steps:
+    - name: Cache Ansible artifacts
+      id: collections-cache
+      uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+      with:
+        path: 'downloads/**'
+        key: cache-downloads-v${{ inputs.cache-version }}-${{ inputs.cache-name }}

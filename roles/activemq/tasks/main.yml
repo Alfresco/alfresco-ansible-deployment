@@ -1,21 +1,29 @@
 ---
 - name: Set path for local download
-  ansible.builtin.stat:
-    path: "{{ lookup('env', 'PWD') }}"
-  register: local_path
   delegate_to: localhost
+  ansible.builtin.stat:
+    path: "{{ lookup('env', 'GITHUB_WORKSPACE') | default(lookup('env', 'PWD'), True) }}"
+  register: local_path
 
-- name: Download activemq archive
+- name: Create download location
+  delegate_to: localhost
+  ansible.builtin.file:
+    path: "{{ local_path.stat.path }}/downloads"
+    state: directory
+    mode: "0755"
+  register: download_path
+
+- name: Download ActiveMQ archive
   delegate_to: localhost
   ansible.builtin.get_url:
     url: "{{ dependencies_url.activemq }}"
     checksum: sha512:{{ dependencies_url.activemq_sha512_checksum_url }}
-    dest: "{{ local_path.stat.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
+    dest: "{{ download_path.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
     mode: "0644"
 
 - name: Copy archive to target
   ansible.builtin.copy:
-    src: "{{ local_path.stat.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
+    src: "{{ download_path.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
     dest: "{{ download_location }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
     mode: "0644"
 
