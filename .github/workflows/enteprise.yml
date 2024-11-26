@@ -64,6 +64,7 @@ jobs:
           - name: sfs
           - name: sync
           - name: trouter
+          - name: audit_storage
     steps:
       - name: Share var with further reusable workflows
         id: jobvars

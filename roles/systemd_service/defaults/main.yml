@@ -1,0 +1,15 @@
+---
+# defaults file for systemd-service
+systemd_service_unit_name: ''
+systemd_service_unit_description: ''
+systemd_service_unit_after: syslog.target network.target local-fs.target remote-fs.target nss-lookup.target
+
+systemd_service_type: simple
+systemd_service_user: ''
+systemd_service_environment: {}
+systemd_service_exec_start: ''
+systemd_service_exec_stop: kill -15 $MAINPID
+systemd_service_working_directory: /tmp
+systemd_service_additional_options: {}
+systemd_service_state: started
+systemd_service_enabled: true

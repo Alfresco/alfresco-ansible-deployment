@@ -1,0 +1,14 @@
+---
+- name: Verify
+  hosts: instance
+  gather_facts: false
+  tasks:
+    - name: Populate service facts
+      ansible.builtin.service_facts:
+
+    - name: Check that service is up and running
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['alfresco-audit-storage.service'] is defined
+          - ansible_facts.services['alfresco-audit-storage.service'].state == 'running'
+        quiet: true

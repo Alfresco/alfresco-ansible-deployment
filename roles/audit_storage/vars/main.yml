@@ -1,0 +1,3 @@
+---
+# vars file for audit_storage
+audit_storage_artifact_path: "{{ audit_storage_binaries_dir }}/{{ audit_storage_artifact_name }}-{{ audit_storage_version }}.jar"

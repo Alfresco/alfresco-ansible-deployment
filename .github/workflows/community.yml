@@ -44,6 +44,7 @@ jobs:
           - name: search
           - name: tomcat
           - name: transformers
+          - name: systemd_service
     env:
       PY_COLORS: 1
       PYTHONUNBUFFERED: 1
