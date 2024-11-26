@@ -488,7 +488,7 @@
       when: acs.edition == "Enterprise"
       audit_storage_version: "{{ audit_storage.version }}"
       audit_storage_zip_url: "{{ downloads.audit_storage_zip_url }}"
-      audit_storage_zip_sha1_url: "{{ downloads.audit_storage_zip_sha1_url }}"
+      audit_storage_zip_sha1_url: "{{ downloads.audit_storage_zip_sha1_checksum_url }}"
       audit_storage_username: "{{ username }}"
       audit_storage_group_name: "{{ group_name }}"
       audit_storage_broker_url: "failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})"
