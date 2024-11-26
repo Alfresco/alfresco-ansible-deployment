@@ -1,0 +1,31 @@
+[Unit]
+Description={{ audit_storage_systemd_service_unit_description }}
+After={{ audit_storage_systemd_service_unit_after }}
+
+[Service]
+Type={{ audit_storage_systemd_service_type }}
+{% if audit_storage_systemd_service_type == 'oneshot' %}
+RemainAfterExit=yes
+{% endif %}
+
+User={{ audit_storage_systemd_service_user }}
+
+{% for key, value in audit_storage_systemd_service_environment.items() %}
+Environment="{{ key }}={{ value | replace('%', '%%') }}"
+{% endfor %}
+
+ExecStart={{ audit_storage_systemd_service_exec_start }}
+ExecStop={{ audit_storage_systemd_service_exec_stop }}
+
+Restart=on-failure
+RestartSec=60
+SuccessExitStatus=143
+
+WorkingDirectory={{ audit_storage_systemd_service_working_directory }}
+
+{% for key, value in audit_storage_systemd_service_additional_options.items() %}
+{{ key }}={{ value }}
+{% endfor %}
+
+[Install]
+WantedBy=multi-user.target

@@ -1,3 +1,6 @@
 ---
 # vars file for audit_storage
 audit_storage_artifact_path: "{{ audit_storage_binaries_dir }}/{{ audit_storage_artifact_name }}-{{ audit_storage_version }}.jar"
+audit_storage_systemd_service_environment: >-
+  {{ audit_storage_default_environment |
+  combine(audit_storage_environment) }}

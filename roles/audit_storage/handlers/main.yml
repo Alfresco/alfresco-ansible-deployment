@@ -1,2 +1,13 @@
 ---
 # handlers file for audit_storage
+- name: Reload systemd
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Restart {{ audit_storage_systemd_service_unit_name }}
+  become: true
+  ansible.builtin.systemd:
+    name: "{{ audit_storage_systemd_service_unit_name }}"
+    state: restarted
+  when: audit_storage_systemd_service_state == 'started'
