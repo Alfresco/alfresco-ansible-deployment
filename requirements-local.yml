@@ -1,0 +1,4 @@
+collections:
+  # Import all local collections - bump the following number to invalidate gha cache: 2024112500
+  - source: ./collections/alfresco/
+    type: subdirs

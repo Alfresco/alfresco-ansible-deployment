@@ -15,4 +15,4 @@ galaxy_info:
   min_ansible_version: "2.12"
   galaxy_tags: []
 dependencies:
-  - role: common
+   - role: alfresco.platform.common

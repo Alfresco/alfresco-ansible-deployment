@@ -6,7 +6,7 @@
 
 - name: Instanciate Java keystore
   ansible.builtin.include_role:
-    name: ../roles/java
+    name: alfresco.platform.java
     tasks_from: keystores
   when: ats_keystore
   vars:

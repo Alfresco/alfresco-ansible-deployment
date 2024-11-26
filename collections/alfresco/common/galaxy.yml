@@ -1,0 +1,20 @@
+namespace: alfresco
+name: common
+description: Alfresco Common Collection
+
+version: 0.1.0-alpha.0
+
+readme: README.md
+authors:
+- Alfresco Ops Readiness <alfresco-build@hyland.com>
+
+license:
+- Apache-2.0
+
+tags:
+  - systemd
+
+dependencies: {}
+
+repository: https://github.com/Alfresco/alfresco-ansible-deployment
+issues: https://github.com/Alfresco/alfresco-ansible-deployment/issues

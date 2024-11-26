@@ -1,0 +1,26 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Check service is running
+      ansible.builtin.systemd:
+        name: my-test-service
+        state: started
+
+    - name: Check service is enabled
+      ansible.builtin.systemd:
+        name: my-test-service
+        enabled: true
+
+    - name: Check logs for warnings and errors
+      ansible.builtin.command: journalctl -u my-test-service -p 5
+      register: journalctl_output
+      changed_when: false
+
+    - name: Assert logs are clean
+      ansible.builtin.assert:
+        that:
+          - journalctl_output.stdout_lines[0] == '-- No entries --'
+        fail_msg: "Service logs contain warnings or errors: {{ journalctl_output.stdout }}"
+        quiet: true

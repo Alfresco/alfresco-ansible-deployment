@@ -59,11 +59,17 @@ jobs:
           - image: rockylinux/rockylinux:9.4
         role:
           - name: adf_app
+            path: roles
           - name: search_enterprise
+            path: roles
           - name: repository
+            path: roles
           - name: sfs
+            path: roles
           - name: sync
+            path: roles
           - name: trouter
+            path: roles
     steps:
       - name: Share var with further reusable workflows
         id: jobvars
@@ -99,7 +105,7 @@ jobs:
           timeout_minutes: 60
           max_attempts: 3
           retry_wait_seconds: 10
-          command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
+          command: cd ${{ matrix.role.path }}/${{ matrix.role.name }} && pipenv run molecule test
 
   docker_integration:
     name: Test ${{ matrix.scenario.name }} scenario on ${{ matrix.molecule_distro.image }}

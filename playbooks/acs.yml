@@ -35,7 +35,7 @@
   hosts: repository:identity:acc:adw
   gather_facts: false
   roles:
-    - role: "../roles/common"
+    - role: alfresco.platform.common
   tasks:
     - name: Set alfresco_url from first entry of known_urls
       vars:

@@ -10,8 +10,8 @@ test_host = os.environ.get('TEST_HOST')
 @pytest.fixture(scope="module")
 def get_ansible_vars(host):
     """Define get_ansible_vars"""
-    common_vars = "file=../../../common/vars/main.yml name=common_vars"
-    common_defaults = "file=../../../common/defaults/main.yml name=common_defaults"
+    common_vars = "file=../../../../collections/alfresco/platform/roles/common/vars/main.yml name=common_vars"
+    common_defaults = "file=../../../../collections/alfresco/platform/roles/common/defaults/main.yml name=common_defaults"
     nginx_vars = "file=../../vars/main.yml name=nginx_vars"
     distribution_name = host.ansible("setup")["ansible_facts"]["ansible_distribution"]
     distribution_version = host.ansible("setup")["ansible_facts"]["ansible_distribution_version"]

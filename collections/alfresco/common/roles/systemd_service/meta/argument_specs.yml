@@ -1,0 +1,54 @@
+---
+argument_specs:
+  main:
+    short_description: Install a systemd service unit
+    description: |
+      This role installs a systemd service unit and starts it.
+    options:
+      systemd_service_unit_name:
+        type: str
+        description: Name of the systemd service unit
+        required: true
+      systemd_service_unit_description:
+        type: str
+        description: Description of the systemd service unit
+        required: true
+      systemd_service_unit_after:
+        type: str
+        description: List of systemd targets to start after (space separated)
+      systemd_service_type:
+        type: str
+        description: Type of the systemd service unit
+        default: simple
+      systemd_service_user:
+        type: str
+        description: User to run the systemd service as
+        required: true
+      systemd_service_environment:
+        type: dict
+        description: Environment variables to set for the systemd service unit
+        default: {}
+      systemd_service_exec_start:
+        type: str
+        description: Command to start the systemd service unit
+        required: true
+      systemd_service_exec_stop:
+        type: str
+        description: Command to stop the systemd service unit
+        default: kill -15 $MAINPID
+      systemd_service_working_directory:
+        type: str
+        description: Working directory for the systemd service unit
+        default: /tmp
+      systemd_service_additional_options:
+        type: dict
+        description: Additional options to set for the systemd service unit
+        default: {}
+      systemd_service_state:
+        type: str
+        description: Default state of the systemd service unit
+        default: started
+      systemd_service_enabled:
+        type: bool
+        description: Whether the systemd service unit should be enabled (started on boot)
+        default: true

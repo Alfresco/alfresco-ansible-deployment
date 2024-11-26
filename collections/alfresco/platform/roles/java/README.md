@@ -33,7 +33,7 @@ Installing OpenJDK and importing a server certificate in the java keystore:
     - hosts: all
     - hosts: all
       roles:
-         - role: java
+         - role: alfresco.platform.java
            cert_containers:
               - path: snakeoil.p12
                 pass: dummy
@@ -46,7 +46,7 @@ Installing OpenJDK, importing certificates and generating a security key:
     - hosts: all
     - hosts: all
       roles:
-         - role: java
+         - role: alfresco.platform.java
            cert_containers:
               - path: server-snakeoil.p12
                 pass: dummy
