@@ -1,11 +1,22 @@
 ---
-# tasks file for base-tomcat
-- name: Download Tomcat
+- name: Set path for local download
+  ansible.builtin.stat:
+    path: "{{ lookup('env', 'PWD') }}"
+  register: local_path
+  delegate_to: localhost
+
+- name: Download Tomcat archive
+  delegate_to: localhost
   ansible.builtin.get_url:
     url: "{{ dependencies_url.tomcat }}"
     checksum: sha512:{{ dependencies_url.tomcat_sha512_checksum_url }}
+    dest: "{{ local_path.stat.path }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
+    mode: "0644"
+
+- name: Copy archive to target
+  ansible.builtin.copy:
+    src: "{{ local_path.stat.path }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
     dest: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
-    timeout: 600
     mode: "0644"
 
 - name: Install Tomcat {{ dependencies_version.tomcat }}

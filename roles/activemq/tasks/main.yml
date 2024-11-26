@@ -1,22 +1,23 @@
 ---
-- name: Download activemq tar
+- name: Set path for local download
+  ansible.builtin.stat:
+    path: "{{ lookup('env', 'PWD') }}"
+  register: local_path
+  delegate_to: localhost
+
+- name: Download activemq archive
+  delegate_to: localhost
   ansible.builtin.get_url:
     url: "{{ dependencies_url.activemq }}"
     checksum: sha512:{{ dependencies_url.activemq_sha512_checksum_url }}
+    dest: "{{ local_path.stat.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
+    mode: "0644"
+
+- name: Copy archive to target
+  ansible.builtin.copy:
+    src: "{{ local_path.stat.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
     dest: "{{ download_location }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
     mode: "0644"
-  register: activemq_download
-  async: 900
-  poll: 0
-  changed_when: false
-
-- name: Check on activemq download async task
-  ansible.builtin.async_status:
-    jid: "{{ activemq_download.ansible_job_id }}"
-  register: job_result
-  until: job_result.finished
-  delay: 5
-  retries: 300
 
 - name: Install ActiveMQ
   become: true
