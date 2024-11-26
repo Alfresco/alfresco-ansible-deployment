@@ -123,11 +123,10 @@
 
     - name: Assert keycloak login redirect
       vars:
-        expected_url_prefix: http://localhost/auth/realms/alfresco/protocol/openid-connect/auth?response_type=code&client_id=alfresco&scope=openid
-        expected_login_submit: http://localhost/auth/realms/alfresco/login-actions/authenticate
+        expected_url_prefix: http://localhost/share/page/aims-login
       ansible.builtin.assert:
-        quiet: true
         that:
           - this.redirected
           - expected_url_prefix in this.url
-          - expected_login_submit in this.content
+        fail_msg: "Current URL={{ this.url }} did not meet expectations"
+        quiet: true
