@@ -13,13 +13,14 @@
     mode: "0755"
   register: download_path
 
-- name: Download Tomcat archive
+- name: Download Tomcat archive # noqa ignore-errors
   delegate_to: localhost
   ansible.builtin.get_url:
     url: "{{ dependencies_url.tomcat }}"
     checksum: sha512:{{ dependencies_url.tomcat_sha512_checksum_url }}
     dest: "{{ download_path.path }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
     mode: "0644"
+  ignore_errors: true
 
 - name: Copy archive to target
   ansible.builtin.copy:

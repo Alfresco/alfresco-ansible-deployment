@@ -12,9 +12,22 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Cache Ansible artifacts
-      id: collections-cache
-      uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+    - name: Restore downloaded artifacts
+      id: artifacts-cache
+      uses: actions/cache/restore@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
       with:
         path: 'downloads/**'
-        key: cache-downloads-v${{ inputs.cache-version }}-${{ inputs.cache-name }}
+        key: cache-downloads-v${{ inputs.cache-version }}-${{ inputs.cache-name }}-${{ hashFiles('group_vars/all.yml') }}-${{ hashFiles('playbooks/prefetch-artifacts.yml') }}
+
+    - name: Prefetch artifacts
+      shell: bash
+      if: steps.artifacts-cache.outputs.cache-hit != 'true'
+      run: |
+        pipenv run ansible-playbook -i inventory_local.yml playbooks/prefetch-artifacts.yml
+
+    - name: Save downloaded artifacts
+      uses: actions/cache/save@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+      if: steps.artifacts-cache.outputs.cache-hit != 'true'
+      with:
+        path: 'downloads/**'
+        key: ${{ steps.artifacts-cache.outputs.cache-primary-key }}

@@ -52,7 +52,7 @@ jobs:
     outputs:
       dtas_version: ${{ steps.jobvars.outputs.dtas_version }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         molecule_distro:
           - image: ubuntu:22.04

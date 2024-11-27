@@ -2,6 +2,8 @@
 all:
   vars:
     ansible_connection: local
+    # reuse the same python interpreter as the one used to run the playbook
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
 
   children:
     repository:
