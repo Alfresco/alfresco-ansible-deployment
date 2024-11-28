@@ -52,7 +52,7 @@ jobs:
     outputs:
       dtas_version: ${{ steps.jobvars.outputs.dtas_version }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         molecule_distro:
           - image: ubuntu:22.04
@@ -89,6 +89,9 @@ jobs:
 
       - name: Setup workspace
         uses: ./.github/actions/setup-workspace
+
+      - name: Cache downloads
+        uses: ./.github/actions/cache-downloads
 
       - name: Run tests
         env:
@@ -152,9 +155,6 @@ jobs:
       fail-fast: false
       matrix:
         molecule_scenario:
-          - name: default
-            vars: vars-ubuntu20-73.yml
-            desc: EC2 ACS 7.3 (Ubuntu 20.04)
           - name: default
             vars: vars-rocky8.yml
             desc: EC2 ACS 7.4 (Rocky Linux 8.9)

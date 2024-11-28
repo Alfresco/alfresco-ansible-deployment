@@ -50,6 +50,9 @@ runs:
     - name: Setup workspace
       uses: ./.github/actions/setup-workspace
 
+    - name: Cache downloads
+      uses: ./.github/actions/cache-downloads
+
     - name: Generate unique id
       shell: bash
       run: echo "MOLECULE_IT_ID=$(date +%s%4N)" >> $GITHUB_ENV
