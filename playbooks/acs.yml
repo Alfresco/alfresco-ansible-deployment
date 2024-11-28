@@ -483,9 +483,16 @@
 - name: Audit Storage Role
   hosts: audit_storage
   gather_facts: false
+  vars:
+    acs_version_requirement: "{{ acs.version is version('23.4', 'ge') }}"
+  pre_tasks:
+    - name: Assert that the required version is met
+      ansible.builtin.fail:
+        msg: "Audit Storage requires ACS 23.4 or later"
+      when: not acs_version_requirement
   roles:
     - role: "../roles/audit_storage"
-      when: acs.edition == "Enterprise"
+      when: acs.edition == "Enterprise" and acs_version_requirement
       audit_storage_version: "{{ audit_storage.version }}"
       audit_storage_zip_url: "{{ downloads.audit_storage_zip_url }}"
       audit_storage_zip_sha1_url: "{{ downloads.audit_storage_zip_sha1_checksum_url }}"
@@ -499,7 +506,7 @@
       audit_storage_opensearch_password: "{{ elasticsearch_password }}"
   post_tasks:
     - name: Update installation status file with Audit Storage
-      when: acs.edition == "Enterprise"
+      when: acs.edition == "Enterprise" and acs_version_requirement
       become: true
       vars:
         audit_storage_components:
