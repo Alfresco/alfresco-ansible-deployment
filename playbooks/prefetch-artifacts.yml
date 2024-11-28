@@ -1,0 +1,36 @@
+# Download artifacts from flaky mirrors and cache them on the controller for later use.
+# Particularly useful when running on CI or nodes with limited internet access.
+# Run with `ansible-playbook -i inventory_local.yml playbooks/prefetch-artifacts.yml`
+- name: Download and cache artifacts on the controller
+  hosts: localhost
+  gather_facts: true
+  tasks:
+    - name: Include common vars
+      ansible.builtin.include_vars: ../roles/common/{{ item }}/main.yml
+      loop: ["defaults", "vars"]
+
+    - name: Set path for local download
+      ansible.builtin.stat:
+        path: "{{ lookup('env', 'GITHUB_WORKSPACE') | default(lookup('env', 'PWD'), True) }}"
+      register: local_path
+
+    - name: Create download location
+      ansible.builtin.file:
+        path: "{{ local_path.stat.path }}/downloads"
+        state: directory
+        mode: "0755"
+      register: download_path
+
+    - name: Download ActiveMQ archive
+      ansible.builtin.get_url:
+        url: "{{ dependencies_url.activemq }}"
+        checksum: sha512:{{ dependencies_url.activemq_sha512_checksum_url }}
+        dest: "{{ download_path.path }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
+        mode: "0644"
+
+    - name: Download Tomcat archive
+      ansible.builtin.get_url:
+        url: "{{ dependencies_url.tomcat }}"
+        checksum: sha512:{{ dependencies_url.tomcat_sha512_checksum_url }}
+        dest: "{{ download_path.path }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
+        mode: "0644"

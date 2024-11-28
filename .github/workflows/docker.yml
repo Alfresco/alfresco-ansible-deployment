@@ -76,6 +76,11 @@ jobs:
       - name: Setup workspace
         uses: ./.github/actions/setup-workspace
 
+      - name: Cache downloads
+        uses: ./.github/actions/cache-downloads
+        with:
+          cache-name: ${{ inputs.galaxy_cache }}
+
       - name: Run tests
         env:
           MOLECULE_ROLE_IMAGE: ${{ inputs.os_distribution }}

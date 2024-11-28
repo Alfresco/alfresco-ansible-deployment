@@ -28,7 +28,7 @@ jobs:
       ! startsWith(github.head_ref, 'next/') && ! contains(github.event.pull_request.labels.*.name, 'ci-prerelease')
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         molecule_distro:
           - image: ubuntu:22.04
@@ -62,9 +62,16 @@ jobs:
 
       - name: Install and cache ansible galaxy dependencies
         uses: ./.github/actions/galaxy
+        with:
+          cache-name: community
 
       - name: Setup workspace
         uses: ./.github/actions/setup-workspace
+
+      - name: Cache downloads
+        uses: ./.github/actions/cache-downloads
+        with:
+          cache-name: community
 
       - name: Run tests
         env:

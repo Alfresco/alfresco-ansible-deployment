@@ -1,22 +1,32 @@
 ---
-- name: Download activemq tar
+- name: Set path for local download
+  delegate_to: localhost
+  ansible.builtin.stat:
+    path: "{{ lookup('env', 'GITHUB_WORKSPACE') | default(lookup('env', 'PWD'), True) }}"
+  register: local_path
+
+- name: Create download location
+  delegate_to: localhost
+  ansible.builtin.file:
+    path: "{{ local_path.stat.path }}/downloads"
+    state: directory
+    mode: "0755"
+  register: download_path
+
+- name: Download ActiveMQ archive # noqa ignore-errors
+  delegate_to: localhost
   ansible.builtin.get_url:
     url: "{{ dependencies_url.activemq }}"
     checksum: sha512:{{ dependencies_url.activemq_sha512_checksum_url }}
+    dest: "{{ download_path.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
+    mode: "0644"
+  ignore_errors: true
+
+- name: Copy archive to target
+  ansible.builtin.copy:
+    src: "{{ download_path.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
     dest: "{{ download_location }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
     mode: "0644"
-  register: activemq_download
-  async: 900
-  poll: 0
-  changed_when: false
-
-- name: Check on activemq download async task
-  ansible.builtin.async_status:
-    jid: "{{ activemq_download.ansible_job_id }}"
-  register: job_result
-  until: job_result.finished
-  delay: 5
-  retries: 300
 
 - name: Install ActiveMQ
   become: true
