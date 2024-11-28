@@ -52,7 +52,7 @@ jobs:
     outputs:
       dtas_version: ${{ steps.jobvars.outputs.dtas_version }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         molecule_distro:
           - image: ubuntu:22.04
@@ -88,6 +88,9 @@ jobs:
 
       - name: Setup workspace
         uses: ./.github/actions/setup-workspace
+
+      - name: Cache downloads
+        uses: ./.github/actions/cache-downloads
 
       - name: Run tests
         env:
