@@ -194,8 +194,7 @@ Follow this quick checklist:
 
 * review currently open dependabot/renovate and merge them
 * copy the versions inside the group_vars/all.yml to a new XX.N-extra-vars.yml (in case of a new ACS major version)
-* run [updatecli workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/updatecli.yml)
-* run [enterprise-extended](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enterprise-extended.yml) and make sure it is green
+* bump versions constraints in scripts/updatecli/updatecli_acs*.yml (workflow will take care of the rest)
 * ensure that the [versions table in the main readme](docs/overview.md#versioning) has been updated
 * ensure that docker images and AMI id for the root molecule tests are
   reflecting any minor OS release (e.g. [default suite](../molecule/default/))
