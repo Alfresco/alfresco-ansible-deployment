@@ -33,6 +33,10 @@
       },
       "adw": {
         "version": "5.2.0"
+      },
+      "aas": {
+        "audit_host": "http://localhost:8083",
+        "elasticsearch_host": "http://localhost:9200"
       }
     }
   }
