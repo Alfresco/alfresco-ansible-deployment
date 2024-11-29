@@ -38,8 +38,6 @@ provisioner:
   config_options:
     defaults:
       pipelining: true
-  env:
-    MOLECULE_IT_TEST_CONFIG: tests/test-config-aas.json
   ansible_args:
     - -e
     - "@../../tests/test-ssl.yml"
@@ -52,3 +50,5 @@ provisioner:
     verify: ../default/verify.yml
 verifier:
   name: ansible
+  env:
+    MOLECULE_IT_TEST_CONFIG: tests/test-config-aas.json
