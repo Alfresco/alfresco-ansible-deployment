@@ -12,8 +12,8 @@ audit_storage_group_name: alfresco
 audit_storage_server_port: 8083
 
 audit_storage_broker_url: failover:(nio://localhost:61616)?timeout=3000
-audit_storage_broker_username: admin
-audit_storage_broker_password: admin
+audit_storage_broker_username: ''
+audit_storage_broker_password: ''
 audit_storage_opensearch_url: http://localhost:9200
 audit_storage_opensearch_username: ''
 audit_storage_opensearch_password: ''
