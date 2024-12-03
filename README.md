@@ -2,7 +2,6 @@
 
 [![community](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml)
 [![enterprise](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml)
-[![enterprise-extended](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enterprise-extended.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enterprise-extended.yml)
 [![release](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml)
 [![pre-commit](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/precommit.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/precommit.yml)
 [![Publish docs](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/docs.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/docs.yml)
