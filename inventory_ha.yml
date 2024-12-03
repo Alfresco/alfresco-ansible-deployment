@@ -67,6 +67,10 @@ all:
       hosts:
         sync.infra.local:
 
+    audit_storage:
+      hosts:
+        audit.infra.local:
+
     other_repo_clients:
       hosts:
 

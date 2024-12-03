@@ -29,6 +29,7 @@ platforms:
       - sfs
       - syncservice
       - transformers
+      - audit_storage
       - trusted_resource_consumers
 provisioner:
   name: ansible
@@ -47,6 +48,6 @@ provisioner:
   playbooks:
     prepare: ../default/prepare.yml
     converge: ../../playbooks/acs.yml
-    verify: ../multimachine/verify.yml
+    verify: ../default/verify.yml
 verifier:
   name: ansible

@@ -1,0 +1,32 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: instance
+    image: $MOLECULE_ROLE_IMAGE
+    dockerfile: ../../../../tests/molecule/Dockerfile-noprivs.j2
+    command: "/lib/systemd/systemd"
+    privileged: true
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+    volume_mounts:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    groups:
+      - audit_storage
+      - activemq
+      - elasticsearch
+provisioner:
+  name: ansible
+  ansible_args:
+    - -e
+    - "@../../../../tests/molecule/secrets.yml"
+  inventory:
+    links:
+      group_vars: ../../../../group_vars
+      host_vars: host_vars
+verifier:
+  name: ansible

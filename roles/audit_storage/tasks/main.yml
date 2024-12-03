@@ -1,0 +1,48 @@
+---
+# tasks file for audit_storage
+- name: Download audit storage distribution {{ audit_storage_version }}
+  ansible.builtin.get_url:
+    url: "{{ audit_storage_zip_url }}"
+    dest: "{{ download_location }}/{{ audit_storage_artifact_name }}-{{ audit_storage_version }}.zip"
+    checksum: sha1:{{ lookup('url', audit_storage_zip_sha1_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+    mode: "0644"
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+
+- name: Install Audit Storage
+  become: true
+  block:
+    - name: Create directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ audit_storage_username }}"
+        group: "{{ audit_storage_group_name }}"
+        mode: "0755"
+      loop:
+        - "{{ audit_storage_binaries_dir }}"
+        - "{{ audit_storage_config_dir }}"
+
+    - name: Extract distribution zip in binaries
+      ansible.builtin.unarchive:
+        src: "{{ download_location }}/{{ audit_storage_artifact_name }}-{{ audit_storage_version }}.zip"
+        dest: "{{ audit_storage_binaries_dir }}"
+        remote_src: true
+        creates: "{{ audit_storage_binaries_dir }}/README.md"
+        owner: "{{ audit_storage_username }}"
+        group: "{{ audit_storage_group_name }}"
+
+    - name: Create systemd service
+      ansible.builtin.template:
+        src: systemd-service.j2
+        dest: /etc/systemd/system/{{ audit_storage_systemd_service_unit_name }}.service
+        mode: "0644"
+      notify:
+        - Reload systemd
+        - Restart {{ audit_storage_systemd_service_unit_name }}
+
+    - name: Start service
+      ansible.builtin.systemd:
+        name: "{{ audit_storage_systemd_service_unit_name }}"
+        state: "{{ audit_storage_systemd_service_state }}"
+        enabled: "{{ audit_storage_systemd_service_enabled }}"
