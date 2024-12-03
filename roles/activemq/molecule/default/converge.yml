@@ -10,6 +10,7 @@
       ansible.builtin.include_role:
         name: "activemq"
       vars:
+        activemq_version: "{{ dependencies_version.activemq }}"
         activemq_environment:
           ACTIVEMQ_OPTS:
             - -Xms300m
