@@ -3,5 +3,7 @@
   hosts: all
   roles:
     - role: activemq
+      vars:
+        activemq_version: "{{ dependencies_version.activemq }}"
     - role: elasticsearch
     - role: audit_storage
