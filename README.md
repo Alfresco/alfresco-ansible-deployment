@@ -28,7 +28,6 @@ setting up environment for development, testing and release.
       * [Docker based tests](#docker-based-tests)
   * [Adding support for a new distribution](#adding-support-for-a-new-distribution)
   * [Release](#release)
-    * [Tag and release](#tag-and-release)
 
 ## Introduction to pipenv
 
@@ -192,31 +191,20 @@ doc](./README.md#versioning)
 
 Follow this quick checklist:
 
-* review currently open dependabot/renovate and merge them
-* copy the versions inside the group_vars/all.yml to a new XX.N-extra-vars.yml (in case of a new ACS major version)
-* bump versions constraints in scripts/updatecli/updatecli_acs*.yml (workflow will take care of the rest)
-* ensure that the [versions table in the main readme](docs/overview.md#versioning) has been updated
-* ensure that docker images and AMI id for the root molecule tests are
-  reflecting any minor OS release (e.g. [default suite](../molecule/default/))
-
-### Tag and release
-
-To start the actual release process, just create a tag and push it.
-
-If you have GPG setup, use `git tag -s` otherwise `git tag -a`.
-
-Tag name must have `v` prefix.
-
-Example with GPG sign enabled:
-
-```bash
-git tag -s v2.x.x -m v2.x.x
-```
-
-Then push the tag with:
-
-```bash
-git push origin v2.x.x
-```
-
-Check that the triggered [Release workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml) go green.
+1. Review currently open dependabot/renovate and merge them.
+1. In case of a new ACS major version, copy the versions inside the group_vars/all.yml to a new XX.N-extra-vars.yml
+1. Bump versions constraints in scripts/updatecli/updatecli_acs*.yml (workflow will take care of the rest)
+1. Ensure that the [versions table in the main readme](docs/overview.md#versioning) has been updated
+1. Ensure that docker images and AMI id for the root molecule tests are
+   reflecting any minor OS release (e.g. [default suite](../molecule/default/))
+1. Ensure that activemq, tomcat and java versions are up to date (latest patch version)
+1. After merging every pending PR, proceed with tagging:
+   * `git tag -s v2.x.x -m v2.x.x`
+   * `git push origin v2.x.x`
+1. Wait for the [Release
+  workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml)
+  go green.
+1. [Draft a new
+  release](https://github.com/Alfresco/alfresco-ansible-deployment/releases) on
+  GitHub with the tag you just pushed. If the release is for a new ACS major
+  version, mention the ACS release in the title, e.g. v2.x.x (ACS 23.4.0)
