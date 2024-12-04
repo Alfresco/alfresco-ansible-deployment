@@ -5,6 +5,5 @@ argument_specs:
     author: Alfresco
     options:
       activemq_version:
-        description: activemq version to use for deployment.
-        required: false
-        default: 5.17.4
+        description: activemq version to use for deployment (URL still handled via group_vars)
+        required: true

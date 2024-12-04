@@ -59,6 +59,8 @@ jobs:
 
       - name: Ensure required artifacts have been cached
         uses: ./.github/actions/cache-downloads
+        with:
+          cache-name: enterprise
   docker:
     name: Test ${{ matrix.role.name }} role on ${{ matrix.molecule_distro.image }}
     runs-on: ubuntu-latest
@@ -107,6 +109,8 @@ jobs:
 
       - name: Cache downloads
         uses: ./.github/actions/cache-downloads
+        with:
+          cache-name: enterprise
 
       - name: Run tests
         env:
