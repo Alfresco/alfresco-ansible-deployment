@@ -16,7 +16,7 @@ The ACS installation is made of several components among which:
 
 Before proceeding to an upgrade, an administrator needs to:
 
-- Make sure the [upgrade path and documentation](https://docs.alfresco.com/content-services/latest/upgrade/) is followed
+- Make sure the [upgrade path and documentation][acs-upgrade] is followed
 - Appropriate backups of database, contentstore and indexes are done and can be restored in case a rollback is needed
 - Initial deployment must have been done using this Ansible playbook
 
@@ -88,3 +88,5 @@ If something goes wrong with the upgrade, or if tests are not successful after u
 ### Hotfix "in-place" upgrades
 
 This process will restart tomcat on all the repository nodes and there is no guarantee one node is stopped only after the others have restarted. As a consequence a short service outage needs to be scheduled
+
+[acs-upgrade]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Upgrade

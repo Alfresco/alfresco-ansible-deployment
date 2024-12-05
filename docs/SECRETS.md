@@ -10,7 +10,7 @@ them manually.
 
 Links to the official documentation relevant for this subject:
 
-* [Alfresco Authorization](https://docs.alfresco.com/content-services/latest/admin/security/)
+* [Alfresco Authorization][security]
 
 ## Secrets defined as variables
 
@@ -66,3 +66,5 @@ acs_environment:
 `metadata-keystore.password` is the same variable handled in `keystore_password`.
 
 `metadata-keystore.metadata.password` is the password of the keystore dedicated to repository metadata.
+
+[security]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Administer/Manage-Security/Authorization

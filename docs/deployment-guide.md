@@ -444,7 +444,7 @@ The sections below describe how you can configure your deployment before running
 
 If you have a valid license place your `.lic` file in the `configuration_files/licenses` folder before running the playbook.
 
-> NOTE: You can also [upload a license](https://docs.alfresco.com/content-services/latest/admin/license/) via the Admin Console once the system is running.
+> NOTE: You can also [upload a license][upload-license] via the Admin Console once the system is running.
 
 ### Secrets management
 
@@ -570,8 +570,8 @@ And then edit `vars/secrets.yml` to fill all the required arguments for the plug
 
 ### Alfresco Global Properties
 
-You can provide your [repository configuration](https://docs.alfresco.com/content-services/latest/config/#using-alfresco-globalproperties)
-by editing the `configuration_files/alfresco-global.properties` file.
+You can provide your [repository configuration][global-properties] by editing
+the `configuration_files/alfresco-global.properties` file.
 
 > This approach is now discouraged and you should prefer using the [`repository`
 > group vars](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/configuration_files/alfresco-global.properties)
@@ -663,7 +663,8 @@ Along with the url the database driver binaries need to be provided for one or b
 
 The default database username (`repo_db_username` and/or `sync_db_username`) and password (`repo_db_password` and/or `sync_db_password`) in the configuration file `group_vars/all.yml` can also be overridden with your custom values.
 
-Please refer to the [Configuring Databases](https://docs.alfresco.com/content-services/latest/config/databases/) documentation for more detailed information.
+Please refer to the [Configuring Databases][databases] documentation for more
+detailed information.
 
 ### External ActiveMQ
 
@@ -722,7 +723,9 @@ Support for external Identity service will be implemented in a future playbook r
 
 ### Custom Keystore
 
-By default the playbook deploys a default keystore to ease the installation process, however, we recommend you [generate your own keystore](https://docs.alfresco.com/content-services/latest/admin/security/#managealfkeystores) following the [instructions here](https://docs.alfresco.com/content-services/latest/admin/security/#keystore-generation).
+By default the playbook deploys a default keystore to ease the installation
+process, however, we recommend you [generate your own keystore][alf-keystores]
+following the [instructions here][keystore-generation].
 
 There are three steps required to use a custom keystore:
 
@@ -1109,7 +1112,7 @@ several repository nodes. This can be achieved rather simply by:
 * Specifying several hosts within the repository hosts group
 
 > :warning: as mention in the
-> [Alfresco official documentation](https://docs.alfresco.com/content-services/latest/admin/cluster/#scenarioredundancycluster),
+> [Alfresco official documentation][redundancy],
 > "All the servers in a cluster should have static IP addresses assigned to
 > them".
 
@@ -1283,3 +1286,10 @@ If the playbook fails for some reason try re-running it with the `-v` option, if
 ### Alfresco Failures
 
 If the playbook completes successfully but the system is not functioning the best place to start is the log files, these can be found in the `/var/log/alfresco` folder on the target hosts. Please note the nginx log files are owned by root as the nginx process is running as root so it can listen on port 80.
+
+[upload-license]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Administer/Licenses/Upload-new-license
+[global-properties]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Configure/Overview/Using-alfresco-global.properties
+[databases]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Configure/Databases
+[alf-keystores]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Administer/Manage-Security/Authorization/Manage-Alfresco-keystores
+[keystore-generation]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Administer/Manage-Security/Authorization/Manage-Alfresco-keystores/Keystore-generation
+[redundancy]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Administer/High-availability-features/Clustering/Recommendations-for-split-architecture/Scenario-Clustering-for-redundancy
