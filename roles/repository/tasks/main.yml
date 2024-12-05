@@ -222,8 +222,8 @@
       ansible.builtin.template:
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        src: apply_amps.sh
-        dest: "{{ repository_content_folder }}"
+        src: apply_amps.sh.j2
+        dest: "{{ repository_content_folder }}/apply_amps.sh"
         mode: "0755"
 
     - name: Install ACS data files to Linux FHS destinations
