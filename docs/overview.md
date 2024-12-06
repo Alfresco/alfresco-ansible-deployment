@@ -78,7 +78,7 @@ set of instructions.
 
 To understand which Operating System the Alfresco Ansible playbook can work
 against (on the target nodes), please refer to the [Supported platform
-doc](https://docs.alfresco.com/content-services/latest/support/) (pick the right
+doc][support] (pick the right
 Alfresco version).
 
 We aim to support these stacks **with the exception of** Amazon Linux & Suse
@@ -112,3 +112,5 @@ ACS 7.x onward.
 > Support for ACS 7.1 has been deprecated since November 2024, but you can still use the latest playbook that supported it ([v2.11.2](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v2.11.2))
 > Support for ACS 7.0 has been deprecated since April 2024, but you can still use the latest playbook that supported it ([v2.6.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v2.6.0))
 > Support for ACS 6.2 has been deprecated since November 2022, but you can still use the latest playbook that supported it ([v2.2.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v2.2.0))
+
+[support]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Supported-Platforms

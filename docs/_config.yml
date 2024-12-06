@@ -6,7 +6,8 @@ color_scheme: alfresco
 url: https://alfresco.github.io
 
 aux_links:
-  Docs: https://docs.alfresco.com/
+  Hyland Support: https://support.hyland.com/p/alfresco
+  Legacy Docs: https://docs.alfresco.com/
   GitHub Repository: https://github.com/Alfresco/alfresco-ansible-deployment
 
 aux_links_new_tab: true
