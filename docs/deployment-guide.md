@@ -84,7 +84,7 @@ node **and** the target host.
     export NEXUS_PASSWORD="<your-password>"
     ```
 
-8. Make sure to add the `known_urls` variables in the file `group_vars/repository.yml`.
+8. Make sure to add the `known_urls` variables in the file `group_vars/all.yml`.
    It should contain any URL which is allowed to query the repository and the
    first entry MUST be set to the dmain URL used to access Alfresco.
    For example with the default vagrant config:
@@ -212,7 +212,7 @@ domain name where the Alfresco applications will be served. The `known_urls` is
 used for that purpose.  It should contain any URL which is allowed to query the
 repository and the first entry MUST be set to the domain URL used to access
 Alfresco. For example if you plan on using ecm.acme.com as your main domain on
-both https & http, you should set the `group_vars/repository.yml` file to:
+both https & http, you should set the `group_vars/all.yml` file to:
 
 ```yaml
 known_urls:
