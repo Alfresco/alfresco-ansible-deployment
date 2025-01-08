@@ -2,7 +2,9 @@ name: "community"
 
 on:
   pull_request:
-    branches: [master]
+    branches:
+      - master
+      - 'next/**'
     paths-ignore:
       - "docs/**"
       - "*.md"
