@@ -4,6 +4,10 @@ bssrf_protection_enabled: true
 known_urls:
   - http://localhost:8080/share
   - https://someotherapp/
+cs_storage:
+  type: tmpfs
+  device: none
+  options: size=100m,mode=777
 use_custom_keystores: true
 acs_environment:
   JAVA_OPTS:
