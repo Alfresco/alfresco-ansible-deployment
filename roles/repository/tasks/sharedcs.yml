@@ -2,16 +2,23 @@
 - name: Shared contentstore preparation
   become: true
   when: cs_storage.device is defined
+  vars:
+    cs_storage_data_folder: "{{ content_data_folder }}/content"
   block:
+    - name: Check if contentstore folder exists
+      ansible.builtin.stat:
+        path: "{{ cs_storage_data_folder }}"
+      register: contentstore_folder
+
     - name: Create contentstore folders
       ansible.builtin.file:
-        path: "{{ content_data_folder }}/content"
+        path: "{{ cs_storage_data_folder }}"
         state: directory
         owner: root
         group: root
         mode: "0755"
-      tags:
-        - molecule-idempotence-notest
+      when: not contentstore_folder.stat.exists
+
     - name: Mount ACS ContentStore
       vars:
         mnt_options:
@@ -19,7 +26,7 @@
           - _netdev
       ansible.posix.mount:
         state: mounted
-        path: "{{ content_data_folder }}/content"
+        path: "{{ cs_storage_data_folder }}"
         src: "{{ cs_storage.device }}"
         fstype: "{{ cs_storage.type }}"
         opts: "{{ mnt_options | join(',') }}"
