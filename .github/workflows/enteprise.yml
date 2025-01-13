@@ -152,6 +152,11 @@ jobs:
             molecule_distro:
               image: ubuntu:22.04
             runner: ubuntu-latest-arm64-small
+          - scenario:
+              name: docker_enterprise
+            molecule_distro:
+              image: ubuntu:24.04
+            runner: ubuntu-latest-arm64-small
 
     uses: ./.github/workflows/docker.yml
     with:

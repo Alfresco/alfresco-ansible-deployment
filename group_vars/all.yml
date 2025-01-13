@@ -110,6 +110,7 @@ supported_os:
       - 8.6
   Ubuntu:
     versions:
+      - 24.04
       - 22.04
       - 20.04
       - 18.04
