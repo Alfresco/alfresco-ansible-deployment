@@ -3,5 +3,7 @@
   hosts: all
   tasks:
     - name: "Include elasticsearch"
+      vars:
+        elasticsearch_version: "{{ dependencies_version.elasticsearch_major_version }}"
       ansible.builtin.include_role:
         name: "elasticsearch"

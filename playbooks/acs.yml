@@ -109,6 +109,7 @@
   gather_facts: false
   roles:
     - role: "../roles/elasticsearch"
+      elasticsearch_version: "{{ dependencies_version.elasticsearch_major_version }}"
       when: acs.edition == "Enterprise" and not groups.external_elasticsearch | default([])
   tags:
     - elasticsearch

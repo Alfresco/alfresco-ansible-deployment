@@ -65,3 +65,4 @@ dependencies_version:
   libreoffice: 7.2.5.1
   pdf_renderer: 1.1
   imagemagick: 7.1.0-16-ci-10
+  elasticsearch_major_version: 7.x
