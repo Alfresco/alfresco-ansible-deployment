@@ -6,6 +6,4 @@
       vars:
         activemq_version: "{{ dependencies_version.activemq }}"
     - role: elasticsearch
-      vars:
-        elasticsearch_version: "{{ dependencies_version.elasticsearch_major_version }}"
     - role: audit_storage
