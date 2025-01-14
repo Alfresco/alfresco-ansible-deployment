@@ -132,6 +132,7 @@
   gather_facts: false
   roles:
     - role: "../roles/identity"
+      identity_keycloak_quarkus_version: "{{ '25.0.0' if acs.version is version('23.4', 'ge') else '24.0.5' }}"
       identity_admin_username: admin
       identity_admin_password: "{{ hostvars.localhost.identity_admin_password }}"
       identity_keycloak_http_port: "{{ ports_cfg.identity.http }}"
