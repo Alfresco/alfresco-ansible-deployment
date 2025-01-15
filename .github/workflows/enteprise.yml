@@ -197,7 +197,7 @@ jobs:
             desc: EC2 ACS 7.4 (RHEL 8.9)
           - name: default
             vars: vars-ubuntu-community.yml
-            desc: EC2 ACS 23.x Community (Ubuntu 22.04)
+            desc: EC2 ACS 23.x Community (Ubuntu 24.04)
           - name: default
             vars: vars-rocky9.yml
             desc: EC2 ACS 23.x (Rocky Linux 9.4)
