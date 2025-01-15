@@ -4,6 +4,14 @@
   ansible.builtin.include_vars:
     file: "{{ os_family_yml }}"
 
+- name: Include OS distribution variables
+  ansible.builtin.include_vars:
+    file: "{{ item }}"
+  with_first_found:
+    - files:
+      - "{{ os_distribution_yml }}"
+      skip: True
+
 - name: Include OS version variables
   ansible.builtin.include_vars:
     file: "{{ item }}"
