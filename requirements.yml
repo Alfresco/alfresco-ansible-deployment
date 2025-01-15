@@ -4,7 +4,7 @@ collections:
   - name: community.general
     version: 9.5.3
   - name: community.postgresql
-    version: 3.7.0
+    version: 3.9.1
   - name: ansible.posix
     version: 2.0.0
   - name: ansible.utils
