@@ -6,7 +6,11 @@
 
 - name: Include OS version variables
   ansible.builtin.include_vars:
-    file: "{{ os_version_yml }}"
+    file: "{{ item }}"
+  with_first_found:
+    - files:
+      - "{{ os_version_yml }}"
+      skip: True
 
 - name: Configure Java keystore
   ansible.builtin.include_role:
