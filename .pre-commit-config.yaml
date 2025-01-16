@@ -79,3 +79,9 @@ repos:
         language: system
         pass_filenames: false
         entry: pipenv run ansible-lint
+      - id: ansible-lint-ignore
+        name: Ensure .ansible-lint-ignore contains existing files
+        language: system
+        entry: sh -c "cat .ansible-lint-ignore | grep -v '^#' | awk -F' ' '{ print$1 }' | xargs -L1 ls > /dev/null"
+        pass_filenames: false
+        always_run: true
