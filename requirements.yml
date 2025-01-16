@@ -2,7 +2,7 @@
 # Install with ansible-galaxy install -vr requirements.yml
 collections:
   - name: community.general
-    version: 9.5.3
+    version: 10.2.0
   - name: community.postgresql
     version: 3.9.1
   - name: ansible.posix
@@ -15,9 +15,9 @@ collections:
     version: 2.4.3
   # molecule ec2 tests
   - name: amazon.aws
-    version: 8.2.2
+    version: 9.1.1
   - name: community.aws
-    version: 8.0.0
+    version: 9.0.0
 
 roles:
   - name: geerlingguy.elasticsearch
