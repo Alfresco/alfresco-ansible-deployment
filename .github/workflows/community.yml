@@ -52,6 +52,7 @@ jobs:
       fail-fast: false
       matrix:
         molecule_distro:
+          - image: ubuntu:24.04
           - image: ubuntu:22.04
           - image: rockylinux/rockylinux:9.4
         role:

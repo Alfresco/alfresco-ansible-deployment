@@ -1,4 +1,4 @@
-MOLECULE_IT_IMAGE_ID: ami-023de9d2acab166f2 # ubuntu-minimal/images/hvm-ssd/ubuntu-jammy-22.04-amd64-minimal-20240701
+MOLECULE_IT_IMAGE_ID: ami-0e9085e60087ce171 # amazon/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20241109
 MOLECULE_IT_EXTRA_VARS: community-extra-vars.yml
 MOLECULE_IT_TEST_CONFIG: tests/test-config-community.json
 MOLECULE_IT_PLATFORM: ubuntu-community
