@@ -34,7 +34,7 @@
 - name: Install ImageMagick rpm packages
   become: true
   when: pkg_format == 'rpm'
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     state: present
     name: >-
       {{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}
