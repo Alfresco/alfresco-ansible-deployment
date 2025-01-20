@@ -11,14 +11,15 @@ title: Upgrading the playbook
 The `ansible-core` version has been upgraded to 2.17, and the Python version we
 test against to 3.11.
 
-* Control node should be compatible with any Python version between 3.10 and
+* Control node must have a Python version between 3.10 and
   3.12.
-* Managed nodes must have a default python version between 3.7 and 3.12.
+* Managed nodes must have a default Python version between 3.7 and 3.12.
 
 You can find updated information for the compatibility at
 [endoflife](https://endoflife.date/ansible-core#compatibility).
 
-To upgrade an existing pipenv virtualenv, you need to remove it first:
+To upgrade an existing pipenv virtualenv, you need to remove it first to force
+the recreation with the updated Python runtime:
 
 ```bash
 pipenv --rm

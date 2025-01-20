@@ -148,33 +148,30 @@ cd alfresco-ansible-deployment
 
 ### Setup runtime environment
 
-Before starting using the playbook, make sure you are running at least python 3.11:
+Before starting using the playbook, make sure you are running at least Python 3.11:
 
 ```bash
 python3 --version
 ```
 
-If not, depending on your distribution, you may need to install python 3.11. For
+If not, depending on your distribution, you may need to install Python 3.11. For
 example, on Ubuntu 22.04 you can install it with:
 
 ```bash
 sudo apt-get install python3.11 python3-pip
 ```
 
-and on rpm-based distributions like Rocky Linux:
+and on rpm-based distributions like Rocky Linux and Red Hat:
 
 ```bash
 sudo dnf install python3.11-pip
 ```
 
-Then check again the version:
+Then check again the version with:
 
 ```bash
 python3.11 --version
 ```
-
-Remember to always use `python3.11` instead of `python3` and `python3.11 -m pip` instead
-of `pip` if there is more than one python version in your system and 3.11 is not the default one.
 
 We made mandatory the usage of [pipenv](https://pipenv.pypa.io/en/latest/) to
 make sure that you will run the playbook with the same set of python
@@ -183,8 +180,11 @@ dependencies we are running our integration tests.
 Install pipenv via pip (alternate [install methods](https://pipenv.pypa.io/en/latest/installation.html)):
 
 ```bash
-pip install --user pipenv
+pip3 install --user pipenv
 ```
+
+> Try with `python3.11 -m pip` instead of `pip3` if there is more than one
+> python version in your system and 3.11 is not the default one.
 
 Now you are ready to install Ansible and required runtime dependencies in a dedicated
 virtual environment managed by pipenv.
