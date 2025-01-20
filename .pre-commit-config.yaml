@@ -1,9 +1,9 @@
 ---
 default_language_version:
-  python: python3.9
+  python: python3.11
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v5.0.0
     hooks:
       - id: check-yaml
         args: [--allow-multiple-documents]
@@ -17,12 +17,12 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/Riverside-Healthcare/djLint
-    rev: v1.34.1
+    rev: v1.36.4
     hooks:
       - id: djlint-jinja
 
   - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.18
+    rev: v0.9.27
     hooks:
       - id: pymarkdown
         files: (README\.md$|docs/.*\.md)
@@ -31,18 +31,18 @@ repos:
           - scan
 
   - repo: https://github.com/PyCQA/prospector
-    rev: v1.10.3
+    rev: v1.13.3
     hooks:
       - id: prospector
 
   - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.4.0
+    rev: v1.5.0
     hooks:
       - id: detect-secrets
         args: ["--baseline", ".secrets.baseline"]
 
   - repo: https://github.com/awslabs/git-secrets
-    rev: b9e96b3
+    rev: "5357e18"
     hooks:
       - id: git-secrets
         name: detect aws secrets
@@ -65,7 +65,7 @@ repos:
         name: generate components version table
         entry: python ./scripts/generate-comp-ver-table.py
         language: python
-        language_version: python3.9
+        language_version: python3.11
         additional_dependencies: [pyyaml]
         pass_filenames: false
         always_run: true
