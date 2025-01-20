@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   updatecli:
-    runs-on: "ubuntu-latest"
+    runs-on: ubuntu-latest
     name: "${{ matrix.values-file }}"
     if: github.actor != 'dependabot[bot]'
     strategy:
