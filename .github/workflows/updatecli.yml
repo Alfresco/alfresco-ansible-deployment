@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 6 * * MON'
-  pull_request:
+  push:
     paths:
       - '.github/workflows/updatecli.yml'
       - 'scripts/updatecli/**'
