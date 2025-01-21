@@ -1,5 +1,5 @@
 acs:
-  version: "23.4"
+  version: "25.1"
 
 adw:
   version: "5.2"
@@ -11,7 +11,7 @@ aos:
   version: "3.2"
 
 apiExplorer:
-  version: "23.4"
+  version: "25.1"
 
 dsync:
   version: "5.1"
@@ -35,4 +35,4 @@ sfs:
   version: "4.1"
 
 target_file: group_vars/all.yml
-version_pattern: '$'
+version_pattern: '(-A\.\d*)?$'

@@ -7,3 +7,7 @@ sfs_environment:
     - $JAVA_OPTS
 utils_sfs: []
 ats_keystore: {}
+
+sfs_truststore_path: "{{ java_home + '/lib/security/cacerts' }}"
+sfs_truststore_pass: 'changeit'
+sfs_truststore_type: "{% if java_major | int >= 21 %}pkcs12{% else %}JCEKS{% endif %}"
