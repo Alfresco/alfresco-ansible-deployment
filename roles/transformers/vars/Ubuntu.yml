@@ -1,0 +1,3 @@
+---
+transformers_imagemagick_packages:
+  - "imagemagick-distribution-ub{{ ansible_distribution_version | replace('.', '') }}"

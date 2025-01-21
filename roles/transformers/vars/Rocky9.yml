@@ -1,5 +1,5 @@
 ---
-imagemagick_packages:
+transformers_imagemagick_packages:
   - imagemagick-distribution-libs-el9
   - imagemagick-distribution-el9
 

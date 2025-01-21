@@ -110,6 +110,7 @@ supported_os:
       - 8.6
   Ubuntu:
     versions:
+      - 24.04
       - 22.04
       - 20.04
       - 18.04
@@ -197,7 +198,7 @@ dependencies_version:
   tomcat: 10.1.33
   libreoffice: 7.2.5.1
   pdf_renderer: 1.1
-  imagemagick: 7.1.0-16-ci-10
+  imagemagick: 7.1.0-16-ci-11
 apache_archive_url: https://archive.apache.org
 java_major: "{{ dependencies_version.java | regex_search('^[0-9]+') }}"
 tomcat_archive_url: "{{ apache_archive_url }}/dist/tomcat"

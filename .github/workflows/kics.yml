@@ -36,6 +36,6 @@ jobs:
           platform_type: ansible
           disable_secrets: true
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@396bb3e45325a47dd9ef434068033c6d5bb0d11a # v3.27.3
+        uses: github/codeql-action/upload-sarif@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3.28.1
         with:
           sarif_file: report-dir/results.sarif

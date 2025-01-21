@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   updatecli:
-    runs-on: "ubuntu-latest"
+    runs-on: ubuntu-latest
     name: "${{ matrix.values-file }}"
     if: github.actor != 'dependabot[bot]'
     strategy:
@@ -39,7 +39,7 @@ jobs:
           token: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Install Updatecli
-        uses: updatecli/updatecli-action@704a64517239e0993c5e3bf6749a063b8f950d9f  # v2.70.0
+        uses: updatecli/updatecli-action@304d62420deffb7c824c9cad12942906e16e4352  # v2.76.0
 
       - name: Run Updatecli in ${{ env.UPDATECLI_MODE }} mode
         run: >-
@@ -53,7 +53,7 @@ jobs:
           UPDATECLI_MODE: apply
 
       - name: Git Auto Commit
-        uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
+        uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5.1.0
         with:
           commit_message: |
             🛠 Updatecli pipeline bump for ${{ matrix.values-file }}

@@ -21,7 +21,7 @@
     checksum: "sha1:{{ lookup('url', pkg_url + '.sha1') }}"
     dest: "{{ download_location }}/{{ pkg_name }}"
     mode: "0644"
-  loop: "{{  imagemagick_packages }}"
+  loop: "{{  transformers_imagemagick_packages }}"
 
 - name: Install ImageMagick deb packages
   become: true
@@ -29,7 +29,7 @@
   ansible.builtin.apt:
     deb: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}"
     state: present
-  loop: "{{  imagemagick_packages }}"
+  loop: "{{  transformers_imagemagick_packages }}"
 
 - name: Install ImageMagick rpm packages
   become: true
@@ -39,4 +39,4 @@
     name: >-
       {{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}
     disable_gpg_check: true
-  loop: "{{  imagemagick_packages }}"
+  loop: "{{  transformers_imagemagick_packages }}"

@@ -1,5 +1,5 @@
 ---
-imagemagick_packages:
+transformers_imagemagick_packages:
   - imagemagick-distribution-linux
 
 imagemagick_home: "/opt/imagemagick-{{ imagemagick_version | regex_search('^[0-9]+') }}"
