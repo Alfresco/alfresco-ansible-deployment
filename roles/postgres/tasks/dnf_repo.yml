@@ -1,11 +1,11 @@
 ---
 - name: Install rpm repository
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: "{{ postgresql_rpm_repo }}"
     state: present
     disable_gpg_check: true
 
 - name: Disable the built-in PostgreSQL module
-  ansible.builtin.command: dnf -y module disable postgresql
-  register: disable_dnf_module
-  changed_when: "'Nothing to do.' not in disable_dnf_module.stdout"
+  ansible.builtin.dnf:
+    name: postgresql
+    state: absent

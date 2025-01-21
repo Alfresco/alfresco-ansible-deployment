@@ -177,7 +177,7 @@
           become: true
           community.crypto.openssl_privatekey:
             path: /etc/pki/private/{{ inventory_hostname | basename }}_{{ key_type }}.key
-            mode: 0600
+            mode: "0600"
             size: "{{ cert_key_size | default(omit) }}"
             type: "{{ key_type }}"
             return_content: true
