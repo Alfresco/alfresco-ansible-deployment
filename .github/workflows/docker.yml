@@ -82,7 +82,7 @@ jobs:
           cache-name: ${{ inputs.galaxy_cache }}
 
       - name: Install required tools for arm runners
-        uses: Alfresco/alfresco-build-tools/.github/actions/install-ubuntu-default-tools@OPSEXP-3019-cleanup-ubuntu-tools
+        uses: Alfresco/alfresco-build-tools/.github/actions/install-ubuntu-default-tools@15e09b8065507210cb1cc33c8bc778b1fb4f289d # v8.10.0
         if: contains(inputs.runner, '-arm')
 
       - name: Run tests
