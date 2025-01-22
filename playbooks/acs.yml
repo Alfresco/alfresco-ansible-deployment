@@ -3,6 +3,11 @@
   hosts: all:!external
   gather_facts: true
   tasks:
+    - name: Ensure group_vars are properly loaded
+      ansible.builtin.fail:
+        msg: "Make sure to place your inventory in the repository root folder."
+      when:
+        - supported_os is not defined
     - name: Compare host OS with supported matrix
       vars:
         os_versions: "{{ supported_os[ansible_distribution].versions | default([]) }}"
