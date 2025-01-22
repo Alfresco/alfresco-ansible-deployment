@@ -21,15 +21,15 @@
     - name: Set solr.sharedSecret property when search secret is available
       ansible.builtin.set_fact:
         temp_array: >-
-          {{ temp_array + [ '-Dsolr.sharedSecret=' ~ reposearch_shared_secret | quote ] }}
+          {{ temp_array + [ '-Dsolr.sharedSecret=' ~ reposearch_shared_secret ] }}
       when: (acs.version is version('7.2.0', '>=')) and (reposearch_shared_secret is defined)
 
     - name: Set metadata-keystore.password and related properties
       ansible.builtin.set_fact:
         temp_array: "{{ temp_array + [
-          '-Dmetadata-keystore.password=' ~ repo_custom_keystore_password | quote,
+          '-Dmetadata-keystore.password=' ~ repo_custom_keystore_password,
           '-Dmetadata-keystore.aliases=metadata',
-          '-Dmetadata-keystore.metadata.password=' ~ repo_custom_keystore_metadata_password | quote
+          '-Dmetadata-keystore.metadata.password=' ~ repo_custom_keystore_metadata_password
           ] }}"
       when:
         - repo_custom_keystore_password is defined

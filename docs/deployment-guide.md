@@ -753,7 +753,7 @@ repository:
         - -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding
         - -Dencryption.keyAlgorithm=AES
         - -Dencryption.keystore.location=/var/opt/alfresco/content-services/keystore/<your-keystore-file>
-        - -Dmetadata-keystore.metadata.algorithm=AES"
+        - -Dmetadata-keystore.metadata.algorithm=AES
 ```
 
 ### Specifying a different component repository
