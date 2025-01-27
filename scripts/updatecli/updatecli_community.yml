@@ -29,6 +29,7 @@ targets:
     aos:
       sourceid: aosAmp
       key_selector: aos_module
+    dsync: null
     googleDriveRepo:
       sourceid: googleDriveAmp
       key_selector: googledrive_repo
