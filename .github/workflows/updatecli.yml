@@ -38,8 +38,8 @@ jobs:
           ref: ${{ github.head_ref || github.ref_name }}
           token: ${{ secrets.BOT_GITHUB_TOKEN }}
 
-      - name: Install Updatecli
-        uses: updatecli/updatecli-action@304d62420deffb7c824c9cad12942906e16e4352  # v2.76.0
+      - name: Install updatecli
+        uses: Alfresco/alfresco-build-tools/.github/actions/setup-updatecli@v8.12.0
 
       - name: Run Updatecli in ${{ env.UPDATECLI_MODE }} mode
         run: >-
