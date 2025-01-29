@@ -39,7 +39,7 @@ jobs:
           token: ${{ secrets.BOT_GITHUB_TOKEN }}
 
       - name: Install updatecli
-        uses: Alfresco/alfresco-build-tools/.github/actions/setup-updatecli@v8.12.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/setup-updatecli@v8.12.1
 
       - name: Run Updatecli in ${{ env.UPDATECLI_MODE }} mode
         run: >-
