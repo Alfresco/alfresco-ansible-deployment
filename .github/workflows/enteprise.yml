@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
 
 env:
-  DTAS_VERSION: v1.6.0
+  DTAS_VERSION: OPSEXP-3033-test-sync-no-sleepo
   BUILD_NUMBER: ${{ github.run_id }}
   PY_COLORS: 1
   PYTHONUNBUFFERED: 1
