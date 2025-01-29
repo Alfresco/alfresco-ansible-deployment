@@ -2,7 +2,7 @@ acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 7.4.2.3
+  version: 7.4.2.4
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
@@ -30,23 +30,23 @@ search_enterprise:
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
-  version: 2.0.13
+  version: 2.0.14
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
-  version: 5.1.5
+  version: 5.1.6
 trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 4.1.5
+  version: 4.1.6
 sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 4.1.5
+  version: 4.1.6
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 4.0.0
+  version: 5.0.1
 sync:
   repository: >-
     {{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x
