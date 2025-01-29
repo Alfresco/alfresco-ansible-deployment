@@ -12,10 +12,10 @@ amps:
     version: 3.11.3
   googledrive_repo:
     repository: "{{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise"
-    version: 3.3.1
+    version: 3.4.2
   googledrive_share:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share"
-    version: 3.3.1
+    version: 3.4.2
 api_explorer:
   artifact_name: api-explorer
   repository: "{{ nexus_repository.releases }}"
@@ -31,15 +31,15 @@ search:
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
-  version: 3.1.2
+  version: 5.1.6
 trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.1.2
+  version: 4.1.6
 sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 2.1.2
+  version: 4.1.6
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
