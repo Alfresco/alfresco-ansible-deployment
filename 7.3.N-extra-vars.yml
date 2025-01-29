@@ -27,7 +27,7 @@ search_enterprise:
 search:
   artifact_name: alfresco-search-services
   repository: "{{ nexus_repository.releases }}"
-  version: 2.0.12 # ACS-9048
+  version: 2.0.14
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
@@ -43,7 +43,7 @@ sfs:
 adw:
   artifact_name: alfresco-digital-workspace
   repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 3.1.0
+  version: 4.4.1
 sync:
   repository: "{{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x"
   version: 3.11.3
