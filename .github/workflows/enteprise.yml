@@ -184,9 +184,6 @@ jobs:
       matrix:
         molecule_scenario:
           - name: default
-            vars: vars-ubuntu20-72.yml
-            desc: EC2 ACS 7.2 (Ubuntu 20.04)
-          - name: default
             vars: vars-ubuntu20-73.yml
             desc: EC2 ACS 7.3 (Ubuntu 20.04)
           - name: default
