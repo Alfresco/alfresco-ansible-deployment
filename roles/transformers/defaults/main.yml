@@ -7,3 +7,7 @@ tengine_environment:
     - -Xmx1536m
 ats_keystore: {}
 include_ghostscript: false
+
+transformers_truststore_path: "{{ java_home + '/lib/security/cacerts' }}"
+transformers_truststore_pass: 'changeit'
+transformers_truststore_type: "{% if java_major | int >= 21 %}pkcs12{% else %}JCEKS{% endif %}"

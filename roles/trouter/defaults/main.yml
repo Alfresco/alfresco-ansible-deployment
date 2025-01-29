@@ -6,3 +6,7 @@ trouter_environment:
     - -Xmx512m
 utils_trouter: []
 ats_keystore: {}
+
+trouter_truststore_path: "{{ java_home + '/lib/security/cacerts' }}"
+trouter_truststore_pass: 'changeit'
+trouter_truststore_type: "{% if java_major | int >= 21 %}pkcs12{% else %}JCEKS{% endif %}"

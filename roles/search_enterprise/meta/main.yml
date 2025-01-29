@@ -1,7 +1,7 @@
 galaxy_info:
   author: alfresco
   namespace: alfresco
-  description: Install elasticsearch required by Search Enteprise
+  description: Install Alfresco Search Enterprise
   company: Hyland Software
 
   license: Apache-2.0
