@@ -193,8 +193,8 @@ dependencies_version:
   postgresql_connector: 42.6.1
   postgres_major_version: 15
   activemq: 5.18.6
-  java: 17.0.13
-  java_build: 11
+  java: 17.0.14
+  java_build: 7
   tomcat: 10.1.33
   libreoffice: 7.2.5.1
   pdf_renderer: 1.1
