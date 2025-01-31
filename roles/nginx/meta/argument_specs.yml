@@ -18,3 +18,11 @@ argument_specs:
         description: Useful when nginx node is behind another reverse proxy (e.g. should be disabled when behind an AWS ELB)
         type: bool
         default: true
+      nginx_client_max_body_size:
+        description: The maximum allowed size of the client request body
+        type: str
+        default: 5g
+      nginx_client_body_timeout:
+        description: The timeout for reading the client request body
+        type: str
+        default: 20m
