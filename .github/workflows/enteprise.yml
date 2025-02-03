@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
 
 env:
-  DTAS_VERSION: v1.6.0
+  DTAS_VERSION: v1.6.1
   BUILD_NUMBER: ${{ github.run_id }}
   PY_COLORS: 1
   PYTHONUNBUFFERED: 1
@@ -183,9 +183,6 @@ jobs:
       fail-fast: false
       matrix:
         molecule_scenario:
-          - name: default
-            vars: vars-ubuntu20-72.yml
-            desc: EC2 ACS 7.2 (Ubuntu 20.04)
           - name: default
             vars: vars-ubuntu20-73.yml
             desc: EC2 ACS 7.3 (Ubuntu 20.04)
