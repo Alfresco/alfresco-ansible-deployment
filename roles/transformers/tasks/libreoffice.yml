@@ -29,7 +29,7 @@
 
     - name: Install LibreOffice RPMs
       when: pkg_format == 'rpm'
-      ansible.builtin.yum:
+      ansible.builtin.dnf:
         state: present
         name: "{{ libreoffice_rpm_files.files | map(attribute='path') | list }}"
         disable_gpg_check: true
