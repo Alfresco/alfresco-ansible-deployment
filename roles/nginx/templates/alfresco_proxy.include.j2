@@ -28,15 +28,15 @@
     #ENV_ACCESS_LOG
 
     location /share/ {
-        client_max_body_size {{ nginx_client_max_body_size }};
-        client_body_timeout {{ nginx_client_body_timeout }};
+        client_max_body_size {{ nginx_max_upload_size }};
+        client_body_timeout {{ nginx_max_upload_time }};
         proxy_pass http://share_lb;
         include {{ nginx_vhost_path }}/alfresco_proxy_headers.include;
     }
 
     location /alfresco/ {
-        client_max_body_size {{ nginx_client_max_body_size }};
-        client_body_timeout {{ nginx_client_body_timeout }};
+        client_max_body_size {{ nginx_max_upload_size }};
+        client_body_timeout {{ nginx_max_upload_time }};
         proxy_pass http://repo_lb;
         include {{ nginx_vhost_path }}/alfresco_proxy_headers.include;
     }

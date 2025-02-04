@@ -15,5 +15,5 @@ nginx_set_proxy_headers: true
 nginx_absolute_redirect: true
 
 # Allow 5GB or 20 minutes long max uploads by default
-nginx_client_max_body_size: "5g"
-nginx_client_body_timeout: "20m"
+nginx_max_upload_size: "5g"
+nginx_max_upload_time: "20m"
