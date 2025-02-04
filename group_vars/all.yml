@@ -241,3 +241,5 @@ ats_mtls_capable: >
     trouter.version is version('2.1', 'ge') and
     sfs.version is version('2.1', 'ge')
   }}
+skip_upgrade_checks: false
+ansible_installation_status_file: "/opt/alfresco/.ansible_alfresco_components.status"

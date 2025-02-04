@@ -19,6 +19,10 @@
 - name: Run preliminary checks
   ansible.builtin.import_playbook: prerun-checks.yml
 
+- name: Run preliminary upgrade checks
+  ansible.builtin.import_playbook: prerun-upgrade-checks.yml
+  when: skip_upgrade_checks is undefined or not skip_upgrade_checks
+
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
 
