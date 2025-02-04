@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
 
 env:
-  DTAS_VERSION: v1.6.0
+  DTAS_VERSION: v1.6.1
   BUILD_NUMBER: ${{ github.run_id }}
   PY_COLORS: 1
   PYTHONUNBUFFERED: 1
@@ -53,7 +53,7 @@ jobs:
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@16272633584df58ea603112c4aac4564c8673cd6 # v8.9.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@4b0ea0ccff236b931a3cb94f4e8640525439361a # v8.12.1
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -95,7 +95,7 @@ jobs:
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@16272633584df58ea603112c4aac4564c8673cd6 # v8.9.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@4b0ea0ccff236b931a3cb94f4e8640525439361a # v8.12.1
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -146,17 +146,17 @@ jobs:
               name: docker_enterprise
             molecule_distro:
               image: rockylinux/rockylinux:9.4
-            runner: ubuntu-latest-arm64-small
+            runner: ubuntu-24.04-arm
           - scenario:
               name: docker_enterprise
             molecule_distro:
               image: ubuntu:22.04
-            runner: ubuntu-latest-arm64-small
+            runner: ubuntu-24.04-arm
           - scenario:
               name: docker_enterprise
             molecule_distro:
               image: ubuntu:24.04
-            runner: ubuntu-latest-arm64-small
+            runner: ubuntu-24.04-arm
 
     uses: ./.github/workflows/docker.yml
     with:
@@ -164,7 +164,7 @@ jobs:
       os_distribution: ${{ matrix.molecule_distro.image }}
       galaxy_cache: enterprise
       dtas_version: ${{ needs.docker.outputs.dtas_version }}
-      dtas_additional_params: ${{ matrix.runner == 'ubuntu-latest-arm64-small' && '-k "not test_transformation"' || '' }}
+      dtas_additional_params: ${{ matrix.runner == 'ubuntu-24.04-arm' && '-k "not test_transformation"' || '' }}
       runner: ${{ matrix.runner }}
     secrets:
       nexus_username: ${{ secrets.NEXUS_USERNAME }}
@@ -183,9 +183,6 @@ jobs:
       fail-fast: false
       matrix:
         molecule_scenario:
-          - name: default
-            vars: vars-ubuntu20-72.yml
-            desc: EC2 ACS 7.2 (Ubuntu 20.04)
           - name: default
             vars: vars-ubuntu20-73.yml
             desc: EC2 ACS 7.3 (Ubuntu 20.04)

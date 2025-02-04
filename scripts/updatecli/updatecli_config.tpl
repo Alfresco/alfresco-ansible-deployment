@@ -305,6 +305,7 @@ targets:
   {{- end }}
   {{- end }}
   {{ range $index, $element := index . "targets" "amps" }}
+  {{ if $element }}
   {{ $indexAmp := printf "%s%s" $index "Amp"}}
   {{ $indexAmp }}:
     name: Bump {{ $index }} AMP
@@ -313,4 +314,5 @@ targets:
     spec:
       key: $.amps.{{ $element.key_selector }}.version
       file: {{ $.target_file }}
+  {{- end }}
   {{- end }}
