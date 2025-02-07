@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6e06612dbb2a47fa3b5899ccd480f8bb854e5c0c83042c2944483f4da01b9f45"
+            "sha256": "ff935ea0f48a2540c20ad55b545497873cac48722a9d2b9e38d6f74f6d0d4139"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -317,12 +317,12 @@
         },
         "ansible-lint": {
             "hashes": [
-                "sha256:ce7a783ce4f053a965e31f308cdb57554259052efea04b8491c9704f11095e54",
-                "sha256:f636309c4e7f724fc1a544df529c4c2354f54cf35ede11d750366afb1158a464"
+                "sha256:4d9de2726829ca700a9b4cc6d52506f5cc8e086ce52760131eb0aabfe7e61ce5",
+                "sha256:a7c84f67a9c4f37312f70c65a34ae2d7ffc6f756458b965141830ae721be62d8"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.10'",
-            "version": "==24.12.2"
+            "version": "==25.1.2"
         },
         "astroid": {
             "hashes": [
@@ -1454,7 +1454,7 @@
                 "sha256:0dd927072d03c0a6527a20d2e6ad5ba8d0380e60870c383bc533b71744df7b7a",
                 "sha256:e72f0de09bba6a04e0de70937b0cf06e55f36f37b3deb422dfaf854b867b840a"
             ],
-            "markers": "python_version >= '3.8'",
+            "markers": "python_version < '3.12'",
             "version": "==10.0"
         },
         "wrapt": {

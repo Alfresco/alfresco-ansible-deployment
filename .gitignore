@@ -377,3 +377,5 @@ $RECYCLE.BIN/
 apache-activemq-*-bin.tar.gz
 apache-tomcat-*.tar.gz
 downloads/
+
+.ansible/
