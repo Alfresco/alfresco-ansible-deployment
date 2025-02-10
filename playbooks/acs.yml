@@ -1,4 +1,15 @@
 ---
+- name: Include vars based on acs major version
+  hosts: all
+  gather_facts: false
+  vars:
+    base_folder: "{{ playbook_dir }}/.."
+    vars_folder: "{{ base_folder }}/vars"
+    vars_file: "{{ vars_folder }}/acs{{ acs_major_version }}.yml"
+  tasks:
+    - name: Include vars based on acs major version
+      ansible.builtin.include_vars: "{{ vars_file }}"
+
 - name: Check if current OS version is in the supported matrix
   hosts: all:!external
   gather_facts: true
