@@ -8,12 +8,12 @@ title: Upgrading the playbook
 
 ### Python and Ansible version requirements
 
-The `ansible-core` version has been upgraded to 2.17, and the Python version we
+The `ansible-core` version has been upgraded to 2.16, and the Python version we
 test against to 3.11.
 
 * Control node must have a Python version between 3.10 and
   3.12.
-* Managed nodes must have a default Python version between 3.7 and 3.12.
+* Managed nodes must have a default Python version between 3.6 and 3.12.
 
 You can find updated information for the compatibility at
 [endoflife](https://endoflife.date/ansible-core#compatibility).
