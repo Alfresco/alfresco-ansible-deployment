@@ -1,19 +1,25 @@
 galaxy_info:
-  author: Alfresco
-  description: Deploys Java using OpenJDK
-  company: Alfresco Software Ltd
+  author: Alfresco Ops Readiness
+  namespace: alfresco
+  description: Install Java runtime as required by Alfresco
+  company: Hyland Software
+
   license: Apache-2.0
+
+  min_ansible_version: "2.16"
+
   platforms:
     - name: Ubuntu
       versions:
-        - bionic
         - focal
+        - jammy
     - name: EL
       versions:
         - "7"
         - "8"
-  min_ansible_version: "2.12"
+        - "9"
+
   galaxy_tags: []
-allow_duplicates: false
+
 dependencies:
   - role: common
