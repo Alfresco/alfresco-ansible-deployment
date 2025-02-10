@@ -182,13 +182,6 @@ and possibly added in separate task files.
 
 New distributions must be added to the `supported_os` variable in the `vars/acsXX.yml` files.
 
-:warning: Starting from **alfresco-ansible-deployment v3.0.0**, the
-`supported_os` variable is being moved into version-specific variable files
-within the `vars/` directory. From this point forward, the `supported_os`
-variable will more accurately reflect the supported OS matrix. However, we
-reserve the right to specify newer distribution versions when testing
-compatibility or evaluating support for minor releases.
-
 If a new OS enters the official supported matrix but is not supported by the
 playbook. It must be mentioned in the [Versioning chapter of the
 doc](./README.md#versioning)

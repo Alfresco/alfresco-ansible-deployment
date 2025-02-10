@@ -6,6 +6,14 @@ title: Upgrading the playbook
 
 ## Unreleased version
 
+### Handling of `supported_os` var
+
+The `supported_os` variable is being moved into version-specific variable files
+within the `vars/` directory. From this point forward, the `supported_os`
+variable will more accurately reflect the supported OS matrix. However, we
+reserve the right to specify newer distribution versions when testing
+compatibility or evaluating support for minor releases.
+
 ### Search Enterprise is the new default search engine
 
 The example inventories have been updated to default to Search Enterprise /
