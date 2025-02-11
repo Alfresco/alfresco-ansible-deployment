@@ -1,0 +1,19 @@
+supported_os:
+  RedHat:
+    versions:
+      - 9.5
+      - 9.4
+      - 9.3
+      - 8.10
+      - 8.9
+  Rocky:
+    versions:
+      - 9.5
+      - 9.4
+      - 9.3
+      - 8.10
+      - 8.9
+  Ubuntu:
+    versions:
+      - 22.04
+      - 24.04 # Testing for the upcoming 25.x acs version
