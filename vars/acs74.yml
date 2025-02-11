@@ -1,0 +1,18 @@
+supported_os:
+  RedHat:
+    versions:
+      - 8.10
+      - 8.9
+      - 8.8
+      - 8.7
+      - 8.6
+  Rocky:
+    versions:
+      - 8.10
+      - 8.9
+      - 8.8
+      - 8.7
+      - 8.6
+  Ubuntu:
+    versions:
+      - 22.04

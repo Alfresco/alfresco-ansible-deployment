@@ -27,6 +27,14 @@ pipenv --rm
 
 For more information check the updated [deployment guide](deployment-guide.md#setup-runtime-environment).
 
+### Handling of `supported_os` var
+
+The `supported_os` variable is being moved into version-specific variable files
+within the `vars/` directory. From this point forward, the `supported_os`
+variable will more accurately reflect the supported OS matrix. However, we
+reserve the right to specify newer distribution versions when testing
+compatibility or evaluating support for minor releases.
+
 ## v2.6.0
 
 ### Search Enterprise is the new default search engine

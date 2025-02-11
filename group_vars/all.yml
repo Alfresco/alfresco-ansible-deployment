@@ -21,6 +21,7 @@ nexus_repository:
     {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.enterprise.repository }}/{{ artifacts_repositories.enterprise.group_id }}
   development_releases: >-
     {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.development.repository }}/{{ artifacts_repositories.enterprise.group_id }}
+acs_major_version: 23
 acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
@@ -82,40 +83,6 @@ acc:
   artifact_name: alfresco-control-center
   repository: "{{ nexus_repository.releases }}"
   version: 9.3.0
-supported_os:
-  RedHat:
-    versions:
-      - 9.4
-      - 9.3
-      - 9.2
-      - 9.1
-      - 9.0
-      - 8.10
-      - 8.9
-      - 8.8
-      - 8.7
-      - 8.6
-      - 8.5
-      - 8.4
-      - 8.2
-  Rocky:
-    versions:
-      - 9.4
-      - 9.3
-      - 9.2
-      - 9.1
-      - 9.0
-      - 8.10
-      - 8.9
-      - 8.8
-      - 8.7
-      - 8.6
-  Ubuntu:
-    versions:
-      - 24.04
-      - 22.04
-      - 20.04
-      - 18.04
 downloads:
   acs_zip_url: >-
     {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip

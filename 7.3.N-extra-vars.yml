@@ -1,3 +1,4 @@
+acs_major_version: 73
 acs:
   artifact_name: alfresco-content-services-distribution
   edition: Enterprise
