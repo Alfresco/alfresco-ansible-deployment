@@ -14,6 +14,7 @@ def get_ansible_vars(host):
     activemq_role = "file=../../vars/main.yml name=activemq_role"
     common_vars = "file=../../../common/vars/main.yml name=common_vars"
     common_defaults = "file=../../../common/defaults/main.yml name=common_defaults"
+    activemq_defaults = "file=../../defaults/main.yml name=activemq_defaults"
     group_vars = "file=../../../../group_vars/all.yml name=group_vars"
     secrets_vars = "file=../../../../vars/secrets.yml name=secrets_vars"
     ansible_vars = host.ansible("include_vars", java_role)["ansible_facts"]["java_role"]
@@ -22,6 +23,7 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", activemq_role)["ansible_facts"]["activemq_role"])
     ansible_vars.update(host.ansible("include_vars", group_vars)["ansible_facts"]["group_vars"])
     ansible_vars.update(host.ansible("include_vars", secrets_vars)["ansible_facts"]["secrets_vars"])
+    ansible_vars.update(host.ansible("include_vars", activemq_defaults)["ansible_facts"]["activemq_defaults"])
     return ansible_vars
 
 def test_activemq_exe_exists(host, get_ansible_vars):
