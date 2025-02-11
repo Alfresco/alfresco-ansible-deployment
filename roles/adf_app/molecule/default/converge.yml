@@ -7,7 +7,9 @@
         adf_app_name: alfresco-digital-workspace
         adf_app_port: 8881
         adf_app_src_archive: "{{ downloads.adw_zip_url }}"
-        adf_app_src_checksum: "{{ downloads.adw_zip_sha1_checksum_url }}"
+        adf_app_src_checksum: sha1:{{ downloads.adw_zip_sha1_checksum_url }}
+        adf_app_src_username: "{{ nexus_user }}"
+        adf_app_src_password: "{{ nexus_password }}"
         adf_app_version: "{{ adw.version }}"
         adf_app_configuration:
           authType: OAUTH
@@ -19,7 +21,7 @@
         adf_app_name: alfresco-control-center
         adf_app_port: 8882
         adf_app_src_archive: "{{ downloads.acc_zip_url }}"
-        adf_app_src_checksum: "{{ downloads.acc_zip_sha1_checksum_url }}"
+        adf_app_src_checksum: sha1:{{ downloads.acc_zip_sha1_checksum_url }}
         adf_app_version: "{{ acc.version }}"
         adf_app_configuration:
           authType: OAUTH
