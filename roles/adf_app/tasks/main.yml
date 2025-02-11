@@ -16,17 +16,12 @@
     state: directory
     mode: "0755"
 
-- name: Download {{ adf_app_name }} {{ adf_app_version }}
-  ansible.builtin.get_url:
-    url: "{{ adf_app_src_archive }}"
-    dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
-    checksum: sha1:{{ adf_app_src_checksum }}
-    mode: 'u=r,g=r,o=r'
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    timeout: 570
-  notify:
-    - Unpack {{ adf_app_name }}
+- name: Download the ADF application archive
+  ansible.builtin.include_tasks:
+    file: fetch.yml
+    apply:
+      notify:
+        - Unpack {{ adf_app_name }}
 
 - name: Set oauth2 redirects fact
   ansible.builtin.set_fact:

@@ -1,0 +1,10 @@
+---
+- name: Download {{ adf_app_name }} {{ adf_app_version }}
+  ansible.builtin.get_url:
+    url: "{{ adf_app_src_archive }}"
+    dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
+    checksum: "{{ adf_app_src_checksum }}"
+    mode: "0644"
+    url_username: "{{ nexus_user }}"
+    url_password: "{{ nexus_password }}"
+    timeout: 570
