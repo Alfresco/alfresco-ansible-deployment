@@ -5,6 +5,6 @@
     dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
     checksum: "{{ adf_app_src_checksum }}"
     mode: "0644"
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
+    url_username: "{{ adf_app_src_username }}"
+    url_password: "{{ adf_app_src_password }}"
     timeout: 570
