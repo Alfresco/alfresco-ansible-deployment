@@ -16,3 +16,4 @@ supported_os:
   Ubuntu:
     versions:
       - 22.04
+activemq_version: 5.17.6

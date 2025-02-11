@@ -17,3 +17,4 @@ supported_os:
     versions:
       - 22.04
       - 24.04 # Testing for the upcoming 25.x acs version
+activemq_version: 5.18.6
