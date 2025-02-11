@@ -401,9 +401,9 @@
       adf_app_name: alfresco-control-center
       adf_app_context: /control-center/
       adf_app_port: 8881
-      adf_app_src_archive: "{{ downloads.acc_zip_url }}"
-      adf_app_src_checksum: sha1:{{ downloads.acc_zip_sha1_checksum_url }}
-      adf_app_version: "{{ acc.version }}"
+      adf_app_src_archive: "{{ acc_url }}"
+      adf_app_src_checksum: "{{ acc_checksum }}"
+      adf_app_version: "{{ acc_version }}"
       adf_app_configuration: >-
         {{
           adf_app_oauth_configuration | default({}) |
