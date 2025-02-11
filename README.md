@@ -180,7 +180,7 @@ We expect distribution support to be added using mostly roles `vars` files. If
 distro specific tasks are needed those should be skipped for other distros
 and possibly added in separate task files.
 
-New distributions must be added to the `supported_os` variable in the `group_vars/all.yml` file.
+New distributions must be added to the `supported_os` variable in the `vars/acsXX.yml` files.
 
 If a new OS enters the official supported matrix but is not supported by the
 playbook. It must be mentioned in the [Versioning chapter of the

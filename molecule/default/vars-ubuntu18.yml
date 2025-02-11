@@ -1,4 +1,0 @@
-MOLECULE_IT_IMAGE_ID: ami-0e42de9d667b232f7 # ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20230531
-MOLECULE_IT_EXTRA_VARS: 7.1.N-extra-vars.yml
-MOLECULE_IT_TEST_CONFIG: tests/test-config-7.1.json
-MOLECULE_IT_PLATFORM: ubuntu18
