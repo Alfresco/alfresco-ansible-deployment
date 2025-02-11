@@ -1,4 +1,6 @@
 ---
+- name: Include latest vars for role
+  ansible.builtin.import_playbook: ../../../../playbooks/include-vars.yml
 - name: Converge
   hosts: all
   order: sorted

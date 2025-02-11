@@ -1,3 +1,5 @@
+- name: Include latest vars for role
+  ansible.builtin.import_playbook: ../../../../playbooks/include-vars.yml
 - name: Import the prerun-network-checks playbook
   ansible.builtin.import_playbook: ../../playbooks/prerun-network-checks.yml
 - name: Import the acs playbook
