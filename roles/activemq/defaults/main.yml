@@ -10,5 +10,5 @@ activemq_environment:
     - -Xmx1g
     - $ACTIVEMQ_OPTS
 activemq_version: 5.18.6
-activemq_dependency_url: https://archive.apache.org/dist/activemq/{{ activemq_version }}/apache-activemq-{{ activemq_version }}-bin.tar.gz
-activemq_dependency_sha512_checksum_url: https://archive.apache.org/dist/activemq/{{ activemq_version }}/apache-activemq-{{ activemq_version }}-bin.tar.gz.sha512
+activemq_url: https://archive.apache.org/dist/activemq/{{ activemq_version }}/apache-activemq-{{ activemq_version }}-bin.tar.gz
+activemq_checksum: sha512:https://archive.apache.org/dist/activemq/{{ activemq_version }}/apache-activemq-{{ activemq_version }}-bin.tar.gz.sha512
