@@ -35,9 +35,6 @@ platforms:
       - transformers
 provisioner:
   name: ansible
-  ansible_args:
-    - -e
-    - "@../../community-extra-vars.yml"
   playbooks:
     converge: ../../playbooks/acs.yml
   inventory:
