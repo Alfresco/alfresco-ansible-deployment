@@ -56,7 +56,7 @@
       when: identity_enabled
       ansible.builtin.set_fact:
         identity_url: "{{ alfresco_url }}/auth"
-        code_flow_pkce_supported: "{{ adw.version is version('4.5.0', 'ge') }}"
+        code_flow_pkce_supported: "{{ adw_version is version('4.5.0', 'ge') }}"
 
 - name: Database Role
   hosts: database[0]
@@ -430,11 +430,12 @@
   hosts: adw
   gather_facts: false
   vars:
-    adw_checksum: >-
-      {% if adw.version is version('4.1.0','ge') -%}
-      {{ downloads.adw_zip_sha1_checksum_url }}
+    adw_sum: >-
+      {% if adw_version is version('4.1.0','ge') -%}
+        {{ adw_checksum }}
       {% else -%}
-      {{ lookup('url', downloads.adw_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
+        {{ adw_checksum.split(':')[0] }}:
+        {{- lookup('url', adw_checksum.split(':')[1:], username=nexus_user, password=nexus_password) }}
       {%- endif %}
   roles:
     - role: "../roles/adf_app"
@@ -442,11 +443,11 @@
       adf_app_name: alfresco-digital-workspace
       adf_app_context: /workspace/
       adf_app_port: 8880
-      adf_app_src_archive: "{{ downloads.adw_zip_url }}"
-      adf_app_src_checksum: sha1:{{ adw_checksum }}
+      adf_app_src_archive: "{{ adw_url }}"
+      adf_app_src_checksum: "{{ adw_sum }}"
       adf_app_src_username: "{{ nexus_user }}"
       adf_app_src_password: "{{ nexus_password }}"
-      adf_app_version: "{{ adw.version }}"
+      adf_app_version: "{{ adw_version }}"
       adf_app_configuration: >-
         {{
           adf_app_oauth_configuration | default({}) |
