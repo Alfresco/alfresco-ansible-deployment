@@ -1,22 +1,23 @@
 galaxy_info:
-  author: Alfresco
+  author: Alfresco Ops Readiness
   namespace: alfresco
-  description: Install Keycloak to enable SSO in Alfresco
+  description: Install Keycloak as required by Alfresco when SSO is enabled
   company: Hyland Software
 
   license: Apache-2.0
 
-  min_ansible_version: "2.12"
+  min_ansible_version: "2.16"
 
   platforms:
     - name: Ubuntu
       versions:
         - focal
-        - bionic
+        - jammy
     - name: EL
       versions:
         - "7"
         - "8"
+        - "9"
 
   galaxy_tags: []
 

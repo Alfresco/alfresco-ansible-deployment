@@ -2,7 +2,7 @@
 argument_specs:
   main:
     short_description: Activemq
-    author: Alfresco
+    author: Alfresco Ops Readiness
     options:
       activemq_version:
         description: activemq version to use for deployment (URL still handled via group_vars)

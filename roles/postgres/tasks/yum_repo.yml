@@ -1,6 +1,0 @@
----
-- name: Install rpm repository
-  ansible.builtin.yum:
-    name: "{{ postgresql_rpm_repo }}"
-    state: present
-    disable_gpg_check: true
