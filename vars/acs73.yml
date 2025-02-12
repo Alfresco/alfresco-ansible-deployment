@@ -8,3 +8,10 @@ supported_os:
   Ubuntu:
     versions:
       - 22.04
+
+adw_version: 5.3.0
+adw_artifact_id: alfresco-digital-workspace
+adw_repository: "{{ nexus_repository.enterprise_releases }}"
+adw_url: >-
+  {{ adw_repository }}/{{ adw_artifact_id }}/{{ adw_version }}/{{ adw_artifact_id }}-{{ adw_version }}.zip
+adw_checksum: sha1:{{ adw_url }}.sha1
