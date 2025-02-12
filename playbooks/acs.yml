@@ -415,7 +415,10 @@
       become: true
       vars:
         acc_components:
-          acc: "{{ acc }}"
+          acc:
+            artifact_name: "{{ acc_artifact_id }}"
+            repository: "{{ acc_repository }}"
+            version: "{{ acc_version }}"
       ansible.builtin.blockinfile:
         block: "{{ acc_components | to_nice_yaml(indent=2) }}"
         create: true
@@ -459,7 +462,10 @@
       become: true
       vars:
         adw_components:
-          adw: "{{ adw }}"
+          adw:
+            artifact_name: "{{ adw_artifact_id }}"
+            repository: "{{ adw_repository }}"
+            version: "{{ adw_version }}"
       ansible.builtin.blockinfile:
         block: "{{ adw_components | to_nice_yaml(indent=2) }}"
         create: true
