@@ -18,15 +18,4 @@ supported_os:
       - 22.04
 acs_play_activemq_version: 5.17.6
 acc_version: 8.0.0
-acc_artifact_id: alfresco-control-center
-acc_repository: "{{ nexus_repository.releases }}"
-acc_url: >-
-  {{ acc_repository }}/{{ acc_artifact_id }}/{{ acc_version }}/{{ acc_artifact_id }}-{{ acc_version }}.zip
-acc_checksum: sha1:{{ acc_url }}.sha1
-
 adw_version: 5.0.0
-adw_artifact_id: alfresco-digital-workspace
-adw_repository: "{{ nexus_repository.enterprise_releases }}"
-adw_url: >-
-  {{ adw_repository }}/{{ adw_artifact_id }}/{{ adw_version }}/{{ adw_artifact_id }}-{{ adw_version }}.zip
-adw_checksum: sha1:{{ adw_url }}.sha1

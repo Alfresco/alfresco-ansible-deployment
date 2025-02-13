@@ -1,3 +1,8 @@
+adw_artifact_id: alfresco-digital-workspace
+adw_repository: "{{ nexus_repository.enterprise_releases }}"
+adw_url: >-
+  {{ adw_repository }}/{{ adw_artifact_id }}/{{ adw_version }}/{{ adw_artifact_id }}-{{ adw_version }}.zip
+adw_checksum: sha1:{{ adw_url }}.sha1
 adw_app_configuration:
   plugins:
     processService: false
