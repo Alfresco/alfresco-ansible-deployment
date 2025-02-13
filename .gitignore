@@ -14,6 +14,7 @@ molecule/multimachine/hosts.yml
 __pycache__/
 *.py[cod]
 *$py.class
+.jython_cache/
 
 # C extensions
 *.so
