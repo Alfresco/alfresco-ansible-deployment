@@ -1,5 +1,8 @@
 ---
-# tasks file for roles/java
+- name: Include dependent roles
+  ansible.builtin.include_role:
+    name: common
+
 - name: Download openjdk archive
   ansible.builtin.get_url:
     url: "{{ dependencies_url.java }}"
