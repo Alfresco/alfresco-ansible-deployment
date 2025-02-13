@@ -2,7 +2,7 @@ acs_major_version: 23
 acs:
   artifact_name: alfresco-content-services-community-distribution
   repository: "{{ nexus_repository.releases }}"
-  version: 23.4.0
+  version: 23.4.1
   edition: Community
 api_explorer:
   artifact_name: api-explorer
