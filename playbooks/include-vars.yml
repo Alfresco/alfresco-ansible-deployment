@@ -8,4 +8,6 @@
     vars_file: "{{ vars_folder }}/acs{{ acs_major_version }}.yml"
   tasks:
     - name: Include vars based on acs major version
-      ansible.builtin.include_vars: "{{ vars_file }}"
+      ansible.builtin.include_vars:
+        file: "{{ vars_file }}"
+        name: included_vars

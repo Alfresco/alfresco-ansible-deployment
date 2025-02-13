@@ -6,13 +6,16 @@
 # Configuring the load-balancer or changing the repo configuration is not part
 # of this playbook
 ---
+- name: Include vars based on acs major version
+  ansible.builtin.import_playbook: include-vars.yml
+
 - name: Check if current OS version is in the supported matrix
   hosts: all:!external
   gather_facts: true
   tasks:
   - name: Compare host OS with supported matrix
     vars:
-      os_versions: "{{ supported_os[ansible_distribution].versions | default([]) }}"
+      os_versions: "{{ included_vars.supported_os[ansible_distribution].versions | default([]) }}"
     ansible.builtin.fail:
       msg:
         - "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS"
