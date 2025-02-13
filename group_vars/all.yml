@@ -47,10 +47,6 @@ api_explorer:
   artifact_name: api-explorer
   repository: "{{ nexus_repository.releases }}"
   version: 23.4.0
-audit_storage:
-  artifact_name: alfresco-audit-storage-distribution
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 1.0.0
 search_enterprise:
   artifact_name: alfresco-elasticsearch-connector-distribution
   repository: "{{ nexus_repository.enterprise_releases }}"
