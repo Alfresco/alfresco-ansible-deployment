@@ -1,9 +1,0 @@
-audit_storage:
-  artifact_name: alfresco-audit-storage-distribution
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 1.0.0
-
-  audit_storage_zip_url: >-
-    {{ audit_storage.repository }}/{{ audit_storage.artifact_name }}/{{ audit_storage.version }}/{{ audit_storage.artifact_name }}-{{ audit_storage.version }}.zip
-  audit_storage_zip_sha1_checksum_url: >-
-    {{ audit_storage.repository }}/{{ audit_storage.artifact_name }}/{{ audit_storage.version }}/{{ audit_storage.artifact_name }}-{{ audit_storage.version }}.zip.sha1
