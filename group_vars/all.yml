@@ -67,10 +67,6 @@ sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 4.1.6
-adw:
-  artifact_name: alfresco-digital-workspace
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 5.3.0
 sync:
   repository: >-
     {{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x
@@ -80,10 +76,6 @@ downloads:
     {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip
   acs_zip_sha1_checksum_url: >-
     {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip.sha1
-  adw_zip_url: >-
-    {{ adw.repository }}/{{ adw.artifact_name }}/{{ adw.version }}/{{ adw.artifact_name }}-{{ adw.version }}.zip
-  adw_zip_sha1_checksum_url: >-
-    {{ adw.repository }}/{{ adw.artifact_name }}/{{ adw.version }}/{{ adw.artifact_name }}-{{ adw.version }}.zip.sha1
   search_enterprise_zip_url: >-
     {{ search_enterprise.repository }}/{{ search_enterprise.artifact_name }}/{{ search_enterprise.version }}/{{ search_enterprise.artifact_name }}-{{ search_enterprise.version }}.zip
   search_enterprise_zip_sha1_url: >-

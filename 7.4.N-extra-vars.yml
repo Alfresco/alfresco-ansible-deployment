@@ -44,10 +44,6 @@ sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 4.1.6
-adw:
-  artifact_name: alfresco-digital-workspace
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 5.0.0
 sync:
   repository: >-
     {{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x
