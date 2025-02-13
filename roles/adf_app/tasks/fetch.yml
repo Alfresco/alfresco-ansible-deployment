@@ -7,4 +7,4 @@
     mode: "0644"
     url_username: "{{ adf_app_src_username }}"
     url_password: "{{ adf_app_src_password }}"
-    timeout: 570
+    timeout: "{{ adf_app_download_timeout }}"
