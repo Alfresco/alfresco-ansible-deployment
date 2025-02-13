@@ -96,8 +96,8 @@ ACS 7.x onward.
 | Apache Tomcat       | 10.1.34                     | 9.0.98         | 9.0.98         |
 | PostgreSQL          | 15.x                        | 14.x           | 14.x           |
 | Apache ActiveMQ     | 5.18.6                      | 5.17.6         | 5.17.6         |
-| Repository          | 23.4.1 (23.4.0)             | 7.4.2.4        | 7.3.2.3        |
-| Share               | 23.4.1 (23.4.0)             | 7.4.2.4        | 7.3.2.3        |
+| Repository          | 23.4.1 (23.4.1)             | 7.4.2.4        | 7.3.2.3        |
+| Share               | 23.4.1 (23.4.1)             | 7.4.2.4        | 7.3.2.3        |
 | Search Services     | 2.0.14                      | 2.0.14         | 2.0.14         |
 | Search Enterprise   | 4.2.0 (n/a)                 | 3.3.3          | 3.2.1          |
 | All-In-One T-Engine | 5.1.6                       | 5.1.6          | 5.1.6          |
