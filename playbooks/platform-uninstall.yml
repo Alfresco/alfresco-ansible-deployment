@@ -37,7 +37,7 @@
         state: absent
       with_items:
         - "/etc/systemd/system/activemq.service"
-        - "{{ activemq_home | default('/opt/apache-activemq-{{ activemq_version }}') }}"
+        - "{{ activemq_home | default('/opt/apache-activemq-{{ version_specific_vars.activemq_version }}') }}"
         - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
         - "{{ binaries_folder | default('/opt/alfresco') }}"
         - "{{ data_folder | default('/var/opt/alfresco') }}"

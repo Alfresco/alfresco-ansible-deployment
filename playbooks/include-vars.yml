@@ -10,4 +10,4 @@
     - name: Include vars based on acs major version
       ansible.builtin.include_vars:
         file: "{{ vars_file }}"
-        name: included_vars
+        name: version_specific_vars
