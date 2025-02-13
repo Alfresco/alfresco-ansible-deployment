@@ -18,3 +18,4 @@ supported_os:
       - 22.04
       - 24.04 # Testing for the upcoming 25.x acs version
 acs_play_activemq_version: 5.18.6
+acs_play_audit_storage_version: 1.0.0
