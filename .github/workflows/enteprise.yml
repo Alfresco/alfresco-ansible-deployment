@@ -57,11 +57,6 @@ jobs:
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
-      - name: Install and cache ansible galaxy dependencies
-        uses: ./.github/actions/galaxy
-        with:
-          cache-name: enterprise
-
       - name: Ensure required artifacts have been cached
         uses: ./.github/actions/cache-downloads
         with:
