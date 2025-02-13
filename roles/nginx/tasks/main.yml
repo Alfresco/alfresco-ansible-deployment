@@ -30,4 +30,4 @@
 
 - name: Vhosts configuration
   ansible.builtin.include_tasks: vhosts.yml
-  when: setup_vhosts
+  when: nginx_setup_vhosts

@@ -8,3 +8,5 @@ supported_os:
   Ubuntu:
     versions:
       - 22.04
+
+adw_version: 5.3.0

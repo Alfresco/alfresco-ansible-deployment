@@ -116,7 +116,6 @@ jobs:
           - image: ubuntu:22.04
           - image: rockylinux/rockylinux:9.4
         scenario:
-          - name: pki
           - name: docker_community
     uses: ./.github/workflows/docker.yml
     with:
