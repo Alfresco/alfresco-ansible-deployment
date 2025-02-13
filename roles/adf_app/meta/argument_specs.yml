@@ -46,6 +46,11 @@ argument_specs:
         description: |
           The version of the adf app, mainly to detect when we need to redeploy
           it.
+      adf_app_download_timeout:
+        type: int
+        default: 90
+        description: |
+          Timeout in seconds to download the ADF app distribution
       adf_app_configuration:
         type: dict
         required: false
@@ -84,3 +89,8 @@ argument_specs:
         description: |
           The version of the adf app, mainly to detect when we need to redeploy
           it.
+      adf_app_download_timeout:
+        type: int
+        default: 90
+        description: |
+          Timeout in seconds to download the ADF app distribution
