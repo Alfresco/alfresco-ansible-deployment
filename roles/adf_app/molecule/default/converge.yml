@@ -6,11 +6,11 @@
       vars:
         adf_app_name: alfresco-digital-workspace
         adf_app_port: 8881
-        adf_app_src_archive: "{{ adw_url }}"
-        adf_app_src_checksum: "{{ adw_checksum }}"
+        adf_app_src_archive: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/alfresco-digital-workspace/5.3.0/alfresco-digital-workspace-5.3.0.zip
+        adf_app_src_checksum: sha1:https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/alfresco-digital-workspace/5.3.0/alfresco-digital-workspace-5.3.0.zip.sha1
         adf_app_src_username: "{{ nexus_user }}"
         adf_app_src_password: "{{ nexus_password }}"
-        adf_app_version: "{{ adw_version }}"
+        adf_app_version: 5.3.0
         adf_app_configuration:
           authType: OAUTH
       ansible.builtin.include_role:
@@ -20,9 +20,9 @@
       vars:
         adf_app_name: alfresco-control-center
         adf_app_port: 8882
-        adf_app_src_archive: "{{ acc_url }}"
-        adf_app_src_checksum: "{{ acc_checksum }}"
-        adf_app_version: "{{ acc_version }}"
+        adf_app_src_archive: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco/alfresco-control-center/9.3.0/alfresco-control-center-9.3.0.zip
+        adf_app_src_checksum: sha1:https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco/alfresco-control-center/9.3.0/alfresco-control-center-9.3.0.zip.sha1
+        adf_app_version: 9.3.0
         adf_app_configuration:
           authType: OAUTH
       ansible.builtin.include_role:
