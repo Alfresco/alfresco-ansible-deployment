@@ -1,14 +1,6 @@
 ---
 - name: Include vars based on acs major version
-  hosts: all
-  gather_facts: false
-  vars:
-    base_folder: "{{ playbook_dir }}/.."
-    vars_folder: "{{ base_folder }}/vars"
-    vars_file: "{{ vars_folder }}/acs{{ acs_major_version }}.yml"
-  tasks:
-    - name: Include vars based on acs major version
-      ansible.builtin.include_vars: "{{ vars_file }}"
+  ansible.builtin.import_playbook: include-vars.yml
 
 - name: Check if current OS version is in the supported matrix
   hosts: all:!external
@@ -16,7 +8,7 @@
   tasks:
     - name: Compare host OS with supported matrix
       vars:
-        os_versions: "{{ supported_os[ansible_distribution].versions | default([]) }}"
+        os_versions: "{{ version_specific_vars.supported_os[ansible_distribution].versions | default([]) }}"
       ansible.builtin.fail:
         msg:
           - "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS"
@@ -114,7 +106,9 @@
   gather_facts: false
   roles:
     - role: "../roles/activemq"
-      activemq_version: "{{ dependencies_version.activemq }}"
+      activemq_version: "{{ version_specific_vars.activemq_version }}"
+      activemq_url: "{{ activemq_archive_download_url }}"
+      activemq_checksum: "{{ activemq_checksum_sha512 }}"
       when: not groups.external_activemq | default([])
   tags:
     - activemq

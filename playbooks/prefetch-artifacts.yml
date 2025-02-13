@@ -22,11 +22,9 @@
       register: download_path
 
     - name: Download ActiveMQ archive
-      ansible.builtin.get_url:
-        url: "{{ dependencies_url.activemq }}"
-        checksum: sha512:{{ dependencies_url.activemq_sha512_checksum_url }}
-        dest: "{{ download_path.path }}/apache-activemq-{{ dependencies_version.activemq }}-bin.tar.gz"
-        mode: "0644"
+      ansible.builtin.include_role:
+        name: "../roles/activemq"
+        tasks_from: fetch
 
     - name: Download Tomcat archive
       ansible.builtin.get_url:

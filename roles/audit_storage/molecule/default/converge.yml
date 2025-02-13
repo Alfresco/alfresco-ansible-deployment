@@ -3,8 +3,6 @@
   hosts: all
   roles:
     - role: activemq
-      vars:
-        activemq_version: "{{ dependencies_version.activemq }}"
     - role: elasticsearch
       vars:
         elasticsearch_major_version: "{{ '8.x' if acs.version is version('25.0', 'ge') else '7.x' }}"
