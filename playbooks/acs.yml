@@ -107,8 +107,6 @@
   roles:
     - role: "../roles/activemq"
       activemq_version: "{{ acs_play_activemq_version }}"
-      activemq_url: "{{ activemq_archive_download_url }}"
-      activemq_checksum: "{{ activemq_checksum_sha512 }}"
       when: not groups.external_activemq | default([])
   tags:
     - activemq
