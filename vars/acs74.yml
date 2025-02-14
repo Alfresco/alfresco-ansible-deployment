@@ -20,3 +20,4 @@ acs_play_activemq_version: 5.17.6
 acs_play_acc_version: 8.0.0
 acs_play_adw_version: 5.0.0
 acs_play_search_version: 2.0.14
+version_specific_java_version: "{{ default_java_version }}"
