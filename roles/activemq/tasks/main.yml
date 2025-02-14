@@ -1,9 +1,4 @@
 ---
-- name: Include java role
-  ansible.builtin.include_role:
-    name: java
-    public: true
-
 - name: Set path for local download
   delegate_to: localhost
   ansible.builtin.stat:
