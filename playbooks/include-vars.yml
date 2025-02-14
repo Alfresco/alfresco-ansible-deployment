@@ -5,7 +5,7 @@
   vars:
     base_folder: "{{ playbook_dir }}/.."
     vars_folder: "{{ base_folder }}/vars"
-    vars_file: "{{ vars_folder }}/acs{{ acs_major_version }}.yml"
+    vars_file: "{{ vars_folder }}/acs{{ acs_play_major_version }}.yml"
   tasks:
     - name: Include vars based on acs major version
       ansible.builtin.include_vars:

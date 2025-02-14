@@ -1,4 +1,4 @@
-acs_major_version: 23
+acs_play_major_version: 23
 acs:
   artifact_name: alfresco-content-services-community-distribution
   repository: "{{ nexus_repository.releases }}"
