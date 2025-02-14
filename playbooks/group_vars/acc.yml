@@ -1,6 +1,7 @@
 acc_artifact_id: alfresco-control-center
 acc_repository: "{{ nexus_repository.releases }}"
+acc_v: "{{ version_specific_acc_version }}"
 acc_url: >-
-  {{ acc_repository }}/{{ acc_artifact_id }}/{{ acc_version }}/{{ acc_artifact_id }}-{{ acc_version }}.zip
+  {{ acc_repository }}/{{ acc_artifact_id }}/{{ acc_v }}/{{ acc_artifact_id }}-{{ acc_v }}.zip
 acc_checksum: sha1:{{ acc_url }}.sha1
 acc_app_configuration: {}
