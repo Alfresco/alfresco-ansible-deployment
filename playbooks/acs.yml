@@ -8,7 +8,7 @@
   tasks:
     - name: Compare host OS with supported matrix
       vars:
-        os_versions: "{{ version_specific_vars.supported_os[ansible_distribution].versions | default([]) }}"
+        os_versions: "{{ supported_os[ansible_distribution].versions | default([]) }}"
       ansible.builtin.fail:
         msg:
           - "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS"
@@ -501,7 +501,7 @@
   roles:
     - role: "../roles/audit_storage"
       when: acs.edition == "Enterprise" and acs_version_requirement
-      audit_storage_version: "{{ version_specific_vars.audit_storage_version }}"
+      audit_storage_version: "{{ acs_play_audit_storage_version }}"
       audit_storage_zip_url: "{{ audit_storage_download_zip_url }}"
       audit_storage_zip_sha1_url: "{{ audit_storage_download_zip_sha1_checksum_url }}"
       audit_storage_username: "{{ username }}"
@@ -521,7 +521,7 @@
           audit_storage:
             artifact_name: "{{ audit_storage_artifact_name }}"
             repository: "{{ audit_storage_repository }}"
-            version: "{{ version_specific_vars.audit_storage_version }}"
+            version: "{{ acs_play_audit_storage_version }}"
       ansible.builtin.blockinfile:
         block: "{{ audit_storage_components | to_nice_yaml(indent=2) }}"
         create: true
