@@ -1,5 +1,5 @@
+activemq_v: "{{ acs_play_activemq_version }}"
 apache_archive_url: https://archive.apache.org
 activemq_archive_url: "{{ apache_archive_url }}/dist/activemq"
-activemq_archive_download_url: "{{ activemq_archive_url }}/{{ activemq_version }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
+activemq_archive_download_url: "{{ activemq_archive_url }}/{{ activemq_v }}/apache-activemq-{{ activemq_v }}-bin.tar.gz"
 activemq_checksum_sha512: "sha512:{{ activemq_archive_download_url }}.sha512"
-activemq_v: "{{ acs_play_activemq_version }}"
