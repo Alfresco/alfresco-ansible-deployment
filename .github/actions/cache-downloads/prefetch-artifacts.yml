@@ -6,11 +6,11 @@
   gather_facts: true
   tasks:
     - name: Include common vars
-      ansible.builtin.include_vars: ../../roles/common/{{ item }}/main.yml
+      ansible.builtin.include_vars: ../../../roles/common/{{ item }}/main.yml
       loop: ["defaults", "vars"]
 
     - name: Include activemq vars
-      ansible.builtin.include_vars: ../../roles/activemq/{{ item }}/main.yml
+      ansible.builtin.include_vars: ../../../roles/activemq/{{ item }}/main.yml
       loop: ["defaults", "vars"]
 
     - name: Set path for local download
