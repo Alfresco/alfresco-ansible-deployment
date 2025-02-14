@@ -5,18 +5,18 @@
   hosts: localhost
   gather_facts: true
   tasks:
-    - name: Include common vars
-      ansible.builtin.include_vars: ../../../roles/common/{{ item }}/main.yml
-      loop: ["defaults", "vars"]
-
-    - name: Include activemq vars
-      ansible.builtin.include_vars: ../../../roles/activemq/{{ item }}/main.yml
-      loop: ["defaults", "vars"]
-
     - name: Set path for local download
       ansible.builtin.stat:
         path: "{{ lookup('env', 'GITHUB_WORKSPACE') | default(lookup('env', 'PWD'), True) }}"
       register: local_path
+
+    - name: Include common vars
+      ansible.builtin.include_vars: "{{ local_path.stat.path }}/roles/common/{{ item }}/main.yml"
+      loop: ["defaults", "vars"]
+
+    - name: Include activemq vars
+      ansible.builtin.include_vars: "{{ local_path.stat.path }}/roles/activemq/{{ item }}/main.yml"
+      loop: ["defaults", "vars"]
 
     - name: Create download location
       ansible.builtin.file:
