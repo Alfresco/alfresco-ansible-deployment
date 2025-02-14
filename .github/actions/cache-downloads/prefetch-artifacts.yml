@@ -28,7 +28,7 @@
     - name: Download ActiveMQ archive
       ansible.builtin.get_url:
         url: "{{ activemq_url }}"
-        checksum: sha512:{{ activemq_checksum }}
+        checksum: "{{ activemq_checksum }}"
         dest: "{{ download_path.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
         mode: "0644"
 
