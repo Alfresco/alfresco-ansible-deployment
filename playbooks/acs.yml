@@ -8,7 +8,7 @@
   tasks:
     - name: Compare host OS with supported matrix
       vars:
-        os_versions: "{{ version_specific_vars.supported_os[ansible_distribution].versions | default([]) }}"
+        os_versions: "{{ supported_os[ansible_distribution].versions | default([]) }}"
       ansible.builtin.fail:
         msg:
           - "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS"
@@ -106,7 +106,7 @@
   gather_facts: false
   roles:
     - role: "../roles/activemq"
-      activemq_version: "{{ version_specific_vars.activemq_version }}"
+      activemq_version: "{{ activemq_v }}"
       activemq_url: "{{ activemq_archive_download_url }}"
       activemq_checksum: "{{ activemq_checksum_sha512 }}"
       when: not groups.external_activemq | default([])

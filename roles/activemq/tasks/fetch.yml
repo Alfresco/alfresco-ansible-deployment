@@ -1,9 +1,0 @@
----
-- name: Download ActiveMQ archive # noqa ignore-errors
-  delegate_to: localhost
-  ansible.builtin.get_url:
-    url: "{{ activemq_url }}"
-    checksum: "{{ activemq_checksum }}"
-    dest: "{{ download_path.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
-    mode: "0644"
-  ignore_errors: true

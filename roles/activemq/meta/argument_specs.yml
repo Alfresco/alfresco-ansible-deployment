@@ -13,16 +13,3 @@ argument_specs:
       activemq_checksum:
         description: activemq dependency sha512 checksum URL to use for deployment
         required: false
-  fetch:
-    short_description: Fetch activemq
-    author: Alfresco
-    options:
-      activemq_version:
-        description: activemq version to use for deployment
-        required: true
-      activemq_url:
-        description: activemq dependency URL to use for deployment
-        required: false
-      activemq_checksum:
-        description: activemq dependency sha512 checksum URL to use for deployment
-        required: false

@@ -17,13 +17,13 @@ runs:
       uses: actions/cache/restore@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
       with:
         path: 'downloads/**'
-        key: cache-downloads-v${{ inputs.cache-version }}-${{ inputs.cache-name }}-${{ hashFiles('group_vars/all.yml') }}-${{ hashFiles('playbooks/prefetch-artifacts.yml') }}
+        key: cache-downloads-v${{ inputs.cache-version }}-${{ inputs.cache-name }}-${{ hashFiles('group_vars/all.yml') }}-${{ hashFiles(github.action_path + '/prefetch-artifacts.yml') }}
 
     - name: Prefetch artifacts
       shell: bash
       if: steps.artifacts-cache.outputs.cache-hit != 'true'
       run: |
-        pipenv run ansible-playbook -i inventory_local.yml playbooks/prefetch-artifacts.yml
+        pipenv run ansible-playbook -i inventory_local.yml ${{ github.action_path }}/prefetch-artifacts.yml
 
     - name: Save downloaded artifacts
       uses: actions/cache/save@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0

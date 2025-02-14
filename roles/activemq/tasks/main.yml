@@ -18,9 +18,14 @@
     mode: "0755"
   register: download_path
 
-- name: Download ActiveMQ {{ activemq_version }} archive from {{ activemq_url }}
-  ansible.builtin.include_tasks:
-    file: fetch.yml
+- name: Download ActiveMQ archive # noqa ignore-errors
+  delegate_to: localhost
+  ansible.builtin.get_url:
+    url: "{{ activemq_dependency_url }}"
+    checksum: sha512:{{ activemq_dependency_sha512_checksum_url }}
+    dest: "{{ download_path.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
+    mode: "0644"
+  ignore_errors: true
 
 - name: Copy archive to target
   ansible.builtin.copy:

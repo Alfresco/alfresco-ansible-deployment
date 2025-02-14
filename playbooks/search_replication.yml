@@ -15,7 +15,7 @@
   tasks:
   - name: Compare host OS with supported matrix
     vars:
-      os_versions: "{{ version_specific_vars.supported_os[ansible_distribution].versions | default([]) }}"
+      os_versions: "{{ supported_os[ansible_distribution].versions | default([]) }}"
     ansible.builtin.fail:
       msg:
         - "{{ ansible_distribution }} {{ ansible_distribution_version }} is not a supported OS"

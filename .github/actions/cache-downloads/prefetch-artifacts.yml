@@ -6,7 +6,11 @@
   gather_facts: true
   tasks:
     - name: Include common vars
-      ansible.builtin.include_vars: ../roles/common/{{ item }}/main.yml
+      ansible.builtin.include_vars: ../../roles/common/{{ item }}/main.yml
+      loop: ["defaults", "vars"]
+
+    - name: Include activemq vars
+      ansible.builtin.include_vars: ../../roles/activemq/{{ item }}/main.yml
       loop: ["defaults", "vars"]
 
     - name: Set path for local download
@@ -22,9 +26,11 @@
       register: download_path
 
     - name: Download ActiveMQ archive
-      ansible.builtin.include_role:
-        name: "../roles/activemq"
-        tasks_from: fetch
+      ansible.builtin.get_url:
+        url: "{{ activemq_dependency_url }}"
+        checksum: sha512:{{ activemq_dependency_sha512_checksum_url }}
+        dest: "{{ download_path.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
+        mode: "0644"
 
     - name: Download Tomcat archive
       ansible.builtin.get_url:
