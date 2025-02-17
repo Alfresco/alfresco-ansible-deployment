@@ -13,3 +13,15 @@ argument_specs:
           and server configuration. The object needs to be passed as expected
           by the java role. Check the java role's arguments specification for
           details.
+      sfs_version:
+        type: str
+        required: false
+        description: The version of the SFS artifact to be installed
+      sfs_zip_url:
+        type: str
+        required: false
+        description: The URL to download the SFS artifact from
+      sfs_zip_checksum_url:
+        type: str
+        required: false
+        description: The URL to download the checksum of the SFS artifact from

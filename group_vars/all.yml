@@ -55,10 +55,6 @@ trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 4.1.6
-sfs:
-  artifact_name: alfresco-shared-file-store-controller
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 4.1.6
 sync:
   repository: >-
     {{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x
@@ -68,10 +64,6 @@ downloads:
     {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip
   acs_zip_sha1_checksum_url: >-
     {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip.sha1
-  sfs_jar_url: >-
-    {{ sfs.repository }}/{{ sfs.artifact_name }}/{{ sfs.version }}/{{ sfs.artifact_name }}-{{ sfs.version }}.jar
-  sfs_jar_sha1_checksum_url: >-
-    {{ sfs.repository }}/{{ sfs.artifact_name }}/{{ sfs.version }}/{{ sfs.artifact_name }}-{{ sfs.version }}.jar.sha1
   trouter_jar_url: >-
     {{ trouter.repository }}/{{ trouter.artifact_name }}/{{ trouter.version }}/{{ trouter.artifact_name }}-{{ trouter.version }}.jar
   trouter_jar_sha1_checksum_url: >-
