@@ -4,7 +4,7 @@
   ansible.builtin.get_url:
     url: "{{ audit_storage_zip_url }}"
     dest: "{{ download_location }}/{{ audit_storage_download_artifact_name }}-{{ audit_storage_version }}.zip"
-    checksum: sha1:{{ lookup('url', audit_storage_zip_sha1_url, username=nexus_user, password=nexus_password) }} # pragma: allowlist secret
+    checksum: "{{ audit_storage_zip_checksum_url }}" # pragma: allowlist secret
     mode: "0644"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
