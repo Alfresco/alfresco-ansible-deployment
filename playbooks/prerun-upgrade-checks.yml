@@ -78,4 +78,4 @@
           ansible.builtin.fail:
           when:
             - installed_components.sync is defined
-            - sync.version != installed_components.sync.version
+            - acs_play_sync_version != installed_components.sync.version
