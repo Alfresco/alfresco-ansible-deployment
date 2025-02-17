@@ -203,8 +203,8 @@
       search_version: "{{ acs_play_search_version }}"
       search_flavor: >-
         {{ 'alfresco-insight-engine' if 'insight-engine' in search_artifact_name else 'alfresco-search-services' }}
-      search_zip_url: "{{ search_download_zip_url }}"
-      search_zip_checksum_url: "{{ search_download_zip_sha1_checksum_url }}"
+      search_zip_url: "{{ acs_play_search_download_zip_url }}"
+      search_zip_checksum_url: "{{ acs_play_search_download_zip_sha1_checksum_url }}"
       search_master_hostname: "{{ solr_host }}"
       search_shared_secret: "{{ reposearch_shared_secret }}"
       alfresco:
