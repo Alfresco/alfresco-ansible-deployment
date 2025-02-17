@@ -10,7 +10,7 @@ java_download_base: >-
 java_tar_file: >-
   OpenJDK{{ java_major }}U-jdk_{{ java_arch }}_linux_hotspot_{{ java_ver }}_{{ java_build }}.tar.gz
 java_url: "{{ java_download_base }}/{{ java_tar_file }}"
-java_checksum: "{{ java_url }}.sha256.txt"
+java_checksum: sha256:{{ java_url }}.sha256.txt
 java_home: /opt/openjdk-{{ java_ver }}
 java_truststore: "{{ java_home }}/lib/security/cacerts"
 java_truststore_pass: changeit
