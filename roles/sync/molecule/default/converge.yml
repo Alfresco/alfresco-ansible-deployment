@@ -35,6 +35,8 @@
       ansible.builtin.include_role:
         name: sync
       vars:
+        sync_zip_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
+        sync_zip_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
         sync_environment:
           JAVA_OPTS:
             - -Xms512m
