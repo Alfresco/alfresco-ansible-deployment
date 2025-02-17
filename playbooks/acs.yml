@@ -502,6 +502,11 @@
   gather_facts: false
   roles:
     - role: "../roles/sync"
+      sync_version: "{{ acs_play_sync_version }}"
+      sync_zip_url: "{{ syncservice_zip_url }}"
+      sync_zip_checksum: "{{ syncservice_zip_sha1_checksum }}"
+      sync_zip_username: "{{ nexus_user }}"
+      sync_zip_password: "{{ nexus_password }}"
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Sync
