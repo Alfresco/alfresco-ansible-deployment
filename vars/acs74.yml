@@ -21,3 +21,4 @@ acs_play_acc_version: 8.0.0
 acs_play_adw_version: 5.0.0
 acs_play_search_version: 2.0.14
 acs_play_java_version: "{{ default_java_version }}"
+acs_play_search_enterprise_version: 3.3.3

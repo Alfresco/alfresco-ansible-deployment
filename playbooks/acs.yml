@@ -361,6 +361,9 @@
   gather_facts: false
   roles:
     - role: "../roles/search_enterprise"
+      search_enterprise_version: "{{ acs_play_search_enterprise_version }}"
+      search_enterprise_zip_url: "{{ search_enterprise_download_zip_url }}"
+      search_enterprise_zip_checksum_url: "{{ search_enterprise_download_zip_sha1_checksum_url }}"
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Enterprise Search
@@ -368,7 +371,10 @@
       become: true
       vars:
         search_enterprise_components:
-          search_enterprise: "{{ search_enterprise }}"
+          search_enterprise:
+            artifact_name: "{{ search_enterprise_artifact_name }}"
+            repository: "{{ search_enterprise_repository }}"
+            version: "{{ acs_play_search_enterprise_version }}"
       ansible.builtin.blockinfile:
         block: "{{ search_enterprise_components | to_nice_yaml(indent=2) }}"
         create: true
