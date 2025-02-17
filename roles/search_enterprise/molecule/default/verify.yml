@@ -6,6 +6,10 @@
     - name: Populate service facts
       ansible.builtin.service_facts:
 
+    - name: Include default vars
+      ansible.builtin.include_vars:
+        file: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/defaults/main.yml"
+
     - name: Check that Elasticsearch Connector service is up and running
       ansible.builtin.assert:
         that:
