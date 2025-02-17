@@ -11,4 +11,4 @@ supported_os:
 acs_play_activemq_version: 5.17.6
 acs_play_adw_version: 4.4.1
 acs_play_search_version: 2.0.14
-version_specific_java_version: "{{ default_java_version }}"
+acs_play_java_version: "{{ default_java_version }}"
