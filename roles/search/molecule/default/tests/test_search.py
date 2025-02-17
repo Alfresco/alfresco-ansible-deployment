@@ -16,12 +16,14 @@ def get_ansible_vars(host):
     common_defaults = "file=../../../common/defaults/main.yml name=common_defaults"
     common_hosts = "file=../../../common/defaults/main.yml name=common_hosts"
     search_services = "file=../../vars/main.yml name=search_services"
+    search_defaults = "file=../../defaults/main.yml name=search_defaults"
     ansible_vars = host.ansible("include_vars", java_role)["ansible_facts"]["java_role"]
     ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
     ansible_vars.update(host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"])
     ansible_vars.update(host.ansible("include_vars", common_hosts)["ansible_facts"]["common_hosts"])
     ansible_vars.update(host.ansible("include_vars", common_defaults)["ansible_facts"]["common_defaults"])
     ansible_vars.update(host.ansible("include_vars", search_services)["ansible_facts"]["search_services"])
+    ansible_vars.update(host.ansible("include_vars", search_defaults)["ansible_facts"]["search_defaults"])
     return ansible_vars
 
 def test_solr_log_exists(host, get_ansible_vars):
@@ -40,7 +42,7 @@ def test_solr_stats_is_accessible(host):
     """Check that SOLR creates the alfresco and archive cores"""
     curl_opts = '-iL'
     search_env = host.ansible.get_variables()
-    if version.parse(search_env['search']['version']) >= version.parse('2.0.3'):
+    if version.parse(search_env['search_version']) >= version.parse('2.0.3'):
         curl_opts += ' -H "X-Alfresco-Search-Secret: alfresco with space"'
     print("curl {} http://{}:8983/solr/#/~cores/alfresco".format(curl_opts, test_host))
     alfresco_core_command = host.run("curl {} http://{}:8983/solr/#/~cores/alfresco".format(curl_opts, test_host))
