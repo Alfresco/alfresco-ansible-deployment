@@ -8,12 +8,6 @@
       - adf_app_port | int < 65536
       - adf_app_src_archive is url
 
-- name: Include role dependencies
-  ansible.builtin.include_role:
-    name: nginx
-  vars:
-    nginx_setup_vhosts: false
-
 - name: Create "{{ nginx_default_vhost_docroot }}/{{ adf_app_name }}/" dir
   become: true
   ansible.builtin.file:
