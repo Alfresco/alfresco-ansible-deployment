@@ -1,0 +1,38 @@
+---
+argument_specs:
+  main:
+    short_description: deploys Alfresco Sync Service
+    description: |
+      This role deploys Alfresco Sync Service. A service which allows syncing
+      content rom the Alfresco repository and Alfresco Desktop Sync (a client
+      application).
+    author: Alfresco
+    options:
+      sync_version:
+        description: |
+          Version of the Alfresco Sync Service to deploy.
+        type: str
+        default: 5.1.0
+      sync_zip_url:
+        description: |
+          URL where to download the Alfresco Sync Service zip file.
+        type: str
+        default: >-
+          https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/5.1.0/sync-dist-6.x-5.1.0.zip
+      sync_zip_username:
+        description: |
+          Username to use to download the Alfresco Sync Service zip file.
+        type: str
+        default: null
+      sync_zip_password:
+        description: |
+          Password to use to download the Alfresco Sync Service zip file.
+        type: str
+        default: null
+      sync_zip_checksum:
+        description: |
+          Checksum of the Alfresco Sync Service zip file folowing the format
+          hash-type:hash-value
+        type: str
+        default: >-
+          https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/5.1.0/sync-dist-6.x-5.1.0.zip.sha1
