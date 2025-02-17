@@ -51,10 +51,6 @@ search_enterprise:
   artifact_name: alfresco-elasticsearch-connector-distribution
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 4.2.0
-search:
-  artifact_name: alfresco-search-services
-  repository: "{{ nexus_repository.releases }}"
-  version: 2.0.14
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
@@ -80,10 +76,6 @@ downloads:
     {{ search_enterprise.repository }}/{{ search_enterprise.artifact_name }}/{{ search_enterprise.version }}/{{ search_enterprise.artifact_name }}-{{ search_enterprise.version }}.zip
   search_enterprise_zip_sha1_url: >-
     {{ search_enterprise.repository }}/{{ search_enterprise.artifact_name }}/{{ search_enterprise.version }}/{{ search_enterprise.artifact_name }}-{{ search_enterprise.version }}.zip.sha1
-  search_zip_url: >-
-    {{ search.repository }}/{{ search.artifact_name }}/{{ search.version }}/{{ search.artifact_name }}-{{ search.version }}.zip
-  search_zip_sha1_checksum_url: >-
-    {{ search.repository }}/{{ search.artifact_name }}/{{ search.version }}/{{ search.artifact_name }}-{{ search.version }}.zip.sha1
   sfs_jar_url: >-
     {{ sfs.repository }}/{{ sfs.artifact_name }}/{{ sfs.version }}/{{ sfs.artifact_name }}-{{ sfs.version }}.jar
   sfs_jar_sha1_checksum_url: >-

@@ -83,13 +83,23 @@ argument_specs:
       search_version:
         description: Alfresco Search Service version to use for deployment.
         required: false
-        default: 2.0.6
+        default: 2.0.14
       search_flavor:
         description: |
           Choose between alfresco-search-services and alfresco-insight-engine.
           Insight Engine requires a specific entitlement.
         required: false
         default: alfresco-search-services
+      search_zip_url:
+        description: |
+          The URL of the Search Service zip file to download.
+        required: false
+        type: str
+      search_zip_sha1_checksum_url:
+        description: |
+          The URL of the Search Service zip file checksum to download.
+        required: false
+        type: str
       solr:
         description: |
           A dictionnary to describe Solr setup
