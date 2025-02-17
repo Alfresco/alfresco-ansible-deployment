@@ -204,6 +204,8 @@
       search_flavor: >-
         {{ 'alfresco-insight-engine' if 'insight-engine' in search_artifact_name else 'alfresco-search-services' }}
       search_artifact_repository: "{{ search_repository }}"
+      search_zip_url: "{{ search_download_zip_url }}"
+      search_zip_checksum_url: "{{ search_download_zip_sha1_checksum_url }}"
       search_master_hostname: "{{ solr_host }}"
       search_shared_secret: "{{ reposearch_shared_secret }}"
       alfresco:
