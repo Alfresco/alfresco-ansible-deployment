@@ -401,8 +401,8 @@
       adf_app_name: alfresco-control-center
       adf_app_context: /control-center/
       adf_app_port: 8881
-      adf_app_src_archive: "{{ acc_url }}"
-      adf_app_src_checksum: "{{ acc_checksum }}"
+      adf_app_src_archive: "{{ acs_play_acc_url }}"
+      adf_app_src_checksum: "{{ acs_play_acc_checksum }}"
       adf_app_version: "{{ acs_play_acc_version }}"
       adf_app_configuration: >-
         {{
@@ -435,10 +435,10 @@
   vars:
     adw_sum: >-
       {% if acs_play_adw_version is version('4.1.0','ge') -%}
-        {{ adw_checksum }}
+        {{ acs_play_adw_checksum }}
       {% else -%}
-        {{ adw_checksum.split(':')[0] }}:
-        {{- lookup('url', adw_checksum.split(':')[1:], username=nexus_user, password=nexus_password) }}
+        {{ acs_play_adw_checksum.split(':')[0] }}:
+        {{- lookup('url', acs_play_adw_checksum.split(':')[1:], username=nexus_user, password=nexus_password) }}
       {%- endif %}
   roles:
     - role: "../roles/adf_app"
@@ -446,7 +446,7 @@
       adf_app_name: alfresco-digital-workspace
       adf_app_context: /workspace/
       adf_app_port: 8880
-      adf_app_src_archive: "{{ adw_url }}"
+      adf_app_src_archive: "{{ acs_play_adw_url }}"
       adf_app_src_checksum: "{{ adw_sum }}"
       adf_app_src_username: "{{ nexus_user }}"
       adf_app_src_password: "{{ nexus_password }}"
