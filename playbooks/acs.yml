@@ -224,7 +224,10 @@
       become: true
       vars:
         search_components:
-          search: "{{ search }}"
+          search:
+            artifact_name: "{{ search_artifact_name }}"
+            repository: "{{ search_repository }}"
+            version: "{{ acs_play_search_version }}"
       ansible.builtin.blockinfile:
         block: "{{ search_components | to_nice_yaml(indent=2) }}"
         create: true
