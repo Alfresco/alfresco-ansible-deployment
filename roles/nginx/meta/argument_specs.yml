@@ -14,6 +14,10 @@ argument_specs:
         description: Useful when nginx node is behind another reverse proxy (e.g. should be disabled when behind an AWS ELB)
         type: bool
         default: true
+      nginx_set_security_headers:
+        description: Add default security headers to mitigate vulnerabilities like XSS, clickjacking, and data injection attacks.
+        type: bool
+        default: true
       nginx_absolute_redirect:
         description: Useful when nginx node is behind another reverse proxy (e.g. should be disabled when behind an AWS ELB)
         type: bool
