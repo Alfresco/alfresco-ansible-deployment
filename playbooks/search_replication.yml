@@ -6,6 +6,9 @@
 # Configuring the load-balancer or changing the repo configuration is not part
 # of this playbook
 ---
+- name: Include vars based on acs major version
+  ansible.builtin.import_playbook: include-vars.yml
+
 - name: Check if current OS version is in the supported matrix
   hosts: all:!external
   gather_facts: true

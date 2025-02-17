@@ -3,7 +3,6 @@
   hosts: all
   roles:
     - role: activemq
-      activemq_version: "{{ dependencies_version.activemq }}"
   tasks:
     - name: Install PostgreSQL
       ansible.builtin.include_role:

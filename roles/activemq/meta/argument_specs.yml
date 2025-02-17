@@ -5,5 +5,11 @@ argument_specs:
     author: Alfresco Ops Readiness
     options:
       activemq_version:
-        description: activemq version to use for deployment (URL still handled via group_vars)
+        description: activemq version to use for deployment
         required: true
+      activemq_url:
+        description: activemq dependency URL to use for deployment
+        required: false
+      activemq_checksum:
+        description: activemq dependency sha512 checksum URL to use for deployment
+        required: false
