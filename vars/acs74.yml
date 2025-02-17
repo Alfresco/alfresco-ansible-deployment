@@ -17,5 +17,5 @@ supported_os:
     versions:
       - 22.04
 acs_play_activemq_version: 5.17.6
-version_specific_acc_version: 8.0.0
-version_specific_adw_version: 5.0.0
+acs_play_acc_version: 8.0.0
+acs_play_adw_version: 5.0.0

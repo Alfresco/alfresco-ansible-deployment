@@ -1,6 +1,6 @@
 adw_artifact_id: alfresco-digital-workspace
 adw_repository: "{{ nexus_repository.enterprise_releases }}"
-adw_v: "{{ version_specific_adw_version }}"
+adw_v: "{{ acs_play_adw_version }}"
 adw_url: >-
   {{ adw_repository }}/{{ adw_artifact_id }}/{{ adw_v }}/{{ adw_artifact_id }}-{{ adw_v }}.zip
 adw_checksum: sha1:{{ adw_url }}.sha1
