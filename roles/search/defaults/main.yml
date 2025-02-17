@@ -10,7 +10,7 @@ search_flavor: alfresco-search-services  # set to alfresco-insight-engine for IE
 search_version: 2.0.14
 search_artifact_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
 search_zip_url: "{{ search_artifact_repository }}/{{ search_flavor }}/{{ search_version }}/{{ search_flavor }}-{{ search_version }}.zip"
-search_zip_checksum_url: sha1:"{{ search_zip_url }}.sha1"
+search_zip_checksum_url: "sha1:{{ search_zip_url }}.sha1"
 search_environment:  # This will add extra vars at the end of the solr.in.sh file
   SOLR_JAVA_MEM: "-Xms1g -Xmx1g"
 search_cores:
