@@ -1,4 +1,4 @@
 sfs_artifact_name: alfresco-shared-file-store-controller
 sfs_repository: "{{ nexus_repository.enterprise_releases }}"
-sfs_download_zip_url: "{{ sfs_repository }}/{{ sfs_artifact_name }}/{{ acs_play_sfs_version }}/{{ sfs_artifact_name }}-{{ acs_play_sfs_version }}.jar"
-sfs_download_zip_sha1_checksum_url: "sha1:{{ sfs_download_zip_url }}.sha1"
+acs_play_sfs_download_zip_url: "{{ sfs_repository }}/{{ sfs_artifact_name }}/{{ acs_play_sfs_version }}/{{ sfs_artifact_name }}-{{ acs_play_sfs_version }}.jar"
+acs_play_sfs_download_zip_sha1_checksum_url: "sha1:{{ acs_play_sfs_download_zip_url }}.sha1"

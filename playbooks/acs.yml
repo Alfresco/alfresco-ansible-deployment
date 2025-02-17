@@ -339,8 +339,8 @@
     - role: "../roles/sfs"
       ats_keystore: "{{ sfs_keystore | default({}) }}"
       sfs_version: "{{ acs_play_sfs_version }}"
-      sfs_zip_url: "{{ sfs_download_zip_url }}"
-      sfs_zip_checksum_url: "{{ sfs_download_zip_sha1_checksum_url }}"
+      sfs_zip_url: "{{ acs_play_sfs_download_zip_url }}"
+      sfs_zip_checksum_url: "{{ acs_play_sfs_download_zip_sha1_checksum_url }}"
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with SFS
