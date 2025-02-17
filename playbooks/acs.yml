@@ -200,9 +200,10 @@
   gather_facts: true
   roles:
     - role: ../roles/search
-      search_version: "{{ search.version }}"
+      search_version: "{{ acs_play_search_version }}"
       search_flavor: >-
-        {{ 'alfresco-insight-engine' if 'insight-engine' in search.artifact_name else 'alfresco-search-services' }}
+        {{ 'alfresco-insight-engine' if 'insight-engine' in search_artifact_name else 'alfresco-search-services' }}
+      search_artifact_repository: "{{ search_repository }}"
       search_master_hostname: "{{ solr_host }}"
       search_shared_secret: "{{ reposearch_shared_secret }}"
       alfresco:
