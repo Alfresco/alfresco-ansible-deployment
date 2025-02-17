@@ -1,4 +1,4 @@
 audit_storage_artifact_name: alfresco-audit-storage-distribution
 audit_storage_repository: "{{ nexus_repository.enterprise_releases }}"
 audit_storage_download_zip_url: "{{ audit_storage_repository }}/{{ audit_storage_artifact_name }}/{{ acs_play_audit_storage_version }}/{{ audit_storage_artifact_name }}-{{ acs_play_audit_storage_version }}.zip"
-audit_storage_download_zip_sha1_checksum_url: "sha1:{{ audit_storage_download_zip_url }}.sha1"
+audit_storage_download_zip_sha1_checksum_url: "{{ audit_storage_download_zip_url }}.sha1"

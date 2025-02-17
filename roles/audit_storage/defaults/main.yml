@@ -2,7 +2,8 @@
 # defaults file for audit_storage
 audit_storage_version: "1.0.0"
 audit_storage_zip_url: https://nexus.alfresco.com/nexus/repository/enterprise-releases/org/alfresco/alfresco-audit-storage-distribution/{{ audit_storage_version }}/alfresco-audit-storage-distribution-{{ audit_storage_version }}.zip
-audit_storage_zip_checksum_url: sha1:https://nexus.alfresco.com/nexus/repository/enterprise-releases/org/alfresco/alfresco-audit-storage-distribution/{{ audit_storage_version }}/alfresco-audit-storage-distribution-{{ audit_storage_version }}.zip.sha1
+audit_storage_zip_checksum_type: sha1
+audit_storage_zip_checksum_url: https://nexus.alfresco.com/nexus/repository/enterprise-releases/org/alfresco/alfresco-audit-storage-distribution/{{ audit_storage_version }}/alfresco-audit-storage-distribution-{{ audit_storage_version }}.zip.sha1
 
 audit_storage_download_artifact_name: alfresco-audit-storage-app
 
