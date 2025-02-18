@@ -1,5 +1,8 @@
 ---
 # This playbook is used to run preliminary upgrade checks for the hosts in the ACS deployment.
+- name: Include vars based on acs major version
+  ansible.builtin.import_playbook: include-vars.yml
+
 - name: Run preliminary upgrade checks for all hosts
   hosts: all:!external
   gather_facts: false
@@ -69,7 +72,7 @@
           ansible.builtin.fail:
           when:
             - installed_components.search is defined
-            - search.version != installed_components.search.version
+            - acs_play_search_version != installed_components.search.version
 
         - name: Fail on unsupported Sync upgrades
           ansible.builtin.fail:

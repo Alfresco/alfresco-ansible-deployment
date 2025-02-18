@@ -10,3 +10,4 @@ supported_os:
       - 22.04
 acs_play_activemq_version: 5.17.6
 acs_play_adw_version: 4.4.1
+acs_play_search_version: 2.0.14

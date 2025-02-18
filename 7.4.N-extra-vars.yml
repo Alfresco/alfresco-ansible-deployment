@@ -28,10 +28,6 @@ search_enterprise:
   artifact_name: alfresco-elasticsearch-connector-distribution
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 3.3.3
-search:
-  artifact_name: alfresco-search-services
-  repository: "{{ nexus_repository.releases }}"
-  version: 2.0.14
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
