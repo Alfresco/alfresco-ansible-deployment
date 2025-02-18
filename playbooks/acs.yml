@@ -372,8 +372,8 @@
       vars:
         search_enterprise_components:
           search_enterprise:
-            artifact_name: "{{ search_enterprise_artifact_name }}"
-            repository: "{{ search_enterprise_repository }}"
+            artifact_name: "{{ acs_play_search_enterprise_artifact_name }}"
+            repository: "{{ acs_play_search_enterprise_repository }}"
             version: "{{ acs_play_search_enterprise_version }}"
       ansible.builtin.blockinfile:
         block: "{{ search_enterprise_components | to_nice_yaml(indent=2) }}"
