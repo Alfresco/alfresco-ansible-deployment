@@ -7,7 +7,6 @@
       - adf_app_port | int >= 1024
       - adf_app_port | int < 65536
       - adf_app_src_archive is url
-      - adf_app_src_checksum is url or adf_app_src_checksum is match("^[a-fA-F0-9]{40}$")
 
 - name: Create "{{ nginx_default_vhost_docroot }}/{{ adf_app_name }}/" dir
   become: true
@@ -20,11 +19,11 @@
   ansible.builtin.get_url:
     url: "{{ adf_app_src_archive }}"
     dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
-    checksum: sha1:{{ adf_app_src_checksum }}
-    mode: 'u=r,g=r,o=r'
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
-    timeout: 570
+    checksum: "{{ adf_app_src_checksum }}"
+    mode: "0644"
+    url_username: "{{ adf_app_src_username | default(omit) }}"
+    url_password: "{{ adf_app_src_password | default(omit) }}"
+    timeout: "{{ adf_app_download_timeout }}"
   notify:
     - Unpack {{ adf_app_name }}
 

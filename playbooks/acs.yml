@@ -56,7 +56,7 @@
       when: identity_enabled
       ansible.builtin.set_fact:
         identity_url: "{{ alfresco_url }}/auth"
-        code_flow_pkce_supported: "{{ adw.version is version('4.5.0', 'ge') }}"
+        code_flow_pkce_supported: "{{ acs_play_adw_version is version('4.5.0', 'ge') }}"
 
 - name: Database Role
   hosts: database[0]
@@ -401,9 +401,9 @@
       adf_app_name: alfresco-control-center
       adf_app_context: /control-center/
       adf_app_port: 8881
-      adf_app_src_archive: "{{ downloads.acc_zip_url }}"
-      adf_app_src_checksum: "{{ downloads.acc_zip_sha1_checksum_url }}"
-      adf_app_version: "{{ acc.version }}"
+      adf_app_src_archive: "{{ acs_play_acc_url }}"
+      adf_app_src_checksum: "{{ acs_play_acc_checksum }}"
+      adf_app_version: "{{ acs_play_acc_version }}"
       adf_app_configuration: >-
         {{
           adf_app_oauth_configuration | default({}) |
@@ -415,7 +415,10 @@
       become: true
       vars:
         acc_components:
-          acc: "{{ acc }}"
+          acc:
+            artifact_name: "{{ acc_artifact_id }}"
+            repository: "{{ acc_repository }}"
+            version: "{{ acs_play_acc_version }}"
       ansible.builtin.blockinfile:
         block: "{{ acc_components | to_nice_yaml(indent=2) }}"
         create: true
@@ -429,20 +432,25 @@
 - name: Alfresco Digital Workspace Role
   hosts: adw
   gather_facts: false
+  vars:
+    adw_sum: >-
+      {% if acs_play_adw_version is version('4.1.0','ge') -%}
+        {{ acs_play_adw_checksum }}
+      {% else -%}
+        {{ acs_play_adw_checksum.split(':')[0] }}:
+        {{- lookup('url', acs_play_adw_checksum.split(':')[1:], username=nexus_user, password=nexus_password) }}
+      {%- endif %}
   roles:
     - role: "../roles/adf_app"
       when: acs.edition == "Enterprise"
       adf_app_name: alfresco-digital-workspace
       adf_app_context: /workspace/
       adf_app_port: 8880
-      adf_app_src_archive: "{{ downloads.adw_zip_url }}"
-      adf_app_src_checksum: >-
-        {% if adw.version is version('4.1.0','ge') -%}
-        {{ downloads.adw_zip_sha1_checksum_url }}
-        {% else -%}
-        {{ lookup('url', downloads.adw_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
-        {%- endif %}
-      adf_app_version: "{{ adw.version }}"
+      adf_app_src_archive: "{{ acs_play_adw_url }}"
+      adf_app_src_checksum: "{{ adw_sum }}"
+      adf_app_src_username: "{{ nexus_user }}"
+      adf_app_src_password: "{{ nexus_password }}"
+      adf_app_version: "{{ acs_play_adw_version }}"
       adf_app_configuration: >-
         {{
           adf_app_oauth_configuration | default({}) |
@@ -454,7 +462,10 @@
       become: true
       vars:
         adw_components:
-          adw: "{{ adw }}"
+          adw:
+            artifact_name: "{{ adw_artifact_id }}"
+            repository: "{{ adw_repository }}"
+            version: "{{ acs_play_adw_version }}"
       ansible.builtin.blockinfile:
         block: "{{ adw_components | to_nice_yaml(indent=2) }}"
         create: true

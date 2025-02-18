@@ -44,18 +44,10 @@ sfs:
   artifact_name: alfresco-shared-file-store-controller
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 4.1.6
-adw:
-  artifact_name: alfresco-digital-workspace
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 5.0.0
 sync:
   repository: >-
     {{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x
   version: 3.11.3
-acc:
-  artifact_name: alfresco-control-center
-  repository: "{{ nexus_repository.releases }}"
-  version: 8.0.0
 dependencies_version:
   postgresql_connector: 42.6.1
   postgres_major_version: 14

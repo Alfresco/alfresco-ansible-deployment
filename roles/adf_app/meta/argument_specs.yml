@@ -27,6 +27,16 @@ argument_specs:
         required: true
         description: |
           URL of the archive that contains the adf app.
+      adf_app_src_username:
+        type: str
+        description: |
+          Username to use when downloading the ADF archive
+        default: null
+      adf_app_src_password:
+        type: str
+        description: |
+          Password to use when downloading the ADF archive
+        default: null
       adf_app_src_checksum:
         type: str
         required: true
@@ -38,6 +48,11 @@ argument_specs:
         description: |
           The version of the adf app, mainly to detect when we need to redeploy
           it.
+      adf_app_download_timeout:
+        type: int
+        default: 90
+        description: |
+          Timeout in seconds to download the ADF app distribution
       adf_app_configuration:
         type: dict
         required: false
