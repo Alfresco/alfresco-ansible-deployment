@@ -105,22 +105,15 @@ use_custom_keystores: false
 dependencies_version:
   postgresql_connector: 42.6.1
   postgres_major_version: 15
-  tomcat: 10.1.34
   libreoffice: 7.2.5.1
   pdf_renderer: 1.1
   imagemagick: 7.1.0-16-ci-11
-apache_archive_url: https://archive.apache.org
-tomcat_archive_url: "{{ apache_archive_url }}/dist/tomcat"
 temurin_arch: "{{ 'x64' if ansible_architecture == 'x86_64' else ansible_architecture }}"
 dependencies_url:
   postgresql_connector: >-
     {{ maven_repository.org }}/postgresql/postgresql/{{ dependencies_version.postgresql_connector }}/postgresql-{{ dependencies_version.postgresql_connector }}.jar
   postgresql_connector_sha1_checksum_url: >-
     {{ maven_repository.org }}/postgresql/postgresql/{{ dependencies_version.postgresql_connector }}/postgresql-{{ dependencies_version.postgresql_connector }}.jar.sha1
-  tomcat: >-
-    {{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat.split('.')[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz
-  tomcat_sha512_checksum_url: >-
-    {{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat.split('.')[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz.sha512
 repo_db_url: ""
 repo_db_driver: org.postgresql.Driver
 repo_db_name: "alfresco"

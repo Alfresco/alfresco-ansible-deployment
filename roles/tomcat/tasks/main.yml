@@ -16,24 +16,24 @@
 - name: Download Tomcat archive # noqa ignore-errors
   delegate_to: localhost
   ansible.builtin.get_url:
-    url: "{{ dependencies_url.tomcat }}"
-    checksum: sha512:{{ dependencies_url.tomcat_sha512_checksum_url }}
-    dest: "{{ download_path.path }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
+    url: "{{ tomcat_version }}"
+    checksum: "{{ tomcat_artifact_checksum_url }}"
+    dest: "{{ download_path.path }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
     mode: "0644"
   ignore_errors: true
 
 - name: Copy archive to target
   ansible.builtin.copy:
-    src: "{{ download_path.path }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
-    dest: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
+    src: "{{ download_path.path }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    dest: "{{ download_location }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
     mode: "0644"
 
-- name: Install Tomcat {{ dependencies_version.tomcat }}
+- name: Install Tomcat {{ tomcat_version }}
   become: true
   block:
     - name: Unarchive a file with extra options
       ansible.builtin.unarchive:
-        src: "{{ download_location }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
+        src: "{{ download_location }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
         dest: "{{ tomcat_home | dirname }}"
         remote_src: true
         creates: "{{ tomcat_home }}"
