@@ -12,17 +12,6 @@ transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
   version: 5.1.6
-<<<<<<< HEAD
-search:
-  artifact_name: alfresco-search-services
-  repository: "{{ nexus_repository.releases }}"
-  version: 2.0.14
-=======
-acc:
-  artifact_name: alfresco-control-center
-  repository: "{{ nexus_repository.releases }}"
-  version: 9.3.0
->>>>>>> 17d4a8a (few fixes)
 amps:
   aos_module:
     repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
