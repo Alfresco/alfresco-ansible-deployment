@@ -1,0 +1,58 @@
+---
+- hosts: java-instance
+  tasks:
+    - name: Include role defaults
+      include_vars:
+        file: ../../defaults/main.yml
+
+    - name: Verify Java binary
+      ansible.builtin.file:
+        path: /opt/openjdk-{{ java_core }}/bin/java
+        state: file
+        mode: "0755"
+      register: java_binary
+
+    - name: Check Java version
+      block:
+        - name: Get Java version
+          ansible.builtin.command:
+            cmd: "{{ java_binary.path }} -version"
+          register: java_version_output
+          ignore_errors: yes
+
+        - name: Fail if Java version is not available
+          ansible.builtin.assert:
+            that: java_version in java_version_output.stderr
+            msg: "Java version do not match ({{java_version }})"
+
+    - name: Check Keystores are properly created
+      become: true
+      vars:
+        keystore_pass: alfresco with space
+        keystore_path: >-
+          {{ java_home }}/lib/security/keystore/ansible.jceks
+      block:
+        - name: Check keystore embeds the certificate
+          ansible.builtin.command:
+            cmd: >-
+              {{ java_home }}/bin/keytool -list -keystore {{ keystore_path }}
+              -storepass alfresco -alias {{ ansible_hostname }}
+
+        - name: Check Keystores embed the certificate key
+          ansible.builtin.command:
+            cmd: >-
+              {{ java_home }}/bin/keytool -keypasswd -keystore {{ keystore_path }}
+              -storepass alfresco -keypass {{ keystore_pass | quote }}
+              -new {{ keystore_pass | quote }} -alias test
+
+    - name: Check Trustore have the CA imported
+      block:
+        - name: Read truststore
+          ansible.builtin.command:
+            cmd: "{{ java_home }}/bin/keytool -list -cacerts"
+          register: truststore_output
+
+        - name: Check Truststore contains the certificate
+          ansible.builtin.assert:
+            that: "'alfresco' in truststore_output.stdout"
+            msg: Truststore does not contain the CA certificate
