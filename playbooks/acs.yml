@@ -202,7 +202,7 @@
     - role: ../roles/search
       search_version: "{{ acs_play_search_version }}"
       search_flavor: >-
-        {{ 'alfresco-insight-engine' if 'insight-engine' in search_artifact_name else 'alfresco-search-services' }}
+        {{ 'alfresco-insight-engine' if 'insight-engine' in acs_play_search_artifact_name else 'alfresco-search-services' }}
       search_zip_url: "{{ acs_play_search_download_zip_url }}"
       search_zip_checksum_url: "{{ acs_play_search_download_zip_sha1_checksum_url }}"
       search_master_hostname: "{{ solr_host }}"
@@ -226,8 +226,8 @@
       vars:
         search_components:
           search:
-            artifact_name: "{{ search_artifact_name }}"
-            repository: "{{ search_repository }}"
+            artifact_name: "{{ acs_play_search_artifact_name }}"
+            repository: "{{ acs_play_search_repository }}"
             version: "{{ acs_play_search_version }}"
       ansible.builtin.blockinfile:
         block: "{{ search_components | to_nice_yaml(indent=2) }}"
