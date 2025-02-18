@@ -514,7 +514,10 @@
       become: true
       vars:
         sync_components:
-          sync: "{{ sync }}"
+          sync:
+            artifact_name: "{{ acs_play_sync_artifact_name }}"
+            repository: "{{ acs_play_sync_repository }}"
+            version: "{{ acs_play_sync_version }}"
       ansible.builtin.blockinfile:
         block: "{{ sync_components | to_nice_yaml(indent=2) }}"
         create: true
