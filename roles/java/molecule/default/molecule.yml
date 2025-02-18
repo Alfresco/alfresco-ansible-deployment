@@ -24,9 +24,3 @@ provisioner:
     links:
       group_vars: ../../../../group_vars
       host_vars: host_vars
-verifier:
-  name: testinfra
-  env:
-    TEST_HOST: "localhost"
-  options:
-    verbose: true

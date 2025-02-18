@@ -38,7 +38,7 @@
       with_items:
         - "/etc/systemd/system/activemq.service"
         - "{{ activemq_home | default('/opt/apache-activemq-{{ acs_play_activemq_version }}') }}"
-        - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
+        - "{{ java_home | default('/opt/openjdk-{{ acs_play_java_core }}') }}"
         - "{{ binaries_folder | default('/opt/alfresco') }}"
         - "{{ data_folder | default('/var/opt/alfresco') }}"
         - "{{ logs_folder | default('/var/log/alfresco') }}"
@@ -84,7 +84,7 @@
         - "/etc/systemd/system/alfresco-transform-router.service"
         - "/etc/systemd/system/alfresco-tengine-aio.service"
         - "/etc/systemd/system/alfresco-shared-fs.service"
-        - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
+        - "{{ java_home | default('/opt/openjdk-{{ acs_play_java_core }}') }}"
         - "{{ binaries_folder | default('/opt/alfresco') }}"
         - "{{ data_folder | default('/var/opt/alfresco') }}"
         - "{{ logs_folder | default('/var/log/alfresco') }}"
@@ -115,7 +115,7 @@
         state: absent
       with_items:
         - "/etc/systemd/system/alfresco-search.service"
-        - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
+        - "{{ java_home | default('/opt/openjdk-{{ acs_play_java_core }}') }}"
         - "{{ binaries_folder | default('/opt/alfresco') }}"
         - "{{ data_folder | default('/var/opt/alfresco') }}"
         - "{{ logs_folder | default('/var/log/alfresco') }}"
@@ -146,7 +146,7 @@
         state: absent
       with_items:
         - "/etc/systemd/system/alfresco-sync.service"
-        - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
+        - "{{ java_home | default('/opt/openjdk-{{ acs_play_java_core }}') }}"
         - "{{ binaries_folder | default('/opt/alfresco') }}"
         - "{{ data_folder | default('/var/opt/alfresco') }}"
         - "{{ logs_folder | default('/var/log/alfresco') }}"
@@ -194,7 +194,7 @@
       with_items:
         - "/etc/systemd/system/alfresco-content.service"
         - "{{ tomcat_home_prefix | default('/opt/apache-tomcat') }}"
-        - "{{ java_home | default('/opt/openjdk-{{ dependencies_version.java }}') }}"
+        - "{{ java_home | default('/opt/openjdk-{{ acs_play_java_core }}') }}"
         - "{{ binaries_folder | default('/opt/alfresco') }}"
         - "{{ logs_folder | default('/var/log/alfresco') }}"
         - "{{ download_location | default('/tmp/ansible_artefacts') }}"

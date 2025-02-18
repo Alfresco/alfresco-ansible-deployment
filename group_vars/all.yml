@@ -129,14 +129,11 @@ use_custom_keystores: false
 dependencies_version:
   postgresql_connector: 42.6.1
   postgres_major_version: 15
-  java: 17.0.14
-  java_build: 7
   tomcat: 10.1.34
   libreoffice: 7.2.5.1
   pdf_renderer: 1.1
   imagemagick: 7.1.0-16-ci-11
 apache_archive_url: https://archive.apache.org
-java_major: "{{ dependencies_version.java | regex_search('^[0-9]+') }}"
 tomcat_archive_url: "{{ apache_archive_url }}/dist/tomcat"
 temurin_arch: "{{ 'x64' if ansible_architecture == 'x86_64' else ansible_architecture }}"
 dependencies_url:
@@ -144,10 +141,6 @@ dependencies_url:
     {{ maven_repository.org }}/postgresql/postgresql/{{ dependencies_version.postgresql_connector }}/postgresql-{{ dependencies_version.postgresql_connector }}.jar
   postgresql_connector_sha1_checksum_url: >-
     {{ maven_repository.org }}/postgresql/postgresql/{{ dependencies_version.postgresql_connector }}/postgresql-{{ dependencies_version.postgresql_connector }}.jar.sha1
-  java: >-
-    https://github.com/adoptium/temurin{{ java_major }}-binaries/releases/download/jdk-{{ dependencies_version.java }}%2B{{ dependencies_version.java_build }}/OpenJDK{{ java_major }}U-jdk_{{ temurin_arch }}_linux_hotspot_{{ dependencies_version.java }}_{{ dependencies_version.java_build }}.tar.gz
-  java_sha256_checksum: >-
-    https://github.com/adoptium/temurin{{ java_major }}-binaries/releases/download/jdk-{{ dependencies_version.java }}%2B{{ dependencies_version.java_build }}/OpenJDK{{ java_major }}U-jdk_{{ temurin_arch }}_linux_hotspot_{{ dependencies_version.java }}_{{ dependencies_version.java_build }}.tar.gz.sha256.txt
   tomcat: >-
     {{ tomcat_archive_url }}/tomcat-{{ dependencies_version.tomcat.split('.')[0] }}/v{{ dependencies_version.tomcat }}/bin/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz
   tomcat_sha512_checksum_url: >-
