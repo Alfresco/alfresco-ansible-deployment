@@ -14,11 +14,3 @@ acs_play_search_version: 2.0.14
 acs_play_java_version: "{{ default_java_version }}"
 acs_play_search_enterprise_version: 3.2.1
 acs_play_sfs_version: 4.1.6
-
-ats_mtls_capable: >
-  {{
-    acs.version is version('7.4', 'ge') and
-    transform.version is version('3.1', 'ge') and
-    trouter.version is version('2.1', 'ge') and
-    acs_play_sfs_version is version('2.1', 'ge')
-  }}

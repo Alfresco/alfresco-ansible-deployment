@@ -349,8 +349,8 @@
       vars:
         sfs_components:
           sfs:
-            artifact_name: "{{ sfs_artifact_name }}"
-            repository: "{{ sfs_repository }}"
+            artifact_name: "{{ acs_play_sfs_artifact_name }}"
+            repository: "{{ acs_play_sfs_repository }}"
             version: "{{ acs_play_sfs_version }}"
       ansible.builtin.blockinfile:
         block: "{{ sfs_components | to_nice_yaml(indent=2) }}"
