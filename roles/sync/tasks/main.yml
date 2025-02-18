@@ -10,8 +10,8 @@
     url: "{{ sync_zip_url }}"
     dest: "{{ download_location }}/sync-dist-6.x-{{ sync_version }}.zip"
     checksum: "{{ sync_zip_checksum }}"
-    url_username: "{{ sync_zip_username }}"
-    url_password: "{{ sync_zip_password }}"
+    url_username: "{{ sync_zip_username | default(omit) }}"
+    url_password: "{{ sync_zip_password | default(omit) }}"
     mode: "0644"
 
 - name: Extract Sync service to {{ sync_home }}
