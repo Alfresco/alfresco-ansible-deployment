@@ -32,10 +32,6 @@ trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 4.1.6
-sfs:
-  artifact_name: alfresco-shared-file-store-controller
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 4.1.6
 sync:
   repository: >-
     {{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x

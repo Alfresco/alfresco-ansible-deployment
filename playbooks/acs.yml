@@ -338,6 +338,11 @@
   roles:
     - role: "../roles/sfs"
       ats_keystore: "{{ sfs_keystore | default({}) }}"
+      sfs_version: "{{ acs_play_sfs_version }}"
+      sfs_zip_url: "{{ acs_play_sfs_download_zip_url }}"
+      sfs_zip_checksum_url: "{{ acs_play_sfs_download_zip_sha1_checksum_url }}"
+      sfs_zip_username: "{{ nexus_user }}"
+      sfs_zip_password: "{{ nexus_password }}"
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with SFS
@@ -345,7 +350,10 @@
       become: true
       vars:
         sfs_components:
-          sfs: "{{ sfs }}"
+          sfs:
+            artifact_name: "{{ acs_play_sfs_artifact_name }}"
+            repository: "{{ acs_play_sfs_repository }}"
+            version: "{{ acs_play_sfs_version }}"
       ansible.builtin.blockinfile:
         block: "{{ sfs_components | to_nice_yaml(indent=2) }}"
         create: true
