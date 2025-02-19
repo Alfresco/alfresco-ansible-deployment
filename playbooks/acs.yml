@@ -364,6 +364,8 @@
       search_enterprise_version: "{{ acs_play_search_enterprise_version }}"
       search_enterprise_zip_url: "{{ acs_play_search_enterprise_download_zip_url }}"
       search_enterprise_zip_checksum_url: "{{ acs_play_search_enterprise_download_zip_sha1_checksum_url }}"
+      search_enterprise_zip_username: "{{ nexus_user }}"
+      search_enterprise_zip_password: "{{ nexus_password }}"
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Enterprise Search

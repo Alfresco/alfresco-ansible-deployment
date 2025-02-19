@@ -8,8 +8,8 @@
     dest: "{{ download_location }}/{{ search_enterprise_artifact_name }}-{{ search_enterprise_version }}.zip"
     checksum: "{{ search_enterprise_zip_checksum_url }}"
     mode: "0644"
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
+    url_username: "{{ search_enterprise_zip_username | default(omit) }}"
+    url_password: "{{ search_enterprise_zip_password | default(omit) }}"
 
 - name: Install & configure Search services
   become: true
