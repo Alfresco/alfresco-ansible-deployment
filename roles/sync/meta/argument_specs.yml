@@ -31,7 +31,7 @@ argument_specs:
         default: null
       sync_zip_checksum:
         description: |
-          Checksum of the Alfresco Sync Service zip file folowing the format
+          Checksum of the Alfresco Sync Service zip file following the format
           hash-type:hash-value
         type: str
         default: >-
