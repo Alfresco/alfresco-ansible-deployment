@@ -20,3 +20,5 @@
           JAVA_OPTS:
             - -Xms800m
             - -Xmx900m
+        trouter_zip_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
+        trouter_zip_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"

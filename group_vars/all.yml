@@ -51,19 +51,11 @@ transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
   version: 5.1.6
-trouter:
-  artifact_name: alfresco-transform-router
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 4.1.6
 downloads:
   acs_zip_url: >-
     {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip
   acs_zip_sha1_checksum_url: >-
     {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip.sha1
-  trouter_jar_url: >-
-    {{ trouter.repository }}/{{ trouter.artifact_name }}/{{ trouter.version }}/{{ trouter.artifact_name }}-{{ trouter.version }}.jar
-  trouter_jar_sha1_checksum_url: >-
-    {{ trouter.repository }}/{{ trouter.artifact_name }}/{{ trouter.version }}/{{ trouter.artifact_name }}-{{ trouter.version }}.jar.sha1
   transform_jar_url: >-
     {{ transform.repository }}/{{ transform.artifact_name }}/{{ transform.version }}/{{ transform.artifact_name }}-{{ transform.version }}.jar
   transform_jar_sha1_checksum_url: >-

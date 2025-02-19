@@ -26,7 +26,7 @@ After=syslog.socket network.target local-fs.target remote-fs.target
 [Service]
 Type=simple
 User={{ username }}
-ExecStart={{ java_home }}/bin/java {{ java_opts }} -jar {{ ats_home }}/{{ trouter.artifact_name }}-{{ trouter.version }}.jar --spring.config.additional-location=optional:atr-mtls.properties
+ExecStart={{ java_home }}/bin/java {{ java_opts }} -jar {{ ats_home }}/{{ trouter_artifact_name }}-{{ trouter_version }}.jar --spring.config.additional-location=optional:atr-mtls.properties
 WorkingDirectory={{ ats_home }}
 Restart=on-failure
 StandardOutput=append:{{ logs_folder }}/ats-atr.log

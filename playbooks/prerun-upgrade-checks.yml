@@ -60,7 +60,7 @@
           ansible.builtin.fail:
           when:
             - installed_components.trouter is defined
-            - trouter.version != installed_components.trouter.version
+            - acs_play_trouter_version != installed_components.trouter.version
 
         - name: Fail on unsupported SFS upgrades
           ansible.builtin.fail:
