@@ -13,3 +13,11 @@ argument_specs:
       search_enterprise_zip_checksum_url:
         description: Search Enterprise dependency checksum URL to use for deployment
         required: false
+      search_enterprise_zip_username:
+        description: |
+          Username to use to download the Search Enterprise zip file
+        required: false
+      search_enterprise_zip_password:
+        description: |
+          Password to use to download the Search Enterprise zip file
+        required: false
