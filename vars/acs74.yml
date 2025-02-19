@@ -25,3 +25,4 @@ acs_play_java_version: "{{ default_java_version }}"
 acs_play_search_enterprise_version: 3.3.3
 acs_play_sfs_version: 4.1.6
 acs_play_sync_version: 3.11.3
+acs_play_tomcat_version: 9.0.98

@@ -256,12 +256,16 @@
       when:
         - ats_mtls_required
         - ats_mtls_capable
-  roles:
-    - role: "../roles/repository"
-      repo_keystore: "{{ repository_keystore | default({}) }}"
-      repository_properties: "{{ global_properties }}"
-      raw_properties: "{{ properties_snippets }}"
-      repository_identity_url: "{{ identity_url | default('') }}"
+  tasks:
+    - name: Install Repository
+      ansible.builtin.include_role:
+        name: "../roles/repository"
+      vars:
+        repo_keystore: "{{ repository_keystore | default({}) }}"
+        repository_properties: "{{ global_properties }}"
+        raw_properties: "{{ properties_snippets }}"
+        repository_identity_url: "{{ identity_url | default('') }}"
+        tomcat_version: "{{ acs_play_tomcat_version }}"
   post_tasks:
     - name: Update installation status file with ACS
       become: true
