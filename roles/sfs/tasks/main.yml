@@ -31,8 +31,8 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0644"
-        url_username: "{{ nexus_user }}"
-        url_password: "{{ nexus_password }}"
+        url_username: "{{ sfs_zip_username | default(omit) }}"
+        url_password: "{{ sfs_zip_password | default(omit) }}"
         timeout: 570
 
     - name: Add sfs startup script

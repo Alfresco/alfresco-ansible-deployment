@@ -14,3 +14,6 @@ sfs_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/
 sfs_version: 4.1.6
 sfs_zip_url: "{{ sfs_repository }}/{{ sfs_artifact_name }}/{{ sfs_version }}/{{ sfs_artifact_name }}-{{ sfs_version }}.jar"
 sfs_zip_checksum_url: "sha1:{{ sfs_zip_url }}.sha1"
+
+sfs_zip_username: null
+sfs_zip_password: null
