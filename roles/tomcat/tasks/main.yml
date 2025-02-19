@@ -16,7 +16,7 @@
 - name: Download Tomcat archive # noqa ignore-errors
   delegate_to: localhost
   ansible.builtin.get_url:
-    url: "{{ tomcat_version }}"
+    url: "{{ tomcat_artifact_url }}"
     checksum: "{{ tomcat_artifact_checksum_url }}"
     dest: "{{ download_path.path }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
     mode: "0644"
