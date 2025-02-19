@@ -6,6 +6,10 @@
     - name: Populate service facts
       ansible.builtin.service_facts:
 
+    - name: Include default vars
+      ansible.builtin.include_vars:
+        file: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/defaults/main.yml"
+
     - name: Check that Elasticsearch Connector service is up and running
       ansible.builtin.assert:
         that:
@@ -47,7 +51,7 @@
         service_file_content: "{{ service_file['content'] | b64decode }}"
         expected_exec_start: >-
           ExecStart=/opt/openjdk-([0-9]+\.){2}[0-9]+/bin/java
-          -jar /opt/alfresco/enterprise-search-{{ search_enterprise.version }}/alfresco-elasticsearch-reindexing-{{ search_enterprise.version }}-app.jar
+          -jar /opt/alfresco/enterprise-search-{{ search_enterprise_version }}/alfresco-elasticsearch-reindexing-{{ search_enterprise_version }}-app.jar
           --alfresco.reindex.concurrentProcessors=6
       ansible.builtin.assert:
         that:

@@ -21,10 +21,6 @@ api_explorer:
   artifact_name: api-explorer
   repository: "{{ nexus_repository.releases }}"
   version: 7.3.0
-search_enterprise:
-  artifact_name: alfresco-elasticsearch-connector-distribution
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 3.2.1
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"

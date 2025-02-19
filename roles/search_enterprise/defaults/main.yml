@@ -3,3 +3,13 @@
 search_enterprise_port: 8081
 # see https://support.hyland.com/r/Alfresco/Alfresco-Search-Enterprise/4.2/Alfresco-Search-Enterprise/Administer
 search_enterprise_reindex_options: ''
+
+search_enterprise_artifact_name: alfresco-elasticsearch-connector-distribution
+search_enterprise_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
+
+search_enterprise_version: 4.2.0
+search_enterprise_zip_url: "{{ search_enterprise_repository }}/{{ search_enterprise_artifact_name }}/{{ search_enterprise_version }}/{{ search_enterprise_artifact_name }}-{{ search_enterprise_version }}.zip"
+search_enterprise_zip_checksum_url:  "sha1:{{ search_enterprise_zip_url }}.sha1"
+
+search_enterprise_zip_username: null
+search_enterprise_zip_password: null

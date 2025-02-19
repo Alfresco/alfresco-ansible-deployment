@@ -17,3 +17,6 @@
     - name: "Include search_enterprise"
       ansible.builtin.include_role:
         name: "search_enterprise"
+      vars:
+        search_enterprise_zip_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
+        search_enterprise_zip_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
