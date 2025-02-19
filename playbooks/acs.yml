@@ -258,7 +258,7 @@
         - ats_mtls_capable
   tasks:
     - name: Install Repository
-      ansible.builtin.include_role:
+      ansible.builtin.import_role:
         name: "../roles/repository"
       vars:
         repo_keystore: "{{ repository_keystore | default({}) }}"
