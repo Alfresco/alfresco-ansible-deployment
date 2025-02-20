@@ -104,9 +104,13 @@
 - name: Activemq Role
   hosts: activemq
   gather_facts: false
-  roles:
-    - role: "../roles/activemq"
-      activemq_version: "{{ acs_play_activemq_version }}"
+  tasks:
+    - name: ActiveMQ Role import
+      ansible.builtin.import_role:
+        name: "../roles/activemq"
+      vars:
+        activemq_version: "{{ acs_play_activemq_version }}"
+        java_version: "{{ acs_play_java_version }}"
       when: not groups.external_activemq | default([])
   tags:
     - activemq
@@ -176,9 +180,13 @@
       when:
         - ats_mtls_required
         - ats_mtls_capable
-  roles:
-    - role: "../roles/transformers"
-      ats_keystore: "{{ transformers_keystore | default({}) }}"
+  tasks:
+    - name: Transformers Role import
+      ansible.builtin.import_role:
+        name: "../roles/transformers"
+      vars:
+        ats_keystore: "{{ transformers_keystore | default({}) }}"
+        java_version: "{{ acs_play_java_version }}"
   post_tasks:
     - name: Update installation status file with Transformers
       become: true
@@ -198,23 +206,25 @@
 - name: Alfresco Search Role
   hosts: search
   gather_facts: true
-  roles:
-    - role: ../roles/search
-      search_version: "{{ acs_play_search_version }}"
-      search_flavor: >-
-        {{ 'alfresco-insight-engine' if 'insight-engine' in acs_play_search_artifact_name else 'alfresco-search-services' }}
-      search_zip_url: "{{ acs_play_search_download_zip_url }}"
-      search_zip_checksum_url: "{{ acs_play_search_download_zip_sha1_checksum_url }}"
-      search_master_hostname: "{{ solr_host }}"
-      search_shared_secret: "{{ reposearch_shared_secret }}"
-      alfresco:
-        host: "{{ nginx_host }}"
-        port: "{{ ports_cfg.nginx.http }}"
-        port_ssl: "{{ ports_cfg.nginx.https }}"
-      search_topology: >-
-        {% if groups.search | length > 1 %}replication
-        {%- else %}standalone
-        {%- endif %}
+  tasks:
+    - name: Search Service Role import
+      ansible.builtin.import_role:
+        name: "../roles/search"
+      vars:
+        java_version: "{{ acs_play_java_version }}"
+        search_version: "{{ acs_play_search_version }}"
+        search_flavor: >-
+          {{ 'alfresco-insight-engine' if 'insight-engine' in acs_play_search_artifact_name else 'alfresco-search-services' }}
+        search_zip_url: "{{ acs_play_search_download_zip_url }}"
+        search_zip_checksum_url: "{{ acs_play_search_download_zip_sha1_checksum_url }}"
+        search_master_hostname: "{{ solr_host }}"
+        search_shared_secret: "{{ reposearch_shared_secret }}"
+        alfresco:
+          host: "{{ nginx_host }}"
+          port: "{{ ports_cfg.nginx.http }}"
+          port_ssl: "{{ ports_cfg.nginx.https }}"
+        search_topology: >-
+          {{ 'replication' if groups.search | length > 1 else 'standalone' }}
   post_tasks:
     - name: Make sure Solr is running
       become: true
@@ -257,10 +267,11 @@
         - ats_mtls_required
         - ats_mtls_capable
   tasks:
-    - name: Install Repository
+    - name: Repository Role import
       ansible.builtin.import_role:
         name: "../roles/repository"
       vars:
+        java_version: "{{ acs_play_java_version }}"
         repo_keystore: "{{ repository_keystore | default({}) }}"
         repository_properties: "{{ global_properties }}"
         raw_properties: "{{ properties_snippets }}"
@@ -301,9 +312,13 @@
       when:
         - ats_mtls_required
         - ats_mtls_capable
-  roles:
-    - role: "../roles/trouter"
-      ats_keystore: "{{ trouter_keystore | default({}) }}"
+  tasks:
+    - name: T-Router Role import
+      ansible.builtin.import_role:
+        name: "../roles/trouter"
+      vars:
+        java_version: "{{ acs_play_java_version }}"
+        ats_keystore: "{{ trouter_keystore | default({}) }}"
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Trouter
@@ -339,14 +354,18 @@
       when:
         - ats_mtls_required
         - ats_mtls_capable
-  roles:
-    - role: "../roles/sfs"
-      ats_keystore: "{{ sfs_keystore | default({}) }}"
-      sfs_version: "{{ acs_play_sfs_version }}"
-      sfs_zip_url: "{{ acs_play_sfs_download_zip_url }}"
-      sfs_zip_checksum_url: "{{ acs_play_sfs_download_zip_sha1_checksum_url }}"
-      sfs_zip_username: "{{ nexus_user }}"
-      sfs_zip_password: "{{ nexus_password }}"
+  tasks:
+    - name: Shared File Store Role import
+      ansible.builtin.import_role:
+        name: "../roles/sfs"
+      vars:
+        java_version: "{{ acs_play_java_version }}"
+        sfs_version: "{{ acs_play_sfs_version }}"
+        sfs_zip_url: "{{ acs_play_sfs_download_zip_url }}"
+        sfs_zip_checksum_url: "{{ acs_play_sfs_download_zip_sha1_checksum_url }}"
+        sfs_zip_username: "{{ nexus_user }}"
+        sfs_zip_password: "{{ nexus_password }}"
+        ats_keystore: "{{ sfs_keystore | default({}) }}"
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with SFS
@@ -371,13 +390,17 @@
 - name: Enterprise Search Role
   hosts: search_enterprise
   gather_facts: false
-  roles:
-    - role: "../roles/search_enterprise"
-      search_enterprise_version: "{{ acs_play_search_enterprise_version }}"
-      search_enterprise_zip_url: "{{ acs_play_search_enterprise_download_zip_url }}"
-      search_enterprise_zip_checksum_url: "{{ acs_play_search_enterprise_download_zip_sha1_checksum_url }}"
-      search_enterprise_zip_username: "{{ nexus_user }}"
-      search_enterprise_zip_password: "{{ nexus_password }}"
+  tasks:
+    - name: Enterprise Search Role import
+      ansible.builtin.import_role:
+        name: "../roles/search_enterprise"
+      vars:
+        java_version: "{{ acs_play_java_version }}"
+        search_enterprise_version: "{{ acs_play_search_enterprise_version }}"
+        search_enterprise_zip_url: "{{ acs_play_search_enterprise_download_zip_url }}"
+        search_enterprise_zip_checksum_url: "{{ acs_play_search_enterprise_download_zip_sha1_checksum_url }}"
+        search_enterprise_zip_username: "{{ nexus_user }}"
+        search_enterprise_zip_password: "{{ nexus_password }}"
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Enterprise Search
@@ -504,13 +527,17 @@
 - name: Sync Service Role
   hosts: syncservice
   gather_facts: false
-  roles:
-    - role: "../roles/sync"
-      sync_version: "{{ acs_play_sync_version }}"
-      sync_zip_url: "{{ acs_play_sync_zip_url }}"
-      sync_zip_checksum: "{{ acs_play_sync_zip_sha1_checksum }}"
-      sync_zip_username: "{{ nexus_user }}"
-      sync_zip_password: "{{ nexus_password }}"
+  tasks:
+    - name: Sync Service Role import
+      ansible.builtin.import_role:
+        name: "../roles/sync"
+      vars:
+        java_version: "{{ acs_play_java_version }}"
+        sync_version: "{{ acs_play_sync_version }}"
+        sync_zip_url: "{{ acs_play_sync_zip_url }}"
+        sync_zip_checksum: "{{ acs_play_sync_zip_sha1_checksum }}"
+        sync_zip_username: "{{ nexus_user }}"
+        sync_zip_password: "{{ nexus_password }}"
       when: acs.edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Sync
@@ -542,20 +569,24 @@
       ansible.builtin.fail:
         msg: "Audit Storage requires ACS 23.4 or later"
       when: not acs_version_requirement
-  roles:
-    - role: "../roles/audit_storage"
+  tasks:
+    - name: Audit Storage Role import
       when: acs.edition == "Enterprise" and acs_version_requirement
-      audit_storage_version: "{{ acs_play_audit_storage_version }}"
-      audit_storage_zip_url: "{{ audit_storage_download_zip_url }}"
-      audit_storage_zip_checksum_url: "{{ audit_storage_download_zip_sha1_checksum_url }}"
-      audit_storage_username: "{{ username }}"
-      audit_storage_group_name: "{{ group_name }}"
-      audit_storage_broker_url: "failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})"
-      audit_storage_broker_username: "{{ activemq_username }}"
-      audit_storage_broker_password: "{{ activemq_password }}"
-      audit_storage_opensearch_url: "{{ elasticsearch_protocol }}://{{ elasticsearch_host }}:{{ ports_cfg.elasticsearch.http }}"
-      audit_storage_opensearch_username: "{{ elasticsearch_username }}"
-      audit_storage_opensearch_password: "{{ elasticsearch_password }}"
+      ansible.builtin.import_role:
+        name: "../roles/audit_storage"
+      vars:
+        java_version: "{{ acs_play_java_version }}"
+        audit_storage_version: "{{ acs_play_audit_storage_version }}"
+        audit_storage_zip_url: "{{ audit_storage_download_zip_url }}"
+        audit_storage_zip_checksum_url: "{{ audit_storage_download_zip_sha1_checksum_url }}"
+        audit_storage_username: "{{ username }}"
+        audit_storage_group_name: "{{ group_name }}"
+        audit_storage_broker_url: "failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})"
+        audit_storage_broker_username: "{{ activemq_username }}"
+        audit_storage_broker_password: "{{ activemq_password }}"
+        audit_storage_opensearch_url: "{{ elasticsearch_protocol }}://{{ elasticsearch_host }}:{{ ports_cfg.elasticsearch.http }}"
+        audit_storage_opensearch_username: "{{ elasticsearch_username }}"
+        audit_storage_opensearch_password: "{{ elasticsearch_password }}"
   post_tasks:
     - name: Update installation status file with Audit Storage
       when: acs.edition == "Enterprise" and acs_version_requirement
