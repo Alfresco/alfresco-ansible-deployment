@@ -21,11 +21,6 @@ platforms:
       - nginx
       - syncservice
       - database
-      - transformers
-      - sfs
-      - trouter
-      - search
-      - adw
       - activemq
 provisioner:
   name: ansible

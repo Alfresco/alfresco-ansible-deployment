@@ -55,10 +55,6 @@ trouter:
   artifact_name: alfresco-transform-router
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 4.1.6
-sync:
-  repository: >-
-    {{ nexus_repository.enterprise_releases }}/services/sync/sync-dist-6.x
-  version: 5.1.0
 downloads:
   acs_zip_url: >-
     {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip
@@ -72,10 +68,6 @@ downloads:
     {{ transform.repository }}/{{ transform.artifact_name }}/{{ transform.version }}/{{ transform.artifact_name }}-{{ transform.version }}.jar
   transform_jar_sha1_checksum_url: >-
     {{ transform.repository }}/{{ transform.artifact_name }}/{{ transform.version }}/{{ transform.artifact_name }}-{{ transform.version }}.jar.sha1
-  sync_zip_url: >-
-    {{ sync.repository }}/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip
-  sync_zip_sha1_checksum_url: >-
-    {{ sync.repository }}/{{ sync.version }}/sync-dist-6.x-{{ sync.version }}.zip.sha1
 war_downloads:
   - url: >-
       {{ api_explorer.repository }}/{{ api_explorer.artifact_name }}/{{ api_explorer.version }}/{{ api_explorer.artifact_name }}-{{ api_explorer.version }}.war

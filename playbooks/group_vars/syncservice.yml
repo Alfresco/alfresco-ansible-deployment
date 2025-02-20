@@ -1,0 +1,4 @@
+acs_play_sync_artifact_name: sync-dist-6.x
+acs_play_sync_repository: "{{ nexus_repository.enterprise_releases }}/services/sync"
+acs_play_sync_zip_url: "{{ acs_play_sync_repository }}/{{ acs_play_sync_artifact_name }}/{{ acs_play_sync_version }}/{{ acs_play_sync_artifact_name }}-{{ acs_play_sync_version }}.zip"
+acs_play_sync_zip_sha1_checksum: "sha1:{{ acs_play_sync_zip_url }}.sha1"

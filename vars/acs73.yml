@@ -15,3 +15,4 @@ acs_play_search_version: 2.0.14
 acs_play_java_version: "{{ default_java_version }}"
 acs_play_search_enterprise_version: 3.2.1
 acs_play_sfs_version: 4.1.6
+acs_play_sync_version: 3.11.3

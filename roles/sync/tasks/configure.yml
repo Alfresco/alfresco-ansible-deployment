@@ -9,7 +9,7 @@
     local_db_url: >-
       {{ sync_db_url or "jdbc:postgresql://{}:{}/{}".format(db_host, ports_cfg.postgres.sql, sync_db_name) }}
     local_config:
-      version: "{{ sync.version }}"
+      version: "{{ sync_version }}"
       messaging:
         username: "{{ activemq_username }}"
         password: "{{ activemq_password }}"
