@@ -22,7 +22,7 @@ s
 {%- endmacro %}
 
 {%- set java_opts = "-DPDFRENDERER_EXE=" + ats_home + "/alfresco-pdf-renderer \
--DLIBREOFFICE_HOME=" + libreoffice_home + " \
+-DLIBREOFFICE_HOME=" + transformers_libreoffice_home + " \
 -DIMAGEMAGICK_ROOT=" + imagemagick_home + " \
 -DIMAGEMAGICK_DYN=" + im_lib() + " \
 -DIMAGEMAGICK_EXE=" + (imagemagick_home + "/bin/convert" if pkg_format == 'deb' else 'convert') + " \

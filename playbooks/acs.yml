@@ -187,6 +187,9 @@
       vars:
         ats_keystore: "{{ transformers_keystore | default({}) }}"
         java_version: "{{ acs_play_java_version }}"
+        transformers_libreoffice_version: "{{ acs_play_te_libre_version }}"
+        transformers_libreoffice_archive_url: "{{ acs_play_te_libre_archive_url }}"
+        transformers_libreoffice_archive_checksum_url: "{{ acs_play_te_libre_archive_checksum_url }}"
   post_tasks:
     - name: Update installation status file with Transformers
       become: true
