@@ -13,3 +13,24 @@ argument_specs:
           and server configuration. The object needs to be passed as expected
           by the java role. Check the java role's arguments specification for
           details.
+      trouter_version:
+        type: str
+        required: false
+        description: The version of the T-Router artifact to be installed
+      trouter_zip_url:
+        type: str
+        required: false
+        description: The URL to download the T-Router artifact from
+      trouter_zip_checksum_url:
+        type: str
+        required: false
+        description: The URL to download the checksum of the T-Router artifact
+      trouter_zip_username:
+        type: str
+        required: false
+        description: The username to use for downloading the T-Router artifact
+      trouter_zip_password:
+        type: str
+        required: false
+        no_log: true
+        description: The password to use for downloading the T-Router artifact
