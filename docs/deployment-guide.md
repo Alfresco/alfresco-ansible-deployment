@@ -635,7 +635,7 @@ For example, to override the JAVA_OPTS environment variable for the All-In-One T
 all:
   children:
     transformers:
-      tengine_environment:
+      transformers_tengine_environment:
         JAVA_OPTS:
           - -Xms512m
           - -Xmx1g

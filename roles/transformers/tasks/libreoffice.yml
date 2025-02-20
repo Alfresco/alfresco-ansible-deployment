@@ -12,30 +12,30 @@
     - name: Extract libreoffice.tar.gz
       vars:
         lo_arch: >-
-          {{ ansible_system }}_{{ ansible_architecture | replace('_', '-') }}_{{ pkg_format }}
+          {{ ansible_system }}_{{ ansible_architecture | replace('_', '-') }}_{{ transformers_pkg_format }}
       ansible.builtin.unarchive:
         src: "{{ download_location }}/libreoffice.tar.gz"
         dest: "{{ download_location }}/"
         remote_src: true
         creates: >-
-          {{ download_location }}/LibreOffice_{{ transformers_libreoffice_version }}_{{ lo_arch }}/{{ pkg_format | upper }}S/
+          {{ download_location }}/LibreOffice_{{ transformers_libreoffice_version }}_{{ lo_arch }}/{{ transformers_pkg_format | upper }}S/
 
     - name: Enumerate LibreOffice RPMs to install
-      when: pkg_format == 'rpm'
+      when: transformers_pkg_format == 'rpm'
       ansible.builtin.find:
         paths: "{{ download_location }}/LibreOffice_{{ transformers_libreoffice_version }}_Linux_{{ ansible_architecture | replace('_', '-') }}_rpm/RPMS/"
         patterns: "*.rpm"
       register: libreoffice_rpm_files
 
     - name: Install LibreOffice RPMs
-      when: pkg_format == 'rpm'
+      when: transformers_pkg_format == 'rpm'
       ansible.builtin.dnf:
         state: present
         name: "{{ libreoffice_rpm_files.files | map(attribute='path') | list }}"
         disable_gpg_check: true
 
     - name: Install LibreOffice debs
-      when: pkg_format == 'deb'
+      when: transformers_pkg_format == 'deb'
       vars:
         lo_arch: >-
           {{ ansible_system }}_{{ ansible_architecture | replace('_', '-') }}

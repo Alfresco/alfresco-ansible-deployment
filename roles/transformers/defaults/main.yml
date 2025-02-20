@@ -1,12 +1,12 @@
 ---
 # defaults file for roles/transformers
-pkg_format: "{% if ansible_pkg_mgr == 'apt' %}deb{% else %}rpm{% endif %}"
-tengine_environment:
+transformers_pkg_format: "{% if ansible_pkg_mgr == 'apt' %}deb{% else %}rpm{% endif %}"
+transformers_tengine_environment:
   JAVA_OPTS:
     - -Xms512m
     - -Xmx1536m
-ats_keystore: {}
-include_ghostscript: false
+transformers_ats_keystore: {}
+transformers_include_ghostscript: false
 
 transformers_libreoffice_artifact_name: libreoffice-dist
 transformers_libreoffice_repository: https://artifacts.alfresco.com/nexus/content/repositories/thirdparty/org/libreoffice
@@ -27,3 +27,10 @@ transformers_pdf_archive_checksum_url: "sha1:{{ transformers_pdf_archive_url }}.
 
 transformers_imagemagick_version: 7.1.0-16-ci-11
 transformers_imagemagick_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
+
+transformers_aio_artifact_name: alfresco-transform-core-aio
+transformers_aio_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
+
+transformers_aio_version: 5.1.6
+transformers_aio_archive_url: "{{ transformers_aio_repository }}/{{ transformers_aio_artifact_name }}/{{ transformers_aio_version }}/{{ transformers_aio_artifact_name }}-{{ transformers_aio_version }}.jar"
+transformers_aio_archive_checksum_url: "sha1:{{ transformers_aio_archive_url }}.sha1"

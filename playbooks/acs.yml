@@ -185,7 +185,7 @@
       ansible.builtin.import_role:
         name: "../roles/transformers"
       vars:
-        ats_keystore: "{{ transformers_keystore | default({}) }}"
+        transformers_ats_keystore: "{{ transformers_keystore | default({}) }}"
         java_version: "{{ acs_play_java_version }}"
         transformers_libreoffice_version: "{{ acs_play_transformers_libreoffice_version }}"
         transformers_libreoffice_archive_url: "{{ acs_play_transformers_libreoffice_archive_url }}"
@@ -195,6 +195,9 @@
         transformers_pdf_archive_checksum_url: "{{ acs_play_transformers_pdf_archive_checksum_url }}"
         transformers_imagemagick_version: "{{ acs_play_transformers_imagemagick_version }}"
         transformers_imagemagick_repository: "{{ acs_play_transformers_imagemagick_repository }}"
+        transformers_aio_version: "{{ acs_play_te_aio_version }}"
+        transformers_aio_archive_url: "{{ acs_play_te_aio_download_archive_url }}"
+        transformers_aio_archive_checksum_url: "{{ acs_play_te_aio_download_archive_sha1_checksum_url }}"
   post_tasks:
     - name: Update installation status file with Transformers
       become: true

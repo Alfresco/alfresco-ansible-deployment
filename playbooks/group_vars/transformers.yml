@@ -21,3 +21,8 @@ acs_play_transformers_pdf_archive_url: "{{ acs_play_transformers_pdf_repository 
 acs_play_transformers_pdf_archive_checksum_url: "sha1:{{ acs_play_transformers_pdf_archive_url }}.sha1"
 
 acs_play_transformers_imagemagick_repository: "{{ nexus_repository.releases }}"
+
+acs_play_te_aio_artifact_name: alfresco-transform-core-aio
+acs_play_te_aio_repository: "{{ nexus_repository.releases }}"
+acs_play_te_aio_download_archive_url: "{{ acs_play_te_aio_repository }}/{{ acs_play_te_aio_artifact_name }}/{{ acs_play_te_aio_version }}/{{ acs_play_te_aio_artifact_name }}-{{ acs_play_te_aio_version }}.jar"
+acs_play_te_aio_download_archive_sha1_checksum_url: "sha1:{{ acs_play_te_aio_download_archive_url }}.sha1"
