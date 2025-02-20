@@ -8,7 +8,8 @@ acs_play_trouter_repository: "{{ nexus_repository.enterprise_releases }}"
 acs_play_trouter_download_zip_url: "{{ acs_play_trouter_repository }}/{{ acs_play_trouter_artifact_name }}/{{ acs_play_trouter_version }}/{{ acs_play_trouter_artifact_name }}-{{ acs_play_trouter_version }}.jar"
 acs_play_trouter_download_zip_sha1_checksum_url: "sha1:{{ acs_play_trouter_download_zip_url }}.sha1"
 
-acs_play_transformers_libreoffice_archive_name: "libreoffice-dist-{{ acs_play_transformers_libreoffice_version }}-{{ pkg_format }}.gz"
-acs_play_transformers_libreoffice_repository: "{{ artifacts_repositories.community.base_url }}/repositories/thirdparty/org/libreoffice/libreoffice-dist"
-acs_play_transformers_libreoffice_archive_url: "{{ acs_play_transformers_libreoffice_repository }}/{{ acs_play_transformers_libreoffice_version }}/{{ acs_play_transformers_libreoffice_archive_name }}"
-acs_play_transformers_libreoffice_archive_checksum_url: "sha1:{{ acs_play_transformers_libreoffice_archive_url }}.sha1"
+acs_play_tf_libre_artifact_name: libreoffice-dist
+acs_play_tf_libre_archive_name: "{{ acs_play_tf_libre_artifact_name }}-{{ acs_play_tf_libre_version }}-{{ pkg_format }}.gz"
+acs_play_tf_libre_repository: "{{ artifacts_repositories.community.base_url }}/repositories/thirdparty/org/libreoffice"
+acs_play_tf_libre_archive_url: "{{ acs_play_tf_libre_repository }}/{{ acs_play_tf_libre_artifact_name }}/{{ acs_play_tf_libre_version }}/{{ acs_play_tf_libre_archive_name }}"
+acs_play_tf_libre_archive_checksum_url: "sha1:{{ acs_play_tf_libre_archive_url }}.sha1"
