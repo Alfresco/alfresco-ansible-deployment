@@ -10,3 +10,18 @@ argument_specs:
         description: |
           Representation of the JRE keystore as expected by the java role.
           Check the java role's arguments specification for details.
+      transformers_libreoffice_version:
+        type: str
+        required: true
+        description: |
+          Version of the LibreOffice package to install.
+      transformers_libreoffice_archive_url:
+        type: str
+        required: true
+        description: |
+          URL to the LibreOffice package archive.
+      transformers_libreoffice_archive_checksum_url:
+        type: str
+        required: true
+        description: |
+          URL to the LibreOffice package archive checksum.

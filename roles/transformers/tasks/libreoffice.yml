@@ -4,8 +4,8 @@
   block:
     - name: Download libreoffice package archive
       ansible.builtin.get_url:
-        url: "{{ libreoffice_archive_url }}"
-        checksum: sha1:{{ lookup('url', libreoffice_archive_sha1_checksum_url) }}
+        url: "{{ transformers_libreoffice_archive_url }}"
+        checksum: "{{ transformers_libreoffice_archive_checksum_url }}"
         dest: "{{ download_location }}/libreoffice.tar.gz"
         mode: "0644"
 
@@ -18,12 +18,12 @@
         dest: "{{ download_location }}/"
         remote_src: true
         creates: >-
-          {{ download_location }}/LibreOffice_{{ dependencies_version.libreoffice }}_{{ lo_arch }}/{{ pkg_format | upper }}S/
+          {{ download_location }}/LibreOffice_{{ transformers_libreoffice_version }}_{{ lo_arch }}/{{ pkg_format | upper }}S/
 
     - name: Enumerate LibreOffice RPMs to install
       when: pkg_format == 'rpm'
       ansible.builtin.find:
-        paths: "{{ download_location }}/LibreOffice_{{ dependencies_version.libreoffice }}_Linux_{{ ansible_architecture | replace('_', '-') }}_rpm/RPMS/"
+        paths: "{{ download_location }}/LibreOffice_{{ transformers_libreoffice_version }}_Linux_{{ ansible_architecture | replace('_', '-') }}_rpm/RPMS/"
         patterns: "*.rpm"
       register: libreoffice_rpm_files
 
@@ -41,6 +41,6 @@
           {{ ansible_system }}_{{ ansible_architecture | replace('_', '-') }}
       ansible.builtin.shell:
         cmd: dpkg -i DEBS/*.deb
-        creates: /opt/libreoffice{{ dependencies_version.libreoffice | regex_search('^[0-9]+.[0-9]+') }}/program/soffice.bin
+        creates: /opt/libreoffice{{ transformers_libreoffice_version | regex_search('^[0-9]+.[0-9]+') }}/program/soffice.bin
         chdir: >-
-          {{ download_location }}/LibreOffice_{{ dependencies_version.libreoffice }}_{{ lo_arch }}_deb
+          {{ download_location }}/LibreOffice_{{ transformers_libreoffice_version }}_{{ lo_arch }}_deb
