@@ -64,7 +64,7 @@ jobs:
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@4b0ea0ccff236b931a3cb94f4e8640525439361a # v8.12.1
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@29e77d9158142e043783ea9eb831535b06474860 # v8.14.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -82,7 +82,7 @@ jobs:
           cache-name: ${{ inputs.galaxy_cache }}
 
       - name: Install required tools for arm runners
-        uses: Alfresco/alfresco-build-tools/.github/actions/install-ubuntu-default-tools@4b0ea0ccff236b931a3cb94f4e8640525439361a # v8.12.1
+        uses: Alfresco/alfresco-build-tools/.github/actions/install-ubuntu-default-tools@29e77d9158142e043783ea9eb831535b06474860 # v8.14.0
         if: contains(inputs.runner, '-arm')
 
       - name: Run tests

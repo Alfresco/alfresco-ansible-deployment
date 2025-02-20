@@ -33,7 +33,7 @@ jobs:
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@4b0ea0ccff236b931a3cb94f4e8640525439361a # v8.12.1
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@29e77d9158142e043783ea9eb831535b06474860 # v8.14.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -78,7 +78,7 @@ jobs:
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@4b0ea0ccff236b931a3cb94f4e8640525439361a # v8.12.1
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@29e77d9158142e043783ea9eb831535b06474860 # v8.14.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -98,7 +98,7 @@ jobs:
       - name: Run tests
         env:
           MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
-        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # v3.0.0
+        uses: nick-fields/retry@c97818ca39074beaea45180dba704f92496a0082 # v3.0.1
         with:
           timeout_minutes: 60
           max_attempts: 3
