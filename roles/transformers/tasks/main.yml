@@ -69,16 +69,16 @@
 
     - name: Download alfresco-pdf-renderer-linux.tgz
       ansible.builtin.get_url:
-        url: "{{ alfresco_pdf_renderer }}"
-        checksum: sha1:{{ lookup('url', alfresco_pdf_renderer_sha1_checksum_url) }}
-        dest: "{{ download_location }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
+        url: "{{ transformers_pdf_archive_url }}"
+        checksum: "{{ transformers_pdf_archive_checksum_url }}"
+        dest: "{{ download_location }}/alfresco-pdf-renderer-{{ transformers_pdf_version }}-linux.tgz"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0644"
 
     - name: Extract alfresco-pdf-renderer-linux.tgz
       ansible.builtin.unarchive:
-        src: "{{ download_location }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
+        src: "{{ download_location }}/alfresco-pdf-renderer-{{ transformers_pdf_version }}-linux.tgz"
         dest: "{{ ats_home }}"
         remote_src: true
         owner: "{{ username }}"

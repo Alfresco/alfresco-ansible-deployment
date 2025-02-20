@@ -2,3 +2,9 @@ acs_play_sfs_artifact_name: alfresco-shared-file-store-controller
 acs_play_sfs_repository: "{{ nexus_repository.enterprise_releases }}"
 acs_play_sfs_download_zip_url: "{{ acs_play_sfs_repository }}/{{ acs_play_sfs_artifact_name }}/{{ acs_play_sfs_version }}/{{ acs_play_sfs_artifact_name }}-{{ acs_play_sfs_version }}.jar"
 acs_play_sfs_download_zip_sha1_checksum_url: "sha1:{{ acs_play_sfs_download_zip_url }}.sha1"
+
+acs_play_te_pdf_artifact_name: alfresco-pdf-renderer
+acs_play_te_pdf_archive_name: "{{ acs_play_te_pdf_artifact_name }}-{{ acs_play_te_pdf_version }}-linux.tgz"
+acs_play_te_pdf_repository: "{{ nexus_repository.releases }}"
+acs_play_te_pdf_archive_url: "{{ acs_play_te_pdf_repository }}/{{ acs_play_te_pdf_artifact_name }}/{{ acs_play_te_pdf_version }}/{{ acs_play_te_pdf_archive_name }}"
+acs_play_te_pdf_archive_checksum_url: "sha1:{{ acs_play_te_pdf_archive_url }}.sha1"

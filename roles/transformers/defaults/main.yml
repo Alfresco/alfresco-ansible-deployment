@@ -7,3 +7,11 @@ tengine_environment:
     - -Xmx1536m
 ats_keystore: {}
 include_ghostscript: false
+
+transformers_pdf_artifact_name: alfresco-pdf-renderer
+transformers_pdf_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
+
+transformers_pdf_version: 1.1
+transformers_pdf_archive_name: "{{ transformers_pdf_artifact_name }}-{{ transformers_pdf_version }}-linux.tgz"
+transformers_pdf_archive_url: "{{ transformers_pdf_repository }}/{{ transformers_pdf_artifact_name }}/{{ transformers_pdf_version }}/{{ transformers_pdf_archive_name }}"
+transformers_pdf_archive_checksum_url: "sha1:{{ transformers_pdf_archive_url }}.sha1"
