@@ -7,3 +7,6 @@ tengine_environment:
     - -Xmx1536m
 ats_keystore: {}
 include_ghostscript: false
+
+transformers_imagemagick_version: 7.1.0-16-ci-11
+transformers_imagemagick_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco

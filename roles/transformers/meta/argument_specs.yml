@@ -10,3 +10,13 @@ argument_specs:
         description: |
           Representation of the JRE keystore as expected by the java role.
           Check the java role's arguments specification for details.
+      transformers_imagemagick_version:
+        type: str
+        required: false
+        description: |
+          Version of ImageMagick to install.
+      transformers_imagemagick_repository:
+        type: str
+        required: false
+        description: |
+          URL of the repository where the ImageMagick distribution is stored.

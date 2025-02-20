@@ -187,6 +187,8 @@
       vars:
         ats_keystore: "{{ transformers_keystore | default({}) }}"
         java_version: "{{ acs_play_java_version }}"
+        transformers_imagemagick_version: "{{ acs_play_te_img_version }}"
+        transformers_imagemagick_repository: "{{ asc_play_te_img_repository }}"
   post_tasks:
     - name: Update installation status file with Transformers
       become: true
