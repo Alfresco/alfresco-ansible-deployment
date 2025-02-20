@@ -1,11 +1,5 @@
 ---
 # vars file for transformers
-alfresco_pdf_base_url: >-
-  {{ nexus_repository.releases }}/alfresco-pdf-renderer/{{ dependencies_version.pdf_renderer }}
-alfresco_pdf_renderer: >-
-  {{ alfresco_pdf_base_url }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz
-alfresco_pdf_renderer_sha1_checksum_url: "{{ alfresco_pdf_renderer }}.sha1"
-
 ghostscript_packages:
   - ghostscript
 

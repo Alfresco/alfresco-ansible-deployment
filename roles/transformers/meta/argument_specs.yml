@@ -25,3 +25,18 @@ argument_specs:
         required: false
         description: |
           URL to the LibreOffice package archive checksum.
+      transformers_pdf_version:
+        type: str
+        required: false
+        description: |
+          Version of the Alfresco PDF Renderer to install.
+      transformers_pdf_archive_url:
+        type: str
+        required: false
+        description: |
+          URL to download the Alfresco PDF Renderer archive from.
+      transformers_pdf_archive_checksum_url:
+        type: str
+        required: false
+        description: |
+          URL to download the checksum of the Alfresco PDF Renderer archive from.

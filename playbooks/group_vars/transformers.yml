@@ -13,3 +13,9 @@ acs_play_te_libre_archive_name: "{{ acs_play_te_libre_artifact_name }}-{{ acs_pl
 acs_play_te_libre_repository: "{{ artifacts_repositories.community.base_url }}/repositories/thirdparty/org/libreoffice"
 acs_play_te_libre_archive_url: "{{ acs_play_te_libre_repository }}/{{ acs_play_te_libre_artifact_name }}/{{ acs_play_te_libre_version }}/{{ acs_play_te_libre_archive_name }}"
 acs_play_te_libre_archive_checksum_url: "sha1:{{ acs_play_te_libre_archive_url }}.sha1"
+
+acs_play_te_pdf_artifact_name: alfresco-pdf-renderer
+acs_play_te_pdf_archive_name: "{{ acs_play_te_pdf_artifact_name }}-{{ acs_play_te_pdf_version }}-linux.tgz"
+acs_play_te_pdf_repository: "{{ nexus_repository.releases }}"
+acs_play_te_pdf_archive_url: "{{ acs_play_te_pdf_repository }}/{{ acs_play_te_pdf_artifact_name }}/{{ acs_play_te_pdf_version }}/{{ acs_play_te_pdf_archive_name }}"
+acs_play_te_pdf_archive_checksum_url: "sha1:{{ acs_play_te_pdf_archive_url }}.sha1"
