@@ -18,6 +18,10 @@
       ansible.builtin.include_vars: "{{ local_path.stat.path }}/roles/activemq/{{ item }}/main.yml"
       loop: ["defaults", "vars"]
 
+    - name: Include tomcat vars
+      ansible.builtin.include_vars: "{{ local_path.stat.path }}/roles/tomcat/{{ item }}/main.yml"
+      loop: ["defaults", "vars"]
+
     - name: Create download location
       ansible.builtin.file:
         path: "{{ local_path.stat.path }}/downloads"
@@ -34,7 +38,7 @@
 
     - name: Download Tomcat archive
       ansible.builtin.get_url:
-        url: "{{ dependencies_url.tomcat }}"
-        checksum: sha512:{{ dependencies_url.tomcat_sha512_checksum_url }}
-        dest: "{{ download_path.path }}/apache-tomcat-{{ dependencies_version.tomcat }}.tar.gz"
+        url: "{{ tomcat_artifact_url }}"
+        checksum: "{{ tomcat_artifact_checksum_url }}"
+        dest: "{{ download_path.path }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
         mode: "0644"

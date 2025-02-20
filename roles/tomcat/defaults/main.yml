@@ -1,3 +1,7 @@
 ---
 # defaults file for tomcat
 tomcat_home_prefix: /opt/apache-tomcat
+
+tomcat_version: 10.1.34
+tomcat_artifact_url: https://archive.apache.org/dist/tomcat/tomcat-{{ tomcat_version.split('.')[0] }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz
+tomcat_artifact_checksum_url: "sha512:{{ tomcat_artifact_url }}.sha512"
