@@ -40,3 +40,13 @@ argument_specs:
         required: false
         description: |
           URL to download the checksum of the Alfresco PDF Renderer archive from.
+      transformers_imagemagick_version:
+        type: str
+        required: false
+        description: |
+          Version of ImageMagick to install.
+      transformers_imagemagick_repository:
+        type: str
+        required: false
+        description: |
+          URL of the repository where the ImageMagick distribution is stored.

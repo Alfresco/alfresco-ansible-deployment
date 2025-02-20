@@ -19,3 +19,5 @@ acs_play_te_pdf_archive_name: "{{ acs_play_te_pdf_artifact_name }}-{{ acs_play_t
 acs_play_te_pdf_repository: "{{ nexus_repository.releases }}"
 acs_play_te_pdf_archive_url: "{{ acs_play_te_pdf_repository }}/{{ acs_play_te_pdf_artifact_name }}/{{ acs_play_te_pdf_version }}/{{ acs_play_te_pdf_archive_name }}"
 acs_play_te_pdf_archive_checksum_url: "sha1:{{ acs_play_te_pdf_archive_url }}.sha1"
+
+asc_play_te_img_repository: "{{ nexus_repository.releases }}"

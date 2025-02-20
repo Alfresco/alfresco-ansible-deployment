@@ -2,5 +2,3 @@
 # vars file for transformers
 ghostscript_packages:
   - ghostscript
-
-imagemagick_version: "{{ dependencies_version.imagemagick }}"
