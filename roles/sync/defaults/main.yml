@@ -17,9 +17,9 @@ jmx_config_remote_enabled: false
 jmx_config_remote_port: 50800
 jmx_config_remote_rmi_port: 50801
 
-repository_jdbc_driver_class: org.postgresql.Driver
-repository_jdbc_driver_version: 42.2.6
-repository_jdbc_driver_base_url: https://repo.maven.apache.org/maven2/org/postgresql/postgresql
-repository_jdbc_driver_url: >-
-  {{ '{0}/{1}/postgresql-{1}.jar'.format(repository_jdbc_driver_base_url, repository_jdbc_driver_version) }}
-repository_jdbc_driver_checksum: "sha1:{{ repository_driver_url }}.sha1"
+sync_jdbc_driver_class: org.postgresql.Driver
+sync_jdbc_driver_version: 42.7.3
+sync_jdbc_driver_base_url: https://repo.maven.apache.org/maven2/org/postgresql/postgresql
+sync_jdbc_driver_url: >-
+  {{ '{0}/{1}/postgresql-{1}.jar'.format(sync_jdbc_driver_base_url, sync_jdbc_driver_version) }}
+sync_jdbc_driver_checksum: "sha1:{{ sync_driver_url }}.sha1"

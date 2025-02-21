@@ -144,7 +144,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
   register: postgresql_download
-  when: repsoitory_jdbc_driver_class == 'org.postgresql.Driver'
+  when: repository_jdbc_driver_class == 'org.postgresql.Driver'
   async: 900
   poll: 0
   tags:
@@ -285,7 +285,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0640"
-      when: repsoitory_jdbc_driver_class != 'org.postgresql.Driver'
+      when: repository_jdbc_driver_class != 'org.postgresql.Driver'
 
     - name: Copy user provided license file
       ansible.builtin.copy:
