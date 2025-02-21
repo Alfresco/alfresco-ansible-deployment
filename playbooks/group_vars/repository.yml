@@ -1,6 +1,6 @@
-acs_play_repository_jdbc_pg_driver_class: org.postgresql.Driver
+acs_play_repository_jdbc_pg_driver_class: "{{ default_jdbc_pg_driver_class }}"
 acs_play_repository_jdbc_pg_driver_version: "{{ acs_play_jdbc_pg_driver_version }}"
-acs_play_repository_jdbc_pg_driver_base_url: https://repo.maven.apache.org/maven2/org/postgresql/postgresql
+acs_play_repository_jdbc_pg_driver_base_url: "{{ default_jdbc_pg_driver_base_url }}"
 acs_play_repository_jdbc_pg_driver_url: >-
   {{ '{0}/{1}/postgresql-{1}.jar'.format(acs_play_repository_jdbc_pg_driver_base_url, acs_play_repository_jdbc_pg_driver_version) }}
 acs_play_repository_jdbc_pg_driver_checksum: "sha1:{{ acs_play_repository_jdbc_driver_url }}.sha1"
