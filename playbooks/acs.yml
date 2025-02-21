@@ -285,6 +285,12 @@
         raw_properties: "{{ properties_snippets }}"
         repository_identity_url: "{{ identity_url | default('') }}"
         tomcat_version: "{{ acs_play_tomcat_version }}"
+        repository_api_explorer_version: "{{ acs_play_repository_api_explorer_version }}"
+        repository_api_explorer_archive_url: "{{ acs_play_repository_api_explorer_archive_url }}"
+        repository_api_explorer_archive_checksum_url: "{{ acs_play_repository_api_explorer_archive_checksum_url }}"
+        repository_extra_war_downloads: "{{ acs_play_repository_extra_war_downloads }}"
+        repository_war_nexus_username: "{{ nexus_user }}"
+        repository_war_nexus_password: "{{ nexus_password }}"
   post_tasks:
     - name: Update installation status file with ACS
       become: true
@@ -292,7 +298,10 @@
         acs_components:
           acs: "{{ acs }}"
           amps: "{{ amps }}"
-          api_explorer: "{{ api_explorer }}"
+          api_explorer:
+            artifact_name: "{{ acs_play_repository_api_explorer_artifact_name }}"
+            repository: "{{ acs_play_repository_api_explorer_repository }}"
+            version: "{{ acs_play_repository_api_explorer_version }}"
       ansible.builtin.blockinfile:
         block: "{{ acs_components | to_nice_yaml(indent=2) }}"
         create: true

@@ -20,10 +20,6 @@ amps:
     repository: >-
       {{ nexus_repository.releases }}/integrations/alfresco-googledrive-share
     version: 3.4.2
-api_explorer:
-  artifact_name: api-explorer
-  repository: "{{ nexus_repository.releases }}"
-  version: 7.4.0
 transform:
   artifact_name: alfresco-transform-core-aio
   repository: "{{ nexus_repository.releases }}"
