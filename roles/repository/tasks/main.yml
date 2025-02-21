@@ -139,7 +139,7 @@
   ansible.builtin.get_url:
     url: "{{ repository_jdbc_driver_url }}"
     checksum: "{{ repository_jdbc_driver_checksum }}"
-    dest: "{{ tomcat_config_dir }}/lib"
+    dest: "{{ tomcat_config_dir }}/lib/postgresql.jar"
     mode: 'u=rw,g=r,o=r'
     owner: "{{ username }}"
     group: "{{ group_name }}"
