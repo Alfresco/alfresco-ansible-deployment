@@ -3,6 +3,12 @@ argument_specs:
   main:
     short_description: Main entrypoint for the tranformers role
     options:
+      transformers_pkg_format:
+        type: str
+        required: false
+        description: |
+          Package format to use for the transformers installation.
+          Possible values are 'deb' or 'rpm'.
       transformers_ats_keystore:
         type: dict
         required: false
