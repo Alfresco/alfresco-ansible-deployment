@@ -51,3 +51,24 @@ argument_specs:
         default: alfresco
         description: |
           The realm to be used when contacting the identity service
+      repository_jdbc_pg_driver_version:
+        type: str
+        required: false
+        description: |
+          The version of the PostgreSQL JDBC driver to download
+      repository_jdbc_driver_class:
+        type: str
+        required: false
+        default: org.postgresql.Driver
+        description: |
+          The class name of the JDBC driver to use
+      repository_jdbc_driver_url:
+        type: str
+        required: false
+        description: |
+          The URL to download the JDBC driver from
+      repository_jdbc_driver_checksum:
+        type: str
+        required: false
+        description: |
+          The checksum of the JDBC driver with format <algorithm>:<checksum>
