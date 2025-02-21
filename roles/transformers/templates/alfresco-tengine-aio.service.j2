@@ -1,31 +1,31 @@
 {%- macro ats_proto() -%}
 http
-{%- if ats_keystore.cert_containers | default([]) | length > 0 -%}
+{%- if transformers_ats_keystore.cert_containers | default([]) | length > 0 -%}
 s
 {%- endif -%}
 {%- endmacro %}
 
 {%- macro im_lib() -%}
-{%- if pkg_format == 'deb' -%}
-{{ imagemagick_home }}/lib/x86_64-linux-gnu/
+{%- if transformers_pkg_format == 'deb' -%}
+{{ transformers_imagemagick_home }}/lib/x86_64-linux-gnu/
 {%- else -%}
 /usr/lib64/
 {%- endif -%}
 {%- endmacro %}
 
 {%- macro im_cfg() -%}
-{%- if pkg_format == 'deb' -%}
-{{ imagemagick_home }}/lib/x86_64-linux-gnu/ImageMagick-{{ transformers_imagemagick_version.split('-')[0] -}}
+{%- if transformers_pkg_format == 'deb' -%}
+{{ transformers_imagemagick_home }}/lib/x86_64-linux-gnu/ImageMagick-{{ transformers_imagemagick_version.split('-')[0] -}}
 {%- else -%}
-{{ imagemagick_home }}
+{{ transformers_imagemagick_home }}
 {%- endif -%}
 {%- endmacro %}
 
 {%- set java_opts = "-DPDFRENDERER_EXE=" + ats_home + "/alfresco-pdf-renderer \
 -DLIBREOFFICE_HOME=" + transformers_libreoffice_home + " \
--DIMAGEMAGICK_ROOT=" + imagemagick_home + " \
+-DIMAGEMAGICK_ROOT=" + transformers_imagemagick_home + " \
 -DIMAGEMAGICK_DYN=" + im_lib() + " \
--DIMAGEMAGICK_EXE=" + (imagemagick_home + "/bin/convert" if pkg_format == 'deb' else 'convert') + " \
+-DIMAGEMAGICK_EXE=" + (transformers_imagemagick_home + "/bin/convert" if transformers_pkg_format == 'deb' else 'convert') + " \
 -DIMAGEMAGICK_CONFIG=" + im_cfg() + "/config-Q16HDRI \
 -DIMAGEMAGICK_CODERS=" + im_cfg() + "/modules-Q16HDRI/coders" %}
 {%- if acs.edition == 'Enterprise' %}
@@ -35,7 +35,7 @@ s
 -DACTIVEMQ_PASSWORD=" + activemq_password + " \
 -DFILE_STORE_URL=" + ats_proto() + "://" + sfs_host + ":" + ports_cfg.sfs.http ~ "/alfresco/api/-default-/private/sfs/versions/1/file" %}
 {%- endif %}
-{%- set tengine_environment_temp = tengine_environment['JAVA_OPTS'] %}
+{%- set tengine_environment_temp = transformers_tengine_environment['JAVA_OPTS'] %}
 {%- set java_opts = java_opts + " " + tengine_environment_temp|join(' ') %}
 {%- set ats_home = binaries_folder + "/transform-service" %}
 {%- set ats_shared_fs_host = sfs_host %}
@@ -47,7 +47,7 @@ After=syslog.socket network.target local-fs.target remote-fs.target
 [Service]
 Type=simple
 User={{ username }}
-ExecStart={{ java_home }}/bin/java {{ java_opts }} -jar {{ ats_home }}/{{ transform.artifact_name }}-{{ transform.version }}.jar --spring.config.additional-location=optional:tengine-mtls.properties
+ExecStart={{ java_home }}/bin/java {{ java_opts }} -jar {{ ats_home }}/{{ transformers_aio_artifact_name }}-{{ transformers_aio_version }}.jar --spring.config.additional-location=optional:tengine-mtls.properties
 WorkingDirectory={{ ats_home }}
 Restart=on-failure
 RestartSec=60

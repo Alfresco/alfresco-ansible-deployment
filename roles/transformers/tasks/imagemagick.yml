@@ -14,7 +14,7 @@
 
 - name: Download ImageMagick distribution
   vars:
-    pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + transformers_imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}"
+    pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + transformers_imagemagick_version) }}{{ imagemagick_package_arch }}.{{ transformers_pkg_format }}"
     pkg_url: "{{ transformers_imagemagick_repository }}/../imagemagick/imagemagick-distribution/{{ transformers_imagemagick_version }}/{{ pkg_name }}"
   ansible.builtin.get_url:
     url: "{{ pkg_url }}"
@@ -25,18 +25,18 @@
 
 - name: Install ImageMagick deb packages
   become: true
-  when: pkg_format == 'deb'
+  when: transformers_pkg_format == 'deb'
   ansible.builtin.apt:
-    deb: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + transformers_imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}"
+    deb: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + transformers_imagemagick_version) }}{{ imagemagick_package_arch }}.{{ transformers_pkg_format }}"
     state: present
-  loop: "{{  transformers_imagemagick_packages }}"
+  loop: "{{ transformers_imagemagick_packages }}"
 
 - name: Install ImageMagick rpm packages
   become: true
-  when: pkg_format == 'rpm'
+  when: transformers_pkg_format == 'rpm'
   ansible.builtin.dnf:
     state: present
     name: >-
-      {{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + transformers_imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}
+      {{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + transformers_imagemagick_version) }}{{ imagemagick_package_arch }}.{{ transformers_pkg_format }}
     disable_gpg_check: true
-  loop: "{{  transformers_imagemagick_packages }}"
+  loop: "{{ transformers_imagemagick_packages }}"
