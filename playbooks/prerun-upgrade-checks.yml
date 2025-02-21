@@ -54,7 +54,7 @@
           ansible.builtin.fail:
           when:
             - installed_components.transform is defined
-            - transformers_aio_version != installed_components.transform.version
+            - acs_play_transformers_aio_version != installed_components.transform.version
 
         - name: Fail on unsupported Trouter upgrades
           ansible.builtin.fail:
