@@ -17,9 +17,5 @@ amps:
   googledrive_share:
     repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share"
     version: 3.4.2
-api_explorer:
-  artifact_name: api-explorer
-  repository: "{{ nexus_repository.releases }}"
-  version: 7.3.0
 dependencies_version:
   postgres_major_version: 14

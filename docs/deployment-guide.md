@@ -821,7 +821,7 @@ Or:
 ```yaml
 war_downloads:
   - url: "https://your.repo.com/path/to/your/artifacts/your-api-explorer.war"
-    sha1_checksum_url: "https://your.repo.com/path/to/your/artifacts/your-api-explorer.war.sha1"
+    checksum: "sha1:https://your.repo.com/path/to/your/artifacts/your-api-explorer.war.sha1"
     dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
 ```
 

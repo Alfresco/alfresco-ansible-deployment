@@ -11,6 +11,23 @@ acs_environment:
     - $JAVA_OPTS
   JAVA_TOOL_OPTIONS:
     - $JAVA_TOOL_OPTIONS
+# war downloads
+repository_api_explorer_artifact_name: api-explorer
+repository_api_explorer_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
+
+repository_api_explorer_version: 23.4.0
+repository_api_explorer_archive_url: "{{ repository_api_explorer_repository }}/{{ repository_api_explorer_artifact_name }}/{{ repository_api_explorer_version }}/{{ repository_api_explorer_artifact_name }}-{{ repository_api_explorer_version }}.war"
+repository_api_explorer_archive_checksum_url: "sha1:{{ repository_api_explorer_archive_url }}.sha1"
+
+repository_default_war_downloads:
+  - url: "{{ repository_api_explorer_archive_url }}"
+    checksum: "{{ repository_api_explorer_archive_checksum_url }}"
+    dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
+
+repository_extra_war_downloads: []
+
+repository_war_nexus_username: null
+repository_war_nexus_password: null
 
 # CSRF config
 csrf:

@@ -1,6 +1,9 @@
 ---
 - name: Converge
   hosts: all
+  vars:
+    molecule_nexus_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
+    molecule_nexus_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
   roles:
     - role: activemq
     - role: nginx
@@ -31,12 +34,14 @@
         name: repository
       vars:
         repository_properties: "{{ global_properties }}"
+        repository_war_nexus_username: "{{ molecule_nexus_username }}"
+        repository_war_nexus_password: "{{ molecule_nexus_password }}"
     - name: Install Alfresco sync service
       ansible.builtin.include_role:
         name: sync
       vars:
-        sync_zip_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
-        sync_zip_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
+        sync_zip_username: "{{ molecule_nexus_username }}"
+        sync_zip_password: "{{ molecule_nexus_password }}"
         sync_environment:
           JAVA_OPTS:
             - -Xms512m
