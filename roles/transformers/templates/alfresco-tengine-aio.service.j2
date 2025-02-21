@@ -14,7 +14,7 @@ s
 {%- endmacro %}
 
 {%- macro im_cfg() -%}
-{%- if pkg_format == 'deb' -%}
+{%- if transformers_pkg_format == 'deb' -%}
 {{ transformers_imagemagick_home }}/lib/x86_64-linux-gnu/ImageMagick-{{ transformers_imagemagick_version.split('-')[0] -}}
 {%- else -%}
 {{ transformers_imagemagick_home }}

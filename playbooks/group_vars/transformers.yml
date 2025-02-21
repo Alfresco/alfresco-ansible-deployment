@@ -9,7 +9,7 @@ acs_play_trouter_download_zip_url: "{{ acs_play_trouter_repository }}/{{ acs_pla
 acs_play_trouter_download_zip_sha1_checksum_url: "sha1:{{ acs_play_trouter_download_zip_url }}.sha1"
 
 acs_play_transformers_libreoffice_artifact_name: libreoffice-dist
-acs_play_transformers_libreoffice_archive_name: "{{ acs_play_transformers_libreoffice_artifact_name }}-{{ acs_play_transformers_libreoffice_version }}-{{ pkg_format }}.gz"
+acs_play_transformers_libreoffice_archive_name: "{{ acs_play_transformers_libreoffice_artifact_name }}-{{ acs_play_transformers_libreoffice_version }}-{{ transformers_pkg_format }}.gz"
 acs_play_transformers_libreoffice_repository: "{{ artifacts_repositories.community.base_url }}/repositories/thirdparty/org/libreoffice"
 acs_play_transformers_libreoffice_archive_url: "{{ acs_play_transformers_libreoffice_repository }}/{{ acs_play_transformers_libreoffice_artifact_name }}/{{ acs_play_transformers_libreoffice_version }}/{{ acs_play_transformers_libreoffice_archive_name }}"
 acs_play_transformers_libreoffice_archive_checksum_url: "sha1:{{ acs_play_transformers_libreoffice_archive_url }}.sha1"

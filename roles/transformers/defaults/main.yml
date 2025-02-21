@@ -12,7 +12,7 @@ transformers_libreoffice_artifact_name: libreoffice-dist
 transformers_libreoffice_repository: https://artifacts.alfresco.com/nexus/content/repositories/thirdparty/org/libreoffice
 
 transformers_libreoffice_version: 7.2.5.1
-transformers_libreoffice_archive_name: "{{ transformers_libreoffice_artifact_name }}-{{ transformers_libreoffice_version }}-{{ pkg_format }}.gz"
+transformers_libreoffice_archive_name: "{{ transformers_libreoffice_artifact_name }}-{{ transformers_libreoffice_version }}-{{ transformers_pkg_format }}.gz"
 transformers_libreoffice_archive_url: "{{ transformers_libreoffice_repository }}/{{ transformers_libreoffice_artifact_name }}/{{ transformers_libreoffice_version }}/{{ transformers_libreoffice_archive_name }}"
 transformers_libreoffice_archive_checksum_url: "sha1:{{ transformers_libreoffice_archive_url }}.sha1"
 transformers_libreoffice_home: "/opt/libreoffice{{ transformers_libreoffice_version[0:3] }}/"
