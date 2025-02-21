@@ -3,7 +3,7 @@ transformers_imagemagick_packages:
   - imagemagick-distribution-libs-el8
   - imagemagick-distribution-el8
 
-utils_transform:
+transformers_utils:
   - libX11-xcb
   - cairo
   - cups-libs
