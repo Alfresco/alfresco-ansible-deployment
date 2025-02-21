@@ -4,7 +4,6 @@ acs_play_sync_zip_url: "{{ acs_play_sync_repository }}/{{ acs_play_sync_artifact
 acs_play_sync_zip_sha1_checksum: "sha1:{{ acs_play_sync_zip_url }}.sha1"
 acs_play_sync_jdbc_pg_driver_class: "{{ default_jdbc_pg_driver_class }}"
 acs_play_sync_jdbc_pg_driver_version: "{{ acs_play_jdbc_pg_driver_version }}"
-acs_play_sync_jdbc_pg_driver_base_url: "{{ default_jdbc_pg_driver_base_url }}"
 acs_play_sync_jdbc_pg_driver_url: >-
-  {{ '{0}/{1}/postgresql-{1}.jar'.format(acs_play_sync_jdbc_pg_driver_base_url, acs_play_sync_jdbc_pg_driver_version) }}
+  {{ '{0}/{1}/postgresql-{1}.jar'.format(default_jdbc_pg_driver_base_url, acs_play_sync_jdbc_pg_driver_version) }}
 acs_play_sync_jdbc_driver_checksum: "sha1:{{ acs_play_sync_jdbc_pg_driver_url }}.sha1"
