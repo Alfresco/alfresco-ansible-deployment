@@ -12,8 +12,8 @@
       ansible.builtin.include_role:
         name: "sfs"
       vars:
-        sfs_zip_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
-        sfs_zip_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
+        sfs_zip_username: "{{ molecule_nexus_username }}"
+        sfs_zip_password: "{{ molecule_nexus_password }}"
     - name: "Include transformers"
       ansible.builtin.include_role:
         name: "transformers"
