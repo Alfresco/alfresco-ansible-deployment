@@ -50,7 +50,7 @@
   block:
     - name: Ensure a list of packages installed
       ansible.builtin.package:
-        name: "{{ utils_transform }}"
+        name: "{{ transformers_utils }}"
         state: present
 
     - name: Install optional ghostscript packages (AGPL)

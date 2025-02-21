@@ -2,9 +2,9 @@
 transformers_imagemagick_packages:
   - imagemagick-distribution-linux
 
-imagemagick_home: "/opt/imagemagick-{{ transformers_imagemagick_version | regex_search('^[0-9]+') }}"
+transformers_imagemagick_home: "/opt/imagemagick-{{ transformers_imagemagick_version | regex_search('^[0-9]+') }}"
 
-utils_transform:
+transformers_utils:
   - libcairo2
   - libcups2
   - libsm6

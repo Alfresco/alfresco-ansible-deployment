@@ -7,7 +7,7 @@ s
 
 {%- macro im_lib() -%}
 {%- if transformers_pkg_format == 'deb' -%}
-{{ imagemagick_home }}/lib/x86_64-linux-gnu/
+{{ transformers_imagemagick_home }}/lib/x86_64-linux-gnu/
 {%- else -%}
 /usr/lib64/
 {%- endif -%}
@@ -15,17 +15,17 @@ s
 
 {%- macro im_cfg() -%}
 {%- if pkg_format == 'deb' -%}
-{{ imagemagick_home }}/lib/x86_64-linux-gnu/ImageMagick-{{ transformers_imagemagick_version.split('-')[0] -}}
+{{ transformers_imagemagick_home }}/lib/x86_64-linux-gnu/ImageMagick-{{ transformers_imagemagick_version.split('-')[0] -}}
 {%- else -%}
-{{ imagemagick_home }}
+{{ transformers_imagemagick_home }}
 {%- endif -%}
 {%- endmacro %}
 
 {%- set java_opts = "-DPDFRENDERER_EXE=" + ats_home + "/alfresco-pdf-renderer \
 -DLIBREOFFICE_HOME=" + transformers_libreoffice_home + " \
--DIMAGEMAGICK_ROOT=" + imagemagick_home + " \
+-DIMAGEMAGICK_ROOT=" + transformers_imagemagick_home + " \
 -DIMAGEMAGICK_DYN=" + im_lib() + " \
--DIMAGEMAGICK_EXE=" + (imagemagick_home + "/bin/convert" if transformers_pkg_format == 'deb' else 'convert') + " \
+-DIMAGEMAGICK_EXE=" + (transformers_imagemagick_home + "/bin/convert" if transformers_pkg_format == 'deb' else 'convert') + " \
 -DIMAGEMAGICK_CONFIG=" + im_cfg() + "/config-Q16HDRI \
 -DIMAGEMAGICK_CODERS=" + im_cfg() + "/modules-Q16HDRI/coders" %}
 {%- if acs.edition == 'Enterprise' %}
