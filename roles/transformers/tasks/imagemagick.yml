@@ -14,20 +14,20 @@
 
 - name: Download ImageMagick distribution
   vars:
-    pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}"
-    pkg_url: "{{ nexus_repository.releases }}/../imagemagick/imagemagick-distribution/{{ imagemagick_version }}/{{ pkg_name }}"
+    pkg_name: "{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + transformers_imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}"
+    pkg_url: "{{ transformers_imagemagick_repository }}/../imagemagick/imagemagick-distribution/{{ transformers_imagemagick_version }}/{{ pkg_name }}"
   ansible.builtin.get_url:
     url: "{{ pkg_url }}"
     checksum: "sha1:{{ lookup('url', pkg_url + '.sha1') }}"
     dest: "{{ download_location }}/{{ pkg_name }}"
     mode: "0644"
-  loop: "{{  transformers_imagemagick_packages }}"
+  loop: "{{ transformers_imagemagick_packages }}"
 
 - name: Install ImageMagick deb packages
   become: true
   when: pkg_format == 'deb'
   ansible.builtin.apt:
-    deb: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}"
+    deb: "{{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + transformers_imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}"
     state: present
   loop: "{{  transformers_imagemagick_packages }}"
 
@@ -37,6 +37,6 @@
   ansible.builtin.dnf:
     state: present
     name: >-
-      {{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}
+      {{ download_location }}/{{ item | replace('imagemagick-distribution', 'imagemagick-distribution-' + transformers_imagemagick_version) }}{{ imagemagick_package_arch }}.{{ pkg_format }}
     disable_gpg_check: true
   loop: "{{  transformers_imagemagick_packages }}"

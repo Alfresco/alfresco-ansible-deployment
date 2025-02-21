@@ -187,12 +187,14 @@
       vars:
         ats_keystore: "{{ transformers_keystore | default({}) }}"
         java_version: "{{ acs_play_java_version }}"
-        transformers_libreoffice_version: "{{ acs_play_te_libre_version }}"
-        transformers_libreoffice_archive_url: "{{ acs_play_te_libre_archive_url }}"
-        transformers_libreoffice_archive_checksum_url: "{{ acs_play_te_libre_archive_checksum_url }}"
-        transformers_pdf_version: "{{ acs_play_te_pdf_version }}"
-        transformers_pdf_archive_url: "{{ acs_play_te_pdf_archive_url }}"
-        transformers_pdf_archive_checksum_url: "{{ acs_play_te_pdf_archive_checksum_url }}"
+        transformers_libreoffice_version: "{{ acs_play_transformers_libreoffice_version }}"
+        transformers_libreoffice_archive_url: "{{ acs_play_transformers_libreoffice_archive_url }}"
+        transformers_libreoffice_archive_checksum_url: "{{ acs_play_transformers_libreoffice_archive_checksum_url }}"
+        transformers_pdf_version: "{{ acs_play_transformers_pdf_version }}"
+        transformers_pdf_archive_url: "{{ acs_play_transformers_pdf_archive_url }}"
+        transformers_pdf_archive_checksum_url: "{{ acs_play_transformers_pdf_archive_checksum_url }}"
+        transformers_imagemagick_version: "{{ acs_play_transformers_imagemagick_version }}"
+        transformers_imagemagick_repository: "{{ acs_play_transformers_imagemagick_repository }}"
   post_tasks:
     - name: Update installation status file with Transformers
       become: true

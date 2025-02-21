@@ -15,7 +15,7 @@ s
 
 {%- macro im_cfg() -%}
 {%- if pkg_format == 'deb' -%}
-{{ imagemagick_home }}/lib/x86_64-linux-gnu/ImageMagick-{{ imagemagick_version.split('-')[0] -}}
+{{ imagemagick_home }}/lib/x86_64-linux-gnu/ImageMagick-{{ transformers_imagemagick_version.split('-')[0] -}}
 {%- else -%}
 {{ imagemagick_home }}
 {%- endif -%}
