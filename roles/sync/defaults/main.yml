@@ -22,4 +22,4 @@ sync_jdbc_driver_version: 42.7.3
 sync_jdbc_driver_base_url: https://repo.maven.apache.org/maven2/org/postgresql/postgresql
 sync_jdbc_driver_url: >-
   {{ '{0}/{1}/postgresql-{1}.jar'.format(sync_jdbc_driver_base_url, sync_jdbc_driver_version) }}
-sync_jdbc_driver_checksum: "sha1:{{ sync_driver_url }}.sha1"
+sync_jdbc_driver_checksum: "sha1:{{ sync_jdbc_driver_url }}.sha1"
