@@ -23,5 +23,5 @@
         repository_properties: "{{ global_properties }}"
         raw_properties:
           - ../../configuration_files/alfresco-global.properties
-        repository_war_nexus_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
-        repository_war_nexus_password: "{{ lookup('env', 'NEXUS_USERNAME') }}"
+        repository_api_explorer_nexus_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
+        repository_api_explorer_nexus_password: "{{ lookup('env', 'NEXUS_USERNAME') }}"

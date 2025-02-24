@@ -3,6 +3,8 @@ acs_play_repository_jdbc_driver_version: "{{ acs_play_jdbc_pg_driver_version }}"
 acs_play_repository_jdbc_driver_url: >-
   {{ '{0}/{1}/postgresql-{1}.jar'.format(default_jdbc_pg_driver_base_url, acs_play_repository_jdbc_driver_version) }}
 acs_play_repository_jdbc_driver_checksum: "sha1:{{ acs_play_repository_jdbc_driver_url }}.sha1"
+
+acs_play_repository_api_explorer_enabled: true
 acs_play_repository_api_explorer_artifact_name: api-explorer
 acs_play_repository_api_explorer_repository: "{{ nexus_repository.releases }}"
 acs_play_repository_api_explorer_archive_url: "{{ acs_play_repository_api_explorer_repository }}/{{ acs_play_repository_api_explorer_artifact_name }}/{{ acs_play_repository_api_explorer_version }}/{{ acs_play_repository_api_explorer_artifact_name }}-{{ acs_play_repository_api_explorer_version }}.war"
@@ -12,3 +14,5 @@ acs_play_repository_extra_war_downloads: []
   # - url: "https://your.repo.com/path/to/your/artifacts/your-war.war"
   #   checksum: "sha1:https://your.repo.com/path/to/your/artifacts/your-war.war.sha1"
   #   dest: "{{ content_folder }}/web-server/webapps/your-war.war"
+  #   url_username: your_username_to_repo
+  #   url_password: your_password_to_repo

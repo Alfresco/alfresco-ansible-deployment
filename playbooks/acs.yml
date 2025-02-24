@@ -294,12 +294,13 @@
         repository_jdbc_driver_version: "{{ acs_play_repository_jdbc_driver_version }}"
         repository_jdbc_driver_url: "{{ acs_play_repository_jdbc_driver_url }}"
         repository_jdbc_driver_checksum: "{{ acs_play_repository_jdbc_driver_checksum }}"
+        repository_api_explorer_enabled: "{{ acs_play_repository_api_explorer_enabled }}"
         repository_api_explorer_version: "{{ acs_play_repository_api_explorer_version }}"
         repository_api_explorer_archive_url: "{{ acs_play_repository_api_explorer_archive_url }}"
         repository_api_explorer_archive_checksum_url: "{{ acs_play_repository_api_explorer_archive_checksum_url }}"
+        repository_api_explorer_nexus_username: "{{ nexus_user }}"
+        repository_api_explorer_nexus_password: "{{ nexus_password }}"
         repository_extra_war_downloads: "{{ acs_play_repository_extra_war_downloads }}"
-        repository_war_nexus_username: "{{ nexus_user }}"
-        repository_war_nexus_password: "{{ nexus_password }}"
   post_tasks:
     - name: Update installation status file with ACS
       become: true

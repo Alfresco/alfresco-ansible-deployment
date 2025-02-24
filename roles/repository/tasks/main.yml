@@ -83,6 +83,16 @@
 - name: Proceed with Shared contentstore tasks
   ansible.builtin.include_tasks: sharedcs.yml
 
+- name: Add api-explorer to default war downloads
+  ansible.builtin.set_fact:
+    repository_default_war_downloads:
+      - url: "{{ repository_api_explorer_archive_url }}"
+        checksum: "{{ repository_api_explorer_archive_checksum_url }}"
+        dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
+        url_username:: "{{ repository_api_explorer_nexus_username }}"
+        url_password:: "{{ repository_api_explorer_nexus_password }}"
+  when: repository_api_explorer_enabled
+
 - name: Download war files
   become: true
   loop: "{{ repository_default_war_downloads + repository_extra_war_downloads }}"
@@ -90,8 +100,8 @@
     url: "{{ item.url }}"
     checksum: "{{ item.checksum }}"
     dest: "{{ item.dest }}"
-    url_username: "{{ repository_war_nexus_username }}"
-    url_password: "{{ repository_war_nexus_password }}"
+    url_username: "{{ item.url_username }}"
+    url_password: "{{ item.url_password }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: "0644"
