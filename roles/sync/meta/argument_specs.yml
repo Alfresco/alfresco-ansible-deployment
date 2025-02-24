@@ -36,3 +36,24 @@ argument_specs:
         type: str
         default: >-
           https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/5.1.0/sync-dist-6.x-5.1.0.zip.sha1
+      sync_jdbc_pg_driver_version:
+        type: str
+        required: false
+        description: |
+          The version of the PostgreSQL JDBC driver to download
+      sync_jdbc_driver_class:
+        type: str
+        required: false
+        default: org.postgresql.Driver
+        description: |
+          The class name of the JDBC driver to use
+      sync_jdbc_driver_url:
+        type: str
+        required: false
+        description: |
+          The URL to download the JDBC driver from
+      sync_jdbc_driver_checksum:
+        type: str
+        required: false
+        description: |
+          The checksum of the JDBC driver with format <algorithm>:<checksum>

@@ -87,14 +87,8 @@ use_custom_keystores: false
 # common dependencies should be updated also in *-extra-vars.yml as well thanks
 # to default ansible merging behaviour
 dependencies_version:
-  postgresql_connector: 42.6.1
   postgres_major_version: 15
 temurin_arch: "{{ 'x64' if ansible_architecture == 'x86_64' else ansible_architecture }}"
-dependencies_url:
-  postgresql_connector: >-
-    {{ maven_repository.org }}/postgresql/postgresql/{{ dependencies_version.postgresql_connector }}/postgresql-{{ dependencies_version.postgresql_connector }}.jar
-  postgresql_connector_sha1_checksum_url: >-
-    {{ maven_repository.org }}/postgresql/postgresql/{{ dependencies_version.postgresql_connector }}/postgresql-{{ dependencies_version.postgresql_connector }}.jar.sha1
 repo_db_url: ""
 repo_db_driver: org.postgresql.Driver
 repo_db_name: "alfresco"
