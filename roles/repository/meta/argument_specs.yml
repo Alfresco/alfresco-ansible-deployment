@@ -109,3 +109,69 @@ argument_specs:
         default: true
         description: |
           Whether to deploy the API Explorer or not
+      repository_nexus_username:
+        type: str
+        required: false
+        description: |
+          Default username to when downloading artifacts from nexus
+      repository_nexus_password:
+        type: str
+        required: false
+        no_log: true
+        description: |
+          Default password to when downloading artifacts from nexus
+      repository_amp_alfresco_googledrive_repo_enterprise_enabled:
+        type: bool
+        required: false
+        default: false
+        description: |
+          Whether to install the Alfresco Googledrive Repo Enterprise AMP or not
+      repository_amp_alfresco_googledrive_repo_enterprise_version:
+        type: str
+        required: false
+        description: |
+          The version of the Alfresco Googledrive Repo Enterprise AMP to install
+      repository_amp_alfresco_googledrive_repo_community_enabled:
+        type: bool
+        required: false
+        default: false
+        description: |
+          Whether to install the Alfresco Googledrive Repo Community AMP or not
+      repository_amp_alfresco_googledrive_repo_community_version:
+        type: str
+        required: false
+        description: |
+          The version of the Alfresco Googledrive Repo Community AMP to install
+      repository_amp_alfresco_googledrive_share_enabled:
+        type: bool
+        required: false
+        default: false
+        description: |
+          Whether to install the Alfresco Googledrive Share AMP or not
+      repository_amp_alfresco_googledrive_share_version:
+        type: str
+        required: false
+        description: |
+          The version of the Alfresco Googledrive Share AMP to install
+      repository_amp_alfresco_device_sync_enabled:
+        type: bool
+        required: false
+        default: false
+        description: |
+          Whether to install the Alfresco Device Sync AMP or not
+      repository_amp_alfresco_device_sync_version:
+        type: str
+        required: false
+        description: |
+          The version of the Alfresco Device Sync AMP to install
+      repository_amp_alfresco_aos_module_enabled:
+        type: bool
+        required: false
+        default: false
+        description: |
+          Whether to install the Alfresco AOS Module AMP or not
+      repository_amp_alfresco_aos_module_version:
+        type: str
+        required: false
+        description: |
+          The version of the Alfresco AOS Module AMP to install

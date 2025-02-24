@@ -4,27 +4,9 @@ acs:
   repository: "{{ nexus_repository.releases }}"
   version: 23.4.1
   edition: Community
-transform:
-  artifact_name: alfresco-transform-core-aio
-  repository: "{{ nexus_repository.releases }}"
-  version: 5.1.6
-amps:
-  aos_module:
-    repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
-    version: 3.2.0
-  googledrive_repo:
-    repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-repo-community"
-    version: 4.1.0
-  googledrive_share:
-    repository: "{{ nexus_repository.releases }}/integrations/alfresco-googledrive-share"
-    version: 4.1.0
-amp_downloads:
-  - url: "{{ amps.aos_module.repository }}/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp"
-    sha1_checksum_url: "{{ amps.aos_module.repository }}/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp.sha1"
-    dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
-  - url: "{{ amps.googledrive_repo.repository }}/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_repo.version }}.amp"
-    sha1_checksum_url: "{{ amps.googledrive_repo.repository }}/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-community-{{ amps.googledrive_repo.version }}.amp.sha1"
-    dest: "{{ content_folder }}/amps_repo/alfresco-googledrive-repo-enterprise.amp"
-  - url: "{{ amps.googledrive_share.repository }}/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp"
-    sha1_checksum_url: "{{ amps.googledrive_share.repository }}/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp.sha1"
-    dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
+
+acs_play_repository_amp_alfresco_googledrive_repo_enterprise_enabled: false
+acs_play_repository_amp_alfresco_googledrive_repo_community_enabled: true
+acs_play_repository_amp_alfresco_googledrive_share_artifact_enabled: true
+acs_play_repository_amp_alfresco_device_sync_enabled: false
+acs_play_repository_amp_alfresco_aos_module_enabled: true
