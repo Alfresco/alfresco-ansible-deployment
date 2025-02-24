@@ -43,21 +43,11 @@ amps:
     repository: >-
       {{ nexus_repository.releases }}/integrations/alfresco-googledrive-share
     version: 4.1.0
-api_explorer:
-  artifact_name: api-explorer
-  repository: "{{ nexus_repository.releases }}"
-  version: 23.4.0
 downloads:
   acs_zip_url: >-
     {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip
   acs_zip_sha1_checksum_url: >-
     {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip.sha1
-war_downloads:
-  - url: >-
-      {{ api_explorer.repository }}/{{ api_explorer.artifact_name }}/{{ api_explorer.version }}/{{ api_explorer.artifact_name }}-{{ api_explorer.version }}.war
-    dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
-    sha1_checksum_url: >-
-      {{ api_explorer.repository }}/{{ api_explorer.artifact_name }}/{{ api_explorer.version }}/{{ api_explorer.artifact_name }}-{{ api_explorer.version }}.war.sha1
 amp_downloads:
   - url: >-
       {{ amps.googledrive_repo.repository }}/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp

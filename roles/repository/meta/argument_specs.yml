@@ -72,3 +72,40 @@ argument_specs:
         required: false
         description: |
           The checksum of the JDBC driver with format <algorithm>:<checksum>
+      repository_api_explorer_version:
+        type: str
+        required: false
+        description: |
+          The version of the API Explorer to deploy
+      repository_api_explorer_archive_url:
+        type: str
+        required: false
+        description: |
+          The URL to download the API Explorer archive from
+      repository_api_explorer_archive_checksum_url:
+        type: str
+        required: false
+        description: |
+          The URL to download the checksum of the API Explorer archive from
+      repository_extra_war_downloads:
+        type: list
+        required: false
+        description: |
+          A list containing the URL and checksum of additional WAR files to download
+      repository_api_explorer_nexus_username:
+        type: str
+        required: false
+        description: |
+          The username to use when downloading WAR files from Nexus
+      repository_api_explorer_nexus_password:
+        type: str
+        required: false
+        no_log: true
+        description: |
+          The password to use when downloading WAR files from Nexus
+      repository_api_explorer_enabled:
+        type: bool
+        required: false
+        default: true
+        description: |
+          Whether to deploy the API Explorer or not
