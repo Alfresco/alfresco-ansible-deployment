@@ -118,7 +118,7 @@ repository_amp_alfresco_googledrive_repo_enterprise_repository: https://artifact
 
 repository_amp_alfresco_googledrive_repo_enterprise_version: 4.1.0
 repository_amp_alfresco_googledrive_repo_enterprise_archive_url: "{{ repository_amp_alfresco_googledrive_repo_enterprise_repository }}/{{ repository_amp_alfresco_googledrive_repo_enterprise_artifact_name }}/{{ repository_amp_alfresco_googledrive_repo_enterprise_version }}/{{ repository_amp_alfresco_googledrive_repo_enterprise_artifact_name }}-{{ repository_amp_alfresco_googledrive_repo_enterprise_version }}.amp"
-repository_amp_alfresco_googledrive_repo_enterprise_archive_checksum_url: "sha1:{{ repository_amp_alfresco_googledrive_repo_archive_url }}.sha1"
+repository_amp_alfresco_googledrive_repo_enterprise_archive_checksum_url: "sha1:{{ repository_amp_alfresco_googledrive_repo_enterprise_archive_url }}.sha1"
 repository_amp_alfresco_googledrive_repo_enterprise_dest: "{{ content_folder }}/amps_repo/{{ repository_amp_alfresco_googledrive_repo_artifact_name }}.amp"
 repository_amp_alfresco_googledrive_repo_enterprise_nexus_username: "{{ repository_nexus_username }}"
 repository_amp_alfresco_googledrive_repo_enterprise_nexus_password: "{{ repository_nexus_password }}"
