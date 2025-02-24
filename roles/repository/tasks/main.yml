@@ -126,18 +126,42 @@
   tags:
     - molecule-idempotence-notest
 
+- name: Create amp_downloads list
+  ansible.builtin.set_fact:
+    amp_downloads:
+      - url: "{{ repository_amp_alfresco_googledrive_repo_archive_url }}"
+        checksum: "{{ repository_amp_alfresco_googledrive_repo_archive_checksum_url }}"
+        dest: "{{ repository_amp_alfresco_googledrive_repo_dest }}"
+        url_username: "{{ repository_amp_alfresco_googledrive_repo_nexus_username }}"
+        url_password: "{{ repository_amp_alfresco_googledrive_repo_nexus_password }}"
+      - url: "{{ repository_amp_alfresco_googledrive_share_archive_url }}"
+        checksum: "{{ repository_amp_alfresco_googledrive_share_archive_checksum_url }}"
+        dest: "{{ repository_amp_alfresco_googledrive_share_dest }}"
+        url_username: "{{ repository_amp_alfresco_googledrive_share_nexus_username }}"
+        url_password: "{{ repository_amp_alfresco_googledrive_share_nexus_password }}"
+      - url: "{{ repository_amp_alfresco_device_sync_archive_url }}"
+        checksum: "{{ repository_amp_alfresco_device_sync_archive_checksum_url }}"
+        dest: "{{ repository_amp_alfresco_device_sync_dest }}"
+        url_username: "{{ repository_amp_alfresco_device_sync_nexus_username }}"
+        url_password: "{{ repository_amp_alfresco_device_sync_nexus_password }}"
+      - url: "{{ repository_amp_alfresco_aos_module_archive_url }}"
+        checksum: "{{ repository_amp_alfresco_aos_module_archive_checksum_url }}"
+        dest: "{{ repository_amp_alfresco_aos_module_dest }}"
+        url_username: "{{ repository_amp_alfresco_aos_module_nexus_username }}"
+        url_password: "{{ repository_amp_alfresco_aos_module_nexus_password }}"
+
 - name: Download AMPS
   become: true
   loop: "{{ amp_downloads }}"
   ansible.builtin.get_url:
     url: "{{ item.url }}"
-    checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }}
+    checksum: "{{ item.checksum }}"
     dest: "{{ item.dest }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rw,g=r,o=r'
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
+    url_username: "{{ item.url_username }}"
+    url_password: "{{ item.url_password }}"
   register: amp_download_result
   async: 900
   poll: 0
