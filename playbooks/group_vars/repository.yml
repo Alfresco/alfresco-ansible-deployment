@@ -16,3 +16,12 @@ acs_play_repository_extra_war_downloads: []
   #   dest: "{{ content_folder }}/web-server/webapps/your-war.war"
   #   url_username: your_username_to_repo
   #   url_password: your_password_to_repo
+
+acs_play_repository_amp_community_enabled: false
+# additional list of amp downloads
+acs_play_repository_extra_amp_downloads: []
+  # - url: "https://your.repo.com/path/to/your/artifacts/your-amp.amp"
+  #   checksum: "sha1:https://your.repo.com/path/to/your/artifacts/your-amp.amp.sha1"
+  #   dest: "{{ content_folder }}/<amps_repo|amps_share>/your-amp.amp"
+  #   url_username: your_username_to_repo
+  #   url_password: your_password_to_repo

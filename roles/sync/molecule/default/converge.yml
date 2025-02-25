@@ -34,8 +34,8 @@
         name: repository
       vars:
         repository_properties: "{{ global_properties }}"
-        repository_api_explorer_nexus_username: "{{ molecule_nexus_username }}"
-        repository_api_explorer_nexus_password: "{{ molecule_nexus_password }}"
+        repository_nexus_username: "{{ molecule_nexus_username }}"
+        repository_nexus_password: "{{ molecule_nexus_password }}"
     - name: Install Alfresco sync service
       ansible.builtin.include_role:
         name: sync

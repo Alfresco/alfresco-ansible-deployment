@@ -27,49 +27,11 @@ acs:
   edition: Enterprise
   repository: "{{ nexus_repository.enterprise_releases }}"
   version: 23.4.1
-amps:
-  aos_module:
-    repository: "{{ nexus_repository.releases }}/aos-module/alfresco-aos-module"
-    version: 3.2.0
-  device_sync:
-    repository: >-
-      {{ nexus_repository.enterprise_releases }}/services/sync/alfresco-device-sync-repo
-    version: 5.1.0
-  googledrive_repo:
-    repository: >-
-      {{ nexus_repository.enterprise_releases }}/integrations/alfresco-googledrive-repo-enterprise
-    version: 4.1.0
-  googledrive_share:
-    repository: >-
-      {{ nexus_repository.releases }}/integrations/alfresco-googledrive-share
-    version: 4.1.0
 downloads:
   acs_zip_url: >-
     {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip
   acs_zip_sha1_checksum_url: >-
     {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip.sha1
-amp_downloads:
-  - url: >-
-      {{ amps.googledrive_repo.repository }}/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp
-    sha1_checksum_url: >-
-      {{ amps.googledrive_repo.repository }}/{{ amps.googledrive_repo.version }}/alfresco-googledrive-repo-enterprise-{{ amps.googledrive_repo.version }}.amp.sha1
-    dest: >-
-      {{ content_folder }}/amps_repo/alfresco-googledrive-repo-enterprise.amp
-  - url: >-
-      {{ amps.googledrive_share.repository }}/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp
-    sha1_checksum_url: >-
-      {{ amps.googledrive_share.repository }}/{{ amps.googledrive_share.version }}/alfresco-googledrive-share-{{ amps.googledrive_share.version }}.amp.sha1
-    dest: "{{ content_folder }}/amps_share/alfresco-googledrive-share.amp"
-  - url: >-
-      {{ amps.device_sync.repository }}/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp
-    sha1_checksum_url: >-
-      {{ amps.device_sync.repository }}/{{ amps.device_sync.version }}/alfresco-device-sync-repo-{{ amps.device_sync.version }}.amp.sha1
-    dest: "{{ content_folder }}/amps_repo/alfresco-device-sync-repo.amp"
-  - url: >-
-      {{ amps.aos_module.repository }}/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp
-    sha1_checksum_url: >-
-      {{ amps.aos_module.repository }}/{{ amps.aos_module.version }}/alfresco-aos-module-{{ amps.aos_module.version }}.amp.sha1
-    dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
 # A default keystore is stored in /var/opt/alfresco/content-services/keystore,
 # to replace this with a custom keystore place the keystore file in the "configuration_files/keystores" folder
 # and change this flag to true. See the deployment guide for more details.

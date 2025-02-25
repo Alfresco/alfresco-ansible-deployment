@@ -126,20 +126,55 @@
   tags:
     - molecule-idempotence-notest
 
+- name: Create a list of amps
+  ansible.builtin.set_fact:
+    amp_downloads:
+    - url: "{{ repository_amp_alfresco_googledrive_repo_enterprise_archive_url }}"
+      checksum: "{{ repository_amp_alfresco_googledrive_repo_enterprise_archive_checksum_url }}"
+      dest: "{{ repository_amp_alfresco_googledrive_repo_enterprise_dest }}"
+      url_username: "{{ repository_amp_alfresco_googledrive_repo_enterprise_nexus_username }}"
+      url_password: "{{ repository_amp_alfresco_googledrive_repo_enterprise_nexus_password }}"
+      enabled: "{{ repository_amp_alfresco_googledrive_repo_enterprise_enabled }}"
+    - url: "{{ repository_amp_alfresco_googledrive_repo_community_archive_url }}"
+      checksum: "{{ repository_amp_alfresco_googledrive_repo_community_archive_checksum_url }}"
+      dest: "{{ repository_amp_alfresco_googledrive_repo_community_dest }}"
+      url_username: "{{ repository_amp_alfresco_googledrive_repo_community_nexus_username }}"
+      url_password: "{{ repository_amp_alfresco_googledrive_repo_community_nexus_password }}"
+      enabled: "{{ repository_amp_alfresco_googledrive_repo_community_enabled }}"
+    - url: "{{ repository_amp_alfresco_googledrive_share_archive_url }}"
+      checksum: "{{ repository_amp_alfresco_googledrive_share_archive_checksum_url }}"
+      dest: "{{ repository_amp_alfresco_googledrive_share_dest }}"
+      url_username: "{{ repository_amp_alfresco_googledrive_share_nexus_username }}"
+      url_password: "{{ repository_amp_alfresco_googledrive_share_nexus_password }}"
+      enabled: "{{ repository_amp_alfresco_googledrive_share_enabled }}"
+    - url: "{{ repository_amp_alfresco_device_sync_archive_url }}"
+      checksum: "{{ repository_amp_alfresco_device_sync_archive_checksum_url }}"
+      dest: "{{ repository_amp_alfresco_device_sync_dest }}"
+      url_username: "{{ repository_amp_alfresco_device_sync_nexus_username }}"
+      url_password: "{{ repository_amp_alfresco_device_sync_nexus_password }}"
+      enabled: "{{ repository_amp_alfresco_device_sync_enabled }}"
+    - url: "{{ repository_amp_alfresco_aos_module_archive_url }}"
+      checksum: "{{ repository_amp_alfresco_aos_module_archive_checksum_url }}"
+      dest: "{{ repository_amp_alfresco_aos_module_dest }}"
+      url_username: "{{ repository_amp_alfresco_aos_module_nexus_username }}"
+      url_password: "{{ repository_amp_alfresco_aos_module_nexus_password }}"
+      enabled: "{{ repository_amp_alfresco_aos_module_enabled }}"
+
 - name: Download AMPS
   become: true
-  loop: "{{ amp_downloads }}"
+  loop: "{{ amp_downloads + repository_extra_amp_downloads }}"
   ansible.builtin.get_url:
     url: "{{ item.url }}"
-    checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }}
+    checksum: "{{ item.checksum }}"
     dest: "{{ item.dest }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rw,g=r,o=r'
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
+    url_username: "{{ item.url_username }}"
+    url_password: "{{ item.url_password }}"
   register: amp_download_result
   async: 900
+  when: (item.enabled | default('true')) == 'true' # when adding additional amp no need to specify enabled
   poll: 0
   tags:
     - molecule-idempotence-notest
@@ -428,6 +463,7 @@
   delay: 1
   retries: 300
   loop: "{{ amp_download_result.results }}"
+  when: (item.item.enabled | default('true')) != 'false'
   tags:
     - molecule-idempotence-notest
 
