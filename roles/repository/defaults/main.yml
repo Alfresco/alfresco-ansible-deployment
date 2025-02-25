@@ -112,7 +112,9 @@ repository_jdbc_driver_url: >-
 repository_jdbc_driver_checksum: "sha1:{{ repository_jdbc_driver_url }}.sha1"
 
 # Repository amps to install
-repository_amp_alfresco_googledrive_repo_enterprise_enabled: true
+repository_amp_community_enabled: false
+
+repository_amp_alfresco_googledrive_repo_enterprise_enabled: "{{ 'false' if repository_amp_community_enabled else 'true' }}"
 repository_amp_alfresco_googledrive_repo_enterprise_artifact_name: alfresco-googledrive-repo-enterprise
 repository_amp_alfresco_googledrive_repo_enterprise_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/integrations
 
@@ -123,7 +125,7 @@ repository_amp_alfresco_googledrive_repo_enterprise_dest: "{{ content_folder }}/
 repository_amp_alfresco_googledrive_repo_enterprise_nexus_username: "{{ repository_nexus_username }}"
 repository_amp_alfresco_googledrive_repo_enterprise_nexus_password: "{{ repository_nexus_password }}"
 
-repository_amp_alfresco_googledrive_repo_community_enabled: false
+repository_amp_alfresco_googledrive_repo_community_enabled: "{{ 'true' if repository_amp_community_enabled else 'false' }}"
 repository_amp_alfresco_googledrive_repo_community_artifact_name: alfresco-googledrive-repo-community
 repository_amp_alfresco_googledrive_repo_community_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco/integrations
 
@@ -145,7 +147,7 @@ repository_amp_alfresco_googledrive_share_dest: "{{ content_folder }}/amps_share
 repository_amp_alfresco_googledrive_share_nexus_username: "{{ repository_nexus_username }}"
 repository_amp_alfresco_googledrive_share_nexus_password: "{{ repository_nexus_password }}"
 
-repository_amp_alfresco_device_sync_enabled: true
+repository_amp_alfresco_device_sync_enabled: "{{ 'false' if repository_amp_community_enabled else 'true' }}"
 repository_amp_alfresco_device_sync_artifact_name: alfresco-device-sync-repo
 repository_amp_alfresco_device_sync_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync
 
