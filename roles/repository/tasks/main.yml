@@ -463,6 +463,7 @@
   delay: 1
   retries: 300
   loop: "{{ amp_download_result.results }}"
+  when: item.item.enabled | default(true) # Do not check skipped amps
   tags:
     - molecule-idempotence-notest
 
