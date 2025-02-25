@@ -42,6 +42,18 @@
               acs_play_repository_api_explorer_version != installed_components.api_explorer.version
 
         - name: Fail on unsupported AMPS upgrades
+          vars:
+            amps:
+              aos_module:
+                version: "{{ acs_play_repository_amp_alfresco_aos_module_version }}"
+              googledrive_share:
+                version: "{{ acs_play_repository_amp_alfresco_googledrive_share_version }}"
+              device_sync:
+                version: "{{ '' if acs_play_repository_amp_community_enabled else acs_play_repository_amp_alfresco_device_sync_version }}"
+              googledrive_repo_enterprise:
+                version: "{{ '' if acs_play_repository_amp_community_enabled else acs_play_repository_amp_alfresco_googledrive_repo_enterprise_version }}"
+              googledrive_repo_community:
+                version: "{{ acs_play_repository_amp_alfresco_googledrive_repo_community_version if acs_play_repository_amp_community_enabled else '' }}"
           ansible.builtin.fail:
           when: |
               installed_components is defined and

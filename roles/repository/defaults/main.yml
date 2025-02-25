@@ -136,7 +136,7 @@ repository_amp_alfresco_googledrive_repo_community_dest: "{{ content_folder }}/a
 repository_amp_alfresco_googledrive_repo_community_nexus_username: "{{ repository_nexus_username }}"
 repository_amp_alfresco_googledrive_repo_community_nexus_password: "{{ repository_nexus_password }}"
 
-repository_amp_alfresco_googledrive_share_enabled: true
+repository_amp_alfresco_googledrive_share_enabled: 'true'
 repository_amp_alfresco_googledrive_share_artifact_name: alfresco-googledrive-share
 repository_amp_alfresco_googledrive_share_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco/integrations
 
@@ -158,7 +158,7 @@ repository_amp_alfresco_device_sync_dest: "{{ content_folder }}/amps_repo/{{ rep
 repository_amp_alfresco_device_sync_nexus_username: "{{ repository_nexus_username }}"
 repository_amp_alfresco_device_sync_nexus_password: "{{ repository_nexus_password }}"
 
-repository_amp_alfresco_aos_module_enabled: true
+repository_amp_alfresco_aos_module_enabled: 'true'
 repository_amp_alfresco_aos_module_artifact_name: alfresco-aos-module
 repository_amp_alfresco_aos_module_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco/aos-module
 

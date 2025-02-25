@@ -316,20 +316,15 @@
           acs: "{{ acs }}"
           amps:
             aos_module:
-              repository: "{{ repository_amp_alfresco_aos_module_repository if repository_amp_alfresco_aos_module_enabled else '' }}"
-              version: "{{ acs_play_repository_amp_alfresco_aos_module_version if repository_amp_alfresco_aos_module_enabled else '' }}"
-            device_sync:
-              repository: "{{ repository_amp_alfresco_device_sync_repository if repository_amp_alfresco_device_sync_enabled else '' }}"
-              version: "{{ acs_play_repository_amp_alfresco_device_sync_version if repository_amp_alfresco_device_sync_enabled else '' }}"
-            googledrive_repo_enterprise:
-              repository: "{{ repository_amp_alfresco_googledrive_repo_enterprise_repository if repository_amp_alfresco_googledrive_repo_enterprise_enabled else '' }}"
-              version: "{{ acs_play_repository_amp_alfresco_googledrive_repo_enterprise_version if repository_amp_alfresco_googledrive_repo_enterprise_enabled else '' }}"
-            googledrive_repo_community:
-              repository: "{{ repository_amp_alfresco_googledrive_repo_community_repository if repository_amp_alfresco_googledrive_repo_community_enabled else '' }}"
-              version: "{{ acs_play_repository_amp_alfresco_googledrive_repo_community_version if repository_amp_alfresco_googledrive_repo_community_enabled else '' }}"
+              version: "{{ acs_play_repository_amp_alfresco_aos_module_version }}"
             googledrive_share:
-              repository: "{{ repository_amp_alfresco_googledrive_share_repository if repository_amp_alfresco_googledrive_share_enabled else '' }}"
-              version: "{{ acs_play_repository_amp_alfresco_googledrive_share_version if repository_amp_alfresco_googledrive_share_enabled else '' }}"
+              version: "{{ acs_play_repository_amp_alfresco_googledrive_share_version }}"
+            device_sync:
+              version: "{{ '' if acs_play_repository_amp_community_enabled else acs_play_repository_amp_alfresco_device_sync_version }}"
+            googledrive_repo_enterprise:
+              version: "{{ '' if acs_play_repository_amp_community_enabled else acs_play_repository_amp_alfresco_googledrive_repo_enterprise_version }}"
+            googledrive_repo_community:
+              version: "{{ acs_play_repository_amp_alfresco_googledrive_repo_community_version if acs_play_repository_amp_community_enabled else '' }}"
           api_explorer:
             artifact_name: "{{ acs_play_repository_api_explorer_artifact_name }}"
             repository: "{{ acs_play_repository_api_explorer_repository }}"
