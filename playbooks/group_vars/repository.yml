@@ -18,7 +18,7 @@ acs_play_repository_extra_war_downloads: []
   #   url_password: your_password_to_repo
 acs_play_repository_amp_alfresco_googledrive_repo_enterprise_enabled: true
 acs_play_repository_amp_alfresco_googledrive_repo_community_enabled: false
-acs_play_repository_amp_alfresco_googledrive_share_artifact_enabled: true
+acs_play_repository_amp_alfresco_googledrive_share_enabled: true
 acs_play_repository_amp_alfresco_device_sync_enabled: true
 acs_play_repository_amp_alfresco_aos_module_enabled: true
 # additional list of amp downloads
