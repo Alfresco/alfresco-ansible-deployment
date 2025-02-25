@@ -321,7 +321,7 @@
           amps:
             aos_module:
               repository: "{{ repository_amp_alfresco_aos_module_repository if acs_play_repository_amp_alfresco_aos_module_enabled else '' }}"
-              version: "{{ acs_play_repository_amp_alfresco_aos_module_version if acs_play_epository_amp_alfresco_aos_module_enabled else '' }}"
+              version: "{{ acs_play_repository_amp_alfresco_aos_module_version if acs_play_repository_amp_alfresco_aos_module_enabled else '' }}"
             device_sync:
               repository: "{{ repository_amp_alfresco_device_sync_repository if acs_play_repository_amp_alfresco_device_sync_enabled else '' }}"
               version: "{{ acs_play_repository_amp_alfresco_device_sync_version if acs_play_repository_amp_alfresco_device_sync_enabled else '' }}"
