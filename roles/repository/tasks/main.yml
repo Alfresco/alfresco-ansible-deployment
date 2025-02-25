@@ -179,10 +179,6 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Echo amp_download_result
-  ansible.builtin.debug:
-    var: amp_download_result
-
 - name: Download postgresql jar
   become: true
   ansible.builtin.get_url:
