@@ -331,35 +331,45 @@
         repository_extra_war_downloads: "{{ acs_play_repository_extra_war_downloads }}"
         repository_extra_amp_downloads: "{{ acs_play_repository_extra_amp_downloads }}"
   post_tasks:
+    - name: Initialize amps
+      ansible.builtin.set_fact:
+        amps: {}
+
+    - name: Add common amps
+      ansible.builtin.set_fact:
+        amps: >-
+          "{{ amps | combine({
+            'aos_module': {
+              'repository': acs_play_repository_amp_aos_module_repository,
+              'version': acs_play_repository_amp_aos_module_version
+            },
+            'googledrive_repo': {
+              'repository': acs_play_repository_amp_googledrive_repo_repository,
+              'version': acs_play_repository_amp_googledrive_repo_version
+            },
+            'googledrive_share': {
+              'repository': acs_play_repository_amp_googledrive_share_repository,
+              'version': acs_play_repository_amp_googledrive_share_version
+            }
+          }) }}"
+
+    - name: Add device sync amp
+      ansible.builtin.set_fact:
+        amps: >-
+          "{{ amps | combine({
+            'device_sync': {
+              'repository': acs_play_repository_amp_device_sync_repository,
+              'version': acs_play_repository_amp_device_sync_version
+            }
+          }) }}"
+      when: not acs_play_repository_amp_community_enabled
+
     - name: Update installation status file with ACS
       become: true
       vars:
         acs_components:
           acs: "{{ acs }}"
-          amps: >-
-            {{
-              {
-                "aos_module": {
-                  "repository": acs_play_repository_amp_aos_module_repository,
-                  "version": acs_play_repository_amp_aos_module_version
-                },
-                "googledrive_repo": {
-                  "repository": acs_play_repository_amp_googledrive_repo_repository,
-                  "version": acs_play_repository_amp_googledrive_repo_version
-                },
-                "googledrive_share": {
-                  "repository": acs_play_repository_amp_googledrive_share_repository,
-                  "version": acs_play_repository_amp_googledrive_share_version
-                }
-              } | combine(
-                {
-                  "device_sync": {
-                    "repository": acs_play_repository_amp_device_sync_repository,
-                    "version": acs_play_repository_amp_device_sync_version
-                  }
-                } if not acs_play_repository_amp_community_enabled else {}
-              )
-            }}
+          amps: "{{ amps }}"
           api_explorer:
             artifact_name: "{{ acs_play_repository_api_explorer_artifact_name }}"
             repository: "{{ acs_play_repository_api_explorer_repository }}"

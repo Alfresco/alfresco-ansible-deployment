@@ -41,32 +41,40 @@
               acs.version is version(installed_components.acs.version, 'lt') or
               acs_play_repository_api_explorer_version != installed_components.api_explorer.version
 
-        - name: Fail on unsupported AMPS upgrades
-          vars:
+        - name: Initialize amps
+          ansible.builtin.set_fact:
+            amps: {}
+
+        - name: Add common amps
+          ansible.builtin.set_fact:
             amps: >-
-              {{
-                {
-                  "aos_module": {
-                    "repository": acs_play_repository_amp_aos_module_repository,
-                    "version": acs_play_repository_amp_aos_module_version
-                  },
-                  "googledrive_repo": {
-                    "repository": acs_play_repository_amp_googledrive_repo_repository,
-                    "version": acs_play_repository_amp_googledrive_repo_version
-                  },
-                  "googledrive_share": {
-                    "repository": acs_play_repository_amp_googledrive_share_repository,
-                    "version": acs_play_repository_amp_googledrive_share_version
-                  }
-                } | combine(
-                  {
-                    "device_sync": {
-                      "repository": acs_play_repository_amp_device_sync_repository,
-                      "version": acs_play_repository_amp_device_sync_version
-                    }
-                  } if not acs_play_repository_amp_community_enabled else {}
-                )
-              }}
+              "{{ amps | combine({
+                'aos_module': {
+                  'repository': acs_play_repository_amp_aos_module_repository,
+                  'version': acs_play_repository_amp_aos_module_version
+                },
+                'googledrive_repo': {
+                  'repository': acs_play_repository_amp_googledrive_repo_repository,
+                  'version': acs_play_repository_amp_googledrive_repo_version
+                },
+                'googledrive_share': {
+                  'repository': acs_play_repository_amp_googledrive_share_repository,
+                  'version': acs_play_repository_amp_googledrive_share_version
+                }
+              }) }}"
+
+        - name: Add device sync amp
+          ansible.builtin.set_fact:
+            amps: >-
+              "{{ amps | combine({
+                'device_sync': {
+                  'repository': acs_play_repository_amp_device_sync_repository,
+                  'version': acs_play_repository_amp_device_sync_version
+                }
+              }) }}"
+          when: not acs_play_repository_amp_community_enabled
+
+        - name: Fail on unsupported AMPS upgrades
           ansible.builtin.fail:
           when: |
               installed_components is defined and
