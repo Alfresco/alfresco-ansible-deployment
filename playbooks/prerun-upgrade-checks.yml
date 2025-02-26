@@ -50,15 +50,12 @@
             amps: >-
               {{ amps | combine({
                 'aos_module': {
-                  'repository': acs_play_repository_amp_aos_module_repository,
                   'version': acs_play_repository_amp_aos_module_version
                 },
                 'googledrive_repo': {
-                  'repository': acs_play_repository_amp_googledrive_repo_repository,
                   'version': acs_play_repository_amp_googledrive_repo_version
                 },
                 'googledrive_share': {
-                  'repository': acs_play_repository_amp_googledrive_share_repository,
                   'version': acs_play_repository_amp_googledrive_share_version
                 }
               }) }}
@@ -68,7 +65,6 @@
             amps: >-
               {{ amps | combine({
                 'device_sync': {
-                  'repository': acs_play_repository_amp_device_sync_repository,
                   'version': acs_play_repository_amp_device_sync_version
                 }
               }) }}
