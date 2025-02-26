@@ -48,7 +48,7 @@
         - name: Add common amps
           ansible.builtin.set_fact:
             amps: >-
-              "{{ amps | combine({
+              {{ amps | combine({
                 'aos_module': {
                   'repository': acs_play_repository_amp_aos_module_repository,
                   'version': acs_play_repository_amp_aos_module_version
@@ -61,17 +61,17 @@
                   'repository': acs_play_repository_amp_googledrive_share_repository,
                   'version': acs_play_repository_amp_googledrive_share_version
                 }
-              }) }}"
+              }) }}
 
         - name: Add device sync amp
           ansible.builtin.set_fact:
             amps: >-
-              "{{ amps | combine({
+              {{ amps | combine({
                 'device_sync': {
                   'repository': acs_play_repository_amp_device_sync_repository,
                   'version': acs_play_repository_amp_device_sync_version
                 }
-              }) }}"
+              }) }}
           when: not acs_play_repository_amp_community_enabled
 
         - name: Fail on unsupported AMPS upgrades
