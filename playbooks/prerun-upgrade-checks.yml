@@ -68,7 +68,7 @@
                   'version': acs_play_repository_amp_device_sync_version
                 }
               }) }}
-          when: not acs_play_repository_amp_community_enabled
+          when: acs.edition == 'Enterprise'
 
         - name: Fail on unsupported AMPS upgrades
           ansible.builtin.fail:
