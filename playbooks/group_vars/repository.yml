@@ -21,19 +21,19 @@ acs_play_repository_amp_community_enabled: false
 
 acs_play_repository_amp_googledrive_repo_artifact_name: alfresco-googledrive-repo-enterprise
 acs_play_repository_amp_googledrive_repo_repository: "{{ nexus_repository.enterprise_releases }}/integrations"
-acs_play_repository_amp_googledrive_repo_archive_url: "{{ acs_play_repository_amp_googledrive_repo_repository }}/{{ acs_play_repository_amp_googledrive_repo_artifact_name }}/{{ acs_play_repository_amp_googledrive_repo_version | default(omit) }}/{{ acs_play_repository_amp_googledrive_repo_artifact_name }}-{{ acs_play_repository_amp_googledrive_repo_version | default(omit) }}.amp"
+acs_play_repository_amp_googledrive_repo_archive_url: "{{ acs_play_repository_amp_googledrive_repo_repository }}/{{ acs_play_repository_amp_googledrive_repo_artifact_name }}/{{ acs_play_repository_amp_googledrive_repo_version }}/{{ acs_play_repository_amp_googledrive_repo_artifact_name }}-{{ acs_play_repository_amp_googledrive_repo_version }}.amp"
 
 acs_play_repository_amp_googledrive_share_artifact_name: alfresco-googledrive-share
 acs_play_repository_amp_googledrive_share_repository: "{{ nexus_repository.releases }}/integrations"
-acs_play_repository_amp_googledrive_share_archive_url: "{{ acs_play_repository_amp_googledrive_share_repository }}/{{ acs_play_repository_amp_googledrive_share_artifact_name }}/{{ acs_play_repository_amp_googledrive_share_version | default(omit) }}/{{ acs_play_repository_amp_googledrive_share_artifact_name }}-{{ acs_play_repository_amp_googledrive_share_version | default(omit) }}.amp"
+acs_play_repository_amp_googledrive_share_archive_url: "{{ acs_play_repository_amp_googledrive_share_repository }}/{{ acs_play_repository_amp_googledrive_share_artifact_name }}/{{ acs_play_repository_amp_googledrive_share_version }}/{{ acs_play_repository_amp_googledrive_share_artifact_name }}-{{ acs_play_repository_amp_googledrive_share_version }}.amp"
 
 acs_play_repository_amp_device_sync_artifact_name: alfresco-device-sync-repo
 acs_play_repository_amp_device_sync_repository: "{{ nexus_repository.enterprise_releases }}/services/sync"
-acs_play_repository_amp_device_sync_archive_url: "{{ acs_play_repository_amp_device_sync_repository }}/{{ acs_play_repository_amp_device_sync_artifact_name }}/{{ acs_play_repository_amp_device_sync_version | default(omit) }}/{{ acs_play_repository_amp_device_sync_artifact_name }}-{{ acs_play_repository_amp_device_sync_version | default(omit) }}.amp"
+acs_play_repository_amp_device_sync_archive_url: "{{ acs_play_repository_amp_device_sync_repository }}/{{ acs_play_repository_amp_device_sync_artifact_name }}/{{ acs_play_repository_amp_device_sync_version }}/{{ acs_play_repository_amp_device_sync_artifact_name }}-{{ acs_play_repository_amp_device_sync_version }}.amp"
 
 acs_play_repository_amp_aos_module_artifact_name: alfresco-aos-module
 acs_play_repository_amp_aos_module_repository: "{{ nexus_repository.releases }}/aos-module"
-acs_play_repository_amp_aos_module_archive_url: "{{ acs_play_repository_amp_aos_module_repository }}/{{ acs_play_repository_amp_aos_module_artifact_name }}/{{ acs_play_repository_amp_aos_module_version | default(omit) }}/{{ acs_play_repository_amp_aos_module_artifact_name }}-{{ acs_play_repository_amp_aos_module_version | default(omit) }}.amp"
+acs_play_repository_amp_aos_module_archive_url: "{{ acs_play_repository_amp_aos_module_repository }}/{{ acs_play_repository_amp_aos_module_artifact_name }}/{{ acs_play_repository_amp_aos_module_version }}/{{ acs_play_repository_amp_aos_module_artifact_name }}-{{ acs_play_repository_amp_aos_module_version }}.amp"
 
 # additional list of amp downloads
 acs_play_repository_extra_amp_downloads: []
