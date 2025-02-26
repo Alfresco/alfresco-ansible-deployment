@@ -19,13 +19,9 @@ acs_play_repository_extra_war_downloads: []
 
 acs_play_repository_amp_community_enabled: false
 
-acs_play_repository_amp_googledrive_repo_enterprise_artifact_name: alfresco-googledrive-repo-enterprise
-acs_play_repository_amp_googledrive_repo_enterprise_repository: "{{ nexus_repository.enterprise_releases }}/integrations"
-acs_play_repository_amp_googledrive_repo_enterprise_archive_url: "{{ acs_play_repository_amp_googledrive_repo_enterprise_repository }}/{{ acs_play_repository_amp_googledrive_repo_enterprise_artifact_name }}/{{ acs_play_repository_amp_googledrive_repo_enterprise_version | default(omit) }}/{{ acs_play_repository_amp_googledrive_repo_enterprise_artifact_name }}-{{ acs_play_repository_amp_googledrive_repo_enterprise_version | default(omit) }}.amp"
-
-acs_play_repository_amp_googledrive_repo_community_artifact_name: alfresco-googledrive-repo-community
-acs_play_repository_amp_googledrive_repo_community_repository: "{{ nexus_repository.releases }}/integrations"
-acs_play_repository_amp_googledrive_repo_community_archive_url: "{{ acs_play_repository_amp_googledrive_repo_community_repository }}/{{ acs_play_repository_amp_googledrive_repo_community_artifact_name }}/{{ acs_play_repository_amp_googledrive_repo_community_version | default(omit) }}/{{ acs_play_repository_amp_googledrive_repo_community_artifact_name }}-{{ acs_play_repository_amp_googledrive_repo_community_version | default(omit) }}.amp"
+acs_play_repository_amp_googledrive_repo_artifact_name: alfresco-googledrive-repo-enterprise
+acs_play_repository_amp_googledrive_repo_repository: "{{ nexus_repository.enterprise_releases }}/integrations"
+acs_play_repository_amp_googledrive_repo_archive_url: "{{ acs_play_repository_amp_googledrive_repo_repository }}/{{ acs_play_repository_amp_googledrive_repo_artifact_name }}/{{ acs_play_repository_amp_googledrive_repo_version | default(omit) }}/{{ acs_play_repository_amp_googledrive_repo_artifact_name }}-{{ acs_play_repository_amp_googledrive_repo_version | default(omit) }}.amp"
 
 acs_play_repository_amp_googledrive_share_artifact_name: alfresco-googledrive-share
 acs_play_repository_amp_googledrive_share_repository: "{{ nexus_repository.releases }}/integrations"

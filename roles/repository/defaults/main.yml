@@ -112,10 +112,10 @@ repository_jdbc_driver_url: >-
 repository_jdbc_driver_checksum: "sha1:{{ repository_jdbc_driver_url }}.sha1"
 
 # Default repository amps to install
-repository_amp_googledrive_repo_enterprise_version: 4.1.0
-repository_amp_googledrive_repo_enterprise_artifact_name: alfresco-googledrive-repo-enterprise
-repository_amp_googledrive_repo_enterprise_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/integrations
-repository_amp_googledrive_repo_enterprise_archive_url: "{{ repository_amp_googledrive_repo_enterprise_repository }}/{{ repository_amp_googledrive_repo_enterprise_artifact_name }}/{{ repository_amp_googledrive_repo_enterprise_version }}/{{ repository_amp_googledrive_repo_enterprise_artifact_name }}-{{ repository_amp_googledrive_repo_enterprise_version }}.amp"
+repository_amp_googledrive_repo_version: 4.1.0
+repository_amp_googledrive_repo_artifact_name: alfresco-googledrive-repo-enterprise
+repository_amp_googledrive_repo_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/integrations
+repository_amp_googledrive_repo_archive_url: "{{ repository_amp_googledrive_repo_repository }}/{{ repository_amp_googledrive_repo_artifact_name }}/{{ repository_amp_googledrive_repo_version }}/{{ repository_amp_googledrive_repo_artifact_name }}-{{ repository_amp_googledrive_repo_version }}.amp"
 
 repository_amp_googledrive_share_version: 4.1.0
 repository_amp_googledrive_share_artifact_name: alfresco-googledrive-share
@@ -133,9 +133,9 @@ repository_amp_aos_module_repository: https://artifacts.alfresco.com/nexus/conte
 repository_amp_aos_module_archive_url: "{{ repository_amp_aos_module_repository }}/{{ repository_amp_aos_module_artifact_name }}/{{ repository_amp_aos_module_version }}/{{ repository_amp_aos_module_artifact_name }}-{{ repository_amp_aos_module_version }}.amp"
 
 repository_amp_downloads:
-  - url: "{{ repository_amp_googledrive_repo_enterprise_archive_url }}"
-    checksum: "sha1:{{ repository_amp_googledrive_repo_enterprise_archive_url }}.sha1"
-    dest: "{{ content_folder }}/amps_repo/{{ repository_amp_googledrive_repo_enterprise_artifact_name }}.amp"
+  - url: "{{ repository_amp_googledrive_repo_archive_url }}"
+    checksum: "sha1:{{ repository_amp_googledrive_repo_archive_url }}.sha1"
+    dest: "{{ content_folder }}/amps_repo/{{ repository_amp_googledrive_repo_artifact_name }}.amp"
     url_username: "{{ repository_nexus_username }}"
     url_password: "{{ repository_nexus_password }}"
   - url: "{{ repository_amp_googledrive_share_archive_url }}"

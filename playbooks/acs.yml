@@ -283,18 +283,12 @@
     - name: Create a list of amps
       ansible.builtin.set_fact:
         acs_play_repository_amp_downloads:
-        - url: "{{ acs_play_repository_amp_googledrive_repo_enterprise_archive_url }}"
-          checksum: "sha1:{{ acs_play_repository_amp_googledrive_repo_enterprise_archive_url }}.sha1"
-          dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_googledrive_repo_enterprise_artifact_name }}.amp"
+        - url: "{{ acs_play_repository_amp_googledrive_repo_archive_url }}"
+          checksum: "sha1:{{ acs_play_repository_amp_googledrive_repo_archive_url }}.sha1"
+          dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_googledrive_repo_artifact_name }}.amp"
           url_username: "{{ nexus_user }}"
           url_password: "{{ nexus_password }}"
-          enabled: "{{ not acs_play_repository_amp_community_enabled }}"
-        - url: "{{ acs_play_repository_amp_googledrive_repo_community_archive_url }}"
-          checksum: "sha1:{{ acs_play_repository_amp_googledrive_repo_community_archive_url }}.sha1"
-          dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_googledrive_repo_community_artifact_name }}.amp"
-          url_username: "{{ nexus_user }}"
-          url_password: "{{ nexus_password }}"
-          enabled: "{{ acs_play_repository_amp_community_enabled }}"
+          enabled: true
         - url: "{{ acs_play_repository_amp_googledrive_share_archive_url }}"
           checksum: "sha1:{{ acs_play_repository_amp_googledrive_share_archive_url }}.sha1"
           dest: "{{ content_folder }}/amps_share/{{ acs_play_repository_amp_googledrive_share_artifact_name }}.amp"
@@ -350,8 +344,8 @@
                   "version": acs_play_repository_amp_aos_module_version
                 },
                 "googledrive_repo": {
-                  "repository": acs_play_repository_amp_googledrive_repo_community_repository if acs_play_repository_amp_community_enabled else acs_play_repository_amp_googledrive_repo_enterprise_repository,
-                  "version": acs_play_repository_amp_googledrive_repo_community_version if acs_play_repository_amp_community_enabled else acs_play_repository_amp_googledrive_repo_enterprise_version
+                  "repository": acs_play_repository_amp_googledrive_repo_repository,
+                  "version": acs_play_repository_amp_googledrive_repo_version
                 },
                 "googledrive_share": {
                   "repository": acs_play_repository_amp_googledrive_share_repository,

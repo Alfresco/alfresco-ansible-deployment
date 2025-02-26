@@ -51,8 +51,8 @@
                     "version": acs_play_repository_amp_aos_module_version
                   },
                   "googledrive_repo": {
-                    "repository": acs_play_repository_amp_googledrive_repo_community_repository if acs_play_repository_amp_community_enabled else acs_play_repository_amp_googledrive_repo_enterprise_repository,
-                    "version": acs_play_repository_amp_googledrive_repo_community_version if acs_play_repository_amp_community_enabled else acs_play_repository_amp_googledrive_repo_enterprise_version
+                    "repository": acs_play_repository_amp_googledrive_repo_repository,
+                    "version": acs_play_repository_amp_googledrive_repo_version
                   },
                   "googledrive_share": {
                     "repository": acs_play_repository_amp_googledrive_share_repository,
