@@ -112,45 +112,45 @@ repository_jdbc_driver_url: >-
 repository_jdbc_driver_checksum: "sha1:{{ repository_jdbc_driver_url }}.sha1"
 
 # Default repository amps to install
-repository_amp_alfresco_googledrive_repo_enterprise_version: 4.1.0
-repository_amp_alfresco_googledrive_repo_enterprise_artifact_name: alfresco-googledrive-repo-enterprise
-repository_amp_alfresco_googledrive_repo_enterprise_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/integrations
-repository_amp_alfresco_googledrive_repo_enterprise_archive_url: "{{ repository_amp_alfresco_googledrive_repo_enterprise_repository }}/{{ repository_amp_alfresco_googledrive_repo_enterprise_artifact_name }}/{{ repository_amp_alfresco_googledrive_repo_enterprise_version }}/{{ repository_amp_alfresco_googledrive_repo_enterprise_artifact_name }}-{{ repository_amp_alfresco_googledrive_repo_enterprise_version }}.amp"
+repository_amp_googledrive_repo_enterprise_version: 4.1.0
+repository_amp_googledrive_repo_enterprise_artifact_name: alfresco-googledrive-repo-enterprise
+repository_amp_googledrive_repo_enterprise_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/integrations
+repository_amp_googledrive_repo_enterprise_archive_url: "{{ repository_amp_googledrive_repo_enterprise_repository }}/{{ repository_amp_googledrive_repo_enterprise_artifact_name }}/{{ repository_amp_googledrive_repo_enterprise_version }}/{{ repository_amp_googledrive_repo_enterprise_artifact_name }}-{{ repository_amp_googledrive_repo_enterprise_version }}.amp"
 
-repository_amp_alfresco_googledrive_share_version: 4.1.0
-repository_amp_alfresco_googledrive_share_artifact_name: alfresco-googledrive-share
-repository_amp_alfresco_googledrive_share_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco/integrations
-repository_amp_alfresco_googledrive_share_archive_url: "{{ repository_amp_alfresco_googledrive_share_repository }}/{{ repository_amp_alfresco_googledrive_share_artifact_name }}/{{ repository_amp_alfresco_googledrive_share_version }}/{{ repository_amp_alfresco_googledrive_share_artifact_name }}-{{ repository_amp_alfresco_googledrive_share_version }}.amp"
+repository_amp_googledrive_share_version: 4.1.0
+repository_amp_googledrive_share_artifact_name: alfresco-googledrive-share
+repository_amp_googledrive_share_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco/integrations
+repository_amp_googledrive_share_archive_url: "{{ repository_amp_googledrive_share_repository }}/{{ repository_amp_googledrive_share_artifact_name }}/{{ repository_amp_googledrive_share_version }}/{{ repository_amp_googledrive_share_artifact_name }}-{{ repository_amp_googledrive_share_version }}.amp"
 
-repository_amp_alfresco_device_sync_version: 5.1.0
-repository_amp_alfresco_device_sync_artifact_name: alfresco-device-sync-repo
-repository_amp_alfresco_device_sync_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync
-repository_amp_alfresco_device_sync_archive_url: "{{ repository_amp_alfresco_device_sync_repository }}/{{ repository_amp_alfresco_device_sync_artifact_name }}/{{ repository_amp_alfresco_device_sync_version }}/{{ repository_amp_alfresco_device_sync_artifact_name }}-{{ repository_amp_alfresco_device_sync_version }}.amp"
+repository_amp_device_sync_version: 5.1.0
+repository_amp_device_sync_artifact_name: alfresco-device-sync-repo
+repository_amp_device_sync_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync
+repository_amp_device_sync_archive_url: "{{ repository_amp_device_sync_repository }}/{{ repository_amp_device_sync_artifact_name }}/{{ repository_amp_device_sync_version }}/{{ repository_amp_device_sync_artifact_name }}-{{ repository_amp_device_sync_version }}.amp"
 
-repository_amp_alfresco_aos_module_version: 3.2.0
-repository_amp_alfresco_aos_module_artifact_name: alfresco-aos-module
-repository_amp_alfresco_aos_module_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco/aos-module
-repository_amp_alfresco_aos_module_archive_url: "{{ repository_amp_alfresco_aos_module_repository }}/{{ repository_amp_alfresco_aos_module_artifact_name }}/{{ repository_amp_alfresco_aos_module_version }}/{{ repository_amp_alfresco_aos_module_artifact_name }}-{{ repository_amp_alfresco_aos_module_version }}.amp"
+repository_amp_aos_module_version: 3.2.0
+repository_amp_aos_module_artifact_name: alfresco-aos-module
+repository_amp_aos_module_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco/aos-module
+repository_amp_aos_module_archive_url: "{{ repository_amp_aos_module_repository }}/{{ repository_amp_aos_module_artifact_name }}/{{ repository_amp_aos_module_version }}/{{ repository_amp_aos_module_artifact_name }}-{{ repository_amp_aos_module_version }}.amp"
 
 repository_amp_downloads:
-  - url: "{{ repository_amp_alfresco_googledrive_repo_enterprise_archive_url }}"
-    checksum: "sha1:{{ repository_amp_alfresco_googledrive_repo_enterprise_archive_url }}.sha1"
-    dest: "{{ content_folder }}/amps_repo/{{ repository_amp_alfresco_googledrive_repo_enterprise_artifact_name }}.amp"
+  - url: "{{ repository_amp_googledrive_repo_enterprise_archive_url }}"
+    checksum: "sha1:{{ repository_amp_googledrive_repo_enterprise_archive_url }}.sha1"
+    dest: "{{ content_folder }}/amps_repo/{{ repository_amp_googledrive_repo_enterprise_artifact_name }}.amp"
     url_username: "{{ repository_nexus_username }}"
     url_password: "{{ repository_nexus_password }}"
-  - url: "{{ repository_amp_alfresco_googledrive_share_archive_url }}"
-    checksum: "sha1:{{ repository_amp_alfresco_googledrive_share_archive_url }}.sha1"
-    dest: "{{ content_folder }}/amps_share/{{ repository_amp_alfresco_googledrive_share_artifact_name }}.amp"
+  - url: "{{ repository_amp_googledrive_share_archive_url }}"
+    checksum: "sha1:{{ repository_amp_googledrive_share_archive_url }}.sha1"
+    dest: "{{ content_folder }}/amps_share/{{ repository_amp_googledrive_share_artifact_name }}.amp"
     url_username: "{{ repository_nexus_username }}"
     url_password: "{{ repository_nexus_password }}"
-  - url: "{{ repository_amp_alfresco_device_sync_archive_url }}"
-    checksum: "sha1:{{ repository_amp_alfresco_device_sync_archive_url }}.sha1"
-    dest: "{{ content_folder }}/amps_repo/{{ repository_amp_alfresco_device_sync_artifact_name }}.amp"
+  - url: "{{ repository_amp_device_sync_archive_url }}"
+    checksum: "sha1:{{ repository_amp_device_sync_archive_url }}.sha1"
+    dest: "{{ content_folder }}/amps_repo/{{ repository_amp_device_sync_artifact_name }}.amp"
     url_username: "{{ repository_nexus_username }}"
     url_password: "{{ repository_nexus_password }}"
-  - url: "{{ repository_amp_alfresco_aos_module_archive_url }}"
-    checksum: "sha1:{{ repository_amp_alfresco_aos_module_archive_url }}.sha1"
-    dest: "{{ content_folder }}/amps_repo/{{ repository_amp_alfresco_aos_module_artifact_name }}.amp"
+  - url: "{{ repository_amp_aos_module_archive_url }}"
+    checksum: "sha1:{{ repository_amp_aos_module_archive_url }}.sha1"
+    dest: "{{ content_folder }}/amps_repo/{{ repository_amp_aos_module_artifact_name }}.amp"
     url_username: "{{ repository_nexus_username }}"
     url_password: "{{ repository_nexus_password }}"
 

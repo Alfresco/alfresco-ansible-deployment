@@ -6,4 +6,4 @@ acs:
   edition: Community
 
 acs_play_repository_amp_community_enabled: true
-acs_play_repository_amp_alfresco_googledrive_repo_community_version: 4.1.0
+acs_play_repository_amp_googledrive_repo_community_version: 4.1.0
