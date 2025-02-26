@@ -288,13 +288,11 @@
           dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_googledrive_repo_artifact_name }}.amp"
           url_username: "{{ nexus_user }}"
           url_password: "{{ nexus_password }}"
-          enabled: true
         - url: "{{ acs_play_repository_amp_googledrive_share_archive_url }}"
           checksum: "sha1:{{ acs_play_repository_amp_googledrive_share_archive_url }}.sha1"
           dest: "{{ content_folder }}/amps_share/{{ acs_play_repository_amp_googledrive_share_artifact_name }}.amp"
           url_username: "{{ nexus_user }}"
           url_password: "{{ nexus_password }}"
-          enabled: true
         - url: "{{ acs_play_repository_amp_device_sync_archive_url }}"
           checksum: "sha1:{{ acs_play_repository_amp_device_sync_archive_url }}.sha1"
           dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_device_sync_artifact_name }}.amp"
@@ -306,7 +304,6 @@
           dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_aos_module_artifact_name }}.amp"
           url_username: "{{ nexus_user }}"
           url_password: "{{ nexus_password }}"
-          enabled: true
   tasks:
     - name: Repository Role import
       ansible.builtin.import_role:
