@@ -280,6 +280,39 @@
       when:
         - ats_mtls_required
         - ats_mtls_capable
+    - name: Create a list of amps
+      ansible.builtin.set_fact:
+        acs_play_repository_amp_downloads:
+        - url: "{{ acs_play_repository_amp_alfresco_googledrive_repo_enterprise_archive_url }}"
+          checksum: "sha1:{{ acs_play_repository_amp_alfresco_googledrive_repo_enterprise_archive_url }}.sha1"
+          dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_alfresco_googledrive_repo_enterprise_artifact_name }}.amp"
+          url_username: "{{ nexus_user }}"
+          url_password: "{{ nexus_password }}"
+          enabled: "{{ not acs_play_repository_amp_community_enabled }}"
+        - url: "{{ acs_play_repository_amp_alfresco_googledrive_repo_community_archive_url }}"
+          checksum: "sha1:{{ acs_play_repository_amp_alfresco_googledrive_repo_community_archive_url }}.sha1"
+          dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_alfresco_googledrive_repo_community_artifact_name }}.amp"
+          url_username: "{{ nexus_user }}"
+          url_password: "{{ nexus_password }}"
+          enabled: "{{ acs_play_repository_amp_community_enabled }}"
+        - url: "{{ acs_play_repository_amp_alfresco_googledrive_share_archive_url }}"
+          checksum: "sha1:{{ acs_play_repository_amp_alfresco_googledrive_share_archive_url }}.sha1"
+          dest: "{{ content_folder }}/amps_share/{{ acs_play_repository_amp_alfresco_googledrive_share_artifact_name }}.amp"
+          url_username: "{{ nexus_user }}"
+          url_password: "{{ nexus_password }}"
+          enabled: true
+        - url: "{{ acs_play_repository_amp_alfresco_device_sync_archive_url }}"
+          checksum: "sha1:{{ acs_play_repository_amp_alfresco_device_sync_archive_url }}.sha1"
+          dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_alfresco_device_sync_artifact_name }}.amp"
+          url_username: "{{ nexus_user }}"
+          url_password: "{{ nexus_password }}"
+          enabled: "{{ not acs_play_repository_amp_community_enabled }}"
+        - url: "{{ acs_play_repository_amp_alfresco_aos_module_archive_url }}"
+          checksum: "sha1:{{ acs_play_repository_amp_alfresco_aos_module_archive_url }}.sha1"
+          dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_alfresco_aos_module_artifact_name }}.amp"
+          url_username: "{{ nexus_user }}"
+          url_password: "{{ nexus_password }}"
+          enabled: true
   tasks:
     - name: Repository Role import
       ansible.builtin.import_role:
@@ -300,12 +333,7 @@
         repository_api_explorer_version: "{{ acs_play_repository_api_explorer_version }}"
         repository_api_explorer_archive_url: "{{ acs_play_repository_api_explorer_archive_url }}"
         repository_api_explorer_archive_checksum_url: "{{ acs_play_repository_api_explorer_archive_checksum_url }}"
-        repository_amp_alfresco_googledrive_repo_enterprise_version: "{{ acs_play_repository_amp_alfresco_googledrive_repo_enterprise_version | default(omit) }}"
-        repository_amp_alfresco_googledrive_repo_community_version: "{{ acs_play_repository_amp_alfresco_googledrive_repo_community_version | default(omit) }}"
-        repository_amp_alfresco_device_sync_version: "{{ acs_play_repository_amp_alfresco_device_sync_version | default(omit) }}"
-        repository_amp_alfresco_googledrive_share_version: "{{ acs_play_repository_amp_alfresco_googledrive_share_version | default(omit) }}"
-        repository_amp_alfresco_aos_module_version: "{{ acs_play_repository_amp_alfresco_aos_module_version | default(omit) }}"
-        repository_amp_community_enabled: "{{ acs_play_repository_amp_community_enabled }}"
+        repository_amp_downloads: "{{ acs_play_repository_amp_downloads }}"
         repository_extra_war_downloads: "{{ acs_play_repository_extra_war_downloads }}"
         repository_extra_amp_downloads: "{{ acs_play_repository_extra_amp_downloads }}"
   post_tasks:
