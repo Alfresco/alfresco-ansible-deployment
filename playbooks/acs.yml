@@ -337,38 +337,35 @@
         repository_extra_war_downloads: "{{ acs_play_repository_extra_war_downloads }}"
         repository_extra_amp_downloads: "{{ acs_play_repository_extra_amp_downloads }}"
   post_tasks:
-    - name: Set AMP versions based on distribution type
-      ansible.builtin.set_fact:
-        amps: >-
-          {{
-            {
-              "aos_module": {
-                "repository": acs_play_repository_amp_alfresco_aos_module_repository,
-                "version": acs_play_repository_amp_alfresco_aos_module_version
-              },
-              "googledrive_repo": {
-                "repository": acs_play_repository_amp_alfresco_googledrive_repo_community_repository if acs_play_repository_amp_community_enabled else acs_play_repository_amp_alfresco_googledrive_repo_enterprise_repository,
-                "version": acs_play_repository_amp_alfresco_googledrive_repo_community_version if acs_play_repository_amp_community_enabled else acs_play_repository_amp_alfresco_googledrive_repo_enterprise_version
-              },
-              "googledrive_share": {
-                "repository": acs_play_repository_amp_alfresco_googledrive_share_repository,
-                "version": acs_play_repository_amp_alfresco_googledrive_share_version
-              }
-            } | combine(
-              {
-                "device_sync": {
-                  "repository": acs_play_repository_amp_alfresco_device_sync_repository,
-                  "version": acs_play_repository_amp_alfresco_device_sync_version
-                }
-              } if not acs_play_repository_amp_community_enabled else {}
-            )
-          }}
     - name: Update installation status file with ACS
       become: true
       vars:
         acs_components:
           acs: "{{ acs }}"
-          amps: "{{ amps }}"
+          amps: >-
+            {{
+              {
+                "aos_module": {
+                  "repository": acs_play_repository_amp_alfresco_aos_module_repository,
+                  "version": acs_play_repository_amp_alfresco_aos_module_version
+                },
+                "googledrive_repo": {
+                  "repository": acs_play_repository_amp_alfresco_googledrive_repo_community_repository if acs_play_repository_amp_community_enabled else acs_play_repository_amp_alfresco_googledrive_repo_enterprise_repository,
+                  "version": acs_play_repository_amp_alfresco_googledrive_repo_community_version if acs_play_repository_amp_community_enabled else acs_play_repository_amp_alfresco_googledrive_repo_enterprise_version
+                },
+                "googledrive_share": {
+                  "repository": acs_play_repository_amp_alfresco_googledrive_share_repository,
+                  "version": acs_play_repository_amp_alfresco_googledrive_share_version
+                }
+              } | combine(
+                {
+                  "device_sync": {
+                    "repository": acs_play_repository_amp_alfresco_device_sync_repository,
+                    "version": acs_play_repository_amp_alfresco_device_sync_version
+                  }
+                } if not acs_play_repository_amp_community_enabled else {}
+              )
+            }}
           api_explorer:
             artifact_name: "{{ acs_play_repository_api_explorer_artifact_name }}"
             repository: "{{ acs_play_repository_api_explorer_repository }}"
