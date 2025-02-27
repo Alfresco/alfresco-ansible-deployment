@@ -41,7 +41,7 @@
               acs.version is version(installed_components.acs.version, 'lt') or
               acs_play_repository_api_explorer_version != installed_components.api_explorer.version
 
-        - name: Initialize amps
+        - name: Initialize evaluation of currently installed amps
           ansible.builtin.set_fact:
             amps: {}
 

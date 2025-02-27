@@ -140,7 +140,7 @@
     url_password: "{{ item.url_password }}"
   register: amp_download_result
   async: 900
-  when: item.enabled | default(True) # when adding additional amp no need to specify enabled
+  when: item.enabled | default(true) # when adding additional amp no need to specify enabled
   poll: 0
   tags:
     - molecule-idempotence-notest
@@ -429,7 +429,7 @@
   delay: 1
   retries: 300
   loop: "{{ amp_download_result.results }}"
-  when: item.item.enabled | default(True)
+  when: item.item.enabled | default(true)
   tags:
     - molecule-idempotence-notest
 

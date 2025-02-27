@@ -328,7 +328,7 @@
         repository_extra_war_downloads: "{{ acs_play_repository_extra_war_downloads }}"
         repository_extra_amp_downloads: "{{ acs_play_repository_extra_amp_downloads }}"
   post_tasks:
-    - name: Initialize amps
+    - name: Initialize evaluation of currently installed amps
       ansible.builtin.set_fact:
         amps: {}
 
