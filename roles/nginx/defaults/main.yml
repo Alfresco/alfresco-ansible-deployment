@@ -11,9 +11,10 @@ nginx_setup_vhosts: true
 
 # Disable when nginx node is behind another reverse proxy (e.g. AWS ELB)
 nginx_set_proxy_headers: true
+
 # Add default security headers to mitigate vulnerabilities like XSS,
 # clickjacking, and data injection attacks.
-nginx_set_security_headers: true
+nginx_security_headers_enabled: true
 
 nginx_absolute_redirect: true
 
