@@ -55,6 +55,11 @@
     location /api-explorer/ {
         proxy_pass http://repo_lb;
         include {{ nginx_vhost_path }}/alfresco_proxy_headers.include;
+        {% if nginx_security_headers_enabled %}
+        {% for header_name, header_value in nginx_security_headers_webapps.items() if header_value %}
+        add_header {{ header_name }} "{{ header_value }}" always;
+        {% endfor %}
+        {% endif %}
     }
 
 {% if groups['identity'] | default([]) | length > 0 %}
