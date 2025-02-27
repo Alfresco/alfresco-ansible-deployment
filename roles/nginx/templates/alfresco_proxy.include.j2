@@ -33,6 +33,11 @@
         client_body_timeout {{ nginx_max_upload_time }};
         proxy_pass http://share_lb;
         include {{ nginx_vhost_path }}/alfresco_proxy_headers.include;
+        {% if nginx_security_headers_enabled %}
+        {% for header_name, header_value in nginx_security_headers_share.items() if header_value %}
+        add_header {{ header_name }} "{{ header_value }}" always;
+        {% endfor %}
+        {% endif %}
     }
 
     location /alfresco/ {
@@ -40,6 +45,11 @@
         client_body_timeout {{ nginx_max_upload_time }};
         proxy_pass http://repo_lb;
         include {{ nginx_vhost_path }}/alfresco_proxy_headers.include;
+        {% if nginx_security_headers_enabled %}
+        {% for header_name, header_value in nginx_security_headers_repository.items() if header_value %}
+        add_header {{ header_name }} "{{ header_value }}" always;
+        {% endfor %}
+        {% endif %}
     }
 
     location /api-explorer/ {
@@ -59,7 +69,9 @@
         proxy_pass http://{{ acc_host }}:8881/;
         include {{ nginx_vhost_path }}/alfresco_proxy_headers.include;
         {% if nginx_security_headers_enabled %}
-        include {{ nginx_vhost_path }}/alfresco_proxy_security_headers.include;
+        {% for header_name, header_value in nginx_security_headers_webapps.items() if header_value %}
+        add_header {{ header_name }} "{{ header_value }}" always;
+        {% endfor %}
         {% endif %}
     }
 
@@ -77,7 +89,9 @@
         proxy_pass http://{{ adw_host }}:8880/;
         include {{ nginx_vhost_path }}/alfresco_proxy_headers.include;
         {% if nginx_security_headers_enabled %}
-        include {{ nginx_vhost_path }}/alfresco_proxy_security_headers.include;
+        {% for header_name, header_value in nginx_security_headers_webapps.items() %}
+        add_header {{ header_name }} "{{ header_value }}" always;
+        {% endfor %}
         {% endif %}
     }
 {% endif %}

@@ -61,7 +61,6 @@
       loop:
         - alfresco_proxy.include
         - alfresco_proxy_headers.include
-        - alfresco_proxy_security_headers.include
       notify: Reload-nginx
 
     - name: Remove legacy vhosts.conf file
