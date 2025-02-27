@@ -18,6 +18,8 @@ http {
 
     access_log  /var/log/nginx/access.log  main;
 
+    server_tokens off;
+
     sendfile            on;
     tcp_nopush          on;
     tcp_nodelay         on;
