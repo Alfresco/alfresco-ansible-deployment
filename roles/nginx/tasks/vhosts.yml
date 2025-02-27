@@ -60,6 +60,7 @@
       loop:
         - alfresco_proxy.include
         - alfresco_proxy_headers.include
+        - alfresco_proxy_security_headers.include
 
     - name: Remove legacy vhosts.conf file
       ansible.builtin.file:

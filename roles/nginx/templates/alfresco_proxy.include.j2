@@ -57,6 +57,9 @@
     location /control-center/ {
         proxy_pass http://{{ acc_host }}:8881/;
         include {{ nginx_vhost_path }}/alfresco_proxy_headers.include;
+        {% if nginx_security_headers_enabled %}
+        include {{ nginx_vhost_path }}/alfresco_proxy_security_headers.include;
+        {% endif %}
     }
 
 {% endif %}
@@ -72,6 +75,9 @@
     location /workspace/ {
         proxy_pass http://{{ adw_host }}:8880/;
         include {{ nginx_vhost_path }}/alfresco_proxy_headers.include;
+        {% if nginx_security_headers_enabled %}
+        include {{ nginx_vhost_path }}/alfresco_proxy_security_headers.include;
+        {% endif %}
     }
 {% endif %}
 {% endif %}
