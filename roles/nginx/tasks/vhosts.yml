@@ -49,6 +49,7 @@
         mode: "0644"
       with_items: "{{ nginx_vhosts }}"
       when: item.state|default('present') != 'absent'
+      notify: Reload-nginx
 
     - name: Add required proxy config
       ansible.builtin.template:
@@ -61,6 +62,7 @@
         - alfresco_proxy.include
         - alfresco_proxy_headers.include
         - alfresco_proxy_security_headers.include
+      notify: Reload-nginx
 
     - name: Remove legacy vhosts.conf file
       ansible.builtin.file:
