@@ -164,7 +164,7 @@
         <!-- <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
                prefix="localhost_access_log" suffix=".txt"
                pattern="%h %l %u %t &quot;%r&quot; %s %b" /> -->
-	<Valve className="org.apache.catalina.valves.RemoteIpValve" />
+       <Valve className="org.apache.catalina.valves.RemoteIpValve" portHeader="X-Forwarded-Port" />
       </Host>
     </Engine>
   </Service>
