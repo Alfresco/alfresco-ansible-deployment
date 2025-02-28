@@ -17,3 +17,6 @@ nginx_absolute_redirect: true
 # Allow 5GB or 20 minutes long max uploads by default
 nginx_max_upload_size: "5g"
 nginx_max_upload_time: "20m"
+
+# What edition of acs are we running
+nginx_repository_acs_edition: "Enterprise"

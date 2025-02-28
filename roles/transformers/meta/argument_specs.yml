@@ -71,3 +71,8 @@ argument_specs:
         required: false
         description: |
           The URL to download the checksum of the transformers All-In-One artifact.
+      transformers_repository_acs_edition:
+        type: str
+        required: false
+        description: |
+          The Alfresco Content Services edition to use.
