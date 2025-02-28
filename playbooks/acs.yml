@@ -130,6 +130,7 @@
   gather_facts: false
   roles:
     - role: "../roles/nginx"
+      nginx_repository_acs_edition: "{{ acs_play_repository_acs_edition }}"
   post_tasks:
     - name: Make sure NGINX is running
       become: true
@@ -187,6 +188,7 @@
       vars:
         transformers_ats_keystore: "{{ transformers_keystore | default({}) }}"
         java_version: "{{ acs_play_java_version }}"
+        transformers_repository_acs_edition: "{{ acs_play_repository_acs_edition }}"
         transformers_libreoffice_version: "{{ acs_play_transformers_libreoffice_version }}"
         transformers_libreoffice_archive_url: "{{ acs_play_transformers_libreoffice_archive_url }}"
         transformers_libreoffice_archive_checksum_url: "{{ acs_play_transformers_libreoffice_archive_checksum_url }}"
