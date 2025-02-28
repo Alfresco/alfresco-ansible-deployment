@@ -41,6 +41,35 @@
               acs.version is version(installed_components.acs.version, 'lt') or
               acs_play_repository_api_explorer_version != installed_components.api_explorer.version
 
+        - name: Initialize evaluation of currently installed amps
+          ansible.builtin.set_fact:
+            amps: {}
+
+        - name: Add common amps
+          ansible.builtin.set_fact:
+            amps: >-
+              {{ amps | combine({
+                'aos_module': {
+                  'version': acs_play_repository_amp_aos_module_version
+                },
+                'googledrive_repo': {
+                  'version': acs_play_repository_amp_googledrive_repo_version
+                },
+                'googledrive_share': {
+                  'version': acs_play_repository_amp_googledrive_share_version
+                }
+              }) }}
+
+        - name: Add device sync amp
+          ansible.builtin.set_fact:
+            amps: >-
+              {{ amps | combine({
+                'device_sync': {
+                  'version': acs_play_repository_amp_device_sync_version
+                }
+              }) }}
+          when: acs.edition == 'Enterprise'
+
         - name: Fail on unsupported AMPS upgrades
           ansible.builtin.fail:
           when: |

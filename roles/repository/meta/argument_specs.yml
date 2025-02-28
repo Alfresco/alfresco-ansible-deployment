@@ -109,3 +109,24 @@ argument_specs:
         default: true
         description: |
           Whether to deploy the API Explorer or not
+      repository_nexus_username:
+        type: str
+        required: false
+        description: |
+          Default username to when downloading artifacts from nexus
+      repository_nexus_password:
+        type: str
+        required: false
+        no_log: true
+        description: |
+          Default password to when downloading artifacts from nexus
+      repository_amp_downloads:
+        type: list
+        required: false
+        description: |
+          A list containing the URL and checksum of AMP files to download
+      repository_extra_amp_downloads:
+        type: list
+        required: false
+        description: |
+          A list containing the URL and checksum of additional AMP files to download

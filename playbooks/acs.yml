@@ -280,6 +280,30 @@
       when:
         - ats_mtls_required
         - ats_mtls_capable
+    - name: Create a list of amps
+      ansible.builtin.set_fact:
+        acs_play_repository_amp_downloads:
+        - url: "{{ acs_play_repository_amp_googledrive_repo_archive_url }}"
+          checksum: "sha1:{{ acs_play_repository_amp_googledrive_repo_archive_url }}.sha1"
+          dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_googledrive_repo_artifact_name }}.amp"
+          url_username: "{{ nexus_user }}"
+          url_password: "{{ nexus_password }}"
+        - url: "{{ acs_play_repository_amp_googledrive_share_archive_url }}"
+          checksum: "sha1:{{ acs_play_repository_amp_googledrive_share_archive_url }}.sha1"
+          dest: "{{ content_folder }}/amps_share/{{ acs_play_repository_amp_googledrive_share_artifact_name }}.amp"
+          url_username: "{{ nexus_user }}"
+          url_password: "{{ nexus_password }}"
+        - url: "{{ acs_play_repository_amp_device_sync_archive_url }}"
+          checksum: "sha1:{{ acs_play_repository_amp_device_sync_archive_url }}.sha1"
+          dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_device_sync_artifact_name }}.amp"
+          url_username: "{{ nexus_user }}"
+          url_password: "{{ nexus_password }}"
+          enabled: "{{ acs.edition == 'Enterprise' and (groups.syncservice | default([]) | length > 0) }}"
+        - url: "{{ acs_play_repository_amp_aos_module_archive_url }}"
+          checksum: "sha1:{{ acs_play_repository_amp_aos_module_archive_url }}.sha1"
+          dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_aos_module_artifact_name }}.amp"
+          url_username: "{{ nexus_user }}"
+          url_password: "{{ nexus_password }}"
   tasks:
     - name: Repository Role import
       ansible.builtin.import_role:
@@ -291,6 +315,8 @@
         raw_properties: "{{ properties_snippets }}"
         repository_identity_url: "{{ identity_url | default('') }}"
         tomcat_version: "{{ acs_play_tomcat_version }}"
+        repository_nexus_username: "{{ nexus_user }}"
+        repository_nexus_password: "{{ nexus_password }}"
         repository_jdbc_driver_version: "{{ acs_play_repository_jdbc_driver_version }}"
         repository_jdbc_driver_url: "{{ acs_play_repository_jdbc_driver_url }}"
         repository_jdbc_driver_checksum: "{{ acs_play_repository_jdbc_driver_checksum }}"
@@ -298,10 +324,43 @@
         repository_api_explorer_version: "{{ acs_play_repository_api_explorer_version }}"
         repository_api_explorer_archive_url: "{{ acs_play_repository_api_explorer_archive_url }}"
         repository_api_explorer_archive_checksum_url: "{{ acs_play_repository_api_explorer_archive_checksum_url }}"
-        repository_api_explorer_nexus_username: "{{ nexus_user }}"
-        repository_api_explorer_nexus_password: "{{ nexus_password }}"
+        repository_amp_downloads: "{{ acs_play_repository_amp_downloads }}"
         repository_extra_war_downloads: "{{ acs_play_repository_extra_war_downloads }}"
+        repository_extra_amp_downloads: "{{ acs_play_repository_extra_amp_downloads }}"
   post_tasks:
+    - name: Initialize evaluation of currently installed amps
+      ansible.builtin.set_fact:
+        amps: {}
+
+    - name: Add common amps
+      ansible.builtin.set_fact:
+        amps: >-
+          {{ amps | combine({
+            'aos_module': {
+              'repository': acs_play_repository_amp_aos_module_repository,
+              'version': acs_play_repository_amp_aos_module_version
+            },
+            'googledrive_repo': {
+              'repository': acs_play_repository_amp_googledrive_repo_repository,
+              'version': acs_play_repository_amp_googledrive_repo_version
+            },
+            'googledrive_share': {
+              'repository': acs_play_repository_amp_googledrive_share_repository,
+              'version': acs_play_repository_amp_googledrive_share_version
+            }
+          }) }}
+
+    - name: Add device sync amp
+      ansible.builtin.set_fact:
+        amps: >-
+          {{ amps | combine({
+            'device_sync': {
+              'repository': acs_play_repository_amp_device_sync_repository,
+              'version': acs_play_repository_amp_device_sync_version
+            }
+          }) }}
+      when: acs.edition == "Enterprise"
+
     - name: Update installation status file with ACS
       become: true
       vars:

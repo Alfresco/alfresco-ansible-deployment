@@ -128,18 +128,19 @@
 
 - name: Download AMPS
   become: true
-  loop: "{{ amp_downloads }}"
+  loop: "{{ repository_amp_downloads + repository_extra_amp_downloads }}"
   ansible.builtin.get_url:
     url: "{{ item.url }}"
-    checksum: sha1:{{ lookup('url', item.sha1_checksum_url, username=nexus_user, password=nexus_password) }}
+    checksum: "{{ item.checksum }}"
     dest: "{{ item.dest }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rw,g=r,o=r'
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
+    url_username: "{{ item.url_username }}"
+    url_password: "{{ item.url_password }}"
   register: amp_download_result
   async: 900
+  when: item.enabled | default(true) # when adding additional amp no need to specify enabled
   poll: 0
   tags:
     - molecule-idempotence-notest
@@ -428,6 +429,7 @@
   delay: 1
   retries: 300
   loop: "{{ amp_download_result.results }}"
+  when: item.item.enabled | default(true)
   tags:
     - molecule-idempotence-notest
 
