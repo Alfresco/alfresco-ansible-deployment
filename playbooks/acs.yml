@@ -298,7 +298,7 @@
           dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_device_sync_artifact_name }}.amp"
           url_username: "{{ nexus_user }}"
           url_password: "{{ nexus_password }}"
-          enabled: "{{ acs.edition == 'Enterprise' and groups.syncservice }}"
+          enabled: "{{ acs.edition == 'Enterprise' and (groups.syncservice | default([]) | length > 0) }}"
         - url: "{{ acs_play_repository_amp_aos_module_archive_url }}"
           checksum: "sha1:{{ acs_play_repository_amp_aos_module_archive_url }}.sha1"
           dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_aos_module_artifact_name }}.amp"
