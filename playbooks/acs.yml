@@ -375,6 +375,7 @@
             artifact_name: "{{ acs_play_repository_acs_artifact_name }}"
             repository: "{{ acs_play_repository_acs_repository }}"
             version: "{{ acs_play_repository_acs_version }}"
+            edition: "{{ acs_play_repository_acs_edition }}"
           amps: "{{ amps }}"
           api_explorer:
             artifact_name: "{{ acs_play_repository_api_explorer_artifact_name }}"

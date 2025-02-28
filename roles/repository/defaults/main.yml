@@ -22,8 +22,8 @@ repository_acs_repository: https://artifacts.alfresco.com/nexus/content/groups/p
 repository_acs_version: 23.4.1
 repository_acs_archive_url: "{{ repository_acs_repository }}/{{ repository_acs_artfiact_name }}/{{ repository_acs_version }}/{{ repository_acs_artfiact_name }}-{{ repository_acs_version }}.zip"
 repository_acs_archive_checksum_url: "sha1:{{ repository_acs_archive_url }}.sha1"
-repository_acs_nexus_username: null
-repository_acs_nexus_password: null
+repository_acs_nexus_username: "{{ repository_nexus_username }}"
+repository_acs_nexus_password: "{{ repository_nexus_password }}"
 
 # war downloads
 repository_api_explorer_enabled: true
