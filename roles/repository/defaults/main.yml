@@ -113,6 +113,11 @@ repository_jdbc_driver_checksum: "sha1:{{ repository_jdbc_driver_url }}.sha1"
 
 # Default repository amps to install
 repository_amp_downloads: []
+  # - url: "https://your.repo.com/path/to/your/artifacts/your-amp.amp"
+  #   checksum: "sha1:2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"
+  #   dest: "{{ content_folder }}/<amps_repo|amps_share>/your-amp.amp"
+  #   url_username: your_username_to_repo
+  #   url_password: your_password_to_repo
 
 # additional list of amp downloads
 repository_extra_amp_downloads: []
