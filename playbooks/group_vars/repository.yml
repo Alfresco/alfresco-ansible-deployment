@@ -36,7 +36,7 @@ acs_play_repository_amp_aos_module_archive_url: "{{ acs_play_repository_amp_aos_
 # additional list of amp downloads
 acs_play_repository_extra_amp_downloads: []
   # - url: "https://your.repo.com/path/to/your/artifacts/your-amp.amp"
-  #   checksum: "sha1:https://your.repo.com/path/to/your/artifacts/your-amp.amp.sha1"
+  #   checksum: "sha1:2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"
   #   dest: "{{ content_folder }}/<amps_repo|amps_share>/your-amp.amp"
   #   url_username: your_username_to_repo
   #   url_password: your_password_to_repo

@@ -119,5 +119,5 @@ repository_amp_downloads: []
   #   url_username: your_username_to_repo
   #   url_password: your_password_to_repo
 
-# additional list of amp downloads
+# Additional list of amp downloads. Same structure as repository_amp_downloads
 repository_extra_amp_downloads: []
