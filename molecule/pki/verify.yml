@@ -45,7 +45,7 @@
       ansible.builtin.service_facts:
 
     - name: Check in logs a client did connect
-      when: item.edition == acs.edition
+      when: item.edition == acs_play_repository_acs_edition
       ansible.builtin.slurp:
         src: /var/log/alfresco/{{ item.file }}.log
       register: ats_log
@@ -93,4 +93,4 @@
         that:
           - ansible_facts.services['alfresco-shared-fs.service'].state == "running"
           - ansible_facts.services['alfresco-transform-router.service'].state == "running"
-      when: acs.edition == 'Enterprise'
+      when: acs_play_repository_acs_edition == 'Enterprise'

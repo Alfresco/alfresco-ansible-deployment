@@ -1,8 +1,3 @@
 acs_play_major_version: 74
-acs:
-  artifact_name: alfresco-content-services-distribution
-  edition: Enterprise
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 7.4.2.4
 dependencies_version:
   postgres_major_version: 14

@@ -120,8 +120,8 @@
   gather_facts: false
   roles:
     - role: "../roles/elasticsearch"
-      elasticsearch_major_version: "{{ '8.x' if acs.version is version('25.0', 'ge') else '7.x' }}"
-      when: acs.edition == "Enterprise" and not groups.external_elasticsearch | default([])
+      elasticsearch_major_version: "{{ '8.x' if acs_play_repository_acs_version is version('25.0', 'ge') else '7.x' }}"
+      when: acs_play_repository_acs_edition == "Enterprise" and not groups.external_elasticsearch | default([])
   tags:
     - elasticsearch
 
@@ -298,7 +298,7 @@
           dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_device_sync_artifact_name }}.amp"
           url_username: "{{ nexus_user }}"
           url_password: "{{ nexus_password }}"
-          enabled: "{{ acs.edition == 'Enterprise' and (groups.syncservice | default([]) | length > 0) }}"
+          enabled: "{{ acs_play_repository_acs_edition == 'Enterprise' and (groups.syncservice | default([]) | length > 0) }}"
         - url: "{{ acs_play_repository_amp_aos_module_archive_url }}"
           checksum: "sha1:{{ acs_play_repository_amp_aos_module_archive_url }}.sha1"
           dest: "{{ content_folder }}/amps_repo/{{ acs_play_repository_amp_aos_module_artifact_name }}.amp"
@@ -317,6 +317,10 @@
         tomcat_version: "{{ acs_play_tomcat_version }}"
         repository_nexus_username: "{{ nexus_user }}"
         repository_nexus_password: "{{ nexus_password }}"
+        repository_acs_edition: "{{ acs_play_repository_acs_edition }}"
+        repository_acs_artfiact_name: "{{ acs_play_repository_acs_artifact_name }}"
+        repository_acs_archive_url: "{{ acs_play_repository_acs_archive_url }}"
+        repository_acs_archive_checksum_url: "{{ acs_play_repository_acs_archive_checksum_url }}"
         repository_jdbc_driver_version: "{{ acs_play_repository_jdbc_driver_version }}"
         repository_jdbc_driver_url: "{{ acs_play_repository_jdbc_driver_url }}"
         repository_jdbc_driver_checksum: "{{ acs_play_repository_jdbc_driver_checksum }}"
@@ -359,13 +363,16 @@
               'version': acs_play_repository_amp_device_sync_version
             }
           }) }}
-      when: acs.edition == "Enterprise"
+      when: acs_play_repository_acs_edition == "Enterprise"
 
     - name: Update installation status file with ACS
       become: true
       vars:
         acs_components:
-          acs: "{{ acs }}"
+          acs:
+            artifact_name: "{{ acs_play_repository_acs_artifact_name }}"
+            repository: "{{ acs_play_repository_acs_repository }}"
+            version: "{{ acs_play_repository_acs_version }}"
           amps: "{{ amps }}"
           api_explorer:
             artifact_name: "{{ acs_play_repository_api_explorer_artifact_name }}"
@@ -410,10 +417,10 @@
         trouter_zip_checksum_url: "{{ acs_play_trouter_download_zip_sha1_checksum_url }}"
         trouter_zip_username: "{{ nexus_user }}"
         trouter_zip_password: "{{ nexus_password }}"
-      when: acs.edition == "Enterprise"
+      when: acs_play_repository_acs_edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Trouter
-      when: acs.edition == "Enterprise"
+      when: acs_play_repository_acs_edition == "Enterprise"
       become: true
       vars:
         trouter_components:
@@ -460,10 +467,10 @@
         sfs_zip_username: "{{ nexus_user }}"
         sfs_zip_password: "{{ nexus_password }}"
         ats_keystore: "{{ sfs_keystore | default({}) }}"
-      when: acs.edition == "Enterprise"
+      when: acs_play_repository_acs_edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with SFS
-      when: acs.edition == "Enterprise"
+      when: acs_play_repository_acs_edition == "Enterprise"
       become: true
       vars:
         sfs_components:
@@ -495,10 +502,10 @@
         search_enterprise_zip_checksum_url: "{{ acs_play_search_enterprise_download_zip_sha1_checksum_url }}"
         search_enterprise_zip_username: "{{ nexus_user }}"
         search_enterprise_zip_password: "{{ nexus_password }}"
-      when: acs.edition == "Enterprise"
+      when: acs_play_repository_acs_edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Enterprise Search
-      when: acs.edition == "Enterprise"
+      when: acs_play_repository_acs_edition == "Enterprise"
       become: true
       vars:
         search_enterprise_components:
@@ -536,7 +543,7 @@
   hosts: acc
   gather_facts: false
   vars:
-    acs_version_requirement: "{{ acs.version is version('7.4', 'ge') }}"
+    acs_version_requirement: "{{ acs_play_repository_acs_version is version('7.4', 'ge') }}"
   roles:
     - role: "../roles/adf_app"
       when: acs_version_requirement
@@ -584,7 +591,7 @@
       {%- endif %}
   roles:
     - role: "../roles/adf_app"
-      when: acs.edition == "Enterprise"
+      when: acs_play_repository_acs_edition == "Enterprise"
       adf_app_name: alfresco-digital-workspace
       adf_app_context: /workspace/
       adf_app_port: 8880
@@ -600,7 +607,7 @@
         }}
   post_tasks:
     - name: Update installation status file with ADW
-      when: acs.edition == "Enterprise"
+      when: acs_play_repository_acs_edition == "Enterprise"
       become: true
       vars:
         adw_components:
@@ -635,10 +642,10 @@
         sync_jdbc_driver_version: "{{ acs_play_sync_jdbc_driver_version }}"
         sync_jdbc_driver_url: "{{ acs_play_sync_jdbc_driver_url }}"
         sync_jdbc_driver_checksum: "{{ acs_play_sync_jdbc_driver_checksum }}"
-      when: acs.edition == "Enterprise"
+      when: acs_play_repository_acs_edition == "Enterprise"
   post_tasks:
     - name: Update installation status file with Sync
-      when: acs.edition == "Enterprise"
+      when: acs_play_repository_acs_edition == "Enterprise"
       become: true
       vars:
         sync_components:
@@ -660,7 +667,7 @@
   hosts: audit_storage
   gather_facts: false
   vars:
-    acs_version_requirement: "{{ acs.version is version('23.4', 'ge') }}"
+    acs_version_requirement: "{{ acs_play_repository_acs_version is version('23.4', 'ge') }}"
   pre_tasks:
     - name: Assert that the required version is met
       ansible.builtin.fail:
@@ -668,7 +675,7 @@
       when: not acs_version_requirement
   tasks:
     - name: Audit Storage Role import
-      when: acs.edition == "Enterprise" and acs_version_requirement
+      when: acs_play_repository_acs_edition == "Enterprise" and acs_version_requirement
       ansible.builtin.import_role:
         name: "../roles/audit_storage"
       vars:
@@ -686,7 +693,7 @@
         audit_storage_opensearch_password: "{{ elasticsearch_password }}"
   post_tasks:
     - name: Update installation status file with Audit Storage
-      when: acs.edition == "Enterprise" and acs_version_requirement
+      when: acs_play_repository_acs_edition == "Enterprise" and acs_version_requirement
       become: true
       vars:
         audit_storage_components:
