@@ -36,9 +36,9 @@
             - installed_components.acs is defined
             - installed_components.api_explorer is defined
             - |
-              acs.edition != installed_components.acs.edition or
-              acs.version.split('.')[:3] | join('.') != installed_components.acs.version.split('.')[:3] | join('.') or
-              acs.version is version(installed_components.acs.version, 'lt') or
+              acs_play_repository_acs_edition != installed_components.acs.edition or
+              acs_play_repository_acs_version.split('.')[:3] | join('.') != installed_components.acs.version.split('.')[:3] | join('.') or
+              acs_play_repository_acs_version is version(installed_components.acs.version, 'lt') or
               acs_play_repository_api_explorer_version != installed_components.api_explorer.version
 
         - name: Initialize evaluation of currently installed amps
@@ -68,7 +68,7 @@
                   'version': acs_play_repository_amp_device_sync_version
                 }
               }) }}
-          when: acs.edition == 'Enterprise'
+          when: acs_play_repository_acs_edition == 'Enterprise'
 
         - name: Fail on unsupported AMPS upgrades
           ansible.builtin.fail:

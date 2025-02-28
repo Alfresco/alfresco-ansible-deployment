@@ -15,6 +15,7 @@ acs_environment:
 repository_nexus_username: null
 repository_nexus_password: null
 
+repository_acs_edition: Enterprise
 repository_acs_artfiact_name: alfresco-content-services-distribution
 repository_acs_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
 

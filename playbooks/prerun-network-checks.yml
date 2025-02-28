@@ -54,7 +54,7 @@
         checked_host: "{{ sfs_host }}"
         checked_port: "{{ ports_cfg.sfs.http }}"
         delegate_target: "{{ groups.transformers | first }}"
-      when: acs.edition == "Enterprise" and groups.transformers | default([]) | length > 0
+      when: acs_play_repository_acs_edition == "Enterprise" and groups.transformers | default([]) | length > 0
 
     - name: Check trouter connection
       ansible.builtin.include_tasks: "tasks/check_port.yml"
@@ -62,7 +62,7 @@
         checked_host: "{{ trouter_host }}"
         checked_port: "{{ ports_cfg.transformers.trouter }}"
         delegate_target: "{{ groups.transformers | first }}"
-      when: acs.edition == "Enterprise" and groups.transformers | default([]) | length > 0
+      when: acs_play_repository_acs_edition == "Enterprise" and groups.transformers | default([]) | length > 0
 
     - name: Check tengine connection
       ansible.builtin.include_tasks: "tasks/check_port.yml"
