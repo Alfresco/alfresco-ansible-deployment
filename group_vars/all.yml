@@ -22,16 +22,6 @@ nexus_repository:
   development_releases: >-
     {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.development.repository }}/{{ artifacts_repositories.enterprise.group_id }}
 acs_play_major_version: 23
-acs:
-  artifact_name: alfresco-content-services-distribution
-  edition: Enterprise
-  repository: "{{ nexus_repository.enterprise_releases }}"
-  version: 23.4.1
-downloads:
-  acs_zip_url: >-
-    {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip
-  acs_zip_sha1_checksum_url: >-
-    {{ acs.repository }}/{{ acs.artifact_name }}/{{ acs.version }}/{{ acs.artifact_name }}-{{ acs.version }}.zip.sha1
 # A default keystore is stored in /var/opt/alfresco/content-services/keystore,
 # to replace this with a custom keystore place the keystore file in the "configuration_files/keystores" folder
 # and change this flag to true. See the deployment guide for more details.

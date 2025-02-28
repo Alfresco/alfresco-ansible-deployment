@@ -73,7 +73,7 @@ ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.0.N-extra-vars.ym
 > Note: Use whatever inventory and config file that matches your use case
 > If you're applying a hotfix to the latest major release (7.1 as of writing) you don't need to specify an extra config file with "-e @file"
 
-After the playbook ran successfully your environment delivers the upgraded version of repo but the previous installation is still on the target machine. It is the admin responsibility to make sure the new system works as expected and no rollback is needed. If all is OK, the old installation previous installation can be cleaned by removing the folder: `{{ binaries_folder }}/content-services-{{ acs.version }}` (by default points to: `/opt/alfresco/content-services-7.0.1`).
+After the playbook ran successfully your environment delivers the upgraded version of repo but the previous installation is still on the target machine. It is the admin responsibility to make sure the new system works as expected and no rollback is needed. If all is OK, the old installation previous installation can be cleaned by removing the folder: `{{ binaries_folder }}/content-services-{{ acs_play_repository_acs_version }}` (by default points to: `/opt/alfresco/content-services-7.0.1`).
 
 #### Rolling back a hotfix "in-place" upgrade
 

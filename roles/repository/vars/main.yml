@@ -1,5 +1,5 @@
 ---
-content_folder: "{{ binaries_folder }}/content-services-{{ acs.version }}"
+content_folder: "{{ binaries_folder }}/content-services-{{ repository_acs_version }}"
 settings_folder: "{{ config_folder }}/content-services"
 content_data_folder: "{{ data_folder }}/content-services"
 
