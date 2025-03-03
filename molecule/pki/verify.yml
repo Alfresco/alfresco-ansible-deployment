@@ -1,12 +1,4 @@
 ---
-- name: Set edition
-  hosts: all:localhost
-  gather_facts: false
-  tasks:
-    - name: Set edition
-      ansible.builtin.set_fact:
-        acs_play_repository_acs_edition: "{{ acs_play_repository_acs_edition | default('Enterprise') }}"
-
 - name: Verify PKI generation
   hosts: all
   gather_facts: false
@@ -53,7 +45,6 @@
       ansible.builtin.service_facts:
 
     - name: Check in logs a client did connect
-      when: item.edition == acs_play_repository_acs_edition
       ansible.builtin.slurp:
         src: /var/log/alfresco/{{ item.file }}.log
       register: ats_log
@@ -63,9 +54,6 @@
       retries: 10
       delay: 3
       loop:
-        - file: ats-ate-aio
-          pattern: GET Transform Config version
-          edition: Community
         - file: ats-atr
           pattern: GET Transform Config version
           edition: Enterprise
@@ -101,4 +89,3 @@
         that:
           - ansible_facts.services['alfresco-shared-fs.service'].state == "running"
           - ansible_facts.services['alfresco-transform-router.service'].state == "running"
-      when: acs_play_repository_acs_edition == 'Enterprise'
