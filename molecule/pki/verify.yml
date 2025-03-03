@@ -1,4 +1,12 @@
 ---
+- name: Set edition
+  hosts: all:localhost
+  gather_facts: false
+  tasks:
+    - name: Set edition
+      ansible.builtin.set_fact:
+        acs_play_repository_acs_edition: "{{ acs_play_repository_acs_edition | default('Enterprise') }}"
+
 - name: Verify PKI generation
   hosts: all
   gather_facts: false
