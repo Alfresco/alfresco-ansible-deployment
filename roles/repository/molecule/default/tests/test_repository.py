@@ -95,11 +95,11 @@ def test_alfresco_context_200(host):
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
 
 
-def test_alfresco_api(host):
+def test_alfresco_api(host, get_ansible_vars):
     "Check the repository is installed correctly by calling the discovery API (/alfresco/api/discovery)"
     cmd = host.run("curl -L --user admin:admin --connect-timeout 5 http://{}:8080/alfresco/api/discovery".format(test_host))
     response = json.loads(cmd.stdout)
-    acs_version = host.ansible.get_variables()['repository_acs_version']
+    acs_version = get_ansible_vars["repository_acs_version"]
     if '-' in acs_version:
         # Remove optional -Ax suffix in acs version
         acs_version_split = acs_version.split('-')
