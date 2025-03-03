@@ -1,0 +1,68 @@
+- name: Verify
+  hosts: all
+  gather_facts: true
+  vars:
+    test_host: "localhost"
+  tasks:
+    - name: Test nginx configuration syntax
+      become: true
+      ansible.builtin.command: nginx -t
+      register: nginx_test
+      changed_when: false
+      failed_when: |
+        'syntax is ok' not in nginx_test.stderr or 'test is successful' not in nginx_test.stderr
+
+    - name: Check /alfresco/service/api/solr/test
+      ansible.builtin.uri:
+        url: "http://{{ test_host }}/alfresco/service/api/solr/test"
+        method: GET
+        status_code: 403
+
+    - name: Check /alfresco/s/api/solr/test
+      ansible.builtin.uri:
+        url: "http://{{ test_host }}/alfresco/s/api/solr/test"
+        method: GET
+        status_code: 403
+
+    - name: Check /alfresco/wcservice/api/solr/test
+      ansible.builtin.uri:
+        url: "http://{{ test_host }}/alfresco/wcservice/api/solr/test"
+        method: GET
+        status_code: 403
+      register: result_wcservice_api_solr_test
+
+    - name: Check /alfresco/wcs/api/solr/test
+      ansible.builtin.uri:
+        url: "http://{{ test_host }}/alfresco/wcs/api/solr/test"
+        method: GET
+        status_code: 403
+
+    - name: Check /share/proxy/alfresco/api/solr/test
+      ansible.builtin.uri:
+        url: "http://{{ test_host }}/share/proxy/alfresco/api/solr/test"
+        method: GET
+        status_code: 403
+
+    - name: Check /share/proxy/alfresco-noauth/api/solr/test
+      ansible.builtin.uri:
+        url: "http://{{ test_host }}/share/proxy/alfresco-noauth/api/solr/test"
+        method: GET
+        status_code: 403
+
+    - name: Check /share/proxy/alfresco-feed/api/solr/test
+      ansible.builtin.uri:
+        url: "http://{{ test_host }}/share/proxy/alfresco-feed/api/solr/test"
+        method: GET
+        status_code: 403
+
+    - name: Check /alfresco/-default-/proxy/alfresco/api/test
+      ansible.builtin.uri:
+        url: "http://{{ test_host }}/alfresco/-default-/proxy/alfresco/api/test"
+        method: GET
+        status_code: 403
+
+    - name: Check /alfresco/s/prometheus
+      ansible.builtin.uri:
+        url: "http://{{ test_host }}/alfresco/s/prometheus"
+        method: GET
+        status_code: 403
