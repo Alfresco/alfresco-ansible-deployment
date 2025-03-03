@@ -15,6 +15,7 @@ nginx_set_proxy_headers: true
 # Add default security headers to mitigate vulnerabilities like XSS,
 # clickjacking, and data injection attacks.
 nginx_security_headers_enabled: true
+nginx_security_header_hsts_enabled: false
 nginx_security_header_hsts_value: "max-age=31536000; includeSubDomains"
 nginx_security_header_xframe_value: "SAMEORIGIN"
 nginx_security_header_xcontenttype_value: "nosniff"
@@ -22,7 +23,7 @@ nginx_security_header_referrer_value: "strict-origin-when-cross-origin"
 nginx_security_header_permissions_value: "geolocation=(), microphone=(), camera=(), usb=(), fullscreen=(self), payment=(), display-capture=()"
 
 nginx_security_headers_webapps:
-  Strict-Transport-Security: "{{ nginx_security_header_hsts_value }}"
+  Strict-Transport-Security: "{{ nginx_security_header_hsts_value if nginx_security_header_hsts_enabled }}"
   X-Frame-Options: "{{ nginx_security_header_xframe_value }}"
   X-Content-Type-Options: "{{ nginx_security_header_xcontenttype_value }}"
   Referrer-Policy: "{{ nginx_security_header_referrer_value }}"
@@ -30,13 +31,13 @@ nginx_security_headers_webapps:
   Content-Security-Policy: "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';"
 
 nginx_security_headers_repository:
-  Strict-Transport-Security: "{{ nginx_security_header_hsts_value }}"
+  Strict-Transport-Security: "{{ nginx_security_header_hsts_value if nginx_security_header_hsts_enabled }}"
   X-Content-Type-Options: "{{ nginx_security_header_xcontenttype_value }}"
   Referrer-Policy: "{{ nginx_security_header_referrer_value }}"
   Permissions-Policy: "{{ nginx_security_header_permissions_value }}"
 
 nginx_security_headers_share:
-  Strict-Transport-Security: "{{ nginx_security_header_hsts_value }}"
+  Strict-Transport-Security: "{{ nginx_security_header_hsts_value if nginx_security_header_hsts_enabled }}"
   Referrer-Policy: "{{ nginx_security_header_referrer_value }}"
   Permissions-Policy: "{{ nginx_security_header_permissions_value }}"
   Content-Security-Policy: "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:;"
