@@ -26,7 +26,3 @@ argument_specs:
         description: Timeout of uploads (client requests read timeout)
         type: str
         default: 20m
-      nginx_repository_acs_edition:
-        description: The edition of the ACS repository
-        type: str
-        default: Enterprise
