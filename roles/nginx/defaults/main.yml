@@ -27,6 +27,7 @@ nginx_security_headers_webapps:
   X-Content-Type-Options: "{{ nginx_security_header_xcontenttype_value }}"
   Referrer-Policy: "{{ nginx_security_header_referrer_value }}"
   Permissions-Policy: "{{ nginx_security_header_permissions_value }}"
+  Content-Security-Policy: "default-src 'self';"
 
 nginx_security_headers_repository:
   Strict-Transport-Security: "{{ nginx_security_header_hsts_value }}"
@@ -38,6 +39,7 @@ nginx_security_headers_share:
   Strict-Transport-Security: "{{ nginx_security_header_hsts_value }}"
   Referrer-Policy: "{{ nginx_security_header_referrer_value }}"
   Permissions-Policy: "{{ nginx_security_header_permissions_value }}"
+  Content-Security-Policy: "default-src 'self';"
 
 nginx_absolute_redirect: true
 
