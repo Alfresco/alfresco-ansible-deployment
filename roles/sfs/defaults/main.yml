@@ -8,6 +8,10 @@ sfs_environment:
 utils_sfs: []
 ats_keystore: {}
 
+sfs_truststore_path: "{{ java_home + '/lib/security/cacerts' }}"
+sfs_truststore_pass: 'changeit'
+sfs_truststore_type: "{% if java_major | int >= 21 %}pkcs12{% else %}JCEKS{% endif %}"
+
 sfs_artifact_name: alfresco-shared-file-store-controller
 sfs_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
 
