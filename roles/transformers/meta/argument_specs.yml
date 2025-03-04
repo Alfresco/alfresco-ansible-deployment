@@ -74,5 +74,8 @@ argument_specs:
       transformers_repository_acs_edition:
         type: str
         required: false
+        choices:
+          - Enterprise
+          - Community
         description: |
           The Alfresco Content Services edition to use.
