@@ -11,3 +11,5 @@
             - -Xms128m
             - -Xmx900m
             - $JAVA_OPTS
+        sfs_zip_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
+        sfs_zip_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"

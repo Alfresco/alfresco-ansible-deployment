@@ -24,9 +24,9 @@
   ansible.builtin.include_role:
     name: ../roles/java
     tasks_from: keystores
-  when: ats_keystore
+  when: transformers_ats_keystore
   vars:
-    java_keystore: "{{ ats_keystore }}"
+    java_keystore: "{{ transformers_ats_keystore }}"
 
 - name: Enable EPEL repository
   become: true
@@ -43,21 +43,21 @@
     gpgcheck: true
     gpgkey: >-
       {{ epel_gpg_base }}/RPM-GPG-KEY-EPEL-{{ epel_ver }}
-  when: pkg_format == 'rpm'
+  when: transformers_pkg_format == 'rpm'
 
 - name: ATS installation
   become: true
   block:
     - name: Ensure a list of packages installed
       ansible.builtin.package:
-        name: "{{ utils_transform }}"
+        name: "{{ transformers_utils }}"
         state: present
 
     - name: Install optional ghostscript packages (AGPL)
       ansible.builtin.package:
         name: "{{ ghostscript_packages }}"
         state: present
-      when: include_ghostscript
+      when: transformers_include_ghostscript
 
     - name: Create transform-services folder
       ansible.builtin.file:
@@ -69,32 +69,30 @@
 
     - name: Download alfresco-pdf-renderer-linux.tgz
       ansible.builtin.get_url:
-        url: "{{ alfresco_pdf_renderer }}"
-        checksum: sha1:{{ lookup('url', alfresco_pdf_renderer_sha1_checksum_url) }}
-        dest: "{{ download_location }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
+        url: "{{ transformers_pdf_archive_url }}"
+        checksum: "{{ transformers_pdf_archive_checksum_url }}"
+        dest: "{{ download_location }}/alfresco-pdf-renderer-{{ transformers_pdf_version }}-linux.tgz"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0644"
 
     - name: Extract alfresco-pdf-renderer-linux.tgz
       ansible.builtin.unarchive:
-        src: "{{ download_location }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz"
+        src: "{{ download_location }}/alfresco-pdf-renderer-{{ transformers_pdf_version }}-linux.tgz"
         dest: "{{ ats_home }}"
         remote_src: true
         owner: "{{ username }}"
         group: "{{ group_name }}"
         creates: "{{ ats_home }}/alfresco-pdf-renderer"
 
-    - name: Download {{ transform.artifact_name }}-{{ transform.version }}.jar
+    - name: Download {{ transformers_aio_artifact_name }}-{{ transformers_aio_version }}.jar
       ansible.builtin.get_url:
-        url: "{{ downloads.transform_jar_url }}"
-        dest: "{{ binaries_folder }}/transform-service/{{ transform.artifact_name }}-{{ transform.version }}.jar"
-        checksum: sha1:{{ lookup('url', downloads.transform_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
+        url: "{{ transformers_aio_archive_url }}"
+        dest: "{{ binaries_folder }}/transform-service/{{ transformers_aio_artifact_name }}-{{ transformers_aio_version }}.jar"
+        checksum: "{{ transformers_aio_archive_checksum_url }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'
-        url_username: "{{ nexus_user }}"
-        url_password: "{{ nexus_password }}"
 
     - name: Create log file with correct permissions
       ansible.builtin.file:
@@ -113,7 +111,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0600"
-      when: ats_keystore
+      when: transformers_ats_keystore
       notify:
         - wait-for-activemq
         - Restart-aio

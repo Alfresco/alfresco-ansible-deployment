@@ -5,15 +5,13 @@
     - name: "Include activemq"
       ansible.builtin.include_role:
         name: "activemq"
-      vars:
-        activemq_version: "{{ dependencies_version.activemq }}"
     - name: Flush Handlers
       ansible.builtin.meta: flush_handlers
     - name: "Include transformers"
       ansible.builtin.include_role:
         name: "transformers"
       vars:
-        tengine_environment:
+        transformers_tengine_environment:
           JAVA_OPTS:
             - -Xms512m
             - -Xmx900m

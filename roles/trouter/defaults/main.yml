@@ -10,3 +10,13 @@ ats_keystore: {}
 trouter_truststore_path: "{{ java_home + '/lib/security/cacerts' }}"
 trouter_truststore_pass: 'changeit'
 trouter_truststore_type: "{% if java_major | int >= 21 %}pkcs12{% else %}JCEKS{% endif %}"
+
+trouter_artifact_name: alfresco-transform-router
+trouter_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
+
+trouter_version: 4.1.6
+trouter_zip_url: "{{ trouter_repository }}/{{ trouter_artifact_name }}/{{ trouter_version }}/{{ trouter_artifact_name }}-{{ trouter_version }}.jar"
+trouter_zip_checksum_url: "sha1:{{ trouter_zip_url }}.sha1"
+
+trouter_zip_username: null
+trouter_zip_password: null

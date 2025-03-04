@@ -6,9 +6,14 @@ nginx_vhosts:
     filename: "alfresco.conf"
 
 # role arguments defaults
-setup_service: true
-setup_vhosts: true
+nginx_setup_service: true
+nginx_setup_vhosts: true
 
 # Disable when nginx node is behind another reverse proxy (e.g. AWS ELB)
 nginx_set_proxy_headers: true
+
 nginx_absolute_redirect: true
+
+# Allow 5GB or 20 minutes long max uploads by default
+nginx_max_upload_size: "5g"
+nginx_max_upload_time: "20m"

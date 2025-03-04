@@ -6,6 +6,8 @@ on:
   schedule:
     - cron: '0 6 * * MON'
   push:
+    tags-ignore:
+      - '**'
     paths:
       - '.github/workflows/updatecli.yml'
       - 'scripts/updatecli/**'
@@ -31,15 +33,14 @@ jobs:
           - updatecli_community.yml
           - updatecli_acs74.yml
           - updatecli_acs73.yml
-          - updatecli_acs72.yml
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ github.head_ref || github.ref_name }}
           token: ${{ secrets.BOT_GITHUB_TOKEN }}
 
-      - name: Install Updatecli
-        uses: updatecli/updatecli-action@304d62420deffb7c824c9cad12942906e16e4352  # v2.76.0
+      - name: Install updatecli
+        uses: Alfresco/alfresco-build-tools/.github/actions/setup-updatecli@v8.14.1
 
       - name: Run Updatecli in ${{ env.UPDATECLI_MODE }} mode
         run: >-

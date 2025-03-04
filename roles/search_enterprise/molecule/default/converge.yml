@@ -1,6 +1,9 @@
 ---
 - name: Converge
   hosts: all
+  vars:
+    molecule_nexus_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
+    molecule_nexus_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
   tasks:
     - name: "Include activemq"
       ansible.builtin.include_role:
@@ -13,14 +16,22 @@
     - name: "Include sfs"
       ansible.builtin.include_role:
         name: "sfs"
+      vars:
+        sfs_zip_username: "{{ molecule_nexus_username }}"
+        sfs_zip_password: "{{ molecule_nexus_password }}"
     - name: "Include transformers"
       ansible.builtin.include_role:
         name: "transformers"
     - name: "Include t-router"
       ansible.builtin.include_role:
         name: "trouter"
+      vars:
+        trouter_zip_username: "{{ molecule_nexus_username }}"
+        trouter_zip_password: "{{ molecule_nexus_password }}"
     - name: "Include search_enterprise"
       ansible.builtin.include_role:
         name: "search_enterprise"
       vars:
         elasticsearch_host: "{{ ansible_hostname }}"
+        search_enterprise_zip_username: "{{ molecule_nexus_username }}"
+        search_enterprise_zip_password: "{{ molecule_nexus_password }}"

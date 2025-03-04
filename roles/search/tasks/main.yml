@@ -15,9 +15,9 @@
 
 - name: "Download {{ search_flavor }}-{{ search_version }}.zip"
   ansible.builtin.get_url:
-    url: "{{ downloads.search_zip_url }}"
+    url: "{{ search_zip_url }}"
     dest: "{{ download_location }}/{{ search_flavor }}-{{ search_version }}.zip"
-    checksum: sha1:{{ lookup('url', downloads.search_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
+    checksum: "{{ search_zip_checksum_url }}"
     mode: "0644"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"

@@ -6,6 +6,37 @@ title: Upgrading the playbook
 
 ## Unreleased version
 
+### Python and Ansible version requirements
+
+The `ansible-core` version has been upgraded to 2.16, and the Python version we
+test against to 3.11.
+
+* Control node must have a Python version between 3.10 and
+  3.12.
+* Managed nodes must have a default Python version between 3.6 and 3.12.
+
+You can find updated information for the compatibility at
+[endoflife](https://endoflife.date/ansible-core#compatibility).
+
+To upgrade an existing pipenv virtualenv, you need to remove it first to force
+the recreation with the updated Python runtime:
+
+```bash
+pipenv --rm
+```
+
+For more information check the updated [deployment guide](deployment-guide.md#setup-runtime-environment).
+
+### Handling of `supported_os` var
+
+The `supported_os` variable is being moved into version-specific variable files
+within the `vars/` directory. From this point forward, the `supported_os`
+variable will more accurately reflect the supported OS matrix. However, we
+reserve the right to specify newer distribution versions when testing
+compatibility or evaluating support for minor releases.
+
+## v2.6.0
+
 ### Search Enterprise is the new default search engine
 
 The example inventories have been updated to default to Search Enterprise /
@@ -14,6 +45,8 @@ search engine from Enterprise since ACS 23.1.1.
 
 Search Services are still supported as before by assigning hosts to the `search`
 group.
+
+## v2.4.0
 
 ### Passing Alfresco global properties
 

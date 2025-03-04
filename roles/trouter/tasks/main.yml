@@ -77,17 +77,17 @@
         - Enable-trouter
         - Restart-trouter
 
-- name: Download {{ trouter.artifact_name }}.jar
+- name: Download {{ trouter_artifact_name }}-{{ trouter_version }}.jar
   become: true
   ansible.builtin.get_url:
-    url: "{{ downloads.trouter_jar_url }}"
-    dest: "{{ ats_home }}/{{ trouter.artifact_name }}-{{ trouter.version }}.jar"
-    checksum: sha1:{{ lookup('url', downloads.trouter_jar_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
+    url: "{{ trouter_zip_url }}"
+    dest: "{{ ats_home }}/{{ trouter_artifact_name }}-{{ trouter_version }}.jar"
+    checksum: "{{ trouter_zip_checksum_url }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
+    url_username: "{{ trouter_zip_username }}"
+    url_password: "{{ trouter_zip_password }}"
     timeout: 570
 
 - name: Check if service restart is needed

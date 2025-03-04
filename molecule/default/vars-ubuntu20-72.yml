@@ -1,4 +1,0 @@
-MOLECULE_IT_IMAGE_ID: ami-0887c7673564b061c # ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20240704
-MOLECULE_IT_EXTRA_VARS: 7.2.N-extra-vars.yml
-MOLECULE_IT_TEST_CONFIG: tests/test-config-7.2.json
-MOLECULE_IT_PLATFORM: ubuntu20-72

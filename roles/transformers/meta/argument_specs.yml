@@ -3,10 +3,71 @@ argument_specs:
   main:
     short_description: Main entrypoint for the tranformers role
     options:
-      ats_keystore:
+      transformers_pkg_format:
+        type: str
+        required: false
+        description: |
+          Package format to use for the transformers installation.
+          Possible values are 'deb' or 'rpm'.
+      transformers_ats_keystore:
         type: dict
         required: false
         no_log: true
         description: |
           Representation of the JRE keystore as expected by the java role.
           Check the java role's arguments specification for details.
+      transformers_libreoffice_version:
+        type: str
+        required: false
+        description: |
+          Version of the LibreOffice package to install.
+      transformers_libreoffice_archive_url:
+        type: str
+        required: false
+        description: |
+          URL to the LibreOffice package archive.
+      transformers_libreoffice_archive_checksum_url:
+        type: str
+        required: false
+        description: |
+          URL to the LibreOffice package archive checksum.
+      transformers_pdf_version:
+        type: str
+        required: false
+        description: |
+          Version of the Alfresco PDF Renderer to install.
+      transformers_pdf_archive_url:
+        type: str
+        required: false
+        description: |
+          URL to download the Alfresco PDF Renderer archive from.
+      transformers_pdf_archive_checksum_url:
+        type: str
+        required: false
+        description: |
+          URL to download the checksum of the Alfresco PDF Renderer archive from.
+      transformers_imagemagick_version:
+        type: str
+        required: false
+        description: |
+          Version of ImageMagick to install.
+      transformers_imagemagick_repository:
+        type: str
+        required: false
+        description: |
+          URL of the repository where the ImageMagick distribution is stored.
+      transformers_aio_artifact_name:
+        type: str
+        required: false
+        description: |
+          The name of the transformers All-In-One artifact.
+      transformers_aio_archive_url:
+        type: str
+        required: false
+        description: |
+          The URL to download the transformers All-In-One artifact.
+      transformers_aio_archive_checksum_url:
+        type: str
+        required: false
+        description: |
+          The URL to download the checksum of the transformers All-In-One artifact.

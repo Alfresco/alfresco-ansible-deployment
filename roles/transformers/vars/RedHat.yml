@@ -1,7 +1,7 @@
 ---
-imagemagick_home: "/usr/lib64/ImageMagick-{{ imagemagick_version.split('-')[0] }}"
+transformers_imagemagick_home: "/usr/lib64/ImageMagick-{{ transformers_imagemagick_version.split('-')[0] }}"
 
-utils_transform:
+transformers_utils:
   - cairo
   - cups-libs
   - libSM

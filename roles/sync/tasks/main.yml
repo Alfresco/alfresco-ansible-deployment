@@ -7,19 +7,19 @@
 
 - name: Download Sync service artefact
   ansible.builtin.get_url:
-    url: "{{ downloads.sync_zip_url }}"
-    dest: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
-    checksum: sha1:{{ lookup('url', downloads.sync_zip_sha1_checksum_url, username=nexus_user, password=nexus_password) }}
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
+    url: "{{ sync_zip_url }}"
+    dest: "{{ download_location }}/sync-dist-6.x-{{ sync_version }}.zip"
+    checksum: "{{ sync_zip_checksum }}"
+    url_username: "{{ sync_zip_username | default(omit) }}"
+    url_password: "{{ sync_zip_password | default(omit) }}"
     mode: "0644"
 
 - name: Extract Sync service to {{ sync_home }}
   ansible.builtin.unarchive:
-    src: "{{ download_location }}/sync-dist-6.x-{{ sync.version }}.zip"
+    src: "{{ download_location }}/sync-dist-6.x-{{ sync_version }}.zip"
     dest: "{{ download_location }}"
     remote_src: true
-    creates: "{{ download_location }}/sync/service-sync/service-sync-{{ sync.version }}.jar"
+    creates: "{{ download_location }}/sync/service-sync/service-sync-{{ sync_version }}.jar"
 
 - name: Install Sync service
   become: true
@@ -53,13 +53,13 @@
 
     - name: Download postgresql JDBC driver
       ansible.builtin.get_url:
-        url: "{{ dependencies_url.postgresql_connector }}"
-        checksum: sha1:{{ lookup('url', dependencies_url.postgresql_connector_sha1_checksum_url) }}
+        url: "{{ sync_jdbc_driver_url }}"
+        checksum: "{{ sync_jdbc_driver_checksum }}"
         dest: "{{ sync_home }}/service-sync/connectors/postgresql.jar"
         mode: "0644"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-      when: not sync_db_url or sync_db_url is regex('jdbc:postgresql://')
+      when: sync_jdbc_driver_class == 'org.postgresql.Driver'
 
     - name: Copy db_connector to {{ sync_home }}/service-sync/connectors folder
       ansible.builtin.copy:
@@ -68,7 +68,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0644"
-      when: sync_db_url and sync_db_url is not regex('jdbc:postgresql://')
+      when: sync_jdbc_driver_class != 'org.postgresql.Driver'
 
     - name: Add paths to setenv file
       ansible.builtin.blockinfile:
@@ -77,7 +77,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         block: |
-          export SYNC_VERSION={{ sync.version }}
+          export SYNC_VERSION={{ sync_version }}
           export SYNC_HOME={{ sync_home }}
         insertafter: EOF
 

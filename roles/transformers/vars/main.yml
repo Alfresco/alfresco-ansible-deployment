@@ -1,19 +1,4 @@
 ---
 # vars file for transformers
-libreoffice_repo: "{{ artifacts_repositories.community.base_url }}/repositories/thirdparty/org/libreoffice/libreoffice-dist"
-libreoffice_repo_path: "{{ dependencies_version.libreoffice }}"
-libreoffice_archive_name: "libreoffice-dist-{{ dependencies_version.libreoffice }}-{{ pkg_format }}.gz"
-libreoffice_archive_url: "{{ libreoffice_repo }}/{{ libreoffice_repo_path }}/{{ libreoffice_archive_name }}"
-libreoffice_archive_sha1_checksum_url: "{{ libreoffice_archive_url }}.sha1"
-libreoffice_home: "/opt/libreoffice{{ dependencies_version.libreoffice[0:3] }}/"
-
-alfresco_pdf_base_url: >-
-  {{ nexus_repository.releases }}/alfresco-pdf-renderer/{{ dependencies_version.pdf_renderer }}
-alfresco_pdf_renderer: >-
-  {{ alfresco_pdf_base_url }}/alfresco-pdf-renderer-{{ dependencies_version.pdf_renderer }}-linux.tgz
-alfresco_pdf_renderer_sha1_checksum_url: "{{ alfresco_pdf_renderer }}.sha1"
-
 ghostscript_packages:
   - ghostscript
-
-imagemagick_version: "{{ dependencies_version.imagemagick }}"

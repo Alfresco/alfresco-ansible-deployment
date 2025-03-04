@@ -5,8 +5,6 @@
     - name: "Include activemq"
       ansible.builtin.include_role:
         name: "activemq"
-      vars:
-        activemq_version: "{{ dependencies_version.activemq }}"
     - name: Flush Handlers
       ansible.builtin.meta: flush_handlers
     - name: "Include AIO"
@@ -22,3 +20,5 @@
           JAVA_OPTS:
             - -Xms800m
             - -Xmx900m
+        trouter_zip_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
+        trouter_zip_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"

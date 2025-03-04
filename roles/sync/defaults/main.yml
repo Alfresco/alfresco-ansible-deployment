@@ -1,4 +1,11 @@
 ---
+sync_version: 5.1.0
+sync_zip_url: >-
+  https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/{{ sync_version }}/sync-dist-6.x-{{ sync_version }}.zip
+sync_zip_checksum: >-
+  sha1:{{ sync_zip_url }}.sha1
+sync_zip_username: null
+sync_zip_password: null
 sync_home: "{{ binaries_folder }}/sync-service"
 utils_sync: []
 sync_environment:
@@ -9,3 +16,10 @@ sync_environment:
 jmx_config_remote_enabled: false
 jmx_config_remote_port: 50800
 jmx_config_remote_rmi_port: 50801
+
+sync_jdbc_driver_class: org.postgresql.Driver
+sync_jdbc_driver_version: 42.7.3
+sync_jdbc_driver_base_url: https://repo.maven.apache.org/maven2/org/postgresql/postgresql
+sync_jdbc_driver_url: >-
+  {{ '{0}/{1}/postgresql-{1}.jar'.format(sync_jdbc_driver_base_url, sync_jdbc_driver_version) }}
+sync_jdbc_driver_checksum: "sha1:{{ sync_jdbc_driver_url }}.sha1"

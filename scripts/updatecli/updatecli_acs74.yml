@@ -2,7 +2,7 @@ acs:
   version: "7.4"
 
 adw:
-  version: "4.0"
+  version: "5.0"
 
 aos:
   version: "1.6"

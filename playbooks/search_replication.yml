@@ -6,6 +6,9 @@
 # Configuring the load-balancer or changing the repo configuration is not part
 # of this playbook
 ---
+- name: Include vars based on acs major version
+  ansible.builtin.import_playbook: include-vars.yml
+
 - name: Check if current OS version is in the supported matrix
   hosts: all:!external
   gather_facts: true
@@ -29,13 +32,16 @@
 - name: Alfresco Search Role
   hosts: search
   gather_facts: true
-  roles:
-    - role: ../roles/search
-      search_flavor: alfresco-search-services
-      search_shared_secret: "{{ reposearch_shared_secret }}"
-      alfresco:
-        host: "{{ ecm_host | default('localhost') }}"
-        port: "{{ ecm_port | default('80') }}"
-        port_ssl: "{{ ecm_ssl | default('443') }}"
-      search_master_hostname: "{{ solr_master_host | omit() }}"
-      search_topology: replication
+  tasks:
+    - name: Search Service role import
+      ansible.builtin.import_role:
+        name: "../roles/search"
+      vars:
+        search_flavor: alfresco-search-services
+        search_shared_secret: "{{ reposearch_shared_secret }}"
+        alfresco:
+          host: "{{ ecm_host | default('localhost') }}"
+          port: "{{ ecm_port | default('80') }}"
+          port_ssl: "{{ ecm_ssl | default('443') }}"
+        search_master_hostname: "{{ solr_master_host | omit() }}"
+        search_topology: replication

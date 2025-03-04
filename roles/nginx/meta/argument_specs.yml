@@ -2,11 +2,11 @@ argument_specs:
   main:
     short_description: Main entrypoint for the nginx role
     options:
-      setup_service:
+      nginx_setup_service:
         description: If the nginx base service should be installed
         type: bool
         default: true
-      setup_vhosts:
+      nginx_setup_vhosts:
         description: If the nginx reverse proxy vhosts should be enabled
         type: bool
         default: true
@@ -18,3 +18,11 @@ argument_specs:
         description: Useful when nginx node is behind another reverse proxy (e.g. should be disabled when behind an AWS ELB)
         type: bool
         default: true
+      nginx_max_upload_size:
+        description: The maximum allowed size of an upload (client request body)
+        type: str
+        default: 5g
+      nginx_max_upload_time:
+        description: Timeout of uploads (client requests read timeout)
+        type: str
+        default: 20m

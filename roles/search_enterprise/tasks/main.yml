@@ -2,14 +2,14 @@
 # tasks file for search_enterprise
 - name: >-
     Download elasticsearch connector distribution
-    {{ search_enterprise.version }}
+    {{ search_enterprise_version }}
   ansible.builtin.get_url:
-    url: "{{ downloads.search_enterprise_zip_url }}"
-    dest: "{{ download_location }}/{{ search_enterprise.artifact_name }}-{{ search_enterprise.version }}.zip"
-    checksum: sha1:{{ lookup('url', downloads.search_enterprise_zip_sha1_url, username=nexus_user, password=nexus_password) }}
+    url: "{{ search_enterprise_zip_url }}"
+    dest: "{{ download_location }}/{{ search_enterprise_artifact_name }}-{{ search_enterprise_version }}.zip"
+    checksum: "{{ search_enterprise_zip_checksum_url }}"
     mode: "0644"
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
+    url_username: "{{ search_enterprise_zip_username | default(omit) }}"
+    url_password: "{{ search_enterprise_zip_password | default(omit) }}"
 
 - name: Install & configure Search services
   become: true
@@ -28,7 +28,7 @@
 
     - name: Extract distribution zip in binaries
       ansible.builtin.unarchive:
-        src: "{{ download_location }}/{{ search_enterprise.artifact_name }}-{{ search_enterprise.version }}.zip"
+        src: "{{ download_location }}/{{ search_enterprise_artifact_name }}-{{ search_enterprise_version }}.zip"
         dest: "{{ search_enterprise_binaries_dir }}"
         remote_src: true
         creates: "{{ search_enterprise_binaries_dir }}/README.md"

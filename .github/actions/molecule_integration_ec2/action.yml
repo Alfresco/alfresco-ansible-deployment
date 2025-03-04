@@ -32,7 +32,7 @@ runs:
       id: setup-python
 
     - name: Install python packages
-      uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@a96753d4d1c98384249ea8370b5d605866b63e1e # v8.8.0
+      uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@695272dc5144fc5484e4ea610ae82715fb6294c8 # v8.14.1
       with:
         python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -42,7 +42,7 @@ runs:
         cache-name: enterprise
 
     - name: Set BRANCH_NAME
-      uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@a96753d4d1c98384249ea8370b5d605866b63e1e # v8.8.0
+      uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@695272dc5144fc5484e4ea610ae82715fb6294c8 # v8.14.1
       with:
         sanitize: true
         max-length: 20
@@ -81,7 +81,7 @@ runs:
         MOLECULE_IT_CONFIG: ${{ inputs.matrix_vars }}
         AWS_ACCESS_KEY_ID: ${{ inputs.aws_access_key_id }}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.aws_secret_access_key }}
-      uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # v3.0.0
+      uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
       with:
         timeout_minutes: 30
         max_attempts: 3
