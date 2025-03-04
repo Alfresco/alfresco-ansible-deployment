@@ -1,3 +1,4 @@
+# kics-scan ignore
 - name: Verify
   hosts: all
   gather_facts: true
