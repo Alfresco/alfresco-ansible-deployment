@@ -15,6 +15,7 @@ supported_os:
       - 8.9
   Ubuntu:
     versions:
+      - 22.04
       - 24.04
 ats_mtls_capable: true
 acs_play_activemq_version: 5.18.6
