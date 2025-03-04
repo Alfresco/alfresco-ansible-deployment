@@ -4,7 +4,7 @@
 
 {% if groups['search'] | default([]) | length >= 1 %}
 index.subsystem.name=solr6
-solr.secureComms={% if repository_acs_version is version('7.2.0', '>=') %}secret{% else %}none{% endif +%}
+solr.secureComms=secret
 solr.port={{ ports_cfg.search.http }}
 solr.host={{ solr_host }}
 {% elif groups['search_enterprise'] | default([]) | length >= 1 and repository_acs_edition == "Enterprise" %}
