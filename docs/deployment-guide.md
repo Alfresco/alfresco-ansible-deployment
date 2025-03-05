@@ -600,7 +600,7 @@ the `configuration_files/alfresco-global.properties` file.
 > `global_properties` as much as possible otherwise reference you own snippets
 > of properties file using either the new `repository` group var
 > `properties_snippets` or directly the `repository` role argument
-> `raw_properties`.
+> `repository_raw_properties`.
 
 `alfresco-global.properties` will be located in
 `/etc/opt/alfresco/content-services/classpath`.
@@ -753,7 +753,7 @@ There are three steps required to use a custom keystore:
 
 1. Place your generated keystore file in the `configuration_files/keystores` folder (these get copied to /var/opt/alfresco/content-services/keystore)
 2. Override the `use_custom_keystores` variable defined in your inventory as a `repository` group variable.
-3. Override the `acs_environment` variable and define your custom JAVA_TOOL_OPTIONS configuration
+3. Override the `repository_acs_environment` variable and define your custom JAVA_TOOL_OPTIONS configuration
 4. Add `repo_custom_keystore_password` and `repo_custom_keystore_metadata_password` in `vars/secrets.yml`
 
 An example snippet of inventory file is shown below:
@@ -762,7 +762,7 @@ An example snippet of inventory file is shown below:
 repository:
   vars:
     use_custom_keystores: true
-    acs_environment:
+    repository_acs_environment:
       JAVA_OPTS:
         - -Xms512m
         - -Xmx3g
@@ -822,7 +822,7 @@ Or:
 war_downloads:
   - url: "https://your.repo.com/path/to/your/artifacts/your-api-explorer.war"
     checksum: "sha1:https://your.repo.com/path/to/your/artifacts/your-api-explorer.war.sha1"
-    dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
+    dest: "{{ repository_content_folder }}/web-server/webapps/api-explorer.war"
 ```
 
 Or:
@@ -831,7 +831,7 @@ Or:
 amp_downloads:
   - url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-aos-module.amp"
     sha1_checksum_url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-aos-module.amp.sha1"
-    dest: "{{ content_folder }}/amps_repo/alfresco-aos-module.amp"
+    dest: "{{ repository_content_folder }}/amps_repo/alfresco-aos-module.amp"
 ```
 
 > Be careful not to override the value for `dest` key
@@ -1147,7 +1147,7 @@ For example in the inventory file:
         ecm1.infra.local:
         ecm2.infra.local:
         ingester.infra.local:
-          cluster_keepoff: true
+          repository_cluster_keepoff: true
 ...
 ```
 
@@ -1163,7 +1163,7 @@ cs_storage:
 ```
 
 In some circumstances, you may want to have a repo node that's dedicated to a scheduled task (such as ingesting massive amount of documents). Depending on the nature of the task and the requirements of your organisation, it may be preferable to not make this node part of the ACS cluster.
-In that case, you can add the `cluster_keepoff` variable to one of the `repository` group nodes'. It will provision the node with the repository and share services but make sure it not taking part in neither the share, nor the repository cluster realm.
+In that case, you can add the `repository_cluster_keepoff` variable to one of the `repository` group nodes'. It will provision the node with the repository and share services but make sure it not taking part in neither the share, nor the repository cluster realm.
 
 > A typical use case is to have a dedicated Solr tracking node. The playbook will then prefer to use that dedicated node - if it finds one - for solr tracking and only use the other as backup server (no load balancing)
 

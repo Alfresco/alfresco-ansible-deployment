@@ -1,2 +1,2 @@
 <?xml version='1.0' encoding='utf-8'?>
-<Context crossContext="true" docBase="{{ content_folder }}/web-server/webapps/ROOT.war" />
+<Context crossContext="true" docBase="{{ repository_content_folder }}/web-server/webapps/ROOT.war" />

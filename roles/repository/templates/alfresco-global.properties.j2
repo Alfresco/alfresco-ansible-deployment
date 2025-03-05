@@ -22,10 +22,10 @@ index.subsystem.name=noindex
 
 # KEYSTORES
 
-dir.keystore={{ content_data_folder }}/keystore
+dir.keystore={{ repository_content_data_folder }}/keystore
 {% if not use_custom_keystores %}
-encryption.keystore.location={{ content_data_folder }}/keystore/keystore
-encryption.keystore.keyMetaData.location={{ content_data_folder }}/keystore/keystore-passwords.properties
+encryption.keystore.location={{ repository_content_data_folder }}/keystore/keystore
+encryption.keystore.keyMetaData.location={{ repository_content_data_folder }}/keystore/keystore-passwords.properties
 encryption.keyAlgorithm=DESede
 encryption.cipherAlgorithm=DESede/CBC/PKCS5Padding
 encryption.keystore.type=JCEKS
@@ -33,8 +33,8 @@ encryption.keystore.backup.type=JCEKS
 {% endif %}
 
 encryption.ssl.truststore.location={{ java_truststore | default(java_home + '/lib/security/cacerts') }}
-{% if repo_keystore %}
-encryption.ssl.keystore.location={{ repo_keystore.path }}
+{% if repository_default_keystore %}
+encryption.ssl.keystore.location={{ repository_default_keystore.path }}
 httpclient.config.transform.mTLSEnabled=true
 httpclient.config.transform.hostnameVerificationDisabled=true
 httpclient.config.sharedfilestore.mTLSEnabled=true
@@ -43,7 +43,7 @@ httpclient.config.sharedfilestore.hostnameVerificationDisabled=true
 
 {%- macro ats_proto() -%}
 http
-{%- if repo_keystore.cert_containers | default([]) | length > 0 -%}
+{%- if repository_default_keystore.cert_containers | default([]) | length > 0 -%}
 s
 {%- endif -%}
 {%- endmacro %}
@@ -60,27 +60,27 @@ dsync.service.uris={% if use_ssl | bool %}https{% else %}http{% endif %}://{% if
 
 # CSRF filter overrides
 {% import 'xorigins_macros.j2' as _xorigins_protection %}
-csrf.filter.enabled={% if csrf.enabled | bool %}true
-{% if csrf.urls -%}
-  csrf.filter.referer={{ _xorigins_protection.compute(inventory_hostname, 'referer', csrf.urls, '|') }}
-  csrf.filter.origin={{ _xorigins_protection.compute(inventory_hostname, 'origin', csrf.urls, ',') }}
+csrf.filter.enabled={% if repository_csrf.enabled | bool %}true
+{% if repository_csrf.urls -%}
+  csrf.filter.referer={{ _xorigins_protection.compute(inventory_hostname, 'referer', repository_csrf.urls, '|') }}
+  csrf.filter.origin={{ _xorigins_protection.compute(inventory_hostname, 'origin', repository_csrf.urls, ',') }}
 {% endif %}
-csrf.filter.referer.always={{ 'true' if 'origin' in csrf.force_headers | lower else 'false' }}
-csrf.filter.origin.always={{ 'true' if 'referer' in csrf.force_headers | lower else 'false' }}
+csrf.filter.referer.always={{ 'true' if 'origin' in repository_csrf.force_headers | lower else 'false' }}
+csrf.filter.origin.always={{ 'true' if 'referer' in repository_csrf.force_headers | lower else 'false' }}
 {% else -%}
   false
 {% endif %}
 
 # CORS filter overrides
-cors.enabled={% if cors.enabled | bool %}true
+cors.enabled={% if repository_cors.enabled | bool %}true
 {% if cors.urls -%}
-  cors.allowed.origins={{ _xorigins_protection.compute(inventory_hostname, 'origin', cors.urls, ',') }}
+  cors.allowed.origins={{ _xorigins_protection.compute(inventory_hostname, 'origin', repository_cors.urls, ',') }}
 {% endif %}
-cors.allowed.methods={{ cors.allowed_methods | default([]) | join(',') }}
-cors.allowed.headers={{ cors.allowed_headers | default([]) | join(',') }}
-cors.exposed.headers={{ cors.exposed_headers | default([]) | join(',') }}
-cors.support.credentials={{ cors.support_credentials | default('true') }}
-cors.preflight.maxage={{ cors.preflight_maxage | default('10') }}
+cors.allowed.methods={{ repository_cors.allowed_methods | default([]) | join(',') }}
+cors.allowed.headers={{ repository_cors.allowed_headers | default([]) | join(',') }}
+cors.exposed.headers={{ repository_cors.exposed_headers | default([]) | join(',') }}
+cors.support.credentials={{ repository_cors.support_credentials | default('true') }}
+cors.preflight.maxage={{ repository_cors.preflight_maxage | default('10') }}
 {% else -%}
   false
 {% endif %}

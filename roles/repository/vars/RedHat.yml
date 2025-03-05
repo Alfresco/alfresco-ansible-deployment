@@ -1,5 +1,5 @@
 ---
-utils_repo:
+repository_utils_repo:
   - cairo
   - cups-libs
   - libSM
@@ -11,7 +11,7 @@ utils_repo:
   - libpng
   - dejavu-sans-fonts
 
-utils_storage:
+repository_utils_storage:
   nfs:
     - nfs-utils
   cifs:

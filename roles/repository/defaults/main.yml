@@ -1,7 +1,7 @@
 ---
 # defaults file for roles/repository
 #
-acs_environment:
+repository_acs_environment:
   JAVA_OPTS:
     - -Xms512m
     - -Xmx3g
@@ -39,13 +39,13 @@ repository_api_explorer_nexus_password: "{{ repository_nexus_password }}"
 repository_extra_war_downloads: []
 
 # CSRF config
-csrf:
+repository_csrf:
   enabled: true
   force_headers: []
   urls: "{{ trusted_urls }}"
 
 # CORS config
-cors:
+repository_cors:
   enabled: true
   urls: "{{ trusted_urls }}"
   allowed_methods:
@@ -71,12 +71,12 @@ cors:
   support.credentials: true
   preflight_maxage: 10
 
-# default_repository_properties: properties to be added to the
+# repository_default_properties: properties to be added to the
 # alfresco-global.properties file, e.g: alfresco.authentication.allowGuestLogin
 # is disabled by default.
 # To add more properties or override existing defaults, use the date structure
 # named repository_properties data structure instead of this one.
-default_repository_properties:
+repository_default_properties:
   deployment:
     method: ANSIBLE
   authentication:
@@ -88,24 +88,22 @@ default_repository_properties:
     authentication:
       allowGuestLogin: "false"
   dir:
-    root: "{{ content_data_folder }}/content"
+    root: "{{ repository_content_data_folder }}/content"
     license:
-      external: "{{ settings_folder }}/licenses"
-raw_properties: []
+      external: "{{ repository_settings_folder }}/licenses"
+repository_raw_properties: []
 
-default_share_properties: {}
-
-utils_repo: []
-utils_storage:
+repository_utils_repo: []
+repository_utils_storage:
   tmpfs: []
-cluster_keepoff: false
+repository_cluster_keepoff: false
 
 # Tomcat resource cache size (mainly for Share)
-tomcat_resource_cache_size: 20480
+repository_tomcat_resource_cache_size: 20480
 
 # make sure to only ever copy contents not dir
-keystore_src: "{{ content_folder }}/keystore/metadata-keystore/"
-repo_keystore: {}
+repository_keystore_src: "{{ repository_content_folder }}/keystore/metadata-keystore/"
+repository_default_keystore: {}
 repository_monitored_startup_timeout_seconds: 300
 
 # Identity service arguments
@@ -125,7 +123,7 @@ repository_jdbc_driver_checksum: "sha1:{{ repository_jdbc_driver_url }}.sha1"
 repository_amp_downloads: []
   # - url: "https://your.repo.com/path/to/your/artifacts/your-amp.amp"
   #   checksum: "sha1:2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"
-  #   dest: "{{ content_folder }}/<amps_repo|amps_share>/your-amp.amp"
+  #   dest: "{{ repository_content_folder }}/<amps_repo|amps_share>/your-amp.amp"
   #   url_username: your_username_to_repo
   #   url_password: your_password_to_repo
 

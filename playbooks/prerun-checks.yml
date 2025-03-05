@@ -57,4 +57,4 @@
           https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/SECURITY.md
       when:
         - known_urls | default([]) | length == 0
-        - cors.enabled | default(True)
+        - repository_cors.enabled | default(True)
