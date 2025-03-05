@@ -6,4 +6,4 @@
       ansible.builtin.include_role:
         name: "elasticsearch"
       vars:
-        elasticsearch_major_version: "{{ '8.x' if acs.version is version('25.0', 'ge') else '7.x' }}"
+        elasticsearch_major_version: '7.x'

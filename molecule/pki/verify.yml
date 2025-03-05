@@ -45,7 +45,6 @@
       ansible.builtin.service_facts:
 
     - name: Check in logs a client did connect
-      when: item.edition == acs.edition
       ansible.builtin.slurp:
         src: /var/log/alfresco/{{ item.file }}.log
       register: ats_log
@@ -55,9 +54,6 @@
       retries: 10
       delay: 3
       loop:
-        - file: ats-ate-aio
-          pattern: GET Transform Config version
-          edition: Community
         - file: ats-atr
           pattern: GET Transform Config version
           edition: Enterprise
@@ -93,4 +89,3 @@
         that:
           - ansible_facts.services['alfresco-shared-fs.service'].state == "running"
           - ansible_facts.services['alfresco-transform-router.service'].state == "running"
-      when: acs.edition == 'Enterprise'

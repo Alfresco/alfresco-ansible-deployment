@@ -15,6 +15,7 @@ test_host = os.environ.get('TEST_HOST')
 def get_ansible_vars(host):
     """Define get_ansible_vars"""
     repository_role = "file=../../vars/main.yml name=repository_role"
+    repository_role_defaults = "file=../../defaults/main.yml name=repository_role_defaults"
     tomcat_role = "file=../tomcat/vars/main.yml name=tomcat_role"
     java_role = "file=../java/vars/main.yml name=java_role"
     common_vars = "file=../../../common/vars/main.yml name=common_vars"
@@ -26,6 +27,7 @@ def get_ansible_vars(host):
     ansible_vars.update(host.ansible("include_vars", java_role)["ansible_facts"]["java_role"])
     ansible_vars.update(host.ansible("include_vars", tomcat_role)["ansible_facts"]["tomcat_role"])
     ansible_vars.update(host.ansible("include_vars", repository_role)["ansible_facts"]["repository_role"])
+    ansible_vars.update(host.ansible("include_vars", repository_role_defaults)["ansible_facts"]["repository_role_defaults"])
     return ansible_vars
 
 
@@ -93,11 +95,11 @@ def test_alfresco_context_200(host):
     assert_that(cmd.stdout, contains_string("HTTP/1.1 200"))
 
 
-def test_alfresco_api(host):
+def test_alfresco_api(host, get_ansible_vars):
     "Check the repository is installed correctly by calling the discovery API (/alfresco/api/discovery)"
     cmd = host.run("curl -L --user admin:admin --connect-timeout 5 http://{}:8080/alfresco/api/discovery".format(test_host))
     response = json.loads(cmd.stdout)
-    acs_version = host.ansible.get_variables()['acs']['version']
+    acs_version = get_ansible_vars["repository_acs_version"]
     if '-' in acs_version:
         # Remove optional -Ax suffix in acs version
         acs_version_split = acs_version.split('-')

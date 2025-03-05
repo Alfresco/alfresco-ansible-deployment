@@ -130,3 +130,9 @@ argument_specs:
         required: false
         description: |
           A list containing the URL and checksum of additional AMP files to download
+      repository_acs_is_enterprise:
+        type: bool
+        required: false
+        default: true
+        description: |
+          Whether the ACS distribution is enterprise or not

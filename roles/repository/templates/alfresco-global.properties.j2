@@ -4,10 +4,10 @@
 
 {% if groups['search'] | default([]) | length >= 1 %}
 index.subsystem.name=solr6
-solr.secureComms={% if acs.version is version('7.2.0', '>=') %}secret{% else %}none{% endif +%}
+solr.secureComms=secret
 solr.port={{ ports_cfg.search.http }}
 solr.host={{ solr_host }}
-{% elif groups['search_enterprise'] | default([]) | length >= 1 and acs.edition == "Enterprise" %}
+{% elif groups['search_enterprise'] | default([]) | length >= 1 and repository_acs_is_enterprise %}
 index.subsystem.name=elasticsearch
 elasticsearch.createIndexIfNotExists=true
 elasticsearch.indexName=alfresco
@@ -50,7 +50,7 @@ s
 
 local.transform.service.enabled=true
 localTransform.core-aio.url={{ ats_proto() }}://{{ ats_tengine_aio_host }}:{{ ports_cfg.transformers.tengine }}
-{% if acs.edition == 'Enterprise' %}
+{% if repository_acs_is_enterprise %}
 transform.service.enabled=true
 transform.service.url={{ ats_proto() }}://{{ trouter_host }}:{{ ports_cfg.transformers.trouter }}
 sfs.url={{ ats_proto() }}://{{ sfs_host }}:{{ ports_cfg.sfs.http }}
