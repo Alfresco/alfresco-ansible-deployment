@@ -3,7 +3,7 @@
   become: true
   when: cs_storage.device is defined
   vars:
-    cs_storage_data_folder: "{{ content_data_folder }}/content"
+    cs_storage_data_folder: "{{ repository_content_data_folder }}/content"
   block:
     - name: Check if contentstore folder exists
       ansible.builtin.stat:

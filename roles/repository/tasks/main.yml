@@ -8,9 +8,9 @@
   ansible.builtin.include_role:
     name: ../roles/java
     tasks_from: keystores
-  when: repo_keystore
+  when: repository_default_keystore
   vars:
-    java_keystore: "{{ repo_keystore }}"
+    java_keystore: "{{ repository_default_keystore }}"
 
 - name: Handle secure properties
   block:
@@ -53,7 +53,7 @@
 - name: Ensure a list of packages installed
   become: true
   ansible.builtin.package:
-    name: "{{ utils_repo + utils_storage[cs_storage.type | default('tmpfs')] }}"
+    name: "{{ repository_utils_repo + repository_utils_storage[cs_storage.type | default('tmpfs')] }}"
     state: present
 
 - name: Create folders
@@ -65,18 +65,18 @@
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rx,o=rx'
   loop:
-    - "{{ content_folder }}/modules/acs-platform"
-    - "{{ content_folder }}/modules/acs-share"
-    - "{{ content_folder }}/amps_repo"
-    - "{{ content_folder }}/amps_share"
-    - "{{ content_folder }}/alf_data"
-    - "{{ content_folder }}/alfresco-mmt"
-    - "{{ content_folder }}/web-server/lib"
-    - "{{ content_folder }}/web-server/webapps"
-    - "{{ settings_folder }}/classpath/alfresco/extension/transform/pipelines"
-    - "{{ settings_folder }}/classpath/alfresco/extension/transform/renditions"
-    - "{{ settings_folder }}/classpath/alfresco/extension/mimetypes"
-    - "{{ settings_folder }}/classpath/alfresco/web-extension"
+    - "{{ repository_content_folder }}/modules/acs-platform"
+    - "{{ repository_content_folder }}/modules/acs-share"
+    - "{{ repository_content_folder }}/amps_repo"
+    - "{{ repository_content_folder }}/amps_share"
+    - "{{ repository_content_folder }}/alf_data"
+    - "{{ repository_content_folder }}/alfresco-mmt"
+    - "{{ repository_content_folder }}/web-server/lib"
+    - "{{ repository_content_folder }}/web-server/webapps"
+    - "{{ repository_settings_folder }}/classpath/alfresco/extension/transform/pipelines"
+    - "{{ repository_settings_folder }}/classpath/alfresco/extension/transform/renditions"
+    - "{{ repository_settings_folder }}/classpath/alfresco/extension/mimetypes"
+    - "{{ repository_settings_folder }}/classpath/alfresco/web-extension"
     - "{{ tomcat_config_dir }}/lib"
     - "{{ tomcat_config_dir }}/conf/Catalina/localhost"
 
@@ -88,7 +88,7 @@
     repository_default_war_downloads:
       - url: "{{ repository_api_explorer_archive_url }}"
         checksum: "{{ repository_api_explorer_archive_checksum_url }}"
-        dest: "{{ content_folder }}/web-server/webapps/api-explorer.war"
+        dest: "{{ repository_content_folder }}/web-server/webapps/api-explorer.war"
         url_username:: "{{ repository_api_explorer_nexus_username }}"
         url_password:: "{{ repository_api_explorer_nexus_password }}"
   when: repository_api_explorer_enabled
@@ -171,13 +171,13 @@
   tags:
     - molecule-idempotence-notest
 
-- name: Extract {{ repository_acs_artifact_name }}.zip into {{ content_folder }}
+- name: Extract {{ repository_acs_artifact_name }}.zip into {{ repository_content_folder }}
   become: true
   ansible.builtin.unarchive:
     src: "{{ download_location }}/{{ repository_acs_artifact_name }}.zip"
-    dest: "{{ content_folder }}"
+    dest: "{{ repository_content_folder }}"
     remote_src: true
-    creates: "{{ content_folder }}/bin"
+    creates: "{{ repository_content_folder }}/bin"
     owner: "{{ username }}"
     group: "{{ group_name }}"
 
@@ -213,7 +213,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
       loop: >-
-        {{ acs_environment
+        {{ repository_acs_environment
         | ansible.builtin.combine(acs_secure_environment
         | default(None), list_merge='prepend')
         | dict2items }}
@@ -223,7 +223,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         src: apply_amps.sh
-        dest: "{{ content_folder }}"
+        dest: "{{ repository_content_folder }}"
         mode: "0755"
 
     - name: Install ACS data files to Linux FHS destinations
@@ -237,21 +237,21 @@
             group: "{{ group_name }}"
             mode: "u+rw,g+r,o="
           loop:
-            - src: "{{ content_folder }}/amps/alfresco-share-services.amp"
-              dest: "{{ content_folder }}/amps_repo"
-            - src: "{{ keystore_src }}"
-              dest: "{{ content_data_folder }}/keystore/"
-            - src: "{{ content_folder }}/web-server/shared/classes/"
-              dest: "{{ settings_folder }}/classpath/"
+            - src: "{{ repository_content_folder }}/amps/alfresco-share-services.amp"
+              dest: "{{ repository_content_folder }}/amps_repo"
+            - src: "{{ repository_keystore_src }}"
+              dest: "{{ repository_content_data_folder }}/keystore/"
+            - src: "{{ repository_content_folder }}/web-server/shared/classes/"
+              dest: "{{ repository_settings_folder }}/classpath/"
       rescue:
         - name: Check Unix FHS dirs
           ansible.builtin.stat:
             path: "{{ item }}"
           register: alf_dest_dirs
           loop:
-            - "{{ content_folder }}/amps_repo/alfresco-share-services.amp"
-            - "{{ content_data_folder }}/keystore/"
-            - "{{ settings_folder }}/classpath/"
+            - "{{ repository_content_folder }}/amps_repo/alfresco-share-services.amp"
+            - "{{ repository_content_data_folder }}/keystore/"
+            - "{{ repository_settings_folder }}/classpath/"
         - name: Handle missing sources
           ansible.builtin.debug:
             msg: Looks like the FHS directory structure is already in place
@@ -276,9 +276,9 @@
         path: "{{ item }}"
         state: absent
       loop:
-        - "{{ content_folder }}/amps"
-        - "{{ keystore_src }}"
-        - "{{ content_folder }}/web-server/shared/classes/"
+        - "{{ repository_content_folder }}/amps"
+        - "{{ repository_keystore_src }}"
+        - "{{ repository_content_folder }}/web-server/shared/classes/"
 
 - name: Configure ACS
   become: true
@@ -301,7 +301,7 @@
     - name: Copy user provided license file
       ansible.builtin.copy:
         src: "{{ role_path }}/../../configuration_files/licenses/"
-        dest: "{{ settings_folder }}/licenses/"
+        dest: "{{ repository_settings_folder }}/licenses/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0640"
@@ -309,7 +309,7 @@
     - name: Copy BSSRF enabled pipeline transformers
       ansible.builtin.copy:
         content: "{{ bssrf_pipelines | to_nice_json }}"
-        dest: "{{ settings_folder }}/classpath/alfresco/extension/transform/pipelines/0200-html-via-txt.json"
+        dest: "{{ repository_settings_folder }}/classpath/alfresco/extension/transform/pipelines/0200-html-via-txt.json"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0640"
@@ -318,7 +318,7 @@
     - name: Copy custom keystore file
       ansible.builtin.copy:
         src: "{{ role_path }}/../../configuration_files/keystores/"
-        dest: "{{ content_data_folder }}/keystore/"
+        dest: "{{ repository_content_data_folder }}/keystore/"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0640"
@@ -347,7 +347,7 @@
         - api-explorer
     - name: Remove conf files
       ansible.builtin.file:
-        path: "{{ content_folder }}/web-server/conf"
+        path: "{{ repository_content_folder }}/web-server/conf"
         state: absent
 
     - name: Initialize accumulator for dynamic properties
@@ -372,7 +372,7 @@
     - name: Create alfresco-global.properties main snippet
       vars:
         merged_repository_properties: >-
-          {{ default_repository_properties
+          {{ repository_default_properties
           | ansible.builtin.combine(repository_properties | default(None))
           | ansible.builtin.combine(dynamic_properties) }}
       ansible.builtin.template:
@@ -388,9 +388,9 @@
       ansible.builtin.assert:
         that: lookup('ansible.builtin.ini', '', type='properties',  file=item) is string
       notify: []
-      loop: "{{ raw_properties }}"
+      loop: "{{ repository_raw_properties }}"
 
-    - name: Add snippet from custom config files {{ raw_properties | join(',') }}
+    - name: Add snippet from custom config files {{ repository_raw_properties | join(',') }}
       ansible.builtin.copy:
         src: "{{ item }}"
         dest: "{{ download_location }}/assemble_snippets_{{ ansible_role_name | basename }}_{{ item | basename }}"
@@ -398,13 +398,13 @@
         group: "{{ group_name }}"
         mode: "0640"
       notify: []
-      loop: "{{ raw_properties }}"
+      loop: "{{ repository_raw_properties }}"
 
     - name: Assemble alfresco-global.properties snippets
       ansible.builtin.assemble:
         src: "{{ download_location }}"
         regexp: assemble_snippets_{{ ansible_role_name | basename }}_.*
-        dest: "{{ settings_folder }}/classpath/alfresco-global.properties"
+        dest: "{{ repository_settings_folder }}/classpath/alfresco-global.properties"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0640"
@@ -415,8 +415,8 @@
         regexp: ^\s*common.loader\s*=
         line: >
           common.loader="{{ config_folder }}/content-services/classpath","${catalina.base}/lib",
-          "${catalina.base}/lib/*.jar","{{ content_folder }}/web-server/lib",
-          "{{ content_folder }}/web-server/lib/*.jar","${catalina.home}/lib","${catalina.home}/lib/*.jar"
+          "${catalina.base}/lib/*.jar","{{ repository_content_folder }}/web-server/lib",
+          "{{ repository_content_folder }}/web-server/lib/*.jar","${catalina.home}/lib","${catalina.home}/lib/*.jar"
         owner: "{{ username }}"
         group: "{{ group_name }}"
 
@@ -436,7 +436,7 @@
 - name: Install amps on alfresco and share war files
   become: true
   ansible.builtin.command:
-    cmd: "{{ content_folder }}/apply_amps.sh -nobackup -force"
+    cmd: "{{ repository_content_folder }}/apply_amps.sh -nobackup -force"
   register: mmt_install
   changed_when: true
   tags:

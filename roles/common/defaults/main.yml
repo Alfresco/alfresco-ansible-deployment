@@ -23,7 +23,7 @@ repo_hosts: |
     {
       inventory_name: inventory_hostname ,
       local_addr: ansible_default_ipv4.address,
-      cluster_keepoff: cluster_keepoff
+      repository_cluster_keepoff: repository_cluster_keepoff
     }')
   }}
 repo_host: >-

@@ -53,11 +53,11 @@ default `admin` user.
 
 ## Secrets not yet handled
 
-The `acs_environment` ansible variable holds environment variables for the JVM
+The `repository_acs_environment` ansible variable holds environment variables for the JVM
 that must be handled as secrets:
 
 ```yml
-acs_environment:
+repository_acs_environment:
   JAVA_TOOL_OPTIONS:
     - -Dmetadata-keystore.password=<your-keystore-password>
     - -Dmetadata-keystore.metadata.password=<your-keystore-password>
