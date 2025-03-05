@@ -123,7 +123,7 @@
   gather_facts: false
   roles:
     - role: "../roles/elasticsearch"
-      elasticsearch_major_version: "{{ '8.x' if acs_play_repository_acs_version is version('25.0', 'ge') else '7.x' }}"
+      elasticsearch_major_version: "{{ acs_play_elasticsearch_major_version }}"
       when: acs_is_enterprise and not groups.external_elasticsearch | default([])
   tags:
     - elasticsearch
