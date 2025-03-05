@@ -73,7 +73,7 @@ csrf.filter.origin.always={{ 'true' if 'referer' in repository_csrf.force_header
 
 # CORS filter overrides
 cors.enabled={% if repository_cors.enabled | bool %}true
-{% if cors.urls -%}
+{% if repository_cors.urls -%}
   cors.allowed.origins={{ _xorigins_protection.compute(inventory_hostname, 'origin', repository_cors.urls, ',') }}
 {% endif %}
 cors.allowed.methods={{ repository_cors.allowed_methods | default([]) | join(',') }}
