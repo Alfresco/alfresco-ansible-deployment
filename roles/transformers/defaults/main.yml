@@ -8,8 +8,7 @@ transformers_tengine_environment:
 transformers_ats_keystore: {}
 transformers_include_ghostscript: false
 
-transformers_repository_acs_edition: Enterprise
-
+transformers_acs_is_enterprise: true
 transformers_libreoffice_artifact_name: libreoffice-dist
 transformers_libreoffice_repository: https://artifacts.alfresco.com/nexus/content/repositories/thirdparty/org/libreoffice
 

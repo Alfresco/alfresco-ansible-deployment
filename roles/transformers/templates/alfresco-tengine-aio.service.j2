@@ -28,7 +28,7 @@ s
 -DIMAGEMAGICK_EXE=" + (transformers_imagemagick_home + "/bin/convert" if transformers_pkg_format == 'deb' else 'convert') + " \
 -DIMAGEMAGICK_CONFIG=" + im_cfg() + "/config-Q16HDRI \
 -DIMAGEMAGICK_CODERS=" + im_cfg() + "/modules-Q16HDRI/coders" %}
-{%- if transformers_repository_acs_edition == 'Enterprise' %}
+{%- if transformers_acs_is_enterprise %}
 {%- set java_opts = java_opts + " \
 -DACTIVEMQ_URL=failover:(" + activemq_transport + "://" + activemq_host + ":" + ports_cfg.activemq[activemq_protocol] + ")?timeout=3000 \
 -DACTIVEMQ_USER=" + activemq_username + " \

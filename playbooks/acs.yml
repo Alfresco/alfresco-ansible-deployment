@@ -29,13 +29,8 @@
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
 
-- name: Check acs edition
-  hosts: all
-  gather_facts: false
-  tasks:
-    - name: Set acs edition
-      ansible.builtin.set_fact:
-        acs_is_enterprise: "{{ acs_play_repository_acs_edition == 'Enterprise' }}"
+- name: Set dynamic facts for play
+  ansible.builtin.import_playbook: dynamic-facts.yml
 
 - name: Generate hosts certificates
   vars:
@@ -195,7 +190,7 @@
       vars:
         transformers_ats_keystore: "{{ transformers_keystore | default({}) }}"
         java_version: "{{ acs_play_java_version }}"
-        transformers_repository_acs_edition: "{{ acs_play_repository_acs_edition }}"
+        transformers_acs_is_enterprise: "{{ acs_is_enterprise }}"
         transformers_libreoffice_version: "{{ acs_play_transformers_libreoffice_version }}"
         transformers_libreoffice_archive_url: "{{ acs_play_transformers_libreoffice_archive_url }}"
         transformers_libreoffice_archive_checksum_url: "{{ acs_play_transformers_libreoffice_archive_checksum_url }}"
@@ -326,7 +321,7 @@
         tomcat_version: "{{ acs_play_tomcat_version }}"
         repository_nexus_username: "{{ nexus_user }}"
         repository_nexus_password: "{{ nexus_password }}"
-        repository_acs_edition: "{{ acs_play_repository_acs_edition }}"
+        repository_acs_is_enterprise: "{{ acs_is_enterprise }}"
         repository_acs_artifact_name: "{{ acs_play_repository_acs_artifact_name }}"
         repository_acs_archive_url: "{{ acs_play_repository_acs_archive_url }}"
         repository_acs_archive_checksum_url: "{{ acs_play_repository_acs_archive_checksum_url }}"
