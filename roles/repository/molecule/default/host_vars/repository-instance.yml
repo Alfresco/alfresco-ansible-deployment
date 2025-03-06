@@ -29,6 +29,7 @@ repository_acs_environment:
     - $JAVA_TOOL_OPTIONS
 
 repository_db_name: "alfresco"
+repository_db_username: "alfresco"
 
 acs_play_proto: "{{ 'https' if use_ssl | bool else 'http' }}"
 acs_play_port: >-
@@ -39,9 +40,9 @@ global_properties:
       limit: 3
       periodSeconds: 20
   db:
-    url: jdbc:postgresql://localhost/alfresco
+    url: jdbc:postgresql://localhost/{{ repository_db_name}}
     driver: org.postgresql.Driver
-    username: "{{ repository_db_name }}"
+    username: "{{ repository_db_username }}"
     password: "{{ repo_db_password }}"
   alfresco:
     host: localhost

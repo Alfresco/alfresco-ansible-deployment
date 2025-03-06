@@ -21,3 +21,7 @@ argument_specs:
         description: |
           Password to use to download the Search Enterprise zip file
         required: false
+      search_enterprise_repo_db_url:
+        description: |
+          URL of the database to use for the Search Enterprise
+        required: false

@@ -21,7 +21,7 @@
         tasks_from: setup_db
       vars:
         postgres_db_name: "{{ repository_db_name }}"
-        postgres_db_username: "{{ repo_db_username }}"
+        postgres_db_username: "{{ repository_db_username }}"
         postgres_db_password: "{{ repo_db_password }}"
         postgres_db_clients: "{{ groups.repository }}"
     - name: Setup sync database

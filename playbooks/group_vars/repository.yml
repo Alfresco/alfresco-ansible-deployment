@@ -66,7 +66,7 @@ global_properties:
     url: >-
       {{ acs_play_repo_db_url if acs_play_repo_db_url else 'jdbc:postgresql://' + db_host + ':' + ports_cfg.postgres.sql | string + '/' + acs_play_repo_db_name }}
     driver: "{{ acs_play_repo_db_driver }}"
-    username: "{{ repo_db_username }}"
+    username: "{{ acs_play_repo_db_username }}"
     password: "{{ repo_db_password }}"
   alfresco:
     host: "{{ fqdn_alfresco | default(known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"

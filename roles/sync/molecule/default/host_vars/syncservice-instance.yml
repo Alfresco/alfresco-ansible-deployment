@@ -3,6 +3,7 @@ known_urls:
   - http://localhost/share
 
 repository_db_name: "alfresco"
+repository_db_username: "alfresco"
 
 global_properties:
   authentication:
@@ -10,9 +11,9 @@ global_properties:
       limit: 3
       periodSeconds: 20
   db:
-    url: jdbc:postgresql://localhost/alfresco
+    url: jdbc:postgresql://localhost/{{ repository_db_name }}
     driver: org.postgresql.Driver
-    username: alfresco
+    username: "{{ repository_db_username }}"
     password: alfresco
   alfresco:
     host: localhost
