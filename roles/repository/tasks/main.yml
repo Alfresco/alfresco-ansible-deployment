@@ -450,7 +450,7 @@
   until: job_result.finished
   delay: 1
   retries: 300
-  when: repo_db_url == ""
+  when: repository_db_url == ""
   tags:
     - molecule-idempotence-notest
 
@@ -504,7 +504,7 @@
   ansible.builtin.wait_for:
     host: "{{ db_host }}"
     port: "{{ ports_cfg.postgres.sql }}"
-  when: not repo_db_url | default(false)
+  when: not repository_db_url | default(false)
 
 - name: Check if service restart is needed
   ansible.builtin.debug:

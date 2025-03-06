@@ -672,12 +672,12 @@ By default the playbook will deploy and configure a Postgres server for you. Tha
 
 > This server also requires to NOT have a sudo configuration with `requirestty` set.
 
-If you'd prefer to use an external database server you can override the `repo_db_url` variable.
+If you'd prefer to use an external database server you can override the `acs_play_repo_db_url` variable.
 
 An example custom database url is shown below:
 
 ```yaml
-repo_db_url: jdbc:mysql://54.164.117.56:3306/alfresco?useUnicode=yes&characterEncoding=UTF-8
+acs_play_repo_db_url: jdbc:mysql://54.164.117.56:3306/alfresco?useUnicode=yes&characterEncoding=UTF-8
 repo_db_driver: com.mysql.jdbc.Driver
 ```
 

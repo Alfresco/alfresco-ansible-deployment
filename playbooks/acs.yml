@@ -67,7 +67,7 @@
   vars:
     pg_role: "../roles/postgres"
     create_repo_db: >-
-      {{ (repo_db_url == "") | ansible.builtin.bool }}
+      {{ (acs_play_repo_db_url == "") | ansible.builtin.bool }}
     create_sync_db: >-
       {{ (sync_db_url == "" and groups.syncservice | default([]) | length > 0) | ansible.builtin.bool }}
   tasks:
@@ -321,6 +321,7 @@
         tomcat_version: "{{ acs_play_tomcat_version }}"
         repository_nexus_username: "{{ nexus_user }}"
         repository_nexus_password: "{{ nexus_password }}"
+        repository_db_url: "{{ acs_play_repo_db_url }}"
         repository_acs_is_enterprise: "{{ acs_is_enterprise }}"
         repository_acs_artifact_name: "{{ acs_play_repository_acs_artifact_name }}"
         repository_acs_archive_url: "{{ acs_play_repository_acs_archive_url }}"
@@ -502,6 +503,7 @@
         name: "../roles/search_enterprise"
       vars:
         java_version: "{{ acs_play_java_version }}"
+        search_enterprise_repo_db_url: "{{ acs_play_repo_db_url }}"
         search_enterprise_version: "{{ acs_play_search_enterprise_version }}"
         search_enterprise_zip_url: "{{ acs_play_search_enterprise_download_zip_url }}"
         search_enterprise_zip_checksum_url: "{{ acs_play_search_enterprise_download_zip_sha1_checksum_url }}"

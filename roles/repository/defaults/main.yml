@@ -25,6 +25,8 @@ repository_acs_archive_checksum_url: "sha1:{{ repository_acs_archive_url }}.sha1
 repository_acs_nexus_username: "{{ repository_nexus_username }}"
 repository_acs_nexus_password: "{{ repository_nexus_password }}"
 
+repository_db_url: ""
+
 # war downloads
 repository_api_explorer_enabled: true
 repository_api_explorer_artifact_name: api-explorer

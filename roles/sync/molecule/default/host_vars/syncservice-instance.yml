@@ -1,3 +1,31 @@
 ansible_user: ansible
 known_urls:
   - http://localhost/share
+
+global_properties:
+  authentication:
+    protection:
+      limit: 3
+      periodSeconds: 20
+  db:
+    url: jdbc:postgresql://localhost/alfresco
+    driver: org.postgresql.Driver
+    username: alfresco
+    password: alfresco
+  alfresco:
+    host: localhost
+    port: 8080
+    protocol: http
+    cluster:
+      enabled: false
+  share:
+    host: localhost
+    port: 8080
+    protocol: http
+  messaging:
+    broker:
+      url: failover:(tcp://localhost:61616)?timeout=3000
+      username: "{{ activemq_username }}"
+      password: "{{ activemq_password }}"
+  aos:
+    baseUrlOverwrite: http://localhost/alfresco/aos
