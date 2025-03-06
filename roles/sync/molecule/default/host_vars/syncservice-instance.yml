@@ -2,6 +2,8 @@ ansible_user: ansible
 known_urls:
   - http://localhost/share
 
+repository_db_name: "alfresco"
+
 global_properties:
   authentication:
     protection:
