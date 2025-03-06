@@ -18,7 +18,7 @@ acs_play_repository_api_explorer_archive_checksum_url: "sha1:{{ acs_play_reposit
 acs_play_repository_extra_war_downloads: []
   # - url: "https://your.repo.com/path/to/your/artifacts/your-war.war"
   #   checksum: "sha1:https://your.repo.com/path/to/your/artifacts/your-war.war.sha1"
-  #   dest: "{{ content_folder }}/web-server/webapps/your-war.war"
+  #   dest: "{{ repository_content_folder }}/web-server/webapps/your-war.war"
   #   url_username: your_username_to_repo
   #   url_password: your_password_to_repo
 
@@ -42,6 +42,6 @@ acs_play_repository_amp_aos_module_archive_url: "{{ acs_play_repository_amp_aos_
 acs_play_repository_extra_amp_downloads: []
   # - url: "https://your.repo.com/path/to/your/artifacts/your-amp.amp"
   #   checksum: "sha1:2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"
-  #   dest: "{{ content_folder }}/<amps_repo|amps_share>/your-amp.amp"
+  #   dest: "{{ repository_content_folder }}/<amps_repo|amps_share>/your-amp.amp"
   #   url_username: your_username_to_repo
   #   url_password: your_password_to_repo

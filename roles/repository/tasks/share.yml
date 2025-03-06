@@ -16,9 +16,9 @@
     group: "{{ group_name }}"
     src: "{{ item }}.j2"
     dest: >-
-      {{ settings_folder }}/classpath/alfresco/web-extension/{{ item }}
+      {{ repository_settings_folder }}/classpath/alfresco/web-extension/{{ item }}
     mode: "0644"
-  loop: "{{ share_templates }}"
+  loop: "{{ repository_share_templates }}"
 
 - name: Add Hazelcast cluster config for Share
   become: true
@@ -26,6 +26,6 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     src: custom-slingshot-application-context.xml
-    dest: "{{ settings_folder }}/classpath/alfresco/web-extension/custom-slingshot-application-context.xml"
+    dest: "{{ repository_settings_folder }}/classpath/alfresco/web-extension/custom-slingshot-application-context.xml"
     mode: 'u=rw,g=,o='
-  when: groups['repository'] | length > 1 and not cluster_keepoff
+  when: groups['repository'] | length > 1 and not repository_cluster_keepoff
