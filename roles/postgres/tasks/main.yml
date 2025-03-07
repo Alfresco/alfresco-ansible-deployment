@@ -6,7 +6,7 @@
 
 - name: Set PostgreSQL service name as fact
   ansible.builtin.set_fact:
-    postgresql_service: "{{ postgresql_service }}"
+    postgres_service: "{{ postgres_service }}"
 
 - name: Install PostgreSQL RDBMS
   become: true
@@ -16,7 +16,7 @@
 
     - name: Install packages
       ansible.builtin.package:
-        name: "{{ postgresql_packages }}"
+        name: "{{ postgres_packages }}"
         state: present
         update_cache: true
       notify:
@@ -24,8 +24,8 @@
 
     - name: Initialize the system database
       ansible.builtin.command:
-        cmd: "{{ postgresql_setup_path }} initdb"
-        creates: "{{ postgresql_data_path }}/PG_VERSION"
+        cmd: "{{ postgres_setup_path }} initdb"
+        creates: "{{ postgres_data_path }}/PG_VERSION"
       when: ansible_os_family == 'RedHat'
 
 - name: Configure PostgreSQL RDBMS
@@ -35,13 +35,13 @@
   block:
     - name: Configure PostgreSQL to listen on all IP interfaces
       ansible.builtin.lineinfile:
-        path: "{{ postgresql_conf_path }}/postgresql.conf"
+        path: "{{ postgres_conf_path }}/postgresql.conf"
         regexp: ^\s*listen_addresses\s*=
         line: "listen_addresses = '{{ postgres_listen_addresses }}'"
 
     - name: Custom PostgreSQL Configuration
       ansible.builtin.lineinfile:
-        path: "{{ postgresql_conf_path }}/postgresql.conf"
+        path: "{{ postgres_conf_path }}/postgresql.conf"
         regexp: "^{{ item['line'] }}"
         line: "{{ item['line'] }}"
         state: "{{ item['state'] | default(omit) }}"

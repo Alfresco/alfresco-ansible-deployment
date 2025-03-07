@@ -1,7 +1,7 @@
 ---
 - name: Install rpm repository
   ansible.builtin.dnf:
-    name: "{{ postgresql_rpm_repo }}"
+    name: "{{ postgres_rpm_repo }}"
     state: present
     disable_gpg_check: true
 

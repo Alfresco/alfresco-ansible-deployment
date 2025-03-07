@@ -9,7 +9,7 @@
   notify:
     - Restart-postgresql
   ansible.builtin.blockinfile:
-    path: "{{ postgresql_conf_path }}/pg_hba.conf"
+    path: "{{ postgres_conf_path }}/pg_hba.conf"
     block: |
       {% for host in postgres_db_clients | map('extract', hostvars, ['ansible_default_ipv4', 'address']) %}
       host {{ postgres_db_name }} {{ postgres_db_username }} {{ host }}/32 md5
