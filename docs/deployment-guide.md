@@ -761,7 +761,7 @@ An example snippet of inventory file is shown below:
 ```yaml
 repository:
   vars:
-    use_custom_keystores: true
+    repository_use_custom_keystores: true
     repository_acs_environment:
       JAVA_OPTS:
         - -Xms512m

@@ -322,7 +322,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0640"
-      when: use_custom_keystores
+      when: repository_use_custom_keystores
 
     - name: Create config folders
       ansible.builtin.file:

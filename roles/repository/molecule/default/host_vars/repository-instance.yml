@@ -8,7 +8,7 @@ cs_storage:
   type: tmpfs
   device: none
   options: size=100m,mode=777
-use_custom_keystores: true
+repository_use_custom_keystores: true
 repository_acs_environment:
   JAVA_OPTS:
     - -Xms350m

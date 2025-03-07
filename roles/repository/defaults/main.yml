@@ -40,6 +40,8 @@ repository_api_explorer_nexus_password: "{{ repository_nexus_password }}"
 
 repository_extra_war_downloads: []
 
+repository_use_custom_keystores: false
+
 # CSRF config
 repository_csrf:
   enabled: true

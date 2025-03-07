@@ -23,7 +23,7 @@ index.subsystem.name=noindex
 # KEYSTORES
 
 dir.keystore={{ repository_content_data_folder }}/keystore
-{% if not use_custom_keystores %}
+{% if not repository_use_custom_keystores %}
 encryption.keystore.location={{ repository_content_data_folder }}/keystore/keystore
 encryption.keystore.keyMetaData.location={{ repository_content_data_folder }}/keystore/keystore-passwords.properties
 encryption.keyAlgorithm=DESede

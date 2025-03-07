@@ -1,6 +1,9 @@
 default_java_version: 17.0.14+7
 acs_play_java_core: "{{ default_java_version.split('+')[0] }}"
 acs_play_repository_acs_edition: Enterprise
+
+acs_play_skip_upgrade_checks: false
+
 default_jdbc_pg_driver_version: 42.7.3
 default_jdbc_pg_driver_base_url: https://repo.maven.apache.org/maven2/org/postgresql/postgresql
 default_jdbc_pg_driver_url: >-
@@ -11,3 +14,10 @@ acs_play_repo_db_url: ""
 acs_play_repo_db_driver: org.postgresql.Driver
 acs_play_repo_db_name: "alfresco"
 acs_play_repo_db_username: "alfresco"
+
+# A default keystore is stored in /var/opt/alfresco/content-services/keystore,
+# to replace this with a custom keystore place the keystore file in the "configuration_files/keystores" folder
+# and change this flag to true. See the deployment guide for more details.
+acs_play_use_custom_keystores: false
+
+ansible_installation_status_file: "/opt/alfresco/.ansible_alfresco_components.status"

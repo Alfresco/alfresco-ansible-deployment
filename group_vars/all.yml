@@ -22,10 +22,6 @@ nexus_repository:
   development_releases: >-
     {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.development.repository }}/{{ artifacts_repositories.enterprise.group_id }}
 acs_play_major_version: 23
-# A default keystore is stored in /var/opt/alfresco/content-services/keystore,
-# to replace this with a custom keystore place the keystore file in the "configuration_files/keystores" folder
-# and change this flag to true. See the deployment guide for more details.
-use_custom_keystores: false
 # common dependencies should be updated also in *-extra-vars.yml as well thanks
 # to default ansible merging behaviour
 dependencies_version:
@@ -39,5 +35,3 @@ use_ssl: false
 # Needs to be empty if unused (don't use dummy values)
 fqdn_alfresco: ""
 autogen_unsecure_secrets: false
-skip_upgrade_checks: false
-ansible_installation_status_file: "/opt/alfresco/.ansible_alfresco_components.status"
