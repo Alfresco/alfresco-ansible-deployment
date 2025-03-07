@@ -41,7 +41,9 @@ repository_api_explorer_nexus_password: "{{ repository_nexus_password }}"
 repository_extra_war_downloads: []
 
 repository_use_custom_keystores: false
-repository_trusted_urls: "{{ groups['trusted_resource_consumers'] | map('extract', hostvars) | map(attribute='known_urls', default=[]) | flatten }}"
+repository_trusted_urls:
+  - http://localhost:8080/share
+  - https://someotherapp/
 
 # CSRF config
 repository_csrf:
