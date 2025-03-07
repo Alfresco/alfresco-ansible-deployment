@@ -8,7 +8,7 @@ cs_storage:
   type: tmpfs
   device: none
   options: size=100m,mode=777
-use_custom_keystores: true
+repository_use_custom_keystores: true
 repository_acs_environment:
   JAVA_OPTS:
     - -Xms350m
@@ -28,6 +28,9 @@ repository_acs_environment:
     - -Dmetadata-keystore.metadata.algorithm=AES
     - $JAVA_TOOL_OPTIONS
 
+repository_db_name: "alfresco"
+repository_db_username: "alfresco"
+
 acs_play_proto: "{{ 'https' if use_ssl | bool else 'http' }}"
 acs_play_port: >-
   {{ ports_cfg.nginx.https if use_ssl | bool else ports_cfg.nginx.http }}
@@ -37,9 +40,9 @@ global_properties:
       limit: 3
       periodSeconds: 20
   db:
-    url: jdbc:postgresql://localhost/alfresco
+    url: jdbc:postgresql://localhost/{{ repository_db_name }}
     driver: org.postgresql.Driver
-    username: "{{ repo_db_username }}"
+    username: "{{ repository_db_username }}"
     password: "{{ repo_db_password }}"
   alfresco:
     host: localhost

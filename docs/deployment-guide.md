@@ -672,18 +672,18 @@ By default the playbook will deploy and configure a Postgres server for you. Tha
 
 > This server also requires to NOT have a sudo configuration with `requirestty` set.
 
-If you'd prefer to use an external database server you can override the `repo_db_url` variable.
+If you'd prefer to use an external database server you can override the `acs_play_repo_db_url` variable.
 
 An example custom database url is shown below:
 
 ```yaml
-repo_db_url: jdbc:mysql://54.164.117.56:3306/alfresco?useUnicode=yes&characterEncoding=UTF-8
-repo_db_driver: com.mysql.jdbc.Driver
+acs_play_repo_db_url: jdbc:mysql://54.164.117.56:3306/alfresco?useUnicode=yes&characterEncoding=UTF-8
+acs_play_repo_db_driver: com.mysql.jdbc.Driver
 ```
 
 Along with the url the database driver binaries need to be provided for one or both services in the `configuration_files/db_connector_repo` and/or `configuration_files/db_connector_sync` folders.
 
-The default database username (`repo_db_username` and/or `sync_db_username`) and password (`repo_db_password` and/or `sync_db_password`) in the configuration file `group_vars/all.yml` can also be overridden with your custom values.
+The default database username (`acs_play_repo_db_username` and/or `sync_db_username`) and password (`repo_db_password` and/or `sync_db_password`) in the configuration file `playbooks/group_vars/all.yml` can also be overridden with your custom values.
 
 Please refer to the [Configuring Databases][databases] documentation for more
 detailed information.
@@ -761,7 +761,7 @@ An example snippet of inventory file is shown below:
 ```yaml
 repository:
   vars:
-    use_custom_keystores: true
+    repository_use_custom_keystores: true
     repository_acs_environment:
       JAVA_OPTS:
         - -Xms512m

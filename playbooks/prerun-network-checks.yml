@@ -21,7 +21,7 @@
         checked_host: "{{ db_host }}"
         checked_port: "{{ ports_cfg.postgres.sql }}"
         delegate_target: "{{ groups.database | first }}"
-      when: repo_db_url == "" and groups.database | default([]) | length > 0
+      when: acs_play_repo_db_url == "" and groups.database | default([]) | length > 0
 
     - name: Check activemq connection
       ansible.builtin.include_tasks: "tasks/check_port.yml"
@@ -118,7 +118,7 @@
         checked_host: "{{ db_host }}"
         checked_port: "{{ ports_cfg.postgres.sql }}"
         delegate_target: "{{ groups.database | first }}"
-      when: repo_db_url == "" and groups.database | default([]) | length > 0
+      when: acs_play_repo_db_url == "" and groups.database | default([]) | length > 0
 
     - name: Check repo connection
       ansible.builtin.include_tasks: "tasks/check_port.yml"

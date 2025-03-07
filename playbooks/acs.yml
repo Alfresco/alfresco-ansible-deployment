@@ -24,7 +24,7 @@
 
 - name: Run preliminary upgrade checks
   ansible.builtin.import_playbook: prerun-upgrade-checks.yml
-  when: skip_upgrade_checks is undefined or not skip_upgrade_checks
+  when: acs_play_skip_upgrade_checks is undefined or not acs_play_skip_upgrade_checks
 
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
@@ -67,7 +67,7 @@
   vars:
     pg_role: "../roles/postgres"
     create_repo_db: >-
-      {{ (repo_db_url == "") | ansible.builtin.bool }}
+      {{ (acs_play_repo_db_url == "") | ansible.builtin.bool }}
     create_sync_db: >-
       {{ (sync_db_url == "" and groups.syncservice | default([]) | length > 0) | ansible.builtin.bool }}
   tasks:
@@ -80,8 +80,8 @@
         name: "{{ pg_role }}"
         tasks_from: setup_db
       vars:
-        postgres_db_name: "{{ repo_db_name }}"
-        postgres_db_username: "{{ repo_db_username }}"
+        postgres_db_name: "{{ acs_play_repo_db_name }}"
+        postgres_db_username: "{{ acs_play_repo_db_username }}"
         postgres_db_password: "{{ repo_db_password }}"
         postgres_db_clients: "{{ groups.repository }}"
       when: create_repo_db
@@ -314,13 +314,16 @@
         name: "../roles/repository"
       vars:
         java_version: "{{ acs_play_java_version }}"
+        repository_trusted_urls: "{{ acs_play_trusted_urls }}"
         repository_default_keystore: "{{ repository_keystore | default({}) }}"
+        repository_use_custom_keystores: "{{ acs_play_repository_use_custom_keystores }}"
         repository_properties: "{{ global_properties }}"
         repository_raw_properties: "{{ properties_snippets }}"
         repository_identity_url: "{{ identity_url | default('') }}"
         tomcat_version: "{{ acs_play_tomcat_version }}"
         repository_nexus_username: "{{ nexus_user }}"
         repository_nexus_password: "{{ nexus_password }}"
+        repository_db_url: "{{ acs_play_repo_db_url }}"
         repository_acs_is_enterprise: "{{ acs_is_enterprise }}"
         repository_acs_artifact_name: "{{ acs_play_repository_acs_artifact_name }}"
         repository_acs_archive_url: "{{ acs_play_repository_acs_archive_url }}"
@@ -502,6 +505,9 @@
         name: "../roles/search_enterprise"
       vars:
         java_version: "{{ acs_play_java_version }}"
+        search_enterprise_repo_db_url: "{{ acs_play_repo_db_url }}"
+        search_enterprise_repo_db_name: "{{ acs_play_repo_db_name }}"
+        search_enterprise_repo_db_username: "{{ acs_play_repo_db_username }}"
         search_enterprise_version: "{{ acs_play_search_enterprise_version }}"
         search_enterprise_zip_url: "{{ acs_play_search_enterprise_download_zip_url }}"
         search_enterprise_zip_checksum_url: "{{ acs_play_search_enterprise_download_zip_sha1_checksum_url }}"

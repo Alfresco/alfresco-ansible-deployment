@@ -25,6 +25,8 @@ repository_acs_archive_checksum_url: "sha1:{{ repository_acs_archive_url }}.sha1
 repository_acs_nexus_username: "{{ repository_nexus_username }}"
 repository_acs_nexus_password: "{{ repository_nexus_password }}"
 
+repository_db_url: ""
+
 # war downloads
 repository_api_explorer_enabled: true
 repository_api_explorer_artifact_name: api-explorer
@@ -38,16 +40,21 @@ repository_api_explorer_nexus_password: "{{ repository_nexus_password }}"
 
 repository_extra_war_downloads: []
 
+repository_use_custom_keystores: false
+repository_trusted_urls:
+  - http://localhost:8080/share
+  - https://someotherapp/
+
 # CSRF config
 repository_csrf:
   enabled: true
   force_headers: []
-  urls: "{{ trusted_urls }}"
+  urls: "{{ repository_trusted_urls }}"
 
 # CORS config
 repository_cors:
   enabled: true
-  urls: "{{ trusted_urls }}"
+  urls: "{{ repository_trusted_urls }}"
   allowed_methods:
     - DELETE
     - GET
