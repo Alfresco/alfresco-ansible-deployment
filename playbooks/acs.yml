@@ -84,6 +84,7 @@
         postgres_db_username: "{{ acs_play_repo_db_username }}"
         postgres_db_password: "{{ repo_db_password }}"
         postgres_db_clients: "{{ groups.repository }}"
+        postgres_major_version: "{{ acs_play_postgres_major_version }}"
       when: create_repo_db
     - name: Setup sync database
       ansible.builtin.include_role:
@@ -94,11 +95,12 @@
         postgres_db_username: "{{ sync_db_username }}"
         postgres_db_password: "{{ sync_db_password }}"
         postgres_db_clients: "{{ groups.syncservice }}"
+        postgres_major_version: "{{ acs_play_postgres_major_version }}"
       when: create_sync_db
   post_tasks:
     - name: Make sure PostgreSQL is running
       ansible.builtin.service:
-        name: "{{ postgresql_service }}"
+        name: "{{ postgres_service }}"
         state: started
       when: create_repo_db or create_sync_db
   tags:
