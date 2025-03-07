@@ -40,7 +40,7 @@ global_properties:
       limit: 3
       periodSeconds: 20
   db:
-    url: jdbc:postgresql://localhost/{{ repository_db_name}}
+    url: jdbc:postgresql://localhost/{{ repository_db_name }}
     driver: org.postgresql.Driver
     username: "{{ repository_db_username }}"
     password: "{{ repo_db_password }}"

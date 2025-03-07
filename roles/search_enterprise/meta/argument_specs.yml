@@ -25,3 +25,11 @@ argument_specs:
         description: |
           URL of the database to use for the Search Enterprise
         required: false
+      search_enterprise_repo_db_name:
+        description: |
+          Name of the database to use for the Search Enterprise
+        required: false
+      search_enterprise_repo_db_username:
+        description: |
+          Username to use to connect to the database for the Search Enterprise
+        required: false
