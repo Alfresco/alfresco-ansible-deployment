@@ -74,6 +74,8 @@
     - name: Install Postgres
       ansible.builtin.include_role:
         name: "{{ pg_role }}"
+      vars:
+        postgres_major_version: "{{ acs_play_postgres_major_version }}"
       when: create_repo_db or create_sync_db
     - name: Setup repository database
       ansible.builtin.include_role:
