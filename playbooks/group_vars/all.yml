@@ -18,6 +18,6 @@ acs_play_repo_db_username: "alfresco"
 # A default keystore is stored in /var/opt/alfresco/content-services/keystore,
 # to replace this with a custom keystore place the keystore file in the "configuration_files/keystores" folder
 # and change this flag to true. See the deployment guide for more details.
-acs_play_use_custom_keystores: false
+acs_play_repository_use_custom_keystores: false
 
 ansible_installation_status_file: "/opt/alfresco/.ansible_alfresco_components.status"
