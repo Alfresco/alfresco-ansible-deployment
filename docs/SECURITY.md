@@ -47,7 +47,7 @@ repository_csrf:
   force_headers:
     - referer
     - origin
-  urls: "{{ trusted_urls }}"
+  urls: "{{ repository_trusted_urls }}"
 ```
 
 Similarly in order to disable CSRF completely use:
@@ -72,7 +72,7 @@ further tweak the CORS configuration, you can do so by overriding the whole
 ```yaml
 repository_cors:
   enabled: true
-  urls: "{{ trusted_urls }}"
+  urls: "{{ repository_trusted_urls }}"
   allowed_methods:
     - GET
     - OPTIONS

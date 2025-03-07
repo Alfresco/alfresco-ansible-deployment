@@ -314,6 +314,7 @@
         name: "../roles/repository"
       vars:
         java_version: "{{ acs_play_java_version }}"
+        repository_trusted_urls: "{{ acs_play_repository_trusted_urls }}"
         repository_default_keystore: "{{ repository_keystore | default({}) }}"
         repository_use_custom_keystores: "{{ acs_play_repository_use_custom_keystores }}"
         repository_properties: "{{ global_properties }}"

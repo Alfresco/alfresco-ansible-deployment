@@ -136,3 +136,10 @@ argument_specs:
         default: true
         description: |
           Whether the ACS distribution is enterprise or not
+      repository_trusted_urls:
+        type: list
+        required: false
+        default: []
+        elements: str
+        description: |
+          A list of URLs that are considered trusted by the repository
