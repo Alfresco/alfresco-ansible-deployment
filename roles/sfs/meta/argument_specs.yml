@@ -3,7 +3,7 @@ argument_specs:
   main:
     short_description: Main entrypoint for the tranformers role
     options:
-      ats_keystore:
+      sfs_ats_keystore:
         type: dict
         required: false
         no_log: true
