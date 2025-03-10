@@ -60,12 +60,12 @@ type of use-cases mentioned earlier.
   This parameter is only useful if the inventory hostname is not reachable by
   its name from other hosts.
 
-- `alfresco.host`: defines the hostname or IP address of the repository to
+- `search_repository.host`: defines the hostname or IP address of the repository to
   track.
 
-- `alfresco.port`: defines the plain TCP port of the repository to track.
+- `search_repository.port`: defines the plain TCP port of the repository to track.
 
-- `alfresco.port_ssl`: defines the encrypted TCP port of the repository to track.
+- `search_repository.port_ssl`: defines the encrypted TCP port of the repository to track.
 
 In the playbook, role's parameters above are mapped within the playbook
 variables:
@@ -74,7 +74,7 @@ variables:
 
 - `search_master_hostname` <= `solr_master_host`
 
-- `alfresco.host` <= `ecmhost`
+- `search_repository.host` <= `ecmhost`
 
 When running the example playbook you need to use the playbook variables.
 
