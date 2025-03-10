@@ -30,3 +30,11 @@ argument_specs:
         description: Timeout of uploads (client requests read timeout)
         type: str
         default: 20m
+      nginx_use_ssl:
+        description: If the nginx vhosts should be configured to use SSL
+        type: bool
+        default: false
+      nginx_fqdn_alfresco:
+        description: The FQDN of the Alfresco instance
+        type: str
+        default: ""

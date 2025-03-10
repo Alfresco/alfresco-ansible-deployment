@@ -31,9 +31,9 @@ repository_acs_environment:
 repository_db_name: "alfresco"
 repository_db_username: "alfresco"
 
-acs_play_proto: "{{ 'https' if use_ssl | bool else 'http' }}"
+acs_play_proto: "{{ 'https' if repository_use_ssl | bool else 'http' }}"
 acs_play_port: >-
-  {{ ports_cfg.nginx.https if use_ssl | bool else ports_cfg.nginx.http }}
+  {{ ports_cfg.nginx.https if repository_use_ssl | bool else ports_cfg.nginx.http }}
 global_properties:
   authentication:
     protection:

@@ -19,7 +19,7 @@ application is hosted on a domain name which do not match the backend server.
 
 In such circumstances, you can tell the playbook which are these applications by
  adding the client application URL as a group variable in the
-`group_vars/all.yaml` file:
+`playbooks/group_vars/all.yaml` file:
 
 ```yaml
 known_urls:
@@ -110,7 +110,7 @@ role), and as a consequence will always try to access the repo through the
 itself is accessed using `http://localhost/share/` - it is breaking CORS
 protection. For that reason in order for Share to work, it is mandatory to add
 the URL Share will be accessed from as a `known_urls`. We recommand doing it via
-the `all` group variables in `group_vars/all.yml`:
+the `all` group variables in `playbooks/group_vars/all.yml`:
 
 ```yaml
 known_urls:

@@ -58,9 +58,9 @@ acs_play_repository_extra_amp_downloads: []
 #   # as in `mount -o` options
 #   options: _netdev,noatime,nodiratime
 
-acs_play_proto: "{{ 'https' if use_ssl | bool else 'http' }}"
+acs_play_proto: "{{ 'https' if acs_play_use_ssl | bool else 'http' }}"
 acs_play_port: >-
-  {{ ports_cfg.nginx.https if use_ssl | bool else ports_cfg.nginx.http }}
+  {{ ports_cfg.nginx.https if acs_play_use_ssl | bool else ports_cfg.nginx.http }}
 global_properties:
   db:
     url: >-
@@ -69,13 +69,13 @@ global_properties:
     username: "{{ acs_play_repo_db_username }}"
     password: "{{ repo_db_password }}"
   alfresco:
-    host: "{{ fqdn_alfresco | default(known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"
+    host: "{{ acs_play_fqdn_alfresco | default(known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"
     port: "{{ acs_play_port }}"
     protocol: "{{ acs_play_proto }}"
     cluster:
       enabled: "{{ (groups['repository'] | length > 1 and not (repository_cluster_keepoff | bool)) | lower }}"
   share:
-    host: "{{ fqdn_alfresco | default(known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"
+    host: "{{ acs_play_fqdn_alfresco | default(known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"
     port: "{{ acs_play_port }}"
     protocol: "{{ acs_play_proto }}"
   messaging:
@@ -85,6 +85,6 @@ global_properties:
       password: "{{ activemq_password }}"
   aos:
     baseUrlOverwrite: >-
-      {{ acs_play_proto }}://{{ fqdn_alfresco | default(nginx_host) }}:{{ acs_play_port }}/alfresco/aos
+      {{ acs_play_proto }}://{{ acs_play_fqdn_alfresco | default(nginx_host) }}:{{ acs_play_port }}/alfresco/aos
 properties_snippets:
   - ../../configuration_files/alfresco-global.properties

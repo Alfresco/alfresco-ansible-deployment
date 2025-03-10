@@ -1,11 +1,3 @@
-# REQUIRED: add at least the Share url
-# The first entry will also be used to assume the base URL of this alfresco install
-# For more information please have a look at the
-# [security_doc](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/SECURITY.md#specify-trustworthy-applications)
-known_urls: []
 acs_play_major_version: 23
-use_ssl: false
 # Put your domain name here if any (e.g. ecm.alfresco.com).
 # Needs to be empty if unused (don't use dummy values)
-fqdn_alfresco: ""
-autogen_unsecure_secrets: false

@@ -84,7 +84,7 @@ node **and** the target host.
     export NEXUS_PASSWORD="<your-password>"
     ```
 
-8. Make sure to add the `known_urls` variables in the file `group_vars/all.yml`.
+8. Make sure to add the `known_urls` variables in the file `playbooks/group_vars/all.yml`.
    It should contain any URL which is allowed to query the repository and the
    first entry MUST be set to the dmain URL used to access Alfresco.
    For example with the default vagrant config:
@@ -234,7 +234,7 @@ domain name where the Alfresco applications will be served. The `known_urls` is
 used for that purpose.  It should contain any URL which is allowed to query the
 repository and the first entry MUST be set to the domain URL used to access
 Alfresco. For example if you plan on using ecm.acme.com as your main domain on
-both https & http, you should set the `group_vars/all.yml` file to:
+both https & http, you should set the `playbooks/group_vars/all.yml` file to:
 
 ```yaml
 known_urls:
@@ -607,7 +607,7 @@ the `configuration_files/alfresco-global.properties` file.
 
 ### Enable SSL
 
-If you have a FQDN and a certificate you want to use place the certificate and the key in the `configuration_files/ssl_certificates` folder before running the playbook. Also replace the `fqdn_alfresco: "your_domain.com"` with your own domain in `group_vars/all.yml` along with setting `use_ssl: true`.
+If you have a FQDN and a certificate you want to use place the certificate and the key in the `configuration_files/ssl_certificates` folder before running the playbook. Also replace the `acs_play_fqdn_alfresco: "your_domain.com"` with your own domain in `playbooks/group_vars/all.yml` along with setting `acs_play_use_ssl: true`.
 
 > NOTE: The certificate and the key should be named the same as the domain eg: `your_domain.com.key` and `your_domain.com.crt`
 
