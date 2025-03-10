@@ -14,13 +14,6 @@ argument_specs:
           use to authenticate to each other.
         required: true
         type: str
-      data_dir_root:
-        description: |
-          This property specifies the top level directory path for the indexes
-          managed by Solr, for example /alfresco-search-services/solrhome.
-        required: false
-        type: str
-        default: /opt/alfresco/search-services
       search_cores:
         description: |
           List of Solr cores to create
