@@ -55,7 +55,7 @@ type of use-cases mentioned earlier.
 - `search_topology`: defines the type of setup to deploy. Can be either
   `standalone` or `replication`. The playbook uses `replication`.
 
-- `search_master_hostname`: gives the playbook the hostname or IP address of
+- `search_master_host`: gives the playbook the hostname or IP address of
   the master host, that read-replicas will poll for index updates.
   This parameter is only useful if the inventory hostname is not reachable by
   its name from other hosts.
@@ -72,7 +72,7 @@ variables:
 
 - `search_shared_secret` <= `reposearch_shared_secret`
 
-- `search_master_hostname` <= `solr_master_host`
+- `search_master_host` <= `solr_master_host`
 
 - `search_repository.host` <= `ecmhost`
 
