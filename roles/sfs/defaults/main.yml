@@ -7,6 +7,8 @@ sfs_environment:
     - $JAVA_OPTS
 utils_sfs: []
 sfs_ats_keystore: {}
+sfs_ats_truststore: "{{ java_home | default('/opt/java') }}/jre/lib/security/cacerts"
+sfs_ats_truststore_pass: changeit
 
 sfs_artifact_name: alfresco-shared-file-store-controller
 sfs_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
