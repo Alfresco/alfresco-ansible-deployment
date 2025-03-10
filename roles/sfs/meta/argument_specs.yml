@@ -13,6 +13,13 @@ argument_specs:
           and server configuration. The object needs to be passed as expected
           by the java role. Check the java role's arguments specification for
           details.
+      sfs_ats_truststore:
+        type: str
+        required: false
+        default: ${JAVA_HOME}/lib/security/cacerts
+        description: |
+          Path to the JRE truststore used by ATS for mTLS client configuration.
+          The truststore is used to verify the server's certificate.
       sfs_version:
         type: str
         required: false
