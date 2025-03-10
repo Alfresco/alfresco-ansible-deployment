@@ -39,7 +39,7 @@
       vars:
         search_flavor: alfresco-search-services
         search_shared_secret: "{{ reposearch_shared_secret }}"
-        alfresco:
+        search_repository:
           host: "{{ ecm_host | default('localhost') }}"
           port: "{{ ecm_port | default('80') }}"
           port_ssl: "{{ ecm_ssl | default('443') }}"
