@@ -49,7 +49,7 @@
   tasks:
     - name: Set alfresco_url from first entry of known_urls
       vars:
-        first_known_url: "{{ known_urls | first | default('http://' ~ nginx_host) }}"
+        first_known_url: "{{ acs_play_known_urls | first | default('http://' ~ nginx_host) }}"
       ansible.builtin.set_fact:
         alfresco_url: "{{ first_known_url | urlsplit('scheme') }}://{{ first_known_url | urlsplit('hostname') }}"
     - name: Populate identity_enabled

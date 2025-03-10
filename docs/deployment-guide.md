@@ -84,7 +84,7 @@ node **and** the target host.
     export NEXUS_PASSWORD="<your-password>"
     ```
 
-8. Make sure to add the `known_urls` variables in the file `playbooks/group_vars/all.yml`.
+8. Make sure to add the `acs_play_known_urls` variables in the file `playbooks/group_vars/all.yml`.
    It should contain any URL which is allowed to query the repository and the
    first entry MUST be set to the dmain URL used to access Alfresco.
    For example with the default vagrant config:
@@ -230,19 +230,19 @@ playbook for the first time (remove it for the next runs).
 ## Minimal configuration
 
 In order to run the playbook successfully you least to provide *AT LEAST* the
-domain name where the Alfresco applications will be served. The `known_urls` is
+domain name where the Alfresco applications will be served. The `acs_play_known_urls` is
 used for that purpose.  It should contain any URL which is allowed to query the
 repository and the first entry MUST be set to the domain URL used to access
 Alfresco. For example if you plan on using ecm.acme.com as your main domain on
 both https & http, you should set the `playbooks/group_vars/all.yml` file to:
 
 ```yaml
-known_urls:
+acs_play_known_urls:
   - https://ecm.acme.com/share
   - http://ecm.acme.com/share
 ```
 
-> The `known_urls` variable serves a larger purpose, check the
+> The `acs_play_known_urls` variable serves a larger purpose, check the
 > [SECURITY README](SECURITY.md) for more details.
 
 ## Understanding the playbook

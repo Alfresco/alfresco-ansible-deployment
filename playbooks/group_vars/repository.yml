@@ -69,13 +69,13 @@ global_properties:
     username: "{{ acs_play_repo_db_username }}"
     password: "{{ repo_db_password }}"
   alfresco:
-    host: "{{ acs_play_fqdn_alfresco | default(known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"
+    host: "{{ acs_play_fqdn_alfresco | default(acs_play_known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"
     port: "{{ acs_play_port }}"
     protocol: "{{ acs_play_proto }}"
     cluster:
       enabled: "{{ (groups['repository'] | length > 1 and not (repository_cluster_keepoff | bool)) | lower }}"
   share:
-    host: "{{ acs_play_fqdn_alfresco | default(known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"
+    host: "{{ acs_play_fqdn_alfresco | default(acs_play_known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"
     port: "{{ acs_play_port }}"
     protocol: "{{ acs_play_proto }}"
   messaging:
