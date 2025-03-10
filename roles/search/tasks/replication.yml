@@ -66,7 +66,7 @@
           </lst>
         slave_xml: |
           <lst name="slave">
-            <str name="masterUrl">{{ solr.scheme }}://{{ search_master_hostname }}:{{ solr.port }}/solr/{{ item }}</str>
+            <str name="masterUrl">{{ search_master_scheme }}://{{ search_master_hostname }}:{{ search_master_port }}/solr/{{ item }}</str>
             <str name="pollInterval">00:00:15</str>
           </lst>
         replication_xml: >-

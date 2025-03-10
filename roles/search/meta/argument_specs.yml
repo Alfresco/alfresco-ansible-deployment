@@ -66,6 +66,20 @@ argument_specs:
         required: false
         type: str
         default: "{{ ansible_play_hosts_all[0] }}"
+      search_master_port:
+        description: |
+          The port used by slaves to communicate to the Solr master node (when
+          replication is enabled).
+        required: false
+        type: int
+        default: 8983
+      search_master_scheme:
+        description: |
+          The protocol used by slaves to communicate with the Solr master node
+          (when replication is enabled).
+        required: false
+        type: str
+        default: http
       search_master_hostname:
         description: |
           Allow overriding the hostname of the Solr master in case the
@@ -93,21 +107,3 @@ argument_specs:
           The URL of the Search Service zip file checksum to download.
         required: false
         type: str
-      solr:
-        description: |
-          A dictionnary to describe Solr setup
-        required: false
-        type: dict
-        options:
-          port:
-            description: |
-              The port Solr uses to serve search requests.
-            required: false
-            type: int
-            default: 8983
-          scheme:
-            description: |
-              The protocol Solr uses to serve search requests.
-            required: false
-            type: str
-            default: http

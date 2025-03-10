@@ -19,6 +19,5 @@ search_cores:
 search_topology: standalone
 search_master: "{{ ansible_play_hosts_all | first }}"
 search_master_hostname: "{{ search_master }}"
-solr:
-  port: 8983
-  scheme: http
+search_master_port: 8983
+search_master_scheme: http
