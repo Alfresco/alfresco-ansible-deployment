@@ -1,7 +1,7 @@
 #
 # solrcore.properties - used in solrconfig.xml
 #
-{% if search_topology == 'replication' and inventory_hostname != search_master %}
+{% if search_topology == 'replication' and inventory_hostname != search_master_host %}
 enable.alfresco.tracking=false
 alfresco.cron=* * * * * ? 1900
 alfresco.nodestate.tracker.cron=* * * * * ? 1900
@@ -96,7 +96,7 @@ alfresco.maxHostConnections=200
 alfresco.socketTimeout=360000
 
 # SOLR caching
-{% if search_topology == 'replication' and inventory_hostname == search_master %}
+{% if search_topology == 'replication' and inventory_hostname == search_master_host %}
 solr.filterCache.size=0
 solr.filterCache.initialSize=0
 solr.filterCache.autowarmCount=0
