@@ -14,13 +14,6 @@ argument_specs:
           use to authenticate to each other.
         required: true
         type: str
-      data_dir_root:
-        description: |
-          This property specifies the top level directory path for the indexes
-          managed by Solr, for example /alfresco-search-services/solrhome.
-        required: false
-        type: str
-        default: /opt/alfresco/search-services
       search_cores:
         description: |
           List of Solr cores to create
@@ -30,7 +23,7 @@ argument_specs:
         default:
           - alfresco
           - archive
-      alfresco:
+      search_repository:
         description: |
           A dictionnary to define Alfresco repository configuration.
         required: false
@@ -66,20 +59,27 @@ argument_specs:
         choices:
           - standalone
           - replication
-      search_master:
+      search_master_host:
         description: |
           The hostname of the Solr master node (when replication is enabled).
           Defaults to the first host of the play hosts.
         required: false
         type: str
         default: "{{ ansible_play_hosts_all[0] }}"
-      search_master_hostname:
+      search_master_port:
         description: |
-          Allow overriding the hostname of the Solr master in case the
-          inventory hostname cannot be accessed by slaves.
+          The port used by slaves to communicate to the Solr master node (when
+          replication is enabled).
+        required: false
+        type: int
+        default: 8983
+      search_master_scheme:
+        description: |
+          The protocol used by slaves to communicate with the Solr master node
+          (when replication is enabled).
         required: false
         type: str
-        default: "{{ search_master }}"
+        default: http
       search_version:
         description: Alfresco Search Service version to use for deployment.
         required: false
@@ -100,21 +100,3 @@ argument_specs:
           The URL of the Search Service zip file checksum to download.
         required: false
         type: str
-      solr:
-        description: |
-          A dictionnary to describe Solr setup
-        required: false
-        type: dict
-        options:
-          port:
-            description: |
-              The port Solr uses to serve search requests.
-            required: false
-            type: int
-            default: 8983
-          scheme:
-            description: |
-              The protocol Solr uses to serve search requests.
-            required: false
-            type: str
-            default: http

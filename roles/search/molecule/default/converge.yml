@@ -7,7 +7,7 @@
       SOLR_JAVA_MEM: "-Xms700m -Xmx900m"
   roles:
     - role: search
-      search_master_hostname: >-
+      search_master_host: >-
         {{ ansible_play_hosts_all | map('extract', hostvars, ['ansible_default_ipv4','address']) | first }}
       search_topology: replication
       search_shared_secret: alfresco with space

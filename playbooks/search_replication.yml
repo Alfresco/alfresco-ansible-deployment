@@ -43,5 +43,5 @@
           host: "{{ ecm_host | default('localhost') }}"
           port: "{{ ecm_port | default('80') }}"
           port_ssl: "{{ ecm_ssl | default('443') }}"
-        search_master_hostname: "{{ solr_master_host | omit() }}"
+        search_master_host: "{{ solr_master_host | omit() }}"
         search_topology: replication
