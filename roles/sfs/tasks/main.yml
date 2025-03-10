@@ -12,7 +12,7 @@
   block:
     - name: Ensure a list of packages installed
       ansible.builtin.package:
-        name: "{{ utils_sfs }}"
+        name: "{{ sfs_utils }}"
         state: present
 
     - name: Create transform services folder

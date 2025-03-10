@@ -5,7 +5,7 @@ sfs_environment:
     - -Xms128m
     - -Xmx512m
     - $JAVA_OPTS
-utils_sfs: []
+sfs_utils: []
 sfs_ats_keystore: {}
 sfs_ats_truststore: "{{ java_home | default('/opt/java') }}/jre/lib/security/cacerts"
 sfs_ats_truststore_pass: changeit
