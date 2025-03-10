@@ -5,12 +5,12 @@ After=syslog.target network.target local-fs.target remote-fs.target nss-lookup.t
 [Service]
 Type=forking
 User={{ username }}
-Environment=SOLR_INCLUDE={{ binaries_dir }}/solr.in.sh
-WorkingDirectory={{ binaries_dir }}/solr
+Environment=SOLR_INCLUDE={{ search_binaries_dir }}/solr.in.sh
+WorkingDirectory={{ search_binaries_dir }}/solr
 Environment=JAVA_HOME=/usr/java
-ExecStart={{ binaries_dir }}/solr.sh start -a "-Dcreate.alfresco.defaults={{ search_cores | join(',')  }}"
-ExecReload={{ binaries_dir }}/solr.sh restart
-ExecStop={{ binaries_dir }}/solr.sh stop
+ExecStart={{ search_binaries_dir }}/solr.sh start -a "-Dcreate.alfresco.defaults={{ search_cores | join(',')  }}"
+ExecReload={{ search_binaries_dir }}/solr.sh restart
+ExecStop={{ search_binaries_dir }}/solr.sh stop
 Restart=on-failure
 RestartSec=60
 
