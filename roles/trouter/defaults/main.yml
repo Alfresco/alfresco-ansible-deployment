@@ -4,7 +4,7 @@ trouter_environment:
   JAVA_OPTS:
     - -Xms128m
     - -Xmx512m
-utils_trouter: []
+trouter_utils: []
 trouter_ats_keystore: {}
 trouter_ats_truststore: "{{ java_home }}/jre/lib/security/cacerts"
 trouter_ats_truststore_pass: changeit
