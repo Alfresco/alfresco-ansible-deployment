@@ -1,6 +1,6 @@
 {%- macro ats_proto() -%}
 http
-{%- if ats_keystore.cert_containers | default([]) | length > 0 -%}
+{%- if trouter_ats_keystore.cert_containers | default([]) | length > 0 -%}
 s
 {%- endif -%}
 {%- endmacro %}
