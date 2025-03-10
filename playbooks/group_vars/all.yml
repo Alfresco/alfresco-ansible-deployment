@@ -1,3 +1,22 @@
+artifacts_repositories:
+  enterprise:
+    base_url: "https://artifacts.alfresco.com/nexus/content"
+    repository: "groups/private"
+    group_id: "org/alfresco"
+  community:
+    base_url: "https://artifacts.alfresco.com/nexus/content"
+    repository: "groups/public"
+    group_id: "org/alfresco"
+  development:
+    repository: "groups/internal"
+nexus_repository:
+  releases: >-
+    {{ artifacts_repositories.community.base_url }}/{{ artifacts_repositories.community.repository }}/{{ artifacts_repositories.community.group_id }}
+  enterprise_releases: >-
+    {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.enterprise.repository }}/{{ artifacts_repositories.enterprise.group_id }}
+  development_releases: >-
+    {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.development.repository }}/{{ artifacts_repositories.enterprise.group_id }}
+
 default_java_version: 17.0.14+7
 acs_play_java_core: "{{ default_java_version.split('+')[0] }}"
 acs_play_repository_acs_edition: Enterprise
