@@ -5,7 +5,7 @@ trouter_environment:
     - -Xms128m
     - -Xmx512m
 utils_trouter: []
-ats_keystore: {}
+trouter_ats_keystore: {}
 
 trouter_artifact_name: alfresco-transform-router
 trouter_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco

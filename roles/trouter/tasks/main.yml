@@ -8,9 +8,9 @@
   ansible.builtin.include_role:
     name: ../roles/java
     tasks_from: keystores
-  when: ats_keystore
+  when: trouter_ats_keystore
   vars:
-    java_keystore: "{{ ats_keystore }}"
+    java_keystore: "{{ trouter_ats_keystore }}"
 
 - name: Install T-Router
   become: true
@@ -35,7 +35,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0600"
-      when: ats_keystore
+      when: trouter_ats_keystore
       notify:
         - Restart-trouter
 

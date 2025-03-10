@@ -428,7 +428,7 @@
         name: "../roles/trouter"
       vars:
         java_version: "{{ acs_play_java_version }}"
-        ats_keystore: "{{ trouter_keystore | default({}) }}"
+        trouter_ats_keystore: "{{ trouter_keystore | default({}) }}"
         trouter_version: "{{ acs_play_trouter_version }}"
         trouter_zip_url: "{{ acs_play_trouter_download_zip_url }}"
         trouter_zip_checksum_url: "{{ acs_play_trouter_download_zip_sha1_checksum_url }}"
