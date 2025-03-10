@@ -1,7 +1,7 @@
 ---
 # defaults file for search
 data_folder: /opt/alfresco
-alfresco:
+search_repository:
   host: localhost
   port: 80
   port_ssl: 443

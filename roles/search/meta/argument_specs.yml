@@ -23,7 +23,7 @@ argument_specs:
         default:
           - alfresco
           - archive
-      alfresco:
+      search_repository:
         description: |
           A dictionnary to define Alfresco repository configuration.
         required: false
