@@ -22,10 +22,6 @@ nexus_repository:
   development_releases: >-
     {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.development.repository }}/{{ artifacts_repositories.enterprise.group_id }}
 acs_play_major_version: 23
-sync_db_url: ""
-sync_db_driver: org.postgresql.Driver
-sync_db_name: "alfresco-sync"
-sync_db_username: "alfresco-sync"
 use_ssl: false
 # Put your domain name here if any (e.g. ecm.alfresco.com).
 # Needs to be empty if unused (don't use dummy values)

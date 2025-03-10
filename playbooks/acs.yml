@@ -69,7 +69,7 @@
     create_repo_db: >-
       {{ (acs_play_repo_db_url == "") | ansible.builtin.bool }}
     create_sync_db: >-
-      {{ (sync_db_url == "" and groups.syncservice | default([]) | length > 0) | ansible.builtin.bool }}
+      {{ (acs_play_sync_db_url == "" and groups.syncservice | default([]) | length > 0) | ansible.builtin.bool }}
   tasks:
     - name: Install Postgres
       ansible.builtin.include_role:
@@ -93,8 +93,8 @@
         name: "{{ pg_role }}"
         tasks_from: setup_db
       vars:
-        postgres_db_name: "{{ sync_db_name }}"
-        postgres_db_username: "{{ sync_db_username }}"
+        postgres_db_name: "{{ acs_play_sync_db_name }}"
+        postgres_db_username: "{{ acs_play_sync_db_username }}"
         postgres_db_password: "{{ sync_db_password }}"
         postgres_db_clients: "{{ groups.syncservice }}"
         postgres_major_version: "{{ acs_play_postgres_major_version }}"
@@ -657,6 +657,10 @@
         sync_jdbc_driver_version: "{{ acs_play_sync_jdbc_driver_version }}"
         sync_jdbc_driver_url: "{{ acs_play_sync_jdbc_driver_url }}"
         sync_jdbc_driver_checksum: "{{ acs_play_sync_jdbc_driver_checksum }}"
+        sync_db_url: "{{ acs_play_sync_db_url }}"
+        sync_db_driver: "{{ acs_play_sync_db_driver }}"
+        sync_db_name: "{{ acs_play_sync_db_name }}"
+        sync_db_username: "{{ acs_play_sync_db_username }}"
       when: acs_is_enterprise
   post_tasks:
     - name: Update installation status file with Sync
