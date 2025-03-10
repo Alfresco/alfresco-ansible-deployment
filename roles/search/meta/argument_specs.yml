@@ -59,7 +59,7 @@ argument_specs:
         choices:
           - standalone
           - replication
-      search_master:
+      search_master_host:
         description: |
           The hostname of the Solr master node (when replication is enabled).
           Defaults to the first host of the play hosts.
@@ -80,13 +80,6 @@ argument_specs:
         required: false
         type: str
         default: http
-      search_master_hostname:
-        description: |
-          Allow overriding the hostname of the Solr master in case the
-          inventory hostname cannot be accessed by slaves.
-        required: false
-        type: str
-        default: "{{ search_master }}"
       search_version:
         description: Alfresco Search Service version to use for deployment.
         required: false

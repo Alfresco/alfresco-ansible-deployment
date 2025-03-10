@@ -17,7 +17,6 @@ search_cores:
   - alfresco
   - archive
 search_topology: standalone
-search_master: "{{ ansible_play_hosts_all | first }}"
-search_master_hostname: "{{ search_master }}"
+search_master_host: "{{ ansible_play_hosts_all | first }}"
 search_master_port: 8983
 search_master_scheme: http
