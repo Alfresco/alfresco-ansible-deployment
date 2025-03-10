@@ -71,6 +71,7 @@
         java_keystore: "{{ trouter_ats_keystore }}"
 
     - name: Add AIO config mTLS config file
+      become: true
       ansible.builtin.template:
         src: mtls.properties.j2
         dest: "{{ ats_home }}/atr-mtls.properties"
