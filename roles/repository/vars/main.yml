@@ -7,6 +7,6 @@ repository_share_templates:
   - share-config-custom.xml
   - smartfolders-amp-actions-config.xml
 
-repository_protocol: "{{ 'https' if use_ssl | bool else 'http' }}"
+repository_protocol: "{{ 'https' if repository_use_ssl | bool else 'http' }}"
 repository_host: "{{ nginx_host }}"
-repository_port: "{{ ports_cfg.nginx.https if use_ssl | bool else ports_cfg.nginx.http }}"
+repository_port: "{{ ports_cfg.nginx.https if repository_use_ssl | bool else ports_cfg.nginx.http }}"

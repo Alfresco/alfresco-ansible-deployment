@@ -49,7 +49,7 @@
   tasks:
     - name: Set alfresco_url from first entry of known_urls
       vars:
-        first_known_url: "{{ known_urls | first | default('http://' ~ nginx_host) }}"
+        first_known_url: "{{ acs_play_known_urls | first | default('http://' ~ nginx_host) }}"
       ansible.builtin.set_fact:
         alfresco_url: "{{ first_known_url | urlsplit('scheme') }}://{{ first_known_url | urlsplit('hostname') }}"
     - name: Populate identity_enabled
@@ -137,6 +137,9 @@
   gather_facts: false
   roles:
     - role: "../roles/nginx"
+      vars:
+        nginx_use_ssl: "{{ acs_play_use_ssl }}"
+        nginx_fqdn_alfresco: "{{ acs_play_fqdn_alfresco }}"
   post_tasks:
     - name: Make sure NGINX is running
       become: true
@@ -320,6 +323,8 @@
         java_version: "{{ acs_play_java_version }}"
         repository_trusted_urls: "{{ acs_play_trusted_urls }}"
         repository_default_keystore: "{{ repository_keystore | default({}) }}"
+        repository_use_ssl: "{{ acs_play_use_ssl }}"
+        repository_fqdn_alfresco: "{{ acs_play_fqdn_alfresco }}"
         repository_use_custom_keystores: "{{ acs_play_repository_use_custom_keystores }}"
         repository_properties: "{{ global_properties }}"
         repository_raw_properties: "{{ properties_snippets }}"

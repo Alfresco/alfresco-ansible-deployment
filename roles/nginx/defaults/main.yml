@@ -5,6 +5,9 @@ nginx_vhosts:
   - listen: "80"
     filename: "alfresco.conf"
 
+nginx_use_ssl: false
+nginx_fqdn_alfresco: ""
+
 # role arguments defaults
 nginx_setup_service: true
 nginx_setup_vhosts: true

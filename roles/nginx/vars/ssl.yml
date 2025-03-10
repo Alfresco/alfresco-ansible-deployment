@@ -1,10 +1,10 @@
 nginx_vhosts:
   - listen: "80"
-    server_name: "{{ fqdn_alfresco }}" # this should be an input from the client
+    server_name: "{{ nginx_fqdn_alfresco }}" # this should be an input from the client
     template: "alfresco_redirect.conf.j2"
     filename: "alfresco.conf"
   - listen: "443"
-    server_name: "{{ fqdn_alfresco }}" # this should be an input from the client
-    filename: "ssl.{{ fqdn_alfresco }}.conf"
-    cert_crt: "{{ fqdn_alfresco }}.crt"
-    cert_key: "{{ fqdn_alfresco }}.key"
+    server_name: "{{ nginx_fqdn_alfresco }}" # this should be an input from the client
+    filename: "ssl.{{ nginx_fqdn_alfresco }}.conf"
+    cert_crt: "{{ nginx_fqdn_alfresco }}.crt"
+    cert_key: "{{ nginx_fqdn_alfresco }}.key"

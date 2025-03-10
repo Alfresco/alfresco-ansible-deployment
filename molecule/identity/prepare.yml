@@ -18,7 +18,7 @@
         marker: >-
           # {mark} KNOWN_URLS VAR
         block: |
-          known_urls:
+          acs_play_known_urls:
             - http://localhost
         path: ../{{ lookup('env', 'MOLECULE_SCENARIO_NAME') }}/host_vars/{{ item }}.yml
       loop: "{{ groups.repository }}"

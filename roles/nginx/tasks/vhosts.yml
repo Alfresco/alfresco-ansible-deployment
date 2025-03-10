@@ -17,7 +17,7 @@
 
     - name: Include ssl vhost if enabled
       ansible.builtin.include_vars: ssl.yml
-      when: use_ssl
+      when: nginx_use_ssl
 
     - name: Add ssl key
       ansible.builtin.template:

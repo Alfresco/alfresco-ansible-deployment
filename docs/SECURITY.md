@@ -19,10 +19,10 @@ application is hosted on a domain name which do not match the backend server.
 
 In such circumstances, you can tell the playbook which are these applications by
  adding the client application URL as a group variable in the
-`group_vars/all.yaml` file:
+`playbooks/group_vars/all.yaml` file:
 
 ```yaml
-known_urls:
+acs_play_known_urls:
   - http://app.domain.local/legit
   - https://app.domain.local/legit
 ```
@@ -33,7 +33,7 @@ CSRF is enabled by default and its default configuration is to only allow
 requests from the same `Origin` & `Referer` headers. Any other `Origin` or
 `Referer` will be denied.
 If you want a third party application (often SPA) to be able query the alfresco
-API you need to add it to the list of `known_urls` as shown above.
+API you need to add it to the list of `acs_play_known_urls` as shown above.
 In addition you can also control whether you want to enforce presence of either
 or both of the `Referer` or `Origin` headers. This is turned off by default as
 some browser/clients simply do not provide them. You should not enforce them
@@ -62,7 +62,7 @@ repository_csrf:
 The playbook now enables CORS headers to be sent by the server by default. The
 default policy basically only allows the Same-Origin policy.
 If you want to allow for more origins to query  the Alfresco repository, you
-should make sure they are part of the `known_urls` variable. Any location
+should make sure they are part of the `acs_play_known_urls` variable. Any location
 mentioned in this variable will be automatically to the list of relaxed origins
 for CORS queries. By default they will be allowed tu use any following methods:
 DELETE, GET, HEAD, OPTIONS, POST, PUT. If you want to restrict methods or
@@ -110,10 +110,10 @@ role), and as a consequence will always try to access the repo through the
 itself is accessed using `http://localhost/share/` - it is breaking CORS
 protection. For that reason in order for Share to work, it is mandatory to add
 the URL Share will be accessed from as a `known_urls`. We recommand doing it via
-the `all` group variables in `group_vars/all.yml`:
+the `all` group variables in `playbooks/group_vars/all.yml`:
 
 ```yaml
-known_urls:
+acs_play_known_urls:
   - https://ecm.domain.local/share
 ```
 
