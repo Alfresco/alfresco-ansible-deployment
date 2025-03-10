@@ -28,7 +28,7 @@
   block:
     - name: Ensure a list of packages installed
       ansible.builtin.package:
-        name: "{{ utils_search }}"
+        name: "{{ search_utils }}"
         state: present
 
     - name: Create search binaries, config and data directories
