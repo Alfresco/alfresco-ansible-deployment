@@ -20,8 +20,8 @@
         name: postgres
         tasks_from: setup_db
       vars:
-        postgres_db_name: "{{ repo_db_name }}"
-        postgres_db_username: "{{ repo_db_username }}"
+        postgres_db_name: "{{ repository_db_name }}"
+        postgres_db_username: "{{ repository_db_username }}"
         postgres_db_password: "{{ repo_db_password }}"
         postgres_db_clients: "{{ groups.repository }}"
     - name: Setup sync database
@@ -43,7 +43,7 @@
         repository_amp_downloads:
           - url: "{{ sync_amp_device_sync_archive_url }}"
             checksum: "sha1:{{ sync_amp_device_sync_archive_url }}.sha1"
-            dest: "{{ content_folder }}/amps_repo/{{ sync_amp_device_sync_artifact_name }}.amp"
+            dest: "{{ repository_content_folder }}/amps_repo/{{ sync_amp_device_sync_artifact_name }}.amp"
             url_username: "{{ molecule_nexus_username }}"
             url_password: "{{ molecule_nexus_password }}"
     - name: Install Alfresco sync service

@@ -1,15 +1,23 @@
 """Postgresql Tests"""
 import os
+import pytest
 from hamcrest import assert_that, contains_string
 
+@pytest.fixture(scope="module")
+def get_ansible_vars(host):
+    """Define get_ansible_vars"""
+    postgres_role_defaults = "file=../../defaults/main.yml name=postgres_role_defaults"
+    ansible_vars = host.ansible("include_vars", postgres_role_defaults)["ansible_facts"]["postgres_role_defaults"]
+    ansible_vars.update(host.ansible("include_vars", postgres_role_defaults)["ansible_facts"]["postgres_role_defaults"])
+    return ansible_vars
 
-def test_postgresql_service(host):
+def test_postgresql_service(host, get_ansible_vars):
     """Ensure postgres is up and basic functionality is working"""
     pghost = host.ansible.get_variables()['inventory_hostname']
     if not host.file('/etc/redhat-release').exists:
         service_name = 'postgresql'
     else:
-        postgres_version = host.ansible.get_variables()['dependencies_version']['postgres_major_version']
+        postgres_version = get_ansible_vars["postgres_major_version"]
         service_name = 'postgresql-{}'.format(postgres_version)
 
     assert_that(host.service(service_name).is_running)

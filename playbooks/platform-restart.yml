@@ -1,4 +1,7 @@
 ---
+- name: Include vars based on acs major version
+  ansible.builtin.import_playbook: include-vars.yml
+
 - name: Stop Alfresco Digital Workspace
   hosts: adw
   gather_facts: false
@@ -87,7 +90,7 @@
   hosts: database
   become: true
   vars:
-    service_name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
+    service_name: postgresql{% if ansible_os_family != 'Debian' %}{{ acs_play_postgres_major_version }}{% endif %}
   tasks:
     - name: Stop {{ service_name }} service
       ansible.builtin.service:
@@ -127,7 +130,7 @@
   hosts: database
   become: true
   vars:
-    service_name: postgresql{% if ansible_os_family != 'Debian' %}{{ dependencies_version.postgres_major_version }}{% endif %}
+    service_name: postgresql{% if ansible_os_family != 'Debian' %}{{ acs_play_postgres_major_version }}{% endif %}
   tasks:
     - name: Start {{ service_name }} service
       ansible.builtin.service:

@@ -42,7 +42,7 @@
           which is not a supported configuration for the community edition.
           Please remove the hosts from the search-enterprise group and ensure that
           the search group contains at least one host.
-      when: acs.edition == 'Community'
+      when: acs_play_repository_acs_edition == 'Community'
 
 - name: Repository pre-requisites
   hosts: repository
@@ -57,4 +57,4 @@
           https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/SECURITY.md
       when:
         - known_urls | default([]) | length == 0
-        - cors.enabled | default(True)
+        - repository_cors.enabled | default(True)

@@ -2,3 +2,4 @@ postgres_listen_addresses: "*"
 postgres_config:
   - line: max_connections = 300
   - line: shared_buffers = 2GB
+postgres_major_version: 15

@@ -42,18 +42,18 @@ provide necessary headers in all circumstances. If so, you can override the
 default `csrf` configuration node.
 
 ```yaml
-csrf:
+repository_csrf:
   enabled: true
   force_headers:
     - referer
     - origin
-  urls: "{{ trusted_urls }}"
+  urls: "{{ repository_trusted_urls }}"
 ```
 
 Similarly in order to disable CSRF completely use:
 
 ```yaml
-csrf:
+repository_csrf:
   enabled: false
 ```
 
@@ -67,12 +67,12 @@ mentioned in this variable will be automatically to the list of relaxed origins
 for CORS queries. By default they will be allowed tu use any following methods:
 DELETE, GET, HEAD, OPTIONS, POST, PUT. If you want to restrict methods or
 further tweak the CORS configuration, you can do so by overriding the whole
-`cors` variable as shown below:
+`repository_cors` variable as shown below:
 
 ```yaml
-cors:
+repository_cors:
   enabled: true
-  urls: "{{ trusted_urls }}"
+  urls: "{{ repository_trusted_urls }}"
   allowed_methods:
     - GET
     - OPTIONS
@@ -98,7 +98,7 @@ cors:
 To completely disable CORS simply use:
 
 ```yaml
-cors:
+repository_cors:
   enabled: false
 ```
 

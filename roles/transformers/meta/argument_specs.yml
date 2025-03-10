@@ -71,3 +71,8 @@ argument_specs:
         required: false
         description: |
           The URL to download the checksum of the transformers All-In-One artifact.
+      transformers_acs_is_enterprise:
+        type: bool
+        required: false
+        description: |
+          Is transformers being installed with Alfresco Content Services Enterprise?

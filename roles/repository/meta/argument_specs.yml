@@ -3,7 +3,7 @@ argument_specs:
   main:
     short_description: Main entrypoint for the repository role
     options:
-      raw_properties:
+      repository_raw_properties:
         type: list
         required: false
         default: []
@@ -18,7 +18,7 @@ argument_specs:
           A YAML data structure containing all the properties you want to set
           in the alfresco-global.properties file. YAML of each leaf node is
           expanded as a path separated by '.' (e.g. alfresco.cluster.enabled)
-      repo_keystore:
+      repository_default_keystore:
         type: dict
         required: false
         no_log: true
@@ -130,3 +130,16 @@ argument_specs:
         required: false
         description: |
           A list containing the URL and checksum of additional AMP files to download
+      repository_acs_is_enterprise:
+        type: bool
+        required: false
+        default: true
+        description: |
+          Whether the ACS distribution is enterprise or not
+      repository_trusted_urls:
+        type: list
+        required: false
+        default: []
+        elements: str
+        description: |
+          A list of URLs that are considered trusted by the repository

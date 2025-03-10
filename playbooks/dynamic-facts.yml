@@ -1,0 +1,14 @@
+---
+- name: Set dynamic facts for play
+  hosts: localhost:all
+  gather_facts: false
+  tasks:
+    - name: Validate acs edition value
+      ansible.builtin.assert:
+        that:
+          - "acs_play_repository_acs_edition in ['Enterprise', 'Community']"
+        fail_msg: "Invalid acs_play_repository_acs_edition value: {{ acs_play_repository_acs_edition }}. Must be 'Enterprise' or 'Community'."
+
+    - name: Set acs edition
+      ansible.builtin.set_fact:
+        acs_is_enterprise: "{{ acs_play_repository_acs_edition == 'Enterprise' }}"

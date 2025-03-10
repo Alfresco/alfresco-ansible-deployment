@@ -1,3 +1,8 @@
+acs_play_repository_acs_artifact_name: alfresco-content-services-distribution
+acs_play_repository_acs_repository: "{{ nexus_repository.enterprise_releases }}"
+acs_play_repository_acs_archive_url: "{{ acs_play_repository_acs_repository }}/{{ acs_play_repository_acs_artifact_name }}/{{ acs_play_repository_acs_version }}/{{ acs_play_repository_acs_artifact_name }}-{{ acs_play_repository_acs_version }}.zip"
+acs_play_repository_acs_archive_checksum_url: "sha1:{{ acs_play_repository_acs_archive_url }}.sha1"
+
 acs_play_repository_jdbc_driver_class: "{{ default_jdbc_pg_driver_class }}"
 acs_play_repository_jdbc_driver_version: "{{ acs_play_jdbc_pg_driver_version }}"
 acs_play_repository_jdbc_driver_url: >-
@@ -13,7 +18,7 @@ acs_play_repository_api_explorer_archive_checksum_url: "sha1:{{ acs_play_reposit
 acs_play_repository_extra_war_downloads: []
   # - url: "https://your.repo.com/path/to/your/artifacts/your-war.war"
   #   checksum: "sha1:https://your.repo.com/path/to/your/artifacts/your-war.war.sha1"
-  #   dest: "{{ content_folder }}/web-server/webapps/your-war.war"
+  #   dest: "{{ repository_content_folder }}/web-server/webapps/your-war.war"
   #   url_username: your_username_to_repo
   #   url_password: your_password_to_repo
 
@@ -37,6 +42,49 @@ acs_play_repository_amp_aos_module_archive_url: "{{ acs_play_repository_amp_aos_
 acs_play_repository_extra_amp_downloads: []
   # - url: "https://your.repo.com/path/to/your/artifacts/your-amp.amp"
   #   checksum: "sha1:2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"
-  #   dest: "{{ content_folder }}/<amps_repo|amps_share>/your-amp.amp"
+  #   dest: "{{ repository_content_folder }}/<amps_repo|amps_share>/your-amp.amp"
   #   url_username: your_username_to_repo
   #   url_password: your_password_to_repo
+
+# To enable clustering you need to describe the shared contentstore.
+# Any storage type can be used as long as it can be mounted by the target hosts
+# using the mount(8) command.  # For more details about configuring a shared
+# contentstore for cluster see the
+# [storage_doc](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/shared-contentstore.md)
+#
+# cs_storage:
+#   type: nfs
+#   device: nas.infra.local:/exports/contentstore
+#   # as in `mount -o` options
+#   options: _netdev,noatime,nodiratime
+
+acs_play_proto: "{{ 'https' if use_ssl | bool else 'http' }}"
+acs_play_port: >-
+  {{ ports_cfg.nginx.https if use_ssl | bool else ports_cfg.nginx.http }}
+global_properties:
+  db:
+    url: >-
+      {{ acs_play_repo_db_url if acs_play_repo_db_url else 'jdbc:postgresql://' + db_host + ':' + ports_cfg.postgres.sql | string + '/' + acs_play_repo_db_name }}
+    driver: "{{ acs_play_repo_db_driver }}"
+    username: "{{ acs_play_repo_db_username }}"
+    password: "{{ repo_db_password }}"
+  alfresco:
+    host: "{{ fqdn_alfresco | default(known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"
+    port: "{{ acs_play_port }}"
+    protocol: "{{ acs_play_proto }}"
+    cluster:
+      enabled: "{{ (groups['repository'] | length > 1 and not (repository_cluster_keepoff | bool)) | lower }}"
+  share:
+    host: "{{ fqdn_alfresco | default(known_urls[0] | urlsplit('hostname')) | default(nginx_host) }}"
+    port: "{{ acs_play_port }}"
+    protocol: "{{ acs_play_proto }}"
+  messaging:
+    broker:
+      url: failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})?timeout=3000
+      username: "{{ activemq_username }}"
+      password: "{{ activemq_password }}"
+  aos:
+    baseUrlOverwrite: >-
+      {{ acs_play_proto }}://{{ fqdn_alfresco | default(nginx_host) }}:{{ acs_play_port }}/alfresco/aos
+properties_snippets:
+  - ../../configuration_files/alfresco-global.properties
