@@ -6,7 +6,7 @@ sfs_environment:
     - -Xmx512m
     - $JAVA_OPTS
 utils_sfs: []
-ats_keystore: {}
+sfs_ats_keystore: {}
 
 sfs_artifact_name: alfresco-shared-file-store-controller
 sfs_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco

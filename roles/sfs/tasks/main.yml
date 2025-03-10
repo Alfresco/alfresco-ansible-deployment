@@ -4,9 +4,9 @@
   ansible.builtin.include_role:
     name: ../roles/java
     tasks_from: keystores
-  when: ats_keystore
+  when: sfs_ats_keystore
   vars:
-    java_keystore: "{{ ats_keystore }}"
+    java_keystore: "{{ sfs_ats_keystore }}"
 - name: Install SFS
   become: true
   block:
@@ -52,7 +52,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0600"
-      when: ats_keystore
+      when: sfs_ats_keystore
       notify:
         - Restart-sfs
 
