@@ -22,10 +22,6 @@ nexus_repository:
   development_releases: >-
     {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.development.repository }}/{{ artifacts_repositories.enterprise.group_id }}
 acs_play_major_version: 23
-# common dependencies should be updated also in *-extra-vars.yml as well thanks
-# to default ansible merging behaviour
-dependencies_version:
-  postgres_major_version: 15
 sync_db_url: ""
 sync_db_driver: org.postgresql.Driver
 sync_db_name: "alfresco-sync"

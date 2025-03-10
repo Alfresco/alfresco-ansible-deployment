@@ -18,6 +18,11 @@ argument_specs:
         required: true
         description: |
           Password of the database user
+      postgres_major_version:
+        type: str
+        required: false
+        description: |
+          Major version of PostgreSQL to use
       postgres_db_clients:
         type: list
         elements: str
