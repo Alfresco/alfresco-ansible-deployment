@@ -1,6 +1,5 @@
 ---
 # vars file for search
-data_folder: /opt/alfresco
 product_dir: >-
   {{ search_flavor | regex_search('alfresco-(.*)', '\1') | first }}
 binaries_dir: "{{ binaries_folder }}/{{ product_dir }}-{{ search_version }}"
