@@ -4,14 +4,6 @@
   ansible.builtin.include_vars: "{{ item }}"
   loop: "{{ lookup('first_found', os_fallback, errors='ignore', wantlist=True) }}"
 
-- name: Instanciate Java keystore
-  ansible.builtin.include_role:
-    name: ../roles/java
-    tasks_from: keystores
-  when: trouter_ats_keystore
-  vars:
-    java_keystore: "{{ trouter_ats_keystore }}"
-
 - name: Install T-Router
   become: true
   block:
@@ -27,17 +19,6 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0755"
-
-    - name: Add AIO config mTLS config file
-      ansible.builtin.template:
-        src: mtls.properties.j2
-        dest: "{{ ats_home }}/atr-mtls.properties"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: "0600"
-      when: trouter_ats_keystore
-      notify:
-        - Restart-trouter
 
     - name: Delete T-Router startup script
       ansible.builtin.file:
@@ -76,6 +57,26 @@
         - Wait-for-aio
         - Enable-trouter
         - Restart-trouter
+
+- name: Configure Trouter mTLS authentication
+  when: trouter_ats_keystore
+  notify:
+    - Restart-trouter
+  block:
+    - name: Instanciate Java keystore
+      ansible.builtin.include_role:
+        name: ../roles/java
+        tasks_from: keystores
+      vars:
+        java_keystore: "{{ trouter_ats_keystore }}"
+
+    - name: Add AIO config mTLS config file
+      ansible.builtin.template:
+        src: mtls.properties.j2
+        dest: "{{ ats_home }}/atr-mtls.properties"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+        mode: "0600"
 
 - name: Download {{ trouter_artifact_name }}-{{ trouter_version }}.jar
   become: true
