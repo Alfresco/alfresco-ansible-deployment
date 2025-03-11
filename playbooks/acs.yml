@@ -292,6 +292,8 @@
         - ats_mtls_required
         - ats_mtls_capable
     - name: Create a list of amps
+      vars:
+        repository_content_folder: "{{ binaries_folder }}/content-services-{{ acs_play_repository_acs_version }}"
       ansible.builtin.set_fact:
         acs_play_repository_amp_downloads:
         - url: "{{ acs_play_repository_amp_googledrive_repo_archive_url }}"
