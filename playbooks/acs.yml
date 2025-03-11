@@ -2,6 +2,9 @@
 - name: Include vars based on acs major version
   ansible.builtin.import_playbook: include-vars.yml
 
+- name: Set dynamic facts for play
+  ansible.builtin.import_playbook: dynamic-facts.yml
+
 - name: Check if current OS version is in the supported matrix
   hosts: all:!external
   gather_facts: true
@@ -28,9 +31,6 @@
 
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
-
-- name: Set dynamic facts for play
-  ansible.builtin.import_playbook: dynamic-facts.yml
 
 - name: Generate hosts certificates
   vars:
