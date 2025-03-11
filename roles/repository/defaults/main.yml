@@ -12,6 +12,9 @@ repository_acs_environment:
   JAVA_TOOL_OPTIONS:
     - $JAVA_TOOL_OPTIONS
 
+repository_use_ssl: false
+repository_fqdn_alfresco: ""
+
 repository_nexus_username: null
 repository_nexus_password: null
 
