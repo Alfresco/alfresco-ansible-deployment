@@ -199,7 +199,7 @@ Follow the checklist:
 2. For minor releases, ensure to update the links beginning with
   `https://support.hyland.com/r/Alfresco` to reflect the latest version or
   corresponding minor update documentation.
-3. In case of a new ACS major version, copy the versions inside the group_vars/all.yml to a new XX.N-extra-vars.yml
+3. In case of a new ACS major version, create new vars/acsXX.yml file. Remember to move community related vars to the new file.
 4. Run the [updatecli
    workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/bumpVersions.yml)
    against an existing branch to push bumps there or against `master` to push

@@ -41,24 +41,18 @@ Alfresco also releases some hotfixes and an hotfix upgrade would be moving from 
 
 In order to apply a later hotfix, you need to first match the pre-requisites, then change the ACS version to point to the hotfix version in the appropriate file, and finally run the playbook again.
 
-In the example below we want to upgrade from the initial 7.0.1 installation to 7.0.1.4 hotfix:
+In the example below we want to upgrade from the initial 23.4.0 installation to 23.4.1 patch:
 
-Edit `7.0.N-extra-vars.yml` and changes the the below snippet:
+Edit `vars/acs23.yml` (or other vars file used before) and change the the below snippet:
 
 ```yaml
-acs:
-  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution"
-  version: 7.0.1
-  edition: Enterprise
+acs_play_repository_acs_version: 23.4.1
 ```
 
 to:
 
 ```yaml
-acs:
-  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution"
-  version: 7.0.1.4
-  edition: Enterprise
+acs_play_repository_acs_version: 23.4.1.2
 ```
 
 > IMPORTANT: make sure you do not set the version to a version number that's not a hotfix (version number needs to be 4 digits and the 3 first ones needs to match the ones of the initially deployed version)
@@ -67,20 +61,20 @@ acs:
 Once these changes are saved run the command below:
 
 ```bash
-ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.0.N-extra-vars.yml"
+ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "acs_play_major_version=23"
 ```
 
 > Note: Use whatever inventory and config file that matches your use case
-> If you're applying a hotfix to the latest major release (7.1 as of writing) you don't need to specify an extra config file with "-e @file"
+> If you're applying a hotfix to the latest major release (23 as of writing) you don't need to specify an extra config file with "-e acs_play_major_version=xx"
 
-After the playbook ran successfully your environment delivers the upgraded version of repo but the previous installation is still on the target machine. It is the admin responsibility to make sure the new system works as expected and no rollback is needed. If all is OK, the old installation previous installation can be cleaned by removing the folder: `{{ binaries_folder }}/content-services-{{ acs_play_repository_acs_version }}` (by default points to: `/opt/alfresco/content-services-7.0.1`).
+After the playbook ran successfully your environment delivers the upgraded version of repo but the previous installation is still on the target machine. It is the admin responsibility to make sure the new system works as expected and no rollback is needed. If all is OK, the previous installation can be cleaned by removing the folder: `{{ binaries_folder }}/content-services-{{ acs_play_repository_acs_version }}` (by default as of writing points to: `/opt/alfresco/content-services-23.4.1`).
 
 #### Rolling back a hotfix "in-place" upgrade
 
 If something goes wrong with the upgrade, or if tests are not successful after upgrade completed, rolling back the environment can be done by following the steps below:
 
 - restoring Database and contentstore backup
-- reverting the version changes to previous state in the config file (either `group_vars/all` or version specific config files)
+- reverting the version changes to previous state in the config file (version specific files `vars/XXacs.yml`)
 - running the playbook again.
 
 ## Upgrade impacts
