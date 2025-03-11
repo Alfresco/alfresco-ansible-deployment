@@ -31,14 +31,11 @@ provisioner:
   ansible_args:
     - -e
     - "@../../../../tests/molecule/secrets.yml"
-    - -e
-    - "@../../../../tests/test-extra-vars.yml"
   config_options:
     defaults:
       pipelining: true
   inventory:
     links:
-      group_vars: ../../../../group_vars
       host_vars: host_vars
 verifier:
   name: testinfra

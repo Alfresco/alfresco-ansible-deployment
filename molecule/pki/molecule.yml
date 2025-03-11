@@ -39,7 +39,6 @@ provisioner:
     converge: ../../playbooks/acs.yml
   inventory:
     links:
-      group_vars: ../../group_vars
       host_vars: host_vars
 verifier:
   name: ansible
