@@ -13,9 +13,9 @@ sync_environment:
     - -Xms512m
     - -Xmx2g
     - $JAVA_OPTS
-jmx_config_remote_enabled: false
-jmx_config_remote_port: 50800
-jmx_config_remote_rmi_port: 50801
+sync_jmx_config_remote_enabled: false
+sync_jmx_config_remote_port: 50800
+sync_jmx_config_remote_rmi_port: 50801
 
 sync_jdbc_driver_class: org.postgresql.Driver
 sync_jdbc_driver_version: 42.7.3
