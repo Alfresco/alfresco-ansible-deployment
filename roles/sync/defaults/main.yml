@@ -7,7 +7,7 @@ sync_zip_checksum: >-
 sync_zip_username: null
 sync_zip_password: null
 sync_home: "{{ binaries_folder }}/sync-service"
-utils_sync: []
+sync_utils: []
 sync_environment:
   JAVA_OPTS:
     - -Xms512m
