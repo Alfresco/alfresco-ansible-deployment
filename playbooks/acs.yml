@@ -242,7 +242,7 @@
           {{ 'alfresco-insight-engine' if 'insight-engine' in acs_play_search_artifact_name else 'alfresco-search-services' }}
         search_zip_url: "{{ acs_play_search_download_zip_url }}"
         search_zip_checksum_url: "{{ acs_play_search_download_zip_sha1_checksum_url }}"
-        search_master_hostname: "{{ solr_host }}"
+        search_master_host: "{{ solr_host }}"
         search_shared_secret: "{{ reposearch_shared_secret }}"
         alfresco:
           host: "{{ nginx_host }}"
