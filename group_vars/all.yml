@@ -1,1 +1,1 @@
-# All vars have been moved to playbook/group_vars/*.yml and to version specific vars/*.yml files.
+# All vars have been moved to playbooks/group_vars/*.yml and to version specific vars/*.yml files.
