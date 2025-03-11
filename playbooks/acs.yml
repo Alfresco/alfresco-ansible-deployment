@@ -2,6 +2,9 @@
 - name: Include vars based on acs major version
   ansible.builtin.import_playbook: include-vars.yml
 
+- name: Set dynamic facts for play
+  ansible.builtin.import_playbook: dynamic-facts.yml
+
 - name: Check if current OS version is in the supported matrix
   hosts: all:!external
   gather_facts: true
@@ -28,9 +31,6 @@
 
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
-
-- name: Set dynamic facts for play
-  ansible.builtin.import_playbook: dynamic-facts.yml
 
 - name: Generate hosts certificates
   vars:
@@ -292,6 +292,8 @@
         - ats_mtls_required
         - ats_mtls_capable
     - name: Create a list of amps
+      vars:
+        repository_content_folder: "{{ binaries_folder }}/content-services-{{ acs_play_repository_acs_version }}"
       ansible.builtin.set_fact:
         acs_play_repository_amp_downloads:
         - url: "{{ acs_play_repository_amp_googledrive_repo_archive_url }}"
@@ -334,6 +336,7 @@
         repository_nexus_password: "{{ nexus_password }}"
         repository_db_url: "{{ acs_play_repo_db_url }}"
         repository_acs_is_enterprise: "{{ acs_is_enterprise }}"
+        repository_acs_version: "{{ acs_play_repository_acs_version }}"
         repository_acs_artifact_name: "{{ acs_play_repository_acs_artifact_name }}"
         repository_acs_archive_url: "{{ acs_play_repository_acs_archive_url }}"
         repository_acs_archive_checksum_url: "{{ acs_play_repository_acs_archive_checksum_url }}"

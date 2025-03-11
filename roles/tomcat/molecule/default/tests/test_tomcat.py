@@ -11,13 +11,11 @@ def get_ansible_vars(host):
     tomcat_defaults = "file=../../defaults/main.yml name=tomcat_defaults"
     common_vars = "file=../../../common/vars/main.yml name=common_vars"
     common_defaults = "file=../../../common/defaults/main.yml name=common_defaults"
-    group_vars = "file=../../../../group_vars/all.yml name=group_vars"
     ansible_vars = host.ansible("include_vars", java_role)["ansible_facts"]["java_role"]
     ansible_vars.update(host.ansible("include_vars", tomcat_role)["ansible_facts"]["tomcat_role"])
     ansible_vars.update(host.ansible("include_vars", tomcat_defaults)["ansible_facts"]["tomcat_defaults"])
     ansible_vars.update(host.ansible("include_vars", common_vars)["ansible_facts"]["common_vars"])
     ansible_vars.update(host.ansible("include_vars", common_defaults)["ansible_facts"]["common_defaults"])
-    ansible_vars.update(host.ansible("include_vars", group_vars)["ansible_facts"]["group_vars"])
     return ansible_vars
 
 def test_tomcat_exe_exists(host, get_ansible_vars):

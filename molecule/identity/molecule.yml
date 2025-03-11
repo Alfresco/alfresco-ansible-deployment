@@ -32,12 +32,8 @@ provisioner:
   config_options:
     defaults:
       pipelining: True
-  ansible_args:
-    - -e
-    - "@../../tests/test-extra-vars.yml"
   inventory:
     links:
-      group_vars: ../../group_vars
       host_vars: host_vars
 verifier:
   name: ansible
