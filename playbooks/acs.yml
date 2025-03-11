@@ -334,6 +334,7 @@
         repository_nexus_password: "{{ nexus_password }}"
         repository_db_url: "{{ acs_play_repo_db_url }}"
         repository_acs_is_enterprise: "{{ acs_is_enterprise }}"
+        repository_acs_version: "{{ acs_play_repository_acs_version }}"
         repository_acs_artifact_name: "{{ acs_play_repository_acs_artifact_name }}"
         repository_acs_archive_url: "{{ acs_play_repository_acs_archive_url }}"
         repository_acs_archive_checksum_url: "{{ acs_play_repository_acs_archive_checksum_url }}"
