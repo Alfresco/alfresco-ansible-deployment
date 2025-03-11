@@ -244,7 +244,7 @@
         search_zip_checksum_url: "{{ acs_play_search_download_zip_sha1_checksum_url }}"
         search_master_host: "{{ solr_host }}"
         search_shared_secret: "{{ reposearch_shared_secret }}"
-        alfresco:
+        search_repository:
           host: "{{ nginx_host }}"
           port: "{{ ports_cfg.nginx.http }}"
           port_ssl: "{{ ports_cfg.nginx.https }}"
