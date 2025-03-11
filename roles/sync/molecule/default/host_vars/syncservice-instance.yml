@@ -1,9 +1,9 @@
 ansible_user: ansible
-known_urls:
-  - http://localhost/share
 
 repository_db_name: "alfresco"
 repository_db_username: "alfresco"
+sync_db_name: "alfresco-sync"
+sync_db_username: "alfresco-sync"
 
 global_properties:
   authentication:

@@ -1,1 +1,1 @@
-acs_play_trusted_urls: "{{ groups['trusted_resource_consumers'] | map('extract', hostvars) | map(attribute='known_urls', default=[]) | flatten }}"
+acs_play_trusted_urls: "{{ groups['trusted_resource_consumers'] | map('extract', hostvars) | map(attribute='acs_play_known_urls', default=[]) | flatten }}"

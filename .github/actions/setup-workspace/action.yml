@@ -6,6 +6,6 @@ runs:
     - name: Switch to internal repository when current or base branch is a next release branch
       if: startsWith(github.ref_name, 'next/') || startsWith(github.head_ref, 'next/') || startsWith(github.base_ref, 'next/') || contains(github.event.pull_request.labels.*.name, 'ci-prerelease')
       run: |
-        yq -i '.artifacts_repositories.enterprise.repository = "groups/internal"' group_vars/all.yml
+        yq -i '.artifacts_repositories.enterprise.repository = "groups/internal"' playbooks/group_vars/all.yml
         echo "::warning title=pre-release branch::Nexus enterprise repository override enabled, using groups/internal as main repository"
       shell: bash

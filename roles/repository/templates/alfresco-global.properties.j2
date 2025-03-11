@@ -60,7 +60,7 @@ transform.service.url={{ ats_proto() }}://{{ trouter_host }}:{{ ports_cfg.transf
 sfs.url={{ ats_proto() }}://{{ sfs_host }}:{{ ports_cfg.sfs.http }}
 {% endif %}
 
-dsync.service.uris={% if use_ssl | bool %}https{% else %}http{% endif %}://{% if fqdn_alfresco %}{{ fqdn_alfresco }}{% else %}{{ nginx_host }}{% endif %}:{% if use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_cfg.nginx.http }}{% endif %}/alfresco
+dsync.service.uris={% if repository_use_ssl | bool %}https{% else %}http{% endif %}://{% if repository_fqdn_alfresco %}{{ repository_fqdn_alfresco }}{% else %}{{ nginx_host }}{% endif %}:{% if repository_use_ssl | bool %}{{ ports_cfg.nginx.https }}{% else %}{{ ports_cfg.nginx.http }}{% endif %}/alfresco
 
 # CSRF filter overrides
 {% import 'xorigins_macros.j2' as _xorigins_protection %}

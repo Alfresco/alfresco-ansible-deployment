@@ -23,3 +23,8 @@ sync_jdbc_driver_base_url: https://repo.maven.apache.org/maven2/org/postgresql/p
 sync_jdbc_driver_url: >-
   {{ '{0}/{1}/postgresql-{1}.jar'.format(sync_jdbc_driver_base_url, sync_jdbc_driver_version) }}
 sync_jdbc_driver_checksum: "sha1:{{ sync_jdbc_driver_url }}.sha1"
+
+sync_db_url: ""
+sync_db_driver: org.postgresql.Driver
+sync_db_name: "alfresco-sync"
+sync_db_username: "alfresco-sync"

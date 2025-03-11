@@ -1,3 +1,28 @@
+# REQUIRED: add at least the Share url
+# The first entry will also be used to assume the base URL of this alfresco install
+# For more information please have a look at the
+# [security_doc](https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/SECURITY.md#specify-trustworthy-applications)
+acs_play_known_urls: []
+
+artifacts_repositories:
+  enterprise:
+    base_url: "https://artifacts.alfresco.com/nexus/content"
+    repository: "groups/private"
+    group_id: "org/alfresco"
+  community:
+    base_url: "https://artifacts.alfresco.com/nexus/content"
+    repository: "groups/public"
+    group_id: "org/alfresco"
+  development:
+    repository: "groups/internal"
+nexus_repository:
+  releases: >-
+    {{ artifacts_repositories.community.base_url }}/{{ artifacts_repositories.community.repository }}/{{ artifacts_repositories.community.group_id }}
+  enterprise_releases: >-
+    {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.enterprise.repository }}/{{ artifacts_repositories.enterprise.group_id }}
+  development_releases: >-
+    {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.development.repository }}/{{ artifacts_repositories.enterprise.group_id }}
+
 default_java_version: 17.0.14+7
 acs_play_java_core: "{{ default_java_version.split('+')[0] }}"
 acs_play_repository_acs_edition: Enterprise
@@ -14,10 +39,19 @@ acs_play_repo_db_url: ""
 acs_play_repo_db_driver: org.postgresql.Driver
 acs_play_repo_db_name: "alfresco"
 acs_play_repo_db_username: "alfresco"
+acs_play_sync_db_url: ""
+acs_play_sync_db_driver: org.postgresql.Driver
+acs_play_sync_db_name: "alfresco-sync"
+acs_play_sync_db_username: "alfresco-sync"
 
 # A default keystore is stored in /var/opt/alfresco/content-services/keystore,
 # to replace this with a custom keystore place the keystore file in the "configuration_files/keystores" folder
 # and change this flag to true. See the deployment guide for more details.
 acs_play_repository_use_custom_keystores: false
+acs_play_use_ssl: false
+# Put your domain name here if any (e.g. ecm.alfresco.com).
+# Needs to be empty if unused (don't use dummy values)
+acs_play_fqdn_alfresco: ""
 
 ansible_installation_status_file: "/opt/alfresco/.ansible_alfresco_components.status"
+autogen_unsecure_secrets: false

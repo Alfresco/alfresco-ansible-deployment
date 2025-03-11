@@ -49,7 +49,7 @@
   tasks:
     - name: Set alfresco_url from first entry of known_urls
       vars:
-        first_known_url: "{{ known_urls | first | default('http://' ~ nginx_host) }}"
+        first_known_url: "{{ acs_play_known_urls | first | default('http://' ~ nginx_host) }}"
       ansible.builtin.set_fact:
         alfresco_url: "{{ first_known_url | urlsplit('scheme') }}://{{ first_known_url | urlsplit('hostname') }}"
     - name: Populate identity_enabled
@@ -69,7 +69,7 @@
     create_repo_db: >-
       {{ (acs_play_repo_db_url == "") | ansible.builtin.bool }}
     create_sync_db: >-
-      {{ (sync_db_url == "" and groups.syncservice | default([]) | length > 0) | ansible.builtin.bool }}
+      {{ (acs_play_sync_db_url == "" and groups.syncservice | default([]) | length > 0) | ansible.builtin.bool }}
   tasks:
     - name: Install Postgres
       ansible.builtin.include_role:
@@ -93,8 +93,8 @@
         name: "{{ pg_role }}"
         tasks_from: setup_db
       vars:
-        postgres_db_name: "{{ sync_db_name }}"
-        postgres_db_username: "{{ sync_db_username }}"
+        postgres_db_name: "{{ acs_play_sync_db_name }}"
+        postgres_db_username: "{{ acs_play_sync_db_username }}"
         postgres_db_password: "{{ sync_db_password }}"
         postgres_db_clients: "{{ groups.syncservice }}"
         postgres_major_version: "{{ acs_play_postgres_major_version }}"
@@ -137,6 +137,9 @@
   gather_facts: false
   roles:
     - role: "../roles/nginx"
+      vars:
+        nginx_use_ssl: "{{ acs_play_use_ssl }}"
+        nginx_fqdn_alfresco: "{{ acs_play_fqdn_alfresco }}"
   post_tasks:
     - name: Make sure NGINX is running
       become: true
@@ -320,6 +323,8 @@
         java_version: "{{ acs_play_java_version }}"
         repository_trusted_urls: "{{ acs_play_trusted_urls }}"
         repository_default_keystore: "{{ repository_keystore | default({}) }}"
+        repository_use_ssl: "{{ acs_play_use_ssl }}"
+        repository_fqdn_alfresco: "{{ acs_play_fqdn_alfresco }}"
         repository_use_custom_keystores: "{{ acs_play_repository_use_custom_keystores }}"
         repository_properties: "{{ global_properties }}"
         repository_raw_properties: "{{ properties_snippets }}"
@@ -657,6 +662,10 @@
         sync_jdbc_driver_version: "{{ acs_play_sync_jdbc_driver_version }}"
         sync_jdbc_driver_url: "{{ acs_play_sync_jdbc_driver_url }}"
         sync_jdbc_driver_checksum: "{{ acs_play_sync_jdbc_driver_checksum }}"
+        sync_db_url: "{{ acs_play_sync_db_url }}"
+        sync_db_driver: "{{ acs_play_sync_db_driver }}"
+        sync_db_name: "{{ acs_play_sync_db_name }}"
+        sync_db_username: "{{ acs_play_sync_db_username }}"
       when: acs_is_enterprise
   post_tasks:
     - name: Update installation status file with Sync

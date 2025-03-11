@@ -84,7 +84,7 @@ activemq_password: ""
 
 If you are managing a test environment and don't want to bother manually
 configuring passwords, you can proceed as usual just by setting the
-`autogen_unsecure_secrets` variable to `true` in `group_vars/all.yml`. In this
+`autogen_unsecure_secrets` variable to `true` in `playbooks/group_vars/all.yml`. In this
 way secrets will be auto-generated but will be saved on your file-system in
 plain text as in the previous versions of the playbook.
 

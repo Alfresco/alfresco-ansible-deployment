@@ -143,3 +143,15 @@ argument_specs:
         elements: str
         description: |
           A list of URLs that are considered trusted by the repository
+      repository_use_ssl:
+        type: bool
+        required: false
+        default: false
+        description: |
+          Whether to enable SSL or not
+      repository_fqdn_alfresco:
+        type: str
+        required: false
+        default: ""
+        description: |
+          The FQDN of the Alfresco instance
