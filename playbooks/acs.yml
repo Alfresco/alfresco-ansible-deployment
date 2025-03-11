@@ -411,7 +411,7 @@
   pre_tasks:
     - name: Build keystore role argument
       ansible.builtin.set_fact:
-        trouter_keystore:
+        acs_play_trouter_keystore:
           path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
           type: JCEKS
@@ -428,7 +428,7 @@
         name: "../roles/trouter"
       vars:
         java_version: "{{ acs_play_java_version }}"
-        ats_keystore: "{{ trouter_keystore | default({}) }}"
+        trouter_ats_keystore: "{{ acs_play_trouter_keystore | default({}) }}"
         trouter_version: "{{ acs_play_trouter_version }}"
         trouter_zip_url: "{{ acs_play_trouter_download_zip_url }}"
         trouter_zip_checksum_url: "{{ acs_play_trouter_download_zip_sha1_checksum_url }}"
@@ -461,7 +461,7 @@
   pre_tasks:
     - name: Build keystore role argument
       ansible.builtin.set_fact:
-        sfs_keystore:
+        acs_play_sfs_keystore:
           path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
           type: JCEKS
@@ -483,7 +483,7 @@
         sfs_zip_checksum_url: "{{ acs_play_sfs_download_zip_sha1_checksum_url }}"
         sfs_zip_username: "{{ nexus_user }}"
         sfs_zip_password: "{{ nexus_password }}"
-        ats_keystore: "{{ sfs_keystore | default({}) }}"
+        sfs_ats_keystore: "{{ acs_play_sfs_keystore | default({}) }}"
       when: acs_is_enterprise
   post_tasks:
     - name: Update installation status file with SFS
