@@ -43,7 +43,7 @@ In order to apply a later hotfix, you need to first match the pre-requisites, th
 
 In the example below we want to upgrade from the initial 23.4.0 installation to 23.4.1 patch:
 
-Edit `vars/acs23.yml` (or other vars file used before) and change the the below snippet:
+Edit `vars/acs23.yml` (or other vars file used before) and change below snippet:
 
 ```yaml
 acs_play_repository_acs_version: 23.4.1

@@ -624,11 +624,11 @@ own domain in `playbooks/group_vars/all.yml` along with setting
 ### AMPs
 
 During playbook execution, multiple AMP files are downloaded and applied. These
-files are defined in variables with the `acs_play_repository_amp_*` prefix within
+files are defined as variables with the `acs_play_repository_amp_*` prefix within
 `playbooks/group_vars/repository.yml` and in version-specific files located in
 `vars/acsXX.yml`.
 
-Additionally, variables prefixed with `acs_play_community_repository_amp*` are
+Additionally, variables prefixed with `acs_play_community_repository_amp_*` are
 used when deploying the community version of ACS.
 
 At runtime, the list of AMP files is dynamically determined while executing the
