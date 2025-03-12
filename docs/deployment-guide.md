@@ -612,11 +612,16 @@ the `configuration_files/alfresco-global.properties` file.
 
 ### Enable SSL
 
-If you have a FQDN and a certificate you want to use place the certificate and
-the key in the `configuration_files/ssl_certificates` folder before running the
-playbook. Also replace the `acs_play_fqdn_alfresco: "your_domain.com"` with your
-own domain in `playbooks/group_vars/all.yml` along with setting
-`acs_play_use_ssl: true`.
+If you want to deploy the Alfresco platform with your own SSL certificate, place
+the certificate and key in the `configuration_files/ssl_certificates` folder
+before running the playbook.
+
+Ensure that the domain associated with this certificate is listed first in
+`acs_play_known_urls`. Additionally, update `playbooks/group_vars/all.yml` by
+setting:
+
+* `acs_play_fqdn_alfresco` to your domain (e.g., `your_domain.com`).
+* `acs_play_use_ssl: true` to enable SSL.
 
 > NOTE: The certificate and the key should be named the same as the domain eg:
 > `your_domain.com.key` and `your_domain.com.crt`

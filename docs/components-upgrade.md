@@ -67,7 +67,13 @@ ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "acs_play_major_versi
 > Note: Use whatever inventory and config file that matches your use case
 > If you're applying a hotfix to the latest major release (23 as of writing) you don't need to specify an extra config file with "-e acs_play_major_version=xx"
 
-After the playbook ran successfully your environment delivers the upgraded version of repo but the previous installation is still on the target machine. It is the admin responsibility to make sure the new system works as expected and no rollback is needed. If all is OK, the previous installation can be cleaned by removing the folder: `{{ binaries_folder }}/content-services-{{ acs_play_repository_acs_version }}` (by default as of writing points to: `/opt/alfresco/content-services-23.4.1`).
+After the playbook ran successfully your environment delivers the upgraded
+version of repo but the previous installation is still on the target machine. It
+is the admin responsibility to make sure the new system works as expected and no
+rollback is needed. If all is OK, the previous installation can be cleaned by
+removing the folder: `{{ binaries_folder }}/content-services-{{
+acs_play_repository_acs_version }}` (by default as of writing points to:
+`/opt/alfresco/content-services-23.4.1`).
 
 #### Rolling back a hotfix "in-place" upgrade
 
