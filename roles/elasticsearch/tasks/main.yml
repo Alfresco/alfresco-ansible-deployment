@@ -29,7 +29,7 @@
         name: geerlingguy.elasticsearch
       vars:
         elasticsearch_version: "{{ elasticsearch_major_version }}"
-        elasticsearch_network_host: "{{ ansible_hostname }}"
+        elasticsearch_network_host: "{{ elasticsearch_listen_address }}"
         elasticsearch_heap_size_min: 1g
         elasticsearch_heap_size_max: 1g
         elasticsearch_extra_options: |

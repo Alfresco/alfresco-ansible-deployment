@@ -4,3 +4,4 @@ elasticsearch_tmp_path: /usr/share/elasticsearch/tmp
 elasticsearch_systemd_service_path: /etc/systemd/system/elasticsearch.service.d/
 
 elasticsearch_major_version: 8.x
+elasticsearch_listen_address: "{{ ansible_hostname }}"
