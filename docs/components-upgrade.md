@@ -41,18 +41,18 @@ Alfresco also releases some hotfixes and an hotfix upgrade would be moving from 
 
 In order to apply a later hotfix, you need to first match the pre-requisites, then change the ACS version to point to the hotfix version in the appropriate file, and finally run the playbook again.
 
-In the example below we want to upgrade from the initial 23.4.0 installation to 23.4.1 patch:
+In the example below we want to upgrade from the initial 7.4.2.3 installation to 7.4.2.4 patch:
 
-Edit `vars/acs23.yml` (or other vars file used before) and change below snippet:
+Edit `vars/acs74.yml` (or other vars file used before) and change below snippet:
 
 ```yaml
-acs_play_repository_acs_version: 23.4.1
+acs_play_repository_acs_version: 7.4.2.3
 ```
 
 to:
 
 ```yaml
-acs_play_repository_acs_version: 23.4.1.2
+acs_play_repository_acs_version: 7.4.2.4
 ```
 
 > IMPORTANT: make sure you do not set the version to a version number that's not a hotfix (version number needs to be 4 digits and the 3 first ones needs to match the ones of the initially deployed version)
@@ -61,7 +61,7 @@ acs_play_repository_acs_version: 23.4.1.2
 Once these changes are saved run the command below:
 
 ```bash
-ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "acs_play_major_version=23"
+ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "acs_play_major_version=74"
 ```
 
 > Note: Use whatever inventory and config file that matches your use case
