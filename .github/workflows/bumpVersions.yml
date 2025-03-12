@@ -45,10 +45,14 @@ jobs:
 
       - name: Updatecli apply
         shell: bash
-        run: >-
-          updatecli apply --config .github/updatecli_maven.tpl
-          -v alfresco-updatecli/deployments/values/supported-matrix.yaml
-          -v .github/updatecli_maven_values.yml
+        run: |
+          set -x
+          for version_file in .github/updatecli_maven_*_values.yml; do
+            updatecli apply --config .github/updatecli_maven.tpl \
+              -v alfresco-updatecli/deployments/values/supported-matrix.yaml \
+              -v .github/updatecli_maven_values.yml \
+              -v $version_file
+          done
         env:
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
