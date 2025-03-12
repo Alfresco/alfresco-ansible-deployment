@@ -1,0 +1,67 @@
+---
+name: Bump versions
+run-name: Bump using alfresco-updatecli/${{ inputs.alfresco-updatecli-ref || 'master' }}
+
+on:
+  push:
+    paths:
+      - .github/workflows/bumpVersions.yml
+      - .github/updatecli_maven.tpl
+      - .github/updatecli_maven_values.yml
+  workflow_dispatch:
+    inputs:
+      alfresco-updatecli-ref:
+        description: "The version to use for alfresco/alfresco-updatecli configs"
+        type: string
+        default: master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  DEFAULT_BRANCH_NAME: master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Bump versions
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          token: ${{ secrets.BOT_GITHUB_TOKEN }}
+
+      - name: Install Updatecli
+        uses: Alfresco/alfresco-build-tools/.github/actions/setup-updatecli@v8.16.0
+
+      - name: Checkout updatecli configs
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: alfresco/alfresco-updatecli
+          ref: ${{ inputs.alfresco-updatecli-ref || 'master' }}
+          path: alfresco-updatecli
+
+      - name: Updatecli apply
+        shell: bash
+        run: >-
+          updatecli apply --config .github/updatecli_maven.tpl
+          -v alfresco-updatecli/deployments/values/supported-matrix.yaml
+          -v .github/updatecli_maven_values.yml
+        env:
+          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+          UPDATECLI_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+          UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME}}
+
+      - name: Git Auto Commit
+        uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5.1.0
+        with:
+          commit_message: |
+            🛠 Updatecli pipeline artifacts bump
+          commit_user_name: ${{ vars.BOT_GITHUB_USERNAME }}
+          commit_user_email: ${{ vars.BOT_GITHUB_EMAIL }}
+          branch: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME && 'updatecli-bump-versions' || github.ref_name }}
+          create_branch: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME }}
+          push_options: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME && '--force' || '' }}

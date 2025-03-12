@@ -1,0 +1,51 @@
+updatecli_matrix_version: current
+ansible_version_file: vars/acs23.yml
+ansible_default_repository_name: private
+ansible_default_group_id: org.alfresco
+artifacts:
+  # alfresco-control-center:
+  #   artifact_name_file: playbooks/group_vars/acc.yml
+  #   artifact_name_key: $.acc_artifact_id
+  #   artifact_version_key: $.acs_play_acc_version
+  #   updatecli_matrix_component_key: adminApp
+  # alfresco-digital-workspace:
+  #   artifact_name_file: playbooks/group_vars/adw.yml
+  #   artifact_name_key: $.adw_artifact_id
+  #   artifact_version_key: $.acs_play_adw_version
+  #   updatecli_matrix_component_key: adw
+  alfresco-audit-storage-app:
+    artifact_name_file: playbooks/group_vars/audit_storage.yml
+    artifact_name_key: $.audit_storage_artifact_name
+    artifact_version_key: $.acs_play_audit_storage_version
+    updatecli_matrix_component_key: audit-storage
+  alfresco-search-enterprise:
+    artifact_name_file: playbooks/group_vars/search_enterprise.yml
+    artifact_name_key: $.acs_play_search_enterprise_artifact_name
+    artifact_version_key: $.acs_play_search_enterprise_version
+    updatecli_matrix_component_key: search-enterprise
+  alfresco-search-services:
+    artifact_name_file: playbooks/group_vars/search.yml
+    artifact_name_key: $.acs_play_search_artifact_name
+    artifact_version_key: $.acs_play_search_version
+    updatecli_matrix_component_key: search
+  alfresco-sync-service:
+    artifact_name_file: playbooks/group_vars/syncservice.yml
+    artifact_name_key: $.acs_play_sync_artifact_name
+    artifact_version_key: $.acs_play_sync_version
+    updatecli_matrix_component_key: sync
+    artifact_group_id: org.alfresco.services.sync
+  alfresco-transform-core-aio:
+    artifact_name_file: playbooks/group_vars/transformers.yml
+    artifact_name_key: $.acs_play_transformers_aio_artifact_name
+    artifact_version_key: $.acs_play_transformers_aio_version
+    updatecli_matrix_component_key: tengine-aio
+  alfresco-transform-router:
+    artifact_name_file: playbooks/group_vars/transformers.yml
+    artifact_name_key: $.acs_play_trouter_artifact_name
+    artifact_version_key: $.acs_play_trouter_version
+    updatecli_matrix_component_key: trouter
+  alfresco-shared-file-store-controller:
+    artifact_name_file: playbooks/group_vars/transformers.yml
+    artifact_name_key: $.acs_play_sfs_artifact_name
+    artifact_version_key: $.acs_play_sfs_version
+    updatecli_matrix_component_key: sfs
