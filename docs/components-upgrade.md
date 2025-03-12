@@ -80,7 +80,7 @@ acs_play_repository_acs_version }}` (by default as of writing points to:
 If something goes wrong with the upgrade, or if tests are not successful after upgrade completed, rolling back the environment can be done by following the steps below:
 
 - restoring Database and contentstore backup
-- reverting the version changes to previous state in the config file (version specific files `vars/XXacs.yml`)
+- reverting the version changes to previous state in the config file (version specific files `vars/acsXX.yml`)
 - running the playbook again.
 
 ## Upgrade impacts
