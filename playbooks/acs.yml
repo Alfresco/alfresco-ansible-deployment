@@ -433,10 +433,10 @@
         java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
         trouter_ats_keystore: "{{ acs_play_trouter_keystore | default({}) }}"
         trouter_version: "{{ acs_play_trouter_version }}"
-        trouter_zip_url: "{{ acs_play_trouter_download_zip_url }}"
-        trouter_zip_checksum_url: "{{ acs_play_trouter_download_zip_sha1_checksum_url }}"
-        trouter_zip_username: "{{ nexus_user }}"
-        trouter_zip_password: "{{ nexus_password }}"
+        trouter_archive_url: "{{ acs_play_trouter_download_zip_url }}"
+        trouter_archive_checksum_url: "{{ acs_play_trouter_download_zip_sha1_checksum_url }}"
+        trouter_archive_username: "{{ nexus_user }}"
+        trouter_archive_password: "{{ nexus_password }}"
       when: acs_is_enterprise
   post_tasks:
     - name: Update installation status file with Trouter
