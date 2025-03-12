@@ -84,31 +84,35 @@ node **and** the target host.
     export NEXUS_PASSWORD="<your-password>"
     ```
 
-8. Make sure to add the `acs_play_known_urls` variables in the file `playbooks/group_vars/all.yml`.
-   It should contain any URL which is allowed to query the repository and the
-   first entry MUST be set to the dmain URL used to access Alfresco.
-   For example with the default vagrant config:
-
-    ```yaml
-    known_urls:
-      - http://192.168.56.100/
-    ```
-
-9. Run the main vagrant:
+8. Run the main vagrant command (you can pass any of the version currently
+   supported as `VAGRANT_ACS_MAJOR_VERSION`):
 
     ```bash
-    vagrant up
+    VAGRANT_ACS_MAJOR_VERSION=23 vagrant up
     ```
 
     > NOTE: The playbook takes around 30 minutes to complete and mostly depends
     > on your internet connection speed.
 
+If any step fails, you can re-run the provisioning step with:
+
+```bash
+vagrant provision
+```
+
+If you want to start from scratch, you can destroy the VM and start again with:
+
+```bash
+vagrant destroy
+vagrant up
+```
+
 Once ACS has initialized access the system using the following URLs using a browser:
 
-* Digital Workspace: `http://192.168.56.100/workspace`
-* Share: `http://192.168.56.100/share`
-* Repository: `http://192.168.56.100/alfresco`
-* API Explorer: `http://192.168.56.100/api-explorer`
+* Digital Workspace: `http://localhost/workspace`
+* Share: `http://localhost/share`
+* Repository: `http://localhost/alfresco`
+* API Explorer: `http://localhost/api-explorer`
 
 To access the machine vagrant created and ran the playbook on use `vagrant ssh`.
 
