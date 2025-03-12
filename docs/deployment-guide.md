@@ -454,7 +454,6 @@ communication paths and port numbers used.
 | elasticsearch               | 9200        | repository                                               | No                      |
 | keycloak                    | 8082        | nginx                                                    | No                      |
 | keycloak                    | 443         | repository                                               | No                      |
-| audit_storage               | 8083        | repository                                               | No                      |
 
 > NOTE: When using the ACS Community, some of these ports do not need to be opened (e.g. transform router/sfs, acc, adw).
 
