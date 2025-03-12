@@ -815,8 +815,6 @@ Edit `playbooks/group_vars/repository.yml`:
 ```yaml
 acs_play_repository_acs_artifact_name: alfresco-content-services-distribution
 acs_play_repository_acs_repository: "{{ nexus_repository.enterprise_releases }}"
-acs_play_repository_acs_archive_url: "{{ acs_play_repository_acs_repository }}/{{ acs_play_repository_acs_artifact_name }}/{{ acs_play_repository_acs_version }}/{{ acs_play_repository_acs_artifact_name }}-{{ acs_play_repository_acs_version }}.zip"
-acs_play_repository_acs_archive_checksum_url: "sha1:{{ acs_play_repository_acs_archive_url }}.sha1"
 ```
 
 to
