@@ -1,6 +1,12 @@
 ansible_default_repository_name: private
 ansible_default_group_id: org.alfresco
 artifacts:
+  # example-artifact:
+  #   artifact_name_file: file where the artifact name can be retrieved
+  #   artifact_name_key: yaml path to the artifact name field
+  #   artifact_version_key: yaml path to the artifact version field (target file is set globally)
+  #   updatecli_matrix_component_key: component name in the supported matrix in alfresco-updatecli
+  #   artifact_group_id: optional, group id of the artifact if different from the default
   # alfresco-control-center:
   #   artifact_name_file: playbooks/group_vars/acc.yml
   #   artifact_name_key: $.acc_artifact_id
