@@ -19,7 +19,7 @@ artifacts:
   #   updatecli_matrix_component_key: adw
   alfresco-audit-storage-app:
     artifact_name_file: playbooks/group_vars/audit_storage.yml
-    artifact_name_key: $.audit_storage_artifact_name
+    artifact_name_key: $.acs_play_audit_storage_artifact_name
     artifact_version_key: $.acs_play_audit_storage_version
     updatecli_matrix_component_key: audit-storage
   alfresco-repository:
