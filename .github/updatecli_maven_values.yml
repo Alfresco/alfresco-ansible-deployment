@@ -18,6 +18,11 @@ artifacts:
     artifact_name_key: $.audit_storage_artifact_name
     artifact_version_key: $.acs_play_audit_storage_version
     updatecli_matrix_component_key: audit-storage
+  alfresco-repository:
+    artifact_name_file: playbooks/group_vars/repository.yml
+    artifact_name_key: $.acs_play_repository_acs_artifact_name
+    artifact_version_key: $.acs_play_repository_acs_version
+    updatecli_matrix_component_key: content-services
   alfresco-search-enterprise:
     artifact_name_file: playbooks/group_vars/search_enterprise.yml
     artifact_name_key: $.acs_play_search_enterprise_artifact_name
