@@ -708,8 +708,8 @@
       vars:
         java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
         audit_storage_version: "{{ acs_play_audit_storage_version }}"
-        audit_storage_zip_url: "{{ audit_storage_download_zip_url }}"
-        audit_storage_zip_checksum_url: "{{ audit_storage_download_zip_sha1_checksum_url }}"
+        audit_storage_zip_url: "{{ acs_play_audit_storage_archive_url }}"
+        audit_storage_zip_checksum_url: "{{ acs_play_audit_storage_archive_checksum_url }}"
         audit_storage_username: "{{ username }}"
         audit_storage_group_name: "{{ group_name }}"
         audit_storage_broker_url: "failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})"
@@ -725,8 +725,8 @@
       vars:
         audit_storage_components:
           audit_storage:
-            artifact_name: "{{ audit_storage_artifact_name }}"
-            repository: "{{ audit_storage_repository }}"
+            artifact_name: "{{ acs_play_audit_storage_artifact_name }}"
+            repository: "{{ acs_play_audit_storage_repository }}"
             version: "{{ acs_play_audit_storage_version }}"
       ansible.builtin.blockinfile:
         block: "{{ audit_storage_components | to_nice_yaml(indent=2) }}"
