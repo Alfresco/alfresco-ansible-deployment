@@ -12,3 +12,13 @@
     - name: Set acs edition
       ansible.builtin.set_fact:
         acs_is_enterprise: "{{ acs_play_repository_acs_edition == 'Enterprise' }}"
+
+    - name: Override repo related vars when using community
+      ansible.builtin.set_fact:
+        acs_play_repository_acs_version: "{{ acs_play_community_repository_acs_version }}"
+        acs_play_repository_acs_repository: "{{ acs_play_community_repository_acs_repository }}"
+        acs_play_repository_acs_artifact_name: "{{ acs_play_community_repository_acs_artifact_name }}"
+        acs_play_repository_amp_googledrive_repo_version: "{{ acs_play_community_repository_amp_googledrive_repo_version }}"
+        acs_play_repository_amp_googledrive_repo_repository: "{{ acs_play_community_repository_amp_googledrive_repo_repository }}"
+        acs_play_repository_amp_googledrive_repo_artifact_name: "{{ acs_play_community_repository_amp_googledrive_repo_artifact_name }}"
+      when: not acs_is_enterprise

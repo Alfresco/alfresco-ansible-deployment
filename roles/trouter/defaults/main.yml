@@ -4,8 +4,10 @@ trouter_environment:
   JAVA_OPTS:
     - -Xms128m
     - -Xmx512m
-utils_trouter: []
-ats_keystore: {}
+trouter_utils: []
+trouter_ats_keystore: {}
+trouter_ats_truststore: "{{ java_home }}/lib/security/cacerts"
+trouter_ats_truststore_pass: changeit
 
 trouter_artifact_name: alfresco-transform-router
 trouter_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco

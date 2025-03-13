@@ -1,4 +1,4 @@
-utils_search:
+search_utils:
   - lsof
   - ca-certificates
   - wget

@@ -2,6 +2,9 @@
 - name: Include vars based on acs major version
   ansible.builtin.import_playbook: include-vars.yml
 
+- name: Set dynamic facts for play
+  ansible.builtin.import_playbook: dynamic-facts.yml
+
 - name: Check if current OS version is in the supported matrix
   hosts: all:!external
   gather_facts: true
@@ -28,9 +31,6 @@
 
 - name: Handle secrets
   ansible.builtin.import_playbook: secrets.yml
-
-- name: Set dynamic facts for play
-  ansible.builtin.import_playbook: dynamic-facts.yml
 
 - name: Generate hosts certificates
   vars:
@@ -117,7 +117,7 @@
         name: "../roles/activemq"
       vars:
         activemq_version: "{{ acs_play_activemq_version }}"
-        java_version: "{{ acs_play_java_version }}"
+        java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
       when: not groups.external_activemq | default([])
   tags:
     - activemq
@@ -196,7 +196,7 @@
         name: "../roles/transformers"
       vars:
         transformers_ats_keystore: "{{ transformers_keystore | default({}) }}"
-        java_version: "{{ acs_play_java_version }}"
+        java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
         transformers_acs_is_enterprise: "{{ acs_is_enterprise }}"
         transformers_libreoffice_version: "{{ acs_play_transformers_libreoffice_version }}"
         transformers_libreoffice_archive_url: "{{ acs_play_transformers_libreoffice_archive_url }}"
@@ -236,15 +236,15 @@
       ansible.builtin.import_role:
         name: "../roles/search"
       vars:
-        java_version: "{{ acs_play_java_version }}"
+        java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
         search_version: "{{ acs_play_search_version }}"
         search_flavor: >-
           {{ 'alfresco-insight-engine' if 'insight-engine' in acs_play_search_artifact_name else 'alfresco-search-services' }}
         search_zip_url: "{{ acs_play_search_download_zip_url }}"
         search_zip_checksum_url: "{{ acs_play_search_download_zip_sha1_checksum_url }}"
-        search_master_hostname: "{{ solr_host }}"
+        search_master_host: "{{ solr_host }}"
         search_shared_secret: "{{ reposearch_shared_secret }}"
-        alfresco:
+        search_repository:
           host: "{{ nginx_host }}"
           port: "{{ ports_cfg.nginx.http }}"
           port_ssl: "{{ ports_cfg.nginx.https }}"
@@ -292,6 +292,8 @@
         - ats_mtls_required
         - ats_mtls_capable
     - name: Create a list of amps
+      vars:
+        repository_content_folder: "{{ binaries_folder }}/content-services-{{ acs_play_repository_acs_version }}"
       ansible.builtin.set_fact:
         acs_play_repository_amp_downloads:
         - url: "{{ acs_play_repository_amp_googledrive_repo_archive_url }}"
@@ -320,7 +322,7 @@
       ansible.builtin.import_role:
         name: "../roles/repository"
       vars:
-        java_version: "{{ acs_play_java_version }}"
+        java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
         repository_trusted_urls: "{{ acs_play_trusted_urls }}"
         repository_default_keystore: "{{ repository_keystore | default({}) }}"
         repository_use_ssl: "{{ acs_play_use_ssl }}"
@@ -329,11 +331,12 @@
         repository_properties: "{{ global_properties }}"
         repository_raw_properties: "{{ properties_snippets }}"
         repository_identity_url: "{{ identity_url | default('') }}"
-        tomcat_version: "{{ acs_play_tomcat_version }}"
+        tomcat_version: "{{ acs_play_tomcat_version }}" # noqa: var-naming[no-role-prefix]
         repository_nexus_username: "{{ nexus_user }}"
         repository_nexus_password: "{{ nexus_password }}"
         repository_db_url: "{{ acs_play_repo_db_url }}"
         repository_acs_is_enterprise: "{{ acs_is_enterprise }}"
+        repository_acs_version: "{{ acs_play_repository_acs_version }}"
         repository_acs_artifact_name: "{{ acs_play_repository_acs_artifact_name }}"
         repository_acs_archive_url: "{{ acs_play_repository_acs_archive_url }}"
         repository_acs_archive_checksum_url: "{{ acs_play_repository_acs_archive_checksum_url }}"
@@ -411,7 +414,7 @@
   pre_tasks:
     - name: Build keystore role argument
       ansible.builtin.set_fact:
-        trouter_keystore:
+        acs_play_trouter_keystore:
           path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
           type: JCEKS
@@ -427,8 +430,8 @@
       ansible.builtin.import_role:
         name: "../roles/trouter"
       vars:
-        java_version: "{{ acs_play_java_version }}"
-        ats_keystore: "{{ trouter_keystore | default({}) }}"
+        java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
+        trouter_ats_keystore: "{{ acs_play_trouter_keystore | default({}) }}"
         trouter_version: "{{ acs_play_trouter_version }}"
         trouter_zip_url: "{{ acs_play_trouter_download_zip_url }}"
         trouter_zip_checksum_url: "{{ acs_play_trouter_download_zip_sha1_checksum_url }}"
@@ -461,7 +464,7 @@
   pre_tasks:
     - name: Build keystore role argument
       ansible.builtin.set_fact:
-        sfs_keystore:
+        acs_play_sfs_keystore:
           path: "{{ config_folder }}/pki/{{ inventory_hostname }}.keystore"
           pass: "{{ hostvars.localhost.certs_p12_passphrase }}"
           type: JCEKS
@@ -477,13 +480,13 @@
       ansible.builtin.import_role:
         name: "../roles/sfs"
       vars:
-        java_version: "{{ acs_play_java_version }}"
+        java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
         sfs_version: "{{ acs_play_sfs_version }}"
         sfs_zip_url: "{{ acs_play_sfs_download_zip_url }}"
         sfs_zip_checksum_url: "{{ acs_play_sfs_download_zip_sha1_checksum_url }}"
         sfs_zip_username: "{{ nexus_user }}"
         sfs_zip_password: "{{ nexus_password }}"
-        ats_keystore: "{{ sfs_keystore | default({}) }}"
+        sfs_ats_keystore: "{{ acs_play_sfs_keystore | default({}) }}"
       when: acs_is_enterprise
   post_tasks:
     - name: Update installation status file with SFS
@@ -513,7 +516,7 @@
       ansible.builtin.import_role:
         name: "../roles/search_enterprise"
       vars:
-        java_version: "{{ acs_play_java_version }}"
+        java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
         search_enterprise_repo_db_url: "{{ acs_play_repo_db_url }}"
         search_enterprise_repo_db_name: "{{ acs_play_repo_db_name }}"
         search_enterprise_repo_db_username: "{{ acs_play_repo_db_username }}"
@@ -653,7 +656,7 @@
       ansible.builtin.import_role:
         name: "../roles/sync"
       vars:
-        java_version: "{{ acs_play_java_version }}"
+        java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
         sync_version: "{{ acs_play_sync_version }}"
         sync_zip_url: "{{ acs_play_sync_zip_url }}"
         sync_zip_checksum: "{{ acs_play_sync_zip_sha1_checksum }}"
@@ -703,10 +706,10 @@
       ansible.builtin.import_role:
         name: "../roles/audit_storage"
       vars:
-        java_version: "{{ acs_play_java_version }}"
+        java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
         audit_storage_version: "{{ acs_play_audit_storage_version }}"
-        audit_storage_zip_url: "{{ audit_storage_download_zip_url }}"
-        audit_storage_zip_checksum_url: "{{ audit_storage_download_zip_sha1_checksum_url }}"
+        audit_storage_zip_url: "{{ acs_play_audit_storage_archive_url }}"
+        audit_storage_zip_checksum_url: "{{ acs_play_audit_storage_archive_checksum_url }}"
         audit_storage_username: "{{ username }}"
         audit_storage_group_name: "{{ group_name }}"
         audit_storage_broker_url: "failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})"
@@ -722,8 +725,8 @@
       vars:
         audit_storage_components:
           audit_storage:
-            artifact_name: "{{ audit_storage_artifact_name }}"
-            repository: "{{ audit_storage_repository }}"
+            artifact_name: "{{ acs_play_audit_storage_artifact_name }}"
+            repository: "{{ acs_play_audit_storage_repository }}"
             version: "{{ acs_play_audit_storage_version }}"
       ansible.builtin.blockinfile:
         block: "{{ audit_storage_components | to_nice_yaml(indent=2) }}"

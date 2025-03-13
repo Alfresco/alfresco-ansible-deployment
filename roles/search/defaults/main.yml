@@ -1,7 +1,6 @@
 ---
 # defaults file for search
-data_folder: /opt/alfresco
-alfresco:
+search_repository:
   host: localhost
   port: 80
   port_ssl: 443
@@ -17,8 +16,6 @@ search_cores:
   - alfresco
   - archive
 search_topology: standalone
-search_master: "{{ ansible_play_hosts_all | first }}"
-search_master_hostname: "{{ search_master }}"
-solr:
-  port: 8983
-  scheme: http
+search_master_host: "{{ ansible_play_hosts_all | first }}"
+search_master_port: 8983
+search_master_scheme: http

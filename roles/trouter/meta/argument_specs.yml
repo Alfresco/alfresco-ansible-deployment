@@ -3,7 +3,7 @@ argument_specs:
   main:
     short_description: Main entrypoint for the trouter role
     options:
-      ats_keystore:
+      trouter_ats_keystore:
         type: dict
         required: false
         no_log: true
@@ -13,6 +13,13 @@ argument_specs:
           and server configuration. The object needs to be passed as expected
           by the java role. Check the java role's arguments specification for
           details.
+      trouter_ats_truststore:
+        type: str
+        required: false
+        default: ${JAVA_HOME}/lib/security/cacerts
+        description: |
+          Path to the JRE truststore used by ATS for mTLS client configuration.
+          The truststore is used to verify the server's certificate.
       trouter_version:
         type: str
         required: false
