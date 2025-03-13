@@ -218,13 +218,18 @@
         | default(None), list_merge='prepend')
         | dict2items }}
 
-    - name: Create apply_amps.sh
+    - name: Prepare apply_amps.sh
       ansible.builtin.template:
         owner: "{{ username }}"
         group: "{{ group_name }}"
-        src: apply_amps.sh
-        dest: "{{ repository_content_folder }}"
+        src: apply_amps.sh.j2
+        dest: "{{ repository_content_folder }}/bin/apply_amps.sh"
         mode: "0755"
+
+    - name: Remove deprecated apply_amps.sh
+      ansible.builtin.file:
+        path: "{{ repository_content_folder }}/apply_amps.sh"
+        state: absent
 
     - name: Install ACS data files to Linux FHS destinations
       block:
@@ -436,7 +441,7 @@
 - name: Install amps on alfresco and share war files
   become: true
   ansible.builtin.command:
-    cmd: "{{ repository_content_folder }}/apply_amps.sh -nobackup -force"
+    cmd: "{{ repository_content_folder }}/bin/apply_amps.sh -nobackup -force"
   register: mmt_install
   changed_when: true
   tags:
