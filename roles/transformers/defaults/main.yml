@@ -15,7 +15,7 @@ transformers_libreoffice_repository: https://artifacts.alfresco.com/nexus/conten
 transformers_libreoffice_version: 7.2.5.1
 transformers_libreoffice_archive_name: "{{ transformers_libreoffice_artifact_name }}-{{ transformers_libreoffice_version }}-{{ transformers_pkg_format }}.gz"
 transformers_libreoffice_archive_url: "{{ transformers_libreoffice_repository }}/{{ transformers_libreoffice_artifact_name }}/{{ transformers_libreoffice_version }}/{{ transformers_libreoffice_archive_name }}"
-transformers_libreoffice_archive_checksum_url: "sha1:{{ transformers_libreoffice_archive_url }}.sha1"
+transformers_libreoffice_archive_checksum: "sha1:{{ transformers_libreoffice_archive_url }}.sha1"
 transformers_libreoffice_home: "/opt/libreoffice{{ transformers_libreoffice_version[0:3] }}/"
 
 transformers_pdf_artifact_name: alfresco-pdf-renderer
@@ -24,7 +24,7 @@ transformers_pdf_repository: https://artifacts.alfresco.com/nexus/content/groups
 transformers_pdf_version: 1.1
 transformers_pdf_archive_name: "{{ transformers_pdf_artifact_name }}-{{ transformers_pdf_version }}-linux.tgz"
 transformers_pdf_archive_url: "{{ transformers_pdf_repository }}/{{ transformers_pdf_artifact_name }}/{{ transformers_pdf_version }}/{{ transformers_pdf_archive_name }}"
-transformers_pdf_archive_checksum_url: "sha1:{{ transformers_pdf_archive_url }}.sha1"
+transformers_pdf_archive_checksum: "sha1:{{ transformers_pdf_archive_url }}.sha1"
 
 transformers_imagemagick_version: 7.1.0-16-ci-11
 transformers_imagemagick_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
@@ -34,4 +34,4 @@ transformers_aio_repository: https://artifacts.alfresco.com/nexus/content/groups
 
 transformers_aio_version: 5.1.6
 transformers_aio_archive_url: "{{ transformers_aio_repository }}/{{ transformers_aio_artifact_name }}/{{ transformers_aio_version }}/{{ transformers_aio_artifact_name }}-{{ transformers_aio_version }}.jar"
-transformers_aio_archive_checksum_url: "sha1:{{ transformers_aio_archive_url }}.sha1"
+transformers_aio_archive_checksum: "sha1:{{ transformers_aio_archive_url }}.sha1"
