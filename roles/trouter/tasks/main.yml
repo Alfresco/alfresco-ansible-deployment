@@ -82,14 +82,14 @@
 - name: Download {{ trouter_artifact_name }}-{{ trouter_version }}.jar
   become: true
   ansible.builtin.get_url:
-    url: "{{ trouter_zip_url }}"
+    url: "{{ trouter_archive_url }}"
     dest: "{{ ats_home }}/{{ trouter_artifact_name }}-{{ trouter_version }}.jar"
-    checksum: "{{ trouter_zip_checksum_url }}"
+    checksum: "{{ trouter_archive_checksum_url }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
-    url_username: "{{ trouter_zip_username }}"
-    url_password: "{{ trouter_zip_password }}"
+    url_username: "{{ trouter_archive_username }}"
+    url_password: "{{ trouter_archive_password }}"
     timeout: 570
 
 - name: Check if service restart is needed

@@ -12,8 +12,8 @@
       ansible.builtin.include_role:
         name: "sfs"
       vars:
-        sfs_zip_username: "{{ molecule_nexus_username }}"
-        sfs_zip_password: "{{ molecule_nexus_password }}"
+        sfs_archive_username: "{{ molecule_nexus_username }}"
+        sfs_archive_password: "{{ molecule_nexus_password }}"
     - name: "Include transformers"
       ansible.builtin.include_role:
         name: "transformers"
@@ -21,8 +21,8 @@
       ansible.builtin.include_role:
         name: "trouter"
       vars:
-        trouter_zip_username: "{{ molecule_nexus_username }}"
-        trouter_zip_password: "{{ molecule_nexus_password }}"
+        trouter_archive_username: "{{ molecule_nexus_username }}"
+        trouter_archive_password: "{{ molecule_nexus_password }}"
     - name: "Include search_enterprise"
       ansible.builtin.include_role:
         name: "search_enterprise"
