@@ -461,8 +461,7 @@ communication paths and port numbers used.
 
 By default, without any configuration applied, the playbook will deploy a
 limited trial of the Enterprise version of Alfresco Content Services that
-goes into read-only mode after 2 days. If you'd like to try Alfresco Content
-Services for a longer period, request the 30-day [Download Trial](https://www.alfresco.com/platform/content-services-ecm/trial/download).
+goes into read-only mode after 2 days.
 
 The sections below describe how you can configure your deployment before running the playbook.
 
