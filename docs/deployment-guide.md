@@ -414,7 +414,7 @@ The following systemd services are deployed and can be used to stop and start Al
 | Service Name                              | Purpose                                                                                 |
 |:------------------------------------------|:----------------------------------------------------------------------------------------|
 | `activemq.service`                        | ActiveMQ Service                                                                        |
-| `postgresql-<version>.service`            | Postgresql DB Service (where `<version>` is 13 for ACS 7.x and 14 for 7.3)              |
+| `postgresql-<version>.service`            | Postgresql DB Service (where `<version>` is 15 for ACS 23 and 14 for 7.4 and 7.3)       |
 | `nginx.service`                           | Nginx Service                                                                           |
 | `alfresco-content.service`                | Alfresco Content Service                                                                |
 | `alfresco-search.service`                 | Alfresco Search Service                                                                 |
@@ -426,6 +426,7 @@ The following systemd services are deployed and can be used to stop and start Al
 | `elasticsearch-connector-reindex.service` | Alfresco Search Enterprise job to force the reindexing of all the contents of the store |
 | `elasticsearch.service`                   | ElasticSearch Service                                                                   |
 | `keycloak.service`                        | Keycloak Service                                                                        |
+| `alfresco-audit-storage.service`          | Alfresco Audit Storage service                                                          |
 
 Please be aware that some configuration changes (e.g. postgres pg_hba,
 properties files, ...) can trigger a service restart and a consequent
@@ -462,7 +463,9 @@ communication paths and port numbers used.
 
 ## Configure Your Deployment
 
-By default, without any configuration applied, the playbook will deploy a limited trial of the Enterprise version of Alfresco Content Services 7.x that goes into read-only mode after 2 days. If you'd like to try Alfresco Content Services for a longer period, request the 30-day [Download Trial](https://www.alfresco.com/platform/content-services-ecm/trial/download).
+By default, without any configuration applied, the playbook will deploy a
+limited trial of the Enterprise version of Alfresco Content Services that
+goes into read-only mode after 2 days.
 
 The sections below describe how you can configure your deployment before running the playbook.
 
@@ -611,20 +614,46 @@ the `configuration_files/alfresco-global.properties` file.
 
 ### Enable SSL
 
-If you have a FQDN and a certificate you want to use place the certificate and the key in the `configuration_files/ssl_certificates` folder before running the playbook. Also replace the `acs_play_fqdn_alfresco: "your_domain.com"` with your own domain in `playbooks/group_vars/all.yml` along with setting `acs_play_use_ssl: true`.
+If you want to deploy the Alfresco platform with your own SSL certificate, place
+the certificate and key in the `configuration_files/ssl_certificates` folder
+before running the playbook.
 
-> NOTE: The certificate and the key should be named the same as the domain eg: `your_domain.com.key` and `your_domain.com.crt`
+Ensure that the domain associated with this certificate is listed first in
+`acs_play_known_urls`. Additionally, update `playbooks/group_vars/all.yml` by
+setting:
+
+* `acs_play_fqdn_alfresco` to your domain (e.g., `your_domain.com`).
+* `acs_play_use_ssl: true` to enable SSL.
+
+> NOTE: The certificate and the key should be named the same as the domain eg:
+> `your_domain.com.key` and `your_domain.com.crt`
 
 ### AMPs
 
-Several AMP files are downloaded and applied during playbook execution, these are defined in a variable which is either in the `group_vars/all.yml` file or an extra-var file (in case of older ACS version).
-For that reason there is common way to override that variable. If you want to change the list of AMPs you'll need to directly change the variable from the file where it is defined.
+During playbook execution, multiple AMP files are downloaded and applied. These
+files are defined as variables with the `acs_play_repository_amp_*` prefix within
+`playbooks/group_vars/repository.yml` and in version-specific files located in
+`vars/acsXX.yml`.
 
-1. Open `group_vars/all.yml` or the `x.y.N-extra-vars.yml` file  and amend `amp_downloads` variable definition
-2. In the `group_vars/all.yml` file, Add any additional AMP you want to apply to the `amp_downloads` variable as well, paying close attention to the `dest` property. If it's a repository AMP use the `amps_repo` folder, if it's a Share AMP use the `amps_share` folder
-3. Save the file and run the playbook as normal.
+Additionally, variables prefixed with `acs_play_community_repository_amp_*` are
+used when deploying the community version of ACS.
 
-> NOTE: This mechanism is sub-optimal and will be improved in a future release.
+At runtime, the list of AMP files is dynamically determined while executing the
+`acs.yml` playbook. The final list is stored in the
+`acs_play_repository_amp_downloads` variable.
+
+To add a custom AMP file, use the `acs_play_repository_extra_amp_downloads`
+variable in `playbooks/group_vars/repository.yml`. Follow the structure provided
+in the commented example below:
+
+```yml
+acs_play_repository_extra_amp_downloads: []
+  # - url: "https://your.repo.com/path/to/your/artifacts/your-amp.amp"
+  #   checksum: "sha1:2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"
+  #   dest: "{{ repository_content_folder }}/<amps_repo|amps_share>/your-amp.amp"
+  #   url_username: your_username_to_repo
+  #   url_password: your_password_to_repo
+```
 
 ### JVM Options
 
@@ -756,7 +785,7 @@ following the [instructions here][keystore-generation].
 There are three steps required to use a custom keystore:
 
 1. Place your generated keystore file in the `configuration_files/keystores` folder (these get copied to /var/opt/alfresco/content-services/keystore)
-2. Override the `use_custom_keystores` variable defined in your inventory as a `repository` group variable.
+2. Override the `repository_use_custom_keystores` variable defined in your inventory as a `repository` group variable.
 3. Override the `repository_acs_environment` variable and define your custom JAVA_TOOL_OPTIONS configuration
 4. Add `repo_custom_keystore_password` and `repo_custom_keystore_metadata_password` in `vars/secrets.yml`
 
@@ -788,22 +817,19 @@ In case you want to use a different server/repository for a specific artifact to
 
 You can change the value of `component.repository` key for the selected component, provided that the path to your custom artifact follows the conventional [Maven2 Repository Layout](https://maven.apache.org/repository/layout.html). For example to change the repository of ACS artifact you would:
 
-Edit `group_vars/all.yml`:
+Edit `playbooks/group_vars/repository.yml`:
 
 ```yaml
-acs:
-  version: 7.2.1
-  repository: "{{ nexus_repository.enterprise_releases }}/alfresco-content-services-distribution"
-  edition: Enterprise
+acs_play_repository_acs_artifact_name: alfresco-content-services-distribution
+acs_play_repository_acs_repository: "{{ nexus_repository.enterprise_releases }}"
 ```
 
 to
 
 ```yaml
-acs:
-  version: 7.2.1
-  repository: "https://your.repo.com/path/to/your/artifacts"
-  edition: Enterprise
+acs_play_repository_acs_artifact_name: my-own-alfresco-content-services-distribution
+acs_play_repository_acs_repository: "https://your.repo.com/path/to/your/artifacts"
+
 ```
 
 > This assumes that the full URL to your custom artifact looks like `https://your.repo.com/path/to/your/artifacts/7.2.1/alfresco-content-services-distribution-7.2.1.zip`
@@ -812,33 +838,14 @@ In case you want to install a different (not latest) ACS version, you should mak
 
 The other way is to override the URL completely:
 
-In `group_vars/all.yml` you need to find the section under which the default download URL for the specific artifact is defined out of `downloads`, `war_downloads` and `amp_downloads` and override it, for example:
+In `playbooks/group_vars/repository.yml` you need to find the vars in which the default download URL for the specific artifact
 
 ```yaml
-downloads:
-  acs_zip_url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-content-services-community-distribution.zip"
-  acs_zip_sha1_checksum_url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-content-services-community-distribution.zip.sha1"
+acs_play_repository_acs_archive_url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-content-services-community-distribution.zip"
+acs_play_repository_acs_archive_checksum_url: "sha1:https://your.repo.com/path/to/your/artifacts/your-alfresco-content-services-community-distribution.zip.sha1"
 ```
 
-Or:
-
-```yaml
-war_downloads:
-  - url: "https://your.repo.com/path/to/your/artifacts/your-api-explorer.war"
-    checksum: "sha1:https://your.repo.com/path/to/your/artifacts/your-api-explorer.war.sha1"
-    dest: "{{ repository_content_folder }}/web-server/webapps/api-explorer.war"
-```
-
-Or:
-
-```yaml
-amp_downloads:
-  - url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-aos-module.amp"
-    sha1_checksum_url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-aos-module.amp.sha1"
-    dest: "{{ repository_content_folder }}/amps_repo/alfresco-aos-module.amp"
-```
-
-> Be careful not to override the value for `dest` key
+You can change url for any artifact using this approach. Just look for it inside `playbooks/group_vars/*.yml` files
 
 ## Localhost Deployment
 
@@ -881,13 +888,13 @@ pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml
 Alternatively, to deploy an ACS Enterprise 7.4 system use the following command:
 
 ```bash
-pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@7.4.N-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "acs_play_major_version=74"
 ```
 
 Or to deploy ACS Community use the following command:
 
 ```bash
-pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "@community-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "acs_play_repository_acs_edition=Community"
 ```
 
 By default, the ACS playbook will now also check compatibility of OS if it is  fully supported.
@@ -979,13 +986,13 @@ pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
 Alternatively, to deploy an ACS 7.4 Enterprise system use the following command:
 
 ```bash
-pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@7.4.N-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "acs_play_major_version=74"
 ```
 
 Or to deploy latest ACS Community use the following command:
 
 ```bash
-pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@community-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "acs_play_repository_acs_edition=Community"
 ```
 
 > NOTE: The playbook takes around 30 minutes to complete.
@@ -1076,7 +1083,7 @@ ansible all -m ping -i inventory_ssh.yml
 **Optional** To check if the required ports for the deployment are available on the target machine and we also have connectivity between nodes (ex. repository connecting to the db on 5432) the prerun-network-checks playbook can be executed before you deploy ACS. If there are any firewalls blocking connectivity this playbook will discover them.
 
 ```bash
-pipenv run ansible-playbook playbooks/prerun-network-checks.yml -i inventory_ssh.yml [-e "@community-extra-vars.yml"]
+pipenv run ansible-playbook playbooks/prerun-network-checks.yml -i inventory_ssh.yml [-e "acs_play_repository_acs_edition=Community"]
 ```
 
 To deploy latest ACS Enterprise on the target hosts execute the playbook as the current user using the following command:
@@ -1088,7 +1095,7 @@ pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
 Or to deploy latest ACS Community use the following command:
 
 ```bash
-pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "@community-extra-vars.yml"
+pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "acs_play_repository_acs_edition=Community"
 ```
 
 > NOTE: The playbook takes around 30 minutes to complete.
@@ -1210,7 +1217,7 @@ This playbook will uninstall the sevices which belong to the specific hosts. Bel
    * alfresco-content.service
    * nginx.service
    * activemq.service
-   * postgresql-`version`.service (where `version` is 13 for ACS 7.x and 14 for 7.3)
+   * postgresql-`version`.service (where `version` is 15 for ACS 23 and 14 for 7.3 & 7.4)
 
 2. Remove the following packages:
    * ImageMagick

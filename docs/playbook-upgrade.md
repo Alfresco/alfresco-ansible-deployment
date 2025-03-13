@@ -6,6 +6,24 @@ title: Upgrading the playbook
 
 ## Unreleased version
 
+### Making roles independent part 2 (to be done)
+
+* The goal is to ensure that all roles are completely independent
+* The `common` role will be deprecated and removed
+
+### Making roles independent part 1
+
+* Playbook-managed variables now use the `acs_play_` prefix for consistency.
+* Inventory group variables have been transitioned to playbook group variables,
+  improving portability while slightly altering variable precedence.
+* Version-specific variables (defined in `vars/acsXX.yml`) now have a uniform
+  precedence level, regardless of the version.
+* Roles now define sensible default values for their arguments, allowing the
+  installation of a component in its latest version when no arguments are
+  provided.
+* Role arguments and variables are now prefixed with the role name to prevent
+  namespace conflicts.
+
 ### Python and Ansible version requirements
 
 The `ansible-core` version has been upgraded to 2.16, and the Python version we
