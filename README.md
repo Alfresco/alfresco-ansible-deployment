@@ -1,16 +1,26 @@
 # Alfresco Ansible Deployment
 
+![Latest Playbook](https://img.shields.io/github/v/release/Alfresco/alfresco-ansible-deployment?sort=semver&style=plastic)
+
+
 [![community](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml)
 [![enterprise](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml)
 [![release](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml)
 [![pre-commit](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/precommit.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/precommit.yml)
 [![Publish docs](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/docs.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/docs.yml)
-[![Bump artifacts versions](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/updatecli.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/updatecli.yml)
+[![Bump versions](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/bumpVersions.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/bumpVersions.yml)
 
 This project provides [Ansible](https://www.ansible.com) playbooks capable of
 deploying Alfresco Content Services (ACS) with different configuration flavours.
 
 The user documentation is available on [GitHub Pages](https://alfresco.github.io/alfresco-ansible-deployment/).
+
+:warning: This project will undergo refactoring to make it more flexible and
+allow for better modularity. For more details about recent and ongoing changes
+please refer to the [upgrade page](docs/playbook-upgrade.md), but to summarize
+starting with 3.0.0 version there may be more disruptive changes between minor
+versions so be extra cautious when trying to reuse inventories or variables
+which worked for you in previous versions.
 
 ## Developers guide
 
