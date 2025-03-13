@@ -84,7 +84,7 @@
   ansible.builtin.get_url:
     url: "{{ trouter_archive_url }}"
     dest: "{{ ats_home }}/{{ trouter_artifact_name }}-{{ trouter_version }}.jar"
-    checksum: "{{ trouter_archive_checksum_url }}"
+    checksum: "{{ trouter_archive_checksum }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: 'u=rwx,g=rwx,o=rx'
