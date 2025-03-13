@@ -2,7 +2,6 @@
 all:
   vars:
     ansible_connection: local
-    elasticsearch_listen_address: "localhost"
 
   children:
     repository:
