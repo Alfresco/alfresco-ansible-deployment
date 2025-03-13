@@ -659,7 +659,7 @@
         java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
         sync_version: "{{ acs_play_sync_version }}"
         sync_zip_url: "{{ acs_play_sync_zip_url }}"
-        sync_zip_checksum: "{{ acs_play_sync_zip_sha1_checksum }}"
+        sync_zip_checksum: "{{ acs_play_sync_zip_checksum }}"
         sync_zip_username: "{{ nexus_user }}"
         sync_zip_password: "{{ nexus_password }}"
         sync_jdbc_driver_version: "{{ acs_play_sync_jdbc_driver_version }}"
