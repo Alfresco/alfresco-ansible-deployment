@@ -1,9 +1,9 @@
 server.ssl.enabled=true
-server.ssl.key-password={{ ats_keystore.pass | default('') }}
-server.ssl.key-store={{ ats_keystore.path | quote }}
-server.ssl.key-store-password={{ ats_keystore.pass | default('') }}
-server.ssl.key-store-type={{ ats_keystore.type | default('JCEKS') }}
-server.ssl.trust-store={{ sfs_truststore_path }}
-server.ssl.trust-store-password={{ sfs_truststore_pass }}
-server.ssl.trust-store-type={{ sfs_truststore_type }}
+server.ssl.key-password={{ sfs_ats_keystore.pass | default('') }}
+server.ssl.key-store={{ sfs_ats_keystore.path | quote }}
+server.ssl.key-store-password={{ sfs_ats_keystore.pass | default('') }}
+server.ssl.key-store-type={{ sfs_ats_keystore.type | default('JCEKS') }}
+server.ssl.trust-store={{ sfs_ats_truststore }}
+server.ssl.trust-store-password={{ sfs_ats_truststore_pass }}
+server.ssl.trust-store-type={{ sfs_ats_truststore_type }}
 server.ssl.client-auth=need

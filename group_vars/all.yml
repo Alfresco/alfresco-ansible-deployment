@@ -1,1 +1,1 @@
-acs_play_major_version: 25
+# All vars have been moved to playbooks/group_vars/*.yml and to version specific vars/*.yml files.

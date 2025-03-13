@@ -1,4 +1,4 @@
 MOLECULE_IT_IMAGE_ID: ami-0230bf6b41b114fef # Rocky-9-EC2-Base-9.4-20240523.0.x86_64
-MOLECULE_IT_EXTRA_VARS: tests/test-extra-vars.yml
+MOLECULE_IT_EXTRA_VARS: acs_play_major_version=23
 MOLECULE_IT_TEST_CONFIG: tests/test-config.json
 MOLECULE_IT_PLATFORM: rocky9

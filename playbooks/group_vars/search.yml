@@ -1,4 +1,4 @@
 acs_play_search_artifact_name: alfresco-search-services
 acs_play_search_repository: "{{ nexus_repository.releases }}"
-acs_play_search_download_zip_url: "{{ acs_play_search_repository }}/{{ acs_play_search_artifact_name }}/{{ acs_play_search_version }}/{{ acs_play_search_artifact_name }}-{{ acs_play_search_version }}.zip"
-acs_play_search_download_zip_sha1_checksum_url: "sha1:{{ acs_play_search_download_zip_url }}.sha1"
+acs_play_search_zip_url: "{{ acs_play_search_repository }}/{{ acs_play_search_artifact_name }}/{{ acs_play_search_version }}/{{ acs_play_search_artifact_name }}-{{ acs_play_search_version }}.zip"
+acs_play_search_zip_checksum: "sha1:{{ acs_play_search_zip_url }}.sha1"

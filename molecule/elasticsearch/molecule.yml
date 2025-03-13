@@ -43,7 +43,6 @@ provisioner:
     - autogen_unsecure_secrets=true
   inventory:
     links:
-      group_vars: ../../group_vars
       host_vars: host_vars
   playbooks:
     prepare: ../default/prepare.yml

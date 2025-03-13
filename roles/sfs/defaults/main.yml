@@ -5,19 +5,18 @@ sfs_environment:
     - -Xms128m
     - -Xmx512m
     - $JAVA_OPTS
-utils_sfs: []
-ats_keystore: {}
-
-sfs_truststore_path: "{{ java_home + '/lib/security/cacerts' }}"
-sfs_truststore_pass: 'changeit'
-sfs_truststore_type: "{% if java_major | int >= 21 %}pkcs12{% else %}JCEKS{% endif %}"
+sfs_utils: []
+sfs_ats_keystore: {}
+sfs_ats_truststore: "{{ java_home }}/lib/security/cacerts"
+sfs_ats_truststore_pass: changeit
+sfs_ats_truststore_type: "{% if java_major | int >= 21 %}pkcs12{% else %}JCEKS{% endif %}"
 
 sfs_artifact_name: alfresco-shared-file-store-controller
 sfs_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
 
 sfs_version: 4.1.6
-sfs_zip_url: "{{ sfs_repository }}/{{ sfs_artifact_name }}/{{ sfs_version }}/{{ sfs_artifact_name }}-{{ sfs_version }}.jar"
-sfs_zip_checksum_url: "sha1:{{ sfs_zip_url }}.sha1"
+sfs_archive_url: "{{ sfs_repository }}/{{ sfs_artifact_name }}/{{ sfs_version }}/{{ sfs_artifact_name }}-{{ sfs_version }}.jar"
+sfs_archive_checksum_url: "sha1:{{ sfs_archive_url }}.sha1"
 
-sfs_zip_username: null
-sfs_zip_password: null
+sfs_archive_username: null
+sfs_archive_password: null

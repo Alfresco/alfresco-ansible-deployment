@@ -3,7 +3,7 @@ argument_specs:
   main:
     short_description: Main entrypoint for the trouter role
     options:
-      ats_keystore:
+      trouter_ats_keystore:
         type: dict
         required: false
         no_log: true
@@ -13,23 +13,30 @@ argument_specs:
           and server configuration. The object needs to be passed as expected
           by the java role. Check the java role's arguments specification for
           details.
+      trouter_ats_truststore:
+        type: str
+        required: false
+        default: ${JAVA_HOME}/lib/security/cacerts
+        description: |
+          Path to the JRE truststore used by ATS for mTLS client configuration.
+          The truststore is used to verify the server's certificate.
       trouter_version:
         type: str
         required: false
         description: The version of the T-Router artifact to be installed
-      trouter_zip_url:
+      trouter_archive_url:
         type: str
         required: false
         description: The URL to download the T-Router artifact from
-      trouter_zip_checksum_url:
+      trouter_archive_checksum_url:
         type: str
         required: false
         description: The URL to download the checksum of the T-Router artifact
-      trouter_zip_username:
+      trouter_archive_username:
         type: str
         required: false
         description: The username to use for downloading the T-Router artifact
-      trouter_zip_password:
+      trouter_archive_password:
         type: str
         required: false
         no_log: true

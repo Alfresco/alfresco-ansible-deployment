@@ -5,5 +5,5 @@ if [ $(id -u) -eq 0 ]; then
 fi
 . {{ config_folder }}/setenv.sh
 export JAVA_TOOL_OPTIONS="-Dalfresco.secureComms.secret={{ search_shared_secret | quote }}"
-export SOLR_INCLUDE={{ config_dir }}/solr.in.sh
-{{ binaries_dir }}/solr/bin/solr $*
+export SOLR_INCLUDE={{ search_config_dir }}/solr.in.sh
+{{ search_binaries_dir }}/solr/bin/solr $*

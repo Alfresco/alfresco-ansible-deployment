@@ -1,4 +1,4 @@
 ---
 # vars file for transformers
-ghostscript_packages:
+transformers_gs_packages:
   - ghostscript

@@ -55,7 +55,7 @@
 
     - name: Install optional ghostscript packages (AGPL)
       ansible.builtin.package:
-        name: "{{ ghostscript_packages }}"
+        name: "{{ transformers_gs_packages }}"
         state: present
       when: transformers_include_ghostscript
 

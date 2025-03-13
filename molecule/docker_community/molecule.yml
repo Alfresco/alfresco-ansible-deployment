@@ -34,10 +34,9 @@ provisioner:
       pipelining: true
   ansible_args:
     - -e
-    - "@../../community-extra-vars.yml"
+    - "acs_play_repository_acs_edition=Community"
   inventory:
     links:
-      group_vars: ../../group_vars
       host_vars: host_vars
   playbooks:
     prepare: ../default/prepare.yml

@@ -3,7 +3,7 @@ argument_specs:
   main:
     short_description: Main entrypoint for the tranformers role
     options:
-      ats_keystore:
+      sfs_ats_keystore:
         type: dict
         required: false
         no_log: true
@@ -13,23 +13,30 @@ argument_specs:
           and server configuration. The object needs to be passed as expected
           by the java role. Check the java role's arguments specification for
           details.
+      sfs_ats_truststore:
+        type: str
+        required: false
+        default: ${JAVA_HOME}/lib/security/cacerts
+        description: |
+          Path to the JRE truststore used by ATS for mTLS client configuration.
+          The truststore is used to verify the server's certificate.
       sfs_version:
         type: str
         required: false
         description: The version of the SFS artifact to be installed
-      sfs_zip_url:
+      sfs_archive_url:
         type: str
         required: false
         description: The URL to download the SFS artifact from
-      sfs_zip_checksum_url:
+      sfs_archive_checksum_url:
         type: str
         required: false
         description: The URL to download the checksum of the SFS artifact from
-      sfs_zip_username:
+      sfs_archive_username:
         type: str
         required: false
         description: The username to use for basic authentication when downloading the SFS artifact
-      sfs_zip_password:
+      sfs_archive_password:
         type: str
         required: false
         no_log: true

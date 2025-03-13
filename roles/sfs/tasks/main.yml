@@ -4,15 +4,15 @@
   ansible.builtin.include_role:
     name: ../roles/java
     tasks_from: keystores
-  when: ats_keystore
+  when: sfs_ats_keystore
   vars:
-    java_keystore: "{{ ats_keystore }}"
+    java_keystore: "{{ sfs_ats_keystore }}"
 - name: Install SFS
   become: true
   block:
     - name: Ensure a list of packages installed
       ansible.builtin.package:
-        name: "{{ utils_sfs }}"
+        name: "{{ sfs_utils }}"
         state: present
 
     - name: Create transform services folder
@@ -25,14 +25,14 @@
 
     - name: Download {{ sfs_artifact_name }}-{{ sfs_version }}.jar
       ansible.builtin.get_url:
-        url: "{{ sfs_zip_url }}"
+        url: "{{ sfs_archive_url }}"
         dest: "{{ ats_home }}/{{ sfs_artifact_name }}-{{ sfs_version }}.jar"
-        checksum: "{{ sfs_zip_checksum_url }}"
+        checksum: "{{ sfs_archive_checksum_url }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0644"
-        url_username: "{{ sfs_zip_username | default(omit) }}"
-        url_password: "{{ sfs_zip_password | default(omit) }}"
+        url_username: "{{ sfs_archive_username | default(omit) }}"
+        url_password: "{{ sfs_archive_password | default(omit) }}"
         timeout: 570
 
     - name: Add sfs startup script
@@ -52,7 +52,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0600"
-      when: ats_keystore
+      when: sfs_ats_keystore
       notify:
         - Restart-sfs
 

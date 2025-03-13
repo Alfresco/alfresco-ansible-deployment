@@ -26,7 +26,7 @@
   block:
     - name: Ensure a list of packages installed
       ansible.builtin.package:
-        name: "{{ utils_sync }}"
+        name: "{{ sync_utils }}"
         state: present
 
     - name: Copy files to {{ sync_home }}

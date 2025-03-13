@@ -24,7 +24,6 @@ provisioner:
       pipelining: True
   inventory:
     links:
-      group_vars: ../../../../group_vars
       host_vars: host_vars
 verifier:
   name: testinfra
