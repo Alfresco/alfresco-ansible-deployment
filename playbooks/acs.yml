@@ -709,7 +709,7 @@
         java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
         audit_storage_version: "{{ acs_play_audit_storage_version }}"
         audit_storage_zip_url: "{{ acs_play_audit_storage_archive_url }}"
-        audit_storage_zip_checksum_url: "{{ acs_play_audit_storage_archive_checksum }}"
+        audit_storage_zip_checksum: "{{ acs_play_audit_storage_archive_checksum }}"
         audit_storage_username: "{{ username }}"
         audit_storage_group_name: "{{ group_name }}"
         audit_storage_broker_url: "failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})"
