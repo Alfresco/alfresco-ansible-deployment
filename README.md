@@ -2,7 +2,6 @@
 
 ![Latest Playbook](https://img.shields.io/github/v/release/Alfresco/alfresco-ansible-deployment?sort=semver&style=plastic)
 
-
 [![community](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml)
 [![enterprise](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml)
 [![release](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml)
@@ -210,21 +209,26 @@ Follow the checklist:
   `https://support.hyland.com/r/Alfresco` to reflect the latest version or
   corresponding minor update documentation.
 3. In case of a new ACS major version, create new vars/acsXX.yml file. Remember to move community related vars to the new file.
-4. Run the [updatecli
+4. Always check the no changes are left under the "Unreleased version" section
+   in the [playbook upgrade doc](docs/playbook-upgrade.md). Also make sure this
+   section for the version you're about to release contains any breaking or
+   important change.
+Stay tuned and check the documentation for regular status updates. There may also be more disruptive changes between minor versions in this 3.x releases
+5. Run the [updatecli
    workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/bumpVersions.yml)
    against an existing branch to push bumps there or against `master` to push
    the bumps to `updatecli-bump-versions` branch.
-5. Ensure that the [versions table in the main readme](docs/overview.md#versioning) has been updated
-6. Ensure that docker images and AMI id for the root molecule tests are
+6. Ensure that the [versions table in the main readme](docs/overview.md#versioning) has been updated
+7. Ensure that docker images and AMI id for the root molecule tests are
    reflecting any minor OS release (e.g. [default suite](../molecule/default/))
-7. Ensure that activemq, tomcat and java versions are up to date (latest patch version)
-8. After merging every pending PR, proceed with tagging:
+8. Ensure that activemq, tomcat and java versions are up to date (latest patch version)
+9. After merging every pending PR, proceed with tagging:
    * `git tag -s v2.x.x -m v2.x.x`
    * `git push origin v2.x.x`
-9. Wait for the [Release
+10. Wait for the [Release
   workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml)
   go green.
-10. [Draft a new
+11. [Draft a new
   release](https://github.com/Alfresco/alfresco-ansible-deployment/releases) on
   GitHub with the tag you just pushed. If the release is for a new ACS major
   version, mention the ACS release in the title, e.g. v2.x.x (ACS 23.4.0)
