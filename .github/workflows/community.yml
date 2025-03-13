@@ -2,7 +2,9 @@ name: "community"
 
 on:
   pull_request:
-    branches: [master]
+    branches:
+      - master
+      - 'next/**'
     paths-ignore:
       - "docs/**"
       - "*.md"
@@ -54,7 +56,7 @@ jobs:
         molecule_distro:
           - image: ubuntu:24.04
           - image: ubuntu:22.04
-          - image: rockylinux/rockylinux:9.4
+          - image: rockylinux/rockylinux:9.5
         role:
           - name: activemq
           - name: common
@@ -114,7 +116,7 @@ jobs:
       matrix:
         molecule_distro:
           - image: ubuntu:22.04
-          - image: rockylinux/rockylinux:9.4
+          - image: rockylinux/rockylinux:9.5
         scenario:
           - name: docker_community
     uses: ./.github/workflows/docker.yml

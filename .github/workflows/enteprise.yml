@@ -2,7 +2,9 @@ name: "enterprise"
 
 on:
   pull_request:
-    branches: [master]
+    branches:
+      - master
+      - 'next/**'
     types: [labeled, opened, synchronize, reopened]
     paths-ignore:
       - "docs/**"
@@ -72,8 +74,8 @@ jobs:
       fail-fast: false
       matrix:
         molecule_distro:
-          - image: ubuntu:22.04
-          - image: rockylinux/rockylinux:9.4
+          - image: ubuntu:24.04
+          - image: rockylinux/rockylinux:9.5
         role:
           - name: adf_app
           - name: search_enterprise
@@ -132,8 +134,8 @@ jobs:
       fail-fast: false
       matrix:
         molecule_distro:
-          - image: ubuntu:22.04
-          - image: rockylinux/rockylinux:9.4
+          - image: ubuntu:24.04
+          - image: rockylinux/rockylinux:9.5
         scenario:
           - name: pki
           - name: elasticsearch
@@ -145,12 +147,7 @@ jobs:
           - scenario:
               name: docker_enterprise
             molecule_distro:
-              image: rockylinux/rockylinux:9.4
-            runner: ubuntu-24.04-arm
-          - scenario:
-              name: docker_enterprise
-            molecule_distro:
-              image: ubuntu:22.04
+              image: rockylinux/rockylinux:9.5
             runner: ubuntu-24.04-arm
           - scenario:
               name: docker_enterprise

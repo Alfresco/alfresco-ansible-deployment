@@ -48,11 +48,9 @@
       ansible.builtin.slurp:
         src: /var/log/alfresco/{{ item.file }}.log
       register: ats_log
-      become: true
       until:
         - item.pattern in ats_log.content | b64decode
-      retries: 10
-      delay: 3
+      no_log: true
       loop:
         - file: ats-atr
           pattern: GET Transform Config version
@@ -60,6 +58,8 @@
         - file: ats-shared-fs
           pattern: TLS virtual host
           edition: Enterprise
+      retries: 10
+      delay: 3
 
     - name: Copy cert as PEM
       ansible.builtin.copy:

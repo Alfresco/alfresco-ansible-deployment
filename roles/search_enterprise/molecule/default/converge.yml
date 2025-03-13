@@ -8,24 +8,33 @@
     - name: "Include activemq"
       ansible.builtin.include_role:
         name: "activemq"
+
+    - name: "Include elasticsearch"
+      ansible.builtin.include_role:
+        name: "elasticsearch"
+
     - name: "Include sfs"
       ansible.builtin.include_role:
         name: "sfs"
       vars:
         sfs_archive_username: "{{ molecule_nexus_username }}"
         sfs_archive_password: "{{ molecule_nexus_password }}"
+
     - name: "Include transformers"
       ansible.builtin.include_role:
         name: "transformers"
+
     - name: "Include t-router"
       ansible.builtin.include_role:
         name: "trouter"
       vars:
         trouter_archive_username: "{{ molecule_nexus_username }}"
         trouter_archive_password: "{{ molecule_nexus_password }}"
+
     - name: "Include search_enterprise"
       ansible.builtin.include_role:
         name: "search_enterprise"
       vars:
+        elasticsearch_host: "{{ ansible_hostname }}"
         search_enterprise_zip_username: "{{ molecule_nexus_username }}"
         search_enterprise_zip_password: "{{ molecule_nexus_password }}"
