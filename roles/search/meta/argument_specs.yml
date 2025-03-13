@@ -95,7 +95,7 @@ argument_specs:
           The URL of the Search Service zip file to download.
         required: false
         type: str
-      search_zip_checksum_url:
+      search_zip_checksum:
         description: |
           The URL of the Search Service zip file checksum to download.
         required: false

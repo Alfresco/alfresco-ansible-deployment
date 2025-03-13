@@ -24,7 +24,7 @@ repository_acs_repository: https://artifacts.alfresco.com/nexus/content/groups/p
 
 repository_acs_version: 23.4.1
 repository_acs_archive_url: "{{ repository_acs_repository }}/{{ repository_acs_artifact_name }}/{{ repository_acs_version }}/{{ repository_acs_artifact_name }}-{{ repository_acs_version }}.zip"
-repository_acs_archive_checksum_url: "sha1:{{ repository_acs_archive_url }}.sha1"
+repository_acs_archive_checksum: "sha1:{{ repository_acs_archive_url }}.sha1"
 repository_acs_nexus_username: "{{ repository_nexus_username }}"
 repository_acs_nexus_password: "{{ repository_nexus_password }}"
 
@@ -37,7 +37,7 @@ repository_api_explorer_repository: https://artifacts.alfresco.com/nexus/content
 
 repository_api_explorer_version: 23.4.0
 repository_api_explorer_archive_url: "{{ repository_api_explorer_repository }}/{{ repository_api_explorer_artifact_name }}/{{ repository_api_explorer_version }}/{{ repository_api_explorer_artifact_name }}-{{ repository_api_explorer_version }}.war"
-repository_api_explorer_archive_checksum_url: "sha1:{{ repository_api_explorer_archive_url }}.sha1"
+repository_api_explorer_archive_checksum: "sha1:{{ repository_api_explorer_archive_url }}.sha1"
 repository_api_explorer_nexus_username: "{{ repository_nexus_username }}"
 repository_api_explorer_nexus_password: "{{ repository_nexus_password }}"
 

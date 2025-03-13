@@ -10,7 +10,7 @@ argument_specs:
       search_enterprise_zip_url:
         description: Search Enterprise dependency URL to use for deployment
         required: false
-      search_enterprise_zip_checksum_url:
+      search_enterprise_zip_checksum:
         description: Search Enterprise dependency checksum URL to use for deployment
         required: false
       search_enterprise_zip_username:

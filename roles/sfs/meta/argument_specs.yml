@@ -28,7 +28,7 @@ argument_specs:
         type: str
         required: false
         description: The URL to download the SFS artifact from
-      sfs_archive_checksum_url:
+      sfs_archive_checksum:
         type: str
         required: false
         description: The URL to download the checksum of the SFS artifact from

@@ -5,7 +5,7 @@
     - name: Download libreoffice package archive
       ansible.builtin.get_url:
         url: "{{ transformers_libreoffice_archive_url }}"
-        checksum: "{{ transformers_libreoffice_archive_checksum_url }}"
+        checksum: "{{ transformers_libreoffice_archive_checksum }}"
         dest: "{{ download_location }}/libreoffice.tar.gz"
         mode: "0644"
 
