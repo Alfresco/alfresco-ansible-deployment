@@ -188,14 +188,22 @@ doc](./README.md#versioning)
 
 ## Release
 
-Follow this quick checklist:
+First ensure that the
+[supported-matrix](https://github.com/Alfresco/alfresco-updatecli/blob/master/deployments/values/supported-matrix.yaml)
+reflects the status of the currently released Alfresco products and update if
+necessary before proceeding.
+
+Follow the checklist:
 
 1. Review currently open dependabot/renovate and merge them.
 2. For minor releases, ensure to update the links beginning with
   `https://support.hyland.com/r/Alfresco` to reflect the latest version or
   corresponding minor update documentation.
 3. In case of a new ACS major version, copy the versions inside the group_vars/all.yml to a new XX.N-extra-vars.yml
-4. Bump versions constraints in scripts/updatecli/updatecli_acs*.yml (workflow will take care of the rest)
+4. Run the [updatecli
+   workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/bumpVersions.yml)
+   against an existing branch to push bumps there or against `master` to push
+   the bumps to `updatecli-bump-versions` branch.
 5. Ensure that the [versions table in the main readme](docs/overview.md#versioning) has been updated
 6. Ensure that docker images and AMI id for the root molecule tests are
    reflecting any minor OS release (e.g. [default suite](../molecule/default/))

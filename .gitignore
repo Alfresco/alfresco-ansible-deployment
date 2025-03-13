@@ -380,3 +380,4 @@ apache-tomcat-*.tar.gz
 downloads/
 
 .ansible/
+alfresco-updatecli/
