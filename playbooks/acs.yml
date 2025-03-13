@@ -483,7 +483,7 @@
         java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
         sfs_version: "{{ acs_play_sfs_version }}"
         sfs_archive_url: "{{ acs_play_sfs_archive_url }}"
-        sfs_archive_checksum_url: "{{ acs_play_sfs_archive_checksum }}"
+        sfs_archive_checksum: "{{ acs_play_sfs_archive_checksum }}"
         sfs_archive_username: "{{ nexus_user }}"
         sfs_archive_password: "{{ nexus_password }}"
         sfs_ats_keystore: "{{ acs_play_sfs_keystore | default({}) }}"
