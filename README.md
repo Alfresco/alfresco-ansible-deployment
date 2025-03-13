@@ -1,13 +1,14 @@
 # Alfresco Ansible Deployment
 
-![Latest Playbook](https://img.shields.io/github/v/release/Alfresco/alfresco-ansible-deployment?sort=semver&style=plastic)
+![GitHub Release](https://img.shields.io/github/v/release/Alfresco/alfresco-ansible-deployment?sort=semver&style=plastic&logo=ansible)
 
+[![pre-commit](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/precommit.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/precommit.yml)
 [![community](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml)
 [![enterprise](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml)
-[![release](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml)
-[![pre-commit](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/precommit.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/precommit.yml)
-[![Publish docs](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/docs.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/docs.yml)
 [![Bump versions](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/bumpVersions.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/bumpVersions.yml)
+
+[![release](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml)
+[![Publish docs](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/docs.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/docs.yml)
 
 This project provides [Ansible](https://www.ansible.com) playbooks capable of
 deploying Alfresco Content Services (ACS) with different configuration flavours.
