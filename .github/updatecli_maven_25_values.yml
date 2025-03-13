@@ -1,0 +1,2 @@
+updatecli_matrix_version: current
+ansible_version_file: vars/acs25.yml
