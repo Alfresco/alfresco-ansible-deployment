@@ -241,7 +241,7 @@
         search_flavor: >-
           {{ 'alfresco-insight-engine' if 'insight-engine' in acs_play_search_artifact_name else 'alfresco-search-services' }}
         search_zip_url: "{{ acs_play_search_zip_url }}"
-        search_zip_checksum_url: "{{ acs_play_search_zip_checksum }}"
+        search_zip_checksum: "{{ acs_play_search_zip_checksum }}"
         search_master_host: "{{ solr_host }}"
         search_shared_secret: "{{ reposearch_shared_secret }}"
         search_repository:
