@@ -1,4 +1,4 @@
 acs_play_search_enterprise_artifact_name: alfresco-elasticsearch-connector-distribution
 acs_play_search_enterprise_repository: "{{ nexus_repository.enterprise_releases }}"
-acs_play_search_enterprise_download_zip_url: "{{ acs_play_search_enterprise_repository }}/{{ acs_play_search_enterprise_artifact_name }}/{{ acs_play_search_enterprise_version }}/{{ acs_play_search_enterprise_artifact_name }}-{{ acs_play_search_enterprise_version }}.zip"
-acs_play_search_enterprise_download_zip_sha1_checksum_url: "sha1:{{ acs_play_search_enterprise_download_zip_url }}.sha1"
+acs_play_search_enterprise_zip_url: "{{ acs_play_search_enterprise_repository }}/{{ acs_play_search_enterprise_artifact_name }}/{{ acs_play_search_enterprise_version }}/{{ acs_play_search_enterprise_artifact_name }}-{{ acs_play_search_enterprise_version }}.zip"
+acs_play_search_enterprise_zip_checksum_url: "sha1:{{ acs_play_search_enterprise_zip_url }}.sha1"

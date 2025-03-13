@@ -207,8 +207,8 @@
         transformers_imagemagick_version: "{{ acs_play_transformers_imagemagick_version }}"
         transformers_imagemagick_repository: "{{ acs_play_transformers_imagemagick_repository }}"
         transformers_aio_version: "{{ acs_play_transformers_aio_version }}"
-        transformers_aio_archive_url: "{{ acs_play_transformers_aio_download_archive_url }}"
-        transformers_aio_archive_checksum_url: "{{ acs_play_transformers_aio_download_archive_sha1_checksum_url }}"
+        transformers_aio_archive_url: "{{ acs_play_transformers_aio_archive_url }}"
+        transformers_aio_archive_checksum_url: "{{ acs_play_transformers_aio_archive_checksum_url }}"
   post_tasks:
     - name: Update installation status file with Transformers
       become: true
@@ -240,8 +240,8 @@
         search_version: "{{ acs_play_search_version }}"
         search_flavor: >-
           {{ 'alfresco-insight-engine' if 'insight-engine' in acs_play_search_artifact_name else 'alfresco-search-services' }}
-        search_zip_url: "{{ acs_play_search_download_zip_url }}"
-        search_zip_checksum_url: "{{ acs_play_search_download_zip_sha1_checksum_url }}"
+        search_zip_url: "{{ acs_play_search_zip_url }}"
+        search_zip_checksum_url: "{{ acs_play_search_zip_checksum_url }}"
         search_master_host: "{{ solr_host }}"
         search_shared_secret: "{{ reposearch_shared_secret }}"
         search_repository:
@@ -433,8 +433,8 @@
         java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
         trouter_ats_keystore: "{{ acs_play_trouter_keystore | default({}) }}"
         trouter_version: "{{ acs_play_trouter_version }}"
-        trouter_archive_url: "{{ acs_play_trouter_download_archive_url }}"
-        trouter_archive_checksum_url: "{{ acs_play_trouter_download_archive_sha1_checksum_url }}"
+        trouter_archive_url: "{{ acs_play_trouter_archive_url }}"
+        trouter_archive_checksum_url: "{{ acs_play_trouter_archive_checksum_url }}"
         trouter_archive_username: "{{ nexus_user }}"
         trouter_archive_password: "{{ nexus_password }}"
       when: acs_is_enterprise
@@ -482,8 +482,8 @@
       vars:
         java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
         sfs_version: "{{ acs_play_sfs_version }}"
-        sfs_archive_url: "{{ acs_play_sfs_download_archive_url }}"
-        sfs_archive_checksum_url: "{{ acs_play_sfs_download_archive_sha1_checksum_url }}"
+        sfs_archive_url: "{{ acs_play_sfs_archive_url }}"
+        sfs_archive_checksum_url: "{{ acs_play_sfs_archive_checksum_url }}"
         sfs_archive_username: "{{ nexus_user }}"
         sfs_archive_password: "{{ nexus_password }}"
         sfs_ats_keystore: "{{ acs_play_sfs_keystore | default({}) }}"
@@ -521,8 +521,8 @@
         search_enterprise_repo_db_name: "{{ acs_play_repo_db_name }}"
         search_enterprise_repo_db_username: "{{ acs_play_repo_db_username }}"
         search_enterprise_version: "{{ acs_play_search_enterprise_version }}"
-        search_enterprise_zip_url: "{{ acs_play_search_enterprise_download_zip_url }}"
-        search_enterprise_zip_checksum_url: "{{ acs_play_search_enterprise_download_zip_sha1_checksum_url }}"
+        search_enterprise_zip_url: "{{ acs_play_search_enterprise_zip_url }}"
+        search_enterprise_zip_checksum_url: "{{ acs_play_search_enterprise_zip_checksum_url }}"
         search_enterprise_zip_username: "{{ nexus_user }}"
         search_enterprise_zip_password: "{{ nexus_password }}"
       when: acs_is_enterprise
