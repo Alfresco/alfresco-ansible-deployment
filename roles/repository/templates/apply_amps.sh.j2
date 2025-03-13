@@ -1,16 +1,18 @@
 #!/bin/sh
 . {{ config_folder }}/setenv.sh
 
-if [ -d ${ACS_HOME}/amps ]; then
+if [ -d ${ACS_HOME}/amps_repo ]; then
   echo "Installing Content Services Platform AMPs ..."
   ${JAVA_HOME}/bin/java -jar ${ACS_HOME}/bin/alfresco-mmt.jar install ${ACS_HOME}/amps_repo ${ACS_HOME}/web-server/webapps/alfresco.war -directory -nobackup $*
 fi
+echo "Listing Content Services Platform AMPs ..."
 ${JAVA_HOME}/bin/java -jar ${ACS_HOME}/bin/alfresco-mmt.jar list ${ACS_HOME}/web-server/webapps/alfresco.war
 
 if [ -d ${ACS_HOME}/amps_share ]; then
   echo "Installing Content Services Share AMPs ..."
   ${JAVA_HOME}/bin/java -jar ${ACS_HOME}/bin/alfresco-mmt.jar install ${ACS_HOME}/amps_share ${ACS_HOME}/web-server/webapps/share.war -directory -nobackup $*
 fi
+echo "Listing Content Services Share AMPs ..."
 ${JAVA_HOME}/bin/java -jar ${ACS_HOME}/bin/alfresco-mmt.jar list ${ACS_HOME}/web-server/webapps/share.war
 
 echo "Clearing Tomcat Application Cache ..."
