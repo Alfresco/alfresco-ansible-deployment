@@ -39,6 +39,6 @@
     - name: Download Tomcat archive
       ansible.builtin.get_url:
         url: "{{ tomcat_artifact_url }}"
-        checksum: "{{ tomcat_artifact_checksum_url }}"
+        checksum: "{{ tomcat_artifact_checksum }}"
         dest: "{{ download_path.path }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
         mode: "0644"
