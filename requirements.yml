@@ -17,7 +17,7 @@ collections:
   - name: amazon.aws
     version: 9.1.1
   - name: community.aws
-    version: 9.0.0
+    version: 9.1.0
 
 roles:
   - name: geerlingguy.elasticsearch
