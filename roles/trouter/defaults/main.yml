@@ -8,7 +8,7 @@ trouter_utils: []
 trouter_ats_keystore: {}
 trouter_ats_truststore: "{{ java_home }}/lib/security/cacerts"
 trouter_ats_truststore_pass: changeit
-trouter_ats_truststore_type: "{% if java_major | int >= 21 %}pkcs12{% else %}JCEKS{% endif %}"
+trouter_ats_truststore_type: "JCEKS"
 
 trouter_artifact_name: alfresco-transform-router
 trouter_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco

@@ -209,6 +209,7 @@
         transformers_aio_version: "{{ acs_play_transformers_aio_version }}"
         transformers_aio_archive_url: "{{ acs_play_transformers_aio_archive_url }}"
         transformers_aio_archive_checksum: "{{ acs_play_transformers_aio_archive_checksum }}"
+        transformers_truststore_type: "{{ acs_play_default_truststore_type }}"
   post_tasks:
     - name: Update installation status file with Transformers
       become: true
@@ -350,6 +351,7 @@
         repository_amp_downloads: "{{ acs_play_repository_amp_downloads }}"
         repository_extra_war_downloads: "{{ acs_play_repository_extra_war_downloads }}"
         repository_extra_amp_downloads: "{{ acs_play_repository_extra_amp_downloads }}"
+        repository_truststore_type: "{{ acs_play_default_truststore_type }}"
   post_tasks:
     - name: Initialize evaluation of currently installed amps
       ansible.builtin.set_fact:
@@ -437,6 +439,7 @@
         trouter_archive_checksum: "{{ acs_play_trouter_archive_checksum }}"
         trouter_archive_username: "{{ nexus_user }}"
         trouter_archive_password: "{{ nexus_password }}"
+        trouter_ats_truststore_type: "{{ acs_play_default_truststore_type }}"
       when: acs_is_enterprise
   post_tasks:
     - name: Update installation status file with Trouter
@@ -487,6 +490,7 @@
         sfs_archive_username: "{{ nexus_user }}"
         sfs_archive_password: "{{ nexus_password }}"
         sfs_ats_keystore: "{{ acs_play_sfs_keystore | default({}) }}"
+        sfs_ats_truststore_type: "{{ acs_play_default_truststore_type }}"
       when: acs_is_enterprise
   post_tasks:
     - name: Update installation status file with SFS

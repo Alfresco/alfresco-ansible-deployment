@@ -139,3 +139,5 @@ repository_amp_downloads: []
 
 # Additional list of amp downloads. Same structure as repository_amp_downloads
 repository_extra_amp_downloads: []
+
+repository_truststore_type: JCEKS

@@ -33,7 +33,7 @@ encryption.keystore.backup.type=JCEKS
 {% endif %}
 
 encryption.ssl.truststore.location={{ java_truststore | default(java_home + '/lib/security/cacerts') }}
-encryption.ssl.truststore.type={% if java_major | int >= 21 %}pkcs12{% else %}JCEKS{% endif %}
+encryption.ssl.truststore.type={{ repository_truststore_type }}
 
 {% if repository_default_keystore %}
 encryption.ssl.keystore.location={{ repository_default_keystore.path }}
