@@ -52,6 +52,9 @@ jobs:
               -v alfresco-updatecli/deployments/values/supported-matrix.yaml \
               -v .github/updatecli_maven_values.yml \
               -v $version_file
+            updatecli apply --config .github/updatecli_amps.tpl \
+              -v .github/updatecli_amps_values.yml \
+              -v $version_file
           done
         env:
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
