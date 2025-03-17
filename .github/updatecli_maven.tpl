@@ -42,7 +42,7 @@ targets:
     kind: yaml
     sourceid: src_{{ $key }}
     spec:
-      file: "{{ $.ansible_version_file }}"
+      file: "{{ $artifact.ansible_version_file | default $.ansible_version_file }}"
       key: "{{ $artifact.artifact_version_key }}"
   {{- end }}
 {{- end }}
