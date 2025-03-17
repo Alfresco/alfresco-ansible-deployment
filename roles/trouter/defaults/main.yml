@@ -15,7 +15,7 @@ trouter_repository: https://artifacts.alfresco.com/nexus/content/groups/private/
 
 trouter_version: 4.1.6
 trouter_archive_url: "{{ trouter_repository }}/{{ trouter_artifact_name }}/{{ trouter_version }}/{{ trouter_artifact_name }}-{{ trouter_version }}.jar"
-trouter_archive_checksum_url: "sha1:{{ trouter_archive_url }}.sha1"
+trouter_archive_checksum: "sha1:{{ trouter_archive_url }}.sha1"
 
 trouter_archive_username: null
 trouter_archive_password: null

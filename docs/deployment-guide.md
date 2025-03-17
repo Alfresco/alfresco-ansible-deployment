@@ -842,7 +842,7 @@ In `playbooks/group_vars/repository.yml` you need to find the vars in which the 
 
 ```yaml
 acs_play_repository_acs_archive_url: "https://your.repo.com/path/to/your/artifacts/your-alfresco-content-services-community-distribution.zip"
-acs_play_repository_acs_archive_checksum_url: "sha1:https://your.repo.com/path/to/your/artifacts/your-alfresco-content-services-community-distribution.zip.sha1"
+acs_play_repository_acs_archive_checksum: "sha1:https://your.repo.com/path/to/your/artifacts/your-alfresco-content-services-community-distribution.zip.sha1"
 ```
 
 You can change url for any artifact using this approach. Just look for it inside `playbooks/group_vars/*.yml` files

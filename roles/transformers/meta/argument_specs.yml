@@ -26,7 +26,7 @@ argument_specs:
         required: false
         description: |
           URL to the LibreOffice package archive.
-      transformers_libreoffice_archive_checksum_url:
+      transformers_libreoffice_archive_checksum:
         type: str
         required: false
         description: |
@@ -41,7 +41,7 @@ argument_specs:
         required: false
         description: |
           URL to download the Alfresco PDF Renderer archive from.
-      transformers_pdf_archive_checksum_url:
+      transformers_pdf_archive_checksum:
         type: str
         required: false
         description: |
@@ -66,7 +66,7 @@ argument_specs:
         required: false
         description: |
           The URL to download the transformers All-In-One artifact.
-      transformers_aio_archive_checksum_url:
+      transformers_aio_archive_checksum:
         type: str
         required: false
         description: |

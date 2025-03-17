@@ -70,7 +70,7 @@
     - name: Download alfresco-pdf-renderer-linux.tgz
       ansible.builtin.get_url:
         url: "{{ transformers_pdf_archive_url }}"
-        checksum: "{{ transformers_pdf_archive_checksum_url }}"
+        checksum: "{{ transformers_pdf_archive_checksum }}"
         dest: "{{ download_location }}/alfresco-pdf-renderer-{{ transformers_pdf_version }}-linux.tgz"
         owner: "{{ username }}"
         group: "{{ group_name }}"
@@ -89,7 +89,7 @@
       ansible.builtin.get_url:
         url: "{{ transformers_aio_archive_url }}"
         dest: "{{ binaries_folder }}/transform-service/{{ transformers_aio_artifact_name }}-{{ transformers_aio_version }}.jar"
-        checksum: "{{ transformers_aio_archive_checksum_url }}"
+        checksum: "{{ transformers_aio_archive_checksum }}"
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: 'u=rwx,g=rwx,o=rx'

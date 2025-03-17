@@ -17,7 +17,7 @@
   ansible.builtin.get_url:
     url: "{{ search_zip_url }}"
     dest: "{{ download_location }}/{{ search_flavor }}-{{ search_version }}.zip"
-    checksum: "{{ search_zip_checksum_url }}"
+    checksum: "{{ search_zip_checksum }}"
     mode: "0644"
     url_username: "{{ nexus_user }}"
     url_password: "{{ nexus_password }}"
