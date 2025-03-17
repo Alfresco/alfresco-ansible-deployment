@@ -11,7 +11,7 @@ artifacts:
     updatecli_scm_id: acsComRepo
     updatecli_xml_target: "/project/properties/alfresco.googledrive.version"
     artifact_version_key: "$.acs_play_repository_amp_googledrive_repo_version"
-  alfresco-googledrive-share:
+  alfresco-googledrive-share-enterprise:
     updatecli_scm_id: acsComRepo
     updatecli_xml_target: "/project/properties/alfresco.googledrive.version"
     artifact_version_key: "$.acs_play_repository_amp_googledrive_share_version"
