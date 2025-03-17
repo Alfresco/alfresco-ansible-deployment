@@ -8,6 +8,8 @@ on:
       - .github/workflows/bumpVersions.yml
       - .github/updatecli_maven.tpl
       - .github/updatecli_maven_values.yml
+      - .github/updatecli_amps.tpl
+      - .github/updatecli_amps_values.yml
   workflow_dispatch:
     inputs:
       alfresco-updatecli-ref:
