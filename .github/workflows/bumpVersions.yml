@@ -61,6 +61,12 @@ jobs:
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
           UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME}}
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          # provide access to SSH user that triggered the build
+          limit-access-to-actor: true
+
       - name: Git Auto Commit
         uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5.1.0
         with:
