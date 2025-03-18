@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6cb0dc14dc26c748b3fd14ad6ba913fe9f4112a4e7c8ee3f71b73abca2fd44ad"
+            "sha256": "44afddf462a392cb285ad7cfe37142dc390de96d7277e846f38092ccdb7f9f62"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -338,11 +338,11 @@
         },
         "attrs": {
             "hashes": [
-                "sha256:1c97078a80c814273a76b2a298a932eb681c87415c11dee0a6921de7f1b02c3e",
-                "sha256:c75a69e28a550a7e93789579c22aa26b0f5b83b75dc4e08fe092980051e1090a"
+                "sha256:427318ce031701fea540783410126f03899a97ffc6f61596ad581ac2e40e3bc3",
+                "sha256:75d7cefc7fb576747b2c81b4442d4d4a1ce0900973527c011d1030fd3bf4af1b"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==25.1.0"
+            "version": "==25.3.0"
         },
         "black": {
             "hashes": [
@@ -753,11 +753,11 @@
         },
         "jinja2": {
             "hashes": [
-                "sha256:8fefff8dc3034e27bb80d67c671eb8a9bc424c0ef4c0826edbff304cceff43bb",
-                "sha256:aba0f4dc9ed8013c424088f68a5c226f7d6097ed89b246d7749c2ec4175c6adb"
+                "sha256:0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d",
+                "sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==3.1.5"
+            "version": "==3.1.6"
         },
         "jmespath": {
             "hashes": [
@@ -920,24 +920,21 @@
         },
         "molecule": {
             "hashes": [
-                "sha256:7243ff58e0b8159aa2cf465ba9605d657f1d614617264307bef5b32518467afe",
-                "sha256:c650d92295860ce17d79048b1dabb787f674718870668d99b52ecdc0e88af541"
+                "sha256:48492238888f7a7453c8b493fdc698be9123020211540c30d22bd89b9fac9fdb",
+                "sha256:c8766907c8b8bfec88d7d1a5df1232bd4606a0c53d9cb95d38e84b455a6993a6"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.10'",
-            "version": "==24.12.0"
+            "version": "==25.3.1"
         },
         "molecule-plugins": {
-            "extras": [
-                "docker",
-                "ec2"
-            ],
             "hashes": [
-                "sha256:432586a21226ef72fca5eaafb56ec7c0dc6d5e471f4e1e5272be5425357bcd2c",
-                "sha256:be3d15329ede00d79a0a60482e8c78cfbb2d18500ad98319c0c076cb833db340"
+                "sha256:5e577231c7d95d7f7dc7146f3527d4692ee30a8c0ea0e8353b15ceba75f7d28e",
+                "sha256:c28b08e25c91fcc679e65d9d18d2b4bb33712aaed2fefdea72b6253c6bd19635"
             ],
-            "markers": "python_version >= '3.9'",
-            "version": "==23.6.0"
+            "index": "pypi",
+            "markers": "python_version >= '3.10'",
+            "version": "==23.7.0"
         },
         "mypy-extensions": {
             "hashes": [
