@@ -1,4 +1,5 @@
 updatecli_matrix_version: 7.4.N
+updatecli_amps_release_branch: "release/7.4.N"
 ansible_version_file: vars/acs74.yml
 artifacts:
   alfresco-audit-storage:

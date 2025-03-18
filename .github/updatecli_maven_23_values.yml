@@ -1,4 +1,5 @@
 updatecli_matrix_version: current
+updatecli_amps_release_branch: "release/23.N"
 ansible_version_file: vars/acs23.yml
 artifacts:
   role-alfresco-repository:
@@ -50,3 +51,7 @@ artifacts:
     artifact_version_key: $.sfs_version
     ansible_version_file: roles/sfs/defaults/main.yml
     updatecli_matrix_component_key: sfs
+  alfresco-googledrive-repo-community:
+    updatecli_scm_id: acsComRepo
+    updatecli_xml_target: "/project/properties/alfresco.googledrive.version"
+    artifact_version_key: "$.acs_play_community_repository_amp_googledrive_repo_version"
