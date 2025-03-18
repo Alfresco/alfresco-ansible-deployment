@@ -1,5 +1,6 @@
 updatecli_matrix_version: 7.4.N
+updatecli_amps_release_branch: "release/7.4.N"
 ansible_version_file: vars/acs74.yml
 artifacts:
-  alfresco-audit-storage-app:
+  alfresco-audit-storage:
     updatecli_matrix_component_key: false # disabled because unsupported
