@@ -22,7 +22,7 @@ repository_acs_is_enterprise: true
 repository_acs_artifact_name: alfresco-content-services-distribution
 repository_acs_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
 
-repository_acs_version: 23.4.1
+repository_acs_version: 25.1.0
 repository_acs_archive_url: "{{ repository_acs_repository }}/{{ repository_acs_artifact_name }}/{{ repository_acs_version }}/{{ repository_acs_artifact_name }}-{{ repository_acs_version }}.zip"
 repository_acs_archive_checksum: "sha1:{{ repository_acs_archive_url }}.sha1"
 repository_acs_nexus_username: "{{ repository_nexus_username }}"
@@ -131,11 +131,11 @@ repository_jdbc_driver_checksum: "sha1:{{ repository_jdbc_driver_url }}.sha1"
 
 # Default repository amps to install
 repository_amp_downloads: []
-  # - url: "https://your.repo.com/path/to/your/artifacts/your-amp.amp"
-  #   checksum: "sha1:2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"
-  #   dest: "{{ repository_content_folder }}/<amps_repo|amps_share>/your-amp.amp"
-  #   url_username: your_username_to_repo
-  #   url_password: your_password_to_repo
+# - url: "https://your.repo.com/path/to/your/artifacts/your-amp.amp"
+#   checksum: "sha1:2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"
+#   dest: "{{ repository_content_folder }}/<amps_repo|amps_share>/your-amp.amp"
+#   url_username: your_username_to_repo
+#   url_password: your_password_to_repo
 
 # Additional list of amp downloads. Same structure as repository_amp_downloads
 repository_extra_amp_downloads: []
