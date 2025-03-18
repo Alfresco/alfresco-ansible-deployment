@@ -44,27 +44,33 @@
     - name: Populate services facts
       ansible.builtin.service_facts:
 
-    - name: Check in logs a client did connect
+    - name: Check ATS Router logs for client access signal
+      become: true
       ansible.builtin.slurp:
-        src: /var/log/alfresco/{{ item.file }}.log
-      register: ats_log
-      until:
-        - item.pattern in ats_log.content | b64decode
-      no_log: true
-      loop:
-        - file: ats-atr
-          pattern: GET Transform Config version
-          edition: Enterprise
-        - file: ats-shared-fs
-          pattern: TLS virtual host
-          edition: Enterprise
+        src: /var/log/alfresco/ats-atr.log
+      register: ats_router_log
+      until: >-
+        "GET Transform Config version" in ats_router_log.content | b64decode
       retries: 10
       delay: 3
+      no_log: true
+
+    - name: Check Shared File Store logs for client access signal
+      become: true
+      ansible.builtin.slurp:
+        src: /var/log/alfresco/ats-shared-fs.log
+      register: ats_fs_log
+      until: >-
+        "TLS virtual host" in ats_fs_log.content | b64decode
+      retries: 3
+      delay: 1
+      no_log: true
 
     - name: Copy cert as PEM
       ansible.builtin.copy:
         src: /tmp/{{ inventory_hostname }}.crt
         dest: /tmp
+
     - name: Check certificates requires auth
       ansible.builtin.uri:
         url: https://localhost:8090
