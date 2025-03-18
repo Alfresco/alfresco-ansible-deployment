@@ -6,10 +6,7 @@ on:
   push:
     paths:
       - .github/workflows/bumpVersions.yml
-      - .github/updatecli_maven.tpl
-      - .github/updatecli_maven_values.yml
-      - .github/updatecli_amps.tpl
-      - .github/updatecli_amps_values.yml
+      - .github/updatecli/**
   workflow_dispatch:
     inputs:
       alfresco-updatecli-ref:
@@ -49,13 +46,13 @@ jobs:
         shell: bash
         run: |
           set -x
-          for version_file in .github/updatecli_maven_*_values.yml; do
-            updatecli apply --config .github/updatecli_maven.tpl \
+          for version_file in .github/updatecli/updatecli_maven_*_values.yml; do
+            updatecli apply --config .github/updatecli/updatecli_maven.tpl \
               -v alfresco-updatecli/deployments/values/supported-matrix.yaml \
-              -v .github/updatecli_maven_values.yml \
+              -v .github/updatecli/updatecli_maven_values.yml \
               -v $version_file
-            updatecli apply --config .github/updatecli_amps.tpl \
-              -v .github/updatecli_amps_values.yml \
+            updatecli apply --config .github/updatecli/updatecli_amps.tpl \
+              -v .github/updatecli/updatecli_amps_values.yml \
               -v $version_file
           done
         env:
