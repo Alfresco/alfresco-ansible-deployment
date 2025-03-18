@@ -24,8 +24,7 @@ nexus_repository:
   development_releases: >-
     {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.development.repository }}/{{ artifacts_repositories.enterprise.group_id }}
 
-default_java_version: 17.0.14+7
-acs_play_java_core: "{{ default_java_version.split('+')[0] }}"
+acs_play_java_core: "{{ acs_play_java_version.split('+')[0] }}"
 acs_play_java_major: "{{ acs_play_java_core.split('.')[0] }}"
 acs_play_default_truststore_type: "{% if acs_play_java_major | int >= 21 %}pkcs12{% else %}JCEKS{% endif %}"
 
