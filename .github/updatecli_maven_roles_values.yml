@@ -1,0 +1,53 @@
+updatecli_matrix_version: current
+updatecli_amps_release_branch: "release/23.N"
+ansible_version_file: vars/acs23.yml
+artifacts:
+  alfresco-repository:
+    artifact_name_file: roles/repository/defaults/main.yml
+    artifact_name_key: $.repository_acs_artifact_name
+    artifact_version_key: $.repository_acs_version
+    ansible_version_file: roles/repository/defaults/main.yml
+    updatecli_matrix_component_key: acs
+  alfresco-audit-storage:
+    artifact_name_file: roles/audit_storage/defaults/main.yml
+    artifact_name_key: $.audit_storage_download_artifact_name
+    artifact_version_key: $.audit_storage_version
+    ansible_version_file: roles/audit_storage/defaults/main.yml
+    updatecli_matrix_component_key: audit-storage
+  alfresco-search-enterprise:
+    artifact_name_file: roles/search_enterprise/defaults/main.yml
+    artifact_name_key: $.search_enterprise_artifact_name
+    artifact_version_key: $.search_enterprise_version
+    ansible_version_file: roles/search_enterprise/defaults/main.yml
+    updatecli_matrix_component_key: search-enterprise
+  alfresco-search-services:
+    artifact_name_file: roles/search/defaults/main.yml
+    artifact_name_key: $.search_flavor
+    artifact_version_key: $.search_version
+    ansible_version_file: roles/search/defaults/main.yml
+    updatecli_matrix_component_key: search
+  alfresco-sync-service:
+    artifact_name_file: roles/sync/defaults/main.yml
+    artifact_name_key: $.sync_artifact_name
+    artifact_version_key: $.sync_version
+    ansible_version_file: roles/sync/defaults/main.yml
+    updatecli_matrix_component_key: sync
+    artifact_group_id: org.alfresco.services.sync
+  alfresco-transform-core-aio:
+    artifact_name_file: roles/transformers/defaults/main.yml
+    artifact_name_key: $.transformers_aio_artifact_name
+    artifact_version_key: $.transformers_aio_version
+    ansible_version_file: roles/transformers/defaults/main.yml
+    updatecli_matrix_component_key: tengine-aio
+  alfresco-transform-router:
+    artifact_name_file: roles/transformers/defaults/main.yml
+    artifact_name_key: $.transformers_aio_artifact_name
+    artifact_version_key: $.transformers_aio_version
+    ansible_version_file: roles/transformers/defaults/main.yml
+    updatecli_matrix_component_key: trouter
+  alfresco-shared-file-store-controller:
+    artifact_name_file: roles/sfs/defaults/main.yml
+    artifact_name_key: $.sfs_artifact_name
+    artifact_version_key: $.sfs_version
+    ansible_version_file: roles/sfs/defaults/main.yml
+    updatecli_matrix_component_key: sfs
