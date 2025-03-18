@@ -27,6 +27,11 @@ artifacts:
     artifact_name_key: $.acs_play_repository_acs_artifact_name
     artifact_version_key: $.acs_play_repository_acs_version
     updatecli_matrix_component_key: acs
+  alfresco-api-explorer:
+    artifact_name_file: playbooks/group_vars/repository.yml
+    artifact_name_key: $.acs_play_repository_api_explorer_artifact_name
+    artifact_version_key: $.acs_play_repository_api_explorer_version
+    updatecli_matrix_component_key: acs
   alfresco-search-enterprise:
     artifact_name_file: playbooks/group_vars/search_enterprise.yml
     artifact_name_key: $.acs_play_search_enterprise_artifact_name
