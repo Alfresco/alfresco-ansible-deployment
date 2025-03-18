@@ -36,7 +36,7 @@ sources:
 
 targets:
 {{- range $key, $artifact := .artifacts }}
-  {{- if all $artifact.updatecli_matrix_component_key $.ansible_version_file $artifact.artifact_version_key }}
+  {{- if all $artifact.updatecli_matrix_component_key (or $artifact.ansible_version_file $.ansible_version_file) $artifact.artifact_version_key }}
   yml_{{ $key }}:
     name: {{ $key }} yml
     kind: yaml
