@@ -42,6 +42,14 @@ jobs:
           ref: ${{ inputs.alfresco-updatecli-ref || 'master' }}
           path: alfresco-updatecli
 
+      - name: Updatecli scm cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/updatecli/github
+          key: updatecli-v1-${{ hashFiles('.github/updatecli/updatecli_amps.tpl') }}
+          restore-keys: |
+            updatecli-v1-
+
       - name: Updatecli apply
         shell: bash
         run: |
@@ -60,12 +68,6 @@ jobs:
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
           UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME}}
-
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        with:
-          # provide access to SSH user that triggered the build
-          limit-access-to-actor: true
 
       - name: Git Auto Commit
         uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5.1.0
