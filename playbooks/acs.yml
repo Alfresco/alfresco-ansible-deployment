@@ -657,6 +657,7 @@
         name: "../roles/sync"
       vars:
         java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
+        sync_artifact_name: "{{ acs_play_sync_artifact_name }}"
         sync_version: "{{ acs_play_sync_version }}"
         sync_zip_url: "{{ acs_play_sync_zip_url }}"
         sync_zip_checksum: "{{ acs_play_sync_zip_checksum }}"
