@@ -1,0 +1,17 @@
+artifacts:
+  alfresco-aos-module:
+    updatecli_scm_id: acsComRepo
+    updatecli_xml_target: "/project/properties/alfresco.aos-module.version"
+    artifact_version_key: "$.acs_play_repository_amp_aos_module_version"
+  alfresco-device-sync-repo:
+    updatecli_scm_id: acsPackaging
+    updatecli_xml_target: "/project/properties/alfresco.desktop-sync.version"
+    artifact_version_key: "$.acs_play_repository_amp_device_sync_version"
+  alfresco-googledrive-repo-enterprise:
+    updatecli_scm_id: acsComRepo
+    updatecli_xml_target: "/project/properties/alfresco.googledrive.version"
+    artifact_version_key: "$.acs_play_repository_amp_googledrive_repo_version"
+  alfresco-googledrive-share-enterprise:
+    updatecli_scm_id: acsComRepo
+    updatecli_xml_target: "/project/properties/alfresco.googledrive.version"
+    artifact_version_key: "$.acs_play_repository_amp_googledrive_share_version"
