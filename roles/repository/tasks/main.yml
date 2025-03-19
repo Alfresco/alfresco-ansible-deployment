@@ -111,6 +111,8 @@
   poll: 0
   tags:
     - molecule-idempotence-notest
+  loop_control:
+    label: "{{ item.url | basename }}"
 
 - name: Download {{ repository_acs_artifact_name }}.zip
   ansible.builtin.get_url:
@@ -144,6 +146,8 @@
   poll: 0
   tags:
     - molecule-idempotence-notest
+  loop_control:
+    label: "{{ item.url | basename }}"
 
 - name: Download postgresql jar
   become: true
@@ -437,6 +441,8 @@
   when: item.item.enabled | default(true)
   tags:
     - molecule-idempotence-notest
+  loop_control:
+    label: "{{ item.item.url | basename }}"
 
 - name: Install amps on alfresco and share war files
   become: true
@@ -470,6 +476,8 @@
   loop: "{{ war_download_result.results }}"
   tags:
     - molecule-idempotence-notest
+  loop_control:
+    label: "{{ item.item.url | basename }}"
 
 - name: Setup ACS service
   become: true
