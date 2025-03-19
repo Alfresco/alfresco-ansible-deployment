@@ -1,0 +1,56 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Assert service is running
+      ansible.builtin.systemd:
+        name: "alfresco-sync"
+        state: started
+
+    - name: Assert service is enabled
+      ansible.builtin.systemd:
+        name: "alfresco-sync"
+        enabled: yes
+
+    - name: Assert log file doesn't contain errors
+      become: true
+      ansible.builtin.command:
+        cmd: |
+          grep -i 'error' /var/log/alfresco/sync-service.log
+      changed_when: false
+      register: log_errors
+      failed_when: log_errors.stdout_lines | length > 0
+
+    - name: Assert service is stable on port 9090
+      ansible.builtin.uri:
+        url: "http://localhost:9090/alfresco/healthcheck"
+        status_code: 200
+      loop: "{{ range(0, 10) }}"
+      loop_control:
+        pause: 1
+
+    - name: Check application-specific healthchecks
+      ansible.builtin.uri:
+        url: "http://localhost:9090/alfresco/healthcheck"
+        method: GET
+        return_content: yes
+        status_code: 200
+      register: health_check
+      failed_when: >-
+        'ActiveMQ connection Ok' not in health_check.content or
+        'Database connection Ok' not in health_check.content or
+        'Repository connection Ok' not in health_check.content
+
+    - name: Get Java processes for Sync Service
+      ansible.builtin.shell: |
+        set -o pipefail && ps aux | grep '[S]yncService server' | grep 'java'
+      register: java_processes
+      changed_when: false
+
+    - name: Verify JVM options for Sync Service
+      ansible.builtin.assert:
+        that:
+          - "'-Xmx900m' in java_processes.stdout"
+          - "'-Xms512m' in java_processes.stdout"
+        fail_msg: "Expected JVM options not found in Sync Service process"
+        success_msg: "Sync Service is running with correct JVM options"
