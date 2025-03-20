@@ -13,6 +13,10 @@ on:
         description: "The version to use for alfresco/alfresco-updatecli configs"
         type: string
         default: master
+      with-AMIs:
+        description: "Whether to update AMIs or not"
+        type: boolean
+        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name || github.run_id }}
@@ -63,6 +67,10 @@ jobs:
               -v .github/updatecli/updatecli_amps_values.yml \
               -v $version_file
           done
+          if [ "${{ inputs.with-AMIs || github.event_name == 'push' }}" = "true" ]; then
+            updatecli apply --config .github/updatecli/updatecli_amis.tpl \
+              -v .github/updatecli/updatecli_amis_values.yml
+          fi
         env:
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}

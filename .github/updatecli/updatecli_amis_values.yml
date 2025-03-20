@@ -1,0 +1,9 @@
+amis:
+  rhel8:
+    pattern: RHEL-9.5.0_HVM-*
+
+targets:
+  molecule_default_rhel8:
+    file: molecule/default/vars-rhel8.yml
+    key: $.MOLECULE_IT_IMAGE_ID
+    source: rhel8
