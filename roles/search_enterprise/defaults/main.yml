@@ -7,7 +7,7 @@ search_enterprise_reindex_options: ''
 search_enterprise_artifact_name: alfresco-elasticsearch-connector-distribution
 search_enterprise_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
 
-search_enterprise_version: 4.2.0
+search_enterprise_version: 5.0.0
 search_enterprise_zip_url: "{{ search_enterprise_repository }}/{{ search_enterprise_artifact_name }}/{{ search_enterprise_version }}/{{ search_enterprise_artifact_name }}-{{ search_enterprise_version }}.zip"
 search_enterprise_zip_checksum: "sha1:{{ search_enterprise_zip_url }}.sha1"
 
