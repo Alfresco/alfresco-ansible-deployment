@@ -30,11 +30,35 @@ sources:
 targets:
 {{- range $key, $target := .targets }}
   yml_{{ $key }}:
+    name: {{ $target.source }} bump
     kind: yaml
     sourceid: src_{{ $target.source }}
+    scmid: "github"
     spec:
       engine: yamlpath # https://github.com/updatecli/updatecli/issues/4490
       file: '{{ $target.file }}'
       key: '{{ $target.key }}'
       comment: '{{ source (printf "src_name_%s" $target.source) }}'
 {{- end }}
+
+actions:
+  pr:
+    kind: "github/pullrequest"
+    scmid: "github"
+    spec:
+      title: "Bump AMIs versions"
+      labels:
+        - "updatecli"
+        - "ec2-test"
+
+scms:
+  github:
+    kind: "github"
+    spec:
+      owner: "Alfresco"
+      repository: "alfresco-ansible-deployment"
+      branch: "master"
+      token: {{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}
+      username: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
+      user: {{ requiredEnv "UPDATECLI_GITHUB_USERNAME" }}
+      email: {{ requiredEnv "UPDATECLI_GITHUB_EMAIL" }}

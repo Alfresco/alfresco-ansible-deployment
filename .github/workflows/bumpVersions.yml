@@ -3,6 +3,8 @@ name: Bump versions
 run-name: Bump ${{ inputs.update-type || 'all' }} using alfresco-updatecli/${{ inputs.alfresco-updatecli-ref || 'master' }}
 
 on:
+  schedule:
+    - cron: '52 6 * * 1'
   push:
     paths:
       - .github/workflows/bumpVersions.yml
@@ -52,7 +54,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/updatecli/github
-          key: updatecli-v1-${{ hashFiles('.github/updatecli/updatecli_amps.tpl') }}
+          key: updatecli-v1-${{ hashFiles('.github/updatecli/updatecli_amps.tpl', '.github/updatecli/updatecli_amis.tpl') }}
           restore-keys: |
             updatecli-v1-
 
@@ -74,10 +76,10 @@ jobs:
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
-          UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME}}
+          UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME }}
 
       - name: Updatecli apply for AMIs
-        if: inputs.update-type == 'ami' || github.event_name == 'push'
+        if: inputs.update-type == 'ami' || github.event_name == 'push' || github.event_name == 'schedule'
         shell: bash
         run: |
           updatecli apply --config .github/updatecli/updatecli_amis.tpl \
@@ -86,6 +88,9 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: eu-west-1
+          UPDATECLI_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+          UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME }}
+          UPDATECLI_GITHUB_EMAIL: ${{ vars.BOT_GITHUB_EMAIL }}
 
       - name: Git Auto Commit
         uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5.1.0
