@@ -81,23 +81,18 @@
           export SYNC_HOME={{ sync_home }}
         insertafter: EOF
 
-    - name: Add sync service startup script
-      ansible.builtin.template:
-        src: syncservice.sh.j2
-        dest: "{{ binaries_folder }}/syncservice.sh"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx'
-      notify:
-        - Restart-sync
+    - name: Remove deprecated startup script
+      ansible.builtin.file:
+        path: "{{ binaries_folder }}/syncservice.sh"
+        state: absent
 
     - name: Add alfresco-sync.service service
       ansible.builtin.template:
-        src: alfresco-sync.service
+        src: alfresco-sync.service.j2
         dest: "/etc/systemd/system/alfresco-sync.service"
-        owner: "{{ username }}"
-        group: "{{ group_name }}"
-        mode: 'u=rwx,g=rwx'
+        owner: "root"
+        group: "root"
+        mode: "0640"
       notify:
         - Enable-sync
         - Restart-sync
