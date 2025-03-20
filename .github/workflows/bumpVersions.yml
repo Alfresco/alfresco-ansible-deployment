@@ -76,6 +76,9 @@ jobs:
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
           UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME}}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: eu-west-1
 
       - name: Git Auto Commit
         uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5.1.0
