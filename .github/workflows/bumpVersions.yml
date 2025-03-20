@@ -51,10 +51,11 @@ jobs:
           path: alfresco-updatecli
 
       - name: Updatecli scm cache
+        if: inputs.update-type == 'maven' || github.event_name == 'push'
         uses: actions/cache@v4
         with:
           path: /tmp/updatecli/github
-          key: updatecli-v1-${{ hashFiles('.github/updatecli/updatecli_amps.tpl', '.github/updatecli/updatecli_amis.tpl') }}
+          key: updatecli-v1-${{ hashFiles('.github/updatecli/updatecli_amps.tpl') }}
           restore-keys: |
             updatecli-v1-
 
