@@ -41,9 +41,9 @@
         'Database connection Ok' not in health_check.content or
         'Repository connection Ok' not in health_check.content
 
-    - name: Get Java processes for Sync Service
+    - name: Get Java processes for Sync Service # noqa risky-shell-pipe
       ansible.builtin.shell: |
-        set -o pipefail && ps aux | grep '[S]yncService server' | grep 'java'
+        ps aux | grep '[S]yncService server' | grep 'java'
       register: java_processes
       changed_when: false
 
