@@ -8,13 +8,23 @@ sources:
       region: {{ requiredEnv "AWS_REGION" }}
       filters:
         - name: "owner-id"
-          values: "{{ $ami.owner_id | default "*" }}"
+          values: '{{ $ami.owner_id | default "*" }}'
         - name: "name"
-          values: "{{ $ami.pattern }}"
+          values: '{{ $ami.pattern }}'
         - name: "architecture"
-          values: "{{ $ami.architecture | default "x86_64" }}"
+          values: '{{ $ami.architecture | default "x86_64" }}'
         - name: "block-device-mapping.volume-type"
-          values: "{{ $ami.volume_type | default "gp3" }}"
+          values: '{{ $ami.volume_type | default "gp3" }}'
+  src_name_{{ $key }}:
+    kind: shell
+    dependson:
+      - src_{{ $key }}
+    spec:
+      command: aws ec2 describe-images --region {{ requiredEnv "AWS_REGION" }} --image-ids {{ source (printf "src_%s" $key) }} --query 'Images[0].Name' --output text
+      environments:
+        - name: PATH
+        - name: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
 {{- end }}
 
 targets:
@@ -23,6 +33,8 @@ targets:
     kind: yaml
     sourceid: src_{{ $target.source }}
     spec:
-      file: "{{ $target.file }}"
-      key: "{{ $target.key }}"
+      engine: yamlpath # https://github.com/updatecli/updatecli/issues/4490
+      file: '{{ $target.file }}'
+      key: '{{ $target.key }}'
+      comment: '{{ source (printf "src_name_%s" $target.source) }}'
 {{- end }}
