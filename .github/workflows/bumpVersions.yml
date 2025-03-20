@@ -1,6 +1,6 @@
 ---
 name: Bump versions
-run-name: Bump using alfresco-updatecli/${{ inputs.alfresco-updatecli-ref || 'master' }}
+run-name: Bump ${{ inputs.update-type || 'all' }} using alfresco-updatecli/${{ inputs.alfresco-updatecli-ref || 'master' }}
 
 on:
   push:
