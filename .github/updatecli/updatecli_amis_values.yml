@@ -1,19 +1,25 @@
 amis:
   rhel8:
-    pattern: RHEL-9.5.0_HVM-*
+    pattern: RHEL-8.10.0_HVM-*
+    owner_id: "309956199498"
+  rhel9:
+    pattern: RHEL-9.4.0_HVM-*
+    owner_id: "309956199498"
   rl8:
     pattern: Rocky-8-EC2-Base-8.10-*
     volume_type: gp2
+    owner_id: "792107900819"
   rl9:
     pattern: Rocky-9-EC2-Base-9.4-*
     volume_type: gp2
-  ub24:
-    pattern: ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*
+    owner_id: "792107900819"
   ub22:
     pattern: ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*
     volume_type: gp2
-  rh9:
-    pattern: RHEL-9.4.0_HVM-*
+    owner_id: "099720109477"
+  ub24:
+    pattern: ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*
+    owner_id: "099720109477"
 
 targets:
   molecule_default_rhel8:
@@ -39,8 +45,8 @@ targets:
   molecule_multimachine:
     file: molecule/multimachine/vars.yml
     key: $.MOLECULE_IT_IMAGE_ID
-    source: rh9
+    source: rhel9
   molecule_opensearch:
     file: molecule/opensearch/vars.yml
     key: $.MOLECULE_IT_IMAGE_ID
-    source: rh9
+    source: rhel9

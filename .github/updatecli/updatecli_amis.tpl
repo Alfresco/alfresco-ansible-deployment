@@ -7,6 +7,8 @@ sources:
     spec:
       region: {{ requiredEnv "AWS_REGION" }}
       filters:
+        - name: "owner-id"
+          values: "{{ $ami.owner_id | default "*" }}"
         - name: "name"
           values: "{{ $ami.pattern }}"
         - name: "architecture"
