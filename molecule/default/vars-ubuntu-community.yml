@@ -1,4 +1,4 @@
-MOLECULE_IT_IMAGE_ID: ami-0df368112825f8d8f # ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20250305
+MOLECULE_IT_IMAGE_ID: ami-0d2e50fe2e2b13c46 # ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20240815
 MOLECULE_IT_EXTRA_VARS: acs_play_repository_acs_edition=Community
 MOLECULE_IT_TEST_CONFIG: tests/test-config-community.json
 MOLECULE_IT_PLATFORM: ubuntu-community
