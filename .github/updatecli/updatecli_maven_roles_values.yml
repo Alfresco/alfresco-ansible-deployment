@@ -38,10 +38,10 @@ artifacts:
     ansible_version_file: roles/transformers/defaults/main.yml
     updatecli_matrix_component_key: tengine-aio
   alfresco-transform-router:
-    artifact_name_file: roles/transformers/defaults/main.yml
-    artifact_name_key: $.transformers_aio_artifact_name
-    artifact_version_key: $.transformers_aio_version
-    ansible_version_file: roles/transformers/defaults/main.yml
+    artifact_name_file: roles/trouter/defaults/main.yml
+    artifact_name_key: $.trouter_artifact_name
+    artifact_version_key: $.trouter_version
+    ansible_version_file: roles/trouter/defaults/main.yml
     updatecli_matrix_component_key: trouter
   alfresco-shared-file-store-controller:
     artifact_name_file: roles/sfs/defaults/main.yml
