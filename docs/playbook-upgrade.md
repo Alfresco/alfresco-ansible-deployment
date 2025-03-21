@@ -6,16 +6,18 @@ title: Upgrading the playbook
 
 ## Unreleased version
 
-### Making roles independent part 2 (to be done)
+### Making roles independent part 2 (future release)
 
 * The goal is to ensure that all roles are completely independent
 * The `common` role will be deprecated and removed
 
+## v4.0.0
+
 ### Making roles independent part 1
 
 * Playbook-managed variables now use the `acs_play_` prefix for consistency.
-* Inventory group variables have been transitioned to playbook group variables,
-  improving portability while slightly altering variable precedence.
+* Inventory group variables have been moved to playbook group variables,
+  improving usability while slightly altering variable precedence.
 * Version-specific variables (defined in `vars/acsXX.yml`) now have a uniform
   precedence level, regardless of the version.
 * Roles now define sensible default values for their arguments, allowing the
