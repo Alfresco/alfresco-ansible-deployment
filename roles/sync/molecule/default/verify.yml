@@ -1,16 +1,22 @@
 ---
 - name: Verify
   hosts: all
+  handlers:
+    - name: Fail if changed
+      ansible.builtin.fail:
+        msg: "Service state not as expected"
   tasks:
     - name: Assert service is running
       ansible.builtin.systemd:
         name: "alfresco-sync"
         state: started
+      notify: Fail if changed
 
     - name: Assert service is enabled
       ansible.builtin.systemd:
         name: "alfresco-sync"
         enabled: yes
+      notify: Fail if changed
 
     - name: Assert log file doesn't contain errors
       become: true
