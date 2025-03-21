@@ -1,8 +1,10 @@
 ---
 name: Bump versions
-run-name: Bump using alfresco-updatecli/${{ inputs.alfresco-updatecli-ref || 'master' }}
+run-name: Bump ${{ inputs.update-type || 'all' }} using alfresco-updatecli/${{ inputs.alfresco-updatecli-ref || 'master' }}
 
 on:
+  schedule:
+    - cron: '52 6 * * 1'
   push:
     paths:
       - .github/workflows/bumpVersions.yml
@@ -13,6 +15,12 @@ on:
         description: "The version to use for alfresco/alfresco-updatecli configs"
         type: string
         default: master
+      update-type:
+          description: 'Which dependencies to bump'
+          type: choice
+          options:
+          - maven
+          - ami
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name || github.run_id }}
@@ -43,6 +51,7 @@ jobs:
           path: alfresco-updatecli
 
       - name: Updatecli scm cache
+        if: inputs.update-type == 'maven' || github.event_name == 'push'
         uses: actions/cache@v4
         with:
           path: /tmp/updatecli/github
@@ -50,7 +59,8 @@ jobs:
           restore-keys: |
             updatecli-v1-
 
-      - name: Updatecli apply
+      - name: Updatecli apply for Maven
+        if: inputs.update-type == 'maven' || github.event_name == 'push'
         shell: bash
         run: |
           set -x
@@ -67,7 +77,21 @@ jobs:
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
-          UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME}}
+          UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME }}
+
+      - name: Updatecli apply for AMIs
+        if: inputs.update-type == 'ami' || github.event_name == 'push' || github.event_name == 'schedule'
+        shell: bash
+        run: |
+          updatecli apply --config .github/updatecli/updatecli_amis.tpl \
+            -v .github/updatecli/updatecli_amis_values.yml
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: eu-west-1
+          UPDATECLI_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+          UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME }}
+          UPDATECLI_GITHUB_EMAIL: ${{ vars.BOT_GITHUB_EMAIL }}
 
       - name: Git Auto Commit
         uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5.1.0
