@@ -6,6 +6,8 @@ on:
   schedule:
     - cron: '52 6 * * 1'
   push:
+    branches-ignore:
+      - 'master'
     paths:
       - .github/workflows/bumpVersions.yml
       - .github/updatecli/**
@@ -80,7 +82,7 @@ jobs:
           UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME }}
 
       - name: Updatecli apply for AMIs
-        if: inputs.update-type == 'ami' || github.event_name == 'push' || github.event_name == 'schedule'
+        if: inputs.update-type == 'ami' || github.event_name == 'schedule'
         shell: bash
         run: |
           updatecli apply --config .github/updatecli/updatecli_amis.tpl \
