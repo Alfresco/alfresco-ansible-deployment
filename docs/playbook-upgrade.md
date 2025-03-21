@@ -11,7 +11,7 @@ title: Upgrading the playbook
 * The goal is to ensure that all roles are completely independent
 * The `common` role will be deprecated and removed
 
-## v4.0.0
+## v3.0.0
 
 ### Making roles independent part 1
 
