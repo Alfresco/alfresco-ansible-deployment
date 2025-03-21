@@ -31,3 +31,5 @@ sync_db_username: "alfresco-sync"
 
 sync_java_home: "{{ java_home }}"
 sync_activemq_host: "{{ activemq_host }}"
+
+sync_repo_config_url: '${repo.scheme}://${repo.hostname}:${repo.port}/alfresco/service/devicesync/config'
