@@ -93,7 +93,7 @@ ACS 7.x onward.
 | Component           | 25.1 Enterprise (Community) | 23.4 Enterprise | 7.4 Enterprise | 7.3 Enterprise |
 | ------------------- | --------------------------- | --------------- | -------------- | -------------- |
 | OpenJDK             | 17.0.14                     | 17.0.14         | 17.0.14        | 17.0.14        |
-| Apache Tomcat       | 10.1.39                     | 10.1.39         | 9.0.102         | 9.0.102         |
+| Apache Tomcat       | 10.1.39                     | 10.1.39         | 9.0.102        | 9.0.102        |
 | PostgreSQL          | 16.x                        | 15.x            | 14.x           | 14.x           |
 | Apache ActiveMQ     | 5.18.6                      | 5.18.6          | 5.17.6         | 5.17.6         |
 | Repository          | 25.1.0                      | 23.4.1          | 7.4.2.4        | 7.3.2.3        |
