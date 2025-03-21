@@ -10,20 +10,8 @@
     sync_amp_device_sync_archive_url: "{{ sync_amp_device_sync_repository }}/{{ sync_amp_device_sync_artifact_name }}/{{ sync_amp_device_sync_version }}/{{ sync_amp_device_sync_artifact_name }}-{{ sync_amp_device_sync_version }}.amp"
   roles:
     - role: activemq
-    - role: nginx
+    - role: postgres
   tasks:
-    - name: Install PostgreSQL
-      ansible.builtin.include_role:
-        name: postgres
-    - name: Setup repository database
-      ansible.builtin.include_role:
-        name: postgres
-        tasks_from: setup_db
-      vars:
-        postgres_db_name: "{{ repository_db_name }}"
-        postgres_db_username: "{{ repository_db_username }}"
-        postgres_db_password: "{{ repo_db_password }}"
-        postgres_db_clients: "{{ groups.repository }}"
     - name: Setup sync database
       ansible.builtin.include_role:
         name: postgres
@@ -33,27 +21,14 @@
         postgres_db_username: "{{ sync_db_username }}"
         postgres_db_password: "{{ sync_db_password }}"
         postgres_db_clients: "{{ groups.syncservice }}"
-    - name: Install Alfresco repository
-      ansible.builtin.include_role:
-        name: repository
-      vars:
-        repository_properties: "{{ global_properties }}"
-        repository_nexus_username: "{{ molecule_nexus_username }}"
-        repository_nexus_password: "{{ molecule_nexus_password }}"
-        repository_amp_downloads:
-          - url: "{{ sync_amp_device_sync_archive_url }}"
-            checksum: "sha1:{{ sync_amp_device_sync_archive_url }}.sha1"
-            dest: "{{ repository_content_folder }}/amps_repo/{{ sync_amp_device_sync_artifact_name }}.amp"
-            url_username: "{{ molecule_nexus_username }}"
-            url_password: "{{ molecule_nexus_password }}"
     - name: Install Alfresco sync service
       ansible.builtin.include_role:
         name: sync
       vars:
+        sync_repo_config_url: "https://run.mocky.io/v3/a62ce156-37c8-47b3-8cd1-08628b3aa130"
         sync_zip_username: "{{ molecule_nexus_username }}"
         sync_zip_password: "{{ molecule_nexus_password }}"
         sync_environment:
           JAVA_OPTS:
             - -Xms512m
             - -Xmx900m
-            - $JAVA_OPTS
