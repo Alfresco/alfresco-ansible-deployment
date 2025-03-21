@@ -5,6 +5,11 @@ transformers_tengine_environment:
   JAVA_OPTS:
     - -Xms512m
     - -Xmx1536m
+
+transformers_truststore_path: "{{ java_home + '/lib/security/cacerts' }}"
+transformers_truststore_pass: "changeit"
+transformers_truststore_type: "JCEKS"
+
 transformers_ats_keystore: {}
 transformers_include_ghostscript: false
 
@@ -32,6 +37,6 @@ transformers_imagemagick_repository: https://artifacts.alfresco.com/nexus/conten
 transformers_aio_artifact_name: alfresco-transform-core-aio
 transformers_aio_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
 
-transformers_aio_version: 5.1.6
+transformers_aio_version: 5.1.7
 transformers_aio_archive_url: "{{ transformers_aio_repository }}/{{ transformers_aio_artifact_name }}/{{ transformers_aio_version }}/{{ transformers_aio_artifact_name }}-{{ transformers_aio_version }}.jar"
 transformers_aio_archive_checksum: "sha1:{{ transformers_aio_archive_url }}.sha1"

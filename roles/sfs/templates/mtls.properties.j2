@@ -5,5 +5,5 @@ server.ssl.key-store-password={{ sfs_ats_keystore.pass | default('') }}
 server.ssl.key-store-type={{ sfs_ats_keystore.type | default('JCEKS') }}
 server.ssl.trust-store={{ sfs_ats_truststore }}
 server.ssl.trust-store-password={{ sfs_ats_truststore_pass }}
-server.ssl.trust-store-type=JCEKS
+server.ssl.trust-store-type={{ sfs_ats_truststore_type }}
 server.ssl.client-auth=need

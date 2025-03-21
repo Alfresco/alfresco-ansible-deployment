@@ -49,6 +49,9 @@
         - name: Print multiline pytest stdout as best as we can
           debug:
             msg: "{{ ansible_failed_result.stdout_lines }}"
+        - name: Exit with failure
+          ansible.builtin.fail:
+            msg: "pytest failed"
 
 - name: Verify adw plugins state
   hosts: adw

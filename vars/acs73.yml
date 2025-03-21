@@ -11,17 +11,17 @@ supported_os:
 ats_mtls_capable: false
 acs_play_activemq_version: 5.17.6
 acs_play_adw_version: 4.4.1
-acs_play_search_version: 2.0.14
-acs_play_java_version: "{{ default_java_version }}"
+acs_play_search_version: 2.0.15
+acs_play_java_version: 17.0.14+7
 acs_play_search_enterprise_version: 3.2.1
-acs_play_sfs_version: 4.1.6
+acs_play_sfs_version: 4.1.7
 acs_play_sync_version: 3.11.3
 acs_play_tomcat_version: 9.0.98
-acs_play_trouter_version: 4.1.6
+acs_play_trouter_version: 4.1.7
 acs_play_transformers_libreoffice_version: 7.2.5.1
 acs_play_transformers_pdf_version: 1.1
 acs_play_transformers_imagemagick_version: 7.1.0-16-ci-11
-acs_play_transformers_aio_version: 5.1.6
+acs_play_transformers_aio_version: 5.1.7
 acs_play_jdbc_pg_driver_version: "{{ default_jdbc_pg_driver_version }}"
 acs_play_postgres_major_version: 14
 acs_play_repository_acs_version: 7.3.2.3

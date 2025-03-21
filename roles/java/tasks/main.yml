@@ -1,6 +1,6 @@
 ---
 # tasks file for roles/java
-- name: Download openjdk archive
+- name: Download openjdk archive for version {{ java_version }}
   ansible.builtin.get_url:
     url: "{{ java_url }}"
     dest: "{{ download_location }}/{{ java_tar_file }}"
@@ -11,7 +11,7 @@
 - name: Install OpenJDK
   become: true
   block:
-    - name: Extract OpenJDK archive
+    - name: Extract OpenJDK archive {{ java_tar_file }}
       ansible.builtin.unarchive:
         src: "{{ download_location }}/{{ java_tar_file }}"
         dest: "{{ java_home | dirname }}"

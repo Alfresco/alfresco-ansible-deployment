@@ -8,7 +8,7 @@
     "assertions": {
       "acs": {
         "edition": "Enterprise",
-        "version": "25.1.0",
+        "version": "23.4.1",
         "identity": false,
         "modules": [
           {
@@ -23,7 +23,7 @@
           },
           {
             "id": "org_alfresco_device_sync_repo",
-            "version": "5.2.0",
+            "version": "5.1.0",
             "installed": true
           }
         ]
@@ -33,10 +33,6 @@
       },
       "adw": {
         "version": "5.3.0"
-      },
-      "aas": {
-        "audit_host": "http://localhost:8083",
-        "elasticsearch_host": "http://localhost:9200"
       }
     }
   }
