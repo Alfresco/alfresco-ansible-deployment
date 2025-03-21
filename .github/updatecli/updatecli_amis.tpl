@@ -6,6 +6,7 @@ sources:
     kind: aws/ami
     spec:
       region: {{ requiredEnv "AWS_REGION" }}
+      sortby: creationdateasc
       filters:
         - name: "owner-id"
           values: '{{ $ami.owner_id | default "*" }}'
