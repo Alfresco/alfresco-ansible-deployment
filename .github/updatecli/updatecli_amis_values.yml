@@ -3,14 +3,14 @@ amis:
     pattern: RHEL-8.10.0_HVM-*
     owner_id: "309956199498"
   rhel9:
-    pattern: RHEL-9.4.0_HVM-*
+    pattern: RHEL-9.5.0_HVM-*
     owner_id: "309956199498"
   rl8:
     pattern: Rocky-8-EC2-Base-8.10-*
     volume_type: gp2
     owner_id: "792107900819"
   rl9:
-    pattern: Rocky-9-EC2-Base-9.4-*
+    pattern: Rocky-9-EC2-Base-9.5-*
     volume_type: gp2
     owner_id: "792107900819"
   ub22:
