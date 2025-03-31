@@ -65,7 +65,7 @@ dsync.service.uris={% if repository_use_ssl | bool %}https{% else %}http{% endif
 csrf.filter.enabled={% if repository_csrf.enabled | bool %}true
 {% if repository_csrf.urls -%}
   csrf.filter.referer={{ _xorigins_protection.compute(inventory_hostname, 'referer', repository_csrf.urls, '|') }}
-  csrf.filter.origin={{ _xorigins_protection.compute(inventory_hostname, 'origin', repository_csrf.urls, ',') }}
+  csrf.filter.origin={{ _xorigins_protection.compute(inventory_hostname, 'origin', repository_csrf.urls, '|') }}
 {% endif %}
 csrf.filter.referer.always={{ 'true' if 'origin' in repository_csrf.force_headers | lower else 'false' }}
 csrf.filter.origin.always={{ 'true' if 'referer' in repository_csrf.force_headers | lower else 'false' }}
