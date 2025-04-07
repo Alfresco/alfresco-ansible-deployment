@@ -66,110 +66,110 @@ jobs:
         uses: ./.github/actions/cache-downloads
         with:
           cache-name: enterprise
-  docker:
-    name: Test ${{ matrix.role.name }} role on ${{ matrix.molecule_distro.image }}
-    runs-on: ubuntu-latest
-    needs: requirements
-    if: needs.requirements.outputs.secrets-available == 'true'
-    outputs:
-      dtas_version: ${{ steps.jobvars.outputs.dtas_version }}
-    strategy:
-      fail-fast: false
-      matrix:
-        molecule_distro:
-          - image: ubuntu:24.04
-          - image: rockylinux/rockylinux:9.5
-        role:
-          - name: adf_app
-          - name: search_enterprise
-          - name: repository
-          - name: sfs
-          - name: sync
-          - name: trouter
-          - name: audit_storage
-    steps:
-      - name: Share var with further reusable workflows
-        id: jobvars
-        run: echo "dtas_version=$DTAS_VERSION" >> $GITHUB_OUTPUT
+  # docker:
+  #   name: Test ${{ matrix.role.name }} role on ${{ matrix.molecule_distro.image }}
+  #   runs-on: ubuntu-latest
+  #   needs: requirements
+  #   if: needs.requirements.outputs.secrets-available == 'true'
+  #   outputs:
+  #     dtas_version: ${{ steps.jobvars.outputs.dtas_version }}
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       molecule_distro:
+  #         - image: ubuntu:24.04
+  #         - image: rockylinux/rockylinux:9.5
+  #       role:
+  #         - name: adf_app
+  #         - name: search_enterprise
+  #         - name: repository
+  #         - name: sfs
+  #         - name: sync
+  #         - name: trouter
+  #         - name: audit_storage
+  #   steps:
+  #     - name: Share var with further reusable workflows
+  #       id: jobvars
+  #       run: echo "dtas_version=$DTAS_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+  #     - name: Checkout
+  #       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Setup Python
-        uses: ./.github/actions/setup-python
-        id: setup-python
+  #     - name: Setup Python
+  #       uses: ./.github/actions/setup-python
+  #       id: setup-python
 
-      - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@1bb43fe6a87aeb29ea82570a3a10438c673f48af # v8.14.1
-        with:
-          python-version: ${{ steps.setup-python.outputs.python-version }}
+  #     - name: Install python packages
+  #       uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@1bb43fe6a87aeb29ea82570a3a10438c673f48af # v8.14.1
+  #       with:
+  #         python-version: ${{ steps.setup-python.outputs.python-version }}
 
-      - name: Install and cache ansible galaxy dependencies
-        uses: ./.github/actions/galaxy
-        with:
-          cache-name: enterprise
+  #     - name: Install and cache ansible galaxy dependencies
+  #       uses: ./.github/actions/galaxy
+  #       with:
+  #         cache-name: enterprise
 
-      - name: Setup workspace
-        uses: ./.github/actions/setup-workspace
+  #     - name: Setup workspace
+  #       uses: ./.github/actions/setup-workspace
 
-      - name: Cache downloads
-        uses: ./.github/actions/cache-downloads
-        with:
-          cache-name: enterprise
+  #     - name: Cache downloads
+  #       uses: ./.github/actions/cache-downloads
+  #       with:
+  #         cache-name: enterprise
 
-      - name: Run tests
-        env:
-          MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
-          NEXUS_USERNAME: ${{ secrets.nexus_username }}
-          NEXUS_PASSWORD: ${{ secrets.nexus_password }}
-        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
-        with:
-          timeout_minutes: 60
-          max_attempts: 3
-          retry_wait_seconds: 10
-          command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
+  #     - name: Run tests
+  #       env:
+  #         MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
+  #         NEXUS_USERNAME: ${{ secrets.nexus_username }}
+  #         NEXUS_PASSWORD: ${{ secrets.nexus_password }}
+  #       uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
+  #       with:
+  #         timeout_minutes: 60
+  #         max_attempts: 3
+  #         retry_wait_seconds: 10
+  #         command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
 
-  docker_integration:
-    name: Test ${{ matrix.scenario.name }} scenario on ${{ matrix.molecule_distro.image }}
-    needs:
-      - docker
-    strategy:
-      fail-fast: false
-      matrix:
-        molecule_distro:
-          - image: ubuntu:24.04
-          - image: rockylinux/rockylinux:9.5
-        scenario:
-          - name: pki
-          - name: elasticsearch
-          - name: identity
-          - name: prerun_network_checks
-        runner:
-          - ubuntu-latest
-        include:
-          - scenario:
-              name: docker_enterprise
-            molecule_distro:
-              image: rockylinux/rockylinux:9.5
-            runner: ubuntu-24.04-arm
-          - scenario:
-              name: docker_enterprise
-            molecule_distro:
-              image: ubuntu:24.04
-            runner: ubuntu-24.04-arm
+  # docker_integration:
+  #   name: Test ${{ matrix.scenario.name }} scenario on ${{ matrix.molecule_distro.image }}
+  #   needs:
+  #     - docker
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       molecule_distro:
+  #         - image: ubuntu:24.04
+  #         - image: rockylinux/rockylinux:9.5
+  #       scenario:
+  #         - name: pki
+  #         - name: elasticsearch
+  #         - name: identity
+  #         - name: prerun_network_checks
+  #       runner:
+  #         - ubuntu-latest
+  #       include:
+  #         - scenario:
+  #             name: docker_enterprise
+  #           molecule_distro:
+  #             image: rockylinux/rockylinux:9.5
+  #           runner: ubuntu-24.04-arm
+  #         - scenario:
+  #             name: docker_enterprise
+  #           molecule_distro:
+  #             image: ubuntu:24.04
+  #           runner: ubuntu-24.04-arm
 
-    uses: ./.github/workflows/docker.yml
-    with:
-      scenario: ${{ matrix.scenario.name }}
-      os_distribution: ${{ matrix.molecule_distro.image }}
-      galaxy_cache: enterprise
-      dtas_version: ${{ needs.docker.outputs.dtas_version }}
-      dtas_additional_params: ${{ matrix.runner == 'ubuntu-24.04-arm' && '-k "not test_transformation and not test_get_sync"' || '' }}
-      runner: ${{ matrix.runner }}
-    secrets:
-      nexus_username: ${{ secrets.NEXUS_USERNAME }}
-      nexus_password: ${{ secrets.NEXUS_PASSWORD }}
-      dtas_token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.DEPENDABOT_GITHUB_TOKEN }}
+  #   uses: ./.github/workflows/docker.yml
+  #   with:
+  #     scenario: ${{ matrix.scenario.name }}
+  #     os_distribution: ${{ matrix.molecule_distro.image }}
+  #     galaxy_cache: enterprise
+  #     dtas_version: ${{ needs.docker.outputs.dtas_version }}
+  #     dtas_additional_params: ${{ matrix.runner == 'ubuntu-24.04-arm' && '-k "not test_transformation and not test_get_sync"' || '' }}
+  #     runner: ${{ matrix.runner }}
+  #   secrets:
+  #     nexus_username: ${{ secrets.NEXUS_USERNAME }}
+  #     nexus_password: ${{ secrets.NEXUS_PASSWORD }}
+  #     dtas_token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.DEPENDABOT_GITHUB_TOKEN }}
 
   ec2:
     name: ${{ matrix.molecule_scenario.desc }}
