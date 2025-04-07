@@ -30,6 +30,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: false
 
+permissions:
+  id-token: write
+
 jobs:
   requirements:
     name: Ensure requirements are met
