@@ -47,7 +47,7 @@ After=syslog.socket network.target local-fs.target remote-fs.target
 [Service]
 Type=simple
 User={{ username }}
-ExecStart={{ java_home }}/bin/java {{ java_opts }} -jar {{ ats_home }}/{{ transformers_aio_artifact_name }}-{{ transformers_aio_version }}.jar --spring.config.additional-location=optional:tengine-mtls.properties
+ExecStart={{ java_home }}/bin/java {{ java_opts | replace('%', '%%') }} -jar {{ ats_home }}/{{ transformers_aio_artifact_name }}-{{ transformers_aio_version }}.jar --spring.config.additional-location=optional:tengine-mtls.properties
 WorkingDirectory={{ ats_home }}
 Restart=on-failure
 RestartSec=60
