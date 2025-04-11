@@ -65,7 +65,7 @@ runs:
       uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
       with:
         aws-region: ${{ inputs.aws_region }}
-        role-to-assume: arn:aws:iam::372466110691:role/AlfrescoCI/ansible-repos
+        role-to-assume: arn:aws:iam::372466110691:role/AlfrescoCI/alfresco-cloud-deploy
         role-session-name: ${{ github.workflow }}-${{ github.run_id }}
         role-duration-seconds: 5400
 
