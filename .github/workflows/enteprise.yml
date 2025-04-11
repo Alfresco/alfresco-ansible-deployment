@@ -30,6 +30,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: false
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   requirements:
     name: Ensure requirements are met
@@ -220,6 +224,5 @@ jobs:
           matrix_desc: ${{ matrix.molecule_scenario.desc }}
           nexus_username: ${{ secrets.NEXUS_USERNAME }}
           nexus_password: ${{ secrets.NEXUS_PASSWORD }}
-          aws_access_key_id: ${{ secrets.aws_access_key_id }}
-          aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
+          aws_region: ${{ env.AWS_REGION }}
           pat: ${{ secrets.BOT_GITHUB_TOKEN }}
