@@ -66,7 +66,7 @@ runs:
       with:
         aws-region: ${{ inputs.aws_region }}
         role-to-assume: arn:aws:iam::372466110691:role/AlfrescoCI/alfresco-cloud-deploy
-        role-session-name: ${{ github.workflow }}-${{ github.run_id }}
+        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}
         role-duration-seconds: 5400
 
     - name: Run tests
