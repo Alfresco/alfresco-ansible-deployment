@@ -66,6 +66,7 @@
     mode: 'u=rwx,g=rx,o=rx'
   loop:
     - "{{ repository_content_folder }}/modules/acs-platform"
+    - "{{ repository_content_folder }}/modules/acs-platform-config"
     - "{{ repository_content_folder }}/modules/acs-share"
     - "{{ repository_content_folder }}/amps_repo"
     - "{{ repository_content_folder }}/amps_share"

@@ -2,5 +2,7 @@
 	<Resources>
 		<PostResources base="{{ repository_content_folder }}/modules/acs-platform"
 		className="org.apache.catalina.webresources.DirResourceSet" webAppMount="/WEB-INF/lib"/>
+		<PostResources base="{{ repository_content_folder }}/modules/acs-platform-config"
+		className="org.apache.catalina.webresources.DirResourceSet" webAppMount="/WEB-INF/lib"/>
 	</Resources>
 </Context>
