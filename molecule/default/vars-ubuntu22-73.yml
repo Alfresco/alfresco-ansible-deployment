@@ -1,4 +1,4 @@
-MOLECULE_IT_IMAGE_ID: ami-01c7096235204c7be # ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20250327
+MOLECULE_IT_IMAGE_ID: ami-0043735dd4439caed # ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20250425
 MOLECULE_IT_EXTRA_VARS: acs_play_major_version=73
 MOLECULE_IT_TEST_CONFIG: tests/test-config-7.3.json
 MOLECULE_IT_PLATFORM: ubuntu22-73
