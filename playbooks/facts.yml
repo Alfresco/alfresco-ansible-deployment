@@ -6,3 +6,6 @@
       ansible.builtin.set_fact:
         ats_mtls_required: >-
           {{ groups.repository | default([]) | difference(groups.transformers | default([])) | length > 0 }}
+    - name: Set features facts
+      ansible.builtin.set_fact:
+        hxi_enabled: groups['hxi'] | default([]) | length > 0

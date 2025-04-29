@@ -352,6 +352,22 @@
         repository_extra_war_downloads: "{{ acs_play_repository_extra_war_downloads }}"
         repository_extra_amp_downloads: "{{ acs_play_repository_extra_amp_downloads }}"
         repository_truststore_type: "{{ acs_play_default_truststore_type }}"
+    - name: Include HxInsight repository extension
+      when: hxi_enabled
+      ansible.builtin.include_role:
+        name: alfresco.platform.hxi_connector
+        tasks_from: repository-extension.yml
+      vars:
+        hxi_connector_repository_extension_artifact_path: "/opt/alfresco/content-services-25.1/modules/acs-platform/hxi-repository-extension.jar"
+        hxi_connector_repository_extension_properties_snippet_path: "/opt/alfresco/content-services-25.1/modules/acs-platform-config/alfresco/module/alfresco-hxinsight-connector-hxinsight-extension/alfresco-global.properties"
+        hxi_connector_alfresco_service_name: "alfresco-content-monitored-startup"
+        hxi_connector_remote_discovery_url: "{{ acs_play_hxi_remote_discovery_url }}"
+        hxi_connector_remote_client_id: "{{ acs_play_hxi_remote_client_id }}"
+        hxi_connector_remote_client_secret: "{{ acs_play_hxi_remote_client_secret }}"
+        hxi_connector_remote_environment_key: "{{ acs_play_hxi_remote_environment_key }}"
+        hxi_connector_remote_prediction_url: "{{ acs_play_hxi_remote_prediction_url }}"
+        hxi_connector_remote_token_url: "{{ acs_play_hxi_remote_token_url }}"
+        hxi_connector_application_sourceid: "{{ acs_play_hxi_application_sourceid }}"
   post_tasks:
     - name: Initialize evaluation of currently installed amps
       ansible.builtin.set_fact:
@@ -742,3 +758,24 @@
         mode: "0755"
   tags:
     - audit_storage
+
+- name: HxInsight Role
+  hosts: hxi
+  gather_facts: false
+  roles:
+    - role: alfresco.platform.hxi_connector
+      when: acs_is_enterprise
+      hxi_connector_java_bin_path: "/opt/openjdk-17.0.14/bin/java"
+      hxi_connector_remote_ingestion_url: "{{ acs_play_hxi_remote_ingestion_url }}"
+      hxi_connector_remote_prediction_url: "{{ acs_play_hxi_remote_prediction_url }}"
+      hxi_connector_remote_token_url: "{{ acs_play_hxi_remote_token_url }}"
+      hxi_connector_remote_client_id: "{{ acs_play_hxi_remote_client_id }}"
+      hxi_connector_remote_client_secret: "{{ acs_play_hxi_remote_client_secret }}"
+      hxi_connector_remote_environment_key: "{{ acs_play_hxi_remote_environment_key }}"
+      hxi_connector_alfresco_base_url: ""
+      hxi_connector_alfresco_username: "admin" # pragma: allowlist secret
+      hxi_connector_alfresco_password: "admin" # pragma: allowlist secret
+      hxi_connector_alfresco_sfs_url: ""
+      hxi_connector_alfresco_activemq_url: ""
+      hxi_connector_service_user: "alfresco"
+      hxi_connector_application_sourceid: "{{ acs_play_hxi_application_sourceid }}"
