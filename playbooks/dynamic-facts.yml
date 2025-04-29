@@ -1,6 +1,6 @@
 ---
 - name: Set dynamic facts for play
-  hosts: localhost:all
+  hosts: localhost:all:!external
   gather_facts: false
   tasks:
     - name: Validate acs edition value

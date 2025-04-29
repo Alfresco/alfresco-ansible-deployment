@@ -1,6 +1,6 @@
 ---
 - name: Include vars based on acs major version
-  hosts: localhost:all
+  hosts: localhost:all:!external
   gather_facts: false
   vars:
     base_folder: "{{ playbook_dir }}/.."
