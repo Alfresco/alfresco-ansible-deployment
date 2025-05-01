@@ -35,7 +35,7 @@ jobs:
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@1bb43fe6a87aeb29ea82570a3a10438c673f48af # v8.14.1
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@012ce56cc25c63d5881d1ec391e2eb4c0254810d # v8.14.1
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -80,7 +80,7 @@ jobs:
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@1bb43fe6a87aeb29ea82570a3a10438c673f48af # v8.14.1
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@012ce56cc25c63d5881d1ec391e2eb4c0254810d # v8.14.1
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
