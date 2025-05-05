@@ -31,15 +31,15 @@
             https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/components-upgrade.md
       vars:
         is_cal_major_version: "{{ acs_play_repository_acs_version.split('.')[0] | int >= 23 }}"
-        version_slice_length: "{{ 2 if is_cal_major_version else 3 }}"
         semver_patch_slice_length: 2
+        acs_version_slice_length: "{{ semver_patch_slice_length if is_cal_major_version else 3 }}"
       block:
         - name: Fail on unsupported ACS upgrade
           ansible.builtin.fail:
           when:
             - installed_components.acs is defined
             - |
-              acs_play_repository_acs_version.split('.')[:version_slice_length] | join('.') != installed_components.acs.version.split('.')[:version_slice_length] | join('.') or
+              acs_play_repository_acs_version.split('.')[:acs_version_slice_length] | join('.') != installed_components.acs.version.split('.')[:acs_version_slice_length] | join('.') or
               acs_play_repository_acs_version is version(installed_components.acs.version, 'lt')
 
         - name: Initialize evaluation of currently installed amps
@@ -81,6 +81,30 @@
               amps[item].version.split('.')[:semver_patch_slice_length] | join('.') != installed_components.amps[item].version.split('.')[:semver_patch_slice_length] | join('.') or
               amps[item].version is version(installed_components.amps[item].version, 'lt')
           loop: "{{ installed_components.amps | list }}"
+
+        - name: Fail on unsupported Transformers upgrades
+          ansible.builtin.fail:
+          when:
+            - installed_components.transform is defined
+            - |
+              acs_play_transformers_aio_version.split('.')[0] != installed_components.transform.version.split('.')[0] or
+              acs_play_transformers_aio_version is version(installed_components.transform.version, 'lt')
+
+        - name: Fail on unsupported Trouter upgrades
+          ansible.builtin.fail:
+          when:
+            - installed_components.trouter is defined
+            - |
+              acs_play_trouter_version.split('.')[:semver_patch_slice_length] | join('.') != installed_components.trouter.version.split('.')[:semver_patch_slice_length] | join('.') or
+              acs_play_trouter_version is version(installed_components.trouter.version, 'lt')
+
+        - name: Fail on unsupported SFS upgrades
+          ansible.builtin.fail:
+          when:
+            - installed_components.sfs is defined
+            - |
+              acs_play_sfs_version.split('.')[:semver_patch_slice_length] | join('.') != installed_components.sfs.version.split('.')[:semver_patch_slice_length] | join('.') or
+              acs_play_sfs_version is version(installed_components.sfs.version, 'lt')
 
         - name: Fail on unsupported Search upgrades
           ansible.builtin.fail:
