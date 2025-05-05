@@ -763,6 +763,7 @@
   hosts: hxi
   gather_facts: false
   roles:
+    - role: "../roles/java"
     - role: alfresco.platform.hxi_connector
       when: acs_is_enterprise
       hxi_connector_java_bin_path: "/opt/openjdk-17.0.14/bin/java"
