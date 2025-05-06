@@ -39,11 +39,9 @@ default_jdbc_pg_driver_url: >-
 default_jdbc_pg_driver_class: org.postgresql.Driver
 
 acs_play_repo_db_url: ""
-acs_play_repo_db_driver: org.postgresql.Driver
 acs_play_repo_db_name: "alfresco"
 acs_play_repo_db_username: "alfresco"
 acs_play_sync_db_url: ""
-acs_play_sync_db_driver: org.postgresql.Driver
 acs_play_sync_db_name: "alfresco-sync"
 acs_play_sync_db_username: "alfresco-sync"
 

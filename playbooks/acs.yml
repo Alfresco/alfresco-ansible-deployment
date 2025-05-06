@@ -673,7 +673,6 @@
         sync_jdbc_driver_url: "{{ acs_play_sync_jdbc_driver_url }}"
         sync_jdbc_driver_checksum: "{{ acs_play_sync_jdbc_driver_checksum }}"
         sync_db_url: "{{ acs_play_sync_db_url }}"
-        sync_db_driver: "{{ acs_play_sync_db_driver }}"
         sync_db_name: "{{ acs_play_sync_db_name }}"
         sync_db_username: "{{ acs_play_sync_db_username }}"
       when: acs_is_enterprise

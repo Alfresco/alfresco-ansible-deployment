@@ -26,6 +26,5 @@ sync_jdbc_driver_url: >-
 sync_jdbc_driver_checksum: "sha1:{{ sync_jdbc_driver_url }}.sha1"
 
 sync_db_url: ""
-sync_db_driver: org.postgresql.Driver
 sync_db_name: "alfresco-sync"
 sync_db_username: "alfresco-sync"
