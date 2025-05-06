@@ -352,6 +352,9 @@
         repository_extra_war_downloads: "{{ acs_play_repository_extra_war_downloads }}"
         repository_extra_amp_downloads: "{{ acs_play_repository_extra_amp_downloads }}"
         repository_truststore_type: "{{ acs_play_default_truststore_type }}"
+    - name: Debug hxi_enabled
+      ansible.builtin.debug:
+        var: hxi_enabled
     - name: Include HxInsight vars
       ansible.builtin.include_vars:
         file: ../vars/hxi.yml
