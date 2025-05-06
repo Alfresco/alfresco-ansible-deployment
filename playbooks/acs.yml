@@ -364,7 +364,7 @@
       vars:
         hxi_connector_repository_extension_artifact_path: "{{ repository_content_folder }}/modules/acs-platform/hxi-repository-extension.jar"
         hxi_connector_repository_extension_properties_snippet_path: "{{ repository_content_folder }}/modules/acs-platform-config/alfresco/module/alfresco-hxinsight-connector-hxinsight-extension/alfresco-global.properties"
-        hxi_connector_alfresco_service_name: "alfresco-content-monitored-startup"
+        hxi_connector_alfresco_service_name: "alfresco-content"
         hxi_connector_remote_discovery_url: "{{ acs_play_hxi_remote_discovery_url }}"
         hxi_connector_remote_client_id: "{{ acs_play_hxi_remote_client_id }}"
         hxi_connector_remote_client_secret: "{{ acs_play_hxi_remote_client_secret }}"
