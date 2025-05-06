@@ -23,7 +23,7 @@ collections:
   # Alternate source for alfresco.platform
   - name: git+https://github.com/Alfresco/alfresco-ansible-collection.git
     type: git
-    version: OPSEXP-3231-mandatory-args
+    version: OPSEXP-3231-optional-handler
 
 roles:
   - name: geerlingguy.elasticsearch
