@@ -358,8 +358,8 @@
         name: alfresco.platform.hxi_connector
         tasks_from: repository-extension.yml
       vars:
-        hxi_connector_repository_extension_artifact_path: "/opt/alfresco/content-services-25.1/modules/acs-platform/hxi-repository-extension.jar"
-        hxi_connector_repository_extension_properties_snippet_path: "/opt/alfresco/content-services-25.1/modules/acs-platform-config/alfresco/module/alfresco-hxinsight-connector-hxinsight-extension/alfresco-global.properties"
+        hxi_connector_repository_extension_artifact_path: "{{ repository_content_folder }}/modules/acs-platform/hxi-repository-extension.jar"
+        hxi_connector_repository_extension_properties_snippet_path: "{{ repository_content_folder }}/modules/acs-platform-config/alfresco/module/alfresco-hxinsight-connector-hxinsight-extension/alfresco-global.properties"
         hxi_connector_alfresco_service_name: "alfresco-content-monitored-startup"
         hxi_connector_remote_discovery_url: "{{ acs_play_hxi_remote_discovery_url }}"
         hxi_connector_remote_client_id: "{{ acs_play_hxi_remote_client_id }}"
@@ -771,12 +771,12 @@
       hxi_connector_remote_prediction_url: "{{ acs_play_hxi_remote_prediction_url }}"
       hxi_connector_remote_token_url: "{{ acs_play_hxi_remote_token_url }}"
       hxi_connector_remote_client_id: "{{ acs_play_hxi_remote_client_id }}"
-      hxi_connector_remote_client_secret: "{{ acs_play_hxi_remote_client_secret }}"
+      hxi_connector_remote_client_secret: "{{ hxi_remote_client_secret }}"
       hxi_connector_remote_environment_key: "{{ acs_play_hxi_remote_environment_key }}"
-      hxi_connector_alfresco_base_url: ""
+      hxi_connector_alfresco_base_url: "{{ acs_play_proto }}://{{ acs_play_fqdn_alfresco | default(nginx_host) }}:{{ acs_play_port }}/alfresco"
       hxi_connector_alfresco_username: "admin" # pragma: allowlist secret
       hxi_connector_alfresco_password: "admin" # pragma: allowlist secret
-      hxi_connector_alfresco_sfs_url: ""
-      hxi_connector_alfresco_activemq_url: ""
+      hxi_connector_alfresco_sfs_url: "http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}"
+      hxi_connector_alfresco_activemq_url: "{{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }}"
       hxi_connector_service_user: "alfresco"
       hxi_connector_application_sourceid: "{{ acs_play_hxi_application_sourceid }}"
