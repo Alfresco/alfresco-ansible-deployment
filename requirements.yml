@@ -18,8 +18,12 @@ collections:
     version: 9.3.0
   - name: community.aws
     version: 9.1.0
-  - name: alfresco.platform
-    version: 0.1.0
+  #- name: alfresco.platform
+  #  version: 0.1.0
+  # Alternate source for alfresco.platform
+  - name: git+https://github.com/Alfresco/alfresco-ansible-collection.git
+    type: git
+    version: OPSEXP-3231-mandatory-args
 
 roles:
   - name: geerlingguy.elasticsearch
