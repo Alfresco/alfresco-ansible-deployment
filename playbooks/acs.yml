@@ -367,7 +367,7 @@
         hxi_connector_alfresco_service_existing_handler_name: "Restart-alfresco-content"
         hxi_connector_remote_discovery_url: "{{ acs_play_hxi_remote_discovery_url }}"
         hxi_connector_remote_client_id: "{{ acs_play_hxi_remote_client_id }}"
-        hxi_connector_remote_client_secret: "{{ acs_play_hxi_remote_client_secret }}"
+        hxi_connector_remote_client_secret: "{{ hxi_remote_client_secret }}"
         hxi_connector_remote_environment_key: "{{ acs_play_hxi_remote_environment_key }}"
         hxi_connector_remote_prediction_url: "{{ acs_play_hxi_remote_prediction_url }}"
         hxi_connector_remote_token_url: "{{ acs_play_hxi_remote_token_url }}"
