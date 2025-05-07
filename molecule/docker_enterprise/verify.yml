@@ -1,0 +1,22 @@
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Populate service facts
+      ansible.builtin.service_facts:
+
+    - name: Print service facts
+      ansible.builtin.debug:
+        var: ansible_facts.services
+
+    - name: Check expected services are present
+      ansible.builtin.assert:
+        that:
+          - "'alfresco-hxinsight-connector-live-ingester.service' in ansible_facts.services"
+          - ansible_facts.services['alfresco-hxinsight-connector-live-ingester.service'].state == 'running'
+          - "'alfresco-hxinsight-connector-prediction-applier.service' in ansible_facts.services"
+          - ansible_facts.services['alfresco-hxinsight-connector-prediction-applier.service'].state == 'running'
+          - "'alfresco-hxinsight-connector-bulk-ingester.service' in ansible_facts.services"
+
+- name: Import the default verify playbook
+  ansible.builtin.import_playbook: ../default/verify.yml
