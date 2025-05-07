@@ -777,9 +777,7 @@
       hxi_connector_remote_client_id: "{{ acs_play_hxi_remote_client_id }}"
       hxi_connector_remote_client_secret: "{{ hxi_remote_client_secret }}"
       hxi_connector_remote_environment_key: "{{ acs_play_hxi_remote_environment_key }}"
-      hxi_connector_alfresco_base_url: "{{ acs_play_proto }}://{{ acs_play_fqdn_alfresco | default(nginx_host) }}:{{ acs_play_port }}/alfresco"
-      hxi_connector_alfresco_username: "admin" # pragma: allowlist secret
-      hxi_connector_alfresco_password: "admin" # pragma: allowlist secret
+      hxi_connector_alfresco_version_override: "{{ acs_play_repository_acs_version }}"
       hxi_connector_alfresco_sfs_url: "http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}"
       hxi_connector_alfresco_activemq_url: "{{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }}"
       hxi_connector_alfresco_activemq_username: "{{ activemq_username }}"
