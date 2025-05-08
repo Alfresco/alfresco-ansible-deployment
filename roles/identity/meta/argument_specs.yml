@@ -47,11 +47,36 @@ argument_specs:
   realm:
     short_description: Configure the keycloak realm
     options:
+      identity_keycloak_http_port:
+        type: int
+        default: 8080
+        description: |
+          Port where to expose the keycloak instance
+      identity_keycloak_host:
+        type: str
+        default: localhost
+        description: |
+          Hostname where clients can reach the keycloak instance
+      identity_keycloak_http_relative_path:
+        type: str
+        default: /auth
+        description:
+          Path relative to / for serving keycloak resources
+      identity_url:
+        type: str
+        default:
+        description:
+          Set the base URL for frontend URL and admin console, including scheme, host, port and path.
+          Will override identity_keycloak_host, identity_keycloak_http_port.
       identity_admin_username:
         type: str
         default: admin
         description: |
           Username of the keycloak instance admin user
+      identity_admin_password:
+        type: str
+        description: |
+          Password of the keycloak instance admin user
       identity_default_realm_id:
         type: str
         default: alfresco
