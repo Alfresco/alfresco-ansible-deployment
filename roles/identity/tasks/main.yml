@@ -7,8 +7,8 @@
     keycloak_quarkus_version: "{{ identity_keycloak_quarkus_version }}"
     keycloak_quarkus_start_dev: "{{ identity_keycloak_start_dev }}"
     keycloak_quarkus_proxy_headers: "{{ identity_keycloak_quarkus_proxy_headers }}"
-    keycloak_quarkus_hostname: "{{ identity_url | default(identity_keycloak_default_hostname, true) }}"
-    keycloak_quarkus_hostname_admin: "{{ identity_url | default(identity_keycloak_default_hostname, true) }}"
+    keycloak_quarkus_hostname: "{{ identity_keycloak_hostname }}"
+    keycloak_quarkus_hostname_admin: "{{ identity_keycloak_hostname }}"
     keycloak_quarkus_http_port: "{{ identity_keycloak_http_port }}"
     keycloak_quarkus_http_relative_path: "{{ identity_keycloak_http_relative_path }}"
   ansible.builtin.include_role:

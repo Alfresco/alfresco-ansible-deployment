@@ -16,6 +16,8 @@ identity_keycloak_default_hostname: "http://{{ identity_keycloak_host }}:{{ iden
 identity_url: null
 identity_known_urls: []
 
+identity_keycloak_hostname: "{{ identity_url | default(identity_keycloak_default_hostname, true) }}"
+
 identity_default_realm_id: alfresco
 
 identity_default_client_id: alfresco
