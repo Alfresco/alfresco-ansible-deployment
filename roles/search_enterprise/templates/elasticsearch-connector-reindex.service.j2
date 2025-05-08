@@ -9,9 +9,9 @@ User={{ username }}
 
 {% include "elasticsearch-cfg.j2" %}
 
-Environment=SPRING_DATASOURCE_URL={{ search_enterprise_repo_db_url if search_enterprise_repo_db_url else 'jdbc:postgresql://' + db_host + ':' + ports_cfg.postgres.sql | string + '/' + search_enterprise_repo_db_name }}
+Environment=SPRING_DATASOURCE_URL={{ search_enterprise_repo_db_url }}
 Environment=SPRING_DATASOURCE_USERNAME={{ search_enterprise_repo_db_username }}
-Environment=SPRING_DATASOURCE_PASSWORD={{ repo_db_password | replace('%', '%%') }}
+Environment=SPRING_DATASOURCE_PASSWORD={{ search_enterprise_repo_db_password | replace('%', '%%') }}
 
 ExecStart={{ java_home }}/bin/java -jar {{ search_enterprise_binaries_dir }}/alfresco-elasticsearch-reindexing-{{ search_enterprise_version }}-app.jar {{ search_enterprise_reindex_options }}
 
