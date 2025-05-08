@@ -15,7 +15,7 @@
           - "'alfresco-hxinsight-connector-live-ingester.service' in ansible_facts.services"
           - ansible_facts.services['alfresco-hxinsight-connector-live-ingester.service'].state == 'running'
           - "'alfresco-hxinsight-connector-prediction-applier.service' not in ansible_facts.services"
-          - "'alfresco-hxinsight-connector-bulk-ingester.service' in ansible_facts.services"
+          - "'alfresco-hxinsight-connector-bulk-ingester.service' not in ansible_facts.services" # OPSEXP-3235
 
 - name: Import the default verify playbook
   ansible.builtin.import_playbook: ../default/verify.yml
