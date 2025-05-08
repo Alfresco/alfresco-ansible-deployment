@@ -44,14 +44,14 @@ argument_specs:
         description:
           Set the base URL for frontend URL and admin console, including scheme, host, port and path.
           Will override identity_keycloak_host, identity_keycloak_http_port.
-      identity_keycloak_quarkus_version:
-        type: str
-        default: 25.0.0
-        description: |
-          Version of the keycloak server
   realm:
     short_description: Configure the keycloak realm
     options:
+      identity_admin_username:
+        type: str
+        default: admin
+        description: |
+          Username of the keycloak instance admin user
       identity_default_realm_id:
         type: str
         default: alfresco
