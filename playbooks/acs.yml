@@ -784,5 +784,8 @@
       hxi_connector_alfresco_activemq_url: "{{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }}"
       hxi_connector_alfresco_activemq_username: "{{ activemq_username }}"
       hxi_connector_alfresco_activemq_password: "{{ activemq_password }}"
+      hxi_connector_alfresco_db_url: "{{ acs_play_repo_db_url }}"
+      hxi_connector_alfresco_db_username: "{{ acs_play_repo_db_username }}"
+      hxi_connector_alfresco_db_password: "{{ repo_db_password }}"
       hxi_connector_service_user: "alfresco"
       hxi_connector_application_sourceid: "{{ acs_play_hxi_application_sourceid }}"
