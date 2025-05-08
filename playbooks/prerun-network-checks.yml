@@ -19,7 +19,7 @@
       ansible.builtin.include_tasks: "tasks/check_port.yml"
       vars:
         checked_host: "{{ db_host }}"
-        checked_port: "{{ ports_cfg.postgres.sql }}"
+        checked_port: "{{ ports_cfg_postgres_sql }}"
         delegate_target: "{{ groups.database | first }}"
       when: acs_play_repo_db_url == "" and groups.database | default([]) | length > 0
 
@@ -116,7 +116,7 @@
       ansible.builtin.include_tasks: "tasks/check_port.yml"
       vars:
         checked_host: "{{ db_host }}"
-        checked_port: "{{ ports_cfg.postgres.sql }}"
+        checked_port: "{{ ports_cfg_postgres_sql }}"
         delegate_target: "{{ groups.database | first }}"
       when: acs_play_repo_db_url == "" and groups.database | default([]) | length > 0
 

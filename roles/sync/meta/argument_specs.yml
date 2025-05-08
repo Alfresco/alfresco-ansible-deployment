@@ -79,3 +79,8 @@ argument_specs:
         required: false
         description: |
           The username to connect to the database
+      sync_db_host:
+        type: str
+        required: false
+        description: |
+          The hostname of the database server

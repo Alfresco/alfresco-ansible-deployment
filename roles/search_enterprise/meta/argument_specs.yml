@@ -23,13 +23,13 @@ argument_specs:
         required: false
       search_enterprise_repo_db_url:
         description: |
-          URL of the database to use for the Search Enterprise
-        required: false
-      search_enterprise_repo_db_name:
-        description: |
-          Name of the database to use for the Search Enterprise
+          URL of the database to use for the Search Enterprise Bulk Ingester
         required: false
       search_enterprise_repo_db_username:
         description: |
-          Username to use to connect to the database for the Search Enterprise
+          Username to use to connect to the database for the Search Enterprise Bulk Ingester
+        required: false
+      search_enterprise_repo_db_password:
+        description: |
+          Password to use to connect to the database for the Search Enterprise Bulk Ingester
         required: false
