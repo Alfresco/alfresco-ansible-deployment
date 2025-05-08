@@ -2,17 +2,14 @@
 # tasks file for identity
 - name: Install Keycloak
   vars:
-    keycloak_quarkus_admin_pass: "{{ identity_admin_password }}"
+    keycloak_quarkus_bootstrap_admin_user: "{{ identity_admin_username }}"
+    keycloak_quarkus_bootstrap_admin_password: "{{ identity_admin_password }}"
     keycloak_quarkus_version: "{{ identity_keycloak_quarkus_version }}"
     keycloak_quarkus_start_dev: "{{ identity_keycloak_start_dev }}"
     keycloak_quarkus_proxy_headers: "{{ identity_keycloak_quarkus_proxy_headers }}"
-    keycloak_quarkus_host: "{{ identity_keycloak_host }}"
+    keycloak_quarkus_hostname: "{{ identity_url | default(identity_keycloak_default_hostname, true) }}"
+    keycloak_quarkus_hostname_admin: "{{ identity_url | default(identity_keycloak_default_hostname, true) }}"
     keycloak_quarkus_http_port: "{{ identity_keycloak_http_port }}"
     keycloak_quarkus_http_relative_path: "{{ identity_keycloak_http_relative_path }}"
-    keycloak_quarkus_frontend_url: "{{ identity_url }}"
-    keycloak_quarkus_admin_url: "{{ identity_url }}"
-    keycloak_quarkus_additional_env_vars:
-      - key: KC_FEATURES
-        value: hostname:v1 # retrocompatibility with Keycloak 24
   ansible.builtin.include_role:
     name: middleware_automation.keycloak.keycloak_quarkus
