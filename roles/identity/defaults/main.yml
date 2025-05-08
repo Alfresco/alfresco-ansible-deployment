@@ -3,7 +3,7 @@
 identity_admin_username: admin
 identity_admin_password: null
 
-identity_keycloak_quarkus_version: "25.0.6"
+identity_keycloak_quarkus_version: "26.2.4"
 identity_alfresco_theme_version: "0.3.5"
 
 identity_keycloak_http_port: 8080
@@ -11,9 +11,12 @@ identity_keycloak_start_dev: true
 identity_keycloak_quarkus_proxy_headers: xforwarded
 identity_keycloak_host: localhost
 identity_keycloak_http_relative_path: /auth
+identity_keycloak_default_url: "http://{{ identity_keycloak_host }}:{{ identity_keycloak_http_port | string }}{{ identity_keycloak_http_relative_path }}"
 
 identity_url: null
 identity_known_urls: []
+
+identity_keycloak_url: "{{ identity_url | default(identity_keycloak_default_url, true) }}"
 
 identity_default_realm_id: alfresco
 

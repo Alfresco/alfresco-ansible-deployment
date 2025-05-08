@@ -47,6 +47,11 @@ argument_specs:
   realm:
     short_description: Configure the keycloak realm
     options:
+      identity_admin_username:
+        type: str
+        default: admin
+        description: |
+          Username of the keycloak instance admin user
       identity_default_realm_id:
         type: str
         default: alfresco
