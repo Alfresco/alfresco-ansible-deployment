@@ -711,7 +711,7 @@ An example custom database url is shown below:
 
 ```yaml
 acs_play_repo_db_url: jdbc:mysql://54.164.117.56:3306/alfresco?useUnicode=yes&characterEncoding=UTF-8
-acs_play_repository_jdbc_driver_class: com.mysql.jdbc.Driver
+acs_play_repo_db_driver: com.mysql.jdbc.Driver
 ```
 
 Along with the url the database driver binaries need to be provided for one or both services in the `configuration_files/db_connector_repo` and/or `configuration_files/db_connector_sync` folders.
