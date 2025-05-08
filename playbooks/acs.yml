@@ -770,7 +770,7 @@
     - role: "../roles/java"
     - role: alfresco.platform.hxi_connector
       when: acs_is_enterprise
-      hxi_connector_java_bin_path: "/opt/openjdk-17.0.14/bin/java"
+      hxi_connector_java_bin_path: "/opt/openjdk-{{ acs_play_java_core }}/bin/java"
       hxi_connector_live_ingester_port: 8084
       hxi_connector_prediction_applier_port: 8085
       hxi_connector_remote_ingestion_url: "{{ acs_play_hxi_remote_ingestion_url }}"
