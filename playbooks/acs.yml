@@ -766,10 +766,17 @@
 - name: HxInsight Role
   hosts: hxi
   gather_facts: false
+  pre_tasks:
+    - name: Assert HxI is available
+      ansible.builtin.fail:
+        msg: "HxInsight can be used only with ACS Enterprise"
+      when: not acs_is_enterprise
+    - name: Include HxInsight vars
+      ansible.builtin.include_vars:
+        file: ../vars/hxi.yml
   roles:
     - role: "../roles/java"
     - role: alfresco.platform.hxi_connector
-      when: acs_is_enterprise
       hxi_connector_java_bin_path: "/opt/openjdk-{{ acs_play_java_core }}/bin/java"
       hxi_connector_live_ingester_port: 8084
       hxi_connector_prediction_applier_port: 8085
