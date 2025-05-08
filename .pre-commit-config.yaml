@@ -31,7 +31,7 @@ repos:
           - scan
 
   - repo: https://github.com/PyCQA/prospector
-    rev: v1.13.3
+    rev: v1.16.1
     hooks:
       - id: prospector
         additional_dependencies:
