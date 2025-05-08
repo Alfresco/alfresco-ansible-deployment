@@ -2,7 +2,6 @@
 import os
 import pytest
 from hamcrest import contains_string, assert_that
-from packaging import version
 
 test_host = os.environ.get('TEST_HOST')
 

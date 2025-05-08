@@ -1,5 +1,4 @@
 """Postgresql Tests"""
-import os
 import pytest
 from hamcrest import assert_that, contains_string
 
