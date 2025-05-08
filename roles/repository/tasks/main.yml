@@ -516,9 +516,9 @@
 
 - name: Wait-for-db
   ansible.builtin.wait_for:
-    host: "{{ db_host }}"
-    port: "{{ ports_cfg.postgres.sql }}"
-  when: not repository_db_url | default(false)
+    host: "{{ repository_db_host }}"
+    port: "{{ repository_db_port }}"
+  when: repository_db_host and repository_db_port
 
 - name: Check if service restart is needed
   ansible.builtin.debug:
