@@ -11,12 +11,12 @@ identity_keycloak_start_dev: true
 identity_keycloak_quarkus_proxy_headers: xforwarded
 identity_keycloak_host: localhost
 identity_keycloak_http_relative_path: /auth
-identity_keycloak_default_hostname: "http://{{ identity_keycloak_host }}:{{ identity_keycloak_http_port | string }}{{ identity_keycloak_http_relative_path }}"
+identity_keycloak_default_url: "http://{{ identity_keycloak_host }}:{{ identity_keycloak_http_port | string }}{{ identity_keycloak_http_relative_path }}"
 
 identity_url: null
 identity_known_urls: []
 
-identity_keycloak_hostname: "{{ identity_url | default(identity_keycloak_default_hostname, true) }}"
+identity_keycloak_url: "{{ identity_url | default(identity_keycloak_default_url, true) }}"
 
 identity_default_realm_id: alfresco
 
