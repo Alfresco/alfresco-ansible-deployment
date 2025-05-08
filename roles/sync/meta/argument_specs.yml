@@ -41,12 +41,6 @@ argument_specs:
         required: false
         description: |
           The version of the PostgreSQL JDBC driver to download
-      sync_jdbc_driver_class:
-        type: str
-        required: false
-        default: org.postgresql.Driver
-        description: |
-          The class name of the JDBC driver to use
       sync_jdbc_driver_url:
         type: str
         required: false
