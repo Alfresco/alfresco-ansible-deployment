@@ -141,3 +141,6 @@ repository_amp_downloads: []
 repository_extra_amp_downloads: []
 
 repository_truststore_type: JCEKS
+
+repository_db_host: ""
+repository_db_port: 5432

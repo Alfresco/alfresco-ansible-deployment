@@ -334,7 +334,7 @@
         tomcat_version: "{{ acs_play_tomcat_version }}" # noqa: var-naming[no-role-prefix]
         repository_nexus_username: "{{ nexus_user }}"
         repository_nexus_password: "{{ nexus_password }}"
-        repository_db_url: "{{ acs_play_repo_db_url }}"
+        repository_db_url: "{{ acs_play_computed_repo_db_url }}"
         repository_acs_is_enterprise: "{{ acs_is_enterprise }}"
         repository_acs_version: "{{ acs_play_repository_acs_version }}"
         repository_acs_artifact_name: "{{ acs_play_repository_acs_artifact_name }}"
@@ -537,9 +537,9 @@
         name: "../roles/search_enterprise"
       vars:
         java_version: "{{ acs_play_java_version }}" # noqa: var-naming[no-role-prefix]
-        search_enterprise_repo_db_url: "{{ acs_play_repo_db_url }}"
-        search_enterprise_repo_db_name: "{{ acs_play_repo_db_name }}"
+        search_enterprise_repo_db_url: "{{ acs_play_computed_repo_db_url }}"
         search_enterprise_repo_db_username: "{{ acs_play_repo_db_username }}"
+        search_enterprise_repo_db_password: "{{ repo_db_password }}"
         search_enterprise_version: "{{ acs_play_search_enterprise_version }}"
         search_enterprise_zip_url: "{{ acs_play_search_enterprise_zip_url }}"
         search_enterprise_zip_checksum: "{{ acs_play_search_enterprise_zip_checksum }}"
@@ -687,7 +687,7 @@
         sync_jdbc_driver_version: "{{ acs_play_sync_jdbc_driver_version }}"
         sync_jdbc_driver_url: "{{ acs_play_sync_jdbc_driver_url }}"
         sync_jdbc_driver_checksum: "{{ acs_play_sync_jdbc_driver_checksum }}"
-        sync_db_url: "{{ acs_play_sync_db_url }}"
+        sync_db_url: "{{ acs_play_computed_sync_db_url }}"
         sync_db_driver: "{{ acs_play_sync_db_driver }}"
         sync_db_name: "{{ acs_play_sync_db_name }}"
         sync_db_username: "{{ acs_play_sync_db_username }}"

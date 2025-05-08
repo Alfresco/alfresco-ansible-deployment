@@ -155,3 +155,14 @@ argument_specs:
         default: ""
         description: |
           The FQDN of the Alfresco instance
+      repository_db_host:
+        type: str
+        required: false
+        description: |
+          The hostname of the database server (used only to check if host/port is reachable)
+      repository_db_port:
+        type: int
+        required: false
+        default: 5432
+        description: |
+          The port of the database server
