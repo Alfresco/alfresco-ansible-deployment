@@ -21,8 +21,6 @@ runs:
           !/var/cache/apt/archives/partial
           !/var/cache/apt/archives/lock
         key: ${{ runner.os }}-apt-python-${{ steps.read-python-version.outputs.python-version }}
-        restore-keys: |
-          ${{ runner.os }}-apt-python-
 
     - uses: deadsnakes/action@e640ac8743173a67cca4d7d77cd837e514bf98e8 # v3.2.0
       with:
