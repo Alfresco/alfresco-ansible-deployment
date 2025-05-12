@@ -9,7 +9,7 @@
       ansible.builtin.debug:
         var: ansible_facts.services
 
-    - name: Check expected services are present
+    - name: Check expected hxi services are present
       ansible.builtin.assert:
         that:
           - "'alfresco-hxinsight-connector-live-ingester.service' in ansible_facts.services"
