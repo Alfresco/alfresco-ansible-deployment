@@ -2,8 +2,8 @@
 - name: Include vars based on acs major version
   ansible.builtin.import_playbook: include-vars.yml
 
-- name: Set dynamic facts for play
-  ansible.builtin.import_playbook: dynamic-facts.yml
+- name: Populate facts
+  ansible.builtin.import_playbook: facts.yml
 
 - name: Check if current OS version is in the supported matrix
   hosts: all:!external
@@ -18,9 +18,6 @@
       when:
         - not (skip_os_test | default(false) | bool)
         - ansible_distribution_version | float not in os_versions
-
-- name: Populate facts
-  ansible.builtin.import_playbook: facts.yml
 
 - name: Run preliminary checks
   ansible.builtin.import_playbook: prerun-checks.yml
