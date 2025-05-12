@@ -5,10 +5,6 @@
     - name: Populate service facts
       ansible.builtin.service_facts:
 
-    - name: Print service facts
-      ansible.builtin.debug:
-        var: ansible_facts.services
-
     - name: Check expected hxi services are present
       ansible.builtin.assert:
         that:
