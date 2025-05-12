@@ -778,8 +778,8 @@
     - role: "../roles/java"
     - role: alfresco.platform.hxi_connector
       hxi_connector_java_bin_path: "/opt/openjdk-{{ acs_play_java_core }}/bin/java"
-      hxi_connector_live_ingester_port: 8084
-      hxi_connector_prediction_applier_port: 8085
+      hxi_connector_live_ingester_port: "{{ acs_play_hxi_connector_live_ingester_port }}"
+      hxi_connector_prediction_applier_port: "{{ acs_play_hxi_connector_prediction_applier_port }}"
       hxi_connector_remote_ingestion_url: "{{ acs_play_hxi_remote_ingestion_url }}"
       hxi_connector_remote_prediction_url: "{{ acs_play_hxi_remote_prediction_url }}"
       hxi_connector_remote_token_url: "{{ acs_play_hxi_remote_token_url }}"
@@ -794,5 +794,5 @@
       hxi_connector_alfresco_db_url: "{{ acs_play_repo_db_url }}"
       hxi_connector_alfresco_db_username: "{{ acs_play_repo_db_username }}"
       hxi_connector_alfresco_db_password: "{{ repo_db_password }}"
-      hxi_connector_service_user: "alfresco"
+      hxi_connector_service_user: "{{ acs_play_hxi_connector_service_user }}"
       hxi_connector_application_sourceid: "{{ acs_play_hxi_application_sourceid }}"

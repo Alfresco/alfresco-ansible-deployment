@@ -1,0 +1,3 @@
+acs_play_hxi_connector_live_ingester_port: 8084
+acs_play_hxi_connector_prediction_applier_port: 8085
+acs_play_hxi_connector_service_user: "alfresco"
