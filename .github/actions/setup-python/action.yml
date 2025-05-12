@@ -16,7 +16,10 @@ runs:
     - name: Cache apt archives
       uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       with:
-        path: /var/cache/apt/archives
+        path: |
+          /var/cache/apt/archives
+          !/var/cache/apt/archives/partial
+          !/var/cache/apt/archives/lock
         key: ${{ runner.os }}-apt-python-${{ steps.read-python-version.outputs.python-version }}
         restore-keys: |
           ${{ runner.os }}-apt-python-
