@@ -46,7 +46,7 @@ argument_specs:
         required: false
         default: org.postgresql.Driver
         description: |
-          The class name of the JDBC driver to use
+          The class name of the JDBC driver to download (only org.postgresql.Driver is currently supported)
       sync_jdbc_driver_url:
         type: str
         required: false
@@ -65,17 +65,22 @@ argument_specs:
       sync_db_driver:
         type: str
         required: false
-        default: org.postgresql.Driver
+        default: "{{ sync_jdbc_driver_class }}"
         description: |
-          The class name of the JDBC driver to use
+          The class name of the JDBC driver to use to connect to the database
       sync_db_name:
         type: str
         required: false
         default: alfresco-sync
         description: |
-          The name of the database to use
+          The name of the database to connect to
       sync_db_username:
         type: str
         required: false
         description: |
           The username to connect to the database
+      sync_db_password:
+        type: str
+        required: false
+        description: |
+          The password to connect to the database
