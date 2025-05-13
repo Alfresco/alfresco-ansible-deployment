@@ -2,11 +2,13 @@
 title: Deploying Alfresco Connector for Content Intelligence
 ---
 
-The Alfresco Connector for Content Intelligence (also referred to as the
-HxInsight Connector inside the provided Ansible playbooks) provides knowledge
-retrieval capabilities by connecting your content repository, Alfresco Content
-Services (ACS), to Knowledge Discovery. Knowledge Discovery allows you to apply
-machine learning to your content repository.
+# Deploying Alfresco Connector for Content Intelligence
+
+The *Alfresco Connector for Content Intelligence* (also referred to as the
+*HxInsight Connector* inside the Ansible playbooks) provides knowledge retrieval
+capabilities by connecting your content repository, Alfresco Content Services
+(ACS), to *Knowledge Discovery*. Knowledge Discovery allows you to apply machine
+learning to your content repository.
 
 You can get the most up-to-date product documentation for the `Alfresco
 Connector` in the [Content Intelligence
