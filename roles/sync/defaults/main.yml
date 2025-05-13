@@ -18,6 +18,7 @@ sync_jmx_config_remote_enabled: false
 sync_jmx_config_remote_port: 50800
 sync_jmx_config_remote_rmi_port: 50801
 
+sync_jdbc_driver_class: org.postgresql.Driver
 sync_jdbc_driver_version: 42.7.3
 sync_jdbc_driver_base_url: https://repo.maven.apache.org/maven2/org/postgresql/postgresql
 sync_jdbc_driver_url: >-
@@ -25,6 +26,6 @@ sync_jdbc_driver_url: >-
 sync_jdbc_driver_checksum: "sha1:{{ sync_jdbc_driver_url }}.sha1"
 
 sync_db_url: ""
-sync_db_driver: org.postgresql.Driver
+sync_db_driver: "{{ sync_jdbc_driver_class }}"
 sync_db_name: "alfresco-sync"
 sync_db_username: "alfresco-sync"

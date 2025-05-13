@@ -668,6 +668,7 @@
         sync_zip_checksum: "{{ acs_play_sync_zip_checksum }}"
         sync_zip_username: "{{ nexus_user }}"
         sync_zip_password: "{{ nexus_password }}"
+        sync_jdbc_driver_class: "{{ acs_play_sync_db_driver }}"
         sync_jdbc_driver_version: "{{ acs_play_sync_jdbc_driver_version }}"
         sync_jdbc_driver_url: "{{ acs_play_sync_jdbc_driver_url }}"
         sync_jdbc_driver_checksum: "{{ acs_play_sync_jdbc_driver_checksum }}"

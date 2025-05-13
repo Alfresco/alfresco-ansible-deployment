@@ -59,7 +59,7 @@
         mode: "0644"
         owner: "{{ username }}"
         group: "{{ group_name }}"
-      when: sync_db_driver == 'org.postgresql.Driver'
+      when: sync_jdbc_driver_class == 'org.postgresql.Driver'
 
     - name: Copy db_connector to {{ sync_home }}/service-sync/connectors folder
       ansible.builtin.copy:
@@ -68,7 +68,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
         mode: "0644"
-      when: sync_db_driver != 'org.postgresql.Driver'
+      when: sync_jdbc_driver_class != 'org.postgresql.Driver'
 
     - name: Add paths to setenv file
       ansible.builtin.blockinfile:
