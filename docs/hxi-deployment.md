@@ -55,3 +55,8 @@ After the deployment is complete:
    ```bash
    journalctl -u alfresco-hxinsight-connector-live-ingester -f
    ```
+
+## Source Code
+
+The `hxi_connector` Ansible role is available as part of the [Alfresco Platform
+Collection](https://github.com/Alfresco/alfresco-ansible-collection).
