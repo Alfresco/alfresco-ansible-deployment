@@ -275,6 +275,8 @@
 - name: Alfresco Repository Role
   hosts: repository
   gather_facts: false
+  vars_files:
+    - "{{ playbook_dir }}/../vars/hxi.yml"
   pre_tasks:
     - name: Build keystore role argument
       ansible.builtin.set_fact:
@@ -350,10 +352,6 @@
         repository_extra_war_downloads: "{{ acs_play_repository_extra_war_downloads }}"
         repository_extra_amp_downloads: "{{ acs_play_repository_extra_amp_downloads }}"
         repository_truststore_type: "{{ acs_play_default_truststore_type }}"
-    - name: Include HxInsight vars
-      ansible.builtin.include_vars:
-        file: ../vars/hxi.yml
-      when: hxi_enabled
     - name: Include HxInsight repository extension
       when: hxi_enabled
       ansible.builtin.include_role:
@@ -765,14 +763,13 @@
 - name: HxInsight Role
   hosts: hxi
   gather_facts: false
+  vars_files:
+    - "{{ playbook_dir }}/../vars/hxi.yml"
   pre_tasks:
     - name: Assert HxI is available
       ansible.builtin.fail:
         msg: "HxInsight can be used only with ACS Enterprise"
       when: not acs_is_enterprise
-    - name: Include HxInsight vars
-      ansible.builtin.include_vars:
-        file: ../vars/hxi.yml
   roles:
     - role: "../roles/java"
     - role: alfresco.platform.hxi_connector
