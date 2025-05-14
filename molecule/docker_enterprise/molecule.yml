@@ -28,6 +28,7 @@ platforms:
       - adw
       - nginx
       - audit_storage
+      - hxi
     published_ports:
       - 0.0.0.0:443:443/tcp
       - 0.0.0.0:8083:8083/tcp
@@ -46,7 +47,6 @@ provisioner:
       host_vars: host_vars
   playbooks:
     prepare: ../default/prepare.yml
-    verify: ../default/verify.yml
 verifier:
   name: ansible
   env:

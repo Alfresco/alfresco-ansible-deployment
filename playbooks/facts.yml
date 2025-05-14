@@ -1,8 +1,32 @@
 ---
-- name: Populate common facts
+- name: Populate facts
   hosts: localhost:all:!external
   tasks:
     - name: Check wether we want to enable mTLS for ATS deployment
       ansible.builtin.set_fact:
         ats_mtls_required: >-
           {{ groups.repository | default([]) | difference(groups.transformers | default([])) | length > 0 }}
+
+    - name: Set features facts
+      ansible.builtin.set_fact:
+        hxi_enabled: "{{ groups.hxi | default([]) | length > 0 }}"
+
+    - name: Validate acs edition value
+      ansible.builtin.assert:
+        that:
+          - "acs_play_repository_acs_edition in ['Enterprise', 'Community']"
+        fail_msg: "Invalid acs_play_repository_acs_edition value: {{ acs_play_repository_acs_edition }}. Must be 'Enterprise' or 'Community'."
+
+    - name: Set acs edition
+      ansible.builtin.set_fact:
+        acs_is_enterprise: "{{ acs_play_repository_acs_edition == 'Enterprise' }}"
+
+    - name: Override repo related vars when using community
+      ansible.builtin.set_fact:
+        acs_play_repository_acs_version: "{{ acs_play_community_repository_acs_version }}"
+        acs_play_repository_acs_repository: "{{ acs_play_community_repository_acs_repository }}"
+        acs_play_repository_acs_artifact_name: "{{ acs_play_community_repository_acs_artifact_name }}"
+        acs_play_repository_amp_googledrive_repo_version: "{{ acs_play_community_repository_amp_googledrive_repo_version }}"
+        acs_play_repository_amp_googledrive_repo_repository: "{{ acs_play_community_repository_amp_googledrive_repo_repository }}"
+        acs_play_repository_amp_googledrive_repo_artifact_name: "{{ acs_play_community_repository_amp_googledrive_repo_artifact_name }}"
+      when: not acs_is_enterprise
