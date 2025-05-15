@@ -18,7 +18,7 @@ supported_os:
       - 22.04
       - 24.04
 ats_mtls_capable: true
-acs_play_activemq_version: 5.18.6
+acs_play_activemq_version: 5.18.7
 acs_play_audit_storage_version: 1.1.0
 acs_play_acc_version: 9.4.0
 acs_play_adw_version: 6.0.0
