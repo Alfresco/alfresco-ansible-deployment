@@ -67,4 +67,4 @@ repository_acs_environment:
 
 `metadata-keystore.metadata.password` is the password of the keystore dedicated to repository metadata.
 
-[security]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Administer/Manage-Security/Authorization
+[security]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Administer/Manage-Security/Authorization

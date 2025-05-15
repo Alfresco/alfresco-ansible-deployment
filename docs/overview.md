@@ -114,4 +114,4 @@ ACS 7.x onward.
 > Support for ACS 7.0 has been deprecated since April 2024, but you can still use the latest playbook that supported it ([v2.6.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v2.6.0))
 > Support for ACS 6.2 has been deprecated since November 2022, but you can still use the latest playbook that supported it ([v2.2.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v2.2.0))
 
-[support]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Supported-Platforms
+[support]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Supported-Platforms
