@@ -1320,9 +1320,9 @@ If the playbook fails for some reason try re-running it with the `-v` option, if
 
 If the playbook completes successfully but the system is not functioning the best place to start is the log files, these can be found in the `/var/log/alfresco` folder on the target hosts. Please note the nginx log files are owned by root as the nginx process is running as root so it can listen on port 80.
 
-[upload-license]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Administer/Licenses/Upload-new-license
-[global-properties]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Configure/Overview/Using-alfresco-global.properties
-[databases]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Configure/Databases
-[alf-keystores]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Administer/Manage-Security/Authorization/Manage-Alfresco-keystores
-[keystore-generation]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Administer/Manage-Security/Authorization/Manage-Alfresco-keystores/Keystore-generation
-[redundancy]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Administer/High-availability-features/Clustering/Recommendations-for-split-architecture/Scenario-Clustering-for-redundancy
+[upload-license]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Administer/Licenses/Upload-new-license
+[global-properties]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Configure/Overview/Using-alfresco-global.properties
+[databases]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Configure/Databases
+[alf-keystores]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1Alfresco-Content-Services/Administer/Manage-Security/Authorization/Manage-Alfresco-keystores
+[keystore-generation]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Administer/Manage-Security/Authorization/Manage-Alfresco-keystores/Keystore-generation
+[redundancy]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Administer/High-availability-features/Clustering/Recommendations-for-split-architecture/Scenario-Clustering-for-redundancy

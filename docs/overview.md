@@ -92,10 +92,10 @@ ACS 7.x onward.
 
 | Component           | 25.1 Enterprise (Community) | 23.4 Enterprise | 7.4 Enterprise | 7.3 Enterprise |
 | ------------------- | --------------------------- | --------------- | -------------- | -------------- |
-| OpenJDK             | 17.0.14                     | 17.0.14         | 17.0.14        | 17.0.14        |
-| Apache Tomcat       | 10.1.39                     | 10.1.39         | 9.0.102        | 9.0.102        |
+| OpenJDK             | 17.0.15                     | 17.0.15         | 17.0.15        | 17.0.15        |
+| Apache Tomcat       | 10.1.41                     | 10.1.41         | 9.0.105        | 9.0.105        |
 | PostgreSQL          | 16.x                        | 15.x            | 14.x           | 14.x           |
-| Apache ActiveMQ     | 5.18.6                      | 5.18.6          | 5.17.6         | 5.17.6         |
+| Apache ActiveMQ     | 5.18.7                      | 5.18.7          | 5.17.7         | 5.17.7         |
 | Repository          | 25.1.0                      | 23.4.1          | 7.4.2.4        | 7.3.2.3        |
 | Share               | 25.1.0                      | 23.4.1          | 7.4.2.4        | 7.3.2.3        |
 | Search Services     | 2.0.15                      | 2.0.15          | 2.0.15         | 2.0.15         |
@@ -114,4 +114,4 @@ ACS 7.x onward.
 > Support for ACS 7.0 has been deprecated since April 2024, but you can still use the latest playbook that supported it ([v2.6.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v2.6.0))
 > Support for ACS 6.2 has been deprecated since November 2022, but you can still use the latest playbook that supported it ([v2.2.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v2.2.0))
 
-[support]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Supported-Platforms
+[support]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Supported-Platforms
