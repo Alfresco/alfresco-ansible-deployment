@@ -4,6 +4,7 @@ repository_db_name: "alfresco"
 repository_db_username: "alfresco"
 sync_db_name: "alfresco-sync"
 sync_db_username: "alfresco-sync"
+sync_db_url: jdbc:postgresql://localhost/{{ sync_db_name }}
 
 global_properties:
   authentication:

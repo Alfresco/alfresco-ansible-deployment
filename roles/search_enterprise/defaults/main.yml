@@ -15,5 +15,5 @@ search_enterprise_zip_username: null
 search_enterprise_zip_password: null
 
 search_enterprise_repo_db_url: ""
-search_enterprise_repo_db_name: "alfresco"
 search_enterprise_repo_db_username: "alfresco"
+search_enterprise_repo_db_password: ""
