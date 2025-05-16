@@ -15,9 +15,9 @@ collections:
     version: 3.0.1
   # molecule ec2 tests
   - name: amazon.aws
-    version: 9.4.0
+    version: 9.5.0
   - name: community.aws
-    version: 9.2.0
+    version: 9.3.0
   - name: alfresco.platform
     version: 0.1.1
   # Alternate source for alfresco.platform
