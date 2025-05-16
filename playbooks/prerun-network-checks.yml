@@ -2,6 +2,8 @@
 # This playbook is used to run preliminary network checks for the hosts in the ACS deployment.
 - name: Include vars based on acs major version
   ansible.builtin.import_playbook: include-vars.yml
+- name: Populate deployment configuration facts
+  ansible.builtin.import_playbook: facts.yml
 - name: Gather facts on all the hosts
   hosts: all:!external
   gather_facts: false
