@@ -1323,6 +1323,6 @@ If the playbook completes successfully but the system is not functioning the bes
 [upload-license]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Administer/Licenses/Upload-new-license
 [global-properties]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Configure/Overview/Using-alfresco-global.properties
 [databases]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Configure/Databases
-[alf-keystores]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1Alfresco-Content-Services/Administer/Manage-Security/Authorization/Manage-Alfresco-keystores
+[alf-keystores]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Administer/Manage-Security/Authorization/Manage-Alfresco-keystores
 [keystore-generation]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Administer/Manage-Security/Authorization/Manage-Alfresco-keystores/Keystore-generation
 [redundancy]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Administer/High-availability-features/Clustering/Recommendations-for-split-architecture/Scenario-Clustering-for-redundancy
