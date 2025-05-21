@@ -320,7 +320,7 @@
     - name: Wait-for-db
       ansible.builtin.wait_for:
         host: "{{ acs_play_computed_repo_db_url | urlsplit('hostname') }}"
-        port: "{{ acs_play_computed_repo_db_url | urlsplit('port') }}"
+        port: "{{ acs_play_computed_repo_db_url | urlsplit('port') | int }}"
   tasks:
     - name: Repository Role import
       ansible.builtin.import_role:
