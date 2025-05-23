@@ -7,7 +7,7 @@
 - name: Merge Alfresco Sync service configuration data structures
   vars:
     local_db_url: >-
-      {{ sync_db_url or "jdbc:postgresql://{}:{}/{}".format(db_host, ports_cfg.postgres.sql, sync_db_name) }}
+      {{ sync_db_url }}
     local_config:
       version: "{{ sync_version }}"
       messaging:

@@ -64,3 +64,5 @@ acs_play_community_repository_acs_artifact_name: alfresco-content-services-commu
 acs_play_community_repository_acs_repository: "{{ nexus_repository.releases }}"
 acs_play_community_repository_amp_googledrive_repo_artifact_name: alfresco-googledrive-repo-community
 acs_play_community_repository_amp_googledrive_repo_repository: "{{ nexus_repository.releases }}/integrations"
+
+ports_cfg_postgres_sql: 5432

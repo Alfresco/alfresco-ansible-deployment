@@ -11,6 +11,24 @@
       ansible.builtin.set_fact:
         hxi_enabled: "{{ groups.hxi | default([]) | length > 0 }}"
 
+    - name: Set facts related to hosts
+      ansible.builtin.set_fact:
+        db_host: >-
+          {{ groups['database']
+          | default([])
+          | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
+          | first
+          | default('127.0.0.1') }}
+
+    - name: Set facts computed with some logic
+      ansible.builtin.set_fact:
+        acs_play_computed_repo_db_url: >-
+          {{ acs_play_repo_db_url if acs_play_repo_db_url else
+          'jdbc:postgresql://' + db_host + ':' + ports_cfg_postgres_sql | string + '/' + acs_play_repo_db_name }}
+        acs_play_computed_sync_db_url: >-
+          {{ acs_play_sync_db_url if acs_play_sync_db_url else
+          'jdbc:postgresql://' + db_host + ':' + ports_cfg_postgres_sql | string + '/' + acs_play_sync_db_name }}
+
     - name: Validate acs edition value
       ansible.builtin.assert:
         that:
