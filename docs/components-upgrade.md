@@ -111,4 +111,4 @@ This process will restart tomcat on all the repository nodes and there is no
 guarantee one node is stopped only after the others have restarted. As a
 consequence a short service outage needs to be scheduled
 
-[acs-upgrade]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Upgrade
+[acs-upgrade]: https://support.hyland.com/r/Alfresco/Alfresco-Content-Services/25.1/Alfresco-Content-Services/Upgrade

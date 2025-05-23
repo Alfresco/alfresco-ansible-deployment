@@ -1,5 +1,5 @@
 ---
-java_version: 17.0.14+7
+java_version: 17.0.15+6
 java_major: "{{ java_version.split('.')[0] }}"
 java_build: "{{ java_version.split('+')[1] | default('1-ea-beta') }}"
 java_core: "{{ java_version.split('+')[0] }}"
