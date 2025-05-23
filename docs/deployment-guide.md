@@ -17,7 +17,9 @@ for a brief introduction.
   * [Getting started quickly with Vagrant](#getting-started-quickly-with-vagrant)
   * [Getting started](#getting-started)
     * [Get the playbook](#get-the-playbook)
-    * [Setup runtime environment](#setup-runtime-environment)
+    * [Setup Python runtime](#setup-python-runtime)
+      * [Additional requirements for Python 3.12+](#additional-requirements-for-python-312)
+    * [Install ansible dependencies via pipenv](#install-ansible-dependencies-via-pipenv)
   * [Minimal configuration](#minimal-configuration)
   * [Understanding the playbook](#understanding-the-playbook)
     * [The Control Node](#the-control-node)
@@ -150,7 +152,7 @@ cd alfresco-ansible-deployment
 > password instead make sure to add the `-k`switch to the ansible command so it
 > prompts you for a password.
 
-### Setup runtime environment
+### Setup Python runtime
 
 Before starting using the playbook, make sure you are running at least Python 3.11:
 
@@ -189,6 +191,33 @@ pip3 install --user pipenv
 
 > Try with `python3.11 -m pip` instead of `pip3` if there is more than one
 > python version in your system and 3.11 is not the default one.
+
+#### Additional requirements for Python 3.12+
+
+If you are using an operating system with Python 3.12 or higher (e.g. Ubuntu
+24.04), you need to setup a `venv` where to install `pipenv` and the playbook
+dependencies. This is due to a change in Python 3.12 that prevents to install
+pipenv in the system site-packages directory.
+
+Create a new venv within the repository root folder with:
+
+```bash
+python3.12 -m venv venv
+```
+
+Then activate the venv with:
+
+```bash
+source venv/bin/activate
+```
+
+Finally, install pipenv in the venv with:
+
+```bash
+pip3 install pipenv
+```
+
+### Install ansible dependencies via pipenv
 
 Now you are ready to install Ansible and required runtime dependencies in a dedicated
 virtual environment managed by pipenv.
