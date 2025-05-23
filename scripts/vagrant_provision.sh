@@ -1,8 +1,10 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 sudo apt-get update -q
-sudo apt-get install python3-pip -qy
+sudo apt-get install python3-pip python3-venv -qy
 cd /vagrant
-pip install --user pipenv
+python3 -m venv venv
+source venv/bin/activate
+pip install pipenv
 python3 -m pipenv install --deploy
 python3 -m pipenv run ansible-galaxy install -r requirements.yml
 python3 -m pipenv run ansible-playbook -i inventory_local.yml \

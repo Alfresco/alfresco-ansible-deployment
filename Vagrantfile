@@ -1,5 +1,5 @@
 Vagrant.configure("2") do |config|
-  acs_major_version = ENV.fetch('VAGRANT_ACS_MAJOR_VERSION', "23").to_i
+  acs_major_version = ENV.fetch('VAGRANT_ACS_MAJOR_VERSION', "25").to_i
   config.vm.provision "shell", path: "./scripts/vagrant_provision.sh", privileged: false, env: {
     "NEXUS_USERNAME" => ENV['NEXUS_USERNAME'],
     "NEXUS_PASSWORD" => ENV['NEXUS_PASSWORD'],
