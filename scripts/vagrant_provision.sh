@@ -1,7 +1,7 @@
 #!/bin/bash -e
 sudo apt-get update -q
 
-# Workaround for too old pipenv version in Ubuntu 22.04
+# Prevent externally-managed-environment error
 if lsb_release -d | grep -q "Ubuntu 24.04"; then
   sudo apt-get install pipenv -qy
 else
