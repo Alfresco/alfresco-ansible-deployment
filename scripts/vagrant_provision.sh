@@ -2,11 +2,11 @@
 sudo apt-get update -q
 
 # Workaround for too old pipenv version in Ubuntu 22.04
-if lsb_release -d | grep -q "Ubuntu 22.04"; then
-  wget -q http://archive.ubuntu.com/ubuntu/pool/universe/p/pipenv/pipenv_2023.12.1+ds-1_all.deb -O /tmp/pipenv.deb
-  sudo dpkg -i /tmp/pipenv.deb
-else
+if lsb_release -d | grep -q "Ubuntu 24.04"; then
   sudo apt-get install pipenv -qy
+else
+  sudo apt-get install python3-pip -qy
+  pip install --user pipenv
 fi
 
 cd /vagrant
