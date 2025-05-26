@@ -195,8 +195,8 @@ pip3 install --user pipenv
 #### Additional requirements for Python 3.12+ on Ubuntu/Debian
 
 If you are using an operating system with Python 3.12 or higher on a
-Debian-derivate (e.g. Ubuntu 24.04), there is a breaking change which will
-prevent you in installing pipenv using the `pip` install command above.
+Debian derivative (e.g. Ubuntu 24.04), there is a breaking change which will
+prevent you from installing pipenv using the `pip` install command above.
 
 The most easy way to workaround this is to install pipenv using the
 binary package:
