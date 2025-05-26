@@ -18,7 +18,7 @@ for a brief introduction.
   * [Getting started](#getting-started)
     * [Get the playbook](#get-the-playbook)
     * [Setup Python runtime](#setup-python-runtime)
-      * [Additional requirements for Python 3.12+](#additional-requirements-for-python-312)
+      * [Additional requirements for Python 3.12+ on Ubuntu/Debian](#additional-requirements-for-python-312-on-ubuntudebian)
     * [Install ansible dependencies via pipenv](#install-ansible-dependencies-via-pipenv)
   * [Minimal configuration](#minimal-configuration)
   * [Understanding the playbook](#understanding-the-playbook)
@@ -192,12 +192,21 @@ pip3 install --user pipenv
 > Try with `python3.11 -m pip` instead of `pip3` if there is more than one
 > python version in your system and 3.11 is not the default one.
 
-#### Additional requirements for Python 3.12+
+#### Additional requirements for Python 3.12+ on Ubuntu/Debian
 
-If you are using an operating system with Python 3.12 or higher (e.g. Ubuntu
-24.04), you need to setup a `venv` where to install `pipenv` and the playbook
-dependencies. This is due to a change in Python 3.12 that prevents to install
-pipenv in the system site-packages directory.
+If you are using an operating system with Python 3.12 or higher on a
+Debian-derivate (e.g. Ubuntu 24.04), there is a breaking change which will
+prevent you in installing pipenv using the `pip` install command above.
+
+The most easy way to workaround this is to install pipenv using the
+binary package:
+
+```bash
+sudo apt-get install pipenv
+```
+
+Another more generic way (which works on any OS) is to install pipenv inside a
+virtualenvironment (venv) as described below.
 
 Create a new venv within the repository root folder with:
 
