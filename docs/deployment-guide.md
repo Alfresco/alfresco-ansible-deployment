@@ -206,7 +206,7 @@ sudo apt-get install pipenv
 ```
 
 Another more generic way (which works on any OS) is to install pipenv inside a
-virtualenvironment (venv) as described below.
+virtual environment (venv) as described below.
 
 Create a new venv within the repository root folder with:
 
