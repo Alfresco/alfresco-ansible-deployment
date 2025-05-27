@@ -45,7 +45,7 @@ the recreation with the updated Python runtime:
 pipenv --rm
 ```
 
-For more information check the updated [deployment guide](deployment-guide.md#setup-runtime-environment).
+For more information check the updated [deployment guide](deployment-guide.md#setup-python-runtime).
 
 ### Handling of `supported_os` var
 
