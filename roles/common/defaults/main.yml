@@ -28,18 +28,6 @@ repo_hosts: |
   }}
 repo_host: >-
   {{ repo_hosts[0].local_addr | default(repo_hosts[0].inventory_name) }}
-activemq_host: "{% if groups.external_activemq | default(False) %}\
-  {{- groups.external_activemq | first -}}\
-  {% else %}\
-  {{- groups.activemq | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | first -}}\
-  {% endif %}"
-activemq_transport: >-
-  {{ groups.external_activemq
-  | default([])
-  | map('extract', hostvars, ['activemq_transport'])
-  | first
-  | default('tcp') }}
-activemq_protocol: openwire
 solr_host: >-
   {{ groups['search']
   | default([])
@@ -103,12 +91,6 @@ ports_cfg:
     http: 8881
   adw:
     http: 8880
-  activemq:
-    openwire: "{% if groups.external_activemq | default(False) %}\
-      {{- groups.external_activemq | map('extract', hostvars, ['activemq_port']) | first | default(61616) -}}\
-      {% else %}\
-      {{- ports.activemq.openwire | default(61616) -}}\
-      {% endif %}"
   repository:
     http: 8080
     https: 8443

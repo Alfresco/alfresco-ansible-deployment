@@ -207,6 +207,11 @@
         transformers_aio_archive_url: "{{ acs_play_transformers_aio_archive_url }}"
         transformers_aio_archive_checksum: "{{ acs_play_transformers_aio_archive_checksum }}"
         transformers_truststore_type: "{{ acs_play_default_truststore_type }}"
+        transformers_activemq_username: "{{ activemq_username }}"
+        transformers_activemq_password: "{{ activemq_password }}"
+        transformers_activemq_host: "{{ activemq_host }}"
+        transformers_activemq_transport: "{{ activemq_transport }}"
+        transformers_activemq_port: "{{ ports_cfg_activemq_openwire }}"
   post_tasks:
     - name: Update installation status file with Transformers
       become: true
@@ -456,6 +461,11 @@
         trouter_archive_username: "{{ nexus_user }}"
         trouter_archive_password: "{{ nexus_password }}"
         trouter_ats_truststore_type: "{{ acs_play_default_truststore_type }}"
+        trouter_activemq_username: "{{ activemq_username }}"
+        trouter_activemq_password: "{{ activemq_password }}"
+        trouter_activemq_host: "{{ activemq_host }}"
+        trouter_activemq_transport: "{{ activemq_transport }}"
+        trouter_activemq_port: "{{ ports_cfg_activemq_openwire }}"
       when: acs_is_enterprise
   post_tasks:
     - name: Update installation status file with Trouter
@@ -545,6 +555,11 @@
         search_enterprise_zip_checksum: "{{ acs_play_search_enterprise_zip_checksum }}"
         search_enterprise_zip_username: "{{ nexus_user }}"
         search_enterprise_zip_password: "{{ nexus_password }}"
+        search_enterprise_activemq_username: "{{ activemq_username }}"
+        search_enterprise_activemq_password: "{{ activemq_password }}"
+        search_enterprise_activemq_host: "{{ activemq_host }}"
+        search_enterprise_activemq_transport: "{{ activemq_transport }}"
+        search_enterprise_activemq_port: "{{ ports_cfg_activemq_openwire }}"
       when: acs_is_enterprise
   post_tasks:
     - name: Update installation status file with Enterprise Search
@@ -691,6 +706,11 @@
         sync_db_driver: "{{ acs_play_sync_db_driver }}"
         sync_db_name: "{{ acs_play_sync_db_name }}"
         sync_db_username: "{{ acs_play_sync_db_username }}"
+        sync_activemq_username: "{{ activemq_username }}"
+        sync_activemq_password: "{{ activemq_password }}"
+        sync_activemq_host: "{{ activemq_host }}"
+        sync_activemq_transport: "{{ activemq_transport }}"
+        sync_activemq_port: "{{ ports_cfg_activemq_openwire }}"
       when: acs_is_enterprise
   post_tasks:
     - name: Update installation status file with Sync
@@ -734,7 +754,7 @@
         audit_storage_zip_checksum: "{{ acs_play_audit_storage_archive_checksum }}"
         audit_storage_username: "{{ username }}"
         audit_storage_group_name: "{{ group_name }}"
-        audit_storage_broker_url: "failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})"
+        audit_storage_broker_url: "failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg_activemq_openwire }})"
         audit_storage_broker_username: "{{ activemq_username }}"
         audit_storage_broker_password: "{{ activemq_password }}"
         audit_storage_opensearch_url: "{{ elasticsearch_protocol }}://{{ elasticsearch_host }}:{{ ports_cfg.elasticsearch.http }}"
@@ -784,7 +804,7 @@
       hxi_connector_remote_environment_key: "{{ acs_play_hxi_remote_environment_key }}"
       hxi_connector_alfresco_version_override: "{{ acs_play_repository_acs_version }}"
       hxi_connector_alfresco_sfs_url: "http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}"
-      hxi_connector_alfresco_activemq_url: "{{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }}"
+      hxi_connector_alfresco_activemq_url: "{{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg_activemq_openwire }}"
       hxi_connector_alfresco_activemq_username: "{{ activemq_username }}"
       hxi_connector_alfresco_activemq_password: "{{ activemq_password }}"
       hxi_connector_alfresco_db_url: "{{ acs_play_repo_db_url }}"

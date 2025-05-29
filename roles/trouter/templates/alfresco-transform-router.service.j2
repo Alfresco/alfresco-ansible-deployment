@@ -7,9 +7,9 @@ s
 
 {%- set java_opts = "-DCORE_AIO_URL=" + ats_proto() + "://" + ats_tengine_aio_host + ":" + ports_cfg.transformers.tengine ~ " \
 -DCORE_AIO_QUEUE=org.alfresco.transform.engine.aio.acs \
--DACTIVEMQ_URL=failover:(" + activemq_transport + "://" + activemq_host + ":" + ports_cfg.activemq[activemq_protocol] + ")?timeout=3000 \
--DACTIVEMQ_USER=" + activemq_username + " \
--DACTIVEMQ_PASSWORD=" + activemq_password + " \
+-DACTIVEMQ_URL=failover:(" + trouter_activemq_transport + "://" + trouter_activemq_host + ":" + trouter_activemq_port + ")?timeout=3000 \
+-DACTIVEMQ_USER=" + trouter_activemq_username + " \
+-DACTIVEMQ_PASSWORD=" + trouter_activemq_password + " \
 -DFILE_STORE_URL=" + ats_proto() + "://" + sfs_host + ":" + ports_cfg.sfs.http ~ "/alfresco/api/-default-/private/sfs/versions/1/file" %}
 {%- if bssrf_protection_enabled %}
 {%- set java_opts = java_opts + " -DTRANSFORMER_ROUTES_ADDITIONAL_HTML_VIA_TXT=" + ats_home + "/pipelines/0200-html-via-txt.json" %}

@@ -17,3 +17,9 @@ search_enterprise_zip_password: null
 search_enterprise_repo_db_url: ""
 search_enterprise_repo_db_username: "alfresco"
 search_enterprise_repo_db_password: ""
+
+search_enterprise_activemq_username: "admin"
+search_enterprise_activemq_password: "admin"
+search_enterprise_activemq_host: localhost
+search_enterprise_activemq_transport: tcp
+search_enterprise_activemq_port: 61616

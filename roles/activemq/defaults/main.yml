@@ -12,3 +12,7 @@ activemq_environment:
 activemq_version: 5.18.7
 activemq_url: https://archive.apache.org/dist/activemq/{{ activemq_version }}/apache-activemq-{{ activemq_version }}-bin.tar.gz
 activemq_checksum: sha512:https://archive.apache.org/dist/activemq/{{ activemq_version }}/apache-activemq-{{ activemq_version }}-bin.tar.gz.sha512
+
+activemq_host: localhost
+activemq_username: admin
+activemq_password: admin

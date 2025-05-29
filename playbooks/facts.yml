@@ -19,6 +19,24 @@
           | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
           | first
           | default('127.0.0.1') }}
+        activemq_host: >-
+          {% if groups.external_activemq | default([]) %}
+          {{ groups.external_activemq | first }}
+          {% else %}
+          {{
+            groups.activemq
+            | default([])
+            | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
+            | first
+            | default('127.0.0.1')
+          }}
+          {% endif %}
+        activemq_transport: >-
+          {{ groups.external_activemq
+          | default([])
+          | map('extract', hostvars, ['activemq_transport'])
+          | first
+          | default('tcp') }}
 
     - name: Set facts computed with some logic
       ansible.builtin.set_fact:
@@ -28,6 +46,12 @@
         acs_play_computed_sync_db_url: >-
           {{ acs_play_sync_db_url if acs_play_sync_db_url else
           'jdbc:postgresql://' + db_host + ':' + ports_cfg_postgres_sql | string + '/' + acs_play_sync_db_name }}
+        ports_cfg_activemq_openwire: >-
+          {% if groups.external_activemq | default([]) %}
+          {{ groups.external_activemq | map('extract', hostvars, ['activemq_port']) | first | default(61616) }}
+          {% else %}
+          {{ ports.activemq.openwire | default(61616) }}
+          {% endif %}
 
     - name: Validate acs edition value
       ansible.builtin.assert:

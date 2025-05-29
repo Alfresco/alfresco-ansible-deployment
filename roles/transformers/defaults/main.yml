@@ -40,3 +40,9 @@ transformers_aio_repository: https://artifacts.alfresco.com/nexus/content/groups
 transformers_aio_version: 5.1.7
 transformers_aio_archive_url: "{{ transformers_aio_repository }}/{{ transformers_aio_artifact_name }}/{{ transformers_aio_version }}/{{ transformers_aio_artifact_name }}-{{ transformers_aio_version }}.jar"
 transformers_aio_archive_checksum: "sha1:{{ transformers_aio_archive_url }}.sha1"
+
+transformers_activemq_username: admin
+transformers_activemq_password: admin
+transformers_activemq_host: localhost
+transformers_activemq_transport: tcp
+transformers_activemq_port: 61616

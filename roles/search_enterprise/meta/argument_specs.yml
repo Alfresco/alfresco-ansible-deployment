@@ -33,3 +33,23 @@ argument_specs:
         description: |
           Password to use to connect to the database for the Search Enterprise Bulk Ingester
         required: false
+      search_enterprise_activemq_username:
+        description: |
+          Username to use to connect to the ActiveMQ broker for the Search Enterprise Bulk Ingester
+        required: false
+      search_enterprise_activemq_password:
+        description: |
+          Password to use to connect to the ActiveMQ broker for the Search Enterprise Bulk Ingester
+        required: false
+      search_enterprise_activemq_host:
+        description: |
+          Hostname of the ActiveMQ broker to use for the Search Enterprise Bulk Ingester
+        required: false
+      search_enterprise_activemq_transport:
+        description: |
+          Transport protocol to use to connect to the ActiveMQ broker for the Search Enterprise Bulk Ingester
+        required: false
+      search_enterprise_activemq_port:
+        description: |
+          Port of the ActiveMQ broker to use for the Search Enterprise Bulk Ingester
+        required: false

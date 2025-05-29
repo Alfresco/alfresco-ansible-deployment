@@ -11,12 +11,12 @@
     local_config:
       version: "{{ sync_version }}"
       messaging:
-        username: "{{ activemq_username }}"
-        password: "{{ activemq_password }}"
+        username: "{{ sync_activemq_username }}"
+        password: "{{ sync_activemq_password }}"
         broker:
-          host: "{{ activemq_host }}"
-          port: "{{ ports_cfg.activemq[activemq_protocol] }}"
-          protocol: "{{ activemq_transport }}"
+          host: "{{ sync_activemq_host }}"
+          port: "{{ sync_activemq_port }}"
+          protocol: "{{ sync_activemq_transport }}"
       sql:
         db:
           url: "{{ local_db_url }}"

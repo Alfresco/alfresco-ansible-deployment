@@ -30,9 +30,9 @@ s
 -DIMAGEMAGICK_CODERS=" + im_cfg() + "/modules-Q16HDRI/coders" %}
 {%- if transformers_acs_is_enterprise %}
 {%- set java_opts = java_opts + " \
--DACTIVEMQ_URL=failover:(" + activemq_transport + "://" + activemq_host + ":" + ports_cfg.activemq[activemq_protocol] + ")?timeout=3000 \
--DACTIVEMQ_USER=" + activemq_username + " \
--DACTIVEMQ_PASSWORD=" + activemq_password + " \
+-DACTIVEMQ_URL=failover:(" + transfromers_activemq_transport + "://" + transfromers_activemq_host + ":" + transfromers_activemq_port + ")?timeout=3000 \
+-DACTIVEMQ_USER=" + transfromers_activemq_username + " \
+-DACTIVEMQ_PASSWORD=" + transfromers_activemq_password + " \
 -DFILE_STORE_URL=" + ats_proto() + "://" + sfs_host + ":" + ports_cfg.sfs.http ~ "/alfresco/api/-default-/private/sfs/versions/1/file" %}
 {%- endif %}
 {%- set tengine_environment_temp = transformers_tengine_environment['JAVA_OPTS'] %}

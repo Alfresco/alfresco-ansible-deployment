@@ -79,7 +79,7 @@ global_properties:
     protocol: "{{ acs_play_proto }}"
   messaging:
     broker:
-      url: failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})?timeout=3000
+      url: failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg_activemq_openwire }})?timeout=3000
       username: "{{ activemq_username }}"
       password: "{{ activemq_password }}"
   aos:

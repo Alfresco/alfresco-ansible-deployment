@@ -31,7 +31,7 @@
       ansible.builtin.include_tasks: "tasks/check_port.yml"
       vars:
         checked_host: "{{ activemq_host }}"
-        checked_port: "{{ ports_cfg.activemq[activemq_protocol] }}"
+        checked_port: "{{ ports_cfg_activemq_openwire }}"
         delegate_target: "{{ groups.activemq | first }}"
       when: groups.activemq | default([]) | length > 0
 
@@ -104,7 +104,7 @@
       ansible.builtin.include_tasks: "tasks/check_port.yml"
       vars:
         checked_host: "{{ activemq_host }}"
-        checked_port: "{{ ports_cfg.activemq[activemq_protocol] }}"
+        checked_port: "{{ ports_cfg_activemq_openwire }}"
         delegate_target: "{{ groups.activemq | first }}"
       when: groups.activemq | default([]) | length > 0
 
@@ -136,7 +136,7 @@
       ansible.builtin.include_tasks: "tasks/check_port.yml"
       vars:
         checked_host: "{{ activemq_host }}"
-        checked_port: "{{ ports_cfg.activemq[activemq_protocol] }}"
+        checked_port: "{{ ports_cfg_activemq_openwire }}"
         delegate_target: "{{ groups.activemq | first }}"
       when: groups.activemq | default([]) | length > 0
 

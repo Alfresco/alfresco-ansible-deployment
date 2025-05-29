@@ -29,3 +29,9 @@ sync_db_url: ""
 sync_db_driver: "{{ sync_jdbc_driver_class }}"
 sync_db_name: "alfresco-sync"
 sync_db_username: "alfresco-sync"
+
+sync_activemq_username: "admin"
+sync_activemq_password: "admin"
+sync_activemq_host: "localhost"
+sync_activemq_transport: "tcp"
+sync_activemq_port: 61616

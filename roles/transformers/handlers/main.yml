@@ -2,11 +2,11 @@
 # handlers file for roles/transformers
 - name: >-
     Wait for activemq on
-    {{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }}
+    {{ transformers_activemq_host }}:{{ transformers_activemq_port }}
   listen: wait-for-activemq
   ansible.builtin.wait_for:
-    host: "{{ activemq_host }}"
-    port: "{{ ports_cfg.activemq[activemq_protocol] }}"
+    host: "{{ transformers_activemq_host }}"
+    port: "{{ transformers_activemq_port }}"
     timeout: 300
     connect_timeout: 5
 
