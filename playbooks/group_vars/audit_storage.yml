@@ -2,3 +2,7 @@ acs_play_audit_storage_artifact_name: alfresco-audit-storage-distribution
 acs_play_audit_storage_repository: "{{ nexus_repository.enterprise_releases }}"
 acs_play_audit_storage_archive_url: "{{ acs_play_audit_storage_repository }}/{{ acs_play_audit_storage_artifact_name }}/{{ acs_play_audit_storage_version }}/{{ acs_play_audit_storage_artifact_name }}-{{ acs_play_audit_storage_version }}.zip"
 acs_play_audit_storage_archive_checksum: "sha1:{{ acs_play_audit_storage_archive_url }}.sha1"
+acs_play_audit_storage_username: "alfresco"
+acs_play_audit_storage_group_name: "alfresco"
+acs_play_audit_storage_nexus_user: "{{ acs_play_nexus_user }}"
+acs_play_audit_storage_nexus_password: "{{ acs_play_nexus_password }}"

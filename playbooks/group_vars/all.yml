@@ -5,6 +5,9 @@
 acs_play_known_urls: []
 acs_play_major_version: 25
 
+acs_play_nexus_user: "{{ lookup('env', 'NEXUS_USERNAME') | default(null) }}"
+acs_play_nexus_password: "{{ lookup('env', 'NEXUS_PASSWORD') | default(null) }}"
+
 artifacts_repositories:
   enterprise:
     base_url: "https://artifacts.alfresco.com/nexus/content"
