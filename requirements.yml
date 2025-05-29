@@ -18,12 +18,12 @@ collections:
     version: 9.5.0
   - name: community.aws
     version: 9.3.0
-  - name: alfresco.platform
-    version: 0.1.1
+  # - name: alfresco.platform
+  #   version: 0.1.1
   # Alternate source for alfresco.platform
-  # - name: git+https://github.com/Alfresco/alfresco-ansible-collection.git
-  #  type: git
-  #  version: 1e0ffdbe1ee3c16da1741d80a692a14a12931edc # pragma: allowlist secret
+  - name: git+https://github.com/Alfresco/alfresco-ansible-collection.git
+    type: git
+    version: 20a18054d72575481628efff133f85b8973742c1 # pragma: allowlist secret
 
 roles:
   - name: geerlingguy.elasticsearch
