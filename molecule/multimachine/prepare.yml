@@ -109,7 +109,7 @@
             --users Password={{ activemq_password | quote }},Username=alfresco
             --security-groups {{ ec2_groups_lookup.security_groups[0].group_id }}
             --publicly-accessible
-            --no-auto-minor-version-upgrade
+            --auto-minor-version-upgrade
 
     - name: Wait for creation
       ansible.builtin.command:
