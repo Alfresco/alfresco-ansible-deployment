@@ -222,7 +222,9 @@ Stay tuned and check the documentation for regular status updates. There may als
 6. Ensure that the [versions table in the main readme](docs/overview.md#versioning) has been updated
 7. Ensure that docker images and AMI id for the root molecule tests are
    reflecting any minor OS release (e.g. [default suite](../molecule/default/))
-8. Ensure that activemq, tomcat and java versions are up to date (latest patch version)
+8. Ensure that activemq, tomcat and java versions are up to date (latest patch
+   version) If activemq needs bump for latest release bump also the version in
+   `prepare.yml` molecule scenario for multimachine.
 9. After merging every pending PR, proceed with tagging:
    * `git tag -s v2.x.x -m v2.x.x`
    * `git push origin v2.x.x`
