@@ -727,7 +727,7 @@
       when: acs_is_enterprise and acs_version_requirement
     - role: alfresco.platform.audit_storage
       when: acs_is_enterprise and acs_version_requirement
-      audit_storage_java_bin_path: "/opt/openjdk-{{ acs_play_java_core }}/bin/java"
+      audit_storage_java_home_path: "/opt/openjdk-{{ acs_play_java_core }}"
       audit_storage_nexus_username: "{{ nexus_user }}"
       audit_storage_nexus_password: "{{ nexus_password }}"
       audit_storage_version: "{{ acs_play_audit_storage_version }}"
