@@ -1,0 +1,58 @@
+---
+- name: ActiveMQ Tests
+  hosts: all
+  become: yes
+  vars:
+    activemq_binary_path: "/opt/apache-activemq-{{ activemq_version }}/bin/activemq"
+  vars_files:
+    - "../java/vars/main.yml"
+    - "../../vars/main.yml"
+    - "../../../common/vars/main.yml"
+    - "../../../common/defaults/main.yml"
+    - "../../defaults/main.yml"
+    - "../../../../vars/secrets.yml"  
+
+  tasks:
+    - name: Check if ActiveMQ binary exists
+      ansible.builtin.stat:
+        path: "{{ activemq_binary_path }}"
+      register: activemq_binary
+    - name: Fail if ActiveMQ binary is missing
+      ansible.builtin.fail:
+        msg: "ActiveMQ binary not found at {{ activemq_binary_path }}"
+      when: not activemq_binary.stat.exists
+    - name: Run ActiveMQ version command and validate output
+      ansible.builtin.shell: ". {{ config_folder }}/setenv.sh && $ACTIVEMQ_HOME/bin/activemq --version"
+      become: yes
+      register: activemq_version_output
+      failed_when: "'ActiveMQ ' ~ activemq_version not in activemq_version_output.stdout"
+    - name: Run and validate ActiveMQ home
+      ansible.builtin.shell: ". {{ config_folder }}/setenv.sh && echo $ACTIVEMQ_HOME"
+      become: yes
+      register: activemq_home_path
+      failed_when: "'/opt/apache-activemq-' ~ activemq_version not in activemq_home_path.stdout"  
+    - name: Ensure ActiveMQ service is running and enabled
+      ansible.builtin.systemd:
+        name: activemq
+        state: started
+        enabled: yes
+      register: activemq_service_status
+      failed_when: 
+        - activemq_service_status.status.ActiveState != "running"
+        - activemq_service_status.status.UnitFileState != "enabled"
+    - name: Validate ActiveMQ web console response      
+      environment:
+        TEST_HOST: "localhost"
+      ansible.builtin.shell: "curl -iL --user admin:'{{ activemq_password }}' http://localhost:8161"  
+      register: activemq_web_response
+      failed_when: 
+        - "'Welcome to the Apache ActiveMQ!' not in activemq_web_response.stdout"
+        - "'200 OK' not in activemq_web_response.stdout"
+    - name: Validate JVM memory settings
+      ansible.builtin.shell: "ps aux | grep '[j]ava'"
+      register: jvm_opts
+      failed_when: 
+        - "'-Xmx900m' not in jvm_opts.stdout"
+        - "'-Xms300m' not in jvm_opts.stdout"
+
+
