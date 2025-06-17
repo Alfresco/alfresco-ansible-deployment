@@ -30,5 +30,5 @@ provisioner:
   inventory:
     links:
       host_vars: host_vars
-verifier:
-  name: testinfra
+# verifier:
+#   name: testinfra

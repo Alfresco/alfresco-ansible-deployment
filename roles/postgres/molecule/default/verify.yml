@@ -1,0 +1,70 @@
+
+---
+- name: postgres Tests
+  hosts: all
+  become: yes
+  vars:
+    activemq_version: "5.18.7"
+    activemq_binary_path: "/opt/apache-activemq-{{ activemq_version }}/bin/activemq"
+    config_folder: "/etc/opt/alfresco"
+    activemq_password: "activemq"
+  tasks:
+  - name: Gather service facts
+    service_facts:
+  - name: Print ActiveMQ password
+    debug:
+      msg: "ActiveMQ password is: {{ inventory_hostname }}"  
+  - name: Ensure PostgreSQL service is running and enabled
+    fail:
+      msg: "PostgreSQL service is not running or enabled!"
+    when: 
+      - ansible_facts.services["postgresql-15.service"].state != "running"
+      - ansible_facts.services["postgresql-15.service"].status != "enabled"
+  - name: Check if alfresco and alfresco-sync databases exist
+    shell: |
+      psql -U postgres -d alfresco -c 'SELECT 1'
+      psql -U postgres -d alfresco-sync -c 'SELECT 1'
+    become: yes
+    become_user: postgres
+    register: db_check
+    failed_when: db_check.rc != 0
+  - name: Verify Alfresco database exists with explicit host
+    shell: "PGPASSWORD=alfresco psql -h postgres-instance  -U alfresco alfresco -c 'SELECT 1'"
+    register: alfresco_db_check
+    become: yes
+    become_user: postgres
+    failed_when: alfresco_db_check.rc != 0
+
+  - name: Verify Alfresco-sync database exists with explicit host
+    shell: "PGPASSWORD=alfresco psql -h postgres-instance -U alfresco-sync alfresco-sync -c 'SELECT 1'"
+    register: alfresco_sync_db_check
+    become: yes
+    become_user: postgres
+    failed_when: alfresco_sync_db_check.rc != 0
+
+    
+  - name: Run PostgreSQL command with explicit host
+    shell: "PGPASSWORD=alfresco psql -h postgres-instance  -U alfresco -d alfresco -c 'SELECT 1'"
+    register: db_check
+    failed_when: "'1' not in db_check.stdout"
+  - name: Check if user cannot connect remotely to another database (should fail)
+    shell: "PGPASSWORD=alfresco psql -h postgres-instance -U alfresco alfresco-sync -c 'SELECT 1'"
+    register: remote_access_check
+    become: yes
+    become_user: postgres
+    failed_when: remote_access_check.rc == 0  # Expect failure
+
+  - name: Check if user can connect locally (should pass)
+    shell: "PGPASSWORD=alfresco psql -h 127.0.0.1 -U alfresco alfresco-sync -c 'SELECT 1'"
+    register: local_access_check
+    become: yes
+    become_user: postgres
+    failed_when: local_access_check.rc != 0  # Expect success
+
+  - name: Ensure user cannot create tables inside alfresco-sync database
+    shell: "PGPASSWORD=alfresco psql -h 127.0.0.1 -U alfresco alfresco-sync -c 'CREATE TABLE public.films (code char(5));'"
+    register: permission_check
+    become: yes
+    become_user: postgres
+    failed_when: "'permission denied for schema public' not in permission_check.stderr"
+
