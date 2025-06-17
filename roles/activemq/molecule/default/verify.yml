@@ -3,16 +3,15 @@
   hosts: all
   become: yes
   vars:
+    activemq_version: "5.18.7"
     activemq_binary_path: "/opt/apache-activemq-{{ activemq_version }}/bin/activemq"
+    config_folder: "/etc/opt/alfresco"
   vars_files:
-    - "../java/vars/main.yml"
-    - "../../vars/main.yml"
-    - "../../../common/vars/main.yml"
-    - "../../../common/defaults/main.yml"
-    - "../../defaults/main.yml"
-    - "../../../../vars/secrets.yml"  
+    - "../../../../vars/secrets.yml"
 
   tasks:
+    - name: Populate service facts
+      ansible.builtin.service_facts:
     - name: Check if ActiveMQ binary exists
       ansible.builtin.stat:
         path: "{{ activemq_binary_path }}"
@@ -30,29 +29,24 @@
       ansible.builtin.shell: ". {{ config_folder }}/setenv.sh && echo $ACTIVEMQ_HOME"
       become: yes
       register: activemq_home_path
-      failed_when: "'/opt/apache-activemq-' ~ activemq_version not in activemq_home_path.stdout"  
-    - name: Ensure ActiveMQ service is running and enabled
-      ansible.builtin.systemd:
-        name: activemq
-        state: started
-        enabled: yes
-      register: activemq_service_status
-      failed_when: 
-        - activemq_service_status.status.ActiveState != "running"
-        - activemq_service_status.status.UnitFileState != "enabled"
-    - name: Validate ActiveMQ web console response      
+      failed_when: "'/opt/apache-activemq-' ~ activemq_version not in activemq_home_path.stdout"
+    - name: Check that activemq service is up and running
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['activemq.service'] is defined
+          - ansible_facts.services['activemq.service'].state == 'running'
+        quiet: true
+    - name: Validate ActiveMQ web console response
       environment:
         TEST_HOST: "localhost"
-      ansible.builtin.shell: "curl -iL --user admin:'{{ activemq_password }}' http://localhost:8161"  
+      ansible.builtin.shell: "curl -iL --user admin:'{{ activemq_password }}' http://localhost:8161"
       register: activemq_web_response
-      failed_when: 
+      failed_when:
         - "'Welcome to the Apache ActiveMQ!' not in activemq_web_response.stdout"
         - "'200 OK' not in activemq_web_response.stdout"
     - name: Validate JVM memory settings
       ansible.builtin.shell: "ps aux | grep '[j]ava'"
       register: jvm_opts
-      failed_when: 
+      failed_when:
         - "'-Xmx900m' not in jvm_opts.stdout"
         - "'-Xms300m' not in jvm_opts.stdout"
-
-
