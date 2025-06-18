@@ -4,22 +4,27 @@
   hosts: all
   become: yes
   vars:
-    activemq_version: "5.18.7"
-    activemq_binary_path: "/opt/apache-activemq-{{ activemq_version }}/bin/activemq"
-    config_folder: "/etc/opt/alfresco"
-    activemq_password: "activemq"
+    postgres_major_version: "15"
+  #   activemq_version: "5.18.7"
+  #   activemq_binary_path: "/opt/apache-activemq-{{ activemq_version }}/bin/activemq"
+  #   config_folder: "/etc/opt/alfresco"
+  #   activemq_password: "activemq"
   tasks:
   - name: Gather service facts
     service_facts:
-  - name: Print ActiveMQ password
-    debug:
-      msg: "ActiveMQ password is: {{ inventory_hostname }}"  
+  # - name: Print ActiveMQ password
+  #   debug:
+  #     msg: "ActiveMQ password is: {{ inventory_hostname }}"
+  - name: Set PostgreSQL service name based on OS type
+    set_fact:
+      service_name: >-
+        {{ 'postgresql' if not ansible_facts['distribution_file_variety'] == 'RedHat'
+          else 'postgresql-' ~ postgres_major_version }}
+
   - name: Ensure PostgreSQL service is running and enabled
     fail:
       msg: "PostgreSQL service is not running or enabled!"
-    when: 
-      - ansible_facts.services["postgresql-15.service"].state != "running"
-      - ansible_facts.services["postgresql-15.service"].status != "enabled"
+    when: ansible_facts.services[service_name ~ '.service'].state != "running" or ansible_facts.services[service_name ~ '.service'].status != "enabled"
   - name: Check if alfresco and alfresco-sync databases exist
     shell: |
       psql -U postgres -d alfresco -c 'SELECT 1'
@@ -42,7 +47,7 @@
     become_user: postgres
     failed_when: alfresco_sync_db_check.rc != 0
 
-    
+
   - name: Run PostgreSQL command with explicit host
     shell: "PGPASSWORD=alfresco psql -h postgres-instance  -U alfresco -d alfresco -c 'SELECT 1'"
     register: db_check
@@ -67,4 +72,3 @@
     become: yes
     become_user: postgres
     failed_when: "'permission denied for schema public' not in permission_check.stderr"
-
