@@ -4,10 +4,10 @@
   become: yes
   vars:
     test_host: "localhost"
-    logs_folder: "/var/log/alfresco" 
+    logs_folder: "/var/log/alfresco"
   tasks:
   - name: Gather service facts
-    service_facts: 
+    service_facts:
   - name: Check if solr.log exists and fail if missing
     ansible.builtin.stat:
       path: "{{ logs_folder }}/solr.log"
@@ -16,7 +16,7 @@
   - name: Validate alfresco-search service state
     fail:
       msg: "alfresco-search service is not running or not enabled"
-    when: 
+    when:
       - ansible_facts.services['alfresco-search.service'].state != 'running'
       - ansible_facts.services['alfresco-search.service'].status != 'enabled'
 
@@ -34,4 +34,3 @@
     register: jvm_check
     changed_when: false
     failed_when: "'-Xmx900m' not in jvm_check.stdout or '-Xms700m' not in jvm_check.stdout"
-
