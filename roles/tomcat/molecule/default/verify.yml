@@ -23,7 +23,7 @@
     register: tomcat_version_output
     changed_when: false
     failed_when: "'Apache Tomcat/' ~ tomcat_version not in tomcat_version_output.stdout"
-  
+
   - name: Validate TOMCAT_HOME is set correctly
     shell: |
       . {{ config_folder }}/setenv.sh && echo $TOMCAT_HOME
@@ -52,7 +52,5 @@
       ansible_facts.services['alfresco-content.service'].state != 'running' or
       ansible_facts.services['alfresco-content.service'].status != 'enabled'
 
-
-      
 
 
