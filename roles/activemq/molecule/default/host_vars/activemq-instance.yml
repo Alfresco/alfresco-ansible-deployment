@@ -1,1 +1,3 @@
 ansible_user: ansible
+activemq_username: activemq # pragma: allowlist secret
+activemq_password: activemq # pragma: allowlist secret
