@@ -16,12 +16,13 @@
         {{ 'postgresql' if ansible_os_family != 'RedHat'
           else 'postgresql-' ~ postgres_major_version }}
 
-  - name: Fail if PostgreSQL service is not running or enabled
-    ansible.builtin.fail:
-      msg: "PostgreSQL service '{{ service_name }}.service' is not running or enabled!"
-    when: >
-      ansible_facts.services.get(service_name ~ '.service', {}).state != 'running' or
-      ansible_facts.services.get(service_name ~ '.service', {}).status != 'enabled'
+  - name: Assert PostgreSQL service is running and enabled
+    ansible.builtin.assert:
+      that:
+        - ansible_facts.services[service_name ~ '.service'].state == 'running'
+        - ansible_facts.services[service_name ~ '.service'].status == 'enabled'
+      fail_msg: "PostgreSQL service '{{ service_name }}.service' is not running or not enabled."
+      success_msg: "PostgreSQL service '{{ service_name }}.service' is running and enabled."
 
   - name: Check if 'alfresco' database exists
     ansible.builtin.command: psql -U postgres -d alfresco -c 'SELECT 1'
