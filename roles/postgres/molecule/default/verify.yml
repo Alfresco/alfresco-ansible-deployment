@@ -9,7 +9,7 @@
   tasks:
   - name: Gather service facts
     ansible.builtin.service_facts:
-  
+
   - name: Set PostgreSQL service name based on OS type
     ansible.builtin.set_fact:
       service_name: >-
@@ -22,7 +22,7 @@
     when: >
       ansible_facts.services.get(service_name ~ '.service', {}).state != 'running' or
       ansible_facts.services.get(service_name ~ '.service', {}).status != 'enabled'
-  
+
   - name: Check if 'alfresco' database exists
     ansible.builtin.command: psql -U postgres -d alfresco -c 'SELECT 1'
 
@@ -37,7 +37,7 @@
 
   - name: Check if user cannot connect remotely to another database (should fail)
     ansible.builtin.shell: "PGPASSWORD=alfresco psql -h postgres-instance -U alfresco alfresco-sync -c 'SELECT 1'"
-    register: remote_access_check   
+    register: remote_access_check
     failed_when: remote_access_check.rc == 0  # Expect failure
 
   - name: Check if user can connect locally (should pass)
