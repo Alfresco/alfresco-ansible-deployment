@@ -107,6 +107,7 @@
           line: admins={{ activemq_username }}
         - file: jetty-realm
           line: "{{ activemq_username }}: MD5:{{ activemq_password | md5 }}, admin"
+      no_log: true    
       loop_control:
         label: "{{ item.file }}"
 
