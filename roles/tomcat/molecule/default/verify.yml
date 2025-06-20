@@ -45,9 +45,10 @@
       msg: "CATALINA_BASE not set properly"
     when: config_folder ~ '/tomcat' not in catalina_env_output.stderr
 
-  - name: Verify Tomcat (alfresco-content) service is running and enabled
-    ansible.builtin.fail:
-      msg: "Tomcat service is not running or not enabled"
-    when: >
-      ansible_facts.services['alfresco-content.service'].state != 'running' or
-      ansible_facts.services['alfresco-content.service'].status != 'enabled'
+  - name: Assert alfresco-content service is running and enabled
+    ansible.builtin.assert:
+      that:
+        - ansible_facts.services['alfresco-content.service'].state == 'running'
+        - ansible_facts.services['alfresco-content.service'].status == 'enabled'
+      fail_msg: "alfresco-content is not running or not enabled."
+      success_msg: "alfresco-content is running and enabled."
