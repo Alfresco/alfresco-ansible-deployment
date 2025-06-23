@@ -11,22 +11,26 @@
     test_host: "localhost"
   tasks:
   - name: Gather service facts
-    service_facts:
-  - name: Verify sfs service is running and enabled
-    fail:
-      msg: "Service alfresco-shared-fs is not running or not enabled"
-    when: >
-      ansible_facts.services['alfresco-shared-fs.service'].state != 'running' or
-      ansible_facts.services['alfresco-shared-fs.service'].status != 'enabled' 
+    ansible.builtin.service_facts:
+
+  - name: Assert alfresco sfs service is running and enabled
+    ansible.builtin.assert:
+      that:
+        - ansible_facts.services['alfresco-shared-fs.service'].state == 'running'
+        - ansible_facts.services['alfresco-shared-fs.service'].status == 'enabled'
+      fail_msg: "alfresco sfs service  is not running or not enabled."
+      success_msg: "alfresco sfs service  is running and enabled."
+
   - name: Ensure ats-shared-fs.log exists
-    stat:
+    ansible.builtin.stat:
       path: /var/log/alfresco/ats-shared-fs.log
     register: sfs_log
     become: yes
     become_user: "{{ username }}"
     failed_when: not sfs_log.stat.exists
+
   - name: Verify /ready and /live endpoints respond with 200
-    uri:
+    ansible.builtin.uri:
       url: "http://{{ test_host }}:8099{{ item }}"
       status_code: 200
       return_content: yes
@@ -34,11 +38,10 @@
       - /ready
       - /live
     register: sfs_endpoints
+
   - name: Validate JVM memory settings
-    ansible.builtin.shell: "set -o pipefail && ps aux | grep '[j]ava'"
-    changed_when: false
+    ansible.builtin.command: "pgrep -fa java"
     register: jvm_opts
+    changed_when: false
     failed_when: >
       '-Xmx900m' not in jvm_opts.stdout or '-Xms128m' not in jvm_opts.stdout
-
-
