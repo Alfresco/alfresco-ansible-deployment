@@ -13,14 +13,19 @@
   - name: Set PostgreSQL service name based on OS type
     ansible.builtin.set_fact:
       service_name: >-
-        {{ 'postgresql' if ansible_os_family != 'RedHat'
-          else 'postgresql-' ~ postgres_major_version }}
+        {%- if ansible_os_family == 'RedHat' -%}
+        postgresql-{{ postgres_major_version }}
+        {%- elif ansible_os_family == 'Debian' -%}
+        postgresql@{{ postgres_major_version }}-main
+        {%- else -%}
+        postgresql
+        {%- endif -%}
 
   - name: Assert PostgreSQL service is running and enabled
     ansible.builtin.assert:
       that:
         - ansible_facts.services[service_name ~ '.service'].state == 'running'
-        - ansible_facts.services[service_name ~ '.service'].status == 'enabled'
+        - ansible_facts.services[service_name ~ '.service'].status in ['enabled', 'active']
       fail_msg: "PostgreSQL service '{{ service_name }}.service' is not running or not enabled."
       success_msg: "PostgreSQL service '{{ service_name }}.service' is running and enabled."
 
