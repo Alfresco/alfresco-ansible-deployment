@@ -4,6 +4,8 @@
   hosts: all
   become: yes
   become_user: postgres
+  environment:
+    PGPASSWORD: "alfresco"
   vars:
     postgres_major_version: "15"
   tasks:
@@ -36,20 +38,20 @@
     ansible.builtin.command: psql -U postgres -d alfresco-sync -c 'SELECT 1'
 
   - name: Verify Alfresco database exists with explicit host
-    ansible.builtin.shell: "PGPASSWORD=alfresco psql -h postgres-instance  -U alfresco alfresco -c 'SELECT 1'"
+    ansible.builtin.command: "psql -h postgres-instance  -U alfresco alfresco -c 'SELECT 1'"
 
   - name: Verify Alfresco-sync database exists with explicit host
-    ansible.builtin.shell: "PGPASSWORD=alfresco psql -h postgres-instance -U alfresco-sync alfresco-sync -c 'SELECT 1'"
+    ansible.builtin.command: "psql -h postgres-instance -U alfresco-sync alfresco-sync -c 'SELECT 1'"
 
   - name: Check if user cannot connect remotely to another database (should fail)
-    ansible.builtin.shell: "PGPASSWORD=alfresco psql -h postgres-instance -U alfresco alfresco-sync -c 'SELECT 1'"
+    ansible.builtin.command: "psql -h postgres-instance -U alfresco alfresco-sync -c 'SELECT 1'"
     register: remote_access_check
     failed_when: remote_access_check.rc == 0  # Expect failure
 
   - name: Check if user can connect locally (should pass)
-    ansible.builtin.shell: "PGPASSWORD=alfresco psql -h 127.0.0.1 -U alfresco alfresco-sync -c 'SELECT 1'"
+    ansible.builtin.command: "psql -h 127.0.0.1 -U alfresco alfresco-sync -c 'SELECT 1'"
 
   - name: Ensure user cannot create tables inside alfresco-sync database
-    ansible.builtin.shell: "PGPASSWORD=alfresco psql -h 127.0.0.1 -U alfresco alfresco-sync -c 'CREATE TABLE public.films (code char(5));'"
+    ansible.builtin.command: "psql -h 127.0.0.1 -U alfresco alfresco-sync -c 'CREATE TABLE public.films (code char(5));'"
     register: permission_check
     failed_when: "'permission denied for schema public' not in permission_check.stderr"
