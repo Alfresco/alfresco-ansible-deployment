@@ -4,7 +4,7 @@
   become: yes
   gather_facts: true
   vars:
-    trouter_host: "localhost"  # Adjust as needed for your environment
+    trouter_host: "localhost"
   tasks:
     - name: Gather service facts
       ansible.builtin.service_facts:
@@ -21,19 +21,11 @@
       register: atr_log
       failed_when: not atr_log.stat.exists
 
-    - name: Call Transform AIO config API (without enforcing status code)
+    - name: Call Transform AIO config API and validate response
       ansible.builtin.uri:
         url: "http://{{ trouter_host }}:8095/transform/config"
         return_content: true
       register: aio_api_response
-      failed_when: false  # Prevents noisy failure
-
-    - name: Assert correct API response status
-      ansible.builtin.assert:
-        that:
-          - aio_api_response.status == 200
-        fail_msg: "AIO config API failed"
-        success_msg: "AIO config API responded with status 200 Created."
 
     - name: Assert API output includes expected keys
       ansible.builtin.assert:
@@ -55,12 +47,11 @@
         '-Xmx900m' not in jvm_opts.stdout or '-Xms800m' not in jvm_opts.stdout
 
     - name: Test ghostscript command
-      become: true
       ansible.builtin.shell: ghostscript
       register: ghostscript_test
-      failed_when:   ghostscript_test.rc != 127
-    - name: Test ghostscript command
-      become: true
+      failed_when: ghostscript_test.rc != 127
+
+    - name: Test gs command
       ansible.builtin.shell: gs
       register: gs_test
       failed_when:   gs_test.rc != 127
