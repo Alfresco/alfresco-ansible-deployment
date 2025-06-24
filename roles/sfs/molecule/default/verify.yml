@@ -2,12 +2,7 @@
 - name: sfs Tests
   hosts: all
   become: yes
-  gather_facts: true
   vars:
-    tomcat_version: "10.1.41"
-    config_folder: "/etc/opt/alfresco"
-    binaries_folder: "/opt/alfresco"
-    username: "alfresco"
     test_host: "localhost"
   tasks:
   - name: Gather service facts
@@ -18,15 +13,13 @@
       that:
         - ansible_facts.services['alfresco-shared-fs.service'].state == 'running'
         - ansible_facts.services['alfresco-shared-fs.service'].status == 'enabled'
-      fail_msg: "alfresco sfs service  is not running or not enabled."
-      success_msg: "alfresco sfs service  is running and enabled."
+      fail_msg: "alfresco sfs service is not running or not enabled."
+      success_msg: "alfresco sfs service is running and enabled."
 
   - name: Ensure ats-shared-fs.log exists
     ansible.builtin.stat:
       path: /var/log/alfresco/ats-shared-fs.log
     register: sfs_log
-    become: yes
-    become_user: "{{ username }}"
     failed_when: not sfs_log.stat.exists
 
   - name: Verify /ready and /live endpoints respond with 200
@@ -37,7 +30,6 @@
     loop:
       - /ready
       - /live
-    register: sfs_endpoints
 
   - name: Validate JVM memory settings
     ansible.builtin.command: "pgrep -fa java"
