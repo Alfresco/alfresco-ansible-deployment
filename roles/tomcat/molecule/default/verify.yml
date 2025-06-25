@@ -33,6 +33,7 @@
   - name: To fetch Catalina environment
     ansible.builtin.command: "{{ binaries_folder }}/tomcat.sh configtest"
     register: catalina_env_output
+    become: true
     become_user: "{{ username }}"
 
   - name: Assert CATALINA_HOME is correct
