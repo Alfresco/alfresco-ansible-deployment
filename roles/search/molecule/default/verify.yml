@@ -1,0 +1,43 @@
+---
+- name: Search Tests
+  hosts: all
+  become: yes
+  vars:
+    test_host: "localhost"
+    logs_folder: "/var/log/alfresco"
+  tasks:
+  - name: Gather service facts
+    ansible.builtin.service_facts:
+
+  - name: Check if solr.log exists and fail if missing
+    ansible.builtin.stat:
+      path: "{{ logs_folder }}/solr.log"
+    register: solr_log
+    failed_when: not solr_log.stat.exists
+
+  - name: Validate alfresco-search service state
+    ansible.builtin.fail:
+      msg: "alfresco-search service is not running or not enabled"
+    when: >
+      ansible_facts.services['alfresco-search.service'].state != 'running' or
+      ansible_facts.services['alfresco-search.service'].status != 'enabled'
+
+  - name: Check SOLR core 'alfresco' endpoint
+    ansible.builtin.command: >
+      curl -s -o /dev/null -w "%{http_code}" -H "X-Alfresco-Search-Secret: alfresco with space"
+      "http://{{ test_host }}:8983/solr/#/~cores/alfresco"
+    register: solr_alfresco_core
+    failed_when: solr_alfresco_core.stdout != "200"
+
+  - name: Check SOLR core 'archive' endpoint
+    ansible.builtin.command: >
+      curl -s -o /dev/null -w "%{http_code}" -H "X-Alfresco-Search-Secret: alfresco with space"
+      "http://{{ test_host }}:8983/solr//#/~cores/archive"
+    register: solr_archive_core
+    failed_when: solr_archive_core.stdout != "200"
+
+  - name: Get JVM options of Alfresco process
+    ansible.builtin.command: "pgrep -fa java"
+    register: jvm_check
+    changed_when: false
+    failed_when: "'-Xmx900m' not in jvm_check.stdout or '-Xms700m' not in jvm_check.stdout"
