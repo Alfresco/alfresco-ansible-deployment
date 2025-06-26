@@ -1,7 +1,7 @@
 ---
 - name: tomcat Tests
   hosts: all
-  become: yes
+  become: true
   gather_facts: true
   vars:
     tomcat_version: "10.1.41"
@@ -13,7 +13,7 @@
     ansible.builtin.service_facts:
 
   - name: Ensure catalina.sh exists, fail if missing
-    stat:
+    ansible.builtin.stat:
       path: "/opt/apache-tomcat-{{ tomcat_version }}/bin/catalina.sh"
     register: catalina_file
     failed_when: not catalina_file.stat.exists
@@ -33,7 +33,6 @@
   - name: To fetch Catalina environment
     ansible.builtin.command: "{{ binaries_folder }}/tomcat.sh configtest"
     register: catalina_env_output
-    become: true
     become_user: "{{ username }}"
 
   - name: Assert CATALINA_HOME is correct
