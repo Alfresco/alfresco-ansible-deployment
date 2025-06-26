@@ -1,7 +1,7 @@
 ---
 - name: trouter Tests
   hosts: all
-  become: yes
+  become: true
   gather_facts: true
   vars:
     trouter_host: "localhost"
