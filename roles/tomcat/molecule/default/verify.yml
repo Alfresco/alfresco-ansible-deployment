@@ -1,0 +1,54 @@
+---
+- name: tomcat Tests
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    tomcat_version: "10.1.41"
+    config_folder: "/etc/opt/alfresco"
+    binaries_folder: "/opt/alfresco"
+    username: "alfresco"
+  tasks:
+  - name: Gather service facts
+    ansible.builtin.service_facts:
+
+  - name: Ensure catalina.sh exists, fail if missing
+    ansible.builtin.stat:
+      path: "/opt/apache-tomcat-{{ tomcat_version }}/bin/catalina.sh"
+    register: catalina_file
+    failed_when: not catalina_file.stat.exists
+
+  - name: Check Tomcat version matches expected
+    ansible.builtin.shell: |
+      . {{ config_folder }}/setenv.sh && $TOMCAT_HOME/bin/catalina.sh version
+    register: tomcat_version_output
+    failed_when: "'Apache Tomcat/' ~ tomcat_version not in tomcat_version_output.stdout"
+
+  - name: Validate TOMCAT_HOME is set correctly
+    ansible.builtin.shell: |
+      . {{ config_folder }}/setenv.sh && echo $TOMCAT_HOME
+    register: tomcat_home_output
+    failed_when: "'/opt/apache-tomcat-' ~ tomcat_version not in tomcat_home_output.stdout"
+
+  - name: To fetch Catalina environment
+    ansible.builtin.command: "{{ binaries_folder }}/tomcat.sh configtest"
+    register: catalina_env_output
+    become_user: "{{ username }}"
+
+  - name: Assert CATALINA_HOME is correct
+    ansible.builtin.fail:
+      msg: "CATALINA_HOME not set properly"
+    when: "'/opt/apache-tomcat-' ~ tomcat_version not in catalina_env_output.stderr"
+
+  - name: Assert CATALINA_BASE is correct
+    ansible.builtin.fail:
+      msg: "CATALINA_BASE not set properly"
+    when: config_folder ~ '/tomcat' not in catalina_env_output.stderr
+
+  - name: Assert alfresco-content service is running and enabled
+    ansible.builtin.assert:
+      that:
+        - ansible_facts.services['alfresco-content.service'].state == 'running'
+        - ansible_facts.services['alfresco-content.service'].status == 'enabled'
+      fail_msg: "alfresco-content is not running or not enabled."
+      success_msg: "alfresco-content is running and enabled."
