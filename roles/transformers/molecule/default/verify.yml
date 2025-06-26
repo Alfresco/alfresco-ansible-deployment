@@ -1,0 +1,63 @@
+---
+- name: tranformers Tests
+  hosts: all
+  become: true
+  vars:
+    logs_folder: "/var/log/alfresco"
+    aio_host: "localhost"
+  tasks:
+    - name: Populate service facts
+      ansible.builtin.service_facts:
+
+    - name: Check and assert AIO log file exists
+      ansible.builtin.stat:
+        path: "{{ logs_folder }}/ats-ate-aio.log"
+      register: aio_log_stat
+      failed_when: not aio_log_stat.stat.exists
+
+    - name: Assert AIO service is running and enabled
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['alfresco-tengine-aio.service'].state == 'running'
+          - ansible_facts.services['alfresco-tengine-aio.service'].status == 'enabled'
+
+    - name: Call Transform AIO config API and validate response
+      ansible.builtin.uri:
+        url: "http://{{ aio_host }}:8090/transform/config"
+        return_content: true
+      register: aio_api_response
+
+    - name: Assert API output includes expected keys
+      ansible.builtin.assert:
+        that:
+          - '"pdfRendererOptions" in aio_api_response.content'
+          - '"archiveOptions" in aio_api_response.content'
+          - '"tikaOptions" in aio_api_response.content'
+          - '"imageMagickOptions" in aio_api_response.content'
+          - '"pdfboxOptions" in aio_api_response.content'
+          - '"textToPdfOptions" in aio_api_response.content'
+          - '"stringOptions" in aio_api_response.content'
+        fail_msg: "Transform AIO config API missing expected keys."
+
+    - name: Validate JVM memory settings
+      ansible.builtin.command: "pgrep -fa java"
+      register: jvm_opts
+      changed_when: false
+      failed_when: >
+        '-Xmx900m' not in jvm_opts.stdout or '-Xms512m' not in jvm_opts.stdout
+
+    - name: Check and assert LibreOffice version (skip on aarch64)
+      ansible.builtin.command: /opt/libreoffice7.2/program/soffice.bin --version
+      register: libreoffice_version
+      failed_when: "'LibreOffice 7.2.5.1' not in libreoffice_version.stdout"
+      when: ansible_architecture != 'aarch64'
+
+    - name: Test ghostscript
+      ansible.builtin.shell: ghostscript
+      register: ghostscript_test
+      failed_when:  ghostscript_test.rc != 127
+
+    - name: Test gs
+      ansible.builtin.shell: gs
+      register: gs_test
+      failed_when:  gs_test.rc != 127
