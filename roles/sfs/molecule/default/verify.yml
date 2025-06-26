@@ -1,7 +1,7 @@
 ---
 - name: sfs Tests
   hosts: all
-  become: yes
+  become: true
   vars:
     test_host: "localhost"
   tasks:
@@ -21,7 +21,7 @@
       path: /var/log/alfresco/ats-shared-fs.log
     register: sfs_log
     failed_when: not sfs_log.stat.exists
-
+  # kics-scan ignore-block
   - name: Verify /ready and /live endpoints respond with 200
     ansible.builtin.uri:
       url: "http://{{ test_host }}:8099{{ item }}"
