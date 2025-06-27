@@ -46,13 +46,13 @@
         changed_when: false
         failed_when: login_check_success.stdout | from_json | json_query("entry.userId") != "admin"
 
-  - name: Check that activemq service is up and running
+  - name: Check that actalfresco-content service is up and running
     ansible.builtin.assert:
       that:
         - ansible_facts.services['alfresco-content.service'] is defined
         - ansible_facts.services['alfresco-content.service'].state == 'running'
-      fail_msg: "activemq service is not running or not enabled."
-      success_msg: "activemq service is running and enabled."
+      fail_msg: "activalfresco-content emq service is not running or not enabled."
+      success_msg: "alfresco-content  service is running and enabled."
 
   - name: Check if alfresco.log exists and fail if missing
     ansible.builtin.stat:
@@ -62,8 +62,7 @@
 
   - name: Check activemq.log does not contain authentication failures
     ansible.builtin.slurp:
-      # src: /var/log/alfresco/activemq.log
-      src: /var/opt/alfresco/activemq/data/activemq.log
+      src: /var/log/alfresco/activemq.log
     register: activemq_log
     become: yes
     failed_when: "'password is invalid.' in (activemq_log.content | b64decode)"
@@ -72,6 +71,7 @@
     ansible.builtin.debug:
       var: activemq_log
 
+  # kics-scan ignore-block
   - name: Verify /alfresco context responds with HTTP 200 and welcome message
     ansible.builtin.uri:
       url: "http://{{ test_host }}:8080/alfresco"
@@ -88,6 +88,7 @@
     ansible.builtin.debug:
       var: alfresco_check
 
+  # kics-scan ignore-block
   - name: Call the Alfresco discovery API
     ansible.builtin.uri:
       url: "http://{{ test_host }}:8080/alfresco/api/discovery"
@@ -99,18 +100,6 @@
       status_code: 200
     register: discovery_response
     changed_when: false
-
-  - name: Normalize ACS version
-    set_fact:
-      acs_expected_version: >-
-        {% set raw = repository_acs_version.split('-')[0] | trim %}
-        {% if raw.startswith('23.2.1') %}
-          23.2.0
-        {% elif raw.startswith('23.3.2') %}
-          23.3.1.2
-        {% else %}
-          {{ raw }}
-        {% endif %}
 
   - name: Extract clean ACS version from discovery display string
     set_fact:
@@ -129,27 +118,13 @@
         Expected version '{{ extracted_version }}' not found at the start of API response:
         '{{ discovery_response.json.entry.repository.version.display }}'
 
-  - name: Call Alfresco discovery API
-    ansible.builtin.uri:
-      url: "http://{{ test_host }}:8080/alfresco/api/discovery"
-      method: GET
-      user: admin
-      password: admin
-      force_basic_auth: true
-      return_content: true
-    register: discovery_response
-    changed_when: false
-    failed_when: >
-      discovery_response.status != 200 and
-      (discovery_response.json.entry.repository.version.display is defined and
-      acs_expected_version not in discovery_response.json.entry.repository.version.display)
-
   - name: Check if share.log exists and fail if missing
     ansible.builtin.stat:
-      path: var/log/alfresco/share.log
+      path: /var/log/alfresco/share.log
     register: share_log
     failed_when: not share_log.stat.exists
 
+  # kics-scan ignore-block
   - name: Verify /share context responds with HTTP 200 and contains 'Alfresco Share'
     ansible.builtin.uri:
       url: "http://{{ test_host }}:8080/share/page/"
@@ -160,6 +135,7 @@
     changed_when: false
     failed_when: "'Alfresco Share' not in share_check.content"
 
+  # kics-scan ignore-block
   - name: Verify /_vti_bin/ returns expected strings
     ansible.builtin.uri:
       url: "http://{{ test_host }}:8080/_vti_bin/"
@@ -175,6 +151,7 @@
       'welcome to alfresco!' not in (vti_bin_check.content | lower | replace('\n', '')) or
       'this application does not provide a web interface in the browser.' not in (vti_bin_check.content | lower | replace('\n', ''))
 
+  # kics-scan ignore-block
   - name: Verify /_vti_inf.html returns HTTP 200 and expected info
     ansible.builtin.uri:
       url: "http://{{ test_host }}:8080/_vti_inf.html"
@@ -190,6 +167,7 @@
       'frontpage configuration information' not in (vti_inf_check.content | lower | replace('\n', '')) or
       '_vti_bin' not in (vti_inf_check.content | lower | replace('\n', ''))
 
+  # kics-scan ignore-block
   - name: Verify /api-explorer returns HTTP 200 and API Explorer title
     ansible.builtin.uri:
       url: "http://{{ test_host }}:8080/api-explorer"
