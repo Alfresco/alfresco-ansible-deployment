@@ -81,10 +81,6 @@ jobs:
         with:
           cache-name: ${{ inputs.galaxy_cache }}
 
-      - name: Install required tools for arm runners
-        uses: Alfresco/alfresco-build-tools/.github/actions/install-ubuntu-default-tools@b3070acf733fdcfd2698065e99017d4969256e5b # v8.14.1
-        if: contains(inputs.runner, '-arm')
-
       - name: Run tests
         env:
           MOLECULE_ROLE_IMAGE: ${{ inputs.os_distribution }}

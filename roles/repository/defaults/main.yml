@@ -123,7 +123,7 @@ repository_identity_client_secret: ''
 repository_identity_realm: alfresco
 
 repository_jdbc_driver_class: org.postgresql.Driver
-repository_jdbc_driver_version: 42.7.3
+repository_jdbc_driver_version: 42.7.7
 repository_jdbc_driver_base_url: https://repo.maven.apache.org/maven2/org/postgresql/postgresql
 repository_jdbc_driver_url: >-
   {{ '{0}/{1}/postgresql-{1}.jar'.format(repository_jdbc_driver_base_url, repository_jdbc_driver_version) }}

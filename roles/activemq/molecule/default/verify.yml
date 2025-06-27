@@ -1,0 +1,62 @@
+---
+- name: ActiveMQ Tests
+  hosts: all
+  become: yes
+  vars:
+    activemq_version: "5.18.7"
+    activemq_binary_path: "/opt/apache-activemq-{{ activemq_version }}/bin/activemq"
+    config_folder: "/etc/opt/alfresco"
+  tasks:
+    - name: Populate service facts
+      ansible.builtin.service_facts:
+
+    - name: Check if ActiveMQ binary exists
+      ansible.builtin.stat:
+        path: "{{ activemq_binary_path }}"
+      register: activemq_binary
+
+    - name: Fail if ActiveMQ binary is missing
+      ansible.builtin.fail:
+        msg: "ActiveMQ binary not found at {{ activemq_binary_path }}"
+      when: not activemq_binary.stat.exists
+
+    - name: Run ActiveMQ version command and validate output
+      ansible.builtin.shell: ". {{ config_folder }}/setenv.sh && $ACTIVEMQ_HOME/bin/activemq --version"
+      become: yes
+      register: activemq_version_output
+      failed_when: "'ActiveMQ ' ~ activemq_version not in activemq_version_output.stdout"
+      changed_when: false
+
+    - name: Run and validate ActiveMQ home
+      ansible.builtin.shell: ". {{ config_folder }}/setenv.sh && echo $ACTIVEMQ_HOME"
+      become: yes
+      register: activemq_home_path
+      failed_when: "'/opt/apache-activemq-' ~ activemq_version not in activemq_home_path.stdout"
+      changed_when: false
+
+    - name: Check that activemq service is up and running
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['activemq.service'] is defined
+          - ansible_facts.services['activemq.service'].state == 'running'
+        quiet: true
+
+    - name: Validate ActiveMQ web console response
+      ansible.builtin.uri:
+        url: "http://localhost:8161"
+        user: "{{ activemq_username }}"
+        password: "{{ activemq_password }}"
+        force_basic_auth: yes
+        return_content: yes
+        status_code: 200
+      register: activemq_web_response
+      failed_when:
+        - "'Welcome to the Apache ActiveMQ!' not in activemq_web_response.content"
+
+    - name: Validate JVM memory settings
+      ansible.builtin.command: "pgrep -fa java"
+      register: jvm_opts
+      changed_when: false
+      failed_when:
+        - "'-Xmx900m' not in jvm_opts.stdout"
+        - "'-Xms300m' not in jvm_opts.stdout"

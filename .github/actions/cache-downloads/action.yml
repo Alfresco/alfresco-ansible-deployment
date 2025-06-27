@@ -12,12 +12,27 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Peek activemq_version
+      id: activemq_peek
+      run: |
+        echo "activemq_version=$(yq '.activemq_version' roles/activemq/defaults/main.yml)" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Peek tomcat_version
+      id: tomcat_peek
+      run: |
+        echo "tomcat_version=$(yq '.tomcat_version' roles/tomcat/defaults/main.yml)" >> $GITHUB_OUTPUT
+      shell: bash
+
     - name: Restore downloaded artifacts
       id: artifacts-cache
       uses: actions/cache/restore@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
       with:
         path: 'downloads/**'
-        key: cache-downloads-v${{ inputs.cache-version }}-${{ inputs.cache-name }}-${{ hashFiles('group_vars/all.yml') }}-${{ hashFiles('.github/actions/cache-downloads/prefetch-artifacts.yml') }}
+        key: "cache-downloads-v${{ inputs.cache-version }}-${{ inputs.cache-name }}-\
+          mq${{ steps.activemq_peek.outputs.activemq_version }}-\
+          tc${{ steps.tomcat_peek.outputs.tomcat_version }}-\
+          ${{ hashFiles('.github/actions/cache-downloads/prefetch-artifacts.yml') }}"
 
     - name: Prefetch artifacts
       shell: bash
