@@ -1,0 +1,39 @@
+---
+- name: sfs Tests
+  hosts: all
+  become: true
+  vars:
+    test_host: "localhost"
+  tasks:
+  - name: Gather service facts
+    ansible.builtin.service_facts:
+
+  - name: Assert alfresco sfs service is running and enabled
+    ansible.builtin.assert:
+      that:
+        - ansible_facts.services['alfresco-shared-fs.service'].state == 'running'
+        - ansible_facts.services['alfresco-shared-fs.service'].status == 'enabled'
+      fail_msg: "alfresco sfs service is not running or not enabled."
+      success_msg: "alfresco sfs service is running and enabled."
+
+  - name: Ensure ats-shared-fs.log exists
+    ansible.builtin.stat:
+      path: /var/log/alfresco/ats-shared-fs.log
+    register: sfs_log
+    failed_when: not sfs_log.stat.exists
+  # kics-scan ignore-block
+  - name: Verify /ready and /live endpoints respond with 200
+    ansible.builtin.uri:
+      url: "http://{{ test_host }}:8099{{ item }}"
+      status_code: 200
+      return_content: yes
+    loop:
+      - /ready
+      - /live
+
+  - name: Validate JVM memory settings
+    ansible.builtin.command: "pgrep -fa java"
+    register: jvm_opts
+    changed_when: false
+    failed_when: >
+      '-Xmx900m' not in jvm_opts.stdout or '-Xms128m' not in jvm_opts.stdout
