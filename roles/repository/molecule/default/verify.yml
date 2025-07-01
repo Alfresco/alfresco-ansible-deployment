@@ -273,6 +273,7 @@
     ansible.builtin.slurp:
       src: /etc/opt/alfresco/content-services/classpath/alfresco/web-extension/share-config-custom.xml
     register: share_cfg_raw
+
   - name: Decode Share config XML content
     ansible.builtin.set_fact:
       share_cfg_text: "{{ share_cfg_raw.content | b64decode }}"
