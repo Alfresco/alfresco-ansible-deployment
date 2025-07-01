@@ -1,0 +1,281 @@
+---
+- name: repository Tests
+  hosts: all
+  become: yes
+  vars:
+    test_host: "localhost"
+    limit: 5
+    period: 60
+    repository_acs_version: "25.1.1"
+    share_xml_raw: "etc/opt/alfresco/content-services/classpath/alfresco/web-extension/share-config-custom.xml"
+
+  tasks:
+  - name: Gather service facts
+    ansible.builtin.service_facts:
+  - name: Brute-force lockout test sequenc
+    block:
+      - name: Perform 5 failed logins to trigger admin lockout
+        ansible.builtin.shell: |
+          for i in $(seq 1 {{ limit }}); do
+            BADPASS=$(head /dev/urandom | tr -dc a-z | head -c6)
+            curl -s -X POST http://{{ test_host }}:8080/alfresco/api/-default-/public/authentication/versions/1/tickets \
+              -H 'Content-Type: application/json' \
+              -d "{\"userId\": \"admin\", \"password\": \"${BADPASS}\"}" > /dev/null
+          done
+        changed_when: false
+
+      - name: Attempt correct login immediately (should fail due to lockout)
+        ansible.builtin.shell: |
+          curl -s -X POST http://{{ test_host }}:8080/alfresco/api/-default-/public/authentication/versions/1/tickets \
+            -H 'Content-Type: application/json' \
+            -d '{"userId": "admin", "password": "admin"}'
+        register: login_check_fail
+        changed_when: false
+        failed_when: '"Login failed" not in login_check_fail.stdout'
+
+      - name: Wait for lockout to expire
+        ansible.builtin.pause:
+          seconds: "{{ period | default(60) }}"
+
+      - name: Attempt login after lockout period (should succeed)
+        shell: |
+          curl -s -X POST http://{{ test_host }}:8080/alfresco/api/-default-/public/authentication/versions/1/tickets \
+            -H 'Content-Type: application/json' \
+            -d '{"userId": "admin", "password": "admin"}'
+        register: login_check_success
+        changed_when: false
+        failed_when: login_check_success.stdout | from_json | json_query("entry.userId") != "admin"
+
+  - name: Check that actalfresco-content service is up and running
+    ansible.builtin.assert:
+      that:
+        - ansible_facts.services['alfresco-content.service'] is defined
+        - ansible_facts.services['alfresco-content.service'].state == 'running'
+      fail_msg: "alfresco-content service is not running or not enabled."
+      success_msg: "alfresco-content  service is running and enabled."
+
+  - name: Check if alfresco.log exists and fail if missing
+    ansible.builtin.stat:
+      path: /var/log/alfresco/alfresco.log
+    register: alfresco_log
+    failed_when: not alfresco_log.stat.exists
+
+  - name: Check activemq.log does not contain authentication failures
+    ansible.builtin.slurp:
+      src: /var/log/alfresco/activemq.log
+    register: activemq_log
+    become: yes
+    failed_when: "'password is invalid.' in (activemq_log.content | b64decode)"
+
+  - name: Print contents of activemq_log
+    ansible.builtin.debug:
+      var: activemq_log
+
+  - name: Verify /alfresco context responds with HTTP 200 and welcome message
+    ansible.builtin.uri:
+      # kics-scan ignore-line
+      url: "http://{{ test_host }}:8080/alfresco"
+      method: GET
+      user: admin
+      password: admin
+      force_basic_auth: true
+      return_content: true
+    register: alfresco_check
+    changed_when: false
+    failed_when: "'Welcome to Alfresco' not in alfresco_check.content"
+
+  - name: Print contents of alfresco_check
+    ansible.builtin.debug:
+      var: alfresco_check
+
+  - name: Call the Alfresco discovery API
+    ansible.builtin.uri:
+      # kics-scan ignore-line
+      url: "http://{{ test_host }}:8080/alfresco/api/discovery"
+      method: GET
+      user: admin
+      password: admin
+      force_basic_auth: true
+      return_content: true
+      status_code: 200
+    register: discovery_response
+    changed_when: false
+
+  - name: Assert discovery API reports expected version
+    ansible.builtin.assert:
+      that:
+        - discovery_response.json.entry.repository.version.display.startswith(repository_acs_version)
+      fail_msg: >
+        Expected version '{{ repository_acs_version }}' not found at the start of API response:
+        '{{ discovery_response.json.entry.repository.version.display }}'
+
+  - name: Check if share.log exists and fail if missing
+    ansible.builtin.stat:
+      path: /var/log/alfresco/share.log
+    register: share_log
+    failed_when: not share_log.stat.exists
+
+  - name: Verify /share context responds with HTTP 200 and contains 'Alfresco Share'
+    ansible.builtin.uri:
+      # kics-scan ignore-line
+      url: "http://{{ test_host }}:8080/share/page/"
+      method: GET
+      return_content: true
+      status_code: 200
+    register: share_check
+    changed_when: false
+    failed_when: "'Alfresco Share' not in share_check.content"
+
+  - name: Verify /_vti_bin/ returns expected strings
+    ansible.builtin.uri:
+      # kics-scan ignore-line
+      url: "http://{{ test_host }}:8080/_vti_bin/"
+      method: GET
+      user: admin
+      password: admin
+      force_basic_auth: true
+      return_content: true
+      status_code: 200
+    register: vti_bin_check
+    changed_when: false
+    failed_when: >
+      'welcome to alfresco!' not in (vti_bin_check.content | lower | replace('\n', '')) or
+      'this application does not provide a web interface in the browser.' not in (vti_bin_check.content | lower | replace('\n', ''))
+
+  - name: Verify /_vti_inf.html returns HTTP 200 and expected info
+    ansible.builtin.uri:
+      # kics-scan ignore-line
+      url: "http://{{ test_host }}:8080/_vti_inf.html"
+      method: GET
+      user: admin
+      password: admin
+      force_basic_auth: true
+      return_content: true
+      status_code: 200
+    register: vti_inf_check
+    changed_when: false
+    failed_when: >
+      'frontpage configuration information' not in (vti_inf_check.content | lower | replace('\n', '')) or
+      '_vti_bin' not in (vti_inf_check.content | lower | replace('\n', ''))
+
+  - name: Verify /api-explorer returns HTTP 200 and API Explorer title
+    ansible.builtin.uri:
+      # kics-scan ignore-line
+      url: "http://{{ test_host }}:8080/api-explorer"
+      method: GET
+      user: admin
+      password: admin
+      force_basic_auth: true
+      return_content: true
+      status_code: 200
+    register: api_explorer_check
+    changed_when: false
+    failed_when: >
+      'alfresco content services rest api explorer' not in (api_explorer_check.content | lower | replace('\n', ''))
+
+  - name: Check if share.log exists and fail if missing
+    ansible.builtin.stat:
+      path: /var/opt/alfresco/content-services/keystore/keystest
+    register: keytest_log
+    failed_when: not keytest_log.stat.exists
+
+  - name: Validate JVM memory settings
+    ansible.builtin.command: "pgrep -fa java"
+    register: jvm_opts
+    changed_when: false
+    failed_when: >
+      '-Xmx900m' not in jvm_opts.stdout or '-Xms350m' not in jvm_opts.stdout
+
+  - name: Ensure content store path exists
+    ansible.builtin.stat:
+      path: /var/opt/alfresco/content-services/content
+    register: cs_mount_stat
+
+  - name: Fail if mount point is missing
+    ansible.builtin.fail:
+      msg: "Content store mount point is missing at /var/opt/alfresco/content-services/content"
+    when: not cs_mount_stat.stat.exists
+
+  - name: Get mount info
+    ansible.builtin.command: findmnt -no SOURCE,FSTYPE,OPTIONS /var/opt/alfresco/content-services/content
+    register: mount_info
+    changed_when: false
+
+  - name: Parse mount info into facts
+    ansible.builtin.set_fact:
+      cs_mount_source: "{{ mount_info.stdout.split()[0] }}"
+      cs_mount_fstype: "{{ mount_info.stdout.split()[1] }}"
+      cs_mount_options: "{{ mount_info.stdout.split()[2].split(',') }}"
+
+  - name: Fail if mount device does not match config
+    ansible.builtin.fail:
+      msg: "Mounted device ({{ cs_mount_source }}) does not match expected device ({{ cs_storage.device }})"
+    when: cs_storage.device is defined and cs_storage.device != '' and cs_mount_source != cs_storage.device
+
+  - name: Fail if filesystem type does not match expected
+    ansible.builtin.fail:
+      msg: "Filesystem type {{ cs_mount_fstype }} does not match expected {{ cs_storage.type }}"
+    when: cs_storage.type is defined and cs_storage.type != '' and cs_mount_fstype != cs_storage.type
+
+  - name: Fail if no expected mount options are present
+    ansible.builtin.fail:
+      msg: "None of the expected mount options {{ cs_storage.options }} found in actual options {{ cs_mount_options }}"
+    when: >
+      cs_storage.options is defined and
+      (cs_mount_options | intersect(cs_storage.options.split(','))) | length == 0
+
+  - name: Read contents of alfresco-global.properties
+    become: true
+    ansible.builtin.slurp:
+      src: /etc/opt/alfresco/content-services/classpath/alfresco-global.properties
+    register: global_props_raw
+
+  - name: Decode properties file content
+    ansible.builtin.set_fact:
+      global_props_content: "{{ global_props_raw.content | b64decode }}"
+
+  - name: Fail if 'index.recovery.mode=NONE' not set
+    ansible.builtin.fail:
+      msg: "'index.recovery.mode=NONE' not found in alfresco-global.properties"
+    when: "'index.recovery.mode=NONE' not in global_props_content"
+
+  - name: Fail if 'index.subsystem.name=noindex' not set
+    ansible.builtin.fail:
+      msg: "'index.subsystem.name=noindex' not found in alfresco-global.properties"
+    when: "'index.subsystem.name=noindex' not in global_props_content"
+
+  - name: Check if port 1121 is listening
+    ansible.builtin.command: ss -tln
+    register: port_check
+    changed_when: false
+    failed_when: "'1121' not in port_check.stdout"
+
+  - name: Test ghostscript command
+    ansible.builtin.shell: ghostscript
+    register: ghostscript_test
+    failed_when: ghostscript_test.rc != 127
+
+  - name: Test gs command
+    ansible.builtin.shell: gs
+    register: gs_test
+    failed_when:   gs_test.rc != 127
+
+  - name: Read Share config XML
+    become: true
+    ansible.builtin.slurp:
+      src: /etc/opt/alfresco/content-services/classpath/alfresco/web-extension/share-config-custom.xml
+    register: share_cfg_raw
+
+  - name: Decode Share config XML content
+    ansible.builtin.set_fact:
+      share_cfg_text: "{{ share_cfg_raw.content | b64decode }}"
+
+  - name: Fail if expected referer is missing
+    ansible.builtin.fail:
+      msg: "CSRF referer configuration is missing or incorrect"
+    when: "'<referer>http://localhost:8080/share/.*|https://someotherapp/.*</referer>' not in share_cfg_text"
+
+  - name: Fail if expected origin is missing
+    ansible.builtin.fail:
+      msg: "CSRF origin configuration is missing or incorrect"
+    when: "'<origin>http://localhost:8080|https://someotherapp</origin>' not in share_cfg_text"
