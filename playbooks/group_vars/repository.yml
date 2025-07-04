@@ -40,6 +40,8 @@ acs_play_repository_amp_aos_module_archive_url: "{{ acs_play_repository_amp_aos_
 # additional list of amp downloads
 acs_play_repository_extra_amp_downloads: []
   # - url: "https://your.repo.com/path/to/your/artifacts/your-amp.amp"
+  #   name: your-amp # optional, name is used for upgrade checks
+  #   version: 1.0.0 # optional, version is used for upgrade checks
   #   checksum: "sha1:2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"
   #   dest: "{{ repository_content_folder }}/<amps_repo|amps_share>/your-amp.amp"
   #   url_username: your_username_to_repo
