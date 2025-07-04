@@ -71,6 +71,14 @@
           when: acs_play_repository_acs_edition == 'Enterprise'
 
         - name: Add extra amps if provided and required properties are set
+          vars:
+            # Vars commonly used in the list that are not accessible by this
+            # playbook as they are not defined in the repository group_vars
+            # file. Nexus credentials are comming from common role which
+            # eventually will be moved to global secrets.
+            repository_content_folder: ""
+            nexus_user: ""
+            nexus_password: ""
           ansible.builtin.set_fact:
             amps: >-
               {{ amps | combine({
@@ -79,7 +87,7 @@
                 }
               }) }}
           loop: "{{ acs_play_repository_extra_amp_downloads | default([]) }}"
-          when: acs_play_repository_extra_amp_downloads is defined and item.version is defined and item.name is defined
+          when: item.name is defined and item.version is defined
 
         - name: Fail on unsupported AMPS upgrades
           ansible.builtin.fail:
