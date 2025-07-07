@@ -696,7 +696,7 @@ acs_play_repository_extra_amp_downloads: []
 ```
 
 > :warning: `name` and `version` are not mandatory but highly recommended to
-> use, they are used in the upgrade checks to to avoid unsupported upgrades.
+> use, they are used in the upgrade checks to avoid unsupported upgrades.
 
 ### JVM Options
 
