@@ -402,6 +402,17 @@
           }) }}
       when: acs_is_enterprise
 
+    - name: Add extra amps if provided and required properties are set
+      ansible.builtin.set_fact:
+        amps: >-
+          {{ amps | combine({
+            item.name: {
+              'version': item.version
+            }
+          }) }}
+      loop: "{{ acs_play_repository_extra_amp_downloads | default([]) }}"
+      when: item.version is defined and item.name is defined
+
     - name: Update installation status file with ACS
       become: true
       vars:

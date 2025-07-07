@@ -687,11 +687,16 @@ in the commented example below:
 ```yml
 acs_play_repository_extra_amp_downloads: []
   # - url: "https://your.repo.com/path/to/your/artifacts/your-amp.amp"
+  #   name: your-amp # optional, name is used for upgrade checks
+  #   version: 1.0.0 # optional, version is used for upgrade checks
   #   checksum: "sha1:2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"
   #   dest: "{{ repository_content_folder }}/<amps_repo|amps_share>/your-amp.amp"
   #   url_username: your_username_to_repo
   #   url_password: your_password_to_repo
 ```
+
+> :warning: `name` and `version` are not mandatory but highly recommended to
+> use, they are used in the upgrade checks to avoid unsupported upgrades.
 
 ### JVM Options
 
