@@ -1,5 +1,7 @@
 name: Delete MQ Configurations
-
+permissions:
+  id-token: write
+  contents: read
 on:
   push:
     branches:
