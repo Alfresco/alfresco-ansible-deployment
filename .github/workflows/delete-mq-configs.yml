@@ -25,6 +25,19 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ANSIBLE_MANAGED_SERVICE_DEV_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_ANSIBLE_MANAGED_SERVICE_DEV_SECRET_ACCESS_KEY}}
           aws-region: eu-west-1
+      - name: List MQ 
+        run: |
+          aws mq list-configurations \
+            --no-paginate \
+            --query "Configurations[?starts_with(Name, 'molecule-')].[Id,Name,EngineType,EngineVersion]" \
+            --query "Configurations[?starts_with(Name, 'molecule-')].[Id,Name,EngineType,Created,LatestRevision.Created,EngineVersion]" \
+            --output table  
+      - name: Test Pagination for MQ Configurations
+        run: |
+          aws mq list-configurations \
+            --max-items 100 \
+            --query "Configurations[?starts_with(Name, 'molecule-')].[Id,Name,EngineType,Created,LatestRevision.Created,EngineVersion]" \
+            --output table       
       - name: Delete MQ 
         run: |
           retention_days=30
