@@ -31,6 +31,7 @@ jobs:
           now=$(date -u +"%s")
 
           configs=$(aws mq list-configurations \
+            --no-paginate \
             --query "Configurations[?starts_with(Name, 'molecule-')].{ID:Id, Name:Name, Created:LatestRevision.Created}" \
             --output json)
 
