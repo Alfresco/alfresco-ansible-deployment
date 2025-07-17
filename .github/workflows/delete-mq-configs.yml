@@ -1,7 +1,10 @@
 name: Delete MQ Configurations
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - OPSEXP-3170
+  workflow_dispatch:  
 
 jobs:
   delete-mq-configs:
