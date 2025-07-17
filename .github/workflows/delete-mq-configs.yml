@@ -35,7 +35,7 @@ jobs:
       - name: Test Pagination for MQ Configurations
         run: |
           aws mq list-configurations \
-            --max-items 100 \
+            --max-results 100 \
             --query "Configurations[?starts_with(Name, 'molecule-')].[Id,Name,EngineType,Created,LatestRevision.Created,EngineVersion]" \
             --output table       
       - name: Delete MQ 
