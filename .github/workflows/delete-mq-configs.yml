@@ -25,8 +25,32 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ANSIBLE_MANAGED_SERVICE_DEV_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_ANSIBLE_MANAGED_SERVICE_DEV_SECRET_ACCESS_KEY}}
           aws-region: eu-west-1
-      - name: List MQ 
+      - name: Delete MQ 
         run: |
-          aws mq list-configurations \
-            --query "Configurations[?starts_with(Name, 'molecule-')].[Id,Name,EngineType,Created,LatestRevision.Created,EngineVersion]" \
-            --output table
+          retention_days=30
+          now=$(date -u +"%s")
+
+          configs=$(aws mq list-configurations \
+            --query "Configurations[?starts_with(Name, 'molecule-')].{ID:Id, Name:Name, Created:LatestRevision.Created}" \
+            --output json)
+
+          echo "$configs" | jq -c '.[]' | while read -r config; do
+            config_id=$(jq -r '.ID' <<< "$config")
+            config_name=$(jq -r '.Name' <<< "$config")
+            created=$(jq -r '.Created' <<< "$config")
+
+            # Convert created date to epoch (supports Linux/macOS)
+            created_epoch=$(date -d "$created" +"%s" 2>/dev/null || \
+                            date -j -f "%Y-%m-%dT%H:%M:%S" "$(echo "$created" | cut -d. -f1)" +"%s")
+            age_days=$(( (now - created_epoch) / 86400 ))
+
+            if [ "$age_days" -gt "$retention_days" ]; then
+              echo "Deleting configuration $config_name (ID: $config_id, Age: $age_days days)"
+            else
+              echo "Skipping configuration $config_name (ID: $config_id, Age: $age_days days)"
+            fi
+          done
+
+
+
+
