@@ -38,6 +38,36 @@ jobs:
             --max-results 100 \
             --query "Configurations[?starts_with(Name, 'molecule-')].[Id,Name,EngineType,Created,LatestRevision.Created,EngineVersion]" \
             --output table       
+      - name: Find and delete MQ configurations older than 30 days
+        run: |
+          set -e
+          echo "Fetching all MQ configurations..."
+          TOKEN=""
+          THRESHOLD_DATE=$(date -d "30 days ago" +%s)
+          COUNT=0
+          while true; do
+            if [ -z "$TOKEN" ]; then
+              RESPONSE=$(aws mq list-configurations --max-results 100)
+            else
+              RESPONSE=$(aws mq list-configurations --max-results 100 --next-token "$TOKEN")
+            fi
+            CONFIGS=$(echo "$RESPONSE" | jq -c '.Configurations[]')
+            for CONFIG in $CONFIGS; do
+              ID=$(echo "$CONFIG" | jq -r '.Id')
+              NAME=$(echo "$CONFIG" | jq -r '.Name')
+              DATE_PART=$(echo "$NAME" | grep -oE '[0-9]{8}' || true)
+              if [ -n "$DATE_PART" ]; then
+                CONFIG_DATE=$(date -d "${DATE_PART}" +%s 2>/dev/null || echo 0)
+                if [ "$CONFIG_DATE" -lt "$THRESHOLD_DATE" ]; then
+                  echo "Deleting old configuration: $NAME ($ID)"
+                  COUNT=$((COUNT + 1))
+                fi
+              fi
+            done
+            TOKEN=$(echo "$RESPONSE" | jq -r '.NextToken')
+            [ "$TOKEN" == "null" ] && break
+          done
+          echo "Total MQ configurations deleted: $COUNT"
       - name: Delete MQ 
         run: |
           retention_days=30
