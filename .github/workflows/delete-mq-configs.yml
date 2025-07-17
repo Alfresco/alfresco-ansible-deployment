@@ -28,5 +28,5 @@ jobs:
       - name: List MQ 
         run: |
           aws mq list-configurations \
-            --query "Configurations[?starts_with(Name, 'molecule-')].[Id,Name,EngineType,EngineVersion]" \
+            --query "Configurations[?starts_with(Name, 'molecule-')].[Id,Name,EngineType,Created,LatestRevision.Created,EngineVersion]" \
             --output table
