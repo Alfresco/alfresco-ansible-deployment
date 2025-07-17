@@ -12,14 +12,19 @@ jobs:
   delete-mq-configs:
     runs-on: ubuntu-latest
     steps:
-      - name: Login to AWS
+      # - name: Login to AWS
+      #   uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
+      #   with:
+      #     aws-region: eu-west-1
+      #     role-to-assume: arn:aws:iam::372466110691:role/AlfrescoCI/alfresco-cloud-deploy
+      #     role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}
+      #     role-duration-seconds: 5400    
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
         with:
+          aws-access-key-id: ${{ secrets.AWS_ANSIBLE_MANAGED_SERVICE_DEV_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ANSIBLE_MANAGED_SERVICE_DEV_SECRET_ACCESS_KEY}}
           aws-region: eu-west-1
-          role-to-assume: arn:aws:iam::372466110691:role/AlfrescoCI/alfresco-cloud-deploy
-          role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}
-          role-duration-seconds: 5400    
-
       - name: List MQ 
         run: |
           aws mq list-configurations \
