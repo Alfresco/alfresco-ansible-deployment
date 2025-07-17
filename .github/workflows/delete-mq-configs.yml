@@ -35,15 +35,14 @@ jobs:
           configs=$(aws mq list-configurations \
             --no-paginate \
             --query "Configurations[?starts_with(Name, 'molecule-')].{ID:Id, Name:Name, Created:LatestRevision.Created}" \
-            --output json)
-
-          echo "$configs" | jq -c '.[]' | while read -r config; do
+            --output json)          
+          while read -r config; do
             config_id=$(jq -r '.ID' <<< "$config")
             config_name=$(jq -r '.Name' <<< "$config")
             created=$(jq -r '.Created' <<< "$config")
 
-            created_epoch=$(date -d "$created" +"%s" 2>/dev/null || \
-                            date -j -f "%Y-%m-%dT%H:%M:%S" "$(echo "$created" | cut -d. -f1)" +"%s")
+            created_epoch=$(date -d "${created%%.*}" +"%s" 2>/dev/null || \
+                            date -j -f "%Y-%m-%dT%H:%M:%S" "${created%%.*}" +"%s")
             age_days=$(( (now - created_epoch) / 86400 ))
 
             if [ "$age_days" -gt "$retention_days" ]; then
@@ -53,9 +52,11 @@ jobs:
               echo "Skipping configuration $config_name (ID: $config_id, Age: $age_days days)"
               count_skip=$((count_skip + 1))
             fi
-          done
-          echo "delete count $count"
-          echo "skip count $count_skip"
+          done < <(echo "$configs" | jq -c '.[]')
+
+          echo "delete count: $count"
+          echo "skip count: $count_skip"
+
 
 
 
