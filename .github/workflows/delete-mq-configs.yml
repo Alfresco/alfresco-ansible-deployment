@@ -120,6 +120,12 @@ jobs:
               if [ "$created_epoch" -lt "$threshold_epoch" ]; then
                 echo "Deleting: $name ($id) — $age_days days old"
                 total_deleted=$((total_deleted + 1))
+                echo "check number: $total_checked"
+                if [ "$total_deleted" -ge 20 ]; then
+                  echo "deleted 20 records"
+                  break 2
+                fi
+
               else
                 echo "Keeping: $name ($id) — $age_days days old"
               fi
