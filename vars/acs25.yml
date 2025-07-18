@@ -20,8 +20,8 @@ supported_os:
 ats_mtls_capable: true
 acs_play_activemq_version: 5.18.7
 acs_play_audit_storage_version: 1.1.0
-acs_play_acc_version: 9.4.0
-acs_play_adw_version: 6.0.0
+acs_play_acc_version: 10.0.0
+acs_play_adw_version: 7.0.0
 acs_play_search_version: 2.0.16
 acs_play_java_version: 17.0.15+6
 acs_play_search_enterprise_version: 5.1.1
