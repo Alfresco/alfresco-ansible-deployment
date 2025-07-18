@@ -38,36 +38,64 @@ jobs:
             --max-results 100 \
             --query "Configurations[?starts_with(Name, 'molecule-')].[Id,Name,EngineType,Created,LatestRevision.Created,EngineVersion]" \
             --output table       
-      - name: Find and delete MQ configurations older than 30 days
+      - name: Delete old MQ configurations using pagination
         run: |
           set -e
-          echo "Fetching all MQ configurations..."
-          TOKEN=""
-          THRESHOLD_DATE=$(date -d "30 days ago" +%s)
-          COUNT=0
+          retention_days=30
+          threshold_epoch=$(date -d "$retention_days days ago" +"%s")
+
+          count_total=0
+          count_deleted=0
+          page_token=""
+
+          echo "Scanning MQ configurations older than $retention_days days..."
+
           while true; do
-            if [ -z "$TOKEN" ]; then
-              RESPONSE=$(aws mq list-configurations --max-results 100)
+            if [ -z "$page_token" ]; then
+              response=$(aws mq list-configurations --max-results 100 --output json)
             else
-              RESPONSE=$(aws mq list-configurations --max-results 100 --next-token "$TOKEN")
+              response=$(aws mq list-configurations --max-results 100 --starting-token "$page_token" --output json)
             fi
-            CONFIGS=$(echo "$RESPONSE" | jq -c '.Configurations[]')
-            for CONFIG in $CONFIGS; do
-              ID=$(echo "$CONFIG" | jq -r '.Id')
-              NAME=$(echo "$CONFIG" | jq -r '.Name')
-              DATE_PART=$(echo "$NAME" | grep -oE '[0-9]{8}' || true)
-              if [ -n "$DATE_PART" ]; then
-                CONFIG_DATE=$(date -d "${DATE_PART}" +%s 2>/dev/null || echo 0)
-                if [ "$CONFIG_DATE" -lt "$THRESHOLD_DATE" ]; then
-                  echo "Deleting old configuration: $NAME ($ID)"
-                  COUNT=$((COUNT + 1))
-                fi
+
+            configs=$(echo "$response" | jq -c '.Configurations[]?')
+            page_token=$(echo "$response" | jq -r '.NextToken')
+
+            echo "$configs" | while read -r config; do
+              id=$(jq -r '.Id' <<< "$config")
+              name=$(jq -r '.Name' <<< "$config")
+              created=$(jq -r '.LatestRevision.Created' <<< "$config")
+
+              created_clean="${created%%.*}"
+              created_epoch=$(date -d "$created_clean" +"%s" 2>/dev/null || \
+                              date -j -f "%Y-%m-%dT%H:%M:%S" "$created_clean" +"%s" || echo 0)
+
+              age_days=$(( ( $(date -u +"%s") - created_epoch ) / 86400 ))
+              count_total=$((count_total + 1))
+
+              # Check if attached to any broker
+              attached=$(aws mq list-brokers \
+                --query "BrokerSummaries[?Configuration.Id=='$id'].BrokerId" \
+                --output text)
+
+              if [ -n "$attached" ]; then
+                echo "In use, skipping: $name ($id) — broker: $attached"
+                continue
+              fi
+
+              if [ "$created_epoch" -lt "$threshold_epoch" ]; then
+                echo "🗑️ Deleting: $name ($id), created $age_days days ago"
+                count_deleted=$((count_deleted + 1))
+              else
+                echo "skipped: $name ($id), created $age_days days ago"
               fi
             done
-            TOKEN=$(echo "$RESPONSE" | jq -r '.NextToken')
-            [ "$TOKEN" == "null" ] && break
+
+            [ "$page_token" == "null" ] || [ -z "$page_token" ] && break
           done
-          echo "Total MQ configurations deleted: $COUNT"
+
+          echo "--------------------------------------------------"
+          echo "Total configurations checked: $count_total"
+          echo "Total configurations deleted: $count_deleted
       - name: Delete MQ 
         run: |
           retention_days=30
