@@ -12,63 +12,14 @@ jobs:
   delete-mq-configs:
     runs-on: ubuntu-latest
     steps:
-      # - name: Login to AWS
-      #   uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
-      #   with:
-      #     aws-region: eu-west-1
-      #     role-to-assume: arn:aws:iam::372466110691:role/AlfrescoCI/alfresco-cloud-deploy
-      #     role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}
-      #     role-duration-seconds: 5400    
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
         with:
           aws-access-key-id: ${{ secrets.AWS_ANSIBLE_MANAGED_SERVICE_DEV_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_ANSIBLE_MANAGED_SERVICE_DEV_SECRET_ACCESS_KEY}}
           aws-region: eu-west-1
-      - name: List MQ 
-        run: |
-          aws mq list-configurations \
-            --no-paginate \
-            --query "Configurations[?starts_with(Name, 'molecule-')].[Id,Name,EngineType,EngineVersion]" \
-            --query "Configurations[?starts_with(Name, 'molecule-')].[Id,Name,EngineType,Created,LatestRevision.Created,EngineVersion]" \
-            --output table  
-      - name: Test Pagination for MQ Configurations
-        run: |
-          aws mq list-configurations \
-            --max-results 100 \
-            --query "Configurations[?starts_with(Name, 'molecule-')].[Id,Name,EngineType,Created,LatestRevision.Created,EngineVersion]" \
-            --output table       
-      - name: Delete MQ 
-        run: |
-          retention_days=30
-          now=$(date -u +"%s")
-          count=0
-          count_skip=0
 
-          configs=$(aws mq list-configurations \
-            --no-paginate \
-            --query "Configurations[?starts_with(Name, 'molecule-')].{ID:Id, Name:Name, Created:LatestRevision.Created}" \
-            --output json)          
-          while read -r config; do
-            config_id=$(jq -r '.ID' <<< "$config")
-            config_name=$(jq -r '.Name' <<< "$config")
-            created=$(jq -r '.Created' <<< "$config")
-
-            created_epoch=$(date -d "${created%%.*}" +"%s" 2>/dev/null || \
-                            date -j -f "%Y-%m-%dT%H:%M:%S" "${created%%.*}" +"%s")
-            age_days=$(( (now - created_epoch) / 86400 ))
-
-            if [ "$age_days" -gt "$retention_days" ]; then
-              echo "Deleting configuration $config_name (ID: $config_id, Age: $age_days days)"
-              count=$((count + 1))
-            else
-              echo "Skipping configuration $config_name (ID: $config_id, Age: $age_days days)"
-              count_skip=$((count_skip + 1))
-            fi
-          done < <(echo "$configs" | jq -c '.[]')
-
-          echo "delete count: $count"
-          echo "skip count: $count_skip"
       - name: Delete old MQ configurations (using pagination)
         run: |
           set -e
@@ -79,7 +30,7 @@ jobs:
           total_deleted=0
           next_token=""
 
-          echo "🔍 Checking for MQ configurations older than $retention_days days..."
+          echo "Checking for MQ configurations older than $retention_days days..."
 
           while true; do
             if [ -z "$next_token" ]; then
@@ -123,6 +74,7 @@ jobs:
 
                 if [ "$total_deleted" -ge 20 ]; then
                   echo "deleted 20 records"
+                  aws mq delete-configuration --configuration-id "$id"
                   break 2
                 fi
               else
@@ -134,10 +86,6 @@ jobs:
             # Exit loop if no more pages
             [ "$next_token" == "null" ] || [ -z "$next_token" ] && break
           done
-
-          echo "--------------------------------------------------"
-          echo "Total configs checked: $total_checked"
-          echo "Total configs deleted: $total_deleted"
       
 
 
