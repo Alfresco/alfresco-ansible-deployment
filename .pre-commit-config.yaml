@@ -22,7 +22,7 @@ repos:
       - id: djlint-jinja
 
   - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.27
+    rev: v0.9.31
     hooks:
       - id: pymarkdown
         files: (README\.md$|docs/.*\.md)
@@ -31,7 +31,7 @@ repos:
           - scan
 
   - repo: https://github.com/PyCQA/prospector
-    rev: v1.16.1
+    rev: v1.17.2
     hooks:
       - id: prospector
         additional_dependencies:

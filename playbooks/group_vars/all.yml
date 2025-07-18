@@ -5,6 +5,8 @@
 acs_play_known_urls: []
 acs_play_major_version: 25
 
+acs_play_default_java_version: 17.0.15+6
+
 artifacts_repositories:
   enterprise:
     base_url: "https://artifacts.alfresco.com/nexus/content"

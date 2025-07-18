@@ -213,25 +213,29 @@ Follow the checklist:
 4. Always check the no changes are left under the "Unreleased version" section
    in the [playbook upgrade doc](docs/playbook-upgrade.md). Also make sure this
    section for the version you're about to release contains any breaking or
-   important change.
-Stay tuned and check the documentation for regular status updates. There may also be more disruptive changes between minor versions in this 3.x releases
+   important change. Stay tuned and check the documentation for regular status
+   updates. There may also be more disruptive changes between minor versions in
+   this 3.x releases.
 5. Run the [updatecli
    workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/bumpVersions.yml)
    against an existing branch to push bumps there or against `master` to push
    the bumps to `updatecli-bump-versions` branch.
-6. Ensure that the [versions table in the main readme](docs/overview.md#versioning) has been updated
-7. Ensure that docker images and AMI id for the root molecule tests are
+6. Manually bump adw and acc which are not yet supported by updatecli.
+7. Ensure that `updatecli_amps_release_branch` in the different
+   `updatecli_maven_*.yml` files is set to the current branch.
+8. Ensure that the [versions table in the main readme](docs/overview.md#versioning) has been updated
+9. Ensure that docker images and AMI id for the root molecule tests are
    reflecting any minor OS release (e.g. [default suite](../molecule/default/))
-8. Ensure that activemq, tomcat and java versions are up to date (latest patch
+10. Ensure that activemq, tomcat and java versions are up to date (latest patch
    version) If activemq needs minor bump for latest release bump also the version in
    `prepare.yml` molecule scenario for multimachine.
-9. After merging every pending PR, proceed with tagging:
-   * `git tag -s v2.x.x -m v2.x.x`
-   * `git push origin v2.x.x`
-10. Wait for the [Release
+11. After merging every pending PR, proceed with tagging:
+    * `git tag -s v2.x.x -m v2.x.x`
+    * `git push origin v2.x.x`
+12. Wait for the [Release
   workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml)
   go green.
-11. [Draft a new
+13. [Draft a new
   release](https://github.com/Alfresco/alfresco-ansible-deployment/releases) on
   GitHub with the tag you just pushed. If the release is for a new ACS major
   version, mention the ACS release in the title, e.g. v2.x.x (ACS 23.4.0)
