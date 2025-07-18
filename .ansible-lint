@@ -5,4 +5,5 @@ skip_list:
   - galaxy  # To remove when/if we push to Ansible galaxy
   - name[template]  # Allow Jinja templating inside task and play names
 exclude_paths:
- - molecule/
+  - host_vars
+  - hosts.yml
