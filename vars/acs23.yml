@@ -22,7 +22,7 @@ acs_play_audit_storage_version: 1.1.0
 acs_play_acc_version: 9.3.0
 acs_play_adw_version: 5.3.0
 acs_play_search_version: 2.0.16
-acs_play_java_version: 17.0.16+8
+acs_play_java_version: "{{ acs_play_default_java_version }}"
 acs_play_search_enterprise_version: 5.1.1
 acs_play_sfs_version: 4.2.0
 acs_play_sync_version: 5.1.0
