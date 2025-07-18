@@ -22,7 +22,7 @@ repository_acs_is_enterprise: true
 repository_acs_artifact_name: alfresco-content-services-distribution
 repository_acs_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
 
-repository_acs_version: 25.1.1
+repository_acs_version: 25.2.0
 repository_acs_archive_url: "{{ repository_acs_repository }}/{{ repository_acs_artifact_name }}/{{ repository_acs_version }}/{{ repository_acs_artifact_name }}-{{ repository_acs_version }}.zip"
 repository_acs_archive_checksum: "sha1:{{ repository_acs_archive_url }}.sha1"
 repository_acs_nexus_username: "{{ repository_nexus_username }}"

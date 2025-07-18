@@ -6,7 +6,7 @@ search_repository:
   port_ssl: 443
 
 search_flavor: alfresco-search-services # set to alfresco-insight-engine for IE
-search_version: 2.0.15
+search_version: 2.0.16
 search_artifact_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
 search_zip_url: "{{ search_artifact_repository }}/{{ search_flavor }}/{{ search_version }}/{{ search_flavor }}-{{ search_version }}.zip"
 search_zip_checksum: "sha1:{{ search_zip_url }}.sha1"
