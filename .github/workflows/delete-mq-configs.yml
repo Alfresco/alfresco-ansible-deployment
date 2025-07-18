@@ -91,15 +91,16 @@ jobs:
             configs=$(echo "$response" | jq -c '.Configurations[]?')
             next_token=$(echo "$response" | jq -r '.NextToken')
 
-            echo "$configs" | while read -r config; do
+            while read -r config; do
               id=$(jq -r '.Id' <<< "$config")
               name=$(jq -r '.Name' <<< "$config")
+
               if [[ "$name" != molecule-* ]]; then
                 echo "Skipping: $name (ID: $id) — doesn't match prefix 'molecule-'"
                 continue
               fi
-              created=$(jq -r '.LatestRevision.Created' <<< "$config")
 
+              created=$(jq -r '.LatestRevision.Created' <<< "$config")
               created_clean="${created%%.*}"
               created_epoch=$(date -d "$created_clean" +"%s" 2>/dev/null || \
                               date -j -f "%Y-%m-%dT%H:%M:%S" "$created_clean" +"%s" || echo 0)
@@ -107,7 +108,6 @@ jobs:
               age_days=$(( ( $(date -u +"%s") - created_epoch ) / 86400 ))
               total_checked=$((total_checked + 1))
 
-              # Check if configuration is attached to a broker
               attached=$(aws mq list-brokers \
                 --query "BrokerSummaries[?Configuration.Id=='$id'].BrokerId" \
                 --output text)
@@ -120,16 +120,16 @@ jobs:
               if [ "$created_epoch" -lt "$threshold_epoch" ]; then
                 echo "Deleting: $name ($id) — $age_days days old"
                 total_deleted=$((total_deleted + 1))
-                echo "check number: $total_checked"
+
                 if [ "$total_deleted" -ge 20 ]; then
                   echo "deleted 20 records"
                   break 2
                 fi
-
               else
                 echo "Keeping: $name ($id) — $age_days days old"
               fi
-            done
+            done < <(echo "$configs")
+
 
             # Exit loop if no more pages
             [ "$next_token" == "null" ] || [ -z "$next_token" ] && break
