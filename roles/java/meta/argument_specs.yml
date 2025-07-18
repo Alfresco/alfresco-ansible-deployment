@@ -12,7 +12,7 @@ argument_specs:
         type: str
         description: |
           Version of the java to install
-        default: 17.0.15+6
+        default: 17.0.16+8
       java_url:
         type: str
         description: |
