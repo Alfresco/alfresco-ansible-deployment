@@ -94,6 +94,10 @@ jobs:
             echo "$configs" | while read -r config; do
               id=$(jq -r '.Id' <<< "$config")
               name=$(jq -r '.Name' <<< "$config")
+              if [[ "$name" != molecule-* ]]; then
+                echo "Skipping: $name (ID: $id) — doesn't match prefix 'molecule-'"
+                continue
+              fi
               created=$(jq -r '.LatestRevision.Created' <<< "$config")
 
               created_clean="${created%%.*}"
