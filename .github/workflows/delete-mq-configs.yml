@@ -3,10 +3,9 @@ permissions:
   id-token: write
   contents: read
 on:
-  push:
-    branches:
-      - OPSEXP-3170
   workflow_dispatch:  
+  schedule:
+    - cron: '0 0 1 * *'  
 
 jobs:
   delete-mq-configs:
@@ -25,9 +24,6 @@ jobs:
           set -e
           retention_days=30
           threshold_epoch=$(date -d "$retention_days days ago" +"%s")
-
-          total_checked=0
-          total_deleted=0
           next_token=""
 
           echo "Checking for MQ configurations older than $retention_days days..."
@@ -57,7 +53,6 @@ jobs:
                               date -j -f "%Y-%m-%dT%H:%M:%S" "$created_clean" +"%s" || echo 0)
 
               age_days=$(( ( $(date -u +"%s") - created_epoch ) / 86400 ))
-              total_checked=$((total_checked + 1))
 
               attached=$(aws mq list-brokers \
                 --query "BrokerSummaries[?Configuration.Id=='$id'].BrokerId" \
@@ -70,13 +65,7 @@ jobs:
 
               if [ "$created_epoch" -lt "$threshold_epoch" ]; then
                 echo "Deleting: $name ($id) — $age_days days old"
-                total_deleted=$((total_deleted + 1))
-
-                if [ "$total_deleted" -ge 20 ]; then
-                  echo "deleted 20 records"
-                  aws mq delete-configuration --configuration-id "$id"
-                  break 2
-                fi
+                aws mq delete-configuration --configuration-id "$id"
               else
                 echo "Keeping: $name ($id) — $age_days days old"
               fi
