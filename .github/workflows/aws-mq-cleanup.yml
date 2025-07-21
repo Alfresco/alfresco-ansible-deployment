@@ -1,23 +1,29 @@
-name: Delete MQ Configurations
+name: Cleanup MQ Configurations
 permissions:
   id-token: write
   contents: read
 on:
-  workflow_dispatch:  
+  workflow_dispatch:
+    inputs:
+      aws_region-updatecli-ref:
+        description: "AWS region where MQ configurations need to be cleaned up"
+        type: string
+        default: eu-west-1
   schedule:
-    - cron: '0 0 1 * *'  
+    - cron: '0 0 1 * *'
 
 jobs:
   delete-mq-configs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Configure AWS credentials
+      - name: Login to AWS
         uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ANSIBLE_MANAGED_SERVICE_DEV_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_ANSIBLE_MANAGED_SERVICE_DEV_SECRET_ACCESS_KEY}}
-          aws-region: eu-west-1
+          aws-region: ${{ inputs.aws_region }}
+          role-to-assume: arn:aws:iam::372466110691:role/AlfrescoCI/mq-configuration-cleanup
+          role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}
+          role-duration-seconds: 1800
 
       - name: Delete old MQ configurations (using pagination)
         run: |
@@ -75,9 +81,3 @@ jobs:
             # Exit loop if no more pages
             [ "$next_token" == "null" ] || [ -z "$next_token" ] && break
           done
-      
-
-
-
-
-
