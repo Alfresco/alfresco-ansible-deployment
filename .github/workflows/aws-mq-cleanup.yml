@@ -1,19 +1,21 @@
 name: Cleanup MQ Configurations
-permissions:
-  id-token: write
-  contents: read
 on:
   workflow_dispatch:
     inputs:
-      aws_region-updatecli-ref:
+      aws_region:
         description: "AWS region where MQ configurations need to be cleaned up"
         type: string
         default: eu-west-1
   schedule:
-    - cron: '0 0 1 * *'
-
+    - cron: '23 5 1 * *'
+permissions:
+  id-token: write
+  contents: read
+env:
+  RETENTION_DAYS: 30
 jobs:
   delete-mq-configs:
+
     runs-on: ubuntu-latest
     steps:
 
@@ -27,18 +29,19 @@ jobs:
 
       - name: Delete old MQ configurations (using pagination)
         run: |
-          set -e
-          retention_days=30
-          threshold_epoch=$(date -d "$retention_days days ago" +"%s")
+          set -o pipefail
+          threshold_epoch=$(date -d "$RETENTION_DAYS  days ago" +"%s")
           next_token=""
 
-          echo "Checking for MQ configurations older than $retention_days days..."
+          echo "Checking for MQ configurations older than $RETENTION_DAYS days..."
 
           while true; do
+            list_configurations_cmd="aws mq list-configurations --max-results 100 --output json"
+
             if [ -z "$next_token" ]; then
-              response=$(aws mq list-configurations --max-results 100 --output json)
+              response=$($list_configurations_cmd )
             else
-              response=$(aws mq list-configurations --max-results 100 --next-token "$next_token" --output json)
+              response=$($list_configurations_cmd --next-token "$next_token" )
             fi
 
             configs=$(echo "$response" | jq -c '.Configurations[]?')
@@ -54,9 +57,8 @@ jobs:
               fi
 
               created=$(jq -r '.LatestRevision.Created' <<< "$config")
-              created_clean="${created%%.*}"
-              created_epoch=$(date -d "$created_clean" +"%s" 2>/dev/null || \
-                              date -j -f "%Y-%m-%dT%H:%M:%S" "$created_clean" +"%s" || echo 0)
+              created_epoch=$(date -d "${created%%.*}" +"%s" || echo 0)
+
 
               age_days=$(( ( $(date -u +"%s") - created_epoch ) / 86400 ))
 
