@@ -20,27 +20,27 @@ supported_os:
 ats_mtls_capable: true
 acs_play_activemq_version: 5.18.7
 acs_play_audit_storage_version: 1.1.0
-acs_play_acc_version: 9.4.0
-acs_play_adw_version: 6.0.0
-acs_play_search_version: 2.0.15
-acs_play_java_version: 17.0.15+6
-acs_play_search_enterprise_version: 5.1.0
-acs_play_sfs_version: 4.1.7
+acs_play_acc_version: 10.0.0
+acs_play_adw_version: 7.0.0
+acs_play_search_version: 2.0.16
+acs_play_java_version: "{{ acs_play_default_java_version }}"
+acs_play_search_enterprise_version: 5.1.1
+acs_play_sfs_version: 4.2.0
 acs_play_sync_version: 5.2.0
-acs_play_tomcat_version: 10.1.41
-acs_play_trouter_version: 4.1.7
+acs_play_tomcat_version: 10.1.43
+acs_play_trouter_version: 4.2.0
 acs_play_transformers_libreoffice_version: 7.2.5.1
 acs_play_transformers_pdf_version: 1.1
 acs_play_transformers_imagemagick_version: 7.1.0-16-ci-11
-acs_play_transformers_aio_version: 5.1.7
+acs_play_transformers_aio_version: 5.2.0
 acs_play_jdbc_pg_driver_version: "{{ default_jdbc_pg_driver_version }}"
 acs_play_postgres_major_version: 16
-acs_play_repository_acs_version: 25.1.1
-acs_play_repository_api_explorer_version: 25.1.0
+acs_play_repository_acs_version: 25.2.0
+acs_play_repository_api_explorer_version: 25.2.0
 acs_play_repository_amp_googledrive_repo_version: 4.1.0
 acs_play_repository_amp_googledrive_share_version: 4.1.0
 acs_play_repository_amp_device_sync_version: 5.2.0
-acs_play_repository_amp_aos_module_version: 3.2.0
+acs_play_repository_amp_aos_module_version: 3.3.0
 
 acs_play_community_repository_amp_googledrive_repo_version: 4.1.0
 acs_play_community_repository_acs_version: 25.1.0

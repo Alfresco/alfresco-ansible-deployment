@@ -1,12 +1,12 @@
 ---
-- name: repository Tests
+- name: Repository Tests
   hosts: all
   become: yes
   vars:
     test_host: "localhost"
     limit: 5
     period: 60
-    repository_acs_version: "25.1.1"
+    repository_acs_version: "25.2.0"
     share_xml_raw: "etc/opt/alfresco/content-services/classpath/alfresco/web-extension/share-config-custom.xml"
 
   tasks:
