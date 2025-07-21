@@ -100,13 +100,13 @@ ACS 7.x onward.
 | Share               | 25.2.0                      | 23.5.0          | 7.4.2.4        | 7.3.2.3        |
 | Search Services     | 2.0.16                      | 2.0.16          | 2.0.16         | 2.0.16         |
 | Search Enterprise   | 5.1.1  (n/a)                | 5.1.1           | 3.3.3          | 3.2.1          |
-| All-In-One T-Engine | 5.2.0                       | 5.2.0           | 5.2.0          | 5.1.7          |
+| All-In-One T-Engine | 5.2.0                       | 5.2.0           | 5.2.0          | 5.2.0          |
 | AOS                 | 3.3.0                       | 3.3.0           | 1.6.3          | 1.5.0          |
 | Google Docs         | 4.1.0                       | 4.1.0           | 3.4.2          | 3.4.2          |
 | Digital Workspace   | 7.0.0 (n/a)                 | 5.3.0           | 5.0.0          | 4.4.1          |
-| Control Center      | 10.0.0                       | 9.3.0           | 8.0.0          | n/a            |
-| Transform Router    | 4.2.0 (n/a)                 | 4.2.0           | 4.2.0          | 4.1.7          |
-| Shared File Store   | 4.2.0 (n/a)                 | 4.2.0           | 4.2.0          | 4.1.7          |
+| Control Center      | 10.0.0                      | 9.3.0           | 8.0.0          | n/a            |
+| Transform Router    | 4.2.0 (n/a)                 | 4.2.0           | 4.2.0          | 4.2.0          |
+| Shared File Store   | 4.2.0 (n/a)                 | 4.2.0           | 4.2.0          | 4.2.0          |
 | Sync Service        | 5.2.0 (n/a)                 | 5.1.0           | 3.11.3         | 3.11.3         |
 
 > Support for ACS 7.2 has been deprecated since February 2025, but you can still use the latest playbook that supported it ([v2.12.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v2.12.0))
