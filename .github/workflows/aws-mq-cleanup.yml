@@ -34,7 +34,7 @@ jobs:
       - name: Delete old MQ configurations (using pagination)
         run: |
           set -o pipefail
-          threshold_epoch=$(date -d "$RETENTION_DAYS  days ago" +"%s")
+          threshold_epoch=$(date -d "$RETENTION_DAYS days ago" +"%s")
           next_token=""
 
           echo "Checking for MQ configurations older than $RETENTION_DAYS days..."
@@ -43,9 +43,9 @@ jobs:
             list_configurations_cmd="aws mq list-configurations --max-results 100 --output json"
 
             if [ -z "$next_token" ]; then
-              response=$($list_configurations_cmd )
+              response=$($list_configurations_cmd)
             else
-              response=$($list_configurations_cmd --next-token "$next_token" )
+              response=$($list_configurations_cmd --next-token "$next_token")
             fi
 
             configs=$(echo "$response" | jq -c '.Configurations[]?')
@@ -61,7 +61,7 @@ jobs:
               fi
 
               created=$(jq -r '.LatestRevision.Created' <<< "$config")
-              created_epoch=$(date -d "${created%%.*}" +"%s" || echo 0)
+              created_epoch=$(date -d "${created%%.*}" +"%s")
 
               age_days=$(( ( $(date -u +"%s") - created_epoch ) / 86400 ))
 
