@@ -1,28 +1,26 @@
 name: Cleanup MQ Configurations
+
 on:
   workflow_dispatch:
-    inputs:
-      aws_region:
-        description: "AWS region where MQ configurations need to be cleaned up"
-        type: string
-        default: eu-west-1
   schedule:
     - cron: '23 5 1 * *'
+
 permissions:
   id-token: write
   contents: read
+
 env:
   RETENTION_DAYS: 30
+  AWS_REGION: eu-west-1
+
 jobs:
   delete-mq-configs:
-
     runs-on: ubuntu-latest
     steps:
-
       - name: Login to AWS
         uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
         with:
-          aws-region: ${{ inputs.aws_region }}
+          aws-region:  ${{ env.AWS_REGION }}
           role-to-assume: arn:aws:iam::372466110691:role/AlfrescoCI/mq-configuration-cleanup
           role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1800
@@ -59,7 +57,6 @@ jobs:
               created=$(jq -r '.LatestRevision.Created' <<< "$config")
               created_epoch=$(date -d "${created%%.*}" +"%s" || echo 0)
 
-
               age_days=$(( ( $(date -u +"%s") - created_epoch ) / 86400 ))
 
               attached=$(aws mq list-brokers \
@@ -78,7 +75,6 @@ jobs:
                 echo "Keeping: $name ($id) — $age_days days old"
               fi
             done < <(echo "$configs")
-
 
             # Exit loop if no more pages
             [ "$next_token" == "null" ] || [ -z "$next_token" ] && break
