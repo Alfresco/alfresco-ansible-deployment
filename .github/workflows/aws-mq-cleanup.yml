@@ -2,6 +2,11 @@ name: Cleanup MQ Configurations
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        type: boolean
+        default: true
+        description: "If true, skips deletion for safe testing"
   schedule:
     - cron: '23 5 1 * *'
 
@@ -12,6 +17,7 @@ permissions:
 env:
   RETENTION_DAYS: 30
   AWS_REGION: eu-west-1
+  DRY_RUN: ${{ inputs.dry_run && github.event_name != 'schedule' }}
 
 jobs:
   delete-mq-configs:
@@ -69,8 +75,12 @@ jobs:
               fi
 
               if [ "$created_epoch" -lt "$threshold_epoch" ]; then
-                echo "Deleting: $name ($id) — $age_days days old"
-                aws mq delete-configuration --configuration-id "$id"
+                if [ "$DRY_RUN" = "false" ]; then
+                  echo "Deleting: $name ($id) — $age_days days old"
+                  aws mq delete-configuration --configuration-id "$id"
+                else
+                  echo "Dry run would delete: $name ($id) — $age_days days old"
+                fi
               else
                 echo "Keeping: $name ($id) — $age_days days old"
               fi
