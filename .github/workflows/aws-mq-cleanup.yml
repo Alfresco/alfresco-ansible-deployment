@@ -1,0 +1,91 @@
+name: Cleanup MQ Configurations
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        type: boolean
+        default: true
+        description: "If true, skips deletion for safe testing"
+  schedule:
+    - cron: '23 5 1 * *'
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  RETENTION_DAYS: 30
+  AWS_REGION: eu-west-1
+  DRY_RUN: ${{ inputs.dry_run && github.event_name != 'schedule' }}
+
+jobs:
+  delete-mq-configs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to AWS
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
+        with:
+          aws-region:  ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::372466110691:role/AlfrescoCI/mq-configuration-cleanup
+          role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}
+          role-duration-seconds: 1800
+
+      - name: Delete old MQ configurations (using pagination)
+        run: |
+          set -o pipefail
+          threshold_epoch=$(date -d "$RETENTION_DAYS days ago" +"%s")
+          next_token=""
+
+          echo "Checking for MQ configurations older than $RETENTION_DAYS days..."
+
+          while true; do
+            list_configurations_cmd="aws mq list-configurations --max-results 100 --output json"
+
+            if [ -z "$next_token" ]; then
+              response=$($list_configurations_cmd)
+            else
+              response=$($list_configurations_cmd --next-token "$next_token")
+            fi
+
+            configs=$(echo "$response" | jq -c '.Configurations[]?')
+            next_token=$(echo "$response" | jq -r '.NextToken')
+
+            while read -r config; do
+              id=$(jq -r '.Id' <<< "$config")
+              name=$(jq -r '.Name' <<< "$config")
+
+              if [[ "$name" != molecule-* ]]; then
+                echo "Skipping: $name (ID: $id) — doesn't match prefix 'molecule-'"
+                continue
+              fi
+
+              created=$(jq -r '.LatestRevision.Created' <<< "$config")
+              created_epoch=$(date -d "${created%%.*}" +"%s")
+
+              age_days=$(( ( $(date -u +"%s") - created_epoch ) / 86400 ))
+
+              attached=$(aws mq list-brokers \
+                --query "BrokerSummaries[?Configuration.Id=='$id'].BrokerId" \
+                --output text)
+
+              if [ -n "$attached" ]; then
+                echo "In use: $name ($id) — broker: $attached"
+                continue
+              fi
+
+              if [ "$created_epoch" -lt "$threshold_epoch" ]; then
+                if [ "$DRY_RUN" = "false" ]; then
+                  echo "Deleting: $name ($id) — $age_days days old"
+                  aws mq delete-configuration --configuration-id "$id"
+                else
+                  echo "Dry run would delete: $name ($id) — $age_days days old"
+                fi
+              else
+                echo "Keeping: $name ($id) — $age_days days old"
+              fi
+            done < <(echo "$configs")
+
+            # Exit loop if no more pages
+            [ "$next_token" == "null" ] || [ -z "$next_token" ] && break
+          done
