@@ -12,5 +12,7 @@ jmespath = "==1.0.1"
 ansible-lint = "==25.5.0"
 molecule = "==24.12.0"
 molecule-plugins = {extras = ["docker","ec2"], version = "23.6.0"}
+
 pytest = ">=8.3.5"
 pytest-testinfra = ">=8.1.0"
+pyhamcrest = ">=2.1.0"
