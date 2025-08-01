@@ -39,7 +39,7 @@ jobs:
           aws s3 cp alfresco-ansible-deployment-${VERSION}.zip s3://alfresco-artefacts-staging/enterprise/alfresco-ansible-deployment/
 
       - name: Publish on Nexus
-        uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@v8.24.1
+        uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@v8.28.1
         if: github.event_name != 'workflow_dispatch'
         with:
           group-id: org.alfresco
