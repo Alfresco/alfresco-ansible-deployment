@@ -468,8 +468,6 @@
   register: mmt_install
   changed_when: true
   when: (amps_installation_needed | default(true)) or existing_amps_checksum_file_response is failed
-  tags:
-    - molecule-idempotence-notest
 
 - name: Write amps checksum to status file
   become: true
