@@ -467,7 +467,7 @@
     cmd: "{{ repository_content_folder }}/bin/apply_amps.sh -nobackup -force"
   register: mmt_install
   changed_when: true
-  when: amps_installation_needed or existing_amps_checksum_file_response is failed
+  when: (amps_installation_needed | default(true)) or existing_amps_checksum_file_response is failed
   tags:
     - molecule-idempotence-notest
 
