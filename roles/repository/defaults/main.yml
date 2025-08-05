@@ -140,6 +140,6 @@ repository_amp_downloads: []
 # Additional list of amp downloads. Same structure as repository_amp_downloads
 repository_extra_amp_downloads: []
 
-repository_amp_installation_status_file: "/opt/alfresco/.ansible_amps.status"
+repository_amp_list_checksum_file: "/opt/alfresco/.ansible_amps.status"
 
 repository_truststore_type: JCEKS

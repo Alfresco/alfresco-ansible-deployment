@@ -445,37 +445,21 @@
   loop_control:
     label: "{{ item.item.url | basename }}"
 
-- name: Read existing amps installation status file
+- name: Generate checksum of current amps configuration
+  ansible.builtin.set_fact:
+    current_amps_checksum: "{{ (repository_amp_downloads + repository_extra_amp_downloads) | to_json | hash('sha256') }}"
+
+- name: Read existing amps checksum file
   become: true
   ansible.builtin.slurp:
-    src: "{{ repository_amp_installation_status_file }}"
-  register: existing_amps_status_file
+    src: "{{ repository_amp_list_checksum_file }}"
+  register: existing_amps_checksum_file
   ignore_errors: true
-
-- name: Parse existing amps status
-  ansible.builtin.set_fact:
-    existing_amps_status: "{{ existing_amps_status_file.content | b64decode | from_json }}"
-  when: existing_amps_status_file is succeeded
-
-- name: Set empty existing amps status when file doesn't exist
-  ansible.builtin.set_fact:
-    existing_amps_status: {}
-  when: existing_amps_status_file is failed
-
-- name: Create current amps status for comparison
-  ansible.builtin.set_fact:
-    current_amps_status: >-
-      {%- set result = {} -%}
-      {%- for item in (repository_amp_downloads + repository_extra_amp_downloads) -%}
-        {%- if item.enabled | default(true) -%}
-          {%- set _ = result.update({(item.dest | basename): item.checksum}) -%}
-        {%- endif -%}
-      {%- endfor -%}
-      {{ result }}
 
 - name: Check if amps installation is needed
   ansible.builtin.set_fact:
-    amps_installation_needed: "{{ current_amps_status != existing_amps_status }}"
+    amps_installation_needed: "{{ current_amps_checksum != (existing_amps_checksum_file.content | b64decode | trim) }}"
+  when: existing_amps_checksum_file is succeeded
 
 - name: Install amps on alfresco and share war files
   become: true
@@ -483,19 +467,18 @@
     cmd: "{{ repository_content_folder }}/bin/apply_amps.sh -nobackup -force"
   register: mmt_install
   changed_when: true
-  when: amps_installation_needed | bool
+  when: amps_installation_needed or existing_amps_checksum_file is failed
   tags:
     - molecule-idempotence-notest
 
-- name: Write amps installation status file
+- name: Write amps checksum to status file
   become: true
   ansible.builtin.copy:
-    content: "{{ current_amps_status | to_nice_json }}"
-    dest: "{{ repository_amp_installation_status_file }}"
+    content: "{{ current_amps_checksum }}"
+    dest: "{{ repository_amp_list_checksum_file }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: "0640"
-  when: current_amps_status is defined and current_amps_status | length > 0
 
 - name: Check on postgres download async task
   become: true
