@@ -33,7 +33,7 @@ runs:
           cache-downloads-v${{ inputs.cache-version }}-${{ inputs.cache-name }}-
           mq${{ steps.activemq_peek.outputs.activemq_version }}-
           tc${{ steps.tomcat_peek.outputs.tomcat_version }}-
-          ${{ hashFiles('.github/actions/cache-downloads/prefetch-artifacts.yml') }}"
+          ${{ hashFiles('.github/actions/cache-downloads/prefetch-artifacts.yml') }}
 
     - name: Prefetch artifacts
       shell: bash
