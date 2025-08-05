@@ -452,14 +452,14 @@
 - name: Read existing amps checksum file
   become: true
   ansible.builtin.slurp:
-    src: "{{ repository_amp_list_checksum_file }}"
-  register: existing_amps_checksum_file
+    src: "{{ repository_amps_checksum_file }}"
+  register: existing_amps_checksum_file_response
   ignore_errors: true
 
 - name: Check if amps installation is needed
   ansible.builtin.set_fact:
-    amps_installation_needed: "{{ current_amps_checksum != (existing_amps_checksum_file.content | b64decode | trim) }}"
-  when: existing_amps_checksum_file is succeeded
+    amps_installation_needed: "{{ current_amps_checksum != (existing_amps_checksum_file_response.content | b64decode | trim) }}"
+  when: existing_amps_checksum_file_response is succeeded
 
 - name: Install amps on alfresco and share war files
   become: true
@@ -467,7 +467,7 @@
     cmd: "{{ repository_content_folder }}/bin/apply_amps.sh -nobackup -force"
   register: mmt_install
   changed_when: true
-  when: amps_installation_needed or existing_amps_checksum_file is failed
+  when: amps_installation_needed or existing_amps_checksum_file_response is failed
   tags:
     - molecule-idempotence-notest
 
@@ -475,7 +475,7 @@
   become: true
   ansible.builtin.copy:
     content: "{{ current_amps_checksum }}"
-    dest: "{{ repository_amp_list_checksum_file }}"
+    dest: "{{ repository_amps_checksum_file }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: "0640"
