@@ -458,7 +458,7 @@
 
 - name: Check if amps installation is needed
   ansible.builtin.set_fact:
-    amps_installation_needed: "{{ current_amps_checksum != (existing_amps_checksum_file_response.content | b64decode | trim) }}"
+    amps_apply_needed: "{{ current_amps_checksum != (existing_amps_checksum_file_response.content | b64decode | trim) }}"
   when: existing_amps_checksum_file_response is succeeded
 
 - name: Install amps on alfresco and share war files
@@ -467,7 +467,7 @@
     cmd: "{{ repository_content_folder }}/bin/apply_amps.sh -nobackup -force"
   register: mmt_install
   changed_when: true
-  when: (amps_installation_needed | default(true)) or existing_amps_checksum_file_response is failed
+  when: amps_apply_needed | default(true)
 
 - name: Write amps checksum to status file
   become: true
