@@ -447,7 +447,15 @@
 
 - name: Generate checksum of current amps configuration
   ansible.builtin.set_fact:
-    current_amps_checksum: "{{ (repository_amp_downloads + repository_extra_amp_downloads) | to_json | hash('sha256') }}"
+    current_amps_checksum: >-
+      {{
+        (repository_amp_downloads + repository_extra_amp_downloads)
+        | map('dict2items')
+        | map('rejectattr', 'key', 'match', 'url_(username|password)')
+        | map('items2dict')
+        | to_json
+        | hash('sha256')
+      }}
 
 - name: Read existing amps checksum file
   become: true
