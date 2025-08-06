@@ -445,14 +445,46 @@
   loop_control:
     label: "{{ item.item.url | basename }}"
 
+- name: Generate checksum of current amps configuration
+  ansible.builtin.set_fact:
+    current_amps_checksum: >-
+      {{
+        (repository_amp_downloads + repository_extra_amp_downloads)
+        | map('dict2items')
+        | map('rejectattr', 'key', 'match', 'url_(username|password)')
+        | map('items2dict')
+        | to_json
+        | hash('sha256')
+      }}
+
+- name: Read existing amps checksum file
+  become: true
+  ansible.builtin.slurp:
+    src: "{{ repository_amps_checksum_file }}"
+  register: existing_amps_checksum_file_response
+  ignore_errors: true
+
+- name: Check if amps installation is needed
+  ansible.builtin.set_fact:
+    amps_apply_needed: "{{ current_amps_checksum != (existing_amps_checksum_file_response.content | b64decode | trim) }}"
+  when: existing_amps_checksum_file_response is succeeded
+
 - name: Install amps on alfresco and share war files
   become: true
   ansible.builtin.command:
     cmd: "{{ repository_content_folder }}/bin/apply_amps.sh -nobackup -force"
   register: mmt_install
   changed_when: true
-  tags:
-    - molecule-idempotence-notest
+  when: amps_apply_needed | default(true)
+
+- name: Write amps checksum to status file
+  become: true
+  ansible.builtin.copy:
+    content: "{{ current_amps_checksum }}"
+    dest: "{{ repository_amps_checksum_file }}"
+    owner: "{{ username }}"
+    group: "{{ group_name }}"
+    mode: "0640"
 
 - name: Check on postgres download async task
   become: true
