@@ -30,7 +30,7 @@ export ANSIBLE_INVENTORY_UNPARSED_WARNING=False
 while true; do
     RANDOM_STRING=$(
         ansible -m ansible.builtin.command \
-        -a "echo {{ lookup('password','/dev/null',chars=['ascii_letters','digits','+./#@^()[_'],length=33) }}" \
+        -a "echo {{ lookup('password','/dev/null',chars=['ascii_letters','digits','$'],length=33) }}" \
         localhost -o \
         | awk '{print $NF}'
     )
