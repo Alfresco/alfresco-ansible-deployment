@@ -104,7 +104,7 @@ ACS 7.x onward.
 | AOS                 | 3.3.0                       | 3.3.0           | 1.6.3          | 1.5.0          |
 | Google Docs         | 4.1.0                       | 4.1.0           | 3.4.2          | 3.4.2          |
 | Digital Workspace   | 7.0.1 (n/a)                 | 5.3.0           | 5.0.0          | 4.4.1          |
-| Control Center      | 10.0.0                      | 9.3.0           | 8.0.0          | n/a            |
+| Control Center      | 10.0.1                      | 9.3.0           | 8.0.0          | n/a            |
 | Transform Router    | 4.2.0 (n/a)                 | 4.2.0           | 4.2.0          | 4.2.0          |
 | Shared File Store   | 4.2.0 (n/a)                 | 4.2.0           | 4.2.0          | 4.2.0          |
 | Sync Service        | 5.2.0 (n/a)                 | 5.1.0           | 3.11.3         | 3.11.3         |
