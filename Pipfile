@@ -10,8 +10,8 @@ jmespath = "==1.0.1"
 
 [dev-packages]
 ansible-lint = "==25.5.0"
-molecule = "==24.12.0"
-molecule-plugins = {extras = ["docker","ec2"], version = "23.6.0"}
+molecule = "==25.7.0"
+molecule-plugins = {extras = ["docker","ec2"], version = "25.8.12"}
 boto3 = ">=1.39.13"
 
 pytest = ">=8.3.5"
