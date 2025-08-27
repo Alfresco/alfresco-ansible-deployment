@@ -4,16 +4,10 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 2
     ignore:
       - dependency-name: "boto3"
       - dependency-name: "ansible-core"
         update-types: ["version-update:semver-minor"]
-    groups:
-      molecule:
-        patterns:
-          - "molecule"
-          - "molecule-plugins"
 
   - package-ecosystem: "github-actions"
     directory: "/"
