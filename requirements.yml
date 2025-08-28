@@ -2,7 +2,7 @@
 # Install with ansible-galaxy install -vr requirements.yml
 collections:
   - name: community.general
-    version: 10.7.2
+    version: 11.2.0
   - name: community.postgresql
     version: 4.1.0
   - name: ansible.posix
@@ -15,15 +15,15 @@ collections:
     version: 3.0.2
   # molecule ec2 tests
   - name: amazon.aws
-    version: 9.5.1
+    version: 10.1.1
   - name: community.aws
-    version: 9.3.0
-  - name: alfresco.platform
-    version: 0.2.0
+    version: 10.0.0
+  #- name: alfresco.platform
+  #  version: 0.2.0
   # Alternate source for alfresco.platform
-  # - name: git+https://github.com/Alfresco/alfresco-ansible-collection.git
-  #  type: git
-  #  version: 1e0ffdbe1ee3c16da1741d80a692a14a12931edc # pragma: allowlist secret
+  - name: git+https://github.com/Alfresco/alfresco-ansible-collection.git
+    type: git
+    version: OPSEXP-3456-relax-community-general # pragma: allowlist secret
 
 roles:
   - name: geerlingguy.elasticsearch
