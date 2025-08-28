@@ -11,7 +11,7 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 2
 
@@ -20,7 +20,7 @@ jobs:
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@cd6257949c361ad3d6ee0c92892e56d84af48eb3 # v8.28.2
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@320cc7dfe8927bf1f60d1365fa695a25c0b082cb # v8.28.2
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
