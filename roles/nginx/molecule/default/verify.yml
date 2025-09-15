@@ -100,5 +100,5 @@
         result_alfresco.permissions_policy != "geolocation=(), microphone=(), camera=(), usb=(), fullscreen=(self), payment=(), display-capture=()" or
         result_alfresco.referrer_policy != "strict-origin-when-cross-origin" or
         result_alfresco.x_content_type_options != "nosniff" or
-        result_alfresco.content_security_policy != "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';" or
+        result_alfresco.content_security_policy != "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; worker-src 'self' blob:;" or
         result_alfresco.x_frame_options != "SAMEORIGIN"
