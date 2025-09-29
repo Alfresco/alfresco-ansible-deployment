@@ -11,7 +11,7 @@ trouter_ats_truststore_pass: changeit
 trouter_ats_truststore_type: "JCEKS"
 
 trouter_artifact_name: alfresco-transform-router
-trouter_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
+trouter_repository: https://nexus-recovery.alfresco.com/nexus/content/groups/private/org/alfresco
 
 trouter_version: 4.2.1
 trouter_archive_url: "{{ trouter_repository }}/{{ trouter_artifact_name }}/{{ trouter_version }}/{{ trouter_artifact_name }}-{{ trouter_version }}.jar"

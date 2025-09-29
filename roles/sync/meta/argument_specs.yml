@@ -18,7 +18,7 @@ argument_specs:
           URL where to download the Alfresco Sync Service zip file.
         type: str
         default: >-
-          https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/5.1.0/sync-dist-6.x-5.1.0.zip
+          https://nexus-recovery.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/5.1.0/sync-dist-6.x-5.1.0.zip
       sync_zip_username:
         description: |
           Username to use to download the Alfresco Sync Service zip file.
@@ -35,7 +35,7 @@ argument_specs:
           hash-type:hash-value
         type: str
         default: >-
-          https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/5.1.0/sync-dist-6.x-5.1.0.zip.sha1
+          https://nexus-recovery.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/sync-dist-6.x/5.1.0/sync-dist-6.x-5.1.0.zip.sha1
       sync_jdbc_pg_driver_version:
         type: str
         required: false

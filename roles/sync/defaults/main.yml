@@ -2,7 +2,7 @@
 sync_version: 5.2.0
 sync_artifact_name: sync-dist-6.x
 sync_zip_url: >-
-  https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/{{ sync_artifact_name }}/{{ sync_version }}/{{ sync_artifact_name }}-{{ sync_version }}.zip
+  https://nexus-recovery.alfresco.com/nexus/content/groups/private/org/alfresco/services/sync/{{ sync_artifact_name }}/{{ sync_version }}/{{ sync_artifact_name }}-{{ sync_version }}.zip
 sync_zip_checksum: >-
   sha1:{{ sync_zip_url }}.sha1
 sync_zip_username: null

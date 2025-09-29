@@ -13,7 +13,7 @@ Virtual Machines).
 ## Prerequisites
 
 * If you want to install the Enterprise version, Nexus credentials for
-  [https://artifacts.alfresco.com](https://artifacts.alfresco.com) are required.
+  [https://nexus-recovery.alfresco.com](https://nexus-recovery.alfresco.com) are required.
 
 ## Documentation
 

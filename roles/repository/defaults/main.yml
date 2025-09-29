@@ -20,7 +20,7 @@ repository_nexus_password: null
 
 repository_acs_is_enterprise: true
 repository_acs_artifact_name: alfresco-content-services-distribution
-repository_acs_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
+repository_acs_repository: https://nexus-recovery.alfresco.com/nexus/content/groups/private/org/alfresco
 
 repository_acs_version: 25.2.0
 repository_acs_archive_url: "{{ repository_acs_repository }}/{{ repository_acs_artifact_name }}/{{ repository_acs_version }}/{{ repository_acs_artifact_name }}-{{ repository_acs_version }}.zip"
@@ -33,7 +33,7 @@ repository_db_url: ""
 # war downloads
 repository_api_explorer_enabled: true
 repository_api_explorer_artifact_name: api-explorer
-repository_api_explorer_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
+repository_api_explorer_repository: https://nexus-recovery.alfresco.com/nexus/content/groups/public/org/alfresco
 
 repository_api_explorer_version: 25.1.0
 repository_api_explorer_archive_url: "{{ repository_api_explorer_repository }}/{{ repository_api_explorer_artifact_name }}/{{ repository_api_explorer_version }}/{{ repository_api_explorer_artifact_name }}-{{ repository_api_explorer_version }}.war"
