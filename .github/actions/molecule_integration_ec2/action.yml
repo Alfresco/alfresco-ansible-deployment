@@ -29,7 +29,7 @@ runs:
       id: setup-python
 
     - name: Install python packages
-      uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@ce7f6e0b62727da8600acf87d72ffbf064ac34b5 # v8.33.0
+      uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@e6c249ac22c6e4d3b4932c16012d1450f8b0a12a # v9.0.1
       with:
         python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -39,7 +39,7 @@ runs:
         cache-name: enterprise
 
     - name: Set BRANCH_NAME
-      uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@ce7f6e0b62727da8600acf87d72ffbf064ac34b5 # v8.33.0
+      uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@e6c249ac22c6e4d3b4932c16012d1450f8b0a12a # v9.0.1
       with:
         sanitize: true
         max-length: 20
@@ -62,7 +62,7 @@ runs:
         echo "NEXUS_PASSWORD=${{ inputs.nexus_password }}" >> $GITHUB_ENV
 
     - name: Login to AWS
-      uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
+      uses: aws-actions/configure-aws-credentials@a03048d87541d1d9fcf2ecf528a4a65ba9bd7838 # v5.0.0
       with:
         aws-region: ${{ inputs.aws_region }}
         role-to-assume: arn:aws:iam::372466110691:role/AlfrescoCI/alfresco-cloud-deploy
