@@ -37,7 +37,7 @@ runs:
               inputs.cache-name,
               steps.activemq_peek.outputs.activemq_version,
               steps.tomcat_peek.outputs.tomcat_version,
-              hashFiles('.github/actions/cache-downloads/prefetch-artifacts.yml')
+              hashFiles('.github/actions/cache-downloads/prefetch-artifacts.yaml')
             )
           }}
 
@@ -45,7 +45,7 @@ runs:
       shell: bash
       if: steps.artifacts-cache.outputs.cache-hit != 'true'
       run: |
-        pipenv run ansible-playbook -i inventory_local.yml ${{ github.action_path }}/prefetch-artifacts.yml
+        pipenv run ansible-playbook -i inventory_local.yml ${{ github.action_path }}/prefetch-artifacts.yaml
 
     - name: Save downloaded artifacts
       uses: actions/cache/save@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0

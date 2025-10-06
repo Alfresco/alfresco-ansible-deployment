@@ -1,5 +1,5 @@
-name: 'Setup workspace'
-description: 'Do some clever stuff on the workspace before running tests'
+name: setup-workspace
+description: Do some clever stuff on the workspace before running tests
 runs:
   using: "composite"
   steps:
