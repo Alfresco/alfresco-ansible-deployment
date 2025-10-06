@@ -1,5 +1,5 @@
-name: "Setup python"
-description: "Install python from .python-version file and cache with pipenv"
+name: setup-python
+description: Install python from .python-version file and cache with pipenv
 outputs:
   python-version:
     description: "The python version that was installed"

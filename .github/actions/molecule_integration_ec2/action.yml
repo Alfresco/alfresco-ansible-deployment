@@ -1,4 +1,5 @@
-name: EC2 tests
+name: molecule_integration_ec2
+description: Run molecule integration tests on EC2 instances
 inputs:
   matrix_name:
     description: 'Name of a molecule scenario'
