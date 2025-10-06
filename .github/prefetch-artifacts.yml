@@ -1,6 +1,6 @@
 # Download artifacts from flaky mirrors and cache them on the controller for later use.
 # Particularly useful when running on CI or nodes with limited internet access.
-# Run with `ansible-playbook -i inventory_local.yml playbooks/prefetch-artifacts.yml`
+# Run with `ansible-playbook -i inventory_local.yml prefetch-artifacts.yml`
 - name: Download and cache artifacts on the controller
   hosts: localhost
   gather_facts: true
