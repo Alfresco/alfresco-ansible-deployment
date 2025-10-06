@@ -10,43 +10,9 @@ updates:
         update-types: ["version-update:semver-minor"]
 
   - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "monthly"
-    groups:
-      github-actions:
-        patterns:
-          - "*"
-
-  - package-ecosystem: "github-actions"
-    directory: "/.github/actions/galaxy"
-    schedule:
-      interval: "monthly"
-    groups:
-      github-actions:
-        patterns:
-          - "*"
-
-  - package-ecosystem: "github-actions"
-    directory: "/.github/actions/cache-downloads"
-    schedule:
-      interval: "monthly"
-    groups:
-      github-actions:
-        patterns:
-          - "*"
-
-  - package-ecosystem: "github-actions"
-    directory: "/.github/actions/molecule_integration_ec2"
-    schedule:
-      interval: "monthly"
-    groups:
-      github-actions:
-        patterns:
-          - "*"
-
-  - package-ecosystem: "github-actions"
-    directory: "/.github/actions/setup-python"
+    directories:
+      - "/"
+      - "/.github/actions/*"
     schedule:
       interval: "monthly"
     groups:
