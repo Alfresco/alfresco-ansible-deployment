@@ -37,7 +37,7 @@ runs:
               inputs.cache-name,
               steps.activemq_peek.outputs.activemq_version,
               steps.tomcat_peek.outputs.tomcat_version,
-              hashFiles('.github/actions/cache-downloads/prefetch-artifacts.yml')
+              hashFiles('.github/prefetch-artifacts.yml')
             )
           }}
 
