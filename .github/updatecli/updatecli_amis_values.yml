@@ -38,8 +38,8 @@ targets:
     file: molecule/default/vars-ubuntu-community.yml
     key: $.MOLECULE_IT_IMAGE_ID
     source: ub24
-  molecule_default_ubuntu22_73:
-    file: molecule/default/vars-ubuntu22-73.yml
+  molecule_default_ubuntu22_74:
+    file: molecule/default/vars-ubuntu22-74.yml
     key: $.MOLECULE_IT_IMAGE_ID
     source: ub22
   molecule_multimachine:
