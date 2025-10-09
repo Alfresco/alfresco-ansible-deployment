@@ -452,7 +452,7 @@ The following systemd services are deployed and can be used to stop and start Al
 | Service Name                              | Purpose                                                                                 |
 |:------------------------------------------|:----------------------------------------------------------------------------------------|
 | `activemq.service`                        | ActiveMQ Service                                                                        |
-| `postgresql-<version>.service`            | Postgresql DB Service (where `<version>` is 15 for ACS 23 and 14 for 7.4 and 7.3)       |
+| `postgresql-<version>.service`            | Postgresql DB Service (where `<version>` is 15 for ACS 23 and 14 for 7.4)       |
 | `nginx.service`                           | Nginx Service                                                                           |
 | `alfresco-content.service`                | Alfresco Content Service                                                                |
 | `alfresco-search.service`                 | Alfresco Search Service                                                                 |
@@ -1260,7 +1260,7 @@ This playbook will uninstall the sevices which belong to the specific hosts. Bel
    * alfresco-content.service
    * nginx.service
    * activemq.service
-   * postgresql-`version`.service (where `version` is 15 for ACS 23 and 14 for 7.3 & 7.4)
+   * postgresql-`version`.service (where `version` is 15 for ACS 23 and 14 for 7.4)
 
 2. Remove the following packages:
    * ImageMagick
