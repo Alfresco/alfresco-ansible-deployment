@@ -44,6 +44,11 @@ argument_specs:
         description:
           Set the base URL for frontend URL and admin console, including scheme, host, port and path.
           Will override identity_keycloak_host, identity_keycloak_http_port.
+      identity_keycloak_additional_env_vars:
+        type: "list"
+        default: "[]"
+        description:
+          "List of additional env variables of { key: str, value: str} to be put in sysconfig file"
   realm:
     short_description: Configure the keycloak realm
     options:
