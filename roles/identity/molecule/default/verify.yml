@@ -1,0 +1,21 @@
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Include role defaults
+      include_vars:
+        file: ../../defaults/main.yml
+
+    - name: Verify feature using Keycloak CLI
+      become: true
+      ansible.builtin.command:
+        cmd: /opt/keycloak/keycloak-{{ identity_keycloak_quarkus_version }}/bin/kc.sh show-config
+      register: kc_config
+      changed_when: false
+
+    - name: Check if token-exchange is in the configuration
+      ansible.builtin.assert:
+        that:
+          - "'kc.features =  token-exchange' in kc_config.stdout"
+        fail_msg: "token-exchange feature not found in Keycloak configuration"
+        success_msg: "token-exchange feature is configured"

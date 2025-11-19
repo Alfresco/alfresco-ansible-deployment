@@ -17,6 +17,7 @@ identity_url: null
 identity_known_urls: []
 
 identity_keycloak_url: "{{ identity_url | default(identity_keycloak_default_url, true) }}"
+identity_keycloak_additional_env_vars: []
 
 identity_default_realm_id: alfresco
 

@@ -154,6 +154,7 @@
       identity_admin_username: admin
       identity_admin_password: "{{ hostvars.localhost.identity_admin_password }}"
       identity_keycloak_http_port: "{{ ports_cfg.identity.http }}"
+      identity_keycloak_additional_env_vars: "{{ acs_play_identity_keycloak_additional_env_vars }}"
       when: not groups.external_identity | default([])
   tasks:
     - name: Configure Realm
