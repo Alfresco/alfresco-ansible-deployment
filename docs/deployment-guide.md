@@ -302,7 +302,7 @@ On windows please make see the provided `Vagrantfile` in order to kick start a
 local Linux VM where to deploy the playbook.
 
 More info on [control
-node](https://docs.ansible.com/ansible/latest/user_guide/basic_concepts.html#control-node)
+node](https://docs.ansible.com/projects/ansible/latest/getting_started/basic_concepts.html#control-node)
 
 ### Understanding the inventory file
 
@@ -382,7 +382,7 @@ So if one variable (like `ansible_user` for example) is valid for all hosts,
 you'd better set it once under the `all` group.
 
 See [Ansible variable precedence
-documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#understanding-variable-precedence)
+documentation](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_variables.html#understanding-variable-precedence)
 to better understand how precedence works.
 
 In most cases we recommend you use your inventory to place the configuration
@@ -431,7 +431,7 @@ Inventory --- Playbooks
 The `inventory_ha.yml` which is very similar to the previous one but also
 provides support for repository clustering (see [acs cluster section](#acs-cluster) for more details).
 
-A complete documentation about inventory file is available at [inventory file](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#intro-inventory)
+A complete documentation about inventory file is available at [inventory file](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html)
 
 ### Folder Structure
 
