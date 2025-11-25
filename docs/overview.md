@@ -99,15 +99,16 @@ ACS 7.x onward.
 | Repository          | 25.3.0                      | 23.6.0          | 7.4.2.4        |
 | Share               | 25.3.0                      | 23.6.0          | 7.4.2.4        |
 | Search Services     | 2.0.17                      | 2.0.17          | 2.0.17         |
-| Search Enterprise   | 5.2.0  (n/a)                | 5.2.0           | 3.3.3          |
-| All-In-One T-Engine | 5.2.2                       | 5.2.2           | 5.2.2          |
+| Search Enterprise   | 5.2.1  (n/a)                | 5.2.1           | 3.3.3          |
+| All-In-One T-Engine | 5.2.4                       | 5.2.4           | 5.2.4          |
 | AOS                 | 3.4.0                       | 3.4.0           | 1.6.3          |
 | Google Docs         | 4.1.0                       | 4.1.0           | 3.4.2          |
-| Digital Workspace   | 7.1.0 (n/a)                 | 5.3.0           | 5.0.0          |
-| Control Center      | 10.1.0                      | 9.3.0           | 8.0.0          |
-| Transform Router    | 4.2.2 (n/a)                 | 4.2.2           | 4.2.2          |
-| Shared File Store   | 4.2.2 (n/a)                 | 4.2.2           | 4.2.2          |
+| Digital Workspace   | 7.2.0 (n/a)                 | 5.3.0           | 5.0.0          |
+| Control Center      | 10.2.0                      | 9.3.0           | 8.0.0          |
+| Transform Router    | 4.2.3 (n/a)                 | 4.2.3           | 4.2.3          |
+| Shared File Store   | 4.2.3 (n/a)                 | 4.2.3           | 4.2.3          |
 | Sync Service        | 5.3.0 (n/a)                 | 5.3.0           | 3.11.3         |
+| Audit Storage       | 1.2.0                       | 1.2.0           | n/a            |
 
 > Support for ACS 7.3 has been deprecated since October 2025, but you can still use the latest playbook that supported it ([v3.4.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v3.4.0))
 > Support for ACS 7.2 has been deprecated since February 2025, but you can still use the latest playbook that supported it ([v2.12.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v2.12.0))
