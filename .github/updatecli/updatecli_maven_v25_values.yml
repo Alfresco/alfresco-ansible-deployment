@@ -6,3 +6,8 @@ artifacts:
     updatecli_scm_id: acsComRepo
     updatecli_xml_target: "/project/properties/alfresco.googledrive.version"
     artifact_version_key: "$.acs_play_community_repository_amp_googledrive_repo_version"
+  alfresco-repository-community:
+    artifact_name_file: playbooks/group_vars/all.yml
+    artifact_name_key: $.acs_play_community_repository_acs_artifact_name
+    artifact_version_key: $.acs_play_community_repository_acs_version
+    updatecli_matrix_component_key: acs
