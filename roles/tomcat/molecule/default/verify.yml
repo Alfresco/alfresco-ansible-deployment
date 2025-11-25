@@ -1,10 +1,10 @@
 ---
-- name: tomcat Tests
+- name: Tomcat Tests
   hosts: all
   become: true
   gather_facts: true
   vars:
-    tomcat_version: "10.1.43"
+    tomcat_version: "10.1.49"
     config_folder: "/etc/opt/alfresco"
     binaries_folder: "/opt/alfresco"
     username: "alfresco"
@@ -23,17 +23,20 @@
       . {{ config_folder }}/setenv.sh && $TOMCAT_HOME/bin/catalina.sh version
     register: tomcat_version_output
     failed_when: "'Apache Tomcat/' ~ tomcat_version not in tomcat_version_output.stdout"
+    changed_when: false
 
   - name: Validate TOMCAT_HOME is set correctly
     ansible.builtin.shell: |
       . {{ config_folder }}/setenv.sh && echo $TOMCAT_HOME
     register: tomcat_home_output
     failed_when: "'/opt/apache-tomcat-' ~ tomcat_version not in tomcat_home_output.stdout"
+    changed_when: false
 
-  - name: To fetch Catalina environment
+  - name: Fetch Catalina environment
     ansible.builtin.command: "{{ binaries_folder }}/tomcat.sh configtest"
     register: catalina_env_output
     become_user: "{{ username }}"
+    changed_when: false
 
   - name: Assert CATALINA_HOME is correct
     ansible.builtin.fail:

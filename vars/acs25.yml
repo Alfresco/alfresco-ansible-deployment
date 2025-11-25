@@ -27,7 +27,7 @@ acs_play_java_version: "{{ acs_play_default_java_version }}"
 acs_play_search_enterprise_version: 5.2.1
 acs_play_sfs_version: 4.2.3
 acs_play_sync_version: 5.3.0
-acs_play_tomcat_version: 10.1.48
+acs_play_tomcat_version: 10.1.49
 acs_play_trouter_version: 4.2.3
 acs_play_transformers_libreoffice_version: 7.2.5.1
 acs_play_transformers_pdf_version: 1.1
