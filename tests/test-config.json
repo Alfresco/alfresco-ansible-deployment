@@ -18,7 +18,7 @@
           },
           {
             "id": "alfresco-aos-module",
-            "version": "3.3.0",
+            "version": "3.4.0",
             "installed": true
           },
           {
@@ -28,11 +28,7 @@
           }
         ]
       },
-      "acc": {
-        "version": "9.4.0"
-      },
-      "adw": {
-        "version": "6.0.0"
-      }
+      "acc": {},
+      "adw": {}
     }
   }

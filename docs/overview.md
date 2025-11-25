@@ -101,7 +101,7 @@ ACS 7.x onward.
 | Search Services     | 2.0.17                      | 2.0.17          | 2.0.17         |
 | Search Enterprise   | 5.2.0  (n/a)                | 5.2.0           | 3.3.3          |
 | All-In-One T-Engine | 5.2.2                       | 5.2.2           | 5.2.2          |
-| AOS                 | 3.3.0                       | 3.3.0           | 1.6.3          |
+| AOS                 | 3.4.0                       | 3.4.0           | 1.6.3          |
 | Google Docs         | 4.1.0                       | 4.1.0           | 3.4.2          |
 | Digital Workspace   | 7.1.0 (n/a)                 | 5.3.0           | 5.0.0          |
 | Control Center      | 10.1.0                      | 9.3.0           | 8.0.0          |
