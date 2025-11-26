@@ -103,8 +103,8 @@ ACS 7.x onward.
 | All-In-One T-Engine | 5.2.4                       | 5.2.4           | 5.2.4          |
 | AOS                 | 3.4.0                       | 3.4.0           | 1.6.3          |
 | Google Docs         | 4.1.0                       | 4.1.0           | 3.4.2          |
-| Digital Workspace   | 7.2.0 (n/a)                 | 5.3.0           | 5.0.0          |
-| Control Center      | 10.2.0                      | 9.3.0           | 8.0.0          |
+| Digital Workspace   | 7.2.0 (n/a)                 | 7.2.0           | 5.0.0          |
+| Control Center      | 10.2.0                      | 10.2.0          | 8.0.0          |
 | Transform Router    | 4.2.3 (n/a)                 | 4.2.3           | 4.2.3          |
 | Shared File Store   | 4.2.3 (n/a)                 | 4.2.3           | 4.2.3          |
 | Sync Service        | 5.3.0 (n/a)                 | 5.3.0           | 3.11.3         |
