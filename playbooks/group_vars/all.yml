@@ -34,7 +34,7 @@ acs_play_repository_acs_edition: Enterprise
 
 acs_play_skip_upgrade_checks: false
 
-default_jdbc_pg_driver_version: 42.7.7
+default_jdbc_pg_driver_version: 42.7.8
 default_jdbc_pg_driver_base_url: https://repo.maven.apache.org/maven2/org/postgresql/postgresql
 default_jdbc_pg_driver_url: >-
   {{ '{0}/{1}/postgresql-{1}.jar'.format(default_jdbc_pg_driver_base_url, default_jdbc_pg_driver_version) }}

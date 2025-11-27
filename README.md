@@ -216,13 +216,16 @@ Follow the checklist:
    important change. Stay tuned and check the documentation for regular status
    updates. There may also be more disruptive changes between minor versions in
    this 3.x releases.
-5. Run the [updatecli
+5. Ensure that `updatecli_amps_release_branch` in the different
+   `updatecli_maven_*.yml` files is set to the current branch.
+6. Run the [updatecli
    workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/bumpVersions.yml)
    against an existing branch to push bumps there or against `master` to push
    the bumps to `updatecli-bump-versions` branch.
-6. Manually bump adw and acc which are not yet supported by updatecli.
-7. Ensure that `updatecli_amps_release_branch` in the different
-   `updatecli_maven_*.yml` files is set to the current branch.
+7. Manually bump components which are not yet supported by updatecli:
+   * `acs_play_adw_version` in [vars/acsXX.yml](vars/)
+   * `acs_play_acc_version` in [vars/acsXX.yml](vars/)
+   * `sync_amp_device_sync_version` in [roles/sync/molecule/default/converge.yml](roles/sync/molecule/default/converge.yml)
 8. Ensure that the [versions table in the main readme](docs/overview.md#versioning) has been updated
 9. Ensure that activemq, tomcat and java versions are up to date (latest patch
    version) If activemq needs minor bump for latest release bump also the version in
