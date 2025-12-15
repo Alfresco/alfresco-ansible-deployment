@@ -37,6 +37,6 @@ transformers_imagemagick_repository: https://artifacts.alfresco.com/nexus/conten
 transformers_aio_artifact_name: alfresco-transform-core-aio
 transformers_aio_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
 
-transformers_aio_version: 5.2.4
+transformers_aio_version: 5.2.5
 transformers_aio_archive_url: "{{ transformers_aio_repository }}/{{ transformers_aio_artifact_name }}/{{ transformers_aio_version }}/{{ transformers_aio_artifact_name }}-{{ transformers_aio_version }}.jar"
 transformers_aio_archive_checksum: "sha1:{{ transformers_aio_archive_url }}.sha1"
