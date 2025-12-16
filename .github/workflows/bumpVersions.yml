@@ -102,5 +102,10 @@ jobs:
             🛠 Updatecli pipeline artifacts bump
           commit_user_name: ${{ vars.BOT_GITHUB_USERNAME }}
           commit_user_email: ${{ vars.BOT_GITHUB_EMAIL }}
+          # Push to a predefined branch when run from the default branch
+          # or to the current branch otherwise (useful for PRs)
           branch: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME && 'updatecli-bump-versions' || github.ref_name }}
+          create_branch: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME }}
+          # Overwrite the existing branch if pushing to the predefined branch
           push_options: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME && '--force' || '' }}
+          skip_checkout: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME }}
