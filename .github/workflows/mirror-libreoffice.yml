@@ -38,7 +38,7 @@ jobs:
         run: gpg --verify ${FILENAME}.asc
 
       - name: Deploy to nexus
-        uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@415eaf041bff74088f35b457061a5ef189d54027 # v9.3.1
+        uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@4657bc5c89f722332e897d8f360b75f08e81b8b9 # v9.3.1
         with:
           group-id: org.libreoffice
           artifact-id: libreoffice-dist
