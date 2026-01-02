@@ -47,5 +47,5 @@ jobs:
           generate-pom: false
           file: ${{ env.FILENAME }}
           classifier: ${{ matrix.package_type }}
-          maven-username: ${{ secrets.NEXUS_USERNAME }}
-          maven-password: ${{ secrets.NEXUS_PASSWORD }}
+          maven-username: ${{ secrets.NEXUS_USERNAME_READ_ONLY }}
+          maven-password: ${{ secrets.NEXUS_PASSWORD_READ_ONLY }}
