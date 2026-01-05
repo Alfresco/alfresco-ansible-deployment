@@ -1,4 +1,4 @@
-- name: Search Enterprise Reindex
+- name: Search Enteprise Reindex
   hosts: search_enterprise[0]
   gather_facts: false
   tasks:

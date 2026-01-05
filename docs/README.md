@@ -3,7 +3,7 @@
 [![release](https://img.shields.io/github/v/release/Alfresco/alfresco-ansible-deployment?display_name=release)](https://github.com/Alfresco/alfresco-ansible-deployment/releases/latest)
 
 [![community](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/community.yml)
-[![enterprise](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enterprise.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enterprise.yml)
+[![enterprise](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/enteprise.yml)
 [![pre-commit](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/precommit.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/precommit.yml)
 [![docs](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/docs.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/docs.yml)
 [![updatecli](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/updatecli.yml/badge.svg)](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/updatecli.yml)
