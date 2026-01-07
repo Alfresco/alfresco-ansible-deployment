@@ -168,8 +168,8 @@ jobs:
       dtas_additional_params: ${{ matrix.runner == 'ubuntu-24.04-arm' && '-k "not test_transformation and not test_get_sync and not test_get_ended_sync"' || '' }}
       runner: ${{ matrix.runner }}
     secrets:
-      nexus_username: ${{ secrets.NEXUS_USERNAME }}
-      nexus_password: ${{ secrets.NEXUS_PASSWORD }}
+      nexus_username: ${{ secrets.NEXUS_USERNAME_READ_ONLY }}
+      nexus_password: ${{ secrets.NEXUS_PASSWORD_READ_ONLY }}
       dtas_token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.DEPENDABOT_GITHUB_TOKEN }}
 
   ec2:
@@ -222,7 +222,7 @@ jobs:
           matrix_name: ${{ matrix.molecule_scenario.name }}
           matrix_vars: ${{ matrix.molecule_scenario.vars }}
           matrix_desc: ${{ matrix.molecule_scenario.desc }}
-          nexus_username: ${{ secrets.NEXUS_USERNAME }}
-          nexus_password: ${{ secrets.NEXUS_PASSWORD }}
+          nexus_username: ${{ secrets.NEXUS_USERNAME_READ_ONLY }}
+          nexus_password: ${{ secrets.NEXUS_PASSWORD_READ_ONLY }}
           aws_region: ${{ env.AWS_REGION }}
           pat: ${{ secrets.BOT_GITHUB_TOKEN }}
