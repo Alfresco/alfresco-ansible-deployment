@@ -28,13 +28,14 @@
 #     - Unpack {{ adf_app_name }}
 
 - name: Download {{ adf_app_name }} {{ adf_app_version }}
-  ansible.builtin.import_playbook: alfresco.platform.download_verify_checksum.yml
+  ansible.builtin.include_tasks: alfresco.platform.download_verify_checksum.yml
   vars:
-    url: "{{ adf_app_src_archive }}"
+    resource_url: "{{ adf_app_src_archive }}"
     url_username: "{{ adf_app_src_username | default(omit) }}"
     url_password: "{{ adf_app_src_password | default(omit) }}"
+    dest_path: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
   notify:
-    - Unpack {{ adf_app_name }}  
+    - Unpack {{ adf_app_name }}
 
 - name: Set oauth2 redirects fact
   ansible.builtin.set_fact:
