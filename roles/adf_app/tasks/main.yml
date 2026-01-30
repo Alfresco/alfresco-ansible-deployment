@@ -34,6 +34,9 @@
     url_username: "{{ adf_app_src_username | default(omit) }}"
     url_password: "{{ adf_app_src_password | default(omit) }}"
     dest_path: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
+- name: Mark artifact for unpack
+  ansible.builtin.debug:
+    msg: "Artifact downloaded successfully"
   notify:
     - Unpack {{ adf_app_name }}
 
