@@ -18,10 +18,13 @@ collections:
     version: 11.0.0
   - name: community.aws
     version: 10.0.0
-  - name: alfresco.platform
-    source: git+https://github.com/Alfresco/alfresco-ansible-collection.git
+  # - name: alfresco.platform
+  #   source: git+https://github.com/Alfresco/alfresco-ansible-collection.git
+  #   type: git
+  #   version: fd7f800e2cdc1a2b736ab3ae880b16e739baef35 # pragma: allowlist secret
+  - name: git+https://github.com/Alfresco/alfresco-ansible-collection.git
     type: git
-    version: fd7f800e2cdc1a2b736ab3ae880b16e739baef35 # pragma: allowlist secret
+    version: d7f363cb7d6ce744fd06a27181d914f74b0645bf # pragma: allowlist secret
   # Alternate source for alfresco.platform
   # - name: git+https://github.com/Alfresco/alfresco-ansible-collection.git
   #  type: git
