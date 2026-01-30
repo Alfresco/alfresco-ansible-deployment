@@ -15,17 +15,26 @@
     state: directory
     mode: "0755"
 
+# - name: Download {{ adf_app_name }} {{ adf_app_version }}
+#   ansible.builtin.get_url:
+#     url: "{{ adf_app_src_archive }}"
+#     dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
+#     checksum: "{{ adf_app_src_checksum }}"
+#     mode: "0644"
+#     url_username: "{{ adf_app_src_username | default(omit) }}"
+#     url_password: "{{ adf_app_src_password | default(omit) }}"
+#     timeout: "{{ adf_app_download_timeout }}"
+#   notify:
+#     - Unpack {{ adf_app_name }}
+
 - name: Download {{ adf_app_name }} {{ adf_app_version }}
-  ansible.builtin.get_url:
+  ansible.builtin.import_playbook: alfresco.platform.download_verify_checksum.yml
+  vars:
     url: "{{ adf_app_src_archive }}"
-    dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
-    checksum: "{{ adf_app_src_checksum }}"
-    mode: "0644"
     url_username: "{{ adf_app_src_username | default(omit) }}"
     url_password: "{{ adf_app_src_password | default(omit) }}"
-    timeout: "{{ adf_app_download_timeout }}"
   notify:
-    - Unpack {{ adf_app_name }}
+    - Unpack {{ adf_app_name }}  
 
 - name: Set oauth2 redirects fact
   ansible.builtin.set_fact:
