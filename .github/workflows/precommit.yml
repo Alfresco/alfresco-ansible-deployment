@@ -11,7 +11,7 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 2
 
@@ -20,7 +20,7 @@ jobs:
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@415eaf041bff74088f35b457061a5ef189d54027 # v9.3.1
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@3768f40c71f5f9b0c4e6a507c8f87ed40d9b60c9 # v9.3.1
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -28,7 +28,7 @@ jobs:
         uses: ./.github/actions/galaxy
 
       - name: Cache pre-commit
-        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
+        uses: actions/cache@b7e8d49f17405cc70c1c120101943203c98d3a4b # v4.2.2
         with:
           path: ~/.cache/pre-commit
           key: ${{ runner.os }}-precommit-${{ hashFiles('.pre-commit-config.yaml') }}
