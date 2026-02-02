@@ -1,4 +1,7 @@
 ---
+- name: Populate facts
+  ansible.builtin.import_playbook: alfresco.platform.download_verify_checksum.yml
+
 - name: Extended validation of role arguments
   ansible.builtin.assert:
     that:
@@ -65,7 +68,7 @@
 
 
 - name: Download {{ adf_app_name }} {{ adf_app_version }}
-  ansible.builtin.include_tasks: collections/ansible_collections/alfresco/platform/playbooks/download_verify_checksum.yml
+  ansible.builtin.include_tasks: collections/ansible_collections/alfresco/platform/playbooks/download.yml
   vars:
     resource_url: "{{ adf_app_src_archive }}"
     url_username: "{{ adf_app_src_username | default(omit) }}"
