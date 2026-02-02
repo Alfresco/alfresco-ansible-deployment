@@ -1,7 +1,4 @@
 ---
-- name: Populate facts
-  ansible.builtin.import_playbook: alfresco.platform.download_verify_checksum.yml
-
 - name: Extended validation of role arguments
   ansible.builtin.assert:
     that:
