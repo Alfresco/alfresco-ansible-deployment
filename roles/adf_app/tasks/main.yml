@@ -27,20 +27,33 @@
 #   notify:
 #     - Unpack {{ adf_app_name }}
 
-- name: Show Alfresco collection structure
-  ansible.builtin.command:
-    cmd: ls -R collections/ansible_collections/alfresco/platform
+- name: Show Ansible home and collection paths
+  ansible.builtin.command: ansible-config dump --only-changed
+  register: ansible_home
   changed_when: false
+  failed_when: false
 
-- name: Check for download_verify_checksum.yml
-  ansible.builtin.command:
-    cmd: find collections/ansible_collections/alfresco/platform -name download_verify_checksum.yml
-  changed_when: false
+- debug:
+    var: ansible_home.stdout_lines
 
-- name: Find download_verify_checksum.yml in collections
-  ansible.builtin.command:
-    cmd: find collections/ansible_collections -name download_verify_checksum.yml
+- name: List all installed Ansible collections
+  ansible.builtin.command: ansible-galaxy collection list
+  register: installed_collections
   changed_when: false
+  failed_when: false
+
+- debug:
+    var: installed_collections.stdout_lines
+- name: List playbooks inside collections (best effort)
+  ansible.builtin.shell: |
+    find ~/.ansible/collections /usr/share/ansible/collections \
+      -type f -name "*.yml" 2>/dev/null
+  register: collection_playbooks
+  changed_when: false
+  failed_when: false
+
+- debug:
+    var: collection_playbooks.stdout_lines
 
 - name: Download {{ adf_app_name }} {{ adf_app_version }}
   ansible.builtin.include_tasks: collections/ansible_collections/alfresco/platform/playbooks/download_verify_checksum.yml
