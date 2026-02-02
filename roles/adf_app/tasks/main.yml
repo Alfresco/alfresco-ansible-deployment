@@ -27,42 +27,6 @@
 #   notify:
 #     - Unpack {{ adf_app_name }}
 
-- name: Show Ansible collection paths
-  ansible.builtin.command: ansible-config dump
-  register: ansible_home
-  changed_when: false
-  failed_when: false
-  delegate_to: localhost
-  run_once: true
-
-- debug:
-    msg: "{{ ansible_home.stdout_lines | select('search', 'COLLECTIONS_PATHS') | list }}"
-
-
-- name: List all installed Ansible collections
-  ansible.builtin.command: ansible-galaxy collection list
-  register: installed_collections
-  changed_when: false
-  failed_when: false
-  delegate_to: localhost
-  run_once: true
-
-- debug:
-    var: installed_collections.stdout_lines
-
-- name: List playbooks inside collections (best effort)
-  ansible.builtin.shell: |
-    find ~/.ansible/collections /usr/share/ansible/collections \
-      -type f -name "*.yml" 2>/dev/null
-  register: collection_playbooks
-  changed_when: false
-  failed_when: false
-  delegate_to: localhost
-  run_once: true
-
-- debug:
-    var: collection_playbooks.stdout_lines
-
 
 - name: Download {{ adf_app_name }} {{ adf_app_version }}
   # ansible.builtin.include_tasks: collections/ansible_collections/alfresco/platform/playbooks/tasks/download.yml
