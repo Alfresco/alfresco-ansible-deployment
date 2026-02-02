@@ -28,14 +28,25 @@
 #     - Unpack {{ adf_app_name }}
 
 
-- name: Download {{ adf_app_name }} {{ adf_app_version }}
-  # ansible.builtin.include_tasks: collections/ansible_collections/alfresco/platform/playbooks/tasks/download.yml
-  ansible.builtin.include_tasks: /home/runner/.ansible/collections/ansible_collections/alfresco/platform/playbooks/tasks/download.yml
+# - name: Download {{ adf_app_name }} {{ adf_app_version }}
+#   # ansible.builtin.include_tasks: collections/ansible_collections/alfresco/platform/playbooks/tasks/download.yml
+#   ansible.builtin.include_tasks: /home/runner/.ansible/collections/ansible_collections/alfresco/platform/playbooks/tasks/download.yml
+#   vars:
+#     resource_url: "{{ adf_app_src_archive }}"
+#     url_username: "{{ adf_app_src_username | default(omit) }}"
+#     url_password: "{{ adf_app_src_password | default(omit) }}"
+#     dest_path: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
+- name: Download {{ adf_app_name }} {{ adf_app_version }} using utils role
+  ansible.builtin.include_role:
+    name: alfresco.platform.utils
+    tasks_from: download_verify_checksum
   vars:
-    resource_url: "{{ adf_app_src_archive }}"
-    url_username: "{{ adf_app_src_username | default(omit) }}"
-    url_password: "{{ adf_app_src_password | default(omit) }}"
-    dest_path: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
+    downloads:
+      - url: "{{ adf_app_src_archive }}"
+        dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
+        username: "{{ adf_app_src_username | default(omit) }}"
+        password: "{{ adf_app_src_password | default(omit) }}"
+
 - name: Mark artifact for unpack
   ansible.builtin.debug:
     msg: "Artifact downloaded successfully"
