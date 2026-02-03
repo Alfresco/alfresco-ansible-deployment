@@ -40,6 +40,9 @@
   ansible.builtin.set_fact:
     adf_app_archive_path: >-
       {{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip
+    adf_app_src_username: "{{ adf_app_src_username }}"
+    adf_app_src_password: "{{ adf_app_src_password }}"
+    adf_app_src_archive: "{{ adf_app_src_archive }}"
 
 - name: Download {{ adf_app_name }} {{ adf_app_version }} using utils role
   ansible.builtin.include_role:
