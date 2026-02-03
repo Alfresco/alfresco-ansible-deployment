@@ -20,7 +20,7 @@ collections:
     version: 10.0.0
   - name: git+https://github.com/Alfresco/alfresco-ansible-collection.git
     type: git
-    version: a4730e149cb1c3adc8e3786192827ff73fce0e95 # pragma: allowlist secret
+    version: 34763b7dd0c2ec9e40728792dd7e5dcad40a2db7 # pragma: allowlist secret
   # Alternate source for alfresco.platform
   # - name: git+https://github.com/Alfresco/alfresco-ansible-collection.git
   #  type: git
