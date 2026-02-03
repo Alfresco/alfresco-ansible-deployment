@@ -49,8 +49,8 @@
     downloads:
       - url: "{{ adf_app_src_archive }}"
         dest: "{{ adf_app_archive_path }}"
-        username: "{{ adf_app_src_username | default(omit) }}"
-        password: "{{ adf_app_src_password | default(omit) }}"
+        username: "{{ adf_app_src_username }}"
+        password: "{{ adf_app_src_password }}"
 
 - name: Mark artifact for unpack
   ansible.builtin.debug:
