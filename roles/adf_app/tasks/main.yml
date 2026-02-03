@@ -22,7 +22,7 @@
   vars:
     artifact:
       url: "{{ adf_app_src_archive }}"
-      dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
+      dest: "{{ adf_app_artifact_dest }}"
       username: "{{ adf_app_src_username }}"
       password: "{{ adf_app_src_password }}"
 
