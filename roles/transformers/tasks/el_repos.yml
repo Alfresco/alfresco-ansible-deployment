@@ -8,7 +8,7 @@
   ansible.builtin.dnf:
     name: "{{ item }}"
     state: present
-    disable_gpg_check: true
+    disable_gpg_check: false
   loop:
     - "{{ epel_url }}"
     - "{{ rpmfusion_free_url }}"
