@@ -23,8 +23,8 @@
     artifact:
       url: "{{ adf_app_src_archive }}"
       dest: "{{ adf_app_artifact_dest }}"
-      username: "{{ adf_app_src_username }}"
-      password: "{{ adf_app_src_password }}"
+      username: "{{ lookup('env', 'NEXUS_USERNAME') | default(null) }}"
+      password: "{{ lookup('env', 'NEXUS_PASSWORD') | default(null) }}"
 
 - name: Mark artifact for unpack
   ansible.builtin.debug:
