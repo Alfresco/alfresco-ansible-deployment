@@ -16,7 +16,7 @@
     mode: "0755"
 
 - name: Download {{ adf_app_name }} {{ adf_app_version }} using utils role
-  ansible.builtin.include_role:
+  ansible.builtin.import_role:
     name: alfresco.platform.utils
     tasks_from: download_verify_checksum
   vars:
