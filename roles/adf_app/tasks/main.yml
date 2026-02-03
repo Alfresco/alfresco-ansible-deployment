@@ -36,6 +36,11 @@
 #     url_username: "{{ adf_app_src_username | default(omit) }}"
 #     url_password: "{{ adf_app_src_password | default(omit) }}"
 #     dest_path: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
+- name: Compute artifact download path
+  ansible.builtin.set_fact:
+    adf_app_archive_path: >-
+      {{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip
+
 - name: Download {{ adf_app_name }} {{ adf_app_version }} using utils role
   ansible.builtin.include_role:
     name: alfresco.platform.utils
@@ -43,7 +48,7 @@
   vars:
     downloads:
       - url: "{{ adf_app_src_archive }}"
-        dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
+        dest: "{{ adf_app_archive_path }}"
         username: "{{ adf_app_src_username | default(omit) }}"
         password: "{{ adf_app_src_password | default(omit) }}"
 
