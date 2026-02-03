@@ -21,12 +21,11 @@ audit_storage_opensearch_password: ''
 audit_storage_default_environment:
   SERVER_PORT: "{{ audit_storage_server_port }}"
   SPRING_ACTIVEMQ_BROKERURL: "{{ audit_storage_broker_url }}"
-  SPRING_ACTIVEMQ_USER: "{{ audit_storage_broker_username }}"
+  SPRING_ACTIVEMQ_USERNAME: "{{ audit_storage_broker_username }}"
   SPRING_ACTIVEMQ_PASSWORD: "{{ audit_storage_broker_password }}"
   AUDIT_ENTRYSTORAGE_OPENSEARCH_CONNECTOR_URI: "{{ audit_storage_opensearch_url }}"
   AUDIT_ENTRYSTORAGE_OPENSEARCH_CONNECTOR_USERNAME: "{{ audit_storage_opensearch_username }}"
   AUDIT_ENTRYSTORAGE_OPENSEARCH_CONNECTOR_PASSWORD: "{{ audit_storage_opensearch_password }}"
-  AUDIT_EVENTINGESTION_URI: activemq:topic:alfresco.repo.event2
 audit_storage_environment: {}
 
 audit_storage_java_bin_path: "{{ java_home }}/bin/java"
