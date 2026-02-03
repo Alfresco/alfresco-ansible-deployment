@@ -37,6 +37,11 @@
       repo:
         hostname: "{{ nginx_host }}"
         port: "{{ ports_cfg.nginx.http }}"
+        syncconfig:
+          url: "{{ sync_repo_config_url }}"
+      sync:
+        cluster:
+          enabled: false
       logging:
         appenders:
           - type: console

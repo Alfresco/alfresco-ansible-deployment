@@ -13,7 +13,6 @@ sync_environment:
   JAVA_OPTS:
     - -Xms512m
     - -Xmx2g
-    - $JAVA_OPTS
 sync_jmx_config_remote_enabled: false
 sync_jmx_config_remote_port: 50800
 sync_jmx_config_remote_rmi_port: 50801
@@ -29,3 +28,8 @@ sync_db_url: ""
 sync_db_driver: "{{ sync_jdbc_driver_class }}"
 sync_db_name: "alfresco-sync"
 sync_db_username: "alfresco-sync"
+
+sync_java_home: "{{ java_home }}"
+sync_activemq_host: "{{ activemq_host }}"
+
+sync_repo_config_url: '${repo.scheme}://${repo.hostname}:${repo.port}/alfresco/service/devicesync/config'

@@ -1,0 +1,18 @@
+[Unit]
+Description=Alfresco Sync Service
+After=syslog.socket network.target local-fs.target remote-fs.target
+
+[Service]
+Type=simple
+WorkingDirectory={{ sync_home }}/service-sync
+User={{ username }}
+ExecStart={{ sync_java_home }}/bin/java $JAVA_OPTS -cp '{{ sync_home }}/service-sync/connectors/*:service-sync-{{ sync_version }}.jar' org.alfresco.service.sync.dropwizard.SyncService server {{ config_folder }}/sync-service/config.yml
+Restart=on-failure
+RestartSec=60
+TimeoutStopSec=5
+{% for key, value in sync_environment.items() %}
+Environment="{{ key }}={{ value | join(' ') | replace('%', '%%') }}"
+{% endfor %}
+
+[Install]
+WantedBy=multi-user.target
