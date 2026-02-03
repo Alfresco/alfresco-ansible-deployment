@@ -15,27 +15,6 @@
     state: directory
     mode: "0755"
 
-# - name: Download {{ adf_app_name }} {{ adf_app_version }}
-#   ansible.builtin.get_url:
-#     url: "{{ adf_app_src_archive }}"
-#     dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
-#     checksum: "{{ adf_app_src_checksum }}"
-#     mode: "0644"
-#     url_username: "{{ adf_app_src_username | default(omit) }}"
-#     url_password: "{{ adf_app_src_password | default(omit) }}"
-#     timeout: "{{ adf_app_download_timeout }}"
-#   notify:
-#     - Unpack {{ adf_app_name }}
-
-
-# - name: Download {{ adf_app_name }} {{ adf_app_version }}
-#   # ansible.builtin.include_tasks: collections/ansible_collections/alfresco/platform/playbooks/tasks/download.yml
-#   ansible.builtin.include_tasks: /home/runner/.ansible/collections/ansible_collections/alfresco/platform/playbooks/tasks/download.yml
-#   vars:
-#     resource_url: "{{ adf_app_src_archive }}"
-#     url_username: "{{ adf_app_src_username | default(omit) }}"
-#     url_password: "{{ adf_app_src_password | default(omit) }}"
-#     dest_path: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
 - name: Compute artifact download path
   ansible.builtin.set_fact:
     adf_app_archive_path: >-
