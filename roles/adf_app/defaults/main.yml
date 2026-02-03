@@ -7,13 +7,14 @@ adf_app_context: /
 adf_app_port: 8080
 adf_app_src_archive: null
 adf_app_src_checksum: null
-adf_app_src_username: null
-adf_app_src_password: null
 adf_app_version: null
 adf_app_configuration: {}
 adf_app_download_timeout: 90
 adf_app_artifact_dest: >-
   /tmp/ansible_artefacts/{{ adf_app_name }}-{{ adf_app_version }}.zip
+adf_app_src_username: "{{ lookup('env', 'NEXUS_USERNAME') | default(null) }}"
+adf_app_src_password: "{{ lookup('env', 'NEXUS_PASSWORD') | default(null) }}"
+
 
 # Other defaults
 adf_app_config_json_path: "{{ nginx_default_vhost_docroot }}/{{ adf_app_name }}/app.config.json"
