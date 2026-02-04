@@ -15,30 +15,26 @@
     state: directory
     mode: "0755"
 
-- name: Download checksum file
-  ansible.builtin.get_url:
-    url: "{{ adf_app_src_archive }}.sha1"
-    dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip.sha1"
-    mode: "0644"
-    url_username: "{{ adf_app_src_username | default(omit) }}"
-    url_password: "{{ adf_app_src_password | default(omit) }}"
-  register: adf_app_checksum_download
+- name: Fetch checksum content
+  ansible.builtin.uri:
+    url: "{{ checksum_url }}"
+    return_content: true
+  register: adf_app_checksum_file
   retries: 3
   delay: 5
-  until: adf_app_checksum_download is succeeded
+  until: adf_app_checksum_file.status == 200
 
-- name: Read checksum file
-  ansible.builtin.slurp:
-    src: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip.sha1"
-  register: adf_app_checksum_file
+- name: Decode checksum file
+  ansible.builtin.set_fact:
+    adf_app_checksum_decoded: "{{ adf_app_checksum_file.content | trim }}"
 
-- name: Normalize checksum (supports maven and legacy formats)
+- name: Normalize checksum (supports maven and common checksum formats)
   ansible.builtin.set_fact:
     adf_app_normalized_checksum: >-
       sha1:{{
-        (adf_app_checksum_file.content | b64decode | trim).split()[0]
-        if (adf_app_checksum_file.content | b64decode | trim).split() | length > 1
-        else (adf_app_checksum_file.content | b64decode | trim)
+        adf_app_checksum_decoded
+        if adf_app_checksum_decoded.split() | length == 1
+        else adf_app_checksum_decoded.split()[0]
       }}
 
 - name: Download {{ adf_app_name }} {{ adf_app_version }}
