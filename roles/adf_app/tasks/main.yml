@@ -32,17 +32,9 @@
     src: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip.sha1"
   register: adf_app_checksum_file
 
-- name: Build checksum for get_url (explicit formats, ordered)
+- name: Build checksum for get_url
   ansible.builtin.set_fact:
-    adf_app_normalized_checksum: >-
-      {% set text = adf_app_checksum_file.content | b64decode | trim %}
-      {% if ' ' not in text %}
-      {# 1) New / Maven format: checksum only #}
-      sha1:{{ text }}
-      {% else %}
-      {# 2) Old / Common format: checksum + filename #}
-      sha1:{{ text.split()[0] }}
-      {% endif %}
+    adf_app_normalized_checksum: "sha1:{{ (adf_app_checksum_file.content | b64decode | trim).split()[0] }}"
 
 - name: Download {{ adf_app_name }} {{ adf_app_version }}
   ansible.builtin.get_url:
