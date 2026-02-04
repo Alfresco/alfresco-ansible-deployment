@@ -7,6 +7,8 @@ adf_app_context: /
 adf_app_port: 8080
 adf_app_src_archive: null
 adf_app_src_checksum: null
+adf_app_src_username: null
+adf_app_src_password: null
 adf_app_version: null
 adf_app_configuration: {}
 adf_app_download_timeout: 90
