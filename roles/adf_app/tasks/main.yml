@@ -15,20 +15,54 @@
     state: directory
     mode: "0755"
 
-- name: Download {{ adf_app_name }} {{ adf_app_version }} using utils role
-  ansible.builtin.import_role:
-    name: alfresco.platform.utils
-    tasks_from: download_verify_checksum
-  vars:
-    artifact:
-      url: "{{ adf_app_src_archive }}"
-      dest: "{{ adf_app_artifact_dest }}"
-      username: "{{ lookup('env', 'NEXUS_USERNAME') | default(null) }}"
-      password: "{{ lookup('env', 'NEXUS_PASSWORD') | default(null) }}"
+- name: Download {{ adf_app_name }} {{ adf_app_version }}
+  ansible.builtin.get_url:
+    url: "{{ adf_app_src_archive }}"
+    dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
+    checksum: "{{ adf_app_src_checksum }}"
+    mode: "0644"
+    url_username: "{{ adf_app_src_username | default(omit) }}"
+    url_password: "{{ adf_app_src_password | default(omit) }}"
+    timeout: "{{ adf_app_download_timeout }}"
 
-- name: Mark artifact for unpack
-  ansible.builtin.debug:
-    msg: "Artifact downloaded successfully"
+- name: Download checksum file
+  ansible.builtin.get_url:
+    url: "{{ adf_app_src_archive }}.sha1"
+    dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip.sha1"
+    mode: "0644"
+    url_username: "{{ adf_app_src_username | default(omit) }}"
+    url_password: "{{ adf_app_src_password | default(omit) }}"
+  register: adf_app_checksum_download
+  retries: 3
+  delay: 5
+  until: adf_app_checksum_download is succeeded
+
+- name: Read checksum file
+  ansible.builtin.slurp:
+    src: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip.sha1"
+  register: adf_app_checksum_file
+
+- name: Build checksum for get_url (explicit formats)
+  ansible.builtin.set_fact:
+    adf_app_normalized_checksum: >-
+      {% set text = adf_app_checksum_file.content | b64decode | trim %}
+      {% if ' ' in text %}
+        {# new format #}
+        sha1:{{ text }}
+      {% else %}
+        {# old format #}
+        sha1:{{ text.split()[0] }}
+      {% endif %}
+
+- name: Download {{ adf_app_name }} {{ adf_app_version }}
+  ansible.builtin.get_url:
+    url: "{{ adf_app_src_archive }}"
+    dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
+    checksum: "{{ adf_app_normalized_checksum }}"
+    mode: "0644"
+    url_username: "{{ adf_app_src_username | default(omit) }}"
+    url_password: "{{ adf_app_src_password | default(omit) }}"
+    timeout: "{{ adf_app_download_timeout }}"
   notify:
     - Unpack {{ adf_app_name }}
 
