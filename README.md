@@ -206,31 +206,31 @@ necessary before proceeding.
 Follow the checklist:
 
 1. Review currently open dependabot/renovate and merge them.
-2. Add the `ec2-test` label to the PR to ensure that all integration tests are passing before merging.
-3. For minor releases, ensure to update the links beginning with
+2. For minor releases, ensure to update the links beginning with
   `https://support.hyland.com/r/Alfresco` to reflect the latest version or
   corresponding minor update documentation.
-4. In case of a new ACS major version, create new vars/acsXX.yml file. Remember to move community related vars to the new file.
-5. Always check the no changes are left under the "Unreleased version" section
+3. In case of a new ACS major version, create new vars/acsXX.yml file. Remember to move community related vars to the new file.
+4. Always check the no changes are left under the "Unreleased version" section
    in the [playbook upgrade doc](docs/playbook-upgrade.md). Also make sure this
    section for the version you're about to release contains any breaking or
    important change. Stay tuned and check the documentation for regular status
    updates. There may also be more disruptive changes between minor versions in
    this 3.x releases.
-6. Ensure that `updatecli_amps_release_branch` in the different
+5. Ensure that `updatecli_amps_release_branch` in the different
    `updatecli_maven_*.yml` files is set to the current branch.
-7. Run the [updatecli
+6. Run the [updatecli
    workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/bumpVersions.yml)
    against an existing branch to push bumps there or against `master` to push
    the bumps to `updatecli-bump-versions` branch.
-8. Manually bump components which are not yet supported by updatecli:
+7. Manually bump components which are not yet supported by updatecli:
    * `acs_play_adw_version` in [vars/acsXX.yml](vars/)
    * `acs_play_acc_version` in [vars/acsXX.yml](vars/)
    * `sync_amp_device_sync_version` in [roles/sync/molecule/default/converge.yml](roles/sync/molecule/default/converge.yml)
-9. Ensure that the [versions table in the main readme](docs/overview.md#versioning) has been updated
-10. Ensure that activemq, tomcat and java versions are up to date (latest patch
+8. Ensure that the [versions table in the main readme](docs/overview.md#versioning) has been updated
+9. Ensure that activemq, tomcat and java versions are up to date (latest patch
    version) If activemq needs minor bump for latest release bump also the version in
    `prepare.yml` molecule scenario for multimachine.
+10. Add the `ec2-test` label to the PR to ensure that all integration tests are passing before merging.
 11. After merging every pending PR, proceed with tagging:
     * `git tag -s v2.x.x -m v2.x.x`
     * `git push origin v2.x.x`
