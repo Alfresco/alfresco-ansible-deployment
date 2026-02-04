@@ -24,11 +24,12 @@
   register: adf_app_checksum_file
   retries: 3
   delay: 5
-  until: adf_app_checksum_file.status == 200
+  ignore_errors: true
 
 - name: Trim checksum content
   ansible.builtin.set_fact:
     adf_app_checksum_trimmed: "{{ adf_app_checksum_file.content | trim }}"
+  when: adf_app_checksum_file is defined and adf_app_checksum_file.status == 200
 
 - name: Normalize checksum (supports maven and common checksum formats)
   ansible.builtin.set_fact:
@@ -38,6 +39,12 @@
         if adf_app_checksum_trimmed.split() | length == 1
         else adf_app_checksum_trimmed.split()[0]
       }}
+  when: adf_app_checksum_file is defined and adf_app_checksum_file.status == 200
+
+- name: Normalize checksum from version('4.1.0') and earlier
+  ansible.builtin.set_fact:
+    adf_app_normalized_checksum: "{{ adf_app_src_checksum }}"
+  when: adf_app_checksum_file is not defined or adf_app_checksum_file.status != 200
 
 - name: Download {{ adf_app_name }} {{ adf_app_version }}
   ansible.builtin.get_url:
