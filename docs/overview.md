@@ -91,7 +91,7 @@ The table below shows the version of the components deployed by the playbook for
 ACS 7.x onward.
 
 | Component           | 25.1 Enterprise (Community) | 23.4 Enterprise | 7.4 Enterprise |
-| ------------------- |-----------------------------|-----------------| -------------- |
+|---------------------|-----------------------------|-----------------|----------------|
 | OpenJDK             | 17.0.17                     | 17.0.17         | 17.0.17        |
 | Apache Tomcat       | 10.1.49                     | 10.1.49         | 9.0.111        |
 | PostgreSQL          | 16.x                        | 15.x            | 14.x           |
@@ -99,8 +99,8 @@ ACS 7.x onward.
 | Repository          | 25.3.0                      | 23.6.0          | 7.4.2.4        |
 | Share               | 25.3.0                      | 23.6.0          | 7.4.2.4        |
 | Search Services     | 2.0.17                      | 2.0.17          | 2.0.17         |
-| Search Enterprise   | 5.2.1  (n/a)                | 5.2.1           | 3.3.3          |
-| All-In-One T-Engine | 5.2.4                       | 5.2.4           | 5.2.4          |
+| Search Enterprise   | 5.3.0 (n/a)                 | 5.3.0           | 3.3.3          |
+| All-In-One T-Engine | 5.3.0                       | 5.3.0           | 5.3.0          |
 | AOS                 | 3.4.1                       | 3.4.1           | 1.6.3          |
 | Google Docs         | 4.1.0                       | 4.1.0           | 3.4.2          |
 | Digital Workspace   | 7.2.0 (n/a)                 | 7.2.0           | 5.0.0          |
