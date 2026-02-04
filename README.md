@@ -230,13 +230,14 @@ Follow the checklist:
 9. Ensure that activemq, tomcat and java versions are up to date (latest patch
    version) If activemq needs minor bump for latest release bump also the version in
    `prepare.yml` molecule scenario for multimachine.
-10. After merging every pending PR, proceed with tagging:
+10. Add the `ec2-test` label to the PR to ensure that all integration tests are passing before merging.
+11. After merging every pending PR, proceed with tagging:
     * `git tag -s v2.x.x -m v2.x.x`
     * `git push origin v2.x.x`
-11. Wait for the [Release
+12. Wait for the [Release
   workflow](https://github.com/Alfresco/alfresco-ansible-deployment/actions/workflows/release.yml)
   go green.
-12. [Draft a new
+13. [Draft a new
   release](https://github.com/Alfresco/alfresco-ansible-deployment/releases) on
   GitHub with the tag you just pushed. If the release is for a new ACS major
   version, mention the ACS release in the title, e.g. v2.x.x (ACS 23.4.0)
