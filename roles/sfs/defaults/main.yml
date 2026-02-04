@@ -14,7 +14,7 @@ sfs_ats_truststore_type: "JCEKS"
 sfs_artifact_name: alfresco-shared-file-store-controller
 sfs_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
 
-sfs_version: 4.3.0
+sfs_version: 4.2.4
 sfs_archive_url: "{{ sfs_repository }}/{{ sfs_artifact_name }}/{{ sfs_version }}/{{ sfs_artifact_name }}-{{ sfs_version }}.jar"
 sfs_archive_checksum: "sha1:{{ sfs_archive_url }}.sha1"
 
