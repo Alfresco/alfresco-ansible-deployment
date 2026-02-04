@@ -4,7 +4,7 @@
   become: true
   gather_facts: true
   vars:
-    tomcat_version: "10.1.49"
+    tomcat_version: "10.1.52"
     config_folder: "/etc/opt/alfresco"
     binaries_folder: "/opt/alfresco"
     username: "alfresco"
