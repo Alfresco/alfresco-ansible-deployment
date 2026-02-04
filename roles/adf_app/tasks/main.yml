@@ -26,17 +26,17 @@
   delay: 5
   until: adf_app_checksum_file.status == 200
 
-- name: Decode checksum file
+- name: Trim checksum content
   ansible.builtin.set_fact:
-    adf_app_checksum_decoded: "{{ adf_app_checksum_file.content | trim }}"
+    adf_app_checksum_trimmed: "{{ adf_app_checksum_file.content | trim }}"
 
 - name: Normalize checksum (supports maven and common checksum formats)
   ansible.builtin.set_fact:
     adf_app_normalized_checksum: >-
       sha1:{{
-        adf_app_checksum_decoded
-        if adf_app_checksum_decoded.split() | length == 1
-        else adf_app_checksum_decoded.split()[0]
+        adf_app_checksum_trimmed
+        if adf_app_checksum_trimmed.split() | length == 1
+        else adf_app_checksum_trimmed.split()[0]
       }}
 
 - name: Download {{ adf_app_name }} {{ adf_app_version }}
