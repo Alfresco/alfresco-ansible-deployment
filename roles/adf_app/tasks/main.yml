@@ -41,7 +41,7 @@
       }}
   when: adf_app_checksum_file is defined and adf_app_checksum_file.status == 200
 
-- name: Normalize checksum from version('4.1.0') and earlier
+- name: Use fallback checksum when remote checksum fetch fails
   ansible.builtin.set_fact:
     adf_app_normalized_checksum: "{{ adf_app_src_checksum }}"
   when: adf_app_checksum_file is not defined or adf_app_checksum_file.status != 200
