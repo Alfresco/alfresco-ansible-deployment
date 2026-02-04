@@ -31,7 +31,7 @@ transformers_pdf_archive_name: "{{ transformers_pdf_artifact_name }}-{{ transfor
 transformers_pdf_archive_url: "{{ transformers_pdf_repository }}/{{ transformers_pdf_artifact_name }}/{{ transformers_pdf_version }}/{{ transformers_pdf_archive_name }}"
 transformers_pdf_archive_checksum: "sha1:{{ transformers_pdf_archive_url }}.sha1"
 
-transformers_imagemagick_version: 7.1.0-16-ci-11
+transformers_imagemagick_version: 7.1.2-13-ci-1
 transformers_imagemagick_repository: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
 
 transformers_aio_artifact_name: alfresco-transform-core-aio
