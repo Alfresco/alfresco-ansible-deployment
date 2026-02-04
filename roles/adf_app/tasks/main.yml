@@ -32,15 +32,7 @@
     src: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip.sha1"
   register: adf_app_checksum_file
 
-- name: Show raw checksum file content
-  ansible.builtin.debug:
-    msg: "{{ adf_app_checksum_file.content | b64decode }}"
-
-# - name: Build checksum for get_url
-#   ansible.builtin.set_fact:
-#     adf_app_normalized_checksum: "sha1:{{ (adf_app_checksum_file.content | b64decode | trim).split()[0] }}"
-
-- name: Build normalized checksum for get_url
+- name: Normalize checksum (supports maven and legacy formats)
   ansible.builtin.set_fact:
     adf_app_normalized_checksum: >-
       sha1:{{
