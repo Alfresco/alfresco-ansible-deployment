@@ -65,12 +65,16 @@ jobs:
         if: inputs.update-type == 'maven' || github.event_name == 'push'
         shell: bash
         run: |
-          set -x
-          for version_file in .github/updatecli/updatecli_maven_v*_values.yml; do
+          for version_file in .github/updatecli/updatecli_maven_*_values.yml; do
+            echo ">>> Running updatecli_maven pipeline for version file: $version_file"
             updatecli apply --config .github/updatecli/updatecli_maven.tpl \
               -v alfresco-updatecli/deployments/values/supported-matrix.yaml \
               -v .github/updatecli/updatecli_maven_values.yml \
               -v $version_file
+          done
+
+          for version_file in .github/updatecli/updatecli_maven_v*_values.yml; do
+            echo ">>> Running updatecli_amps pipeline for version file: $version_file"
             updatecli apply --config .github/updatecli/updatecli_amps.tpl \
               -v .github/updatecli/updatecli_amps_values.yml \
               -v $version_file
