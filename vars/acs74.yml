@@ -23,17 +23,17 @@ acs_play_adw_version: 5.0.0
 acs_play_search_version: 2.0.17
 acs_play_java_version: "{{ acs_play_default_java_version }}"
 acs_play_search_enterprise_version: 3.3.3
-acs_play_sfs_version: 4.2.4
+acs_play_sfs_version: 4.3.0
 acs_play_sync_version: 3.11.3
-acs_play_tomcat_version: 9.0.111
-acs_play_trouter_version: 4.2.4
+acs_play_tomcat_version: 9.0.115
+acs_play_trouter_version: 4.3.0
 acs_play_transformers_libreoffice_version: 7.2.5.1
 acs_play_transformers_pdf_version: 1.1
 acs_play_transformers_imagemagick_version: 7.1.2-13-ci-1
-acs_play_transformers_aio_version: 5.2.5
+acs_play_transformers_aio_version: 5.3.0
 acs_play_jdbc_pg_driver_version: "{{ default_jdbc_pg_driver_version }}"
 acs_play_postgres_major_version: 14
-acs_play_repository_acs_version: 7.4.2.5
+acs_play_repository_acs_version: 7.4.2.6
 acs_play_repository_api_explorer_version: 7.4.0
 acs_play_repository_amp_googledrive_repo_version: 3.4.2
 acs_play_repository_amp_googledrive_share_version: 3.4.2
