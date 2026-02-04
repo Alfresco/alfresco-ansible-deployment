@@ -381,3 +381,5 @@ downloads/
 
 .ansible/
 alfresco-updatecli/
+
+.idea/
