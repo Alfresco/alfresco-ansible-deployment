@@ -23,6 +23,7 @@
     url_username: "{{ adf_app_src_username | default(omit) }}"
     url_password: "{{ adf_app_src_password | default(omit) }}"
     return_content: true
+    force: true
   register: adf_app_checksum_file
   retries: 3
   delay: 5
