@@ -1,5 +1,9 @@
 name: Update AMPs artifacts for version {{ .updatecli_matrix_version }} in {{ .ansible_version_file }}
 
+{{- if not .updatecli_amps_release_branch }}
+{{- fail "updatecli_amps_release_branch is required" }}
+{{- end }}
+
 scms:
   acsPackaging:
     kind: github
