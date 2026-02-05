@@ -601,12 +601,16 @@
     acs_version_requirement: "{{ acs_play_repository_acs_version is version('7.4', 'ge') }}"
     acc_sum: >-
       {% set raw = lookup(
-          'url',
-          acs_play_acc_checksum.split(':', 1)[1],
-          username=nexus_user,
-          password=nexus_password
-        ) | trim %}
-      {{ acs_play_acc_checksum.split(':', 1)[0] }}:{{ raw.split()[0] }}
+            'url',
+            acs_play_acc_checksum.split(':', 1)[1],
+            username=nexus_user,
+            password=nexus_password
+          ) | trim %}
+      {% set checksum_token = raw.split() | first %}
+      {% if checksum_token is not defined %}
+        {% fail("Checksum fetch returned empty content") %}
+      {% endif %}
+      {{ acs_play_acc_checksum.split(':', 1)[0] }}:{{ checksum_token }}
   roles:
     - role: "../roles/adf_app"
       when: acs_version_requirement
@@ -649,8 +653,17 @@
       {% if acs_play_adw_version is version('4.1.0','ge') -%}
         {{ acs_play_adw_checksum }}
       {% else -%}
-        {% set raw = lookup('url', acs_play_adw_checksum.split(':', 1)[1], username=nexus_user, password=nexus_password) | trim %}
-        {{ acs_play_adw_checksum.split(':', 1)[0] }}:{{ raw.split()[0] }}
+        {% set raw = lookup(
+            'url',
+            acs_play_adw_checksum.split(':', 1)[1],
+            username=nexus_user,
+            password=nexus_password
+          ) | trim %}
+        {% set checksum_token = raw.split() | first %}
+        {% if checksum_token is not defined %}
+          {% fail("Checksum fetch returned empty content") %}
+        {% endif %}
+        {{ acs_play_adw_checksum.split(':', 1)[0] }}:{{ checksum_token }}
       {%- endif %}
   roles:
     - role: "../roles/adf_app"
