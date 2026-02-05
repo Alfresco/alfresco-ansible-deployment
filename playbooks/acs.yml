@@ -607,7 +607,7 @@
             password=nexus_password
           ) | trim %}
       {% set checksum_token = raw.split() | first | default('') | trim %}
-      {{ acs_play_acc_checksum.split(':', 1)[0] | trim }}:{{ checksum_token }}
+      {{ (acs_play_acc_checksum.split(':', 1)[0] + ':' + checksum_token) | trim }}
   roles:
     - role: "../roles/adf_app"
       when: acs_version_requirement
@@ -657,7 +657,7 @@
               password=nexus_password
             ) | trim %}
         {% set checksum_token = raw.split() | first | default('') | trim %}
-        {{ acs_play_adw_checksum.split(':', 1)[0] | trim }}:{{ checksum_token }}
+        {{ (acs_play_adw_checksum.split(':', 1)[0] + ':' + checksum_token) | trim }}
       {%- endif %}
   roles:
     - role: "../roles/adf_app"
