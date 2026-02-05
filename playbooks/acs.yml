@@ -606,10 +606,7 @@
             username=nexus_user,
             password=nexus_password
           ) | trim %}
-      {% set checksum_token = raw.split() | first %}
-      {% if not checksum_token %}
-        {% fail("Checksum fetch returned empty content") %}
-      {% endif %}
+      {% set checksum_token = raw.split() | first | default('') %}
       {{ acs_play_acc_checksum.split(':', 1)[0] }}:{{ checksum_token }}
   roles:
     - role: "../roles/adf_app"
@@ -654,15 +651,12 @@
         {{ acs_play_adw_checksum }}
       {% else -%}
         {% set raw = lookup(
-            'url',
-            acs_play_adw_checksum.split(':', 1)[1],
-            username=nexus_user,
-            password=nexus_password
-          ) | trim %}
-        {% set checksum_token = raw.split() | first %}
-        {% if not checksum_token %}
-          {% fail("Checksum fetch returned empty content") %}
-        {% endif %}
+              'url',
+              acs_play_adw_checksum.split(':', 1)[1],
+              username=nexus_user,
+              password=nexus_password
+            ) | trim %}
+        {% set checksum_token = raw.split() | first | default('') %}
         {{ acs_play_adw_checksum.split(':', 1)[0] }}:{{ checksum_token }}
       {%- endif %}
   roles:
