@@ -15,42 +15,11 @@
     state: directory
     mode: "0755"
 
-- name: Fetch checksum content
-  ansible.builtin.uri:
-    url: "{{ adf_app_src_archive }}.sha1"
-    return_content: true
-    url_username: "{{ adf_app_src_username | default(omit) }}"
-    url_password: "{{ adf_app_src_password | default(omit) }}"
-  register: adf_app_checksum_file
-  retries: 3
-  delay: 5
-  ignore_errors: true
-
-- name: Trim checksum content
-  ansible.builtin.set_fact:
-    adf_app_checksum_trimmed: "{{ adf_app_checksum_file.content | trim }}"
-  when: adf_app_checksum_file is defined and adf_app_checksum_file.status == 200
-
-- name: Normalize checksum (supports maven and common checksum formats)
-  ansible.builtin.set_fact:
-    adf_app_normalized_checksum: >-
-      sha1:{{
-        adf_app_checksum_trimmed
-        if adf_app_checksum_trimmed.split() | length == 1
-        else adf_app_checksum_trimmed.split()[0]
-      }}
-  when: adf_app_checksum_file is defined and adf_app_checksum_file.status == 200
-
-- name: Use fallback checksum when remote checksum fetch fails
-  ansible.builtin.set_fact:
-    adf_app_normalized_checksum: "{{ adf_app_src_checksum }}"
-  when: adf_app_checksum_file is not defined or adf_app_checksum_file.status != 200
-
 - name: Download {{ adf_app_name }} {{ adf_app_version }}
   ansible.builtin.get_url:
     url: "{{ adf_app_src_archive }}"
     dest: "{{ download_location }}/{{ adf_app_name }}-{{ adf_app_version }}.zip"
-    checksum: "{{ adf_app_normalized_checksum }}"
+    checksum: "{{ adf_app_src_checksum }}"
     mode: "0644"
     url_username: "{{ adf_app_src_username | default(omit) }}"
     url_password: "{{ adf_app_src_password | default(omit) }}"
