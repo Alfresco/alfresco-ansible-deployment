@@ -11,6 +11,10 @@
   loop:
     - "{{ epel_gpg_key_url }}"
     - "{{ rpmfusion_gpg_key_url }}"
+  register: rpm_key_result
+  retries: 3
+  delay: 5
+  until: rpm_key_result is succeeded
 
 - name: Enable additional repositories
   become: true
@@ -26,3 +30,7 @@
   loop:
     - "{{ epel_url }}"
     - "{{ rpmfusion_free_url }}"
+  register: dnf_result
+  retries: 3
+  delay: 5
+  until: dnf_result is succeeded
