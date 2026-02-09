@@ -11,6 +11,10 @@
   loop:
     - "{{ epel_gpg_key_url }}"
     - "{{ rpmfusion_gpg_key_url }}"
+  register: transformers_rpm_key_result
+  retries: "{{ transformers_el_repos_retries }}"
+  delay: "{{ transformers_el_repos_delay }}"
+  until: transformers_rpm_key_result is succeeded
 
 - name: Enable additional repositories
   become: true
@@ -26,3 +30,7 @@
   loop:
     - "{{ epel_url }}"
     - "{{ rpmfusion_free_url }}"
+  register: transformers_dnf_repos_result
+  retries: "{{ transformers_el_repos_retries }}"
+  delay: "{{ transformers_el_repos_delay }}"
+  until: transformers_dnf_repos_result is succeeded
