@@ -181,7 +181,7 @@ molecule tests, using the docker driver.
 You can run it with:
 
 ```sh
-molecule -s local test
+molecule test -s local
 ```
 
 ## Adding support for a new distribution
