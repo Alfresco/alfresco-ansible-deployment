@@ -94,15 +94,10 @@
           s: http://www.springframework.org/schema/beans
           a: http://activemq.apache.org/schema/core
 
-    - name: Check ActiveMQ properties files
+    - name: Check if jetty-realm.properties exists
       ansible.builtin.stat:
-        path: "{{ activemq_conf }}/{{ item }}.properties"
-      register: activemq_props_files
-      loop:
-        - users
-        - groups
-        - jetty-realm
-        - credentials
+        path: "{{ activemq_conf }}/jetty-realm.properties"
+      register: jetty_realm_file
 
     - name: Configure ActiveMQ users
       ansible.builtin.lineinfile:
@@ -115,8 +110,6 @@
           line: "{{ activemq_username }}={{ activemq_password }}"
         - file: groups
           line: admins={{ activemq_username }}
-        - file: jetty-realm
-          line: "{{ activemq_username }}: MD5:{{ activemq_password | md5 }}, admin"
         - file: credentials
           line: "activemq.username={{ activemq_username }}"
         - file: credentials
@@ -124,7 +117,15 @@
       no_log: true
       loop_control:
         label: "{{ item.file }}"
-      when: activemq_props_files.results | selectattr('item', 'equalto', item.file) | map(attribute='stat.exists') | first | default(false)
+
+    - name: Configure ActiveMQ jetty-realm users
+      ansible.builtin.lineinfile:
+        path: "{{ activemq_conf }}/jetty-realm.properties"
+        line: "{{ activemq_username }}: MD5:{{ activemq_password | md5 }}, admin"
+        owner: "{{ username }}"
+        group: "{{ group_name }}"
+      no_log: true
+      when: jetty_realm_file.stat.exists
 
     - name: Change location of ActiveMQ logs
       vars:
