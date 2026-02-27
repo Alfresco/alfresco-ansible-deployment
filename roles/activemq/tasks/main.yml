@@ -94,7 +94,7 @@
           s: http://www.springframework.org/schema/beans
           a: http://activemq.apache.org/schema/core
 
-    - name: Check if jetty-realm.properties exists
+    - name: Check if jetty-realm.properties exists for 5.x
       ansible.builtin.stat:
         path: "{{ activemq_conf }}/jetty-realm.properties"
       register: jetty_realm_file
@@ -118,7 +118,7 @@
       loop_control:
         label: "{{ item.file }}"
 
-    - name: Configure ActiveMQ jetty-realm users
+    - name: Configure ActiveMQ jetty-realm users for 5.x
       ansible.builtin.lineinfile:
         path: "{{ activemq_conf }}/jetty-realm.properties"
         line: "{{ activemq_username }}: MD5:{{ activemq_password | md5 }}, admin"
