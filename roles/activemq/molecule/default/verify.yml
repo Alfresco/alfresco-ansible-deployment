@@ -3,7 +3,7 @@
   hosts: all
   become: yes
   vars:
-    activemq_version: "5.18.7"
+    activemq_version: "6.2.1"
     activemq_binary_path: "/opt/apache-activemq-{{ activemq_version }}/bin/activemq"
     config_folder: "/etc/opt/alfresco"
   tasks:
