@@ -745,6 +745,7 @@
   roles:
     - role: "../roles/java"
       when: acs_is_enterprise and acs_version_requirement
+      java_version: "{{ acs_play_java_version }}"
     - role: alfresco.platform.audit_storage
       when: acs_is_enterprise and acs_version_requirement
       audit_storage_java_home_path: "/opt/openjdk-{{ acs_play_java_core }}"
@@ -793,6 +794,7 @@
       when: not acs_is_enterprise
   roles:
     - role: "../roles/java"
+      java_version: "{{ acs_play_java_version }}"
     - role: alfresco.platform.hxi_connector
       hxi_connector_java_home_path: "/opt/openjdk-{{ acs_play_java_core }}"
       hxi_connector_live_ingester_port: "{{ acs_play_hxi_connector_live_ingester_port }}"
