@@ -1,27 +1,23 @@
-
 ---
-- name: postgres Tests
+- name: Postgres Tests
   hosts: all
   become: yes
   become_user: postgres
   environment:
     PGPASSWORD: "alfresco"
   vars:
-    postgres_major_version: "15"
+    postgres_major_version: "16"
   tasks:
   - name: Gather service facts
     ansible.builtin.service_facts:
 
   - name: Set PostgreSQL service name based on OS type
+    vars:
+      postgres_service_names:
+        RedHat: "postgresql-{{ postgres_major_version }}"
+        Debian: "postgresql@{{ postgres_major_version }}-main"
     ansible.builtin.set_fact:
-      service_name: >-
-        {%- if ansible_os_family == 'RedHat' -%}
-        postgresql-{{ postgres_major_version }}
-        {%- elif ansible_os_family == 'Debian' -%}
-        postgresql@{{ postgres_major_version }}-main
-        {%- else -%}
-        postgresql
-        {%- endif -%}
+      service_name: "{{ postgres_service_names[ansible_os_family] | default('postgresql') }}"
 
   - name: Assert PostgreSQL service is running and enabled
     ansible.builtin.assert:
@@ -33,25 +29,32 @@
 
   - name: Check if 'alfresco' database exists
     ansible.builtin.command: psql -U postgres -d alfresco -c 'SELECT 1'
+    changed_when: false
 
   - name: Check if 'alfresco-sync' database exists
     ansible.builtin.command: psql -U postgres -d alfresco-sync -c 'SELECT 1'
+    changed_when: false
 
   - name: Verify Alfresco database exists with explicit host
     ansible.builtin.command: "psql -h postgres-instance  -U alfresco alfresco -c 'SELECT 1'"
+    changed_when: false
 
   - name: Verify Alfresco-sync database exists with explicit host
     ansible.builtin.command: "psql -h postgres-instance -U alfresco-sync alfresco-sync -c 'SELECT 1'"
+    changed_when: false
 
   - name: Check if user cannot connect remotely to another database (should fail)
     ansible.builtin.command: "psql -h postgres-instance -U alfresco alfresco-sync -c 'SELECT 1'"
     register: remote_access_check
     failed_when: remote_access_check.rc == 0  # Expect failure
+    changed_when: false
 
   - name: Check if user can connect locally (should pass)
     ansible.builtin.command: "psql -h 127.0.0.1 -U alfresco alfresco-sync -c 'SELECT 1'"
+    changed_when: false
 
   - name: Ensure user cannot create tables inside alfresco-sync database
     ansible.builtin.command: "psql -h 127.0.0.1 -U alfresco alfresco-sync -c 'CREATE TABLE public.films (code char(5));'"
     register: permission_check
     failed_when: "'permission denied for schema public' not in permission_check.stderr"
+    changed_when: false
