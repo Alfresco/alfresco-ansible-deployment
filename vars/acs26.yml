@@ -35,7 +35,7 @@ acs_play_transformers_imagemagick_version: 7.1.2-13-ci-1
 acs_play_transformers_aio_version: 5.4.0-A.1
 acs_play_jdbc_pg_driver_version: "{{ default_jdbc_pg_driver_version }}"
 acs_play_postgres_major_version: 16
-acs_play_repository_acs_version: 25.3.0
+acs_play_repository_acs_version: 26.1.0-A.19
 acs_play_repository_api_explorer_version: 26.1.0-A.2
 acs_play_repository_amp_googledrive_repo_version: 4.1.0
 acs_play_repository_amp_googledrive_share_version: 4.1.0
