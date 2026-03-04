@@ -1,6 +1,6 @@
-updatecli_matrix_version: 25.N
-updatecli_amps_release_branch: "release/25.3"
-ansible_version_file: vars/acs25.yml
+updatecli_matrix_version: current
+updatecli_amps_release_branch: "feature/release-26.1.0-A.15"
+ansible_version_file: vars/acs26.yml
 artifacts:
   alfresco-googledrive-repo-community:
     updatecli_scm_id: acsComRepo
