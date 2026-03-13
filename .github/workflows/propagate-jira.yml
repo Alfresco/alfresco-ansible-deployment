@@ -13,6 +13,6 @@ jobs:
         with:
           jira-url: ${{ vars.JIRA_URL }}
           jira-project-key: "OPSEXP"
-          jira-user: ${{ secrets.JIRA_USER }}
+          jira-user: ${{ vars.JIRA_USER }}
           jira-token: ${{ secrets.JIRA_TOKEN }}
           merge-versions: "true"
