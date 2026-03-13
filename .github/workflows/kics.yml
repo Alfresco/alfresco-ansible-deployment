@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Run KICS Scan
-        uses: checkmarx/kics-github-action@00def9108246ec656aea725db2167522d26a99d2 # v2.1.19
+        uses: checkmarx/kics-github-action@05aa5eb70eede1355220f4ca5238d96b397e30a6 # v2.1.20
         with:
           path: 'playbooks,roles'
           ignore_on_exit: results
@@ -36,6 +36,6 @@ jobs:
           platform_type: ansible
           disable_secrets: true
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@b20883b0cd1f46c72ae0ba6d1090936928f9fa30 # v4.32.0
+        uses: github/codeql-action/upload-sarif@0d579ffd059c29b07949a3cce3983f0780820c98 # v4.32.6
         with:
           sarif_file: report-dir/results.sarif
