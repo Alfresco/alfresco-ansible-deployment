@@ -19,6 +19,8 @@ platforms:
       - elasticsearch
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_ROLES_PATH: "../../../../roles"
   inventory:
     links:
       host_vars: host_vars

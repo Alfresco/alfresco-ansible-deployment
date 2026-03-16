@@ -21,6 +21,8 @@ platforms:
       - 0.0.0.0:8080:8080/tcp
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_ROLES_PATH: "../../../../roles"
   inventory:
     links:
       host_vars: host_vars

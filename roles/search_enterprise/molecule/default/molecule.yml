@@ -22,6 +22,8 @@ platforms:
       - search_enterprise
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_ROLES_PATH: "../../../../roles"
   ansible_args:
     - -e
     - "@../../../../tests/molecule/secrets.yml"

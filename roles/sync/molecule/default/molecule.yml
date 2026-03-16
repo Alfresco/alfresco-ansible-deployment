@@ -27,6 +27,8 @@ provisioner:
   ansible_args:
     - -e
     - "@../../../../tests/molecule/secrets.yml"
+  env:
+    ANSIBLE_ROLES_PATH: "../../../../roles"
   inventory:
     links:
       host_vars: host_vars
