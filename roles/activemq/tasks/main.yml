@@ -66,7 +66,7 @@
         - name: Handle missing sources
           ansible.builtin.debug:
             msg: Looks like the FHS directory structure is already in place
-          when: not amq_dest_dirs.results | map(attribute='stat.exists') | difference([True])
+          when: not activemq_amq_dest_dirs.results | map(attribute='stat.exists') | difference([True])
 
     - name: Remove data & configuration folder from binaries folder
       ansible.builtin.file:
