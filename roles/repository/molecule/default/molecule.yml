@@ -32,7 +32,7 @@ provisioner:
     - -e
     - "@../../../../tests/molecule/secrets.yml"
   env:
-    ANSIBLE_ROLES_PATH: "../../../../roles"
+    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
   config_options:
     defaults:
       pipelining: true

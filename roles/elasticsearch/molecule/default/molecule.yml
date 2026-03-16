@@ -20,7 +20,7 @@ platforms:
 provisioner:
   name: ansible
   env:
-    ANSIBLE_ROLES_PATH: "../../../../roles"
+    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
   inventory:
     links:
       host_vars: host_vars
