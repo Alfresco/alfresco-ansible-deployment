@@ -277,7 +277,7 @@
               re-created.
               Please reinstall from scratch :(
           when: >-
-            not repository_alf_dest_dirs.results
+            repository_alf_dest_dirs.results
             | map(attribute='stat.exists')
             | difference([True])
 
