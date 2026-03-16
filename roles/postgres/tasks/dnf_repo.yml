@@ -8,5 +8,5 @@
 # https://github.com/ansible/ansible/issues/73457
 - name: Disable the default PostgreSQL module
   ansible.builtin.command: dnf -y module disable postgresql
-  register: disable_dnf_module
-  changed_when: "'Nothing to do.' not in disable_dnf_module.stdout"
+  register: postgres_disable_dnf_module
+  changed_when: "'Nothing to do.' not in postgres_disable_dnf_module.stdout"

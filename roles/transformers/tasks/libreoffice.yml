@@ -25,13 +25,13 @@
       ansible.builtin.find:
         paths: "{{ download_location }}/LibreOffice_{{ transformers_libreoffice_version }}_Linux_{{ ansible_architecture | replace('_', '-') }}_rpm/RPMS/"
         patterns: "*.rpm"
-      register: libreoffice_rpm_files
+      register: transformers_libreoffice_rpm_files
 
     - name: Install LibreOffice RPMs
       when: transformers_pkg_format == 'rpm'
       ansible.builtin.dnf:
         state: present
-        name: "{{ libreoffice_rpm_files.files | map(attribute='path') | list }}"
+        name: "{{ transformers_libreoffice_rpm_files.files | map(attribute='path') | list }}"
         disable_gpg_check: true
 
     - name: Install LibreOffice debs

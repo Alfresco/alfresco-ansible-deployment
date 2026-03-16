@@ -58,18 +58,18 @@
 - name: Retrieve the app.config.json in the packaged application
   ansible.builtin.slurp:
     src: "{{ adf_app_config_json_path }}"
-  register: app_config_json
+  register: adf_app_app_config_json
 
 - name: Ensure that app.config.json is actually a valid json
   ansible.builtin.assert:
     that:
-      - app_config_json['content'] | b64decode | from_json
+      - adf_app_app_config_json['content'] | b64decode | from_json
     quiet: true
 
 - name: Ensure app.config.json is merged with current configuration
   become: true
   ansible.builtin.copy:
-    content: "{{ app_config_json['content'] | b64decode | from_json | ansible.builtin.combine(adf_app_merged_configuration, recursive=true) | to_nice_json }}"
+    content: "{{ adf_app_app_config_json['content'] | b64decode | from_json | ansible.builtin.combine(adf_app_merged_configuration, recursive=true) | to_nice_json }}"
     dest: "{{ adf_app_config_json_path }}"
     mode: "0644"
 

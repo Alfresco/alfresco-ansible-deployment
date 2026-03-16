@@ -8,7 +8,7 @@
     - name: Check if contentstore folder exists
       ansible.builtin.stat:
         path: "{{ cs_storage_data_folder }}"
-      register: contentstore_folder
+      register: repository_contentstore_folder
 
     - name: Create contentstore folders
       ansible.builtin.file:
@@ -17,7 +17,7 @@
         owner: root
         group: root
         mode: "0755"
-      when: not contentstore_folder.stat.exists
+      when: not repository_contentstore_folder.stat.exists
 
     - name: Mount ACS ContentStore
       vars:

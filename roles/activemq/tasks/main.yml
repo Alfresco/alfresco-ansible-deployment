@@ -3,28 +3,28 @@
   delegate_to: localhost
   ansible.builtin.stat:
     path: "{{ lookup('env', 'GITHUB_WORKSPACE') | default(lookup('env', 'PWD'), True) }}"
-  register: local_path
+  register: activemq_local_path
 
 - name: Create download location
   delegate_to: localhost
   ansible.builtin.file:
-    path: "{{ local_path.stat.path }}/downloads"
+    path: "{{ activemq_local_path.stat.path }}/downloads"
     state: directory
     mode: "0755"
-  register: download_path
+  register: activemq_download_path
 
 - name: Download ActiveMQ archive # noqa ignore-errors
   delegate_to: localhost
   ansible.builtin.get_url:
     url: "{{ activemq_url }}"
     checksum: "{{ activemq_checksum }}"
-    dest: "{{ download_path.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
+    dest: "{{ activemq_download_path.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
     mode: "0644"
   ignore_errors: true
 
 - name: Copy archive to target
   ansible.builtin.copy:
-    src: "{{ download_path.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
+    src: "{{ activemq_download_path.path }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
     dest: "{{ download_location }}/apache-activemq-{{ activemq_version }}-bin.tar.gz"
     mode: "0644"
 
@@ -59,7 +59,7 @@
         - name: Check Unix FHS dirs
           ansible.builtin.stat:
             path: "{{ item }}"
-          register: amq_dest_dirs
+          register: activemq_amq_dest_dirs
           loop:
             - "{{ config_folder }}/activemq"
             - "{{ data_folder }}/activemq"
@@ -97,7 +97,7 @@
     - name: Check if jetty-realm.properties exists for 5.x
       ansible.builtin.stat:
         path: "{{ activemq_conf }}/jetty-realm.properties"
-      register: jetty_realm_file
+      register: activemq_jetty_realm_file
 
     - name: Configure ActiveMQ users
       ansible.builtin.lineinfile:
@@ -125,7 +125,7 @@
         owner: "{{ username }}"
         group: "{{ group_name }}"
       no_log: true
-      when: jetty_realm_file.stat.exists
+      when: activemq_jetty_realm_file.stat.exists
 
     - name: Change location of ActiveMQ logs
       vars:

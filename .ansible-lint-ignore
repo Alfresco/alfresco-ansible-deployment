@@ -2,3 +2,11 @@ roles/common/vars/Debian.yml var-naming[no-role-prefix]
 roles/common/vars/RedHat.yml var-naming[no-role-prefix]
 roles/common/vars/main.yml var-naming[no-role-prefix]
 roles/common/defaults/main.yml var-naming[no-role-prefix]
+
+roles/repository/tasks/main.yml role-name[path]
+roles/sfs/tasks/main.yml role-name[path]
+roles/trouter/tasks/main.yml role-name[path]
+roles/transformers/tasks/main.yml role-name[path]
+
+playbooks/search_replication.yml role-name[path]
+playbooks/acs.yml role-name[path]

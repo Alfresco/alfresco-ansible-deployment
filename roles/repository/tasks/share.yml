@@ -2,7 +2,7 @@
 - name: Configure identity service properties when available
   when: repository_identity_url
   ansible.builtin.set_fact:
-    share_aims_properties:
+    repository_share_aims_properties:
       enabled: "true"
       realm: "{{ repository_identity_realm }}"
       resource: "{{ repository_identity_client_id }}"

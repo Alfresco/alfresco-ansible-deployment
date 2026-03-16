@@ -714,9 +714,9 @@
       </cookie>
    </config>
    -->
-{% if share_aims_properties is defined %}
+{% if repository_share_aims_properties is defined %}
    <config evaluator="string-compare" condition="AIMS">
-      {% for key, value in share_aims_properties.items() %}
+      {% for key, value in repository_share_aims_properties.items() %}
       <{{ key }}>{{ value }}</{{ key }}>
       {% endfor %}
    </config>
