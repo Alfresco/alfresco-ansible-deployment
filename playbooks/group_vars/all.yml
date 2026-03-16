@@ -28,13 +28,13 @@ nexus_repository:
 
 acs_play_java_core: "{{ acs_play_java_version.split('+')[0] }}"
 acs_play_java_major: "{{ acs_play_java_core.split('.')[0] }}"
-acs_play_default_truststore_type: "{% if acs_play_java_major | int >= 21 %}pkcs12{% else %}JCEKS{% endif %}"
+acs_play_default_truststore_type: "{{ 'PKCS12' if acs_play_java_major | int >= 21 else 'JCEKS' }}"
 
 acs_play_repository_acs_edition: Enterprise
 
 acs_play_skip_upgrade_checks: false
 
-default_jdbc_pg_driver_version: 42.7.8
+default_jdbc_pg_driver_version: 42.7.9
 default_jdbc_pg_driver_base_url: https://repo.maven.apache.org/maven2/org/postgresql/postgresql
 default_jdbc_pg_driver_url: >-
   {{ '{0}/{1}/postgresql-{1}.jar'.format(default_jdbc_pg_driver_base_url, default_jdbc_pg_driver_version) }}
