@@ -1,7 +1,7 @@
 ---
 # defaults file for search_enterprise
 search_enterprise_port: 8081
-# see https://support.hyland.com/r/Alfresco/Alfresco-Search-Enterprise/4.2/Alfresco-Search-Enterprise/Administer
+# see https://support.hyland.com/r/Alfresco/Alfresco-Search-Enterprise/5.4/Alfresco-Search-Enterprise/Administer
 search_enterprise_reindex_options: ''
 
 search_enterprise_artifact_name: alfresco-elasticsearch-connector-distribution

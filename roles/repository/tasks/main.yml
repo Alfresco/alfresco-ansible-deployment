@@ -90,8 +90,8 @@
       - url: "{{ repository_api_explorer_archive_url }}"
         checksum: "{{ repository_api_explorer_archive_checksum }}"
         dest: "{{ repository_content_folder }}/web-server/webapps/api-explorer.war"
-        url_username:: "{{ repository_api_explorer_nexus_username }}"
-        url_password:: "{{ repository_api_explorer_nexus_password }}"
+        url_username: "{{ repository_api_explorer_nexus_username }}"
+        url_password: "{{ repository_api_explorer_nexus_password }}"
   when: repository_api_explorer_enabled
 
 - name: Download war files
