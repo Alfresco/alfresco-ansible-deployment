@@ -19,6 +19,8 @@ platforms:
       - transformers
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
   config_options:
     defaults:
       pipelining: True

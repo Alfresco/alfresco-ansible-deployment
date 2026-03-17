@@ -28,6 +28,8 @@ platforms:
       - activemq
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
   ansible_args:
     - -e
     - "@../../../../tests/molecule/secrets.yml"
