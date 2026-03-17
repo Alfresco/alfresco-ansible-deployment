@@ -9,7 +9,7 @@ jinja2 = "==3.1.6"
 jmespath = "==1.1.0"
 
 [dev-packages]
-ansible-lint = "==25.5.0"
+ansible-lint = "==26.3.0"
 molecule = "==26.3.0"
 molecule-plugins = {extras = ["docker","ec2"], version = "25.8.12"}
 boto3 = ">=1.39.13"

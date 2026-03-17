@@ -16,17 +16,17 @@
   block:
     - name: Initialize temporary accumulator
       ansible.builtin.set_fact:
-        temp_array: []
+        repository_temp_array: []
 
     - name: Set solr.sharedSecret property when search secret is available
       ansible.builtin.set_fact:
-        temp_array: >-
-          {{ temp_array + [ '-Dsolr.sharedSecret=' ~ reposearch_shared_secret | quote ] }}
+        repository_temp_array: >-
+          {{ repository_temp_array + [ '-Dsolr.sharedSecret=' ~ reposearch_shared_secret | quote ] }}
       when: reposearch_shared_secret is defined
 
     - name: Set metadata-keystore.password and related properties
       ansible.builtin.set_fact:
-        temp_array: "{{ temp_array + [
+        repository_temp_array: "{{ repository_temp_array + [
           '-Dmetadata-keystore.password=' ~ repo_custom_keystore_password | quote,
           '-Dmetadata-keystore.aliases=metadata',
           '-Dmetadata-keystore.metadata.password=' ~ repo_custom_keystore_metadata_password | quote
@@ -37,9 +37,9 @@
 
     - name: Combine secure acs environment
       ansible.builtin.set_fact:
-        acs_secure_environment:
-          JAVA_TOOL_OPTIONS: "{{ temp_array }}"
-      when: temp_array|length > 0
+        repository_acs_secure_environment:
+          JAVA_TOOL_OPTIONS: "{{ repository_temp_array }}"
+      when: repository_temp_array|length > 0
 
 - name: Install curl except Redhat 9
   become: true
@@ -106,7 +106,7 @@
     owner: "{{ username }}"
     group: "{{ group_name }}"
     mode: "0644"
-  register: war_download_result
+  register: repository_war_download_result
   async: 900
   no_log: true
   poll: 0
@@ -123,7 +123,7 @@
     url_password: "{{ repository_acs_nexus_password }}"
     checksum: "{{ repository_acs_archive_checksum }}"
     mode: "0644"
-  register: distribution_download_result
+  register: repository_distribution_download_result
   async: 1800
   poll: 0
   tags:
@@ -141,7 +141,7 @@
     mode: 'u=rw,g=r,o=r'
     url_username: "{{ item.url_username }}"
     url_password: "{{ item.url_password }}"
-  register: amp_download_result
+  register: repository_amp_download_result
   async: 900
   when: item.enabled | default(true) # when adding additional amp no need to specify enabled
   poll: 0
@@ -159,7 +159,7 @@
     mode: 'u=rw,g=r,o=r'
     owner: "{{ username }}"
     group: "{{ group_name }}"
-  register: postgresql_download
+  register: repository_postgresql_download
   when: repository_jdbc_driver_class == 'org.postgresql.Driver'
   async: 900
   poll: 0
@@ -168,11 +168,11 @@
 
 - name: Verifying if the distribution zip finished downloading
   ansible.builtin.async_status:
-    jid: "{{ distribution_download_result.ansible_job_id }}"
-  until: job_result.finished
+    jid: "{{ repository_distribution_download_result.ansible_job_id }}"
+  until: repository_distribution_download_result.finished
   delay: 10
   retries: 180
-  register: job_result
+  register: repository_distribution_download_result
   tags:
     - molecule-idempotence-notest
 
@@ -219,7 +219,7 @@
         group: "{{ group_name }}"
       loop: >-
         {{ repository_acs_environment
-        | ansible.builtin.combine(acs_secure_environment
+        | ansible.builtin.combine(repository_acs_secure_environment
         | default(None), list_merge='prepend')
         | dict2items }}
 
@@ -257,7 +257,7 @@
         - name: Check Unix FHS dirs
           ansible.builtin.stat:
             path: "{{ item }}"
-          register: alf_dest_dirs
+          register: repository_alf_dest_dirs
           loop:
             - "{{ repository_content_folder }}/amps_repo/alfresco-share-services.amp"
             - "{{ repository_content_data_folder }}/keystore/"
@@ -266,7 +266,7 @@
           ansible.builtin.debug:
             msg: Looks like the FHS directory structure is already in place
           when: >-
-            not alf_dest_dirs.results
+            not repository_alf_dest_dirs.results
             | map(attribute='stat.exists')
             | difference([True])
         - name: Fail on unexcepted FHS inconsistency
@@ -277,7 +277,7 @@
               re-created.
               Please reinstall from scratch :(
           when: >-
-            alf_dest_dirs.results
+            repository_alf_dest_dirs.results
             | map(attribute='stat.exists')
             | difference([True])
 
@@ -362,7 +362,7 @@
 
     - name: Initialize accumulator for dynamic properties
       ansible.builtin.set_fact:
-        dynamic_properties: {}
+        repository_dynamic_properties: {}
 
     - name: Configure identity service when available
       when: repository_identity_url
@@ -377,14 +377,14 @@
           # Do not try to merge with the previous `identity-service` or you will regret it
           identity-service.auth-server-url: "{{ repository_identity_url }}"
       ansible.builtin.set_fact:
-        dynamic_properties: "{{ dynamic_properties | ansible.builtin.combine(sso_repository_properties) }}"
+        repository_dynamic_properties: "{{ repository_dynamic_properties | ansible.builtin.combine(sso_repository_properties) }}"
 
     - name: Create alfresco-global.properties main snippet
       vars:
         merged_repository_properties: >-
           {{ repository_default_properties
           | ansible.builtin.combine(repository_properties | default(None))
-          | ansible.builtin.combine(dynamic_properties) }}
+          | ansible.builtin.combine(repository_dynamic_properties) }}
       ansible.builtin.template:
         owner: "{{ username }}"
         group: "{{ group_name }}"
@@ -434,11 +434,11 @@
   become: true
   ansible.builtin.async_status:
     jid: "{{ item.ansible_job_id }}"
-  register: job_result
-  until: job_result.finished
+  register: repository_amp_job_result
+  until: repository_amp_job_result.finished
   delay: 1
   retries: 300
-  loop: "{{ amp_download_result.results }}"
+  loop: "{{ repository_amp_download_result.results }}"
   when: item.item.enabled | default(true)
   tags:
     - molecule-idempotence-notest
@@ -447,7 +447,7 @@
 
 - name: Generate checksum of current amps configuration
   ansible.builtin.set_fact:
-    current_amps_checksum: >-
+    repository_current_amps_checksum: >-
       {{
         (repository_amp_downloads + repository_extra_amp_downloads)
         | map('dict2items')
@@ -461,26 +461,26 @@
   become: true
   ansible.builtin.slurp:
     src: "{{ repository_amps_checksum_file }}"
-  register: existing_amps_checksum_file_response
+  register: repository_existing_amps_checksum_file_response
   ignore_errors: true
 
 - name: Check if amps installation is needed
   ansible.builtin.set_fact:
-    amps_apply_needed: "{{ current_amps_checksum != (existing_amps_checksum_file_response.content | b64decode | trim) }}"
-  when: existing_amps_checksum_file_response is succeeded
+    repository_amps_apply_needed: "{{ repository_current_amps_checksum != (repository_existing_amps_checksum_file_response.content | b64decode | trim) }}"
+  when: repository_existing_amps_checksum_file_response is succeeded
 
 - name: Install amps on alfresco and share war files
   become: true
   ansible.builtin.command:
     cmd: "{{ repository_content_folder }}/bin/apply_amps.sh -nobackup -force"
-  register: mmt_install
+  register: repository_mmt_install
   changed_when: true
-  when: amps_apply_needed | default(true)
+  when: repository_amps_apply_needed | default(true)
 
 - name: Write amps checksum to status file
   become: true
   ansible.builtin.copy:
-    content: "{{ current_amps_checksum }}"
+    content: "{{ repository_current_amps_checksum }}"
     dest: "{{ repository_amps_checksum_file }}"
     owner: "{{ username }}"
     group: "{{ group_name }}"
@@ -489,9 +489,9 @@
 - name: Check on postgres download async task
   become: true
   ansible.builtin.async_status:
-    jid: "{{ postgresql_download.ansible_job_id }}"
-  register: job_result
-  until: job_result.finished
+    jid: "{{ repository_postgresql_download.ansible_job_id }}"
+  register: repository_postgresql_job_result
+  until: repository_postgresql_job_result.finished
   delay: 1
   retries: 300
   when: repository_db_url == ""
@@ -502,11 +502,11 @@
   become: true
   ansible.builtin.async_status:
     jid: "{{ item.ansible_job_id }}"
-  register: job_result
-  until: job_result.finished
+  register: repository_war_job_result
+  until: repository_war_job_result.finished
   delay: 2
   retries: 300
-  loop: "{{ war_download_result.results }}"
+  loop: "{{ repository_war_download_result.results }}"
   tags:
     - molecule-idempotence-notest
   loop_control:

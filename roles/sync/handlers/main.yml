@@ -19,7 +19,7 @@
 - name: Wait-alfresco-sync-ready
   ansible.builtin.uri:
     url: "http://127.0.0.1:{{ ports_cfg.sync.http }}/alfresco/healthcheck"
-  register: result
-  until: result.status == 200
+  register: sync_result
+  until: sync_result.status == 200
   retries: 12
   delay: 10
