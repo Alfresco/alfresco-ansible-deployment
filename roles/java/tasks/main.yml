@@ -7,7 +7,7 @@
     checksum: "{{ java_checksum }}"
     timeout: 570
     mode: "0644"
-  retries: 5
+  retries: 10
   delay: 60
   register: java_download
   until: java_download is not failed
