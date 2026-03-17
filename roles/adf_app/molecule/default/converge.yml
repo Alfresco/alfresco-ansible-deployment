@@ -2,10 +2,10 @@
 - name: Converge
   hosts: all
   vars:
-    acc_v: 9.3.0
+    acc_v: 10.3.0
     acc_id: alfresco-control-center
     acc_repo: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
-    adw_v: 5.3.0
+    adw_v: 7.3.0
     adw_id: alfresco-digital-workspace
     adw_repo: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
   tasks:
