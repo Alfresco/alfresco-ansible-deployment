@@ -27,7 +27,4 @@ RUN set -xe \
   && groupadd -r ${DEPLOY_GROUP} \
   && useradd -m -g ${DEPLOY_GROUP} ${DEPLOY_USER} \
   && usermod -aG ${SUDO_GROUP} ${DEPLOY_USER} \
-  && sed -i "/^%${SUDO_GROUP}/s/ALL\$/NOPASSWD:ALL/g" /etc/sudoers \
-  && for f in /etc/pam.d/system-auth /etc/pam.d/password-auth /etc/pam.d/sudo /etc/pam.d/sudo-i; do \
-       [ -f "$f" ] && sed -i '/pam_sss\.so/d' "$f" || true; \
-     done
+  && sed -i "/^%${SUDO_GROUP}/s/ALL\$/NOPASSWD:ALL/g" /etc/sudoers

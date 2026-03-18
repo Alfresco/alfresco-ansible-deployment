@@ -78,9 +78,16 @@ jobs:
       fail-fast: false
       matrix:
         molecule_distro:
+          - image: ubuntu:24.04
           - image: rockylinux/rockylinux:9.7
         role:
+          - name: adf_app
+          - name: search_enterprise
           - name: repository
+          - name: sfs
+          - name: sync
+          - name: trouter
+          - name: audit_storage
     steps:
       - name: Share var with further reusable workflows
         id: jobvars
@@ -111,6 +118,13 @@ jobs:
         with:
           cache-name: enterprise
 
+      - name: Disable unix-chkpwd AppArmor profile
+        run: |
+          if sudo aa-status --enabled 2>/dev/null; then
+            sudo ln -sf /etc/apparmor.d/unix-chkpwd /etc/apparmor.d/disable/
+            sudo apparmor_parser -R /etc/apparmor.d/unix-chkpwd 2>/dev/null || true
+          fi
+
       - name: Run tests
         env:
           MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
@@ -121,13 +135,7 @@ jobs:
           timeout_minutes: 60
           max_attempts: 3
           retry_wait_seconds: 10
-          command: cd roles/${{ matrix.role.name }} && pipenv run molecule converge
-
-      - name: Setup tmate session
-        if: always()
-        uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: true
+          command: cd roles/${{ matrix.role.name }} && pipenv run molecule test
 
   docker_integration:
     name: Test ${{ matrix.scenario.name }} scenario on ${{ matrix.molecule_distro.image }}
