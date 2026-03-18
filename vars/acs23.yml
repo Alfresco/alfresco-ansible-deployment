@@ -1,6 +1,7 @@
 supported_os:
   RedHat:
     versions:
+      - 9.7
       - 9.5
       - 9.4
       - 9.3
@@ -8,6 +9,7 @@ supported_os:
       - 8.9
   Rocky:
     versions:
+      - 9.7
       - 9.5
       - 9.4
       - 9.3
