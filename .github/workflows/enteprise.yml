@@ -79,7 +79,7 @@ jobs:
       matrix:
         molecule_distro:
           - image: ubuntu:24.04
-          - image: rockylinux/rockylinux:9.5
+          - image: rockylinux/rockylinux:9.7
         role:
           - name: adf_app
           - name: search_enterprise
@@ -139,7 +139,7 @@ jobs:
       matrix:
         molecule_distro:
           - image: ubuntu:24.04
-          - image: rockylinux/rockylinux:9.5
+          - image: rockylinux/rockylinux:9.7
         scenario:
           - name: pki
           - name: elasticsearch
@@ -151,7 +151,7 @@ jobs:
           - scenario:
               name: docker_enterprise
             molecule_distro:
-              image: rockylinux/rockylinux:9.5
+              image: rockylinux/rockylinux:9.7
             runner: ubuntu-24.04-arm
           - scenario:
               name: docker_enterprise
@@ -198,13 +198,13 @@ jobs:
             desc: EC2 ACS 26.x Community (Ubuntu 24.04)
           - name: default
             vars: vars-rocky9.yml
-            desc: EC2 ACS 23.x (Rocky Linux 9.5)
+            desc: EC2 ACS 23.x (Rocky Linux 9.7)
           - name: multimachine
             vars: vars.yml
-            desc: EC2 ACS 26.x clustered (RHEL 9.5)
+            desc: EC2 ACS 26.x clustered (RHEL 9.7)
           - name: opensearch
             vars: vars.yml
-            desc: EC2 ACS 26.x opensearch (RHEL 9.5)
+            desc: EC2 ACS 26.x opensearch (RHEL 9.7)
     env:
       AWS_REGION: eu-west-1
       MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
