@@ -81,6 +81,13 @@ jobs:
         with:
           cache-name: ${{ inputs.galaxy_cache }}
 
+      - name: Disable unix-chkpwd AppArmor profile
+        run: |
+          if sudo aa-status --enabled 2>/dev/null; then
+            sudo ln -sf /etc/apparmor.d/unix-chkpwd /etc/apparmor.d/disable/
+            sudo apparmor_parser -R /etc/apparmor.d/unix-chkpwd 2>/dev/null || true
+          fi
+
       - name: Run tests
         env:
           MOLECULE_ROLE_IMAGE: ${{ inputs.os_distribution }}

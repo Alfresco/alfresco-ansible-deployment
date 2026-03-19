@@ -56,7 +56,7 @@ jobs:
         molecule_distro:
           - image: ubuntu:24.04
           - image: ubuntu:22.04
-          - image: rockylinux/rockylinux:9.5
+          - image: rockylinux/rockylinux:9.7
         role:
           - name: activemq
           - name: common
@@ -97,6 +97,13 @@ jobs:
         with:
           cache-name: community
 
+      - name: Disable unix-chkpwd AppArmor profile
+        run: |
+          if sudo aa-status --enabled 2>/dev/null; then
+            sudo ln -sf /etc/apparmor.d/unix-chkpwd /etc/apparmor.d/disable/
+            sudo apparmor_parser -R /etc/apparmor.d/unix-chkpwd 2>/dev/null || true
+          fi
+
       - name: Run tests
         env:
           MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
@@ -116,7 +123,7 @@ jobs:
       matrix:
         molecule_distro:
           - image: ubuntu:22.04
-          - image: rockylinux/rockylinux:9.5
+          - image: rockylinux/rockylinux:9.7
         scenario:
           - name: docker_community
     uses: ./.github/workflows/docker.yml
