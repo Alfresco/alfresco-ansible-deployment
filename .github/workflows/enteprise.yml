@@ -25,6 +25,7 @@ env:
   BUILD_NUMBER: ${{ github.run_id }}
   PY_COLORS: 1
   PYTHONUNBUFFERED: 1
+  PIPENV_IGNORE_VIRTUALENVS: 1
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
