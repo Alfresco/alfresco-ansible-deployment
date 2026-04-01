@@ -33,4 +33,6 @@ jobs:
           path: ~/.cache/pre-commit
           key: ${{ runner.os }}-precommit-${{ hashFiles('.pre-commit-config.yaml') }}
 
-      - uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
+      - uses: Alfresco/alfresco-build-tools/.github/actions/pre-commit@OPSEXP-3813-pre-commit-fork
+        with:
+          python-version: ${{ steps.setup-python.outputs.python-version }}
