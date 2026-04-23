@@ -21,7 +21,7 @@ permissions:
 
 jobs:
   publish:
-    uses: Alfresco/jekyll-build-tools/.github/workflows/jekyll-publish.yml@b1cb3d46b496b55d93e3e59d3c2c0584fbe21864
+    uses: Alfresco/jekyll-build-tools/.github/workflows/jekyll-publish.yml@2d1b48e5abd8d2defeda1d0adc2096a8e29d6cda
     with:
       working-directory: docs
       publish: ${{ github.event_name == 'push' && github.ref_name == 'master' }}
