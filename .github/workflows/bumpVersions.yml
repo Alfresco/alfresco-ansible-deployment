@@ -67,7 +67,7 @@ jobs:
         run: |
           for version_file in .github/updatecli/updatecli_maven_*_values.yml; do
             echo ">>> Running updatecli_maven pipeline for version file: $version_file"
-            updatecli apply --config .github/updatecli/updatecli_maven.tpl \
+            updatecli pipeline apply --config .github/updatecli/updatecli_maven.tpl \
               -v alfresco-updatecli/deployments/values/supported-matrix.yaml \
               -v .github/updatecli/updatecli_maven_values.yml \
               -v $version_file
@@ -75,7 +75,7 @@ jobs:
 
           for version_file in .github/updatecli/updatecli_maven_v*_values.yml; do
             echo ">>> Running updatecli_amps pipeline for version file: $version_file"
-            updatecli apply --config .github/updatecli/updatecli_amps.tpl \
+            updatecli pipeline apply --config .github/updatecli/updatecli_amps.tpl \
               -v .github/updatecli/updatecli_amps_values.yml \
               -v $version_file
           done
@@ -88,8 +88,9 @@ jobs:
       - name: Updatecli apply for AMIs
         if: inputs.update-type == 'ami' || github.event_name == 'schedule'
         shell: bash
-        run: |
-          updatecli apply --config .github/updatecli/updatecli_amis.tpl \
+        run: >-
+          updatecli pipeline apply
+            --config .github/updatecli/updatecli_amis.tpl
             -v .github/updatecli/updatecli_amis_values.yml
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
