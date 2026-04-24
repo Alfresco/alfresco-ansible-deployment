@@ -18,12 +18,6 @@ artifacts:
     artifact_version_key: $.search_enterprise_version
     ansible_version_file: roles/search_enterprise/defaults/main.yml
     updatecli_matrix_component_key: search-enterprise
-  alfresco-search-services:
-    artifact_name_file: roles/search/defaults/main.yml
-    artifact_name_key: $.search_flavor
-    artifact_version_key: $.search_version
-    ansible_version_file: roles/search/defaults/main.yml
-    updatecli_matrix_component_key: search
   alfresco-sync-service:
     artifact_name_file: roles/sync/defaults/main.yml
     artifact_name_key: $.sync_artifact_name
