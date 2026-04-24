@@ -5,8 +5,8 @@ run-name: Bump ${{ inputs.update-type || github.event_name }} using alfresco-upd
 on:
   schedule:
     - cron: '52 6 * * 1'
-  push:
-    branches-ignore:
+  pull_request:
+    branches:
       - 'master'
     paths:
       - .github/workflows/bumpVersions.yml
