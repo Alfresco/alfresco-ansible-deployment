@@ -21,7 +21,7 @@ on:
   workflow_dispatch:
 
 env:
-  DTAS_VERSION: v1.7.3
+  DTAS_VERSION: v1.7.4
   BUILD_NUMBER: ${{ github.run_id }}
   PY_COLORS: 1
   PYTHONUNBUFFERED: 1
