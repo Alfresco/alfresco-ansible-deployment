@@ -11,3 +11,6 @@ artifacts:
     artifact_name_key: $.acs_play_community_repository_acs_artifact_name
     artifact_version_key: $.acs_play_community_repository_acs_version
     updatecli_matrix_component_key: acs
+  # not supported anymore since 26.x for Enterprise
+  alfresco-search-services:
+    updatecli_matrix_component_key: false

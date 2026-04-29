@@ -4,21 +4,24 @@
   become: true
   gather_facts: true
   vars:
-    tomcat_version: "11.0.18"
     config_folder: "/etc/opt/alfresco"
     binaries_folder: "/opt/alfresco"
     username: "alfresco"
   tasks:
+  - name: Load role defaults
+    ansible.builtin.include_vars:
+      file: "../../defaults/main.yml"
+
   - name: Gather service facts
     ansible.builtin.service_facts:
 
-  - name: Ensure catalina.sh exists, fail if missing
+  - name: Ensure catalina.sh exists in /opt/apache-tomcat-{{ tomcat_version }}/bin
     ansible.builtin.stat:
       path: "/opt/apache-tomcat-{{ tomcat_version }}/bin/catalina.sh"
-    register: catalina_file
-    failed_when: not catalina_file.stat.exists
+    register: tomcat_catalina_file
+    failed_when: not tomcat_catalina_file.stat.exists
 
-  - name: Check Tomcat version matches expected
+  - name: Check Tomcat version matches expected {{ tomcat_version }}
     ansible.builtin.shell: |
       . {{ config_folder }}/setenv.sh && $TOMCAT_HOME/bin/catalina.sh version
     register: tomcat_version_output
@@ -34,7 +37,7 @@
 
   - name: Fetch Catalina environment
     ansible.builtin.command: "{{ binaries_folder }}/tomcat.sh configtest"
-    register: catalina_env_output
+    register: tomcat_catalina_env_output
     become: true
     become_user: "{{ username }}"
     changed_when: false
@@ -42,12 +45,12 @@
   - name: Assert CATALINA_HOME is correct
     ansible.builtin.fail:
       msg: "CATALINA_HOME not set properly"
-    when: "'/opt/apache-tomcat-' ~ tomcat_version not in catalina_env_output.stderr"
+    when: "'/opt/apache-tomcat-' ~ tomcat_version not in tomcat_catalina_env_output.stderr"
 
   - name: Assert CATALINA_BASE is correct
     ansible.builtin.fail:
       msg: "CATALINA_BASE not set properly"
-    when: config_folder ~ '/tomcat' not in catalina_env_output.stderr
+    when: config_folder ~ '/tomcat' not in tomcat_catalina_env_output.stderr
 
   - name: Assert alfresco-content service is running and enabled
     ansible.builtin.assert:
