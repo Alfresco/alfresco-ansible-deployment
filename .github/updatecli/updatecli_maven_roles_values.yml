@@ -36,7 +36,7 @@ artifacts:
     artifact_name_key: $.transformers_pdf_artifact_name
     artifact_version_key: $.transformers_pdf_version
     ansible_version_file: roles/transformers/defaults/main.yml
-    updatecli_matrix_component_key: alfresco-pdf-renderer
+    updatecli_matrix_component_key: pdf-renderer
   alfresco-transform-router:
     artifact_name_file: roles/trouter/defaults/main.yml
     artifact_name_key: $.trouter_artifact_name
