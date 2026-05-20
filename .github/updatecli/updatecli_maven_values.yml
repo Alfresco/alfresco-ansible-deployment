@@ -63,3 +63,8 @@ artifacts:
     artifact_name_key: $.acs_play_sfs_artifact_name
     artifact_version_key: $.acs_play_sfs_version
     updatecli_matrix_component_key: sfs
+  alfresco-pdf-renderer:
+    artifact_name_file: playbooks/group_vars/transformers.yml
+    artifact_name_key: $.acs_play_transformers_pdf_artifact_name
+    artifact_version_key: $.acs_play_transformers_pdf_version
+    updatecli_matrix_component_key: pdf-renderer
