@@ -192,12 +192,6 @@ jobs:
       matrix:
         molecule_scenario:
           - name: default
-            vars: vars-ubuntu22-74.yml
-            desc: EC2 ACS 7.4 (Ubuntu 22.04)
-          - name: default
-            vars: vars-rocky8.yml
-            desc: EC2 ACS 7.4 (Rocky Linux 8.10)
-          - name: default
             vars: vars-rhel8.yml
             desc: EC2 ACS 25 (RHEL 8.10)
           - name: default

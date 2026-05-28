@@ -26,10 +26,6 @@ targets:
     file: molecule/default/vars-rhel8.yml
     key: $.MOLECULE_IT_IMAGE_ID
     source: rhel8
-  molecule_default_rocky8:
-    file: molecule/default/vars-rocky8.yml
-    key: $.MOLECULE_IT_IMAGE_ID
-    source: rl8
   molecule_default_rocky9:
     file: molecule/default/vars-rocky9.yml
     key: $.MOLECULE_IT_IMAGE_ID
@@ -38,10 +34,6 @@ targets:
     file: molecule/default/vars-ubuntu-community.yml
     key: $.MOLECULE_IT_IMAGE_ID
     source: ub24
-  molecule_default_ubuntu22_74:
-    file: molecule/default/vars-ubuntu22-74.yml
-    key: $.MOLECULE_IT_IMAGE_ID
-    source: ub22
   molecule_multimachine:
     file: molecule/multimachine/vars.yml
     key: $.MOLECULE_IT_IMAGE_ID
