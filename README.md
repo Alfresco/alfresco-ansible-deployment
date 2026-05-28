@@ -207,7 +207,7 @@ Follow the checklist:
 
 1. Review currently open dependabot/renovate and merge them.
 2. For minor releases, ensure to update the links beginning with
-  `https://support.hyland.com/r/Alfresco` to reflect the latest version or
+  `https://docs.hyland.com/p/alfresco` to reflect the latest version or
   corresponding minor update documentation.
 3. In case of a new ACS major version, create new vars/acsXX.yml file. Remember to move community related vars to the new file.
 4. Always check the no changes are left under the "Unreleased version" section
