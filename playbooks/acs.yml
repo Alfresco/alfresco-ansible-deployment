@@ -599,7 +599,6 @@
   hosts: acc
   gather_facts: false
   vars:
-    acs_version_requirement: "{{ acs_play_repository_acs_version is version('7.4', 'ge') }}"
     acc_sum: >-
       {% set raw = lookup(
           'url',
@@ -610,7 +609,6 @@
       {{ acs_play_acc_checksum.split(':', 1)[0] }}:{{ raw.split()[0] }}
   roles:
     - role: "../roles/adf_app"
-      when: acs_version_requirement
       adf_app_name: alfresco-control-center
       adf_app_context: /control-center/
       adf_app_port: 8881
@@ -624,7 +622,6 @@
         }}
   post_tasks:
     - name: Update installation status file with ACC
-      when: acs_version_requirement
       become: true
       vars:
         acc_components:

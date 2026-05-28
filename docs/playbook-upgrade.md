@@ -6,6 +6,13 @@ title: Upgrading the playbook
 
 ## Unreleased version
 
+### Removing ACS 7.4 support
+
+* ACS 7.4 support has been removed from the repository because the release is now
+  end of life.
+* The dedicated version vars, updatecli entries, and molecule coverage for ACS 7.4
+  are no longer shipped.
+
 ### Making roles independent part 2 (future release)
 
 * The goal is to ensure that all roles are completely independent

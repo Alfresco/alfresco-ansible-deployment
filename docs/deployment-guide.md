@@ -452,7 +452,7 @@ The following systemd services are deployed and can be used to stop and start Al
 | Service Name                              | Purpose                                                                                 |
 |:------------------------------------------|:----------------------------------------------------------------------------------------|
 | `activemq.service`                        | ActiveMQ Service                                                                        |
-| `postgresql-<version>.service`            | Postgresql DB Service (where `<version>` is 15 for ACS 23 and 14 for 7.4)       |
+| `postgresql-<version>.service`            | Postgresql DB Service (where `<version>` matches the supported ACS stack, e.g. 17 for ACS 26, 16 for ACS 25, or 15 for ACS 23)       |
 | `nginx.service`                           | Nginx Service                                                                           |
 | `alfresco-content.service`                | Alfresco Content Service                                                                |
 | `alfresco-search.service`                 | Alfresco Search Service                                                                 |
@@ -928,12 +928,6 @@ To deploy ACS 23.1 Enterprise on the local machine navigate to the folder you ex
 pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml
 ```
 
-Alternatively, to deploy an ACS Enterprise 7.4 system use the following command:
-
-```bash
-pipenv run ansible-playbook playbooks/acs.yml -i inventory_local.yml -e "acs_play_major_version=74"
-```
-
 Or to deploy ACS Community use the following command:
 
 ```bash
@@ -1024,12 +1018,6 @@ To deploy latest ACS Enterprise on the target host execute the playbook as the c
 
 ```bash
 pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml
-```
-
-Alternatively, to deploy an ACS 7.4 Enterprise system use the following command:
-
-```bash
-pipenv run ansible-playbook playbooks/acs.yml -i inventory_ssh.yml -e "acs_play_major_version=74"
 ```
 
 Or to deploy latest ACS Community use the following command:
@@ -1260,7 +1248,7 @@ This playbook will uninstall the sevices which belong to the specific hosts. Bel
    * alfresco-content.service
    * nginx.service
    * activemq.service
-   * postgresql-`version`.service (where `version` is 15 for ACS 23 and 14 for 7.4)
+   * postgresql-`version`.service (where `version` matches the supported ACS stack, e.g. 17 for ACS 26, 16 for ACS 25, or 15 for ACS 23)
 
 2. Remove the following packages:
    * ImageMagick
