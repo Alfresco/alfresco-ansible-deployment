@@ -201,7 +201,7 @@ jobs:
             vars: vars-rhel8.yml
             desc: EC2 ACS 25 (RHEL 8.10)
           - name: default
-            vars: vars-ubuntu22.yml
+            vars: vars-ubuntu24.yml
             desc: EC2 ACS 26.x Community (Ubuntu 24.04)
           - name: default
             vars: vars-rocky9.yml
