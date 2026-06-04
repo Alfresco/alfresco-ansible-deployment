@@ -32,13 +32,13 @@ component (at the time of writing it's only hotfix upgrades for ACS repository)
 
 There are different kinds of upgrade one may want to roll out. For example a
 major upgrade would be upgrading from 25.x to 26.x. A minor upgrade (or
-service pack upgrade) would be moving from 26.1 to 26.2. Both major and minor
+service pack upgrade) would be moving from 25.1 to 25.2. Both major and minor
 upgrades require setting up a new environment, migrating data and customizations
 from the source environment to the target one. The main reason behind this
 limitation is that major upgrades usually come with underlying software stack
 changes. These migrations cannot be done "in-place".
 
-Alfresco also releases hotfixes - upgrading from 26.1.0 to 26.2.1 - which
+Alfresco also releases hotfixes (upgrading from 25.2.0 to 25.2.1). These
 upgrades can be done "in-place" and are supported by the playbook.
 
 > Please note that "in-place" upgrade still need to match the upgrade pre-requisites
@@ -49,19 +49,19 @@ In order to apply a later hotfix, you need to first match the pre-requisites,
 then change the ACS version to point to the hotfix version in the appropriate
 file, and finally run the playbook again.
 
-In the example below we want to upgrade from the initial 26.2.0 installation to
-26.2.1 patch:
+In the example below we want to upgrade from the initial 25.2.0 installation to
+25.2.1 patch:
 
 Edit `vars/acs26.yml` (or other vars file used before) and change below snippet:
 
 ```yaml
-acs_play_repository_acs_version: 26.2.0
+acs_play_repository_acs_version: 25.2.0
 ```
 
 to:
 
 ```yaml
-acs_play_repository_acs_version: 26.2.1
+acs_play_repository_acs_version: 25.2.1
 ```
 
 > **IMPORTANT:** make sure you do not set the version to a version number that's not

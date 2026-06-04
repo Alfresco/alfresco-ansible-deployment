@@ -41,7 +41,7 @@ molecule test -s local
 
 - `playbooks/` - Main playbooks (acs.yml, pki.yml, platform-restart.yml, etc.)
 - `roles/` - 17 Ansible roles, each with own `molecule/` tests
-- `vars/acs*.yml` - Version-specific variables per ACS release (acs23, acs25, acs26, acs74)
+- `vars/acs*.yml` - Version-specific variables per ACS release (acs23, acs25, acs26)
 - `molecule/` - Root-level integration test scenarios (default=EC2, docker_community, docker_enterprise, multimachine, etc.)
 - `group_vars/` - Inventory group variables
 - `docs/` - GitHub Pages documentation (Jekyll)

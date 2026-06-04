@@ -1262,7 +1262,8 @@ This playbook will uninstall the sevices which belong to the specific hosts. Bel
    * activemq.service
    * postgresql-`version`.service
 
-    > Pick the PostgreSQL version you have installed by checking in `vars/acsXX.yml` file
+    > Pick the PostgreSQL version you have installed by checking in the file
+    > `vars/acsXX.yml`.
 
 2. Remove the following packages:
    * ImageMagick
