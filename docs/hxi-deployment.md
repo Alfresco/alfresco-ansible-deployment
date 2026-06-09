@@ -12,7 +12,7 @@ learning to your content repository.
 
 You can get the most up-to-date product documentation for the `Alfresco
 Connector` in the [Content Intelligence
-Documentation](https://support.hyland.com/p/contentintel).
+Documentation](https://docs.hyland.com/p/contentintel).
 
 ## Prerequisites
 
