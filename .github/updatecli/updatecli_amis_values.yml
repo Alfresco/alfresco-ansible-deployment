@@ -35,11 +35,11 @@ targets:
     key: $.MOLECULE_IT_IMAGE_ID
     source: rl9
   molecule_default_ubuntu_community:
-    file: molecule/default/vars-ubuntu-community.yml
+    file: molecule/default/vars-ubuntu24.yml
     key: $.MOLECULE_IT_IMAGE_ID
     source: ub24
-  molecule_default_ubuntu22_74:
-    file: molecule/default/vars-ubuntu22-74.yml
+  molecule_default_ubuntu22_23:
+    file: molecule/default/vars-ubuntu22.yml
     key: $.MOLECULE_IT_IMAGE_ID
     source: ub22
   molecule_multimachine:
