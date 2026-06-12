@@ -90,7 +90,7 @@ distributions.
 The table below shows the version of the components deployed by the playbook for
 ACS 7.x onward.
 
-| Component           | 26.1 Enterprise (Community) | 25.4 Enterprise | 23.6 Enterprise |
+| Component           | 26.1 Enterprise (Community) | 25.4 Enterprise | 23.7 Enterprise |
 |---------------------|-----------------------------|-----------------|-----------------|
 | OpenJDK             | 21.0.11                     | 17.0.19         | 17.0.19         |
 | Apache Tomcat       | 11.0.22                     | 10.1.55         | 10.1.55         |
