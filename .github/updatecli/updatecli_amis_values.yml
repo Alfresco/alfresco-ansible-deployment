@@ -22,10 +22,6 @@ targets:
     file: molecule/default/vars-rhel8.yml
     key: $.MOLECULE_IT_IMAGE_ID
     source: rhel8
-  molecule_default_rocky8:
-    file: molecule/default/vars-rocky8.yml
-    key: $.MOLECULE_IT_IMAGE_ID
-    source: rl8
   molecule_default_rocky9:
     file: molecule/default/vars-rocky9.yml
     key: $.MOLECULE_IT_IMAGE_ID
