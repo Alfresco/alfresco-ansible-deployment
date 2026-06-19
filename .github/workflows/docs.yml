@@ -15,13 +15,13 @@ on:
       - .github/workflows/docs.yml
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
 jobs:
   publish:
-    uses: Alfresco/jekyll-build-tools/.github/workflows/jekyll-publish.yml@2d1b48e5abd8d2defeda1d0adc2096a8e29d6cda
+    uses: Alfresco/jekyll-build-tools/.github/workflows/jekyll-publish.yml@a821305960121ffa2b4bdb0047786a8d3c220481 # v0.4.0
     with:
       working-directory: docs
       publish: ${{ github.event_name == 'push' && github.ref_name == 'master' }}

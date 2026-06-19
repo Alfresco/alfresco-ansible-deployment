@@ -174,10 +174,11 @@ jobs:
       dtas_version: ${{ needs.docker.outputs.dtas_version }}
       dtas_additional_params: ${{ matrix.runner == 'ubuntu-24.04-arm' && '-k "not test_transformation and not test_get_sync and not test_get_ended_sync"' || '' }}
       runner: ${{ matrix.runner }}
+      gh_app_client_id: ${{ vars.GH_APP_ENGINEERING_RO_CLIENT_ID }}
     secrets:
       nexus_username: ${{ secrets.NEXUS_USERNAME_READ_ONLY }}
       nexus_password: ${{ secrets.NEXUS_PASSWORD_READ_ONLY }}
-      dtas_token: ${{ secrets.BOT_GITHUB_TOKEN || secrets.DEPENDABOT_GITHUB_TOKEN }}
+      gh_app_private_key: ${{ secrets.GH_APP_ENGINEERING_RO_PRIVATE_KEY }}
 
   ec2:
     name: ${{ matrix.molecule_scenario.desc }}
@@ -216,6 +217,17 @@ jobs:
       AWS_REGION: eu-west-1
       MOLECULE_IT_AWS_VPC_SUBNET_ID: subnet-6bdd4223
     steps:
+      - name: Generate DTAS app token
+        id: app-token-dtas
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.GH_APP_ENGINEERING_RO_CLIENT_ID }}
+          private-key: ${{ secrets.GH_APP_ENGINEERING_RO_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: |
+            alfresco-deployment-test-automation-scripts
+          permission-contents: read
+
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
@@ -232,4 +244,4 @@ jobs:
           nexus_username: ${{ secrets.NEXUS_USERNAME_READ_ONLY }}
           nexus_password: ${{ secrets.NEXUS_PASSWORD_READ_ONLY }}
           aws_region: ${{ env.AWS_REGION }}
-          pat: ${{ secrets.BOT_GITHUB_TOKEN }}
+          pat: ${{ steps.app-token-dtas.outputs.token }}

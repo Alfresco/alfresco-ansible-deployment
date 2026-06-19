@@ -30,17 +30,57 @@ concurrency:
 
 env:
   DEFAULT_BRANCH_NAME: master
+  UPDATECLI_BRANCH_NAME: updatecli-bump-versions
 
 jobs:
-  build:
+  prepare-branch:
+    if: github.ref_name == 'master'
     runs-on: ubuntu-latest
-    name: Bump versions
-    if: github.actor != 'dependabot[bot]'
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - name: Reset ${{ env.UPDATECLI_BRANCH_NAME }} to ${{ env.DEFAULT_BRANCH_NAME }}
+        run: |
+          git checkout -b "${{ env.UPDATECLI_BRANCH_NAME }}"
+          git push --force origin "${{ env.UPDATECLI_BRANCH_NAME }}"
+
+  build:
+    needs: prepare-branch
+    runs-on: ubuntu-latest
+    name: Bump versions
+    if: |
+      !cancelled()
+      && needs.prepare-branch.result != 'failure'
+      && github.actor != 'dependabot[bot]'
+    steps:
+      - name: Generate alfresco-engineering app token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1  # v3.2.0
         with:
-          token: ${{ secrets.BOT_GITHUB_TOKEN }}
+          client-id: ${{ vars.GH_APP_ENGINEERING_CONTRIB_CLIENT_ID }}
+          private-key: ${{ secrets.GH_APP_ENGINEERING_CONTRIB_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Generate alfresco-engineering app token for upstream reads
+        id: app-token-upstream
+        if: inputs.update-type == 'maven' || github.event_name == 'push'
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1  # v3.2.0
+        with:
+          client-id: ${{ vars.GH_APP_ENGINEERING_RO_CLIENT_ID }}
+          private-key: ${{ secrets.GH_APP_ENGINEERING_RO_PRIVATE_KEY }}
+          repositories: |
+            acs-packaging
+            alfresco-enterprise-repo
+            alfresco-community-repo
+          permission-contents: read
+
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Install Updatecli
         uses: Alfresco/alfresco-build-tools/.github/actions/setup-updatecli@v18.7.0
@@ -82,8 +122,8 @@ jobs:
         env:
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME_READ_ONLY }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD_READ_ONLY }}
-          UPDATECLI_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
-          UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME }}
+          UPDATECLI_GITHUB_TOKEN: ${{ steps.app-token-upstream.outputs.token }}
+          UPDATECLI_GITHUB_USERNAME: x-access-token
 
       - name: Updatecli apply for AMIs
         if: inputs.update-type == 'ami' || github.event_name == 'schedule'
@@ -96,21 +136,15 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: eu-west-1
-          UPDATECLI_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
-          UPDATECLI_GITHUB_USERNAME: ${{ vars.BOT_GITHUB_USERNAME }}
-          UPDATECLI_GITHUB_EMAIL: ${{ vars.BOT_GITHUB_EMAIL }}
+          UPDATECLI_GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
-      - name: Git Auto Commit
-        uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
+      - name: Commit changes
+        uses: iarekylew00t/verified-bot-commit@5b4e8852dc472093935b8debcb81459bb79f7986 # v2.3.2
         with:
-          commit_message: |
-            🛠 Updatecli pipeline artifacts bump
-          commit_user_name: ${{ vars.BOT_GITHUB_USERNAME }}
-          commit_user_email: ${{ vars.BOT_GITHUB_EMAIL }}
-          # Push to a predefined branch when run from the default branch
-          # or to the current branch otherwise (useful for PRs)
-          branch: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME && 'updatecli-bump-versions' || github.ref_name }}
-          create_branch: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME }}
-          # Overwrite the existing branch if pushing to the predefined branch
-          push_options: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME && '--force' || '' }}
-          skip_checkout: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME }}
+          token: ${{ steps.app-token.outputs.token }}
+          ref: ${{ github.ref_name == env.DEFAULT_BRANCH_NAME && format('refs/heads/{0}', env.UPDATECLI_BRANCH_NAME) || github.ref }}
+          files: |
+            vars/acs*.yml
+            roles/**/defaults/main.yml
+          if-no-commit: info
+          message: 🛠 Updatecli pipeline artifacts bump
