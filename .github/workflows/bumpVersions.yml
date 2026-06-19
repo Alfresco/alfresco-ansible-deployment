@@ -130,9 +130,8 @@ jobs:
       - name: Updatecli apply for AMIs
         if: inputs.update-type == 'ami' || github.event_name == 'schedule'
         shell: bash
-        run: >-
-          updatecli pipeline apply
-            --config .github/updatecli/updatecli_amis.tpl
+        run: |
+          updatecli pipeline apply --config .github/updatecli/updatecli_amis.tpl \
             -v .github/updatecli/updatecli_amis_values.yml
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
