@@ -44,7 +44,7 @@ jobs:
       - name: Reset ${{ env.UPDATECLI_BRANCH_NAME }} to ${{ env.DEFAULT_BRANCH_NAME }}
         run: |
           git checkout -b "${{ env.UPDATECLI_BRANCH_NAME }}"
-          git push --force origin "${{ env.UPDATECLI_BRANCH_NAME }}"
+          git push --force-with-lease origin "${{ env.UPDATECLI_BRANCH_NAME }}"
 
   build:
     needs: prepare-branch
@@ -80,7 +80,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
-          token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: false
 
       - name: Install Updatecli
         uses: Alfresco/alfresco-build-tools/.github/actions/setup-updatecli@v18.7.0
