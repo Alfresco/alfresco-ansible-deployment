@@ -8,6 +8,12 @@ nginx_vhosts:
 nginx_use_ssl: false
 nginx_fqdn_alfresco: ""
 
+# On SELinux-enabled nodes nginx (httpd_t) may only write logs labelled
+# httpd_log_t, so /var/log/nginx is the only allowed location.
+nginx_logs_folder: /var/log/nginx
+nginx_access_log: "{{ nginx_logs_folder }}/alfresco.access.log"
+nginx_error_log: "{{ nginx_logs_folder }}/alfresco.error.log"
+
 # role arguments defaults
 nginx_setup_service: true
 nginx_setup_vhosts: true
