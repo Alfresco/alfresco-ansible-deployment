@@ -62,8 +62,8 @@
         replace: "{{ certificate_domain }}"
 
     - name: Clone DTAS when clone_github_token is available
-      when: clone_github_token is defined and clone_github_token.startswith('ghp_')
+      when: clone_github_token | default('', true) | length > 0
       ansible.builtin.git:
-        repo: "https://{{ clone_github_token }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
+        repo: "https://x-access-token:{{ clone_github_token }}@github.com/Alfresco/alfresco-deployment-test-automation-scripts.git"
         dest: "{{ dtas_dir }}"
         version: "{{ dtas_version }}"
