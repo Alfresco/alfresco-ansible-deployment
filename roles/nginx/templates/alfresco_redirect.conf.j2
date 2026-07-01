@@ -8,8 +8,8 @@ map $remote_addr $rogue_repo_clients {
 }
 
 server {
-    access_log {{ logs_folder }}/nginx.alfresco.access.log;
-    error_log  {{ logs_folder }}/nginx.alfresco.error.log error;
+    access_log {{ nginx_access_log }};
+    error_log  {{ nginx_error_log }} error;
 
     listen {{ ports_cfg.nginx.http | default('80') }};
 

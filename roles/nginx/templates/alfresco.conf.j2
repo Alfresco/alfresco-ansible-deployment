@@ -30,8 +30,8 @@ upstream share_lb {
     }
 
 server {
-    access_log {{ logs_folder }}/nginx.alfresco.access.log;
-    error_log  {{ logs_folder }}/nginx.alfresco.error.log error;
+    access_log {{ nginx_access_log }};
+    error_log  {{ nginx_error_log }} error;
 
     listen {{ item.listen | default('80') }}{% if item.listen == '443' %} ssl{% endif %};
 {% if item.server_name is defined %}
