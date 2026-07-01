@@ -52,14 +52,14 @@ jobs:
           echo "secrets-available=true" >> $GITHUB_OUTPUT
 
       - name: Checkout
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Setup Python
         uses: ./.github/actions/setup-python
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v18.7.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v18.15.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -94,14 +94,14 @@ jobs:
         run: echo "dtas_version=$DTAS_VERSION" >> $GITHUB_OUTPUT
 
       - name: Checkout
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Setup Python
         uses: ./.github/actions/setup-python
         id: setup-python
 
       - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v18.7.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v18.15.0
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
@@ -229,7 +229,7 @@ jobs:
           permission-contents: read
 
       - name: Checkout
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           # avoid auth conflict when cloning DTAS during verify step
           persist-credentials: false

@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Get tag name
         shell: bash
@@ -27,7 +27,7 @@ jobs:
 
       - name: Configure AWS credentials
         if: github.event_name != 'workflow_dispatch'
-        uses: aws-actions/configure-aws-credentials@e7f100cf4c008499ea8adda475de1042d6975c7b # v6.2.0
+        uses: aws-actions/configure-aws-credentials@254c19bd240aabef8777f48595e9d2d7b972184b # v6.2.1
         with:
           aws-access-key-id: ${{ secrets.AWS_S3_STAGING_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_S3_STAGING_SECRET_KEY }}
@@ -39,7 +39,7 @@ jobs:
           aws s3 cp alfresco-ansible-deployment-${VERSION}.zip s3://alfresco-artefacts-staging/enterprise/alfresco-ansible-deployment/
 
       - name: Publish on Nexus
-        uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@v18.7.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@v18.15.0
         if: github.event_name != 'workflow_dispatch'
         with:
           group-id: org.alfresco
