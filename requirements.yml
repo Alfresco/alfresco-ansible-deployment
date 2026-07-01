@@ -17,7 +17,7 @@ collections:
   - name: amazon.aws
     version: 11.4.0
   - name: community.aws
-    version: 11.0.0
+    version: 11.1.0
   - name: alfresco.platform
     version: 0.3.0
   # Alternate source for alfresco.platform
