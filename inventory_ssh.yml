@@ -30,21 +30,22 @@ all:
     # Elasticsearch-based indexing hosts (canonical group, default search engine -
     # not available in Community edition)
     indexers:
+      # Deprecated alias retained for backward compatibility (e.g. dynamic/tag-based
+      # inventories still populating it); see docs/playbook-upgrade.md
       children:
-        # Deprecated alias retained for backward compatibility; see docs/playbook-upgrade.md
         search_enterprise:
-          hosts:
-            search_1:
-              ansible_host: targetIP
+      hosts:
+        search_1:
+          ansible_host: targetIP
 
     # Solr-based indexing hosts (legacy engine; alternative to Enterprise Search and the
     # only available option for the Community edition)
     legacy_indexers:
       children:
         search:
-          hosts:
-            # search_1:
-            #   ansible_host: targetIP
+      hosts:
+        # search_1:
+        #   ansible_host: targetIP
 
     elasticsearch:
       hosts:
