@@ -28,16 +28,18 @@ While the `search` role do not have any **strong** requirement at the inventory
 level, the playbook `playbooks/search_replication.yml` leverage the same
 inventory structure the `playbooks/acs.yml`.
 So if you use the playbook as-is, you'll need to give a list of hosts which
-belong to the `search` group. Of course you can reuse the inventory of the main
-playbook and simply add the search hosts you want to provision.
+belong to the `legacy_indexers` group (the deprecated `search` group still
+works as a backward-compatible alias). Of course you can reuse the inventory of
+the main playbook and simply add the search hosts you want to provision.
 
 ```yaml
 all:
   children:
-    search:
-      search0.infra.local:
-      search1.infra.local:
-      search2.infra.local:
+    legacy_indexers:
+      hosts:
+        search0.infra.local:
+        search1.infra.local:
+        search2.infra.local:
 ```
 
 ## Role parameters

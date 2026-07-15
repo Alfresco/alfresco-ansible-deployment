@@ -19,7 +19,7 @@ platforms:
       - activemq
       - sfs
       - transformers
-      - search_enterprise
+      - indexers
 provisioner:
   name: ansible
   env:

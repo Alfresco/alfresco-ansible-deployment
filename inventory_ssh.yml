@@ -27,17 +27,25 @@ all:
         activemq_1:
           ansible_host: targetIP
 
-    # Solr search engine (an alternative to Enterprise Search, and the only available option for the Community edition)
-    search:
-      hosts:
-        # search_1:
-        #   ansible_host: targetIP
+    # Elasticsearch-based indexing hosts (canonical group, default search engine -
+    # not available in Community edition)
+    indexers:
+      children:
+        # Deprecated alias retained for backward compatibility; see docs/playbook-upgrade.md
+        search_enterprise:
+          hosts:
+            search_1:
+              ansible_host: targetIP
 
-    # Enterprise Search (default search engine - not available in Community edition)
-    search_enterprise:
-      hosts:
-        search_1:
-          ansible_host: targetIP
+    # Solr-based indexing hosts (legacy engine; alternative to Enterprise Search and the
+    # only available option for the Community edition)
+    legacy_indexers:
+      children:
+        search:
+          hosts:
+            # search_1:
+            #   ansible_host: targetIP
+
     elasticsearch:
       hosts:
         search_1:

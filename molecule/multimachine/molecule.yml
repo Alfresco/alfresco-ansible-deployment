@@ -25,7 +25,7 @@ platforms:
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
     region: ${AWS_REGION}
     groups:
-      - search
+      - legacy_indexers
     tags:
       Name: molecule_${MOLECULE_IT_PLATFORM}_search_${BRANCH_NAME}_${BUILD_NUMBER}
       Owner: Ops Readiness Team

@@ -30,7 +30,7 @@
   ansible.builtin.import_playbook: secrets.yml
 
 - name: Alfresco Search Role
-  hosts: search
+  hosts: legacy_indexers:search
   gather_facts: true
   tasks:
     - name: Search Service role import

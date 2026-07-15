@@ -16,7 +16,7 @@ platforms:
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
-      - search
+      - legacy_indexers
   - name: search-replica-instance
     image: $MOLECULE_ROLE_IMAGE
     dockerfile: ../../../../tests/molecule/Dockerfile-noprivs.j2
@@ -29,7 +29,7 @@ platforms:
     volume_mounts:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
-      - search
+      - legacy_indexers
 provisioner:
   name: ansible
   ansible_args:

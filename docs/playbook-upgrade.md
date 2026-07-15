@@ -6,6 +6,24 @@ title: Upgrading the playbook
 
 ## Unreleased version
 
+### Inventory groups renamed to `indexers` / `legacy_indexers`
+
+The indexing inventory groups have clearer names that convey the indexing
+technology rather than the product edition:
+
+* `indexers` is the new canonical group for Elasticsearch-based indexing hosts
+  (previously `search_enterprise`).
+* `legacy_indexers` is the new canonical group for Solr-based indexing hosts
+  (previously `search`).
+
+The old `search_enterprise` and `search` groups are retained as
+backward-compatible sub-groups, so **existing inventories keep working without
+any changes**. They are deprecated and will be removed in a future major
+version; new inventories should use `indexers` and `legacy_indexers`.
+
+The separate `elasticsearch` group (the ElasticSearch cluster backing Search
+Enterprise) is unchanged.
+
 ### Making roles independent part 2 (future release)
 
 * The goal is to ensure that all roles are completely independent

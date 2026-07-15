@@ -92,7 +92,7 @@
       notify: Reload systemd
 
 - name: Clean Search Service
-  hosts: search
+  hosts: legacy_indexers:search
   become: true
   ignore_unreachable: true
   handlers:

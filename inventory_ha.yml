@@ -29,15 +29,21 @@ all:
       hosts:
         mq.infra.local:
 
-    # Solr search engine (alternative to Enterprise Search)
-    search:
-      hosts:
-        # fts.infra.local:
+    # Elasticsearch-based indexing hosts (canonical group, default search engine)
+    indexers:
+      children:
+        # Deprecated alias retained for backward compatibility; see docs/playbook-upgrade.md
+        search_enterprise:
+          hosts:
+            fts.infra.local:
 
-    # Enterprise Search (default search engine)
-    search_enterprise:
-      hosts:
-        fts.infra.local:
+    # Solr-based indexing hosts (legacy engine; alternative to Enterprise Search)
+    legacy_indexers:
+      children:
+        search:
+          hosts:
+            # fts.infra.local:
+
     elasticsearch:
       hosts:
         fts.infra.local:

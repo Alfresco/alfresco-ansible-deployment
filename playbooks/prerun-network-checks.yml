@@ -40,8 +40,8 @@
       vars:
         checked_host: "{{ solr_host }}"
         checked_port: "{{ ports_cfg.search.http }}"
-        delegate_target: "{{ groups.search | first }}"
-      when: groups.search | default([]) | length > 0
+        delegate_target: "{{ legacy_indexer_hosts | first }}"
+      when: legacy_indexer_hosts | length > 0
 
     - name: Check sync connection
       ansible.builtin.include_tasks: "tasks/check_port.yml"
@@ -77,7 +77,7 @@
       when: groups.transformers | default([]) | length > 0
 
 - name: Run preliminary network checks for search hosts
-  hosts: search
+  hosts: legacy_indexers:search
   become: true
   gather_facts: false
   tasks:

@@ -68,3 +68,21 @@ acs_play_community_repository_amp_googledrive_repo_artifact_name: alfresco-googl
 acs_play_community_repository_amp_googledrive_repo_repository: "{{ nexus_repository.releases }}/integrations"
 
 ports_cfg_postgres_sql: 5432
+
+# Indexing artifact coordinates. Kept globally (rather than in per-group_vars) so they
+# resolve for hosts in either the canonical (indexers/legacy_indexers) or the deprecated
+# (search_enterprise/search) groups.
+acs_play_search_enterprise_artifact_name: alfresco-elasticsearch-connector-distribution
+acs_play_search_enterprise_repository: "{{ nexus_repository.enterprise_releases }}"
+acs_play_search_enterprise_zip_url: "{{ acs_play_search_enterprise_repository }}/{{ acs_play_search_enterprise_artifact_name }}/{{ acs_play_search_enterprise_version }}/{{ acs_play_search_enterprise_artifact_name }}-{{ acs_play_search_enterprise_version }}.zip"
+acs_play_search_enterprise_zip_checksum: "sha1:{{ acs_play_search_enterprise_zip_url }}.sha1"
+
+acs_play_search_artifact_name: alfresco-search-services
+acs_play_search_repository: "{{ nexus_repository.releases }}"
+acs_play_search_zip_url: "{{ acs_play_search_repository }}/{{ acs_play_search_artifact_name }}/{{ acs_play_search_version }}/{{ acs_play_search_artifact_name }}-{{ acs_play_search_version }}.zip"
+acs_play_search_zip_checksum: "sha1:{{ acs_play_search_zip_url }}.sha1"
+
+# Backward-compatible resolution of indexing groups: canonical name unioned with the
+# deprecated alias so playbooks work with either.
+indexer_hosts: "{{ groups['indexers'] | default([]) | union(groups['search_enterprise'] | default([])) }}"
+legacy_indexer_hosts: "{{ groups['legacy_indexers'] | default([]) | union(groups['search'] | default([])) }}"
