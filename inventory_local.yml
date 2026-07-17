@@ -16,21 +16,17 @@ all:
       children:
         repository:
 
-    # Elasticsearch-based indexing hosts (canonical group, default search engine -
+    # Elasticsearch-based indexing hosts (default search engine -
     # not available in Community edition)
     indexers:
       children:
         repository:
-        # Deprecated alias retained for backward compatibility (e.g. dynamic/tag-based
-        # inventories still populating it); see docs/playbook-upgrade.md
-        search_enterprise:
 
     # Solr-based indexing hosts (legacy engine; alternative to Enterprise Search and the
     # only available option for the Community edition)
     legacy_indexers:
       children:
         # repository:
-        search:
 
     elasticsearch:
       children:

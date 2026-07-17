@@ -16,10 +16,10 @@ technology rather than the product edition:
 * `legacy_indexers` is the new canonical group for Solr-based indexing hosts
   (previously `search`).
 
-The old `search_enterprise` and `search` groups are retained as
-backward-compatible sub-groups, so **existing inventories keep working without
-any changes**. They are deprecated and will be removed in a future major
-version; new inventories should use `indexers` and `legacy_indexers`.
+The old `search_enterprise` and `search` group names are still resolved by the
+playbook, so **existing inventories keep working without any changes**. They are
+deprecated and will be removed in a future major version; new inventories should
+use `indexers` and `legacy_indexers`.
 
 The separate `elasticsearch` group (the ElasticSearch cluster backing Search
 Enterprise) is unchanged.
