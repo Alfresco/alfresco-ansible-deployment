@@ -9,6 +9,13 @@
         state: present
       become: true
 
+    # Workaround for openssl ASN1 regression breaking HTTPS on EL9 (CVE-2026-34180); drop once AMIs ship a fix
+    - name: Update openssl to avoid ASN1 TLS failures
+      package:
+        name: openssl
+        state: latest
+      become: true
+
 - name: Prepare localhost
   hosts: localhost
   gather_facts: false
