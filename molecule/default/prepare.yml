@@ -32,6 +32,8 @@
           - redhat-release*
       become: true
       when: not apt_get.stat.exists
+      async: 600
+      poll: 10
 
 - name: Prepare localhost
   hosts: localhost
