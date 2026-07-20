@@ -1,6 +1,6 @@
 ---
 - name: Verify
-  hosts: search_enterprise
+  hosts: indexers:search_enterprise
   gather_facts: false
   tasks:
     - name: Populate service facts

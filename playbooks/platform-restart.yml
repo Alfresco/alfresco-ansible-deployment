@@ -42,7 +42,7 @@
         - stop
 
 - name: Stop Alfresco Search services
-  hosts: search
+  hosts: legacy_indexers:search
   gather_facts: false
   become: true
   tasks:
@@ -173,7 +173,7 @@
         - start
 
 - name: Start Alfresco Search services
-  hosts: search
+  hosts: legacy_indexers:search
   gather_facts: false
   become: true
   tasks:

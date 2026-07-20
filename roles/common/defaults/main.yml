@@ -41,8 +41,7 @@ activemq_transport: >-
   | default('tcp') }}
 activemq_protocol: openwire
 solr_host: >-
-  {{ groups['search']
-  | default([])
+  {{ (groups['legacy_indexers'] | default([]) | union(groups['search'] | default([])))
   | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
   | first
   | default('127.0.0.1') }}

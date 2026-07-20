@@ -21,7 +21,7 @@ platforms:
       - activemq
       - transformers
       - repository
-      - search_enterprise
+      - indexers
       - trusted_resource_consumers
       - nginx
 provisioner:

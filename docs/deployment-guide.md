@@ -338,9 +338,14 @@ An ACS inventory file has the following groups a host can belong to:
 * `external_activemq`: an alternative group to `activemq` in case you don't want
   to deploy ActiveMQ using our basic activemq role but instead use an ActiveMQ
   instance of yours which matches your hosting standards.
-* `search`: a single host on which to deploy Alfresco Search services, as an
-  alternative to Search Enterprise.
-* `search_enterprise`: one or more hosts on which deploy Search Enterprise.
+* `indexers`: one or more hosts on which to deploy Search Enterprise
+  (Elasticsearch-based indexing). The deprecated `search_enterprise` group name
+  is still accepted for backward compatibility but should not be used for new
+  inventories.
+* `legacy_indexers`: a single host on which to deploy Alfresco Search services
+  (Solr-based indexing), as an alternative to Search Enterprise. The deprecated
+  `search` group name is still accepted for backward compatibility but should not
+  be used for new inventories.
 * `elasticsearch`: one or more hosts on which deploy the ElasticSearch cluster
   backing Search Enterprise.
 * `external_elasticsearch`: an alternative group to `elasticsearch` in case you

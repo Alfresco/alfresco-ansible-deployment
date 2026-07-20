@@ -1,9 +1,10 @@
 - name: Search Enteprise Reindex
-  hosts: search_enterprise[0]
+  hosts: indexers:search_enterprise
   gather_facts: false
   tasks:
     - name: Run the Elasticsearch Connector Reindex
       become: true
+      run_once: true
       ansible.builtin.systemd:
         state: started
         name: elasticsearch-connector-reindex

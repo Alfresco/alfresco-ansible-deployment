@@ -228,7 +228,7 @@
     - transformers
 
 - name: Alfresco Search Role
-  hosts: search
+  hosts: legacy_indexers:search
   gather_facts: true
   tasks:
     - name: Search Service Role import
@@ -248,7 +248,7 @@
           port: "{{ ports_cfg.nginx.http }}"
           port_ssl: "{{ ports_cfg.nginx.https }}"
         search_topology: >-
-          {{ 'replication' if groups.search | length > 1 else 'standalone' }}
+          {{ 'replication' if legacy_indexer_hosts | length > 1 else 'standalone' }}
   post_tasks:
     - name: Make sure Solr is running
       become: true
@@ -542,7 +542,7 @@
     - sfs
 
 - name: Enterprise Search Role
-  hosts: search_enterprise
+  hosts: indexers:search_enterprise
   gather_facts: false
   tasks:
     - name: Enterprise Search Role import

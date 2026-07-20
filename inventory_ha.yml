@@ -29,15 +29,16 @@ all:
       hosts:
         mq.infra.local:
 
-    # Solr search engine (alternative to Enterprise Search)
-    search:
+    # Elasticsearch-based indexing hosts (default search engine)
+    indexers:
+      hosts:
+        fts.infra.local:
+
+    # Solr-based indexing hosts (legacy engine; alternative to Enterprise Search)
+    legacy_indexers:
       hosts:
         # fts.infra.local:
 
-    # Enterprise Search (default search engine)
-    search_enterprise:
-      hosts:
-        fts.infra.local:
     elasticsearch:
       hosts:
         fts.infra.local:
