@@ -25,5 +25,10 @@
       ansible.builtin.dnf:
         name: '*'
         state: latest
+        exclude:
+          - rocky-release*
+          - rocky-repos*
+          - rocky-gpg-keys*
+          - redhat-release*
       become: true
       when: not apt_get.stat.exists
