@@ -1,13 +1,19 @@
 ---
 - name: Prepare remote hosts
   hosts: all
-  gather_facts: true
+  gather_facts: false
   tasks:
     - name: Make sure python3 is installed
       package:
         name: python3
         state: present
       become: true
+
+    - name: Detect Rocky 9
+      ansible.builtin.shell: . /etc/os-release && [ "$ID" = rocky ] && [ "${VERSION_ID%%.*}" = 9 ]
+      register: rocky9_check
+      changed_when: false
+      failed_when: false
 
     # RHSA-2026:39798 fixes the _ssl/ASN1 regression that breaks all HTTPS; pin the 3.9 build on Rocky 9, don't jump python versions
     - name: Pin ASN1-fixed python3 (3.9) on Rocky 9
@@ -17,9 +23,7 @@
           - python3-libs-3.9.25-7.el9_8.2
         state: present
       become: true
-      when:
-        - ansible_facts['distribution'] == 'Rocky'
-        - ansible_facts['distribution_major_version'] == '9'
+      when: rocky9_check.rc == 0
 
 - name: Prepare localhost
   hosts: localhost
