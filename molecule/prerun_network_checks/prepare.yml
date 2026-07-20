@@ -1,7 +1,7 @@
 ---
 - name: Prepare remote hosts
   hosts: all
-  gather_facts: false
+  gather_facts: true
   tasks:
     - name: Make sure python3 is installed
       package:
@@ -9,9 +9,14 @@
         state: present
       become: true
 
-    # Workaround for openssl ASN1 regression breaking HTTPS on EL9 (CVE-2026-34180); drop once AMIs ship a fix
-    - name: Update openssl to avoid ASN1 TLS failures
-      package:
-        name: openssl
-        state: latest
+    # RHSA-2026:39798 fixes the _ssl/ASN1 regression that breaks all HTTPS; pin the 3.9 build on Rocky 9, don't jump python versions
+    - name: Pin ASN1-fixed python3 (3.9) on Rocky 9
+      ansible.builtin.dnf:
+        name:
+          - python3-3.9.25-7.el9_8.2
+          - python3-libs-3.9.25-7.el9_8.2
+        state: present
       become: true
+      when:
+        - ansible_facts['distribution'] == 'Rocky'
+        - ansible_facts['distribution_major_version'] == '9'
