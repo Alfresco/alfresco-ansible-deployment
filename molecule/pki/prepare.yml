@@ -8,18 +8,21 @@
         state: present
       become: true
 
-    - name: Detect Rocky 9
-      ansible.builtin.shell: . /etc/os-release && [ "$ID" = rocky ] && [ "${VERSION_ID%%.*}" = 9 ]
-      register: rocky9_check
-      changed_when: false
-      failed_when: false
+    - name: Check for apt
+      ansible.builtin.stat:
+        path: /usr/bin/apt-get
+      register: apt_get
 
-    # RHSA-2026:39798 fixes the _ssl/ASN1 regression that breaks all HTTPS; pin the 3.9 build on Rocky 9, don't jump python versions
-    - name: Pin ASN1-fixed python3 (3.9) on Rocky 9
-      ansible.builtin.dnf:
-        name:
-          - python3-3.9.25-7.el9_8.2
-          - python3-libs-3.9.25-7.el9_8.2
-        state: present
+    - name: Upgrade all packages (Debian/Ubuntu)
+      ansible.builtin.apt:
+        upgrade: dist
+        update_cache: true
       become: true
-      when: rocky9_check.rc == 0
+      when: apt_get.stat.exists
+
+    - name: Upgrade all packages (RHEL/Rocky)
+      ansible.builtin.dnf:
+        name: '*'
+        state: latest
+      become: true
+      when: not apt_get.stat.exists
