@@ -1,0 +1,32 @@
+---
+- name: Verify repository is configured for Elasticsearch indexing
+  hosts: repository
+  gather_facts: false
+  tasks:
+    - name: Read contents of alfresco-global.properties
+      ansible.builtin.slurp:
+        src: /etc/opt/alfresco/content-services/classpath/alfresco-global.properties
+      register: global_props_raw
+
+    - name: Assert Elasticsearch subsystem is configured
+      ansible.builtin.assert:
+        that:
+          - "'index.subsystem.name=elasticsearch' in (global_props_raw.content | b64decode)"
+        fail_msg: "'index.subsystem.name=elasticsearch' not found in alfresco-global.properties"
+
+- name: Verify Elasticsearch batch indexing service
+  hosts: indexers
+  gather_facts: false
+  tasks:
+    - name: Populate service facts
+      ansible.builtin.service_facts:
+
+    - name: Assert batch indexing service is running
+      ansible.builtin.assert:
+        that:
+          - "'alfresco-batch-indexing.service' in ansible_facts.services"
+          - ansible_facts.services['alfresco-batch-indexing.service'].state == 'running'
+        fail_msg: "alfresco-batch-indexing service is not running"
+
+- name: Import the default verify playbook
+  ansible.builtin.import_playbook: ../default/verify.yml

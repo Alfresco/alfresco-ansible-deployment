@@ -126,6 +126,7 @@ jobs:
           - image: rockylinux/rockylinux:9.8
         scenario:
           - name: docker_community
+          - name: docker_community_elasticsearch
     uses: ./.github/workflows/docker.yml
     with:
       scenario: ${{ matrix.scenario.name }}

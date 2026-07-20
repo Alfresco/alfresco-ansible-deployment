@@ -19,6 +19,7 @@ repository_nexus_username: null
 repository_nexus_password: null
 
 repository_acs_is_enterprise: true
+repository_elasticsearch_eligible: false
 repository_acs_artifact_name: alfresco-content-services-distribution
 repository_acs_repository: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
 

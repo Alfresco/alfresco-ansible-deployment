@@ -136,6 +136,15 @@ argument_specs:
         default: true
         description: |
           Whether the ACS distribution is enterprise or not
+      repository_elasticsearch_eligible:
+        type: bool
+        required: false
+        default: false
+        description: |
+          Whether the deployment is eligible for Elasticsearch indexing, i.e.
+          Enterprise (any version) or Community ACS 26.2+. Controls whether the
+          search subsystem is configured for Elasticsearch when an indexers host
+          is present.
       repository_trusted_urls:
         type: list
         required: false
