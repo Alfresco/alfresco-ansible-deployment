@@ -37,6 +37,8 @@ provisioner:
   ansible_args:
     - -e
     - "acs_play_repository_acs_edition=Community"
+    - -e
+    - "@../../tests/test-ssl.yml"
   inventory:
     links:
       host_vars: host_vars
@@ -45,3 +47,5 @@ provisioner:
     verify: verify.yml
 verifier:
   name: ansible
+  env:
+    MOLECULE_IT_TEST_CONFIG: tests/test-config-community.json

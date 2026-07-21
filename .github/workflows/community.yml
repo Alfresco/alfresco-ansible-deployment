@@ -126,9 +126,15 @@ jobs:
           - image: rockylinux/rockylinux:9.8
         scenario:
           - name: docker_community
+            dtas: false
           - name: docker_community_elasticsearch
+            dtas: true
     uses: ./.github/workflows/docker.yml
     with:
       scenario: ${{ matrix.scenario.name }}
       os_distribution: ${{ matrix.molecule_distro.image }}
       galaxy_cache: community
+      dtas_version: ${{ matrix.scenario.dtas && 'v1.7.4' || 'master' }}
+      gh_app_client_id: ${{ matrix.scenario.dtas && vars.GH_APP_ENGINEERING_RO_CLIENT_ID || '' }}
+    secrets:
+      gh_app_private_key: ${{ matrix.scenario.dtas && secrets.GH_APP_ENGINEERING_RO_PRIVATE_KEY || '' }}
