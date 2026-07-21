@@ -9,17 +9,17 @@
         state: present
       become: true
 
-    - name: Check for apt
-      ansible.builtin.stat:
-        path: /usr/bin/apt-get
-      register: apt_get
+    - name: Gather OS family fact
+      ansible.builtin.setup:
+        filter:
+          - 'ansible_os_family'
 
     - name: Upgrade all packages (Debian/Ubuntu)
       ansible.builtin.apt:
         upgrade: dist
         update_cache: true
       become: true
-      when: apt_get.stat.exists
+      when: ansible_os_family == 'Debian'
 
     - name: Upgrade all packages (RHEL/Rocky)
       ansible.builtin.dnf:
@@ -31,7 +31,7 @@
           - rocky-gpg-keys*
           - redhat-release*
       become: true
-      when: not apt_get.stat.exists
+      when: ansible_os_family == 'RedHat'
       async: 600
       poll: 10
 
