@@ -4,6 +4,7 @@
   gather_facts: false
   tasks:
     - name: Read contents of alfresco-global.properties
+      become: true
       ansible.builtin.slurp:
         src: /etc/opt/alfresco/content-services/classpath/alfresco-global.properties
       register: global_props_raw
