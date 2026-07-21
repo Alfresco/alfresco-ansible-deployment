@@ -53,8 +53,9 @@ The playbook uses the following roles:
 * **adw** - deploys and configures Alfresco Digital Workspace
 * **common** - contains a set of common tasks that prepares the specified host
   for other roles (creates user and group, common directories)
-* **elasticsearch** - deploys and configures ElasticSearch cluster required by
-  Alfresco Search Enterprise
+* **elasticsearch** - deploys and configures the ElasticSearch cluster backing
+  Elasticsearch-based indexing (Alfresco Search Enterprise, or Community batch
+  indexing on ACS 26.2 and later)
 * **identity** - deploys and configures Keycloak to enable SSO
   capabilities(optional)
 * **java** - deploys OpenJDK

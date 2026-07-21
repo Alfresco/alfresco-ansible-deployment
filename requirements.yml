@@ -19,7 +19,7 @@ collections:
   - name: community.aws
     version: 11.1.0
   - name: alfresco.platform
-    version: 0.3.0
+    version: 0.4.0
   # Alternate source for alfresco.platform
   # - name: git+https://github.com/Alfresco/alfresco-ansible-collection.git
   #  type: git
