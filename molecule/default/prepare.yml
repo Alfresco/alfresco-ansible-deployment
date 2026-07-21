@@ -20,6 +20,8 @@
         update_cache: true
       become: true
       when: ansible_os_family == 'Debian'
+      async: 600
+      poll: 10
 
     - name: Upgrade all packages (RHEL/Rocky)
       ansible.builtin.dnf:
