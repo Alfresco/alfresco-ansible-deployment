@@ -605,6 +605,7 @@
       search_community_db_username: "{{ acs_play_repo_db_username }}"
       search_community_db_password: "{{ repo_db_password }}"
       search_community_acs_url: "{{ 'https' if acs_play_use_ssl else 'http' }}://{{ nginx_host }}:{{ ports_cfg.nginx.https if acs_play_use_ssl else ports_cfg.nginx.http }}"
+      search_community_transform_url: "http://{{ ats_tengine_aio_host }}:{{ ports_cfg.transformers.tengine }}/transform/config"
   post_tasks:
     - name: Update installation status file with Community Search
       when: acs_play_community_search_enabled
