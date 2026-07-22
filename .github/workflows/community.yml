@@ -22,20 +22,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
-env:
-  DTAS_VERSION: v1.7.4
-
 jobs:
   requirements:
     name: Ensure requirements are met
     runs-on: ubuntu-latest
-    outputs:
-      dtas_version: ${{ steps.jobvars.outputs.dtas_version }}
     steps:
-      - name: Expose workflow variables
-        id: jobvars
-        run: echo "dtas_version=$DTAS_VERSION" >> "$GITHUB_OUTPUT"
-
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
@@ -135,15 +126,8 @@ jobs:
           - image: rockylinux/rockylinux:9.8
         scenario:
           - name: docker_community
-            dtas: false
-          - name: docker_community_elasticsearch
-            dtas: true
     uses: ./.github/workflows/docker.yml
     with:
       scenario: ${{ matrix.scenario.name }}
       os_distribution: ${{ matrix.molecule_distro.image }}
       galaxy_cache: community
-      dtas_version: ${{ needs.requirements.outputs.dtas_version }}
-      gh_app_client_id: ${{ matrix.scenario.dtas && vars.GH_APP_ENGINEERING_RO_CLIENT_ID || '' }}
-    secrets:
-      gh_app_private_key: ${{ matrix.scenario.dtas && secrets.GH_APP_ENGINEERING_RO_PRIVATE_KEY || '' }}

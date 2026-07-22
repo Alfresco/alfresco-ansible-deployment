@@ -19,13 +19,15 @@ platforms:
       - database
       - activemq
       - transformers
-      - search
+      - indexers
+      - elasticsearch
       - repository
       - trusted_resource_consumers
       - acc
       - nginx
     published_ports:
       - 0.0.0.0:443:443/tcp
+      - 0.0.0.0:9200:9200/tcp
 
 provisioner:
   name: ansible
@@ -40,6 +42,6 @@ provisioner:
       host_vars: host_vars
   playbooks:
     prepare: ../default/prepare.yml
-    verify: ../default/verify.yml
+    verify: verify.yml
 verifier:
   name: ansible

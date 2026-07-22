@@ -82,7 +82,7 @@
         postgres_db_name: "{{ acs_play_repo_db_name }}"
         postgres_db_username: "{{ acs_play_repo_db_username }}"
         postgres_db_password: "{{ repo_db_password }}"
-        postgres_db_clients: "{{ groups.repository }}"
+        postgres_db_clients: "{{ groups.repository | default([]) | union(indexer_hosts) }}"
         postgres_major_version: "{{ acs_play_postgres_major_version }}"
       when: create_repo_db
     - name: Setup sync database
