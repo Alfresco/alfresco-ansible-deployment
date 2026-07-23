@@ -13,7 +13,7 @@ platforms:
       - /run
       - /run/lock
       - /tmp
-    volume_mounts:
+    volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
       - transformers
