@@ -96,3 +96,7 @@ legacy_indexer_hosts: "{{ groups['legacy_indexers'] | default([]) | union(groups
 acs_play_elasticsearch_eligible: >-
   {{ (acs_is_enterprise or acs_play_repository_acs_version is version('26.2', 'ge')) | bool }}
 acs_play_community_search_enabled: "{{ acs_play_elasticsearch_eligible and not acs_is_enterprise }}"
+acs_play_repository_index_type: >-
+  {{ 'solr' if legacy_indexer_hosts | length > 0
+     else ('elasticsearch' if (indexer_hosts | length > 0 and acs_play_elasticsearch_eligible)
+     else 'noindex') }}

@@ -2,12 +2,12 @@
 {{ prop.key }}={{ prop.value }}
 {% endfor %}
 
-{% if (groups['legacy_indexers'] | default([]) | union(groups['search'] | default([]))) | length >= 1 %}
+{% if repository_index_type == 'solr' %}
 index.subsystem.name=solr6
 solr.secureComms=secret
 solr.port={{ ports_cfg.search.http }}
 solr.host={{ solr_host }}
-{% elif (groups['indexers'] | default([]) | union(groups['search_enterprise'] | default([]))) | length >= 1 and repository_elasticsearch_eligible %}
+{% elif repository_index_type == 'elasticsearch' %}
 index.subsystem.name=elasticsearch
 elasticsearch.createIndexIfNotExists=true
 elasticsearch.indexName=alfresco
