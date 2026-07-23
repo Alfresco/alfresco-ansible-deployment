@@ -13,8 +13,6 @@ platforms:
       - /run
       - /run/lock
       - /tmp
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
       - repository
       - nginx

@@ -13,8 +13,6 @@ platforms:
       - /run
       - /run/lock
       - /tmp
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
       - legacy_indexers
   - name: search-replica-instance
@@ -26,8 +24,6 @@ platforms:
       - /run
       - /run/lock
       - /tmp
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
       - legacy_indexers
 provisioner:
