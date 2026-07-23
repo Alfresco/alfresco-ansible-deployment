@@ -26,15 +26,6 @@
           - "Please refer to https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/deployment-guide.md#setup-a-control-node for detailed instructions."
       when: (jinja2_version.stdout.split('.')[0] | int < 3)
 
-    # - name: Assert that the indexers group is empty when ATS mTLS is required
-    #   ansible.builtin.assert:
-    #     that:
-    #       - indexer_hosts | length == 0
-    #     fail_msg: >-
-    #       mTLS enabled but not yet supported for Elasticsearch indexing
-    #       (indexers group, or the deprecated search_enterprise alias).
-    #   when: ats_mtls_required and ats_mtls_capable
-
     - name: Assert that Elasticsearch indexing is supported for the deployed edition and version
       ansible.builtin.assert:
         that:
