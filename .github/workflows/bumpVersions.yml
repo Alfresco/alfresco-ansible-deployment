@@ -96,7 +96,7 @@ jobs:
 
       - name: Updatecli scm cache
         if: inputs.update-type == 'maven' || github.event_name == 'push'
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: /tmp/updatecli/github
           key: updatecli-v1-${{ hashFiles('.github/updatecli/updatecli_amps.tpl') }}
