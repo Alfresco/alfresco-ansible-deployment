@@ -13,8 +13,6 @@ platforms:
       - /run
       - /run/lock
       - /tmp
-    volume:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
       - repository
       - activemq

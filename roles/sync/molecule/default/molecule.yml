@@ -13,8 +13,6 @@ platforms:
       - /run
       - /run/lock
       - /tmp
-    volume_mounts:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     groups:
       - repository
       - trusted_resource_consumers
