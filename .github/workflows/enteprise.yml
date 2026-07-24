@@ -201,9 +201,9 @@ jobs:
           - name: default
             vars: vars-rhel8.yml
             desc: EC2 ACS 25 (RHEL 8.10)
-          - name: default
+          - name: default_elastic
             vars: vars-ubuntu24.yml
-            desc: EC2 ACS 26.x Community (Ubuntu 24.04)
+            desc: EC2 ACS 26.x Community Elasticsearch (Ubuntu 24.04)
           - name: default
             vars: vars-rocky9.yml
             desc: EC2 ACS 25.x (Rocky Linux 9.8)

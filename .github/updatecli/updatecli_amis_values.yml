@@ -35,7 +35,7 @@ targets:
     key: $.MOLECULE_IT_IMAGE_ID
     source: rl9
   molecule_default_ubuntu_community:
-    file: molecule/default/vars-ubuntu24.yml
+    file: molecule/default_elastic/vars-ubuntu24.yml
     key: $.MOLECULE_IT_IMAGE_ID
     source: ub24
   molecule_default_ubuntu22_23:

@@ -82,7 +82,21 @@ acs_play_search_repository: "{{ nexus_repository.releases }}"
 acs_play_search_zip_url: "{{ acs_play_search_repository }}/{{ acs_play_search_artifact_name }}/{{ acs_play_search_version }}/{{ acs_play_search_artifact_name }}-{{ acs_play_search_version }}.zip"
 acs_play_search_zip_checksum: "sha1:{{ acs_play_search_zip_url }}.sha1"
 
+acs_play_search_community_artifact_name: alfresco-elasticsearch-batch-indexing-distribution
+acs_play_search_community_repository: "{{ nexus_repository.releases }}"
+acs_play_search_community_zip_url: "{{ acs_play_search_community_repository }}/{{ acs_play_search_community_artifact_name }}/{{ acs_play_search_community_version }}/{{ acs_play_search_community_artifact_name }}-{{ acs_play_search_community_version }}.zip"
+acs_play_search_community_zip_checksum: "sha1:{{ acs_play_search_community_zip_url }}.sha1"
+
 # Backward-compatible resolution of indexing groups: canonical name unioned with the
 # deprecated alias so playbooks work with either.
 indexer_hosts: "{{ groups['indexers'] | default([]) | union(groups['search_enterprise'] | default([])) }}"
 legacy_indexer_hosts: "{{ groups['legacy_indexers'] | default([]) | union(groups['search'] | default([])) }}"
+
+# Elasticsearch indexing is supported on Enterprise (any version) or Community ACS 26.2+.
+acs_play_elasticsearch_eligible: >-
+  {{ (acs_is_enterprise or acs_play_repository_acs_version is version('26.2', 'ge')) | bool }}
+acs_play_community_search_enabled: "{{ (acs_play_elasticsearch_eligible and not acs_is_enterprise) | bool }}"
+acs_play_repository_index_type: >-
+  {{ 'solr' if legacy_indexer_hosts | length > 0
+     else ('elasticsearch' if (indexer_hosts | length > 0 and acs_play_elasticsearch_eligible)
+     else 'noindex') }}

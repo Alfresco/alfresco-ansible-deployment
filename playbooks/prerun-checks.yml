@@ -26,25 +26,17 @@
           - "Please refer to https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/docs/deployment-guide.md#setup-a-control-node for detailed instructions."
       when: (jinja2_version.stdout.split('.')[0] | int < 3)
 
-    - name: Assert that the indexers group is empty when ATS mTLS is required
+    - name: Assert that Elasticsearch indexing is supported for the deployed edition and version
       ansible.builtin.assert:
         that:
-          - indexer_hosts | length == 0
-        fail_msg: >-
-          mTLS enabled but not yet supported for Elasticsearch indexing
-          (indexers group, or the deprecated search_enterprise alias).
-      when: ats_mtls_required and ats_mtls_capable
-
-    - name: Assert that the indexers group is empty when edition is community
-      ansible.builtin.assert:
-        that:
-          - indexer_hosts | length == 0
+          - acs_play_elasticsearch_eligible | bool
         fail_msg: >-
           Your inventory includes one or more hosts in the indexers group (or the
-          deprecated search_enterprise alias), which is not a supported configuration
-          for the community edition. Please remove those hosts and ensure that the
-          legacy_indexers group (or the deprecated search alias) contains at least one host.
-      when: acs_play_repository_acs_edition == 'Community'
+          deprecated search_enterprise alias), but Elasticsearch indexing is only
+          supported on Enterprise (any version) or Community ACS 26.2+. Detected
+          Community ACS {{ acs_play_repository_acs_version }}. Upgrade to 26.2+ or move
+          the hosts to the legacy_indexers group (or the deprecated search alias) to use Solr.
+      when: indexer_hosts | length > 0
 
 - name: Repository pre-requisites
   hosts: repository
