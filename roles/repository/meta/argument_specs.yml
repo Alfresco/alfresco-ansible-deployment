@@ -136,6 +136,18 @@ argument_specs:
         default: true
         description: |
           Whether the ACS distribution is enterprise or not
+      repository_index_type:
+        type: str
+        required: false
+        default: noindex
+        choices:
+          - solr
+          - elasticsearch
+          - noindex
+        description: |
+          Search subsystem the repository is configured to use
+          (index.subsystem.name). The playbook derives this from the indexing
+          groups, edition and version.
       repository_trusted_urls:
         type: list
         required: false

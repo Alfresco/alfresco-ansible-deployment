@@ -82,7 +82,7 @@
         postgres_db_name: "{{ acs_play_repo_db_name }}"
         postgres_db_username: "{{ acs_play_repo_db_username }}"
         postgres_db_password: "{{ repo_db_password }}"
-        postgres_db_clients: "{{ groups.repository }}"
+        postgres_db_clients: "{{ groups.repository | default([]) | union(indexer_hosts) }}"
         postgres_major_version: "{{ acs_play_postgres_major_version }}"
       when: create_repo_db
     - name: Setup sync database
@@ -125,7 +125,7 @@
   roles:
     - role: "../roles/elasticsearch"
       elasticsearch_major_version: "{{ acs_play_elasticsearch_major_version }}"
-      when: acs_is_enterprise and not groups.external_elasticsearch | default([])
+      when: acs_play_elasticsearch_eligible and not groups.external_elasticsearch | default([])
   tags:
     - elasticsearch
 
@@ -337,6 +337,7 @@
         repository_nexus_password: "{{ nexus_password }}"
         repository_db_url: "{{ acs_play_computed_repo_db_url }}"
         repository_acs_is_enterprise: "{{ acs_is_enterprise }}"
+        repository_index_type: "{{ acs_play_repository_index_type }}"
         repository_acs_version: "{{ acs_play_repository_acs_version }}"
         repository_acs_artifact_name: "{{ acs_play_repository_acs_artifact_name }}"
         repository_acs_archive_url: "{{ acs_play_repository_acs_archive_url }}"
@@ -578,6 +579,52 @@
         mode: "0755"
   tags:
     - search_enterprise
+
+- name: Community Search (Elasticsearch Batch Indexing) Role
+  hosts: indexers
+  gather_facts: false
+  roles:
+    - role: "../roles/java"
+      when: acs_play_community_search_enabled
+      java_version: "{{ acs_play_java_version }}"
+    - role: alfresco.platform.search_community
+      when: acs_play_community_search_enabled
+      search_community_java_home_path: "/opt/openjdk-{{ acs_play_java_core }}"
+      search_community_java_bin_path: "/opt/openjdk-{{ acs_play_java_core }}/bin/java"
+      search_community_version: "{{ acs_play_search_community_version }}"
+      search_community_artifact_name: "{{ acs_play_search_community_artifact_name }}"
+      search_community_repository: "{{ acs_play_search_community_repository }}"
+      search_community_zip_url: "{{ acs_play_search_community_zip_url }}"
+      search_community_zip_checksum: "{{ acs_play_search_community_zip_checksum }}"
+      search_community_username: "{{ username }}"
+      search_community_group_name: "{{ group_name }}"
+      search_community_elasticsearch_url: "{{ elasticsearch_protocol }}://{{ elasticsearch_host }}:{{ ports_cfg.elasticsearch.http }}"
+      search_community_elasticsearch_username: "{{ elasticsearch_username | default('') }}"
+      search_community_elasticsearch_password: "{{ elasticsearch_password | default('') }}"
+      search_community_db_url: "{{ acs_play_computed_repo_db_url }}"
+      search_community_db_username: "{{ acs_play_repo_db_username }}"
+      search_community_db_password: "{{ repo_db_password }}"
+      search_community_acs_url: "{{ 'https' if acs_play_use_ssl else 'http' }}://{{ nginx_host }}:{{ ports_cfg.nginx.https if acs_play_use_ssl else ports_cfg.nginx.http }}"
+      search_community_transform_url: "http://{{ ats_tengine_aio_host }}:{{ ports_cfg.transformers.tengine }}/transform/config"
+  post_tasks:
+    - name: Update installation status file with Community Search
+      when: acs_play_community_search_enabled
+      become: true
+      vars:
+        search_community_components:
+          search_community:
+            artifact_name: "{{ acs_play_search_community_artifact_name }}"
+            repository: "{{ acs_play_search_community_repository }}"
+            version: "{{ acs_play_search_community_version }}"
+      ansible.builtin.blockinfile:
+        block: "{{ search_community_components | to_nice_yaml(indent=2) }}"
+        create: true
+        path: "{{ ansible_installation_status_file }}"
+        marker_begin: SEARCH_COMMUNITY_BEGIN
+        marker_end: SEARCH_COMMUNITY_END
+        mode: "0755"
+  tags:
+    - search_community
 
 - name: Populate adf app facts
   hosts: acc:adw

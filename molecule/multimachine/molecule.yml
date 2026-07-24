@@ -25,9 +25,10 @@ platforms:
     vpc_subnet_id: ${MOLECULE_IT_AWS_VPC_SUBNET_ID}
     region: ${AWS_REGION}
     groups:
-      - legacy_indexers
+      - indexers
+      - elasticsearch
     tags:
-      Name: molecule_${MOLECULE_IT_PLATFORM}_search_${BRANCH_NAME}_${BUILD_NUMBER}
+      Name: molecule_${MOLECULE_IT_PLATFORM}_es_${BRANCH_NAME}_${BUILD_NUMBER}
       Owner: Ops Readiness Team
       Department: Engineering
       Production: false

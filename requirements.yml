@@ -6,20 +6,20 @@ collections:
   - name: community.postgresql
     version: 4.2.0
   - name: ansible.posix
-    version: 2.2.0
+    version: 2.2.2
   - name: ansible.utils
-    version: 6.0.2
+    version: 6.0.3
   - name: community.crypto
     version: 2.26.9
   - name: middleware_automation.keycloak
-    version: 3.0.6
+    version: 3.0.10
   # molecule ec2 tests
   - name: amazon.aws
-    version: 11.3.0
+    version: 11.4.0
   - name: community.aws
-    version: 11.0.0
+    version: 11.1.0
   - name: alfresco.platform
-    version: 0.3.0
+    version: 0.4.1
   # Alternate source for alfresco.platform
   # - name: git+https://github.com/Alfresco/alfresco-ansible-collection.git
   #  type: git
@@ -27,4 +27,4 @@ collections:
 
 roles:
   - name: geerlingguy.elasticsearch
-    version: 5.1.2
+    version: 5.2.0

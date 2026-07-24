@@ -24,6 +24,15 @@ use `indexers` and `legacy_indexers`.
 The separate `elasticsearch` group (the ElasticSearch cluster backing Search
 Enterprise) is unchanged.
 
+### Community Elasticsearch indexing (ACS 26.2+)
+
+Community deployments can now use Elasticsearch-based indexing instead of Solr.
+Populate the `indexers` group on an ACS 26.2 (or later) Community deployment and
+the playbook installs the Elasticsearch batch indexing service and configures the
+repository to use the `elasticsearch` search subsystem. Earlier Community
+versions remain Solr-only (`legacy_indexers`); populating `indexers` on a
+Community deployment older than 26.2 now fails fast with a clear message.
+
 ### Making roles independent part 2 (future release)
 
 * The goal is to ensure that all roles are completely independent
