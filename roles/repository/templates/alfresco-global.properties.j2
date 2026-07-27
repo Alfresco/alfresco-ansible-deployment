@@ -18,7 +18,7 @@ elasticsearch.password={{ elasticsearch_password | default('') }}
 {% else %}
 index.subsystem.name=noindex
 {% endif %}
-{% if repository_index_type != 'noindex' and reposearch_shared_secret is defined %}
+{% if repository_index_type != 'noindex' and reposearch_shared_secret | default('') | length > 0 %}
 solr.secureComms=secret
 {% endif %}
 
