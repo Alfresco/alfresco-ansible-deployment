@@ -28,7 +28,10 @@ The password used to access the postgres database of Sync
 
 ### reposearch_shared_secret
 
-The secret used between Solr and Repository for communicating.
+The shared secret used to authenticate against the Repository legacy Solr
+tracking API. It is required by Solr and, for Community Elasticsearch
+deployments, by the batch indexing service that fetches content for
+transformation through the same API.
 
 ### elasticsearch_password
 

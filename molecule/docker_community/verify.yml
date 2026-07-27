@@ -9,11 +9,26 @@
         src: /etc/opt/alfresco/content-services/classpath/alfresco-global.properties
       register: global_props_raw
 
-    - name: Assert Elasticsearch subsystem is configured
+    - name: Assert Elasticsearch subsystem is configured with shared secret auth
+      vars:
+        global_props: "{{ global_props_raw.content | b64decode }}"
       ansible.builtin.assert:
         that:
-          - "'index.subsystem.name=elasticsearch' in (global_props_raw.content | b64decode)"
-        fail_msg: "'index.subsystem.name=elasticsearch' not found in alfresco-global.properties"
+          - "'index.subsystem.name=elasticsearch' in global_props"
+          - "'solr.secureComms=secret' in global_props"
+        fail_msg: "Elasticsearch subsystem or solr.secureComms not configured in alfresco-global.properties"
+
+    - name: Read tomcat.sh
+      become: true
+      ansible.builtin.slurp:
+        src: /opt/alfresco/tomcat.sh
+      register: tomcat_sh_raw
+
+    - name: Assert the repository is configured with the tracking shared secret
+      ansible.builtin.assert:
+        that:
+          - "'-Dsolr.sharedSecret=' in (tomcat_sh_raw.content | b64decode)"
+        fail_msg: "-Dsolr.sharedSecret not found in tomcat.sh"
 
 - name: Verify Elasticsearch batch indexing service
   hosts: indexers
@@ -28,6 +43,18 @@
           - "'alfresco-batch-indexing.service' in ansible_facts.services"
           - ansible_facts.services['alfresco-batch-indexing.service'].state == 'running'
         fail_msg: "alfresco-batch-indexing service is not running"
+
+    - name: Read the batch indexing environment file
+      become: true
+      ansible.builtin.slurp:
+        src: /etc/systemd/system/alfresco-batch-indexing.env
+      register: batch_env_raw
+
+    - name: Assert the batch indexing service is configured with the tracking shared secret
+      ansible.builtin.assert:
+        that:
+          - (batch_env_raw.content | b64decode) is search('ALFRESCO_CONTENT_TRANSFORM_SHAREDSECRET=.+')
+        fail_msg: "ALFRESCO_CONTENT_TRANSFORM_SHAREDSECRET is not set for the batch indexing service"
 
 - name: Import the default verify playbook
   ansible.builtin.import_playbook: ../default/verify.yml
