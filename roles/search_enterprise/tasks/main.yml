@@ -42,6 +42,8 @@
         owner: root
         group: root
         mode: "0640"
+      notify:
+        - Run elasticsearch-connector reindex service
 
     - name: Add elasticsearch-connector service
       ansible.builtin.template:

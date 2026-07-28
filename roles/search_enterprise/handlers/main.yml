@@ -13,3 +13,10 @@
     name: elasticsearch-connector
     state: restarted
     daemon_reload: true
+
+- name: Run elasticsearch-connector reindex service
+  become: true
+  ansible.builtin.systemd:
+    name: elasticsearch-connector-reindex
+    state: started
+    daemon_reload: true
