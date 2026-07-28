@@ -16,6 +16,7 @@
 
 - name: Run elasticsearch-connector reindex service
   become: true
+  when: search_enterprise_repo_db_url | length > 0
   ansible.builtin.systemd:
     name: elasticsearch-connector-reindex
     state: started
