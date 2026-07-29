@@ -35,6 +35,22 @@
   ansible.builtin.debug:
     var: diag_connector.stdout_lines
 
+- name: "Diag [{{ diag_label | default('search') }}] batch indexing health + errors"
+  become: true
+  ansible.builtin.shell: |
+    echo "state=$(systemctl is-active alfresco-batch-indexing 2>/dev/null)"
+    journalctl -u alfresco-batch-indexing --no-pager 2>/dev/null \
+      | grep -viE 'FailoverTransport|EndpointLinksResolver|TomcatWebServer|AbstractCamelContext|HikariDataSource' \
+      | grep -iE 'WARN|ERROR|Exception|transform|path|content|refused|reset|denied|403|version_conflict' \
+      | tail -n 40
+  register: diag_batch_indexing
+  changed_when: false
+  failed_when: false
+
+- name: "Diag [{{ diag_label | default('search') }}] batch indexing"
+  ansible.builtin.debug:
+    var: diag_batch_indexing.stdout_lines
+
 - name: "Diag [{{ diag_label | default('search') }}] ActiveMQ restarts/blips"
   become: true
   ansible.builtin.shell: |
@@ -96,7 +112,7 @@
     es=http://localhost:9200
     echo "index_health=$(curl -s -u "$creds" "${es}/_cluster/health/alfresco?pretty" 2>/dev/null | tr -d ' \n')"
     echo "total_docs=$(curl -s -u "$creds" "${es}/alfresco/_count" 2>/dev/null)"
-    echo "docs_with_content=$(curl -s -u "$creds" "${es}/alfresco/_count" -H 'Content-Type: application/json' -d '{"query":{"exists":{"field":"cm%3Acontent"}}}' 2>/dev/null)"
+    echo "docs_with_content=$(curl -s -u "$creds" "${es}/alfresco/_count" -H 'Content-Type: application/json' -d '{"query":{"exists":{"field":"cm:content"}}}' 2>/dev/null)"
   args:
     executable: /bin/bash
   register: diag_es

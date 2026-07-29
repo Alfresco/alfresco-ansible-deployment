@@ -3,7 +3,8 @@
       "host": "TEST_URL",
       "username": "admin",
       "password": "admin",
-      "search_retry_interval_seconds": "30"
+      "search_retry_interval_seconds": "30",
+      "search_timeout_seconds": "300"
     },
     "assertions": {
       "acs": {
