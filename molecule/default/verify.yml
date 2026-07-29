@@ -7,6 +7,15 @@
       ansible.builtin.set_fact:
         acs_play_repository_acs_edition: "{{ acs_play_repository_acs_edition | default('Enterprise') }}"
 
+- name: Search diagnostics baseline (post-converge/reindex, pre-test)
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Gather baseline search diagnostics
+      ansible.builtin.include_tasks: "tasks/gather_search_diagnostics.yml"
+      vars:
+        diag_label: baseline
+
 - name: Verify
   hosts: localhost
   gather_facts: false
@@ -49,9 +58,28 @@
         - name: Print multiline pytest stdout as best as we can
           debug:
             msg: "{{ ansible_failed_result.stdout_lines }}"
-        - name: Exit with failure
-          ansible.builtin.fail:
-            msg: "pytest failed"
+        - name: Record DTAS failure for post-mortem diagnostics
+          ansible.builtin.set_fact:
+            dtas_failed: true
+
+- name: Search diagnostics after DTAS failure
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Gather post-failure search diagnostics
+      when: hostvars['localhost']['dtas_failed'] | default(false) | bool
+      ansible.builtin.include_tasks: "tasks/gather_search_diagnostics.yml"
+      vars:
+        diag_label: post-failure
+
+- name: Fail the run when DTAS failed
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Exit with failure
+      when: dtas_failed | default(false) | bool
+      ansible.builtin.fail:
+        msg: "pytest failed (see 'Diag [post-failure]' output above)"
 
 - name: Verify adw plugins state
   hosts: adw
