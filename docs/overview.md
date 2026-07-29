@@ -103,7 +103,7 @@ ACS 7.x onward.
 | Search Enterprise   | 5.7.0 (n/a)                 | 5.7.0           | 5.7.0           |
 | All-In-One T-Engine | 5.4.3                       | 5.4.3           | 5.4.3           |
 | AOS                 | 3.4.1                       | 3.4.1           | 3.4.1           |
-| Google Docs         | 4.1.0                       | 4.1.0           | 4.1.0           |
+| Google Docs         | 4.1.1                       | 4.1.1           | 4.1.1           |
 | Digital Workspace   | 8.0.0 (n/a)                 | 8.0.0           | 8.0.0           |
 | Control Center      | 11.0.0                      | 11.0.0          | 11.0.0          |
 | Transform Router    | 4.4.3 (n/a)                 | 4.4.3           | 4.4.3           |
