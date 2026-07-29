@@ -45,6 +45,11 @@ solr_host: >-
   | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
   | first
   | default('127.0.0.1') }}
+indexer_hosts: >-
+  {{ groups['indexers']
+  | default([])
+  | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
+  | list }}
 ats_tengine_aio_host: >-
   {{ groups['transformers']
   | default([])
