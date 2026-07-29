@@ -4,7 +4,6 @@
 
 {% if repository_index_type == 'solr' %}
 index.subsystem.name=solr6
-solr.secureComms=secret
 solr.port={{ ports_cfg.search.http }}
 solr.host={{ solr_host }}
 {% elif repository_index_type == 'elasticsearch' %}
@@ -18,6 +17,9 @@ elasticsearch.user={{ elasticsearch_username | default('') }}
 elasticsearch.password={{ elasticsearch_password | default('') }}
 {% else %}
 index.subsystem.name=noindex
+{% endif %}
+{% if repository_index_type != 'noindex' and reposearch_shared_secret | default('') | length > 0 %}
+solr.secureComms=secret
 {% endif %}
 
 # KEYSTORES
