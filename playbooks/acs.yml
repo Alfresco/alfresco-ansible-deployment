@@ -587,15 +587,6 @@
     - role: "../roles/java"
       when: acs_play_community_search_enabled
       java_version: "{{ acs_play_java_version }}"
-    - role: "../roles/java"
-      tasks_from: keystores
-      when: acs_play_use_ssl and acs_play_community_search_enabled
-      java_version: "{{ acs_play_java_version }}"
-      java_keystore:
-        trusted_certs:
-          - path: >-
-              {{ playbook_dir }}/../configuration_files/ssl_certificates/{{ acs_play_fqdn_alfresco }}.crt
-            alias: "nginx-frontend-{{ acs_play_fqdn_alfresco }}"
     - role: alfresco.platform.search_community
       when: acs_play_community_search_enabled
       search_community_java_home_path: "/opt/openjdk-{{ acs_play_java_core }}"
@@ -617,6 +608,28 @@
       search_community_transform_url: "http://{{ ats_tengine_aio_host }}:{{ ports_cfg.transformers.tengine }}/transform/config"
       search_community_content_transform_shared_secret: "{{ reposearch_shared_secret }}"
   post_tasks:
+    - name: Trust nginx front-door certificate for Community Search content transform calls
+      when: acs_play_use_ssl and acs_play_community_search_enabled
+      ansible.builtin.include_role:
+        name: ../roles/java
+        tasks_from: keystores
+      vars:
+        java_home: "/opt/openjdk-{{ acs_play_java_core }}"
+        java_keystore:
+          trusted_certs:
+            - path: >-
+                {{ playbook_dir }}/../configuration_files/ssl_certificates/{{ acs_play_fqdn_alfresco }}.crt
+              alias: "nginx-frontend-{{ acs_play_fqdn_alfresco }}"
+
+    - name: Restart Community Search batch indexing service to pick up the newly trusted certificate
+      when:
+        - acs_play_use_ssl and acs_play_community_search_enabled
+        - java_needs_restart | default(false)
+      become: true
+      ansible.builtin.systemd:
+        name: alfresco-batch-indexing
+        state: restarted
+
     - name: Update installation status file with Community Search
       when: acs_play_community_search_enabled
       become: true
