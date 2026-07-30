@@ -40,41 +40,18 @@ argument_specs:
           path:
             description: |
               Local path to the java keystore
-              Required when cert_containers or seckeys is given, unused by trusted_certs.
-            required: false
+            required: true
             type: str
           pass:
             description: |
               Password to unlock the java keystore
-              Required when cert_containers or seckeys is given, unused by trusted_certs.
-            required: false
+            required: true
             type: str
           type:
             description: |
               Type of keystore (JKS, JCEKS, PKCS12)
-              Required when cert_containers or seckeys is given, unused by trusted_certs.
-            required: false
+            required: true
             type: str
-          trusted_certs:
-            description: |
-              A list of dict to represent plain PEM certificates to trust directly in the
-              java truststore, without importing them into a keystore (no PKCS12 container,
-              no password required).
-            required: false
-            type: list
-            elements: dict
-            options:
-              path:
-                type: str
-                description: |
-                  Local path to the plain PEM certificate to trust
-                required: true
-              alias:
-                type: str
-                description: |
-                  Alias to register the certificate under in the truststore.
-                  Defaults to the certificate's file basename.
-                required: false
           cert_containers:
             description: |
               A list of dict to represent certificates to import in keystore.
