@@ -6,6 +6,13 @@ title: Upgrading the playbook
 
 ## Unreleased version
 
+### Making roles independent part 2 (future release)
+
+* The goal is to ensure that all roles are completely independent
+* The `common` role will be deprecated and removed
+
+## v3.11.0
+
 ### Inventory groups renamed to `indexers` / `legacy_indexers`
 
 The indexing inventory groups have clearer names that convey the indexing
@@ -32,11 +39,6 @@ the playbook installs the Elasticsearch batch indexing service and configures th
 repository to use the `elasticsearch` search subsystem. Earlier Community
 versions remain Solr-only (`legacy_indexers`); populating `indexers` on a
 Community deployment older than 26.2 now fails fast with a clear message.
-
-### Making roles independent part 2 (future release)
-
-* The goal is to ensure that all roles are completely independent
-* The `common` role will be deprecated and removed
 
 ## v3.10.0
 

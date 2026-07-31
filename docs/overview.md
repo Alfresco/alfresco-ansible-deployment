@@ -91,25 +91,25 @@ distributions.
 The table below shows the version of the components deployed by the playbook for
 ACS 7.x onward.
 
-| Component           | 26.1 Enterprise (Community) | 25.4 Enterprise | 23.7 Enterprise |
+| Component           | 26.2 Enterprise (Community) | 25.4 Enterprise | 23.7 Enterprise |
 |---------------------|-----------------------------|-----------------|-----------------|
 | OpenJDK             | 21.0.11                     | 17.0.19         | 17.0.19         |
 | Apache Tomcat       | 11.0.22                     | 10.1.55         | 10.1.55         |
 | PostgreSQL          | 17.x                        | 16.x            | 15.x            |
-| Apache ActiveMQ     | 6.2.6                       | 5.18.7          | 5.18.7          |
-| Repository          | 26.1.0                      | 25.4.1          | 23.7.0          |
-| Share               | 26.1.0                      | 25.4.1          | 23.7.0          |
-| Search Services     | 2.0.20                      | 2.0.20          | 2.0.20          |
-| Search Enterprise   | 5.6.0 (n/a)                 | 5.6.0           | 5.6.0           |
-| All-In-One T-Engine | 5.4.2                       | 5.4.2           | 5.4.2           |
+| Apache ActiveMQ     | 6.2.7                       | 5.18.7          | 5.18.7          |
+| Repository          | 26.2.0                      | 25.4.1          | 23.7.1          |
+| Share               | 26.2.0                      | 25.4.1          | 23.7.1          |
+| Search Services     | 2.0.20                      | 2.0.21          | 2.0.21          |
+| Search Enterprise   | 5.7.0 (n/a)                 | 5.7.0           | 5.7.0           |
+| All-In-One T-Engine | 5.4.3                       | 5.4.3           | 5.4.3           |
 | AOS                 | 3.4.1                       | 3.4.1           | 3.4.1           |
-| Google Docs         | 4.1.0                       | 4.1.0           | 4.1.0           |
-| Digital Workspace   | 7.5.0 (n/a)                 | 7.5.0           | 7.5.0           |
-| Control Center      | 10.5.0                      | 10.5.0          | 10.5.0          |
-| Transform Router    | 4.4.2 (n/a)                 | 4.4.2           | 4.4.2           |
-| Shared File Store   | 4.4.2 (n/a)                 | 4.4.2           | 4.4.2           |
-| Sync Service        | 5.3.4 (n/a)                 | 5.3.4           | 5.3.4           |
-| Audit Storage       | 1.3.2                       | 1.3.2           | 1.3.2           |
+| Google Docs         | 4.1.1                       | 4.1.1           | 4.1.1           |
+| Digital Workspace   | 8.0.0 (n/a)                 | 8.0.0           | 8.0.0           |
+| Control Center      | 11.0.0                      | 11.0.0          | 11.0.0          |
+| Transform Router    | 4.4.3 (n/a)                 | 4.4.3           | 4.4.3           |
+| Shared File Store   | 4.4.3 (n/a)                 | 4.4.3           | 4.4.3           |
+| Sync Service        | 5.3.5 (n/a)                 | 5.3.5           | 5.3.5           |
+| Audit Storage       | 1.3.3                       | 1.3.3           | 1.3.3           |
 
 > Support for ACS 7.4 has been deprecated since May 2026, but you can still use the latest playbook that supported it ([v3.9.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v3.9.0))
 > Support for ACS 7.3 has been deprecated since October 2025, but you can still use the latest playbook that supported it ([v3.4.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v3.4.0))
