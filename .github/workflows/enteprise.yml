@@ -149,22 +149,31 @@ jobs:
           - image: rockylinux/rockylinux:9.8
         scenario:
           - name: pki
-          - name: elasticsearch
           - name: identity
           - name: prerun_network_checks
         runner:
-          - ubuntu-latest-8-cores
+          - ubuntu-latest
         include:
+          - scenario:
+              name: elasticsearch
+            molecule_distro:
+              image: rockylinux/rockylinux:9.8
+            runner: alfrescoPub-ubuntu2404-32G-8CPU
+          - scenario:
+              name: elasticsearch
+            molecule_distro:
+              image: ubuntu:24.04
+            runner: alfrescoPub-ubuntu2404-32G-8CPU
           - scenario:
               name: docker_enterprise
             molecule_distro:
               image: rockylinux/rockylinux:9.8
-            runner: ubuntu-latest-8-cores
+            runner: alfrescoPub-ubuntu2404-32G-8CPU
           - scenario:
               name: docker_enterprise
             molecule_distro:
               image: ubuntu:24.04
-            runner: ubuntu-latest-8-cores
+            runner: alfrescoPub-ubuntu2404-32G-8CPU
 
     uses: ./.github/workflows/docker.yml
     with:
