@@ -45,10 +45,6 @@ solr_host: >-
   | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
   | first
   | default('127.0.0.1') }}
-# Named distinctly from playbooks/group_vars/all.yml's `indexer_hosts` (a list of
-# inventory hostnames used for solr-vs-elasticsearch mode detection and postgres
-# ACLs) - that variable takes precedence over this role default and would silently
-# shadow it if reused, since nginx here needs actual IP addresses, not hostnames.
 indexer_ip_addresses: >-
   {{ (groups['indexers'] | default([]) | union(groups['search_enterprise'] | default([])))
   | map('extract', hostvars, ['ansible_default_ipv4', 'address'])
