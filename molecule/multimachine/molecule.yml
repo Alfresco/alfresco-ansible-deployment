@@ -140,6 +140,8 @@ provisioner:
     - "${MOLECULE_IT_EXTRA_VARS}"
     - -e
     - "@../../tests/test-ssl.yml"
+    - -e
+    - '{"ats_mtls_capable": false}'
   inventory:
     links:
       host_vars: ./host_vars
