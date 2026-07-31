@@ -7,15 +7,6 @@
       ansible.builtin.set_fact:
         acs_play_repository_acs_edition: "{{ acs_play_repository_acs_edition | default('Enterprise') }}"
 
-- name: Search diagnostics baseline (post-converge/reindex, pre-test)
-  hosts: all
-  gather_facts: false
-  tasks:
-    - name: Gather baseline search diagnostics
-      ansible.builtin.include_tasks: "tasks/gather_search_diagnostics.yml"
-      vars:
-        diag_label: baseline
-
 - name: Verify
   hosts: localhost
   gather_facts: false
