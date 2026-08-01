@@ -85,7 +85,7 @@ jobs:
           persist-credentials: false
 
       - name: Install Updatecli
-        uses: Alfresco/alfresco-build-tools/.github/actions/setup-updatecli@v18.20.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/setup-updatecli@v18.21.0
 
       - name: Checkout updatecli configs
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
