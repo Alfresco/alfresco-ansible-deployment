@@ -1,4 +1,7 @@
 ---
+# NOTE: This scenario is currently not working. The Community Elasticsearch batch
+# indexing role has been removed pending the upcoming batch indexer release, so this
+# scenario is not exercised in CI for now (see .github/workflows/enteprise.yml).
 dependency:
   name: galaxy
 
