@@ -201,6 +201,9 @@ jobs:
           - name: default
             vars: vars-rhel8.yml
             desc: EC2 ACS 25 (RHEL 8.10)
+          - name: default
+            vars: vars-community.yml
+            desc: EC2 ACS 26.x Community Solr (Ubuntu 24.04)
           # Temporarily disabled: Community Elasticsearch batch indexing has been
           # removed pending the upcoming batch indexer release. Re-enable once available.
           # - name: default_elastic
