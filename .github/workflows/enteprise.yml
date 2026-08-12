@@ -209,7 +209,7 @@ jobs:
             desc: EC2 ACS 25.x (Rocky Linux 9.8)
           - name: multimachine
             vars: vars.yml
-            desc: EC2 ACS 26.x clustered (RHEL 9.8)
+            desc: EC2 ACS 26.x clustered OpenSearch SigV4 (RHEL 9.8)
           - name: opensearch
             vars: vars.yml
             desc: EC2 ACS 26.x opensearch (RHEL 9.8)

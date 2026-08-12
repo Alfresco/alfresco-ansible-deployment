@@ -92,7 +92,10 @@
             name: "{{ opensearch_role_name }}"
             state: absent
             delete_instance_profile: true
-          failed_when: false
+          register: role_delete
+          retries: 6
+          delay: 10
+          until: role_delete is not failed
 
 - name: Cleanup external activemq
   hosts: localhost
