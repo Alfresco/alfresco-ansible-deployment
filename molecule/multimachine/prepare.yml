@@ -220,6 +220,10 @@
               security_groups: "{{ ec2_sg | unique }}"
               subnets: "{{ ec2_subnet_ids | unique }}"
             tags: "{{ resource_tags }}"
+          register: opensearch_domain
+          until: opensearch_domain is not failed
+          retries: 5
+          delay: 30
 
         - name: Gather OpenSearch domain info
           community.aws.opensearch_info:

@@ -56,7 +56,7 @@
           become: true
           ansible.builtin.shell: journalctl -u {{ job_name }}
           register: error_log
-          retries: 6
+          retries: 30
           delay: 10
           until: error_log.stdout | regex_search('reindexByIds.*COMPLETED.*')
           changed_when: false
