@@ -178,10 +178,13 @@
               --iam-instance-profile Name={{ opensearch_role_name }}
           loop: "{{ sigv4_ec2.instances | map(attribute='instance_id') | list }}"
           register: associate_profile
+          until: 'associate_profile.rc == 0 or "existing association" in associate_profile.stderr'
+          retries: 10
+          delay: 15
           changed_when: associate_profile.rc == 0
           failed_when:
             - associate_profile.rc != 0
-            - '"already has an associated instance profile" not in associate_profile.stderr'
+            - '"existing association" not in associate_profile.stderr'
 
         - name: Request OpenSearch domain creation
           vars:
