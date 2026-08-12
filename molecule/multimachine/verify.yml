@@ -1,0 +1,65 @@
+---
+- name: Verify search enterprise live indexing under SigV4
+  hosts: indexers:search_enterprise
+  gather_facts: false
+  vars:
+    es_iam_auth: "{{ lookup('ansible.builtin.env', 'MOLECULE_ES_AUTH') == 'aws-iam' }}"
+    job_name: elasticsearch-connector.service
+  tasks:
+    - name: SigV4 live indexing checks
+      when: es_iam_auth | bool
+      block:
+        - name: Populate service facts
+          ansible.builtin.service_facts:
+
+        - name: Check that Elasticsearch Connector service is up and running
+          ansible.builtin.assert:
+            that:
+              - ansible_facts.services[job_name] is defined
+              - ansible_facts.services[job_name].state == 'running'
+
+        - name: "Check that {{ job_name }} is really up and running"
+          become: true
+          ansible.builtin.shell: journalctl -u {{ job_name }}
+          register: error_log
+          retries: 6
+          delay: 10
+          until: error_log.stdout | regex_search('Started LiveIndexingApp')
+          changed_when: false
+
+- name: Verify reindex under SigV4
+  hosts: indexers:search_enterprise
+  gather_facts: false
+  vars:
+    es_iam_auth: "{{ lookup('ansible.builtin.env', 'MOLECULE_ES_AUTH') == 'aws-iam' }}"
+    job_name: elasticsearch-connector-reindex.service
+  tasks:
+    - name: SigV4 reindex checks
+      when: es_iam_auth | bool
+      block:
+        - name: Populate service facts
+          ansible.builtin.service_facts:
+
+        - name: Check that {{ job_name }} is defined and not running
+          ansible.builtin.assert:
+            that:
+              - ansible_facts.services[job_name] is defined
+              - ansible_facts.services[job_name].state == 'inactive'
+
+        - name: Run the Elasticsearch Connector Reindex
+          become: true
+          ansible.builtin.systemd:
+            state: started
+            name: elasticsearch-connector-reindex
+
+        - name: "Check that {{ job_name }} completed the reindex"
+          become: true
+          ansible.builtin.shell: journalctl -u {{ job_name }}
+          register: error_log
+          retries: 6
+          delay: 10
+          until: error_log.stdout | regex_search('reindexByIds.*COMPLETED.*')
+          changed_when: false
+
+- name: Default verify
+  import_playbook: ../default/verify.yml

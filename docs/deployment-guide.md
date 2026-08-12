@@ -822,6 +822,60 @@ all:
 Every hosts under the `external` group is not directly managed by the acs
 playbook and is required in the inventory just for the sake of architecture description.
 
+#### Authenticating with AWS IAM (SigV4)
+
+When the external cluster is an AWS OpenSearch domain, you can authenticate the
+repository, live indexer and reindexer with AWS IAM (SigV4) instead of HTTP basic
+auth. Requests are then signed with the credentials the target hosts obtain from
+their EC2 instance profile, and no ElasticSearch password is generated or
+propagated.
+
+Select this mode by setting `elasticsearch_auth_mode: aws-iam` and an
+`elasticsearch_aws_region` on the external host, omitting `elasticsearch_username`
+(and the password):
+
+```yaml
+all:
+  children:
+    external_elasticsearch:
+      hosts:
+        whatever.eu-west-1.es.amazonaws.com:
+          elasticsearch_auth_mode: aws-iam
+          elasticsearch_aws_region: eu-west-1
+          elasticsearch_port: 443
+          elasticsearch_protocol: https
+    external:
+      children:
+        external_elasticsearch:
+```
+
+In this mode:
+
+* No `elasticsearch_password` is required in `vars/secrets.yml`; secret generation
+  for it is skipped.
+* The OpenSearch domain does **not** need fine-grained access control / an internal
+  master user — data-plane access is authorised by IAM.
+* The EC2 instance profile attached to the repository and search hosts must grant
+  `es:ESHttp*` on the domain ARN, for example:
+
+  ```json
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": "es:ESHttp*",
+        "Resource": "arn:aws:es:<region>:<account-id>:domain/<domain-name>/*"
+      }
+    ]
+  }
+  ```
+
+  and the domain's access policy must allow the role that instance profile assumes.
+
+> Audit storage does not support SigV4 and is therefore not compatible with
+> `elasticsearch_auth_mode: aws-iam`.
+
 ### External Identity
 
 Support for external Identity service will be implemented in a future playbook release (internal ref: OPSEXP-2353).

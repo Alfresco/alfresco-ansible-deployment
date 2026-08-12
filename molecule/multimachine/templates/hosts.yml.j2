@@ -6,3 +6,9 @@ all:
           hosts:
             {{ mqhost }}:
               {{ mqattrs | to_yaml }}
+{% if eshost is defined %}
+        external_elasticsearch:
+          hosts:
+            {{ eshost }}:
+              {{ esattrs | to_yaml }}
+{% endif %}
