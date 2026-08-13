@@ -193,8 +193,7 @@
           community.aws.opensearch:
             domain_name: "{{ domain_name }}"
             engine_version: OpenSearch_1.3
-            wait: true
-            wait_timeout: 1800
+            wait: false
             cluster_config:
               instance_type: c6g.large.search
               instance_count: 1
@@ -228,22 +227,10 @@
           retries: 5
           delay: 30
 
-        - name: Gather OpenSearch domain info
-          community.aws.opensearch_info:
-            domain_name: "{{ domain_name }}"
-          until: es_domain.domains[0].domain_status.endpoints.vpc | default(false)
-          delay: 30
-          retries: 10
-          register: es_domain
-
-        - name: Register external OpenSearch host facts for inventory rendering
+        - name: Persist SigV4 provisioning facts for the inventory render
           ansible.builtin.set_fact:
-            eshost: "{{ es_domain.domains[0].domain_status.endpoints.vpc }}"
-            esattrs:
-              elasticsearch_auth_mode: aws-iam
-              elasticsearch_aws_region: "{{ aws_region }}"
-              elasticsearch_port: 443
-              elasticsearch_protocol: https
+            sigv4_domain_name: "{{ domain_name }}"
+            sigv4_aws_region: "{{ aws_region }}"
 
 - name: Prepare external activemq
   hosts: localhost
@@ -286,6 +273,25 @@
     - name: Grab activemq hostname
       set_fact:
         activemq_hostname: "{{ (describe_broker_output.stdout | from_json).BrokerInstances[0].Endpoints[0] | urlsplit('hostname') }}"
+
+    - name: Wait for the asynchronously-created OpenSearch domain endpoint
+      community.aws.opensearch_info:
+        domain_name: "{{ sigv4_domain_name }}"
+      register: es_domain
+      until: es_domain.domains[0].domain_status.endpoints.vpc | default(false)
+      delay: 30
+      retries: 30
+      when: sigv4_domain_name is defined
+
+    - name: Register external OpenSearch host facts for inventory rendering
+      ansible.builtin.set_fact:
+        eshost: "{{ es_domain.domains[0].domain_status.endpoints.vpc }}"
+        esattrs:
+          elasticsearch_auth_mode: aws-iam
+          elasticsearch_aws_region: "{{ sigv4_aws_region }}"
+          elasticsearch_port: 443
+          elasticsearch_protocol: https
+      when: sigv4_domain_name is defined
 
     - name: Configure activemq hostname as {{ activemq_hostname }}
       vars:

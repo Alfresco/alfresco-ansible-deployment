@@ -85,7 +85,6 @@ runs:
         aws-region: ${{ inputs.aws_region }}
         role-to-assume: arn:aws:iam::372466110691:role/AlfrescoCI/alfresco-cloud-deploy
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-cleanup
-        role-duration-seconds: 5400
 
     - name: Cleanup tests
       if: always()
