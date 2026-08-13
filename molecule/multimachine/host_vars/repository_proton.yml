@@ -1,1 +1,11 @@
 # variables for molecule tests - inventory_hostname: repository_proton
+# BEGIN KNOWN_URLS VAR
+acs_play_known_urls:
+  - https://ec2-108-131-139-43.eu-west-1.compute.amazonaws.com/share/
+# END KNOWN_URLS VAR
+# BEGIN CS_STORAGE VARS
+cs_storage:
+  type: nfs
+  device: fs-0a0324945655b4a4f.efs.eu-west-1.amazonaws.com:/local-1
+  options: _netdev,noatime,nodiratime,tcp,soft,intr
+# END CS_STORAGE VARS
