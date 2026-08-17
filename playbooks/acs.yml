@@ -831,7 +831,10 @@
     - role: "../roles/java"
       java_version: "{{ acs_play_java_version }}"
     - role: alfresco.platform.cic_connector
+      cic_connector_artifact_username: "{{ nexus_user }}"
+      cic_connector_artifact_password: "{{ nexus_password }}"
       cic_connector_java_home_path: "/opt/openjdk-{{ acs_play_java_core }}"
+      cic_connector_artifact_default_version: "{{ acs_play_cic_connector_version }}"
       cic_connector_live_ingester_port: "{{ acs_play_cic_connector_live_ingester_port }}"
       cic_connector_nucleus_sync_port: "{{ acs_play_cic_connector_nucleus_sync_port }}"
       cic_connector_remote_ingestion_url: "{{ acs_play_cic_remote_ingestion_url }}"
