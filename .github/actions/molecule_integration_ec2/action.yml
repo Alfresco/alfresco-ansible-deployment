@@ -78,6 +78,14 @@ runs:
         CLONE_GITHUB_TOKEN: ${{ inputs.pat }}
       run: ./tests/molecule_it/script.sh verify
 
+    - name: Refresh AWS credentials before cleanup
+      if: always()
+      uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
+      with:
+        aws-region: ${{ inputs.aws_region }}
+        role-to-assume: arn:aws:iam::372466110691:role/AlfrescoCI/alfresco-cloud-deploy
+        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-cleanup
+
     - name: Cleanup tests
       if: always()
       env:

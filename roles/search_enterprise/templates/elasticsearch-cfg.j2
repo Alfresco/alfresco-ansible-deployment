@@ -4,6 +4,13 @@ Environment=ELASTICSEARCH_INDEXNAME=alfresco
 Environment=SPRING_ACTIVEMQ_BROKERURL=failover:({{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }})
 Environment=SPRING_ACTIVEMQ_USER={{ activemq_username }}
 Environment=SPRING_ACTIVEMQ_PASSWORD={{ activemq_password | replace('%', '%%') }}
+Environment=SPRING_ELASTICSEARCH_URIS={{ elasticsearch_protocol }}://{{ elasticsearch_host }}:{{ ports_cfg.elasticsearch.http }}
 Environment=SPRING_ELASTICSEARCH_REST_URIS={{ elasticsearch_protocol }}://{{ elasticsearch_host }}:{{ ports_cfg.elasticsearch.http }}
+{% if elasticsearch_auth_mode == 'aws-iam' %}
+Environment=SPRING_ELASTICSEARCH_AUTH_MODE=aws-iam
+Environment=SPRING_ELASTICSEARCH_AWS_REGION={{ elasticsearch_aws_region }}
+Environment=SPRING_ELASTICSEARCH_AWS_SERVICE={{ elasticsearch_aws_service }}
+{% else %}
 Environment=SPRING_ELASTICSEARCH_REST_USERNAME={{ elasticsearch_username }}
 Environment=SPRING_ELASTICSEARCH_REST_PASSWORD={{ elasticsearch_password | replace('%', '%%') }}
+{% endif %}

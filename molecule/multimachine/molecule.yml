@@ -149,4 +149,3 @@ provisioner:
   playbooks:
     create: ../default/create.yml
     destroy: ../default/destroy.yml
-    verify: ../default/verify.yml

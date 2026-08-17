@@ -82,6 +82,156 @@
                 fstype: nfs
                 state: absent
 
+- name: Prepare external OpenSearch domain with SigV4 (IAM) auth
+  hosts: localhost
+  gather_facts: false
+  vars:
+    es_iam_auth: "{{ lookup('ansible.builtin.env', 'MOLECULE_ES_AUTH') == 'aws-iam' }}"
+    aws_region: "{{ lookup('ansible.builtin.env', 'AWS_REGION') }}"
+    it_platform: "{{ lookup('ansible.builtin.env', 'MOLECULE_IT_PLATFORM') }}"
+    repo_branch: "{{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}"
+    build: "{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}"
+    domain_name: >-
+      {{ ['molecule', it_platform, build, repo_branch]
+      | join('-')
+      | ansible.builtin.regex_replace('[^a-zA-Z0-9]', build[-1])
+      | lower
+      | truncate(28, True, '', 0) }}
+    resource_suffix: >-
+      {{ [it_platform, build, repo_branch]
+      | join('-')
+      | ansible.builtin.regex_replace('[^a-zA-Z0-9]', '-')
+      | lower
+      | truncate(40, True, '', 0) }}
+    opensearch_role_name: "molecule-{{ resource_suffix }}-opensearch"
+    ec2_tag_names:
+      - "molecule_{{ it_platform }}_repo_{{ repo_branch }}_{{ build }}"
+      - "molecule_{{ it_platform }}_es_{{ repo_branch }}_{{ build }}"
+    resource_tags:
+      Name: "molecule-{{ resource_suffix }}"
+      Creator: Alfresco/alfresco-ansible-deployment
+      Purpose: Molecule multimachine SigV4 suite
+      Owner: Ops Readiness Team
+      Department: Engineering
+      Production: false
+  tasks:
+    - name: Provision the SigV4 OpenSearch domain and instance profile
+      when: es_iam_auth | bool
+      block:
+        - name: Gather caller info
+          amazon.aws.aws_caller_info:
+          register: caller_info
+
+        - name: Gather repository and search EC2 instances
+          amazon.aws.ec2_instance_info:
+            filters:
+              instance-state-name: running
+              "tag:Name": "{{ ec2_tag_names }}"
+          register: sigv4_ec2
+
+        - name: Ensure repository and search instances were found
+          ansible.builtin.assert:
+            that: sigv4_ec2.instances | length > 0
+            fail_msg: "No repository/search instances found for SigV4 provisioning"
+
+        - name: Build the OpenSearch domain ARN
+          ansible.builtin.set_fact:
+            opensearch_domain_arn: "arn:aws:es:{{ aws_region }}:{{ caller_info.account }}:domain/{{ domain_name }}"
+
+        - name: Create IAM role and instance profile for OpenSearch SigV4 access
+          amazon.aws.iam_role:
+            name: "{{ opensearch_role_name }}"
+            assume_role_policy_document: "{{ ec2_assume_role_policy | to_json }}"
+            create_instance_profile: true
+            tags: "{{ resource_tags }}"
+          vars:
+            ec2_assume_role_policy:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Principal:
+                    Service: ec2.amazonaws.com
+                  Action: sts:AssumeRole
+          register: opensearch_role
+
+        - name: Attach the es:ESHttp* inline policy to the role
+          amazon.aws.iam_policy:
+            iam_type: role
+            iam_name: "{{ opensearch_role_name }}"
+            policy_name: "{{ opensearch_role_name }}-eshttp"
+            state: present
+            policy_json: "{{ eshttp_policy | to_json }}"
+          vars:
+            eshttp_policy:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - es:ESHttp*
+                  Resource: "{{ opensearch_domain_arn }}/*"
+
+        - name: Associate the instance profile with repository and search hosts
+          ansible.builtin.command:
+            cmd: >-
+              aws ec2 associate-iam-instance-profile
+              --instance-id {{ item }}
+              --iam-instance-profile Name={{ opensearch_role_name }}
+          loop: "{{ sigv4_ec2.instances | map(attribute='instance_id') | list }}"
+          register: associate_profile
+          until: 'associate_profile.rc == 0 or "existing association" in associate_profile.stderr'
+          retries: 10
+          delay: 15
+          changed_when: associate_profile.rc == 0
+          failed_when:
+            - associate_profile.rc != 0
+            - '"existing association" not in associate_profile.stderr'
+
+        - name: Request OpenSearch domain creation
+          vars:
+            ec2_sg: "{{ sigv4_ec2.instances | json_query('[].security_groups[].group_id') }}"
+            ec2_subnet_ids: "{{ sigv4_ec2.instances | map(attribute='subnet_id') | list }}"
+          community.aws.opensearch:
+            domain_name: "{{ domain_name }}"
+            engine_version: OpenSearch_1.3
+            wait: false
+            cluster_config:
+              instance_type: c6g.large.search
+              instance_count: 1
+              zone_awareness: false
+              dedicated_master: false
+            ebs_options:
+              ebs_enabled: true
+              volume_type: gp2
+              volume_size: 10
+            access_policies:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Principal:
+                    AWS: "{{ opensearch_role.iam_role.arn }}"
+                  Action:
+                    - es:ESHttp*
+                  Resource: "{{ opensearch_domain_arn }}/*"
+            encryption_at_rest_options:
+              enabled: true
+            node_to_node_encryption_options:
+              enabled: true
+            domain_endpoint_options:
+              enforce_https: true
+            vpc_options:
+              security_groups: "{{ ec2_sg | unique }}"
+              subnets: "{{ ec2_subnet_ids | unique }}"
+            tags: "{{ resource_tags }}"
+          register: opensearch_domain
+          until: opensearch_domain is not failed
+          retries: 5
+          delay: 30
+
+        - name: Persist SigV4 provisioning facts for the inventory render
+          ansible.builtin.set_fact:
+            sigv4_domain_name: "{{ domain_name }}"
+            sigv4_aws_region: "{{ aws_region }}"
+
 - name: Prepare external activemq
   hosts: localhost
   gather_facts: false
@@ -123,6 +273,25 @@
     - name: Grab activemq hostname
       set_fact:
         activemq_hostname: "{{ (describe_broker_output.stdout | from_json).BrokerInstances[0].Endpoints[0] | urlsplit('hostname') }}"
+
+    - name: Wait for the asynchronously-created OpenSearch domain endpoint
+      community.aws.opensearch_info:
+        domain_name: "{{ sigv4_domain_name }}"
+      register: es_domain
+      until: es_domain.domains[0].domain_status.endpoints.vpc | default(false)
+      delay: 30
+      retries: 30
+      when: sigv4_domain_name is defined
+
+    - name: Register external OpenSearch host facts for inventory rendering
+      ansible.builtin.set_fact:
+        eshost: "{{ es_domain.domains[0].domain_status.endpoints.vpc }}"
+        esattrs:
+          elasticsearch_auth_mode: aws-iam
+          elasticsearch_aws_region: "{{ sigv4_aws_region }}"
+          elasticsearch_port: 443
+          elasticsearch_protocol: https
+      when: sigv4_domain_name is defined
 
     - name: Configure activemq hostname as {{ activemq_hostname }}
       vars:

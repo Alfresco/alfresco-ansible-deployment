@@ -23,6 +23,80 @@
         path: host_vars/{{ item }}.yml
       loop: "{{ molecule_yml.platforms | selectattr('name', 'in', groups.repository) | map(attribute='name') }}"
 
+- name: Cleanup external OpenSearch domain and instance profile
+  hosts: localhost
+  gather_facts: false
+  vars:
+    es_iam_auth: "{{ lookup('ansible.builtin.env', 'MOLECULE_ES_AUTH') == 'aws-iam' }}"
+    it_platform: "{{ lookup('ansible.builtin.env', 'MOLECULE_IT_PLATFORM') }}"
+    repo_branch: "{{ lookup('ansible.builtin.env', 'BRANCH_NAME') }}"
+    build: "{{ lookup('ansible.builtin.env', 'BUILD_NUMBER') }}"
+    domain_name: >-
+      {{ ['molecule', it_platform, build, repo_branch]
+      | join('-')
+      | ansible.builtin.regex_replace('[^a-zA-Z0-9]', build[-1])
+      | lower
+      | truncate(28, True, '', 0) }}
+    resource_suffix: >-
+      {{ [it_platform, build, repo_branch]
+      | join('-')
+      | ansible.builtin.regex_replace('[^a-zA-Z0-9]', '-')
+      | lower
+      | truncate(40, True, '', 0) }}
+    opensearch_role_name: "molecule-{{ resource_suffix }}-opensearch"
+    ec2_tag_names:
+      - "molecule_{{ it_platform }}_repo_{{ repo_branch }}_{{ build }}"
+      - "molecule_{{ it_platform }}_es_{{ repo_branch }}_{{ build }}"
+  tasks:
+    - name: Tear down the SigV4 OpenSearch domain and instance profile
+      when: es_iam_auth | bool
+      block:
+        - name: Destroy OpenSearch domain {{ domain_name }}
+          community.aws.opensearch:
+            domain_name: "{{ domain_name }}"
+            state: absent
+            wait_timeout: 1200
+            wait: true
+
+        - name: Gather repository and search EC2 instances
+          amazon.aws.ec2_instance_info:
+            filters:
+              "tag:Name": "{{ ec2_tag_names }}"
+          register: sigv4_ec2
+
+        - name: Disassociate the instance profile from repository and search hosts
+          ansible.builtin.shell: |
+            set -o pipefail
+            assoc=$(aws ec2 describe-iam-instance-profile-associations \
+              --filters "Name=instance-id,Values={{ item }}" \
+              --query "IamInstanceProfileAssociations[].AssociationId" --output text)
+            for a in $assoc; do
+              aws ec2 disassociate-iam-instance-profile --association-id "$a"
+            done
+          args:
+            executable: /bin/bash
+          loop: "{{ sigv4_ec2.instances | map(attribute='instance_id') | list }}"
+          changed_when: true
+          failed_when: false
+
+        - name: Delete the es:ESHttp* inline policy
+          amazon.aws.iam_policy:
+            iam_type: role
+            iam_name: "{{ opensearch_role_name }}"
+            policy_name: "{{ opensearch_role_name }}-eshttp"
+            state: absent
+          failed_when: false
+
+        - name: Delete the IAM role and its instance profile
+          amazon.aws.iam_role:
+            name: "{{ opensearch_role_name }}"
+            state: absent
+            delete_instance_profile: true
+          register: role_delete
+          retries: 6
+          delay: 10
+          until: role_delete is not failed
+
 - name: Cleanup external activemq
   hosts: localhost
   gather_facts: false

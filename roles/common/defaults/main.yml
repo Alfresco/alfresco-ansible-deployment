@@ -92,6 +92,12 @@ elasticsearch_host: "{% if groups.external_elasticsearch | default(False) %}\
   {% endif %}"
 elasticsearch_protocol: >-
   {{- groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_protocol']) | first | default('http') -}}
+elasticsearch_auth_mode: >-
+  {{- groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_auth_mode']) | first | default('basic') -}}
+elasticsearch_aws_region: >-
+  {{- groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_aws_region']) | first | default('') -}}
+elasticsearch_aws_service: >-
+  {{- groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_aws_service']) | first | default('es') -}}
 identity_host: "{% if groups.external_identity | default(False) %}\
   {{- groups.external_identity | first -}}\
   {% else %}\

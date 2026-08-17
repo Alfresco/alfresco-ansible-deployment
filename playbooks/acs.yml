@@ -788,6 +788,14 @@
       ansible.builtin.fail:
         msg: "Audit Storage requires ACS 23.4 or later"
       when: not acs_version_requirement
+    - name: Assert Audit Storage is not combined with aws-iam Elasticsearch auth
+      ansible.builtin.fail:
+        msg: >-
+          Audit Storage does not support AWS IAM (SigV4) Elasticsearch auth.
+          Set elasticsearch_auth_mode to basic or disable Audit Storage.
+      when:
+        - acs_is_enterprise and acs_version_requirement
+        - (groups.external_elasticsearch | default([]) | map('extract', hostvars, ['elasticsearch_auth_mode']) | first | default('basic')) == 'aws-iam'
   roles:
     - role: "../roles/java"
       when: acs_is_enterprise and acs_version_requirement
