@@ -80,6 +80,12 @@ all:
         audit_storage_1:
           ansible_host: targetIP
 
+    # Content Intelligence Connector hosts (Enterprise only, optional)
+    cic:
+      hosts:
+        # cic_1:
+        #   ansible_host: targetIP
+
     other_repo_clients:
       hosts:
 

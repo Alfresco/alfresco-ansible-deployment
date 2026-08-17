@@ -60,6 +60,11 @@ all:
       children:
         repository:
 
+    # Content Intelligence Connector hosts (Enterprise only, optional)
+    cic:
+      children:
+        # repository:
+
     other_repo_clients:
       hosts:
 

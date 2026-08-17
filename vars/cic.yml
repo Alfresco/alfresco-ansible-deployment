@@ -1,0 +1,8 @@
+acs_play_cic_remote_ingestion_url: "https://ingestion.insight.dev.experience.hyland.com"
+acs_play_cic_remote_token_url: "https://auth.dev.app.hyland.com/idp/connect/token"
+acs_play_cic_remote_client_id: "sc-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx"
+acs_play_cic_remote_environment_key: "alfresco-kd-ci-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx"
+acs_play_cic_application_sourceid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx"
+acs_play_cic_nucleus_base_url: "https://auth.dev.app.hyland.com"
+acs_play_cic_nucleus_idp_base_url: "https://api.platform.dev.app.hyland.com"
+acs_play_cic_nucleus_system_id: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx"
