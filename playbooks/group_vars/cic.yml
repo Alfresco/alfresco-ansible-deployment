@@ -1,6 +1,4 @@
 acs_play_cic_connector_live_ingester_port: 8084
 acs_play_cic_connector_nucleus_sync_port: 8085
 acs_play_cic_connector_service_user: "alfresco"
-# ACS admin credentials the connector uses for REST/discovery and Nucleus Sync (override per environment)
 acs_play_cic_alfresco_username: "admin"
-acs_play_cic_alfresco_password: "admin"

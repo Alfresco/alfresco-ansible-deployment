@@ -38,8 +38,10 @@ documentation](https://support.hyland.com/r/Alfresco/Alfresco-Connector-for-Cont
 1. Configure at least one host inside the `inventory` file for the `cic` group.
 2. Provide your Content Intelligence credentials and related configuration
    parameters/URLs in the `vars/cic.yml` file.
-3. Provide `cic_remote_client_secret` in the `vars/secrets.yml` file. Make sure
-   to learn about [Ansible Vault
+3. Provide `cic_remote_client_secret` in the `vars/secrets.yml` file. If the ACS
+   administrator password differs from the default (`admin`), also set
+   `cic_alfresco_password` there — it is the credential the connector
+   authenticates to ACS with. Make sure to learn about [Ansible Vault
    integration](https://alfresco.github.io/alfresco-ansible-deployment/deployment-guide.html#secrets-management)
    if you are doing a production deployment.
 4. Run the Ansible playbook as for a standard deployment. Please follow the

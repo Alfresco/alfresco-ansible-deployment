@@ -845,7 +845,7 @@
       cic_connector_alfresco_version_override: "{{ acs_play_repository_acs_version }}"
       cic_connector_alfresco_base_url: "http://{{ repo_host }}:{{ ports_cfg.repository.http }}/alfresco"
       cic_connector_alfresco_username: "{{ acs_play_cic_alfresco_username }}"
-      cic_connector_alfresco_password: "{{ acs_play_cic_alfresco_password }}"
+      cic_connector_alfresco_password: "{{ cic_alfresco_password }}"
       cic_connector_alfresco_sfs_url: "http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}"
       cic_connector_alfresco_activemq_url: "{{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }}"
       cic_connector_alfresco_activemq_username: "{{ activemq_username }}"
