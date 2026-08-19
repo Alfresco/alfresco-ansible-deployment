@@ -82,7 +82,7 @@
         postgres_db_name: "{{ acs_play_repo_db_name }}"
         postgres_db_username: "{{ acs_play_repo_db_username }}"
         postgres_db_password: "{{ repo_db_password }}"
-        postgres_db_clients: "{{ groups.repository | default([]) | union(indexer_hosts) }}"
+        postgres_db_clients: "{{ groups.repository | default([]) | union(indexer_hosts) | union(groups.cic | default([])) }}"
         postgres_major_version: "{{ acs_play_postgres_major_version }}"
       when: create_repo_db
     - name: Setup sync database
@@ -276,8 +276,6 @@
 - name: Alfresco Repository Role
   hosts: repository
   gather_facts: false
-  vars_files:
-    - "{{ playbook_dir }}/../vars/hxi.yml"
   pre_tasks:
     - name: Build keystore role argument
       ansible.builtin.set_fact:
@@ -354,23 +352,6 @@
         repository_extra_war_downloads: "{{ acs_play_repository_extra_war_downloads }}"
         repository_extra_amp_downloads: "{{ acs_play_repository_extra_amp_downloads }}"
         repository_truststore_type: "{{ acs_play_default_truststore_type }}"
-    - name: Include HxInsight repository extension
-      when: hxi_enabled
-      ansible.builtin.include_role:
-        name: alfresco.platform.hxi_connector
-        tasks_from: repository-extension
-      vars:
-        hxi_connector_repository_content_folder: "{{ binaries_folder }}/content-services-{{ acs_play_repository_acs_version }}"
-        hxi_connector_repository_extension_artifact_path: "{{ hxi_connector_repository_content_folder }}/modules/acs-platform/hxi-repository-extension.jar"
-        hxi_connector_repository_extension_properties_snippet_path: "{{ hxi_connector_repository_content_folder }}/modules/acs-platform-config/alfresco/module/alfresco-hxinsight-connector-hxinsight-extension/alfresco-global.properties"
-        hxi_connector_alfresco_service_existing_handler_name: "Restart-alfresco-content"
-        hxi_connector_remote_discovery_url: "{{ acs_play_hxi_remote_discovery_url }}"
-        hxi_connector_remote_client_id: "{{ acs_play_hxi_remote_client_id }}"
-        hxi_connector_remote_client_secret: "{{ hxi_remote_client_secret }}"
-        hxi_connector_remote_environment_key: "{{ acs_play_hxi_remote_environment_key }}"
-        hxi_connector_remote_prediction_url: "{{ acs_play_hxi_remote_prediction_url }}"
-        hxi_connector_remote_token_url: "{{ acs_play_hxi_remote_token_url }}"
-        hxi_connector_application_sourceid: "{{ acs_play_hxi_application_sourceid }}"
   post_tasks:
     - name: Initialize evaluation of currently installed amps
       ansible.builtin.set_fact:
@@ -836,36 +817,44 @@
   tags:
     - audit_storage
 
-- name: HxInsight Role
-  hosts: hxi
+- name: Content Intelligence Connector Role
+  hosts: cic
   gather_facts: false
   vars_files:
-    - "{{ playbook_dir }}/../vars/hxi.yml"
+    - "{{ playbook_dir }}/../vars/cic.yml"
   pre_tasks:
-    - name: Assert HxI is available
+    - name: Assert CIC is available
       ansible.builtin.fail:
-        msg: "HxInsight can be used only with ACS Enterprise"
+        msg: "Content Intelligence Connector can be used only with ACS Enterprise"
       when: not acs_is_enterprise
   roles:
     - role: "../roles/java"
       java_version: "{{ acs_play_java_version }}"
-    - role: alfresco.platform.hxi_connector
-      hxi_connector_java_home_path: "/opt/openjdk-{{ acs_play_java_core }}"
-      hxi_connector_live_ingester_port: "{{ acs_play_hxi_connector_live_ingester_port }}"
-      hxi_connector_prediction_applier_port: "{{ acs_play_hxi_connector_prediction_applier_port }}"
-      hxi_connector_remote_ingestion_url: "{{ acs_play_hxi_remote_ingestion_url }}"
-      hxi_connector_remote_prediction_url: "{{ acs_play_hxi_remote_prediction_url }}"
-      hxi_connector_remote_token_url: "{{ acs_play_hxi_remote_token_url }}"
-      hxi_connector_remote_client_id: "{{ acs_play_hxi_remote_client_id }}"
-      hxi_connector_remote_client_secret: "{{ hxi_remote_client_secret }}"
-      hxi_connector_remote_environment_key: "{{ acs_play_hxi_remote_environment_key }}"
-      hxi_connector_alfresco_version_override: "{{ acs_play_repository_acs_version }}"
-      hxi_connector_alfresco_sfs_url: "http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}"
-      hxi_connector_alfresco_activemq_url: "{{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }}"
-      hxi_connector_alfresco_activemq_username: "{{ activemq_username }}"
-      hxi_connector_alfresco_activemq_password: "{{ activemq_password }}"
-      hxi_connector_alfresco_db_url: "{{ acs_play_repo_db_url }}"
-      hxi_connector_alfresco_db_username: "{{ acs_play_repo_db_username }}"
-      hxi_connector_alfresco_db_password: "{{ repo_db_password }}"
-      hxi_connector_service_user: "{{ acs_play_hxi_connector_service_user }}"
-      hxi_connector_application_sourceid: "{{ acs_play_hxi_application_sourceid }}"
+    - role: alfresco.platform.cic_connector
+      cic_connector_artifact_username: "{{ nexus_user }}"
+      cic_connector_artifact_password: "{{ nexus_password }}"
+      cic_connector_java_home_path: "/opt/openjdk-{{ acs_play_java_core }}"
+      cic_connector_artifact_default_version: "{{ acs_play_cic_connector_version }}"
+      cic_connector_live_ingester_port: "{{ acs_play_cic_connector_live_ingester_port }}"
+      cic_connector_nucleus_sync_port: "{{ acs_play_cic_connector_nucleus_sync_port }}"
+      cic_connector_remote_ingestion_url: "{{ acs_play_cic_remote_ingestion_url }}"
+      cic_connector_remote_token_url: "{{ acs_play_cic_remote_token_url }}"
+      cic_connector_remote_client_id: "{{ acs_play_cic_remote_client_id }}"
+      cic_connector_remote_client_secret: "{{ cic_remote_client_secret }}"
+      cic_connector_remote_environment_key: "{{ acs_play_cic_remote_environment_key }}"
+      cic_connector_alfresco_version_override: "{{ acs_play_repository_acs_version }}"
+      cic_connector_alfresco_base_url: "http://{{ repo_host }}:{{ ports_cfg.repository.http }}/alfresco"
+      cic_connector_alfresco_username: "{{ acs_play_cic_alfresco_username }}"
+      cic_connector_alfresco_password: "{{ cic_alfresco_password }}"
+      cic_connector_alfresco_sfs_url: "http://{{ sfs_host }}:{{ ports_cfg.sfs.http }}"
+      cic_connector_alfresco_activemq_url: "{{ activemq_transport }}://{{ activemq_host }}:{{ ports_cfg.activemq[activemq_protocol] }}"
+      cic_connector_alfresco_activemq_username: "{{ activemq_username }}"
+      cic_connector_alfresco_activemq_password: "{{ activemq_password }}"
+      cic_connector_alfresco_db_url: "{{ acs_play_computed_repo_db_url }}"
+      cic_connector_alfresco_db_username: "{{ acs_play_repo_db_username }}"
+      cic_connector_alfresco_db_password: "{{ repo_db_password }}"
+      cic_connector_service_user: "{{ acs_play_cic_connector_service_user }}"
+      cic_connector_application_sourceid: "{{ acs_play_cic_application_sourceid }}"
+      cic_connector_nucleus_base_url: "{{ acs_play_cic_nucleus_base_url }}"
+      cic_connector_nucleus_idp_base_url: "{{ acs_play_cic_nucleus_idp_base_url }}"
+      cic_connector_nucleus_system_id: "{{ acs_play_cic_nucleus_system_id }}"

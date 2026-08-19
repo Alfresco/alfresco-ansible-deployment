@@ -9,7 +9,7 @@
 
     - name: Set features facts
       ansible.builtin.set_fact:
-        hxi_enabled: "{{ groups.hxi | default([]) | length > 0 }}"
+        cic_enabled: "{{ groups.cic | default([]) | length > 0 }}"
 
     - name: Set facts related to hosts
       ansible.builtin.set_fact:

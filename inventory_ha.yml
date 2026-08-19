@@ -72,6 +72,11 @@ all:
       hosts:
         audit.infra.local:
 
+    # Content Intelligence Connector hosts (Enterprise only, optional)
+    cic:
+      hosts:
+        # ingester.infra.local:
+
     other_repo_clients:
       hosts:
 
