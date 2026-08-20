@@ -13,3 +13,4 @@
             - $JAVA_OPTS
         sfs_archive_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
         sfs_archive_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
+        sfs_repository: "{{ acs_play_sfs_repository }}"

@@ -40,6 +40,8 @@
         repository_properties: "{{ global_properties }}"
         repository_nexus_username: "{{ molecule_nexus_username }}"
         repository_nexus_password: "{{ molecule_nexus_password }}"
+        repository_acs_repository: "{{ acs_play_repository_acs_repository }}"
+        repository_api_explorer_repository: "{{ acs_play_repository_api_explorer_repository }}"
         repository_amp_downloads:
           - url: "{{ sync_amp_device_sync_archive_url }}"
             checksum: "sha1:{{ sync_amp_device_sync_archive_url }}.sha1"
@@ -52,6 +54,7 @@
       vars:
         sync_zip_username: "{{ molecule_nexus_username }}"
         sync_zip_password: "{{ molecule_nexus_password }}"
+        sync_zip_url: "{{ acs_play_sync_repository }}/{{ sync_artifact_name }}/{{ sync_version }}/{{ sync_artifact_name }}-{{ sync_version }}.zip"
         sync_environment:
           JAVA_OPTS:
             - -Xms512m
