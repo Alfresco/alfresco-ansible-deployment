@@ -7,3 +7,6 @@
       vars:
         elasticsearch_major_version: '7.x'
     - role: audit_storage
+      vars:
+        audit_storage_zip_url: "{{ acs_play_audit_storage_archive_url }}"
+        audit_storage_zip_checksum: "{{ acs_play_audit_storage_archive_checksum }}"
