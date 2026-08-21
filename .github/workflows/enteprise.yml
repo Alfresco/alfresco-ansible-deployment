@@ -44,7 +44,7 @@ jobs:
       - name: Check if nexus secrets are available
         id: check-secrets
         run: | # pragma: allowlist secret
-          if [ -z "${{ secrets.nexus_username }}" ] || [-z "${{ secrets.nexus_password }}"]; then
+          if [ -z "${{ secrets.NEXUS_ARCHIVE_USERNAME }}" ] || [-z "${{ secrets.NEXUS_ARCHIVE_PASSWORD }}"]; then
             echo "nexus_username or nexus_password is missing"
             echo "secrets-available=false" >> $GITHUB_OUTPUT
             exit 0
@@ -128,8 +128,8 @@ jobs:
       - name: Run tests
         env:
           MOLECULE_ROLE_IMAGE: ${{ matrix.molecule_distro.image }}
-          NEXUS_USERNAME: ${{ secrets.nexus_username }}
-          NEXUS_PASSWORD: ${{ secrets.nexus_password }}
+          NEXUS_USERNAME: ${{ secrets.NEXUS_ARCHIVE_USERNAME }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_ARCHIVE_PASSWORD }}
         uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60 # v4.0.0
         with:
           timeout_minutes: 60
@@ -176,8 +176,8 @@ jobs:
       runner: ${{ matrix.runner }}
       gh_app_client_id: ${{ vars.GH_APP_ENGINEERING_RO_CLIENT_ID }}
     secrets:
-      nexus_username: ${{ secrets.NEXUS_USERNAME_READ_ONLY }}
-      nexus_password: ${{ secrets.NEXUS_PASSWORD_READ_ONLY }}
+      nexus_username: ${{ secrets.NEXUS_ARCHIVE_USERNAME }}
+      nexus_password: ${{ secrets.NEXUS_ARCHIVE_PASSWORD }}
       gh_app_private_key: ${{ secrets.GH_APP_ENGINEERING_RO_PRIVATE_KEY }}
 
   ec2:
@@ -241,7 +241,7 @@ jobs:
           matrix_name: ${{ matrix.molecule_scenario.name }}
           matrix_vars: ${{ matrix.molecule_scenario.vars }}
           matrix_desc: ${{ matrix.molecule_scenario.desc }}
-          nexus_username: ${{ secrets.NEXUS_USERNAME_READ_ONLY }}
-          nexus_password: ${{ secrets.NEXUS_PASSWORD_READ_ONLY }}
+          nexus_username: ${{ secrets.NEXUS_ARCHIVE_USERNAME }}
+          nexus_password: ${{ secrets.NEXUS_ARCHIVE_PASSWORD }}
           aws_region: ${{ env.AWS_REGION }}
           pat: ${{ steps.app-token-dtas.outputs.token }}
