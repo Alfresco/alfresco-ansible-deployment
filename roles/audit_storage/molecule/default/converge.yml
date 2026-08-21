@@ -8,5 +8,6 @@
         elasticsearch_major_version: '7.x'
     - role: audit_storage
       vars:
-        audit_storage_zip_url: "{{ acs_play_audit_storage_archive_url }}"
-        audit_storage_zip_checksum: "{{ acs_play_audit_storage_archive_checksum }}"
+        audit_storage_zip_url: >-
+          {{ acs_play_audit_storage_repository }}/{{ acs_play_audit_storage_artifact_name }}/{{ audit_storage_version }}/{{ acs_play_audit_storage_artifact_name }}-{{ audit_storage_version }}.zip
+        audit_storage_zip_checksum: "sha1:{{ audit_storage_zip_url }}.sha1"
