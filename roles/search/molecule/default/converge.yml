@@ -11,3 +11,4 @@
         {{ ansible_play_hosts_all | map('extract', hostvars, ['ansible_default_ipv4','address']) | first }}
       search_topology: replication
       search_shared_secret: alfresco with space
+      search_artifact_repository: "{{ acs_play_search_repository }}"

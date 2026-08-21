@@ -10,6 +10,11 @@
     - name: "Include AIO"
       ansible.builtin.include_role:
         name: "transformers"
+      vars:
+        transformers_libreoffice_repository: "{{ acs_play_transformers_libreoffice_repository }}"
+        transformers_pdf_repository: "{{ acs_play_transformers_pdf_repository }}"
+        transformers_imagemagick_repository: "{{ acs_play_transformers_imagemagick_repository }}"
+        transformers_aio_repository: "{{ acs_play_transformers_aio_repository }}"
     - name: Flush Handlers
       ansible.builtin.meta: flush_handlers
     - name: "Include trouter"
@@ -22,3 +27,4 @@
             - -Xmx900m
         trouter_archive_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
         trouter_archive_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
+        trouter_repository: "{{ acs_play_trouter_repository }}"

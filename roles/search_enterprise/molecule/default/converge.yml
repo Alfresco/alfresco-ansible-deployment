@@ -19,10 +19,16 @@
       vars:
         sfs_archive_username: "{{ molecule_nexus_username }}"
         sfs_archive_password: "{{ molecule_nexus_password }}"
+        sfs_repository: "{{ acs_play_sfs_repository }}"
 
     - name: "Include transformers"
       ansible.builtin.include_role:
         name: "transformers"
+      vars:
+        transformers_libreoffice_repository: "{{ acs_play_transformers_libreoffice_repository }}"
+        transformers_pdf_repository: "{{ acs_play_transformers_pdf_repository }}"
+        transformers_imagemagick_repository: "{{ acs_play_transformers_imagemagick_repository }}"
+        transformers_aio_repository: "{{ acs_play_transformers_aio_repository }}"
 
     - name: "Include t-router"
       ansible.builtin.include_role:
@@ -30,6 +36,7 @@
       vars:
         trouter_archive_username: "{{ molecule_nexus_username }}"
         trouter_archive_password: "{{ molecule_nexus_password }}"
+        trouter_repository: "{{ acs_play_trouter_repository }}"
 
     - name: "Include search_enterprise"
       ansible.builtin.include_role:
@@ -38,3 +45,4 @@
         elasticsearch_host: "{{ ansible_hostname }}"
         search_enterprise_zip_username: "{{ molecule_nexus_username }}"
         search_enterprise_zip_password: "{{ molecule_nexus_password }}"
+        search_enterprise_repository: "{{ acs_play_search_enterprise_repository }}"

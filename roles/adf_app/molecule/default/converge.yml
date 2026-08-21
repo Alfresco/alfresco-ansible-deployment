@@ -4,10 +4,10 @@
   vars:
     acc_v: 10.3.0
     acc_id: alfresco-control-center
-    acc_repo: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
+    acc_repo: "{{ acc_repository }}"
     adw_v: 7.3.0
     adw_id: alfresco-digital-workspace
-    adw_repo: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
+    adw_repo: "{{ adw_repository }}"
   tasks:
     - name: "Install alfresco-digital-workspace"
       vars:

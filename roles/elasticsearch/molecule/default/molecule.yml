@@ -22,5 +22,6 @@ provisioner:
   inventory:
     links:
       host_vars: host_vars
+      group_vars: ../../../../playbooks/group_vars
 verifier:
   name: ansible
