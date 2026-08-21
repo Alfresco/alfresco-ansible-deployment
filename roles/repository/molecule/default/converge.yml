@@ -25,3 +25,5 @@
           - ../../configuration_files/alfresco-global.properties
         repository_nexus_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
         repository_nexus_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
+        repository_acs_repository: "{{ acs_play_repository_acs_repository }}"
+        repository_api_explorer_repository: "{{ acs_play_repository_api_explorer_repository }}"

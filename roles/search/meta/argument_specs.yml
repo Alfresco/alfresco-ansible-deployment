@@ -90,6 +90,11 @@ argument_specs:
           Insight Engine requires a specific entitlement.
         required: false
         default: alfresco-search-services
+      search_artifact_repository:
+        description: |
+          URL of the repository where the Search Service distribution is stored.
+        required: false
+        type: str
       search_zip_url:
         description: |
           The URL of the Search Service zip file to download.

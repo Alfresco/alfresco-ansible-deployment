@@ -7,3 +7,5 @@
       vars:
         elasticsearch_major_version: '7.x'
     - role: audit_storage
+      vars:
+        audit_storage_repository: "{{ acs_play_audit_storage_repository }}"

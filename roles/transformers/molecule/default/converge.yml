@@ -15,3 +15,7 @@
           JAVA_OPTS:
             - -Xms512m
             - -Xmx900m
+        transformers_libreoffice_repository: "{{ acs_play_transformers_libreoffice_repository }}"
+        transformers_pdf_repository: "{{ acs_play_transformers_pdf_repository }}"
+        transformers_imagemagick_repository: "{{ acs_play_transformers_imagemagick_repository }}"
+        transformers_aio_repository: "{{ acs_play_transformers_aio_repository }}"
