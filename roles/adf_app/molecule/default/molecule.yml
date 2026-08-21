@@ -13,6 +13,9 @@ platforms:
       - /run
       - /run/lock
       - /tmp
+    groups:
+      - adw
+      - acc
 provisioner:
   name: ansible
   env:
