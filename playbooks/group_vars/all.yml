@@ -9,11 +9,11 @@ acs_play_default_java_version: 17.0.19+10
 
 artifacts_repositories:
   enterprise:
-    base_url: "https://nexus-archive.opsexp.alfresco.com"
+    base_url: "https://nexus-archive2.opsexp.alfresco.com"
     repository: "groups/private"
     group_id: "org/alfresco"
   community:
-    base_url: "https://nexus-archive.opsexp.alfresco.com"
+    base_url: "https://nexus-archive2.opsexp.alfresco.com"
     repository: "groups/public"
     group_id: "org/alfresco"
   development:
