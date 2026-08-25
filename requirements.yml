@@ -23,7 +23,7 @@ collections:
   # Alternate source for alfresco.platform
   - name: git+https://github.com/Alfresco/alfresco-ansible-collection.git
     type: git
-    version: ecb3e6427da656c58c4a0ccc8f3cb2c581016576 # pragma: allowlist secret
+    version: 5ca9ea2042d4864c210e1cba583e4dd4d9fb1f2e # pragma: allowlist secret
 
 roles:
   - name: geerlingguy.elasticsearch
