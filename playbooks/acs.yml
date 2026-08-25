@@ -833,7 +833,7 @@
     - role: alfresco.platform.cic_connector
       cic_connector_artifact_username: "{{ nexus_user }}"
       cic_connector_artifact_password: "{{ nexus_password }}"
-      cic_connector_artifact_repository_url: "{{ nexus_repository.enterprise_releases }}/"
+      cic_connector_artifact_repository_url: "{{ nexus_repository.enterprise_releases }}"
       cic_connector_java_home_path: "/opt/openjdk-{{ acs_play_java_core }}"
       cic_connector_artifact_default_version: "{{ acs_play_cic_connector_version }}"
       cic_connector_live_ingester_port: "{{ acs_play_cic_connector_live_ingester_port }}"
