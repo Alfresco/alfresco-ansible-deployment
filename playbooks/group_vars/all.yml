@@ -7,15 +7,13 @@ acs_play_major_version: 26
 
 acs_play_default_java_version: 17.0.19+10
 
-nexus_host: "https://nexus-archive2.opsexp.alfresco.com"
-
 artifacts_repositories:
   enterprise:
-    base_url: "{{ nexus_host }}/nexus/content"
+    base_url: "https://nexus-archive2.opsexp.alfresco.com/nexus/content"
     repository: "groups/private"
     group_id: "org/alfresco"
   community:
-    base_url: "{{ nexus_host }}/nexus/content"
+    base_url: "https://nexus-archive2.opsexp.alfresco.com/nexus/content"
     repository: "groups/public"
     group_id: "org/alfresco"
   development:
@@ -27,7 +25,6 @@ nexus_repository:
     {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.enterprise.repository }}/{{ artifacts_repositories.enterprise.group_id }}
   development_releases: >-
     {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.development.repository }}/{{ artifacts_repositories.enterprise.group_id }}
-  enterprise_releases_repository: "{{ nexus_host }}/nexus/repository/enterprise-releases/"
 
 acs_play_java_core: "{{ acs_play_java_version.split('+')[0] }}"
 acs_play_java_major: "{{ acs_play_java_core.split('.')[0] }}"
