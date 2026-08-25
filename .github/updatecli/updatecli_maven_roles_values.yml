@@ -6,12 +6,6 @@ artifacts:
     artifact_version_key: $.repository_acs_version
     ansible_version_file: roles/repository/defaults/main.yml
     updatecli_matrix_component_key: acs
-  alfresco-audit-storage:
-    artifact_name_file: roles/audit_storage/defaults/main.yml
-    artifact_name_key: $.audit_storage_download_artifact_name
-    artifact_version_key: $.audit_storage_version
-    ansible_version_file: roles/audit_storage/defaults/main.yml
-    updatecli_matrix_component_key: audit-storage
   alfresco-search-enterprise:
     artifact_name_file: roles/search_enterprise/defaults/main.yml
     artifact_name_key: $.search_enterprise_artifact_name
