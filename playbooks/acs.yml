@@ -574,7 +574,7 @@
       search_community_java_bin_path: "/opt/openjdk-{{ acs_play_java_core }}/bin/java"
       search_community_version: "{{ acs_play_search_community_version }}"
       search_community_artifact_name: "{{ acs_play_search_community_artifact_name }}"
-      search_community_repository: "{{ acs_play_search_community_repository }}"
+      search_community_repository_url: "{{ acs_play_search_community_repository }}"
       search_community_zip_url: "{{ acs_play_search_community_zip_url }}"
       search_community_zip_checksum: "{{ acs_play_search_community_zip_checksum }}"
       search_community_username: "{{ username }}"
@@ -833,6 +833,7 @@
     - role: alfresco.platform.cic_connector
       cic_connector_artifact_username: "{{ nexus_user }}"
       cic_connector_artifact_password: "{{ nexus_password }}"
+      cic_connector_artifact_repository_url: "{{ nexus_repository.enterprise_releases }}"
       cic_connector_java_home_path: "/opt/openjdk-{{ acs_play_java_core }}"
       cic_connector_artifact_default_version: "{{ acs_play_cic_connector_version }}"
       cic_connector_live_ingester_port: "{{ acs_play_cic_connector_live_ingester_port }}"
