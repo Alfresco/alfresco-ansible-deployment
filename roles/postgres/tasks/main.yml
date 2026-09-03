@@ -22,6 +22,14 @@
       notify:
         - Enable-postgresql
 
+    - name: Install python bindings package
+      ansible.builtin.dnf:
+        name: "{{ postgres_python_package }}"
+        state: present
+        update_cache: true
+        disablerepo: pgdg*
+      when: postgres_python_package is defined
+
     - name: Initialize the system database
       ansible.builtin.command:
         cmd: "{{ postgres_setup_path }} initdb"
