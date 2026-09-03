@@ -17,6 +17,9 @@ identity_url: null
 identity_known_urls: []
 
 identity_keycloak_url: "{{ identity_url | default(identity_keycloak_default_url, true) }}"
+# identity_keycloak_url already contains identity_keycloak_http_relative_path, so the
+# health check URL is set explicitly to avoid the path being appended twice
+identity_keycloak_health_check_url: "{{ identity_keycloak_url | regex_replace('/+$', '') }}/realms/master/.well-known/openid-configuration"
 identity_keycloak_additional_env_vars: []
 
 identity_default_realm_id: alfresco
