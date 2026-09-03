@@ -1,4 +1,4 @@
 postgres_packages:
   - postgresql{{ postgres_major_version }}-server
   - postgresql{{ postgres_major_version }}
-postgres_python_package: python{{ '3' if ansible_python_version.split('.')[0] == '3' else '' }}-psycopg2
+  - python{{ '3' if ansible_python_version.split('.')[0] == '3' else '' }}-psycopg2
