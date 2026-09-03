@@ -8,8 +8,10 @@ updates:
       - dependency-name: "boto3"
       - dependency-name: "ansible-core"
         update-types: ["version-update:semver-minor"]
-      # molecule >= 26.8.0 is incompatible with the molecule-plugins ec2 driver
       - dependency-name: "molecule"
+        # molecule 26.8.0 is incompatible with the molecule-plugins ec2 driver
+        versions:
+          - "26.8.0"
     groups:
       python-deps:
         patterns:

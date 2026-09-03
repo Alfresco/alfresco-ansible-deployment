@@ -10,9 +10,6 @@ jmespath = "==1.1.0"
 
 [dev-packages]
 ansible-lint = "==26.8.0"
-# molecule is pinned to 26.6.0 because 26.8.0 renamed Config.config to
-# Config.config_data which breaks the ec2 driver shipped by molecule-plugins
-# (AttributeError: 'Config' object has no attribute 'config').
 molecule = "==26.6.0"
 molecule-plugins = {extras = ["docker","ec2"], version = "26.7.15"}
 boto3 = ">=1.39.13"
