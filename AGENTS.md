@@ -66,6 +66,7 @@ molecule test -s local
 - **Markdown**: pymarkdown for README and docs/ only
 - **Secrets**: detect-secrets with baseline file `.secrets.baseline`
 - **Pre-commit**: runs `generate-comp-ver-table.py` on every commit (auto-generates version table)
+- **Dependabot pins**: prefer `ignore.versions` scoped to known-bad versions instead of disabling all updates for a dependency (docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#versions-ignore)
 - **New distro support**: add to `supported_os` in `vars/acsXX.yml`, prefer `vars` files over conditional tasks
 
 ## Environment Variables (Integration Tests)
