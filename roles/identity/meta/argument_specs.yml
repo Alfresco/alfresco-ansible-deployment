@@ -44,6 +44,11 @@ argument_specs:
         description:
           Set the base URL for frontend URL and admin console, including scheme, host, port and path.
           Will override identity_keycloak_host, identity_keycloak_http_port.
+      identity_keycloak_health_check_url:
+        type: str
+        default: "{{ identity_keycloak_url }}/realms/master/.well-known/openid-configuration"
+        description:
+          Full URL used to check the keycloak service health after a restart
       identity_keycloak_additional_env_vars:
         type: "list"
         default: "[]"
