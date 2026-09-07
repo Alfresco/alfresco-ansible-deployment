@@ -22,6 +22,11 @@ artifacts:
     artifact_name_key: $.acs_play_audit_storage_artifact_name
     artifact_version_key: $.acs_play_audit_storage_version
     updatecli_matrix_component_key: audit-storage
+  alfresco-cic-connector:
+    artifact_name_file: playbooks/group_vars/cic.yml
+    artifact_name_key: $.acs_play_cic_connector_artifact_name
+    artifact_version_key: $.acs_play_cic_connector_version
+    updatecli_matrix_component_key: cic-connector
   alfresco-repository:
     artifact_name_file: playbooks/group_vars/repository.yml
     artifact_name_key: $.acs_play_repository_acs_artifact_name
