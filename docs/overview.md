@@ -110,6 +110,7 @@ ACS 7.x onward.
 | Shared File Store   | 4.4.4 (n/a)                 | 4.4.4           | 4.4.4           |
 | Sync Service        | 5.3.6 (n/a)                 | 5.3.6           | 5.3.6           |
 | Audit Storage       | 1.3.4                       | 1.3.4           | 1.3.4           |
+| CIC Connector       | 1.0.2 (n/a)                 | 1.0.2           | 1.0.2           |
 
 > Support for ACS 7.4 has been deprecated since May 2026, but you can still use the latest playbook that supported it ([v3.9.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v3.9.0))
 > Support for ACS 7.3 has been deprecated since October 2025, but you can still use the latest playbook that supported it ([v3.4.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v3.4.0))
