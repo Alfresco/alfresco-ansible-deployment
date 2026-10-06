@@ -7,6 +7,9 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -25,21 +28,17 @@ jobs:
         run: |
           ./scripts/generate-zip.sh
 
-      - name: Configure AWS credentials
+      - name: Publish to S3 release bucket
         if: github.event_name != 'workflow_dispatch'
-        uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c # v6.2.4
+        uses: Alfresco/alfresco-build-tools/.github/actions/s3-upload@v19.3.0
         with:
-          aws-access-key-id: ${{ secrets.AWS_S3_STAGING_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_S3_STAGING_SECRET_KEY }}
-          aws-region: eu-west-1
-
-      - name: Publish to S3 staging bucket
-        if: github.event_name != 'workflow_dispatch'
-        run: |
-          aws s3 cp alfresco-ansible-deployment-${VERSION}.zip s3://alfresco-artefacts-staging/enterprise/alfresco-ansible-deployment/
+          aws-region: ${{ vars.AWS_RELEASE_ARTIFACT_UPLOAD_REGION }}
+          aws-role-arn: ${{ vars.AWS_RELEASE_ARTIFACT_UPLOAD_ROLE_ARN }}
+          source: alfresco-ansible-deployment-${{ env.VERSION }}.zip
+          destination: s3://${{ vars.AWS_RELEASE_ARTIFACT_UPLOAD_BUCKET }}/release/enterprise/alfresco-ansible-deployment/
 
       - name: Publish on Nexus
-        uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@v18.26.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@v19.3.0
         if: github.event_name != 'workflow_dispatch'
         with:
           group-id: org.alfresco
