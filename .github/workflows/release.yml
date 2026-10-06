@@ -28,7 +28,7 @@ jobs:
         run: |
           ./scripts/generate-zip.sh
 
-      - name: Publish to S3 staging bucket
+      - name: Publish to S3 release bucket
         if: github.event_name != 'workflow_dispatch'
         uses: Alfresco/alfresco-build-tools/.github/actions/s3-upload@v19.3.0
         with:
