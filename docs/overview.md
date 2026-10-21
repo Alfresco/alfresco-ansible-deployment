@@ -94,22 +94,22 @@ ACS 7.x onward.
 | Component           | 26.2 Enterprise (Community) | 25.5 Enterprise | 23.7 Enterprise |
 |---------------------|-----------------------------|-----------------|-----------------|
 | OpenJDK             | 21.0.12                     | 17.0.20         | 17.0.20         |
-| Apache Tomcat       | 11.0.25                     | 10.1.59         | 10.1.59         |
+| Apache Tomcat       | 11.0.27                     | 10.1.61         | 10.1.61         |
 | PostgreSQL          | 17.x                        | 16.x            | 15.x            |
-| Apache ActiveMQ     | 6.2.9                       | 5.18.7          | 5.18.7          |
-| Repository          | 26.2.2 (26.2.0)             | 25.5.0          | 23.7.3          |
-| Share               | 26.2.2 (26.2.0)             | 25.5.0          | 23.7.3          |
-| Search Services     | 2.0.22                      | 2.0.22          | 2.0.22          |
-| Search Enterprise   | 5.8.0 (n/a)                 | 5.8.0           | 5.8.0           |
-| All-In-One T-Engine | 5.4.4                       | 5.4.4           | 5.4.4           |
+| Apache ActiveMQ     | 6.3.2                       | 5.18.7          | 5.18.7          |
+| Repository          | 26.2.4 (26.2.0)             | 25.5.2          | 23.7.3          |
+| Share               | 26.2.4 (26.2.0)             | 25.5.2          | 23.7.3          |
+| Search Services     | 2.0.22                      | 2.0.22          | 2.0.23          |
+| Search Enterprise   | 5.9.0 (n/a)                 | 5.9.0           | 5.9.0           |
+| All-In-One T-Engine | 5.4.5                       | 5.4.5           | 5.4.5           |
 | AOS                 | 3.4.1                       | 3.4.2           | 3.4.1           |
 | Google Docs         | 4.1.1                       | 5.0.0           | 4.1.1           |
 | Digital Workspace   | 8.0.0 (n/a)                 | 8.0.0           | 8.0.0           |
 | Control Center      | 11.0.0                      | 11.0.0          | 11.0.0          |
-| Transform Router    | 4.4.4 (n/a)                 | 4.4.4           | 4.4.4           |
-| Shared File Store   | 4.4.4 (n/a)                 | 4.4.4           | 4.4.4           |
-| Sync Service        | 5.3.6 (n/a)                 | 5.3.6           | 5.3.6           |
-| Audit Storage       | 1.3.4                       | 1.3.4           | 1.3.4           |
+| Transform Router    | 4.4.5 (n/a)                 | 4.4.5           | 4.4.5           |
+| Shared File Store   | 4.4.5 (n/a)                 | 4.4.5           | 4.4.5           |
+| Sync Service        | 5.3.7 (n/a)                 | 5.3.7           | 5.3.7           |
+| Audit Storage       | 1.3.5                       | 1.3.5           | 1.3.5           |
 | CIC Connector       | 1.0.2 (n/a)                 | 1.0.2           | 1.0.2           |
 
 > Support for ACS 7.4 has been deprecated since May 2026, but you can still use the latest playbook that supported it ([v3.9.0](https://github.com/Alfresco/alfresco-ansible-deployment/releases/tag/v3.9.0))
