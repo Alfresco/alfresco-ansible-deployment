@@ -30,7 +30,7 @@ jobs:
 
       - name: Publish to S3 release bucket
         if: github.event_name != 'workflow_dispatch'
-        uses: Alfresco/alfresco-build-tools/.github/actions/s3-upload@v19.3.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/s3-upload@v19.2.1
         with:
           aws-region: ${{ vars.AWS_RELEASE_ARTIFACT_UPLOAD_REGION }}
           aws-role-arn: ${{ vars.AWS_RELEASE_ARTIFACT_UPLOAD_ROLE_ARN }}
@@ -38,7 +38,7 @@ jobs:
           destination: s3://${{ vars.AWS_RELEASE_ARTIFACT_UPLOAD_BUCKET }}/release/enterprise/alfresco-ansible-deployment/
 
       - name: Publish on Nexus
-        uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@v19.3.0
+        uses: Alfresco/alfresco-build-tools/.github/actions/maven-deploy-file@v19.2.1
         if: github.event_name != 'workflow_dispatch'
         with:
           group-id: org.alfresco
