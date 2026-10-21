@@ -96,7 +96,7 @@ ACS 7.x onward.
 | OpenJDK             | 21.0.12                     | 17.0.20         | 17.0.20         |
 | Apache Tomcat       | 11.0.27                     | 10.1.61         | 10.1.61         |
 | PostgreSQL          | 17.x                        | 16.x            | 15.x            |
-| Apache ActiveMQ     | 6.3.2                       | 5.18.7          | 5.18.7          |
+| Apache ActiveMQ     | 6.2.9                       | 5.18.7          | 5.18.7          |
 | Repository          | 26.2.4 (26.2.0)             | 25.5.2          | 23.7.3          |
 | Share               | 26.2.4 (26.2.0)             | 25.5.2          | 23.7.3          |
 | Search Services     | 2.0.22                      | 2.0.22          | 2.0.23          |
