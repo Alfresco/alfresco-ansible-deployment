@@ -250,16 +250,26 @@
 
     - name: Create mq broker
       ansible.builtin.command:
-        cmd: >
-          aws mq create-broker --broker-name {{ broker_name }}
-            --deployment-mode SINGLE_INSTANCE
-            --engine-type ACTIVEMQ
-            --host-instance-type mq.t3.micro
-            --engine-version 5.19
-            --users Password={{ activemq_password | quote }},Username=alfresco
-            --security-groups {{ ec2_groups_lookup.security_groups[0].group_id }}
-            --publicly-accessible
-            --auto-minor-version-upgrade
+        argv:
+          - aws
+          - mq
+          - create-broker
+          - --broker-name
+          - "{{ broker_name }}"
+          - --deployment-mode
+          - SINGLE_INSTANCE
+          - --engine-type
+          - ACTIVEMQ
+          - --host-instance-type
+          - mq.t3.micro
+          - --engine-version
+          - "5.19"
+          - --users
+          - "{{ [{'Username': 'alfresco', 'Password': activemq_password}] | to_json }}"
+          - --security-groups
+          - "{{ ec2_groups_lookup.security_groups[0].group_id }}"
+          - --publicly-accessible
+          - --auto-minor-version-upgrade
 
     - name: Wait for creation
       ansible.builtin.command:
