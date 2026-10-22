@@ -20,7 +20,7 @@ acs_play_transformers_pdf_repository: "{{ nexus_repository.releases }}"
 acs_play_transformers_pdf_archive_url: "{{ acs_play_transformers_pdf_repository }}/{{ acs_play_transformers_pdf_artifact_name }}/{{ acs_play_transformers_pdf_version }}/{{ acs_play_transformers_pdf_archive_name }}"
 acs_play_transformers_pdf_archive_checksum: "sha1:{{ acs_play_transformers_pdf_archive_url }}.sha1"
 
-acs_play_transformers_imagemagick_repository: "{{ nexus_repository.releases }}"
+acs_play_transformers_imagemagick_repository: "{{ artifacts_repositories.community.base_url }}/{{ artifacts_repositories.community.repository }}/org/imagemagick"
 
 acs_play_transformers_aio_artifact_name: alfresco-transform-core-aio
 acs_play_transformers_aio_repository: "{{ nexus_repository.releases }}"
