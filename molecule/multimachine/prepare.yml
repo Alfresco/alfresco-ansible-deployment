@@ -256,10 +256,14 @@
             --engine-type ACTIVEMQ
             --host-instance-type mq.t3.micro
             --engine-version 5.19
-            --users Password={{ activemq_password | quote }},Username=alfresco
+            --users {{ mq_users | to_json | quote }}
             --security-groups {{ ec2_groups_lookup.security_groups[0].group_id }}
             --publicly-accessible
             --auto-minor-version-upgrade
+      vars:
+        mq_users:
+          - Username: alfresco
+            Password: "{{ activemq_password }}"  # pragma: allowlist secret
 
     - name: Wait for creation
       ansible.builtin.command:
