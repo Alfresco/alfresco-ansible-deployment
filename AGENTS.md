@@ -57,6 +57,7 @@ pipenv run tests/integration/run.sh
 |----------|---------|---------|
 | `precommit.yml` | All PRs + push to master | pre-commit hooks (lint, secrets, formatting) |
 | `community.yml` | PRs/push to master (non-docs) | Role molecule tests on Docker (community edition) |
+| `tests.yml` | PRs/push to master (non-docs) | `tests/unit` pytest and `tests/integration` artifact server routing checks |
 | `enteprise.yml` | PRs with `ec2-test` label + push to master | EC2 integration tests (needs Nexus secrets) |
 | `bumpVersions.yml` | Manual dispatch | Updatecli version bumps |
 | `release.yml` | Tag push (`v*`) | Build release artifacts |

@@ -44,28 +44,6 @@ jobs:
         with:
           cache-name: community
 
-  integration:
-    name: Integration tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Setup Python
-        uses: ./.github/actions/setup-python
-        id: setup-python
-
-      - name: Install python packages
-        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v19.2.1
-        with:
-          python-version: ${{ steps.setup-python.outputs.python-version }}
-
-      - name: Run artifact_server filter unit tests
-        run: pipenv run pytest tests/unit
-
-      - name: Check every component resolves to the expected server
-        run: pipenv run tests/integration/run.sh
-
   docker:
     name: Test ${{ matrix.role.name }} role on ${{ matrix.molecule_distro.image }}
     # -A* and -M* are not available without nexus credentials
