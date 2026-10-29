@@ -64,7 +64,7 @@ jobs:
         run: pipenv run pytest tests/unit
 
       - name: Check every component resolves to the expected server
-        run: pipenv run tests/artifact-routing/run.sh
+        run: pipenv run tests/integration/run.sh
 
   docker:
     name: Test ${{ matrix.role.name }} role on ${{ matrix.molecule_distro.image }}

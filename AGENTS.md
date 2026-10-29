@@ -38,7 +38,7 @@ molecule test -s local
 
 # Artifact server routing (no Docker needed)
 pipenv run pytest tests/unit
-pipenv run tests/artifact-routing/run.sh
+pipenv run tests/integration/run.sh
 ```
 
 ## Repository Structure
