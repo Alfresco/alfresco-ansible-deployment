@@ -635,9 +635,7 @@
     acc_sum: >-
       {% set raw = lookup(
           'url',
-          acs_play_acc_checksum.split(':', 1)[1],
-          username=artifact_servers[acs_play_acc_server].username,
-          password=artifact_servers[acs_play_acc_server].password
+          acs_play_acc_checksum.split(':', 1)[1]
         ) | trim %}
       {{ acs_play_acc_checksum.split(':', 1)[0] }}:{{ raw.split()[0] }}
   roles:
