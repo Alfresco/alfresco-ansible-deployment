@@ -44,8 +44,8 @@ jobs:
         with:
           cache-name: community
 
-  artifact-routing:
-    name: Check artifact server routing
+  integration:
+    name: Integration tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
