@@ -18,6 +18,9 @@ platforms:
       - acc
 provisioner:
   name: ansible
+  ansible_args:
+    - -e
+    - "@../../../../vars/acs26.yml"
   env:
     ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
   inventory:

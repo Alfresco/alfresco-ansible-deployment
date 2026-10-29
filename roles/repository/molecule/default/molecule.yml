@@ -29,6 +29,8 @@ provisioner:
   ansible_args:
     - -e
     - "@../../../../tests/molecule/secrets.yml"
+    - -e
+    - "@../../../../vars/acs26.yml"
   env:
     ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
   config_options:

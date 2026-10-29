@@ -1,0 +1,5 @@
+---
+provisioner:
+  name: ansible
+  env:
+    ANSIBLE_FILTER_PLUGINS: "../../../../playbooks/filter_plugins"
