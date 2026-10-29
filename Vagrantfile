@@ -3,6 +3,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "./scripts/vagrant_provision.sh", privileged: false, env: {
     "NEXUS_USERNAME" => ENV['NEXUS_USERNAME'],
     "NEXUS_PASSWORD" => ENV['NEXUS_PASSWORD'],
+    "CLOUDSMITH_USERNAME" => ENV['CLOUDSMITH_USERNAME'],
+    "CLOUDSMITH_API_KEY" => ENV['CLOUDSMITH_API_KEY'],
     "VAGRANT_ACS_MAJOR_VERSION" => acs_major_version,
     "ANSIBLE_PIPELINING" => "true",
   }

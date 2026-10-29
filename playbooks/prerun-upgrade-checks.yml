@@ -79,6 +79,8 @@
             repository_content_folder: ""
             nexus_user: ""
             nexus_password: ""
+            cloudsmith_user: ""
+            cloudsmith_api_key: ""
           ansible.builtin.set_fact:
             amps: >-
               {{ amps | combine({

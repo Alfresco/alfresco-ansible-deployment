@@ -1,0 +1,59 @@
+---
+- name: Include vars based on acs major version
+  ansible.builtin.import_playbook: ../../playbooks/include-vars.yml
+
+- name: Populate deployment configuration facts
+  ansible.builtin.import_playbook: ../../playbooks/facts.yml
+
+- name: Check each component resolves to the expected artifact server
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - ../../roles/common/defaults/main.yml
+  vars:
+    expected_server: archive
+    expected_bases:
+      archive:
+        releases: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
+        enterprise_releases: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
+        username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
+      cloudsmith:
+        releases: https://artifacts.hyland.dev/basic/alfresco-public/maven/org/alfresco
+        enterprise_releases: https://artifacts.hyland.dev/basic/alfresco-private/maven/org/alfresco
+        username: "{{ lookup('env', 'CLOUDSMITH_USERNAME') }}"
+    edition_releases: "{{ 'enterprise_releases' if acs_is_enterprise else 'releases' }}"
+    components:
+      - {name: repository, server: acs_play_repository_acs_server, url: acs_play_repository_acs_archive_url, kind: "{{ edition_releases }}"}
+      - {name: api_explorer, server: acs_play_repository_api_explorer_server, url: acs_play_repository_api_explorer_archive_url, kind: releases}
+      - {name: googledrive_repo, server: acs_play_repository_amp_googledrive_repo_server, url: acs_play_repository_amp_googledrive_repo_archive_url, kind: "{{ edition_releases }}"}
+      - {name: googledrive_share, server: acs_play_repository_amp_googledrive_share_server, url: acs_play_repository_amp_googledrive_share_archive_url, kind: releases}
+      - {name: device_sync, server: acs_play_repository_amp_device_sync_server, url: acs_play_repository_amp_device_sync_archive_url, kind: enterprise_releases}
+      - {name: aos_module, server: acs_play_repository_amp_aos_module_server, url: acs_play_repository_amp_aos_module_archive_url, kind: releases}
+      - {name: transformers_aio, server: acs_play_transformers_aio_server, url: acs_play_transformers_aio_archive_url, kind: releases}
+      - {name: transformers_pdf, server: acs_play_transformers_pdf_server, url: acs_play_transformers_pdf_archive_url, kind: releases}
+      - {name: trouter, server: acs_play_trouter_server, url: acs_play_trouter_archive_url, kind: enterprise_releases}
+      - {name: sfs, server: acs_play_sfs_server, url: acs_play_sfs_archive_url, kind: enterprise_releases}
+      - {name: search, server: acs_play_search_server, url: acs_play_search_zip_url, kind: releases}
+      - {name: search_enterprise, server: acs_play_search_enterprise_server, url: acs_play_search_enterprise_zip_url, kind: enterprise_releases}
+      - {name: search_community, server: acs_play_search_community_server, url: acs_play_search_community_zip_url, kind: releases, version: acs_play_search_community_version}
+      - {name: acc, server: acs_play_acc_server, url: acs_play_acc_url, kind: releases}
+      - {name: adw, server: acs_play_adw_server, url: acs_play_adw_url, kind: enterprise_releases}
+      - {name: sync, server: acs_play_sync_server, url: acs_play_sync_zip_url, kind: enterprise_releases}
+      - {name: audit_storage, server: acs_play_audit_storage_server, url: acs_play_audit_storage_archive_url, kind: enterprise_releases}
+      - {name: cic_connector, server: acs_play_cic_connector_server, url: acs_play_cic_connector_repository, kind: enterprise_releases}
+  tasks:
+    - name: Assert component server, URL and credentials
+      vars:
+        server: "{{ lookup('vars', item.server) }}"
+        url: "{{ lookup('vars', item.url) }}"
+      ansible.builtin.assert:
+        that:
+          - server == expected_server
+          - url.startswith(expected_bases[expected_server][item.kind])
+          - artifact_server_credentials[server].username == expected_bases[expected_server].username
+        fail_msg: "{{ item.name }}: server={{ server }} url={{ url }}"
+        quiet: true
+      loop: "{{ components }}"
+      loop_control:
+        label: "{{ item.name }}"
+      when: item.version is not defined or lookup('vars', item.version, default='') | length > 0

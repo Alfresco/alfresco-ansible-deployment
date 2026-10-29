@@ -78,12 +78,15 @@ node **and** the target host.
 4. Install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
 5. Open Virtualbox application to make sure it startup correctly
 6. In a terminal, navigate to where you cloned or unpacked the repository
-7. Set environment variables to hold your Nexus credentials as shown below
-   (replacing the values appropriately):
+7. Set environment variables to hold your artifact server credentials as shown
+   below (replacing the values appropriately, see
+   [Artifact servers](#artifact-servers)):
 
     ```bash
     export NEXUS_USERNAME="<your-username>"
     export NEXUS_PASSWORD="<your-password>"
+    export CLOUDSMITH_USERNAME="<your-username>"
+    export CLOUDSMITH_API_KEY="<your-api-key>"
     ```
 
 8. Run the main vagrant command (you can pass any of the version currently
@@ -246,12 +249,14 @@ pipenv run ansible-galaxy install -r requirements.yml
 > that shell just by using `exit` or `Ctrl+D`.
 
 If you intend to deploy an Enterprise system, create the mandatory environment
-variables that hold your Nexus credentials as shown below (replacing the values
-appropriately):
+variables that hold your artifact server credentials as shown below (replacing
+the values appropriately, see [Artifact servers](#artifact-servers)):
 
 ```bash
 export NEXUS_USERNAME="<your-username>"
 export NEXUS_PASSWORD="<your-password>"
+export CLOUDSMITH_USERNAME="<your-username>"
+export CLOUDSMITH_API_KEY="<your-api-key>"
 ```
 
 Now you have the control node setup you can
@@ -915,6 +920,17 @@ repository:
         - -Dmetadata-keystore.metadata.algorithm=AES"
 ```
 
+### Artifact servers
+
+Alfresco artifacts are published on two servers:
+
+* the archive server, [https://artifacts.alfresco.com](https://artifacts.alfresco.com), which holds every release published before the move to the new server. It uses the `NEXUS_USERNAME` and `NEXUS_PASSWORD` credentials.
+* the new server, `https://artifacts.hyland.dev`, which receives every new release. It uses the `CLOUDSMITH_USERNAME` and `CLOUDSMITH_API_KEY` credentials.
+
+The playbook picks the server for each component from that component's version. `artifacts_archive_last_versions` in `playbooks/group_vars/all.yml` lists, for every component, the last version of each release line published on the archive server. A version up to that bound is downloaded from the archive server; a newer version, or one on a release line that isn't listed, is downloaded from the new server, with the matching credentials.
+
+You only need the credentials of the server(s) your component versions resolve to.
+
 ### Specifying a different component repository
 
 In case you want to use a different server/repository for a specific artifact to further customize your deployment, you can override the default URL in two ways:
@@ -925,7 +941,7 @@ Edit `playbooks/group_vars/repository.yml`:
 
 ```yaml
 acs_play_repository_acs_artifact_name: alfresco-content-services-distribution
-acs_play_repository_acs_repository: "{{ nexus_repository.enterprise_releases }}"
+acs_play_repository_acs_repository: "{{ artifact_servers[acs_play_repository_acs_server].enterprise_releases }}"
 ```
 
 to

@@ -1,4 +1,6 @@
 acs_play_cic_connector_artifact_name: alfresco-cic-connector-live-ingester
+acs_play_cic_connector_server: "{{ acs_play_cic_connector_version | artifact_server(artifacts_archive_last_versions.cic_connector) }}"
+acs_play_cic_connector_repository: "{{ artifact_servers[acs_play_cic_connector_server].enterprise_releases }}"
 
 acs_play_cic_connector_live_ingester_port: 8084
 acs_play_cic_connector_nucleus_sync_port: 8085

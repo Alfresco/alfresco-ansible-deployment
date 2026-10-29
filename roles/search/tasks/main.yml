@@ -19,8 +19,8 @@
     dest: "{{ download_location }}/{{ search_flavor }}-{{ search_version }}.zip"
     checksum: "{{ search_zip_checksum }}"
     mode: "0644"
-    url_username: "{{ nexus_user }}"
-    url_password: "{{ nexus_password }}"
+    url_username: "{{ search_zip_username }}"
+    url_password: "{{ search_zip_password }}"
     timeout: 570
 
 - name: Install & configure Search services

@@ -153,5 +153,7 @@ os_version_yml: "{{ ansible_distribution }}{{ ansible_distribution_major_version
 
 nexus_user: "{{ lookup('env', 'NEXUS_USERNAME') | default(null) }}"
 nexus_password: "{{ lookup('env', 'NEXUS_PASSWORD') | default(null) }}"
+cloudsmith_user: "{{ lookup('env', 'CLOUDSMITH_USERNAME') | default(null) }}"
+cloudsmith_api_key: "{{ lookup('env', 'CLOUDSMITH_API_KEY') | default(null) }}"
 
 bssrf_protection_enabled: false

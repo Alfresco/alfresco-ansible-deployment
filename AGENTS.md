@@ -35,6 +35,10 @@ molecule -e molecule/default/vars-rhel8.yml test
 
 # Docker-only full integration (no AWS needed)
 molecule test -s local
+
+# Artifact server routing (no Docker needed)
+pipenv run pytest tests/unit
+pipenv run tests/artifact-routing/run.sh
 ```
 
 ## Repository Structure
@@ -67,13 +71,15 @@ molecule test -s local
 - **Secrets**: detect-secrets with baseline file `.secrets.baseline`
 - **Pre-commit**: runs `generate-comp-ver-table.py` on every commit (auto-generates version table)
 - **Dependabot pins**: prefer `ignore.versions` scoped to known-bad versions instead of disabling all updates for a dependency (docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#versions-ignore)
+- **Artifact servers**: each Alfresco component picks its download server and credentials from its own version via the `artifact_server` filter (`playbooks/filter_plugins/`) and `artifacts_archive_last_versions` in `playbooks/group_vars/all.yml`; use `artifact_servers[...]` / `artifact_server_credentials[...]`, never `nexus_repository` or `nexus_user` directly
 - **New distro support**: add to `supported_os` in `vars/acsXX.yml`, prefer `vars` files over conditional tasks
 
 ## Environment Variables (Integration Tests)
 
 Defined in `.envrc`, secrets in `.env.credentials` (gitignored):
 - `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`
-- `NEXUS_USERNAME`, `NEXUS_PASSWORD` (enterprise artifact downloads)
+- `NEXUS_USERNAME`, `NEXUS_PASSWORD` (archive artifact server, artifacts.alfresco.com)
+- `CLOUDSMITH_USERNAME`, `CLOUDSMITH_API_KEY` (new artifact server, artifacts.hyland.dev)
 - `CLONE_GITHUB_TOKEN`
 - `ANSIBLE_VAULT_PASSWORD_FILE` → `.vault_pass.txt`
 

@@ -12,8 +12,11 @@ Virtual Machines).
 
 ## Prerequisites
 
-* If you want to install the Enterprise version, Nexus credentials for
-  [https://artifacts.alfresco.com](https://artifacts.alfresco.com) are required.
+* If you want to install the Enterprise version, credentials for the Alfresco
+  artifact servers are required: Nexus credentials for
+  [https://artifacts.alfresco.com](https://artifacts.alfresco.com) and Cloudsmith
+  credentials for `https://artifacts.hyland.dev`. See
+  [Artifact servers](deployment-guide.md#artifact-servers).
 
 ## Documentation
 
