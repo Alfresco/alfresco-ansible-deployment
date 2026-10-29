@@ -1,8 +1,4 @@
 ---
-dependency:
-  name: galaxy
-driver:
-  name: docker
 platforms:
   - name: activemq-instance
     image: $MOLECULE_ROLE_IMAGE
@@ -26,11 +22,6 @@ platforms:
       - activemq
 provisioner:
   name: ansible
-  env:
-    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
-  config_options:
-    defaults:
-      pipelining: True
   inventory:
     links:
       host_vars: host_vars

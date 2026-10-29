@@ -1,8 +1,4 @@
 ---
-dependency:
-  name: galaxy
-driver:
-  name: docker
 platforms:
   - name: java-instance
     image: $MOLECULE_ROLE_IMAGE
@@ -15,11 +11,6 @@ platforms:
       - /tmp
 provisioner:
   name: ansible
-  env:
-    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
-  config_options:
-    defaults:
-      pipelining: True
   inventory:
     links:
       host_vars: host_vars

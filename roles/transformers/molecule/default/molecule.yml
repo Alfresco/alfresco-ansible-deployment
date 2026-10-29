@@ -1,8 +1,4 @@
 ---
-dependency:
-  name: galaxy
-driver:
-  name: docker
 platforms:
   - name: transformers-instance
     image: $MOLECULE_ROLE_IMAGE
@@ -26,16 +22,11 @@ platforms:
       - activemq
 provisioner:
   name: ansible
-  env:
-    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
   ansible_args:
     - -e
     - "@../../../../tests/molecule/secrets.yml"
     - -e
     - "@../../../../vars/acs26.yml"
-  config_options:
-    defaults:
-      pipelining: True
   inventory:
     links:
       host_vars: host_vars

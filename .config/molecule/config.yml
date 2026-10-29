@@ -1,5 +1,13 @@
 ---
+dependency:
+  name: galaxy
+driver:
+  name: docker
 provisioner:
   name: ansible
   env:
+    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
     ANSIBLE_FILTER_PLUGINS: "../../../../playbooks/filter_plugins"
+  config_options:
+    defaults:
+      pipelining: true

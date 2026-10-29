@@ -1,8 +1,4 @@
 ---
-dependency:
-  name: galaxy
-driver:
-  name: docker
 platforms:
   - name: search-instance
     image: $MOLECULE_ROLE_IMAGE
@@ -33,8 +29,6 @@ provisioner:
     - "@../../../../tests/molecule/secrets.yml"
     - -e
     - "@../../../../vars/acs26.yml"
-  env:
-    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
   inventory:
     links:
       host_vars: host_vars
