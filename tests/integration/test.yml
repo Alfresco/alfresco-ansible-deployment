@@ -8,8 +8,6 @@
 - name: Check each component resolves to the expected artifact server
   hosts: localhost
   gather_facts: false
-  vars_files:
-    - ../../roles/common/defaults/main.yml
   vars:
     expected_server: archive
     expected_bases:
@@ -50,7 +48,7 @@
         that:
           - server == expected_server
           - url.startswith(expected_bases[expected_server][item.kind])
-          - artifact_server_credentials[server].username == expected_bases[expected_server].username
+          - artifact_servers[server].username == expected_bases[expected_server].username
         fail_msg: "{{ item.name }}: server={{ server }} url={{ url }}"
         quiet: true
       loop: "{{ components }}"

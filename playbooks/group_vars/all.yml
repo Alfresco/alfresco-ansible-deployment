@@ -45,20 +45,20 @@ cloudsmith_repository:
   development_releases: >-
     {{ cloudsmith_repositories.enterprise.base_url }}/{{ cloudsmith_repositories.development.repository }}/{{ cloudsmith_repositories.enterprise.group_id }}
 
+nexus_user: "{{ lookup('env', 'NEXUS_USERNAME') | default(null) }}"
+nexus_password: "{{ lookup('env', 'NEXUS_PASSWORD') | default(null) }}"
+cloudsmith_user: "{{ lookup('env', 'CLOUDSMITH_USERNAME') | default(null) }}"
+cloudsmith_api_key: "{{ lookup('env', 'CLOUDSMITH_API_KEY') | default(null) }}"
+
 artifact_servers:
   archive:
     releases: "{{ nexus_repository.releases }}"
     enterprise_releases: "{{ nexus_repository.enterprise_releases }}"
-  cloudsmith:
-    releases: "{{ cloudsmith_repository.releases }}"
-    enterprise_releases: "{{ cloudsmith_repository.enterprise_releases }}"
-# Separate from artifact_servers: facts.yml templates that dict without the
-# common role defaults that define these credentials.
-artifact_server_credentials:
-  archive:
     username: "{{ nexus_user }}"
     password: "{{ nexus_password }}"
   cloudsmith:
+    releases: "{{ cloudsmith_repository.releases }}"
+    enterprise_releases: "{{ cloudsmith_repository.enterprise_releases }}"
     username: "{{ cloudsmith_user }}"
     password: "{{ cloudsmith_api_key }}"
 

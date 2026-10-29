@@ -241,8 +241,8 @@
           {{ 'alfresco-insight-engine' if 'insight-engine' in acs_play_search_artifact_name else 'alfresco-search-services' }}
         search_zip_url: "{{ acs_play_search_zip_url }}"
         search_zip_checksum: "{{ acs_play_search_zip_checksum }}"
-        search_zip_username: "{{ artifact_server_credentials[acs_play_search_server].username }}"
-        search_zip_password: "{{ artifact_server_credentials[acs_play_search_server].password }}"
+        search_zip_username: "{{ artifact_servers[acs_play_search_server].username }}"
+        search_zip_password: "{{ artifact_servers[acs_play_search_server].password }}"
         search_master_host: "{{ solr_host }}"
         search_shared_secret: "{{ reposearch_shared_secret }}"
         search_repository:
@@ -300,24 +300,24 @@
         - url: "{{ acs_play_repository_amp_googledrive_repo_archive_url }}"
           checksum: "sha1:{{ acs_play_repository_amp_googledrive_repo_archive_url }}.sha1"
           dest: "{{ repository_content_folder }}/amps_repo/{{ acs_play_repository_amp_googledrive_repo_artifact_name }}.amp"
-          url_username: "{{ artifact_server_credentials[acs_play_repository_amp_googledrive_repo_server].username }}"
-          url_password: "{{ artifact_server_credentials[acs_play_repository_amp_googledrive_repo_server].password }}"
+          url_username: "{{ artifact_servers[acs_play_repository_amp_googledrive_repo_server].username }}"
+          url_password: "{{ artifact_servers[acs_play_repository_amp_googledrive_repo_server].password }}"
         - url: "{{ acs_play_repository_amp_googledrive_share_archive_url }}"
           checksum: "sha1:{{ acs_play_repository_amp_googledrive_share_archive_url }}.sha1"
           dest: "{{ repository_content_folder }}/amps_share/{{ acs_play_repository_amp_googledrive_share_artifact_name }}.amp"
-          url_username: "{{ artifact_server_credentials[acs_play_repository_amp_googledrive_share_server].username }}"
-          url_password: "{{ artifact_server_credentials[acs_play_repository_amp_googledrive_share_server].password }}"
+          url_username: "{{ artifact_servers[acs_play_repository_amp_googledrive_share_server].username }}"
+          url_password: "{{ artifact_servers[acs_play_repository_amp_googledrive_share_server].password }}"
         - url: "{{ acs_play_repository_amp_device_sync_archive_url }}"
           checksum: "sha1:{{ acs_play_repository_amp_device_sync_archive_url }}.sha1"
           dest: "{{ repository_content_folder }}/amps_repo/{{ acs_play_repository_amp_device_sync_artifact_name }}.amp"
-          url_username: "{{ artifact_server_credentials[acs_play_repository_amp_device_sync_server].username }}"
-          url_password: "{{ artifact_server_credentials[acs_play_repository_amp_device_sync_server].password }}"
+          url_username: "{{ artifact_servers[acs_play_repository_amp_device_sync_server].username }}"
+          url_password: "{{ artifact_servers[acs_play_repository_amp_device_sync_server].password }}"
           enabled: "{{ acs_is_enterprise and (groups.syncservice | default([]) | length > 0) }}"
         - url: "{{ acs_play_repository_amp_aos_module_archive_url }}"
           checksum: "sha1:{{ acs_play_repository_amp_aos_module_archive_url }}.sha1"
           dest: "{{ repository_content_folder }}/amps_repo/{{ acs_play_repository_amp_aos_module_artifact_name }}.amp"
-          url_username: "{{ artifact_server_credentials[acs_play_repository_amp_aos_module_server].username }}"
-          url_password: "{{ artifact_server_credentials[acs_play_repository_amp_aos_module_server].password }}"
+          url_username: "{{ artifact_servers[acs_play_repository_amp_aos_module_server].username }}"
+          url_password: "{{ artifact_servers[acs_play_repository_amp_aos_module_server].password }}"
   tasks:
     - name: Repository Role import
       ansible.builtin.import_role:
@@ -333,10 +333,10 @@
         repository_raw_properties: "{{ properties_snippets }}"
         repository_identity_url: "{{ identity_url | default('') }}"
         tomcat_version: "{{ acs_play_tomcat_version }}" # noqa: var-naming[no-role-prefix]
-        repository_acs_nexus_username: "{{ artifact_server_credentials[acs_play_repository_acs_server].username }}"
-        repository_acs_nexus_password: "{{ artifact_server_credentials[acs_play_repository_acs_server].password }}"
-        repository_api_explorer_nexus_username: "{{ artifact_server_credentials[acs_play_repository_api_explorer_server].username }}"
-        repository_api_explorer_nexus_password: "{{ artifact_server_credentials[acs_play_repository_api_explorer_server].password }}"
+        repository_acs_artifact_username: "{{ artifact_servers[acs_play_repository_acs_server].username }}"
+        repository_acs_artifact_password: "{{ artifact_servers[acs_play_repository_acs_server].password }}"
+        repository_api_explorer_artifact_username: "{{ artifact_servers[acs_play_repository_api_explorer_server].username }}"
+        repository_api_explorer_artifact_password: "{{ artifact_servers[acs_play_repository_api_explorer_server].password }}"
         repository_db_url: "{{ acs_play_computed_repo_db_url }}"
         repository_acs_is_enterprise: "{{ acs_is_enterprise }}"
         repository_index_type: "{{ acs_play_repository_index_type }}"
@@ -452,8 +452,8 @@
         trouter_version: "{{ acs_play_trouter_version }}"
         trouter_archive_url: "{{ acs_play_trouter_archive_url }}"
         trouter_archive_checksum: "{{ acs_play_trouter_archive_checksum }}"
-        trouter_archive_username: "{{ artifact_server_credentials[acs_play_trouter_server].username }}"
-        trouter_archive_password: "{{ artifact_server_credentials[acs_play_trouter_server].password }}"
+        trouter_archive_username: "{{ artifact_servers[acs_play_trouter_server].username }}"
+        trouter_archive_password: "{{ artifact_servers[acs_play_trouter_server].password }}"
         trouter_ats_truststore_type: "{{ acs_play_default_truststore_type }}"
       when: acs_is_enterprise
   post_tasks:
@@ -502,8 +502,8 @@
         sfs_version: "{{ acs_play_sfs_version }}"
         sfs_archive_url: "{{ acs_play_sfs_archive_url }}"
         sfs_archive_checksum: "{{ acs_play_sfs_archive_checksum }}"
-        sfs_archive_username: "{{ artifact_server_credentials[acs_play_sfs_server].username }}"
-        sfs_archive_password: "{{ artifact_server_credentials[acs_play_sfs_server].password }}"
+        sfs_archive_username: "{{ artifact_servers[acs_play_sfs_server].username }}"
+        sfs_archive_password: "{{ artifact_servers[acs_play_sfs_server].password }}"
         sfs_ats_keystore: "{{ acs_play_sfs_keystore | default({}) }}"
         sfs_ats_truststore_type: "{{ acs_play_default_truststore_type }}"
       when: acs_is_enterprise
@@ -542,8 +542,8 @@
         search_enterprise_version: "{{ acs_play_search_enterprise_version }}"
         search_enterprise_zip_url: "{{ acs_play_search_enterprise_zip_url }}"
         search_enterprise_zip_checksum: "{{ acs_play_search_enterprise_zip_checksum }}"
-        search_enterprise_zip_username: "{{ artifact_server_credentials[acs_play_search_enterprise_server].username }}"
-        search_enterprise_zip_password: "{{ artifact_server_credentials[acs_play_search_enterprise_server].password }}"
+        search_enterprise_zip_username: "{{ artifact_servers[acs_play_search_enterprise_server].username }}"
+        search_enterprise_zip_password: "{{ artifact_servers[acs_play_search_enterprise_server].password }}"
       when: acs_is_enterprise
   post_tasks:
     - name: Update installation status file with Enterprise Search
@@ -636,8 +636,8 @@
       {% set raw = lookup(
           'url',
           acs_play_acc_checksum.split(':', 1)[1],
-          username=artifact_server_credentials[acs_play_acc_server].username,
-          password=artifact_server_credentials[acs_play_acc_server].password
+          username=artifact_servers[acs_play_acc_server].username,
+          password=artifact_servers[acs_play_acc_server].password
         ) | trim %}
       {{ acs_play_acc_checksum.split(':', 1)[0] }}:{{ raw.split()[0] }}
   roles:
@@ -680,7 +680,7 @@
       {% if acs_play_adw_version is version('4.1.0','ge') -%}
         {{ acs_play_adw_checksum }}
       {% else -%}
-        {% set raw = lookup('url', acs_play_adw_checksum.split(':', 1)[1], username=artifact_server_credentials[acs_play_adw_server].username, password=artifact_server_credentials[acs_play_adw_server].password) | trim %}
+        {% set raw = lookup('url', acs_play_adw_checksum.split(':', 1)[1], username=artifact_servers[acs_play_adw_server].username, password=artifact_servers[acs_play_adw_server].password) | trim %}
         {{ acs_play_adw_checksum.split(':', 1)[0] }}:{{ raw.split()[0] }}
       {%- endif %}
   roles:
@@ -691,8 +691,8 @@
       adf_app_port: 8880
       adf_app_src_archive: "{{ acs_play_adw_url }}"
       adf_app_src_checksum: "{{ adw_sum }}"
-      adf_app_src_username: "{{ artifact_server_credentials[acs_play_adw_server].username }}"
-      adf_app_src_password: "{{ artifact_server_credentials[acs_play_adw_server].password }}"
+      adf_app_src_username: "{{ artifact_servers[acs_play_adw_server].username }}"
+      adf_app_src_password: "{{ artifact_servers[acs_play_adw_server].password }}"
       adf_app_version: "{{ acs_play_adw_version }}"
       adf_app_configuration: >-
         {{
@@ -732,8 +732,8 @@
         sync_version: "{{ acs_play_sync_version }}"
         sync_zip_url: "{{ acs_play_sync_zip_url }}"
         sync_zip_checksum: "{{ acs_play_sync_zip_checksum }}"
-        sync_zip_username: "{{ artifact_server_credentials[acs_play_sync_server].username }}"
-        sync_zip_password: "{{ artifact_server_credentials[acs_play_sync_server].password }}"
+        sync_zip_username: "{{ artifact_servers[acs_play_sync_server].username }}"
+        sync_zip_password: "{{ artifact_servers[acs_play_sync_server].password }}"
         sync_jdbc_driver_class: "{{ acs_play_sync_db_driver }}"
         sync_jdbc_driver_version: "{{ acs_play_sync_jdbc_driver_version }}"
         sync_jdbc_driver_url: "{{ acs_play_sync_jdbc_driver_url }}"
@@ -788,8 +788,8 @@
     - role: alfresco.platform.audit_storage
       when: acs_is_enterprise and acs_version_requirement
       audit_storage_java_home_path: "/opt/openjdk-{{ acs_play_java_core }}"
-      audit_storage_nexus_username: "{{ artifact_server_credentials[acs_play_audit_storage_server].username }}"
-      audit_storage_nexus_password: "{{ artifact_server_credentials[acs_play_audit_storage_server].password }}"
+      audit_storage_nexus_username: "{{ artifact_servers[acs_play_audit_storage_server].username }}"
+      audit_storage_nexus_password: "{{ artifact_servers[acs_play_audit_storage_server].password }}"
       audit_storage_version: "{{ acs_play_audit_storage_version }}"
       audit_storage_zip_url: "{{ acs_play_audit_storage_archive_url }}"
       audit_storage_zip_checksum: "{{ acs_play_audit_storage_archive_checksum }}"
@@ -835,8 +835,8 @@
     - role: "../roles/java"
       java_version: "{{ acs_play_java_version }}"
     - role: alfresco.platform.cic_connector
-      cic_connector_artifact_username: "{{ artifact_server_credentials[acs_play_cic_connector_server].username }}"
-      cic_connector_artifact_password: "{{ artifact_server_credentials[acs_play_cic_connector_server].password }}"
+      cic_connector_artifact_username: "{{ artifact_servers[acs_play_cic_connector_server].username }}"
+      cic_connector_artifact_password: "{{ artifact_servers[acs_play_cic_connector_server].password }}"
       cic_connector_artifact_repository_url: "{{ acs_play_cic_connector_repository }}"
       cic_connector_java_home_path: "/opt/openjdk-{{ acs_play_java_core }}"
       cic_connector_artifact_default_version: "{{ acs_play_cic_connector_version }}"

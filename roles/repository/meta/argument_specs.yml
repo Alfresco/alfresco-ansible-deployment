@@ -92,34 +92,34 @@ argument_specs:
         required: false
         description: |
           A list containing the URL and checksum of additional WAR files to download
-      repository_api_explorer_nexus_username:
+      repository_api_explorer_artifact_username:
         type: str
         required: false
         description: |
-          The username to use when downloading WAR files from Nexus
-      repository_api_explorer_nexus_password:
+          The username to use when downloading WAR files from the artifact repository
+      repository_api_explorer_artifact_password:
         type: str
         required: false
         no_log: true
         description: |
-          The password to use when downloading WAR files from Nexus
+          The password to use when downloading WAR files from the artifact repository
       repository_api_explorer_enabled:
         type: bool
         required: false
         default: true
         description: |
           Whether to deploy the API Explorer or not
-      repository_nexus_username:
+      repository_artifact_username:
         type: str
         required: false
         description: |
-          Default username to when downloading artifacts from nexus
-      repository_nexus_password:
+          Default username to use when downloading artifacts
+      repository_artifact_password:
         type: str
         required: false
         no_log: true
         description: |
-          Default password to when downloading artifacts from nexus
+          Default password to use when downloading artifacts
       repository_amp_downloads:
         type: list
         required: false
