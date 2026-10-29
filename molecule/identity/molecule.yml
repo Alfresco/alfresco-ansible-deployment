@@ -27,11 +27,13 @@ platforms:
 
 provisioner:
   name: ansible
+  ansible_args: []
   config_options:
     defaults:
       pipelining: True
   inventory:
     links:
+      group_vars: ../../playbooks/group_vars
       host_vars: host_vars
 verifier:
   name: ansible

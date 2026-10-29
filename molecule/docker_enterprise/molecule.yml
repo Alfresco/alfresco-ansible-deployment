@@ -42,6 +42,7 @@ provisioner:
     - "@../../tests/test-ssl.yml"
   inventory:
     links:
+      group_vars: ../../playbooks/group_vars
       host_vars: host_vars
   playbooks:
     prepare: ../default/prepare.yml

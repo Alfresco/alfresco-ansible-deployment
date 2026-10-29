@@ -14,11 +14,6 @@ platforms:
       - repository
       - syncservice
 provisioner:
-  name: ansible
-  ansible_args:
-    - -e
-    - "@../../../../tests/molecule/secrets.yml"
   inventory:
     links:
       host_vars: host_vars
-      group_vars: ../../../../playbooks/group_vars

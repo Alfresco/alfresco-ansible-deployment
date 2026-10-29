@@ -23,13 +23,6 @@ platforms:
     groups:
       - legacy_indexers
 provisioner:
-  name: ansible
-  ansible_args:
-    - -e
-    - "@../../../../tests/molecule/secrets.yml"
-    - -e
-    - "@../../../../vars/acs26.yml"
   inventory:
     links:
       host_vars: host_vars
-      group_vars: ../../../../playbooks/group_vars

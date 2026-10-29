@@ -12,11 +12,6 @@ platforms:
     groups:
       - transformers
 provisioner:
-  name: ansible
-  ansible_args:
-    - -e
-    - "@../../../../vars/acs26.yml"
   inventory:
     links:
       host_vars: host_vars
-      group_vars: ../../../../playbooks/group_vars
