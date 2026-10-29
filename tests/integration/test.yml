@@ -15,10 +15,12 @@
         releases: https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco
         enterprise_releases: https://artifacts.alfresco.com/nexus/content/groups/private/org/alfresco
         username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
+        password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
       cloudsmith:
         releases: https://artifacts.hyland.dev/basic/alfresco-public/maven/org/alfresco
         enterprise_releases: https://artifacts.hyland.dev/basic/alfresco-private/maven/org/alfresco
         username: "{{ lookup('env', 'CLOUDSMITH_USERNAME') }}"
+        password: "{{ lookup('env', 'CLOUDSMITH_API_KEY') }}"
     edition_releases: "{{ 'enterprise_releases' if acs_is_enterprise else 'releases' }}"
     components:
       - {name: repository, server: acs_play_repository_acs_server, url: acs_play_repository_acs_archive_url, kind: "{{ edition_releases }}"}
@@ -49,6 +51,7 @@
           - server == expected_server
           - url.startswith(expected_bases[expected_server][item.kind])
           - artifact_servers[server].username == expected_bases[expected_server].username
+          - artifact_servers[server].password == expected_bases[expected_server].password
         fail_msg: "{{ item.name }}: server={{ server }} url={{ url }}"
         quiet: true
       loop: "{{ components }}"
