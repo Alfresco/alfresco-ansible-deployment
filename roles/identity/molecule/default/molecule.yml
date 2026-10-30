@@ -1,8 +1,4 @@
 ---
-dependency:
-  name: galaxy
-driver:
-  name: docker
 platforms:
   - name: identity-instance
     image: $MOLECULE_ROLE_IMAGE
@@ -18,13 +14,9 @@ platforms:
     published_ports:
       - 0.0.0.0:8080:8080/tcp
 provisioner:
-  name: ansible
-  env:
-    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
   inventory:
     links:
       host_vars: host_vars
-      group_vars: ../../../../playbooks/group_vars
 verifier:
   name: ansible
 

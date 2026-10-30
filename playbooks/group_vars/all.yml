@@ -26,6 +26,66 @@ nexus_repository:
   development_releases: >-
     {{ artifacts_repositories.enterprise.base_url }}/{{ artifacts_repositories.development.repository }}/{{ artifacts_repositories.enterprise.group_id }}
 
+cloudsmith_repositories:
+  enterprise:
+    base_url: "https://artifacts.hyland.dev/basic"
+    repository: "alfresco-private/maven"
+    group_id: "org/alfresco"
+  community:
+    base_url: "https://artifacts.hyland.dev/basic"
+    repository: "alfresco-public/maven"
+    group_id: "org/alfresco"
+  development:
+    repository: "alfresco-internal/maven"
+cloudsmith_repository:
+  releases: >-
+    {{ cloudsmith_repositories.community.base_url }}/{{ cloudsmith_repositories.community.repository }}/{{ cloudsmith_repositories.community.group_id }}
+  enterprise_releases: >-
+    {{ cloudsmith_repositories.enterprise.base_url }}/{{ cloudsmith_repositories.enterprise.repository }}/{{ cloudsmith_repositories.enterprise.group_id }}
+  development_releases: >-
+    {{ cloudsmith_repositories.enterprise.base_url }}/{{ cloudsmith_repositories.development.repository }}/{{ cloudsmith_repositories.enterprise.group_id }}
+
+nexus_user: "{{ lookup('env', 'NEXUS_USERNAME') | default(null) }}"
+nexus_password: "{{ lookup('env', 'NEXUS_PASSWORD') | default(null) }}"
+cloudsmith_user: "{{ lookup('env', 'CLOUDSMITH_USERNAME') | default(null) }}"
+cloudsmith_api_key: "{{ lookup('env', 'CLOUDSMITH_API_KEY') | default(null) }}"
+
+artifact_servers:
+  archive:
+    releases: "{{ nexus_repository.releases }}"
+    enterprise_releases: "{{ nexus_repository.enterprise_releases }}"
+    username: "{{ nexus_user }}"
+    password: "{{ nexus_password }}"
+  cloudsmith:
+    releases: "{{ cloudsmith_repository.releases }}"
+    enterprise_releases: "{{ cloudsmith_repository.enterprise_releases }}"
+    username: "{{ cloudsmith_user }}"
+    password: "{{ cloudsmith_api_key }}"
+
+# Last version of each release line published on the archive server: anything
+# newer, or on a line not listed, is fetched from cloudsmith.
+artifacts_archive_last_versions:
+  repository: ["6.2.2.25", "7.4.2.6", "23.7.3", "25.5.2", "26.2.4"]
+  community_repository: ["6.1.1", "7.4.2", "23.4.1", "25.3.0", "26.2.0"]
+  api_explorer: ["1.4", "5.2.4", "6.3.0", "7.4.0", "23.7.0", "25.5.0", "26.2.0"]
+  amp_googledrive_repo: ["3.4.2", "4.1.1", "5.0.0"]
+  community_amp_googledrive_repo: ["3.4.2", "4.1.1", "5.0.0"]
+  amp_googledrive_share: ["3.4.2", "4.1.1", "5.0.0"]
+  amp_device_sync: ["2.2.3", "3.11.3", "4.0.1", "5.3.7"]
+  amp_aos_module: ["1.6.3", "2.0.1", "3.4.3"]
+  transformers_aio: ["2.6.0", "3.1.2", "4.0.1", "5.4.5"]
+  transformers_pdf: ["0.10", "1.3.0-86"]
+  trouter: ["0.5.2", "1.5.3", "2.1.2", "3.0.1", "4.4.5"]
+  sfs: ["0.16.1", "1.5.3", "2.1.2", "3.0.1", "4.4.5"]
+  search: ["1.4.3.4", "2.0.23"]
+  search_enterprise: ["0.0.4", "3.3.3", "4.2.0", "5.9.0"]
+  search_community: ["5.9.0"]
+  acc: ["8.4.0", "10.5.0", "11.0.0"]
+  adw: ["1.6", "2.9.1", "3.1.1", "4.4.1", "5.3.0", "6.0.0", "7.5.0", "8.0.0"]
+  sync: ["3.11.3", "4.0.1", "5.3.7"]
+  audit_storage: ["0.0.11", "1.3.5"]
+  cic_connector: ["1.0.3"]
+
 acs_play_java_core: "{{ acs_play_java_version.split('+')[0] }}"
 acs_play_java_major: "{{ acs_play_java_core.split('.')[0] }}"
 acs_play_default_truststore_type: "{{ 'PKCS12' if acs_play_java_major | int >= 21 else 'JCEKS' }}"
@@ -63,9 +123,11 @@ autogen_unsecure_secrets: false
 
 # Community Edition vars
 acs_play_community_repository_acs_artifact_name: alfresco-content-services-community-distribution
-acs_play_community_repository_acs_repository: "{{ nexus_repository.releases }}"
+acs_play_community_repository_acs_server: "{{ acs_play_community_repository_acs_version | artifact_server(artifacts_archive_last_versions.community_repository) }}"
+acs_play_community_repository_acs_repository: "{{ artifact_servers[acs_play_community_repository_acs_server].releases }}"
 acs_play_community_repository_amp_googledrive_repo_artifact_name: alfresco-googledrive-repo-community
-acs_play_community_repository_amp_googledrive_repo_repository: "{{ nexus_repository.releases }}/integrations"
+acs_play_community_repository_amp_googledrive_repo_server: "{{ acs_play_community_repository_amp_googledrive_repo_version | artifact_server(artifacts_archive_last_versions.community_amp_googledrive_repo) }}"
+acs_play_community_repository_amp_googledrive_repo_repository: "{{ artifact_servers[acs_play_community_repository_amp_googledrive_repo_server].releases }}/integrations"
 
 ports_cfg_postgres_sql: 5432
 
@@ -73,17 +135,20 @@ ports_cfg_postgres_sql: 5432
 # resolve for hosts in either the canonical (indexers/legacy_indexers) or the deprecated
 # (search_enterprise/search) groups.
 acs_play_search_enterprise_artifact_name: alfresco-elasticsearch-connector-distribution
-acs_play_search_enterprise_repository: "{{ nexus_repository.enterprise_releases }}"
+acs_play_search_enterprise_server: "{{ acs_play_search_enterprise_version | artifact_server(artifacts_archive_last_versions.search_enterprise) }}"
+acs_play_search_enterprise_repository: "{{ artifact_servers[acs_play_search_enterprise_server].enterprise_releases }}"
 acs_play_search_enterprise_zip_url: "{{ acs_play_search_enterprise_repository }}/{{ acs_play_search_enterprise_artifact_name }}/{{ acs_play_search_enterprise_version }}/{{ acs_play_search_enterprise_artifact_name }}-{{ acs_play_search_enterprise_version }}.zip"
 acs_play_search_enterprise_zip_checksum: "sha1:{{ acs_play_search_enterprise_zip_url }}.sha1"
 
 acs_play_search_artifact_name: alfresco-search-services
-acs_play_search_repository: "{{ nexus_repository.releases }}"
+acs_play_search_server: "{{ acs_play_search_version | artifact_server(artifacts_archive_last_versions.search) }}"
+acs_play_search_repository: "{{ artifact_servers[acs_play_search_server].releases }}"
 acs_play_search_zip_url: "{{ acs_play_search_repository }}/{{ acs_play_search_artifact_name }}/{{ acs_play_search_version }}/{{ acs_play_search_artifact_name }}-{{ acs_play_search_version }}.zip"
 acs_play_search_zip_checksum: "sha1:{{ acs_play_search_zip_url }}.sha1"
 
 acs_play_search_community_artifact_name: alfresco-elasticsearch-batch-indexing-distribution
-acs_play_search_community_repository: "{{ nexus_repository.releases }}"
+acs_play_search_community_server: "{{ acs_play_search_community_version | artifact_server(artifacts_archive_last_versions.search_community) }}"
+acs_play_search_community_repository: "{{ artifact_servers[acs_play_search_community_server].releases }}"
 acs_play_search_community_zip_url: "{{ acs_play_search_community_repository }}/{{ acs_play_search_community_artifact_name }}/{{ acs_play_search_community_version }}/{{ acs_play_search_community_artifact_name }}-{{ acs_play_search_community_version }}.zip"
 acs_play_search_community_zip_checksum: "sha1:{{ acs_play_search_community_zip_url }}.sha1"
 

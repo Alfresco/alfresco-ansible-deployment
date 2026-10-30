@@ -74,11 +74,8 @@
           vars:
             # Vars commonly used in the list that are not accessible by this
             # playbook as they are not defined in the repository group_vars
-            # file. Nexus credentials are comming from common role which
-            # eventually will be moved to global secrets.
+            # file.
             repository_content_folder: ""
-            nexus_user: ""
-            nexus_password: ""
           ansible.builtin.set_fact:
             amps: >-
               {{ amps | combine({

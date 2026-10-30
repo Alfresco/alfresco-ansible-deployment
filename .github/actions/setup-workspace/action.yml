@@ -7,5 +7,6 @@ runs:
       if: startsWith(github.ref_name, 'next/') || startsWith(github.head_ref, 'next/') || startsWith(github.base_ref, 'next/') || contains(github.event.pull_request.labels.*.name, 'ci-prerelease')
       run: |
         yq -i '.artifacts_repositories.enterprise.repository = "groups/internal"' playbooks/group_vars/all.yml
-        echo "::warning title=pre-release branch::Nexus enterprise repository override enabled, using groups/internal as main repository"
+        yq -i '.cloudsmith_repositories.enterprise.repository = "alfresco-internal/maven"' playbooks/group_vars/all.yml
+        echo "::warning title=pre-release branch::Enterprise repository override enabled, using groups/internal (Nexus) and alfresco-internal (Cloudsmith) as main repositories"
       shell: bash

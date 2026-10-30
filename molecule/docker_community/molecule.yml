@@ -37,6 +37,7 @@ provisioner:
     - "acs_play_repository_acs_edition=Community"
   inventory:
     links:
+      group_vars: ../../playbooks/group_vars
       host_vars: host_vars
   playbooks:
     prepare: ../default/prepare.yml

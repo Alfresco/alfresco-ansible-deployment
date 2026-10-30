@@ -1,5 +1,6 @@
 acs_play_sync_artifact_name: sync-dist-6.x
-acs_play_sync_repository: "{{ nexus_repository.enterprise_releases }}/services/sync"
+acs_play_sync_server: "{{ acs_play_sync_version | artifact_server(artifacts_archive_last_versions.sync) }}"
+acs_play_sync_repository: "{{ artifact_servers[acs_play_sync_server].enterprise_releases }}/services/sync"
 acs_play_sync_zip_url: "{{ acs_play_sync_repository }}/{{ acs_play_sync_artifact_name }}/{{ acs_play_sync_version }}/{{ acs_play_sync_artifact_name }}-{{ acs_play_sync_version }}.zip"
 acs_play_sync_zip_checksum: "sha1:{{ acs_play_sync_zip_url }}.sha1"
 acs_play_sync_jdbc_driver_version: "{{ acs_play_jdbc_pg_driver_version }}"

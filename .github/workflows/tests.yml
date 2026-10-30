@@ -1,0 +1,46 @@
+name: "tests"
+
+on:
+  pull_request:
+    branches:
+      - master
+      - 'next/**'
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+      - .github/workflows/docs.yml
+      - .pre-commit-config.yaml
+  push:
+    branches: [master]
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+      - .github/workflows/docs.yml
+      - .pre-commit-config.yaml
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  integration:
+    name: Integration tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Python
+        uses: ./.github/actions/setup-python
+        id: setup-python
+
+      - name: Install python packages
+        uses: Alfresco/alfresco-build-tools/.github/actions/pipenv@v19.2.1
+        with:
+          python-version: ${{ steps.setup-python.outputs.python-version }}
+
+      - name: Run artifact_server filter unit tests
+        run: pipenv run pytest tests/unit
+
+      - name: Check every component resolves to the expected server
+        run: pipenv run tests/integration/run.sh

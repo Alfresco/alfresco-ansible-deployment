@@ -1,0 +1,21 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+provisioner:
+  name: ansible
+  ansible_args:
+    - -e
+    - "@../../../../tests/molecule/secrets.yml"
+    - -e
+    - "@../../../../vars/acs26.yml"
+  env:
+    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
+    ANSIBLE_FILTER_PLUGINS: "../../../../playbooks/filter_plugins"
+  config_options:
+    defaults:
+      pipelining: true
+  inventory:
+    links:
+      group_vars: ../../../../playbooks/group_vars

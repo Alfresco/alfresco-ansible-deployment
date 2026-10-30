@@ -17,8 +17,8 @@
           {{ '{0}/{1}/{2}/{1}-{2}.zip'.format(adw_repo, adw_id, adw_v) }}
         adf_app_src_checksum: >-
           {{ 'sha1:{0}/{1}/{2}/{1}-{2}.zip.sha1'.format(adw_repo, adw_id, adw_v) }}
-        adf_app_src_username: "{{ nexus_user }}"
-        adf_app_src_password: "{{ nexus_password }}"
+        adf_app_src_username: "{{ lookup('env', 'NEXUS_USERNAME') }}"
+        adf_app_src_password: "{{ lookup('env', 'NEXUS_PASSWORD') }}"
         adf_app_version: "{{ adw_v }}"
         adf_app_configuration:
           authType: OAUTH

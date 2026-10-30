@@ -1,10 +1,12 @@
 acs_play_sfs_artifact_name: alfresco-shared-file-store-controller
-acs_play_sfs_repository: "{{ nexus_repository.enterprise_releases }}"
+acs_play_sfs_server: "{{ acs_play_sfs_version | artifact_server(artifacts_archive_last_versions.sfs) }}"
+acs_play_sfs_repository: "{{ artifact_servers[acs_play_sfs_server].enterprise_releases }}"
 acs_play_sfs_archive_url: "{{ acs_play_sfs_repository }}/{{ acs_play_sfs_artifact_name }}/{{ acs_play_sfs_version }}/{{ acs_play_sfs_artifact_name }}-{{ acs_play_sfs_version }}.jar"
 acs_play_sfs_archive_checksum: "sha1:{{ acs_play_sfs_archive_url }}.sha1"
 
 acs_play_trouter_artifact_name: alfresco-transform-router
-acs_play_trouter_repository: "{{ nexus_repository.enterprise_releases }}"
+acs_play_trouter_server: "{{ acs_play_trouter_version | artifact_server(artifacts_archive_last_versions.trouter) }}"
+acs_play_trouter_repository: "{{ artifact_servers[acs_play_trouter_server].enterprise_releases }}"
 acs_play_trouter_archive_url: "{{ acs_play_trouter_repository }}/{{ acs_play_trouter_artifact_name }}/{{ acs_play_trouter_version }}/{{ acs_play_trouter_artifact_name }}-{{ acs_play_trouter_version }}.jar"
 acs_play_trouter_archive_checksum: "sha1:{{ acs_play_trouter_archive_url }}.sha1"
 
@@ -16,13 +18,15 @@ acs_play_transformers_libreoffice_archive_checksum: "sha1:{{ acs_play_transforme
 
 acs_play_transformers_pdf_artifact_name: alfresco-pdf-renderer
 acs_play_transformers_pdf_archive_name: "{{ acs_play_transformers_pdf_artifact_name }}-{{ acs_play_transformers_pdf_version }}-linux.tgz"
-acs_play_transformers_pdf_repository: "{{ nexus_repository.releases }}"
+acs_play_transformers_pdf_server: "{{ acs_play_transformers_pdf_version | artifact_server(artifacts_archive_last_versions.transformers_pdf) }}"
+acs_play_transformers_pdf_repository: "{{ artifact_servers[acs_play_transformers_pdf_server].releases }}"
 acs_play_transformers_pdf_archive_url: "{{ acs_play_transformers_pdf_repository }}/{{ acs_play_transformers_pdf_artifact_name }}/{{ acs_play_transformers_pdf_version }}/{{ acs_play_transformers_pdf_archive_name }}"
 acs_play_transformers_pdf_archive_checksum: "sha1:{{ acs_play_transformers_pdf_archive_url }}.sha1"
 
 acs_play_transformers_imagemagick_repository: "{{ artifacts_repositories.community.base_url }}/{{ artifacts_repositories.community.repository }}/org/imagemagick"
 
 acs_play_transformers_aio_artifact_name: alfresco-transform-core-aio
-acs_play_transformers_aio_repository: "{{ nexus_repository.releases }}"
+acs_play_transformers_aio_server: "{{ acs_play_transformers_aio_version | artifact_server(artifacts_archive_last_versions.transformers_aio) }}"
+acs_play_transformers_aio_repository: "{{ artifact_servers[acs_play_transformers_aio_server].releases }}"
 acs_play_transformers_aio_archive_url: "{{ acs_play_transformers_aio_repository }}/{{ acs_play_transformers_aio_artifact_name }}/{{ acs_play_transformers_aio_version }}/{{ acs_play_transformers_aio_artifact_name }}-{{ acs_play_transformers_aio_version }}.jar"
 acs_play_transformers_aio_archive_checksum: "sha1:{{ acs_play_transformers_aio_archive_url }}.sha1"

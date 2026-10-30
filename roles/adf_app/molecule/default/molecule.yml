@@ -1,8 +1,4 @@
 ---
-dependency:
-  name: galaxy
-driver:
-  name: docker
 platforms:
   - name: adf_app-instance
     image: $MOLECULE_ROLE_IMAGE
@@ -17,12 +13,8 @@ platforms:
       - adw
       - acc
 provisioner:
-  name: ansible
-  env:
-    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
   inventory:
     links:
       host_vars: host_vars
-      group_vars: ../../../../playbooks/group_vars
 verifier:
   name: ansible

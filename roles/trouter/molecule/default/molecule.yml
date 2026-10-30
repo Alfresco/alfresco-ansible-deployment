@@ -1,8 +1,4 @@
 ---
-dependency:
-  name: galaxy
-driver:
-  name: docker
 platforms:
   - name: trouter-instance
     image: $MOLECULE_ROLE_IMAGE
@@ -25,16 +21,6 @@ platforms:
       - adw
       - activemq
 provisioner:
-  name: ansible
-  env:
-    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
-  ansible_args:
-    - -e
-    - "@../../../../tests/molecule/secrets.yml"
-  config_options:
-    defaults:
-      pipelining: True
   inventory:
     links:
       host_vars: host_vars
-      group_vars: ../../../../playbooks/group_vars

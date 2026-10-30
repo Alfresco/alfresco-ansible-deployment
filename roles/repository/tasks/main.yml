@@ -90,8 +90,8 @@
       - url: "{{ repository_api_explorer_archive_url }}"
         checksum: "{{ repository_api_explorer_archive_checksum }}"
         dest: "{{ repository_content_folder }}/web-server/webapps/api-explorer.war"
-        url_username: "{{ repository_api_explorer_nexus_username }}"
-        url_password: "{{ repository_api_explorer_nexus_password }}"
+        url_username: "{{ repository_api_explorer_artifact_username }}"
+        url_password: "{{ repository_api_explorer_artifact_password }}"
   when: repository_api_explorer_enabled
 
 - name: Download war files
@@ -119,8 +119,8 @@
   ansible.builtin.get_url:
     url: "{{ repository_acs_archive_url }}"
     dest: "{{ download_location }}/{{ repository_acs_artifact_name }}.zip"
-    url_username: "{{ repository_acs_nexus_username }}"
-    url_password: "{{ repository_acs_nexus_password }}"
+    url_username: "{{ repository_acs_artifact_username }}"
+    url_password: "{{ repository_acs_artifact_password }}"
     checksum: "{{ repository_acs_archive_checksum }}"
     mode: "0644"
   register: repository_distribution_download_result

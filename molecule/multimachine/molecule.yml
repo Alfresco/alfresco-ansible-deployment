@@ -144,6 +144,7 @@ provisioner:
     - '{"ats_mtls_capable": false}'
   inventory:
     links:
+      group_vars: ../../playbooks/group_vars
       host_vars: ./host_vars
       hosts: ./hosts.yml
   playbooks:

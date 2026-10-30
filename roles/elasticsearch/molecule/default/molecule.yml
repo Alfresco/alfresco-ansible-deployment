@@ -1,8 +1,4 @@
 ---
-dependency:
-  name: galaxy
-driver:
-  name: docker
 platforms:
   - name: elasticsearch-instance
     image: $MOLECULE_ROLE_IMAGE
@@ -16,12 +12,8 @@ platforms:
     groups:
       - elasticsearch
 provisioner:
-  name: ansible
-  env:
-    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
   inventory:
     links:
       host_vars: host_vars
-      group_vars: ../../../../playbooks/group_vars
 verifier:
   name: ansible

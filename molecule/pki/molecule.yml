@@ -31,10 +31,12 @@ platforms:
       - transformers
 provisioner:
   name: ansible
+  ansible_args: []
   playbooks:
     converge: ../../playbooks/acs.yml
   inventory:
     links:
+      group_vars: ../../playbooks/group_vars
       host_vars: host_vars
 verifier:
   name: ansible

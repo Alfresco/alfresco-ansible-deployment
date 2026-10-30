@@ -1,8 +1,4 @@
 ---
-dependency:
-  name: galaxy
-driver:
-  name: docker
 platforms:
   - name: common-instance
     image: $MOLECULE_ROLE_IMAGE
@@ -16,16 +12,9 @@ platforms:
     groups:
       - search
 provisioner:
-  name: ansible
-  env:
-    ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
-  config_options:
-    defaults:
-      pipelining: True
   inventory:
     links:
       host_vars: host_vars
-      group_vars: ../../../../playbooks/group_vars
 verifier:
   name: testinfra
   env:
