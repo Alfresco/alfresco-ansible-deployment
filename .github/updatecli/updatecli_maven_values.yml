@@ -1,6 +1,6 @@
 # Flip to cloudsmith once artifacts.alfresco.com stops receiving releases.
 # Server names match artifact_servers in playbooks/group_vars/all.yml.
-updatecli_artifact_server: cloudsmith
+updatecli_artifact_server: archive
 updatecli_artifact_servers:
   archive:
     url: nexus.alfresco.com/nexus/repository
