@@ -13,7 +13,8 @@ sources:
     name: {{ $key }} artifact
     kind: maven
     spec:
-      repository: {{ requiredEnv "NEXUS_USERNAME" }}:{{ requiredEnv "NEXUS_PASSWORD" }}@nexus.alfresco.com/nexus/repository/{{ $artifact.artifact_repository_name | default $.ansible_default_repository_name }}
+      {{- $server := index $.updatecli_artifact_servers $.updatecli_artifact_server }}
+      repository: {{ requiredEnv $server.username_env }}:{{ requiredEnv $server.password_env }}@{{ $server.url }}/{{ $artifact.artifact_repository_name | default $server.default_repository }}
       groupid: {{ $artifact.artifact_group_id | default $.ansible_default_group_id }}
       artifactid: '{{ source (printf "src_%s_artifact_name" $key) }}'
       dependson:
