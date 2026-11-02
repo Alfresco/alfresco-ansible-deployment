@@ -3,7 +3,7 @@
 updatecli_artifact_server: archive
 updatecli_artifact_servers:
   archive:
-    url: nexus.alfresco.com/nexus/repository
+    url: maven.alfresco.com/nexus/repository
     default_repository: private
     username_env: NEXUS_USERNAME
     password_env: NEXUS_PASSWORD # pragma: allowlist secret
