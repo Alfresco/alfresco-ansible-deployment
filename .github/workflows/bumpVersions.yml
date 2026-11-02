@@ -52,6 +52,9 @@ jobs:
     needs: prepare-branch
     runs-on: ubuntu-latest
     name: Bump versions
+    permissions:
+      id-token: write
+      contents: read
     if: |
       !cancelled()
       && needs.prepare-branch.result != 'failure'
@@ -102,6 +105,12 @@ jobs:
           key: updatecli-v1-${{ hashFiles('.github/updatecli/updatecli_amps.tpl') }}
           restore-keys: |
             updatecli-v1-
+
+      - name: Authenticate to Cloudsmith
+        if: (inputs.update-type == 'maven' || github.event_name == 'push') && vars.CLOUDSMITH_NAMESPACE != ''
+        uses: Alfresco/alfresco-build-tools/.github/actions/cloudsmith-auth@v19.11.0
+        with:
+          oidc-namespace: ${{ vars.CLOUDSMITH_NAMESPACE }}
 
       - name: Updatecli apply for Maven
         if: inputs.update-type == 'maven' || github.event_name == 'push'
