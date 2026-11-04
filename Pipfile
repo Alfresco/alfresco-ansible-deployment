@@ -14,6 +14,6 @@ molecule = "==26.10.0"
 molecule-plugins = {extras = ["docker","ec2"], version = "26.10.12"}
 boto3 = ">=1.39.13"
 
-pytest = ">=9.1.1"
+pytest = ">=9.2.0"
 pytest-testinfra = ">=8.1.0"
 pyhamcrest = ">=2.1.0"
