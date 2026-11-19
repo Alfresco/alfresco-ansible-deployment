@@ -1,5 +1,5 @@
 acc_artifact_id: alfresco-control-center
-acs_play_acc_server: "{{ acs_play_acc_version | artifact_server(artifacts_archive_last_versions.acc) }}"
+acs_play_acc_server: "{{ acs_play_acc_version | alfresco.platform.artifact_server('acc') }}"
 acc_repository: "{{ artifact_servers[acs_play_acc_server].releases }}"
 acs_play_acc_url: >-
   {{ acc_repository }}/{{ acc_artifact_id }}/{{ acs_play_acc_version }}/{{ acc_artifact_id }}-{{ acs_play_acc_version }}.zip
