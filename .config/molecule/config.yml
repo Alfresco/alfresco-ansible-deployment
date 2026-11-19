@@ -12,7 +12,6 @@ provisioner:
     - "@../../../../vars/acs26.yml"
   env:
     ANSIBLE_ROLES_PATH: "../../../../roles:~/.ansible/roles"
-    ANSIBLE_FILTER_PLUGINS: "../../../../playbooks/filter_plugins"
   config_options:
     defaults:
       pipelining: true

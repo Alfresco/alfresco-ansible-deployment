@@ -39,8 +39,10 @@ jobs:
         with:
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
-      - name: Run artifact_server filter unit tests
-        run: pipenv run pytest tests/unit
+      - name: Install and cache ansible galaxy dependencies
+        uses: ./.github/actions/galaxy
+        with:
+          cache-name: tests
 
       - name: Check every component resolves to the expected server
         run: pipenv run tests/integration/run.sh

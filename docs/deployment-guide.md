@@ -927,7 +927,7 @@ Alfresco artifacts are published on two servers:
 * the archive server, [https://artifacts.alfresco.com](https://artifacts.alfresco.com), which holds every release published before the move to the new server. It uses the `NEXUS_USERNAME` and `NEXUS_PASSWORD` credentials.
 * the new server, `https://artifacts.hyland.dev`, which receives every new release. It uses the `CLOUDSMITH_USERNAME` and `CLOUDSMITH_API_KEY` credentials.
 
-The playbook picks the server for each component from that component's version. `artifacts_archive_last_versions` in `playbooks/group_vars/all.yml` lists, for every component, the last version of each release line published on the archive server. A version up to that bound is downloaded from the archive server; a newer version, or one on a release line that isn't listed, is downloaded from the new server, with the matching credentials.
+The playbook picks the server for each component from that component's version, with the `alfresco.platform.artifact_server` filter. The `alfresco.platform` collection lists, for every component, the last version of each release line published on the archive server. A version up to that bound is downloaded from the archive server; a newer version, or one on a release line that isn't listed, is downloaded from the new server, with the matching credentials.
 
 You only need the credentials of the server(s) your component versions resolve to.
 
