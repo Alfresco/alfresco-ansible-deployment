@@ -36,8 +36,7 @@ molecule -e molecule/default/vars-rhel8.yml test
 # Docker-only full integration (no AWS needed)
 molecule test -s local
 
-# Artifact server routing (no Docker needed)
-pipenv run pytest tests/unit
+# Artifact server routing (no Docker needed, needs requirements.yml collections)
 pipenv run tests/integration/run.sh
 
 # Updatecli Maven source rendering (needs updatecli)
@@ -60,7 +59,7 @@ tests/updatecli/run.sh
 |----------|---------|---------|
 | `precommit.yml` | All PRs + push to master | pre-commit hooks (lint, secrets, formatting) |
 | `community.yml` | PRs/push to master (non-docs) | Role molecule tests on Docker (community edition) |
-| `tests.yml` | PRs/push to master (non-docs) | `tests/unit` pytest, `tests/integration` artifact server routing checks and `tests/updatecli` bump pipeline rendering |
+| `tests.yml` | PRs/push to master (non-docs) | `tests/integration` artifact server routing checks and `tests/updatecli` bump pipeline rendering |
 | `enteprise.yml` | PRs with `ec2-test` label + push to master | EC2 integration tests (needs Nexus secrets) |
 | `bumpVersions.yml` | Manual dispatch | Updatecli version bumps |
 | `release.yml` | Tag push (`v*`) | Build release artifacts |
@@ -75,7 +74,7 @@ tests/updatecli/run.sh
 - **Secrets**: detect-secrets with baseline file `.secrets.baseline`
 - **Pre-commit**: runs `generate-comp-ver-table.py` on every commit (auto-generates version table)
 - **Dependabot pins**: prefer `ignore.versions` scoped to known-bad versions instead of disabling all updates for a dependency (docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#versions-ignore)
-- **Artifact servers**: each Alfresco component picks its download server and credentials from its own version via the `artifact_server` filter (`playbooks/filter_plugins/`) and `artifacts_archive_last_versions` in `playbooks/group_vars/all.yml`; use `artifact_servers[<server>]` for URLs and credentials, never `nexus_repository` or `nexus_user` directly. The bump pipeline follows a single switch, `updatecli_artifact_server` in `.github/updatecli/updatecli_maven_values.yml`: set it to `cloudsmith` (and set the `CLOUDSMITH_NAMESPACE` repo variable for OIDC auth) once artifacts.alfresco.com stops receiving releases
+- **Artifact servers**: each Alfresco component picks its download server and credentials from its own version via the `alfresco.platform.artifact_server('<component>')` filter, which ships the last archive version of each component; use `artifact_servers[<server>]` for URLs and credentials, never `nexus_repository` or `nexus_user` directly. The bump pipeline follows a single switch, `updatecli_artifact_server` in `.github/updatecli/updatecli_maven_values.yml`: set it to `cloudsmith` (and set the `CLOUDSMITH_NAMESPACE` repo variable for OIDC auth) once artifacts.alfresco.com stops receiving releases
 - **New distro support**: add to `supported_os` in `vars/acsXX.yml`, prefer `vars` files over conditional tasks
 
 ## Environment Variables (Integration Tests)
